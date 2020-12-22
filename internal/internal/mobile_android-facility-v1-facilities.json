@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "title": "AndroidFacility",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "streetAndHouseNumber": {
+      "type": "string",
+      "minLength": 1
+    },
+    "postalCodeAndCity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "title": "AndroidFacilityStatus",
+      "type": "string",
+      "enum": [
+        "ONLINE",
+        "SUSPENDED",
+        "OFFLINE"
+      ],
+      "tsEnumNames": [
+        "ONLINE",
+        "SUSPENDED",
+        "OFFLINE"
+      ]
+    },
+    "showFeatureShipments": {
+      "title": "AndroidFacilityShowFeatureShipments",
+      "type": "boolean"
+    },
+    "services": {
+      "items": {
+        "$ref": "#/definitions/AndroidFacilityServices"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "streetAndHouseNumber",
+    "postalCodeAndCity",
+    "status"
+  ],
+  "definitions": {
+    "AndroidFacilityServices": {
+      "type": "string",
+      "enum": [
+        "SHIP_FROM_STORE",
+        "PICKUP"
+      ]
+    }
+  }
+}

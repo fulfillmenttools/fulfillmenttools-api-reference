@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "type": "object",
+  "definitions": {
+    "WebFacilityPhoneNumber": {
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "type",
+        "value"
+      ]
+    },
+    "WebFacilityEmailAddress": {
+      "properties": {
+        "recipient": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "recipient",
+        "value"
+      ]
+    },
+    "WebFacilityContact": {
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "firstName",
+        "lastName"
+      ]
+    },
+    "WebFacilityAddress": {
+      "properties": {
+        "postalCode": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "houseNumber": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "phoneNumbers": {
+          "items": {
+            "$ref": "#/definitions/WebFacilityPhoneNumber"
+          },
+          "type": "array"
+        },
+        "emailAddresses": {
+          "items": {
+            "$ref": "#/definitions/WebFacilityEmailAddress"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "postalCode",
+        "city",
+        "houseNumber",
+        "country"
+      ]
+    },
+    "WebFacility": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "locationType": {
+          "type": "string",
+          "enum": [
+            "STORE",
+            "WAREHOUSE"
+          ]
+        },
+        "address": {
+          "$ref": "#/definitions/WebFacilityAddress"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ONLINE",
+            "SUSPENDED",
+            "OFFLINE"
+          ]
+        },
+        "contact": {
+          "$ref": "#/definitions/WebFacilityContact"
+        },
+        "services": {
+          "items": {
+            "$ref": "#/definitions/WebFacilityServices"
+          },
+          "type": "array"
+        },
+        "version": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "locationType",
+        "address",
+        "status",
+        "version"
+      ]
+    },
+    "WebFacilityServices": {
+      "type": "string",
+      "enum": [
+        "SHIP_FROM_STORE",
+        "PICKUP"
+      ]
+    },
+    "WebListingReactivationAfter": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "active": {
+          "type": "boolean"
+        }
+      }
+    },
+    "WebRetainedOfflineStock": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "active": {
+          "type": "boolean"
+        }
+      }
+    },
+    "WebShortpick": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean"
+        }
+      },
+      "required" : ["active"]
+    },
+    "WebFacilityStockConfiguration": {
+      "type": "object",
+      "properties": {
+        "retainedOfflineStock": {
+          "$ref": "#/definitions/WebRetainedOfflineStock"
+        },
+        "listingReactivationAfter": {
+          "$ref": "#/definitions/WebListingReactivationAfter"
+        },
+        "shortpick": {
+          "$ref": "#/definitions/WebShortpick"
+        },
+        "version": {
+          "type": "number"
+        }
+      },
+      "required" : ["version"]
+    }
+  }
+}
