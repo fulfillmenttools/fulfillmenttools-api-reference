@@ -1,2 +1,2 @@
-# fulfillmenttools-public-api-reference
+# fulfillmenttools-api-reference
 Public api assets for the fulfillmenttools platform API
