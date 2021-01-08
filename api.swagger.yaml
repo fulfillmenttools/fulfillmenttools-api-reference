@@ -2087,12 +2087,14 @@ definitions:
   DeliveryPreferences:
     type: "object"
     properties:
-      "collect" :
+      targetTime:
+        $ref: "#/definitions/TargetTime"
+      collect :
         type: "array"
         maxItems: 1
         items:
           $ref: '#/definitions/CollectDelivery'
-      "shipping":
+      shipping:
         type: "object"
         properties:
           "servicetype":
@@ -2430,6 +2432,8 @@ definitions:
       - "pickLineItems"
       - "deliveryinformation"
     properties:
+      targetTime:
+        $ref: '#/definitions/TargetTime'
       orderRef:
         type: "string"
         example: "LGMl2DuvPnfPoSHhYFOm"
@@ -2490,6 +2494,7 @@ definitions:
           - "status"
           - "pickLineItems"
           - "shortId"
+          - "targetTime"
         type: "object"
         properties:
           id:
@@ -2869,7 +2874,11 @@ definitions:
   Handoverjob:
     allOf:
       - $ref: '#/definitions/StrippedHandoverjob'
+      - required:
+          - "targetTime"
     properties:
+      targetTime:
+        $ref: '#/definitions/TargetTime'
       anonymized:
         type: "boolean"
         example: false
@@ -2955,6 +2964,7 @@ definitions:
           - "status"
           - "pickJobRef"
           - "facilityRef"
+          - "targetTime"
         type: "object"
         properties:
           id:
@@ -2972,6 +2982,8 @@ definitions:
             type: "array"
             items:
               $ref: '#/definitions/StrippedParcel'
+          targetTime:
+            $ref: '#/definitions/TargetTime'
   DeliveryInformation:
     type: "object"
     required:
@@ -4046,3 +4058,8 @@ definitions:
       - "delayed"
       - "notification"
     description: "The state of the KEP"
+  TargetTime:
+    type: "string"
+    format: "date-time"
+    example: "2020-02-03T09:45:51.525Z"
+    description: "At which time the result is expected."
