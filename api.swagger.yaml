@@ -2433,13 +2433,7 @@ definitions:
       - "orderDate"
       - "facilityRef"
       - "pickLineItems"
-      - "deliveryinformation"
     properties:
-      targetTime:
-        type: "string"
-        format: "date-time"
-        example: "2020-02-03T09:45:51.525Z"
-        description: "At which time the result is expected."
       orderRef:
         type: "string"
         example: "LGMl2DuvPnfPoSHhYFOm"
@@ -2465,27 +2459,7 @@ definitions:
         items:
           $ref: '#/definitions/PickLineItemForCreation'
       deliveryinformation:
-        type: object
-        properties:
-          "channel":
-            type: "string"
-            enum:
-              - "COLLECT"
-              - "SHIPPING"
-          "details" :
-            type: object
-            properties:
-              "collect":
-                type: object
-                properties:
-                  "identifier":
-                    type: "string"
-                    description: "Includes information about Click & Collect recipient"
-              "shipping" :
-                type: object
-                properties:
-                  recipientaddress:
-                    $ref: '#/definitions/ConsumerAddress'
+        $ref: '#/definitions/PickjobDeliveryInformationForCreation'
       customAttributes:
         type: "object"
         description: "Attributes that can be added to the pickjob. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
@@ -2500,7 +2474,7 @@ definitions:
           - "status"
           - "pickLineItems"
           - "shortId"
-          - "targetTime"
+          - "deliveryinformation"
         type: "object"
         properties:
           id:
@@ -2521,6 +2495,8 @@ definitions:
               $ref: '#/definitions/PickLineItem'
           status:
             $ref: '#/definitions/PickJobStatus'
+          deliveryinformation:
+            $ref: '#/definitions/PickjobDeliveryInformation'
   StrippedPickJob:
     allOf:
       - $ref: '#/definitions/VersionedResource'
@@ -4070,3 +4046,36 @@ definitions:
       - "delayed"
       - "notification"
     description: "The state of the KEP"
+  PickjobDeliveryInformationForCreation:
+    type: object
+    properties:
+      targetTime:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T09:45:51.525Z"
+        description: "At which time the result is expected."
+      channel:
+        type: "string"
+        enum:
+          - "COLLECT"
+          - "SHIPPING"
+      details:
+        type: object
+        properties:
+          collect:
+            type: object
+            properties:
+              identifier:
+                type: "string"
+                description: "Includes information about Click & Collect recipient"
+          shipping:
+            type: object
+            properties:
+              recipientaddress:
+                $ref: '#/definitions/ConsumerAddress'
+  PickjobDeliveryInformation:
+    allOf:
+      - $ref: '#/definitions/PickjobDeliveryInformationForCreation'
+      - required:
+          - "targetTime"
+          - "channel"
