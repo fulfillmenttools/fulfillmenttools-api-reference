@@ -1,0 +1,23 @@
+== Pickjobs
+image::doc/pickjobs/DocPickjobsHeader.png[align="center"]
+PickJobs are collections of Pick Line Items wrapped in a meta data envelope. It is one of the central resources in the API
+and is used in a process to collect goods that were ordered by the consumer before packing and shipping them.
+[source,yaml]
+
+=== Information about delivery
+Complete set of delivery information is conveyed from order to pick job, so, type of order (**Click & Collect** or **default Delivery**) could be fetched from `deliveryinformation` field in pick job.
+[source,curl]
+----
+    "deliveryinformation": {
+        "channel": "COLLECT",
+        "details": {
+            "collect": {
+                 "identifier": "Stefan Bauer"  // Identity of the consumer
+            },
+            "shipping": {
+              // Contains address of the consumer
+            }
+        }
+    }
+----
+By Default `channel` field of the delivery information is set to "SHIPPING" but in Click & Collect option, it is "COLLECT"

@@ -1,0 +1,101 @@
+== General Topics
+=== Host
+The fulfillmenttools API is served over HTTPS. A tenant will get his own host once the corresponding
+environment has been created. The naming format of this host is similar to `https://TENANT-SLUG.api.fulfillmenttools.com` while `TENANT-SLUG` is a unique identifier to each environment.
+For documentation purposes the URLs referenced in the documentation are abbreviated by:
+
+[.text-center]
+`https://{host}`
+
+=== Region
+Our service is hosted with Google Cloud Platform. We leverage products that are located either in Region *europe-west1* (St.Ghislain, Belgium) or
+*europe-west3* (Frankfurt, Germany).
+
+=== API Versioning
+We will release a new version of the API when we make backwards-incompatible changes. The following changes however are considered to be backwards-compatible:
+
+- Adding new API resources.
+- Adding new optional request parameters to existing API methods.
+- Adding new properties to existing API responses.
+- Changing the order of properties in existing API responses.
+
+=== Authorization
+Authorization against our API works by using a registered user and using the *OAuth-Protocol*. If the authentication
+was successfully, a signed JWT Token is issued to the caller which can be used to authenticate against the API or to get a fresh token
+from the authentication provider using the `refresh_token`.  Currently we are using the Google Identity Provider as an authentication provider.
+
+Logging in and obtaining a valid token can for example be done by issuing the following request:
+
+[source,curl]
+----
+curl --request POST 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=<AUTHKEY>' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{"email": username,  "password": password, "returnSecureToken": true}'
+----
+A valid `username` and `password` as well as the customer specific `AUTH_KEY` can be obtained from fulfillmenttools when the tenant is entitled to use the API.
+
+As a result, an answer looking similar to this is responded:
+[source,json]
+----
+{
+  "kind": "identitytoolkit#VerifyPasswordResponse",
+  "localId": "jdwBuqqYWdYoqWTH1Xv85EJJMpm2",
+  "email": "yourlogin@yourdomain.com",
+  "displayName": "",
+  "idToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImMzZjI3NjU0MmJmZmUN0WU5OGMyMGQ2MDNlYmUyYmExMTc2ZWRhMzMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vb2NmZi1kZXYtYm94ZmlzaC12MS1ibHViIiwiYXVkIjoib2NmZi1kZXYtYm94ZmlzaC12MS1ibHViIiwiYXV0aF90aW1lIjoxNTkyODI0MDg2LCJ1c2VyX2lkIjoiamR3QnVxcVlXZFlvcVdUSDFYdjg1RUpKTXBtMiIsInN1YiI6Impkd0J1cXFZV2RZb3FXVEgxWHY4NUVKSk1wbTIiLCJpYXQiOjE1OTI4MjQwODYsImV4cCI6MTU5MjgyNzY4NiwiZW1haWwiOiJ0ZXN0QHRlc3QuZGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGVzdEB0ZXN0LmRlIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.nTlNZTj5B3-lOToCuzEFIqTQSz4cPY1lOhdj12-RG1wOTlOoS_u5JGi4Zw4S684o07381g3ooC_B-KM2UhqaQMAkWfA_OA1cJgD_rrAdIUov_cuYdCYXHmvI-8kAajsy6R08Uh3lQYHx9tmyzbweqDFluGXEc9huH-QoWfoiwZ9Y1sjguAgC1ZCbQi3AkgKcKOqHVn8bGFxYK6KxoyXMZxaiFrfwjMQ-lov0554akQDBU0gAqLCszXtmQP7rNI5boeMIA1vo0myTXwvmYLMHIVJVn6Ej-I2SSAY1OCdafgF6k492lxJN8lJhsTsJfCynLgbiNgHJJxtBXSTSFnp2fA",
+  "registered": true,
+  "refreshToken": "AE0u-NeGDdHWPB0RjOYOL5AlfSO6r8CvMO6eLSXxdjMG9xiXQmBxZKJgu9OSwZ2JJc2jgSTgiNFYTFYmd1DAlfcCzpunAOF6JC8ZofkrkM75lTjMyQgxWlGWIP24dk2qaMvtAPt2oK8RtsjKx4TRQosFagokGTukQKxSWxSpTEDZl0QbWM9zmbBjzBqSK5yCWMwK2qHJpYgfJvoyAyReo76mRDC36NUpRMKoncagBq30OFCJkEgpvyI",
+  "expiresIn": "3600"
+}
+----
+The value of `idToken` can be used in a HTTP call within the `Authorization` Header in a request towards our API like this:
+
+`Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6I...`
+
+Refreshing the access token (which expires by default after 60 minutes) is done by using the value of the field `refreshToken`. The following snippet shows how a call is issued in order to get a new access token by using a refresh token:
+[source,bash]
+----
+curl --request POST 'https://securetoken.googleapis.com/v1/token?grant_type=refresh_token&refresh_token=<REFRESH_TOKEN>&key=<AUTHKEY>'
+----
+
+=== Representations
+The fulfillmenttools API currently offers `application/json` as the standard representation of request- and response-bodies.
+
+=== Timeouts & Response Times
+Currently each endpoint can have a response time of up to 60 seconds.
+
+=== Update Guarantees
+The API provides different update guarantees for different kinds of requests.
+
+==== Strong Consistency
+Each resource provides read-after-write consistency. Read-after-write consistency means that when an entity is updated, The changes that were made are instantly availabe after waiting for the successful response and reading the same entity.
+
+==== Eventual Consistency
+Some updates are not visible immediately in the used clients (especially mobile and web clients) after the update. For example, if a shipment was created which is by design an asynchronous process, updating the shipment itself provides read-after-write consistency, but the actual visibility in said clients is updated with a delay by the platform.
+
+These delayed updates provide an Eventual Consistency guarantee. It means that after a delay you will be able to see the changes that you or a follow up process performed.
+
+These delays can vary depending on the amount of data to update. We try to keep these delays as small as possible.
+
+=== Optimistic Concurrency Control (Optimistic Locking)
+Many API resources use optimistic concurrency control to prevent lost updates when making changes to existing data concurrently. These resources have a version attribute. When sending (partial) updates to these resources, the expected (and to the client last known version) of a resource is sent as a part of the request.
+
+After making an update, the HTTP response body contains the new version of the resource. An API client must wait for the new version before sending follow-up requests.
+
+Background processes and other events can also change a resource’s version number without any requests sent from an API client directly to the resource. Do not rely on a consistently incremented version number.
+
+The API does not use ETag and If-Match HTTP headers for the purpose of optimistic concurrency control.
+
+If a version mismatch occurs, the API returns a 409 HTTP status (Conflict) error.
+
+=== Resource Timestamps
+Timestamps as created- or lastModified or other fields that represent a date are always UTC Timestamps corresponding to Coordinated Universal Time (UTC), for example 2020-06-22T12:10:31.000Z.
+
+=== Pagination Interface
+The fulfillmenttools platform offers a pagination interface for some endpoints. Pagination is done based on size and page provided in the request by using query parameters,
+you will get the portion data according to requested parameters:
+[source,bash]
+----
+GET /api/orders?size=10&page=2
+----
+This call would return the second page of your orders and contains 10 orders.
