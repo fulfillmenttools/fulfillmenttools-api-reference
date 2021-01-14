@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.12">
+<meta name="author" content="OC fulfillment GmbH">
+<title>fulfillmenttools HTTP API documentation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment @import statement to use as custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*::before,*::after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite::before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details>summary:first-of-type{cursor:pointer;display:list-item;outline:none;margin-bottom:.75em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{-webkit-border-radius:4px;border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class="highlight"],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos{border-right:1px solid currentColor;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid currentColor;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
+ul.inline{display:-ms-flexbox;display:-webkit-box;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);-webkit-border-radius:50%;border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media print,amzn-kf8{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>fulfillmenttools HTTP API documentation</h1>
+<div class="details">
+<span id="author" class="author">OC fulfillment GmbH</span><br>
+<span id="email" class="email"><a href="mailto:api@fulfillmenttools.com">api@fulfillmenttools.com</a></span><br>
+<span id="revnumber">0.1-beta ,</span>
+<span id="revdate">23.06.2020</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_general_topics">General Topics</a>
+<ul class="sectlevel2">
+<li><a href="#_host">Host</a></li>
+<li><a href="#_region">Region</a></li>
+<li><a href="#_api_versioning">API Versioning</a></li>
+<li><a href="#_authorization">Authorization</a></li>
+<li><a href="#_representations">Representations</a></li>
+<li><a href="#_timeouts_response_times">Timeouts &amp; Response Times</a></li>
+<li><a href="#_update_guarantees">Update Guarantees</a></li>
+<li><a href="#_optimistic_concurrency_control_optimistic_locking">Optimistic Concurrency Control (Optimistic Locking)</a></li>
+<li><a href="#_resource_timestamps">Resource Timestamps</a></li>
+<li><a href="#_pagination_interface">Pagination Interface</a></li>
+</ul>
+</li>
+<li><a href="#_users">Users</a>
+<ul class="sectlevel2">
+<li><a href="#_roles_and_permissions">Roles and permissions</a></li>
+<li><a href="#_use_cases">Use Cases</a></li>
+</ul>
+</li>
+<li><a href="#_tenant">Tenant</a>
+<ul class="sectlevel2">
+<li><a href="#_tenant_based_configurations">Tenant based configurations</a></li>
+</ul>
+</li>
+<li><a href="#_facilities">Facilities</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_a_facility">Creating a facility</a></li>
+<li><a href="#_updating_state_of_a_facility">Updating state of a facility</a></li>
+<li><a href="#_configurations">Configurations</a></li>
+<li><a href="#_listings">Listings</a></li>
+</ul>
+</li>
+<li><a href="#_orders">Orders</a>
+<ul class="sectlevel2">
+<li><a href="#_default_behaviour">Default behaviour</a></li>
+<li><a href="#_providing_preferred_delivery_types_per_order">Providing preferred delivery types per order</a></li>
+</ul>
+</li>
+<li><a href="#_pickjobs">Pickjobs</a>
+<ul class="sectlevel2">
+<li><a href="#_information_about_delivery">Information about delivery</a></li>
+</ul>
+</li>
+<li><a href="#_shipments">Shipments</a>
+<ul class="sectlevel2">
+<li><a href="#_provided_information_to_a_shipment">Provided information to a Shipment</a></li>
+</ul>
+</li>
+<li><a href="#_parcels">Parcels</a></li>
+<li><a href="#_handoverjobs">Handoverjobs</a>
+<ul class="sectlevel2">
+<li><a href="#_lifecycle_of_handoverjobs">Lifecycle of Handoverjobs</a></li>
+</ul>
+</li>
+<li><a href="#_references">References</a>
+<ul class="sectlevel2">
+<li><a href="#_endpoints_resources">Endpoints / Resources</a></li>
+<li><a href="#_used_models">Used models</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This document gives an overview of the characteristics and features of the fulfillmenttools RESTful API.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<strong class="big red">Please understand, that the API is currently in a Pre-Released state and is subject to frequent changes until further notice!</strong>
+</td>
+</tr>
+</table>
+</div>
+<!-- toc disabled -->
+</div>
+</div>
+<div class="sect1">
+<h2 id="_general_topics">General Topics</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_host">Host</h3>
+<div class="paragraph">
+<p>The fulfillmenttools API is served over HTTPS. A tenant will get his own host once the corresponding
+environment has been created. The naming format of this host is similar to <code><a href="https://TENANT-SLUG.api.fulfillmenttools.com" class="bare">https://TENANT-SLUG.api.fulfillmenttools.com</a></code> while <code>TENANT-SLUG</code> is a unique identifier to each environment.
+For documentation purposes the URLs referenced in the documentation are abbreviated by:</p>
+</div>
+<div class="paragraph text-center">
+<p><code><a href="https://{host}" class="bare">https://{host}</a></code></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_region">Region</h3>
+<div class="paragraph">
+<p>Our service is hosted with Google Cloud Platform. We leverage products that are located either in Region <strong>europe-west1</strong> (St.Ghislain, Belgium) or
+<strong>europe-west3</strong> (Frankfurt, Germany).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_api_versioning">API Versioning</h3>
+<div class="paragraph">
+<p>We will release a new version of the API when we make backwards-incompatible changes. The following changes however are considered to be backwards-compatible:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Adding new API resources.</p>
+</li>
+<li>
+<p>Adding new optional request parameters to existing API methods.</p>
+</li>
+<li>
+<p>Adding new properties to existing API responses.</p>
+</li>
+<li>
+<p>Changing the order of properties in existing API responses.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_authorization">Authorization</h3>
+<div class="paragraph">
+<p>Authorization against our API works by using a registered user and using the <strong>OAuth-Protocol</strong>. If the authentication
+was successfully, a signed JWT Token is issued to the caller which can be used to authenticate against the API or to get a fresh token
+from the authentication provider using the <code>refresh_token</code>.  Currently we are using the Google Identity Provider as an authentication provider.</p>
+</div>
+<div class="paragraph">
+<p>Logging in and obtaining a valid token can for example be done by issuing the following request:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --request POST 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=&lt;AUTHKEY&gt;' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{"email": username,  "password": password, "returnSecureToken": true}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A valid <code>username</code> and <code>password</code> as well as the customer specific <code>AUTH_KEY</code> can be obtained from fulfillmenttools when the tenant is entitled to use the API.</p>
+</div>
+<div class="paragraph">
+<p>As a result, an answer looking similar to this is responded:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "kind": "identitytoolkit#VerifyPasswordResponse",
+  "localId": "jdwBuqqYWdYoqWTH1Xv85EJJMpm2",
+  "email": "yourlogin@yourdomain.com",
+  "displayName": "",
+  "idToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImMzZjI3NjU0MmJmZmUN0WU5OGMyMGQ2MDNlYmUyYmExMTc2ZWRhMzMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vb2NmZi1kZXYtYm94ZmlzaC12MS1ibHViIiwiYXVkIjoib2NmZi1kZXYtYm94ZmlzaC12MS1ibHViIiwiYXV0aF90aW1lIjoxNTkyODI0MDg2LCJ1c2VyX2lkIjoiamR3QnVxcVlXZFlvcVdUSDFYdjg1RUpKTXBtMiIsInN1YiI6Impkd0J1cXFZV2RZb3FXVEgxWHY4NUVKSk1wbTIiLCJpYXQiOjE1OTI4MjQwODYsImV4cCI6MTU5MjgyNzY4NiwiZW1haWwiOiJ0ZXN0QHRlc3QuZGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGVzdEB0ZXN0LmRlIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.nTlNZTj5B3-lOToCuzEFIqTQSz4cPY1lOhdj12-RG1wOTlOoS_u5JGi4Zw4S684o07381g3ooC_B-KM2UhqaQMAkWfA_OA1cJgD_rrAdIUov_cuYdCYXHmvI-8kAajsy6R08Uh3lQYHx9tmyzbweqDFluGXEc9huH-QoWfoiwZ9Y1sjguAgC1ZCbQi3AkgKcKOqHVn8bGFxYK6KxoyXMZxaiFrfwjMQ-lov0554akQDBU0gAqLCszXtmQP7rNI5boeMIA1vo0myTXwvmYLMHIVJVn6Ej-I2SSAY1OCdafgF6k492lxJN8lJhsTsJfCynLgbiNgHJJxtBXSTSFnp2fA",
+  "registered": true,
+  "refreshToken": "AE0u-NeGDdHWPB0RjOYOL5AlfSO6r8CvMO6eLSXxdjMG9xiXQmBxZKJgu9OSwZ2JJc2jgSTgiNFYTFYmd1DAlfcCzpunAOF6JC8ZofkrkM75lTjMyQgxWlGWIP24dk2qaMvtAPt2oK8RtsjKx4TRQosFagokGTukQKxSWxSpTEDZl0QbWM9zmbBjzBqSK5yCWMwK2qHJpYgfJvoyAyReo76mRDC36NUpRMKoncagBq30OFCJkEgpvyI",
+  "expiresIn": "3600"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The value of <code>idToken</code> can be used in a HTTP call within the <code>Authorization</code> Header in a request towards our API like this:</p>
+</div>
+<div class="paragraph">
+<p><code>Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6I&#8230;&#8203;</code></p>
+</div>
+<div class="paragraph">
+<p>Refreshing the access token (which expires by default after 60 minutes) is done by using the value of the field <code>refreshToken</code>. The following snippet shows how a call is issued in order to get a new access token by using a refresh token:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">curl --request POST 'https://securetoken.googleapis.com/v1/token?grant_type=refresh_token&amp;refresh_token=&lt;REFRESH_TOKEN&gt;&amp;key=&lt;AUTHKEY&gt;'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_representations">Representations</h3>
+<div class="paragraph">
+<p>The fulfillmenttools API currently offers <code>application/json</code> as the standard representation of request- and response-bodies.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_timeouts_response_times">Timeouts &amp; Response Times</h3>
+<div class="paragraph">
+<p>Currently each endpoint can have a response time of up to 60 seconds.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_update_guarantees">Update Guarantees</h3>
+<div class="paragraph">
+<p>The API provides different update guarantees for different kinds of requests.</p>
+</div>
+<div class="sect3">
+<h4 id="_strong_consistency">Strong Consistency</h4>
+<div class="paragraph">
+<p>Each resource provides read-after-write consistency. Read-after-write consistency means that when an entity is updated, The changes that were made are instantly availabe after waiting for the successful response and reading the same entity.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_eventual_consistency">Eventual Consistency</h4>
+<div class="paragraph">
+<p>Some updates are not visible immediately in the used clients (especially mobile and web clients) after the update. For example, if a shipment was created which is by design an asynchronous process, updating the shipment itself provides read-after-write consistency, but the actual visibility in said clients is updated with a delay by the platform.</p>
+</div>
+<div class="paragraph">
+<p>These delayed updates provide an Eventual Consistency guarantee. It means that after a delay you will be able to see the changes that you or a follow up process performed.</p>
+</div>
+<div class="paragraph">
+<p>These delays can vary depending on the amount of data to update. We try to keep these delays as small as possible.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_optimistic_concurrency_control_optimistic_locking">Optimistic Concurrency Control (Optimistic Locking)</h3>
+<div class="paragraph">
+<p>Many API resources use optimistic concurrency control to prevent lost updates when making changes to existing data concurrently. These resources have a version attribute. When sending (partial) updates to these resources, the expected (and to the client last known version) of a resource is sent as a part of the request.</p>
+</div>
+<div class="paragraph">
+<p>After making an update, the HTTP response body contains the new version of the resource. An API client must wait for the new version before sending follow-up requests.</p>
+</div>
+<div class="paragraph">
+<p>Background processes and other events can also change a resource’s version number without any requests sent from an API client directly to the resource. Do not rely on a consistently incremented version number.</p>
+</div>
+<div class="paragraph">
+<p>The API does not use ETag and If-Match HTTP headers for the purpose of optimistic concurrency control.</p>
+</div>
+<div class="paragraph">
+<p>If a version mismatch occurs, the API returns a 409 HTTP status (Conflict) error.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resource_timestamps">Resource Timestamps</h3>
+<div class="paragraph">
+<p>Timestamps as created- or lastModified or other fields that represent a date are always UTC Timestamps corresponding to Coordinated Universal Time (UTC), for example 2020-06-22T12:10:31.000Z.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pagination_interface">Pagination Interface</h3>
+<div class="paragraph">
+<p>The fulfillmenttools platform offers a pagination interface for some endpoints. Pagination is done based on size and page provided in the request by using query parameters,
+you will get the portion data according to requested parameters:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">GET /api/orders?size=10&amp;page=2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This call would return the second page of your orders and contains 10 orders.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_users">Users</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the fulfillmenttools platform there is a simple yet effective rights &amp; permission system in place. It hides data from users, that are authenticated but not authorized to view data or it disables to use features in API, backoffice or mobile clients.</p>
+</div>
+<div class="sect2">
+<h3 id="_roles_and_permissions">Roles and permissions</h3>
+<div class="paragraph">
+<p>There is a fixed set of roles a user can possess within the platform. Currently the system knows the following roles:</p>
+</div>
+<table id="bookmark-roles_table" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Available Roles in fulfillmenttools</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Role</th>
+<th class="tableblock halign-left valign-top">Facility affiliation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FULFILLER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SUPERVISOR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ADMINISTRATOR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>A user always has to possess a known role in order to interact with the clients or via the API.
+This information is issued to the Identity-Provider and will be reflected in the next JWT, that is issued to the user.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Only information that comes within the signed JWT token is considered for authorization in the platform. That also means, that for example
+a role change can take <strong>up to 60 minutes</strong> for a user to become visible, because already issued JWT Tokens still remain valid.
+You can force acquiring a new role for example by asking the user to logout and login again.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Currently there is a 1:1 relationship between a user and a role: Any given user in the system can have exactly one role.
+The existing roles are sharing permissions and implement a concept of inheritance which is shown in the following diagram:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="doc/users/DocRolesAndPermissions.png" alt="DocRolesAndPermissions">
+</div>
+</div>
+<div class="sect3">
+<h4 id="_facility_affiliation">Facility affiliation</h4>
+<div class="paragraph">
+<p>In order to prevents user of specific roles to read out data that they are not allowed to see (for GDPR reasons for instance)
+some roles are only assignable together with a mandatory reference to a facility (see <a href="#bookmark-roles_table">table</a>).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Currently the list of available roles is fixed and cannot be extended by the client.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_cases">Use Cases</h3>
+<div class="paragraph">
+<p>The following calls are allowed to the following roles: SUPERVISOR, ADMINISTRATOR</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+SUPERVISORS can only manage users within their assigned facility while ADMINISTRATORS can manage users for any existing facility.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_creation_of_new_users">Creation of new users</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --location --request POST 'https://{host}/api/users' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer &lt;Valid idToken&gt;' \
+--data-raw '{
+  "firstname": "Donna",
+  "lastname": "Sheridan-Carmichael",
+  "username": "dsheridan",
+  "password": "fsdf6556",
+  "roles": [
+    {
+      "name": "FULFILLER",
+      "facilities": [
+    "0AMSoRCbm7kSM3LJPoeH"
+      ]
+    }
+  ]
+}'
+
+Response:
+201 OK
+{
+    "customClaims": {
+        "roles": [
+            {
+                "facilities": [
+                    "0T1vKaEar0nuG58CxzA5"
+                ],
+                "name": "FULFILLER"
+            }
+        ]
+    },
+    "version": 1,
+    "lastname": "Sheridan-Carmichael",
+    "username": "dsheridan",
+    "firstname": "Donna",
+    "created": "2020-09-25T10:06:35.009Z",
+    "lastModified": "2020-09-25T10:06:35.009Z",
+    "id": "x5jrZrDHvYYs6HpaDICKYG4QuIk2"
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Operation is allowed by either a <code>SUPERVISOR</code> of facility <code>0AMSoRCbm7kSM3LJPoeH</code> or an <code>ADMINISTRATOR</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_modifying_role_of_a_user">Modifying role of a user</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --request PATCH 'https://{host}}/api/users/x5jrZrDHvYYs6HpaDICKYG4QuIk2' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer &lt;Valid idToken&gt;' \
+--data-raw '{
+  "version": 1,
+  "actions": [
+    {
+        "action": 	"ModifyUser",
+          "roles": [
+              {
+                "name": "SUPERVISOR",
+                "facilities": [
+              "0T1vKaEar0nuG58CxzA5"
+                ]
+              }
+            ]
+    }
+  ]
+}'
+
+Response:
+200 OK
+{
+    "lastname": "Sheridan-Carmichael",
+    "customClaims": {
+        "roles": [
+            {
+                "facilities": [
+                    "0T1vKaEar0nuG58CxzA5"
+                ],
+                "name": "SUPERVISOR"
+            }
+        ]
+    },
+    "version": 2,
+    "lastModified": "2020-09-25T10:13:27.236Z",
+    "username": "dsheridan",
+    "created": "2020-09-25T10:06:35.009Z",
+    "firstname": "Donna",
+    "id": "x5jrZrDHvYYs6HpaDICKYG4QuIk2"
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Role changes to users can only be done by users that have enough rights. In other words: A <code>SUPERVISOR</code> can not make another user an <code>ADMINISTRATOR</code>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deleting_a_user">Deleting a user</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --request DELETE 'https://{host}}/api/users/x5jrZrDHvYYs6HpaDICKYG4QuIk2' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer &lt;Valid idToken&gt;'
+
+Response:
+200 OK</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+When a user is deleted all currently active JWT Tokens of said user are invalidated. The user will not be able to use an issued token anymore.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tenant">Tenant</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the fulfillmenttools platform a tenant is another word for our customer - and that happens to be you (once you decided to work with us).
+You will be issued with your own independent managed SaaS platform in regards of data segregation, call routing and configuration for your business without having to worry about scalability and security.</p>
+</div>
+<div class="paragraph">
+<p>The tenant system can be configured and in this section we will present some configurations on a tenant level.</p>
+</div>
+<div class="sect2">
+<h3 id="_tenant_based_configurations">Tenant based configurations</h3>
+<div class="paragraph">
+<p>The configurations mentioned here are applicable for the whole tenant. In other words: to all your facilities and for all your processes. More detailed configuration on facility level is mentioned in the <a href="#_facilities">Facilities</a> section.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name of feature</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">How to activate?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Infinite Stock</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The platform or, to be more precise, the Distributing Order Management System, can be configured in a way that it assumes infinite stock for the product listings you provide to fulfillmenttools. However, you can still disable single listings for not to be taken into consideration in your Backoffice-Application.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Disabled</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Please get in contact with us.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_facilities">Facilities</h2>
+<div class="sectionbody">
+<div class="imageblock text-center">
+<div class="content">
+<img src="doc/facilities/DocFacilitiesOverview.png" alt="DocFacilitiesOverview">
+</div>
+</div>
+<div class="paragraph">
+<p>This resource describes the stores, warehouses, popup stores, etc. of a company. In general, a facility is a place where fulfillment processes take place or should be considered.</p>
+</div>
+<div class="paragraph">
+<p>The facilities in our platform have some basic data to them: an address, provided services, etc.. They are also an important component of the Distributing Order Management System: an <a href="#_orders">Order</a> and a facility are combined into a <a href="#_pickjobs">Pickjob</a> which is then picked to fulfill the consumers' order.</p>
+</div>
+<div class="paragraph">
+<p>The api offers a delete endpoint. Handle with care as the call will delete every data related to the facility such as
+listings and configurations.</p>
+</div>
+<div class="sect2">
+<h3 id="_creating_a_facility">Creating a facility</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --request POST 'https://{host}}/api/facilities' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer &lt;Valid idToken&gt;' \
+--data-raw '{
+    "name": "Otternasen Deluxe-Store",
+    "locationType": "STORE",
+    "address": {
+        "street": "Allende-Platz",
+        "houseNumber": "3",
+        "postalCode": "20146",
+        "city": "Hamburg",
+        "country": "DE",
+        "companyName": "Deluxe-Store",
+        "phoneNumbers": [
+            {
+                "value": "040 - 25 45 78 41",
+                "type": "PHONE",
+                "label": "Anschluss im Laden"
+            }
+        ],
+        "emailAddresses": [
+            {
+                "value": "tim@otternasen.com",
+                "recipient": "Tim Otter"
+            }
+        ]
+    },
+    "contact": {
+        "firstName": "Tim",
+        "lastName": "Otter",
+        "roleDescription": "Head of Everything"
+    },
+    "status": "ONLINE",
+    "services": [
+        {
+            "type": "SHIP_FROM_STORE"
+        }
+    ]
+}'
+
+Response:
+201 Facility is created.
+
+{
+    "locationType": "STORE",
+    "name": "Otternasen Deluxe-Store",
+    "version": 1,
+    "status": "ONLINE",
+    "address": {
+        "phoneNumbers": [
+            {
+                "type": "PHONE",
+                "label": "Anschluss im Laden",
+                "value": "040 - 25 45 78 41"
+            }
+        ],
+        "city": "Hamburg",
+        "emailAddresses": [
+            {
+                "value": "tim@otternasen.com",
+                "recipient": "Tim Otter"
+            }
+        ],
+        "country": "DE",
+        "houseNumber": "3",
+        "postalCode": "20146",
+        "companyName": "Deluxe-Store",
+        "street": "Allende-Platz"
+    },
+    "services": [
+        {
+            "type": "SHIP_FROM_STORE"
+        }
+    ],
+    "contact": {
+        "roleDescription": "Head of Everything",
+        "firstName": "Tim",
+        "lastName": "Otter"
+    },
+    "created": "2020-10-13T15:03:39.011Z",
+    "lastModified": "2020-10-13T15:03:39.011Z",
+    "id": "AeFgjHMHHBBX4H4gwydZ"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_updating_state_of_a_facility">Updating state of a facility</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --request PATCH 'https://{host}}/api/facilities/AeFgjHMHHBBX4H4gwydZ' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer &lt;Valid idToken&gt;' \
+--data-raw '{
+  "version": 2,
+    "actions": [{
+        "action": "ModifyFacility",
+        "status": "OFFLINE"
+    }
+  ]
+}'
+
+Response:
+200 OK
+{
+    "services": [
+        {
+            "type": "SHIP_FROM_STORE"
+        }
+    ],
+    "id": "AeFgjHMHHBBX4H4gwydZ",
+    "created": "2020-10-13T15:03:39.011Z",
+    "version": 2,
+    "status": "OFFLINE",
+    "address": {
+        "street": "Allende-Platz",
+        "companyName": "Deluxe-Store",
+        "country": "DE",
+        "city": "Hamburg",
+        "houseNumber": "3",
+        "phoneNumbers": [
+            {
+                "label": "Anschluss im Laden",
+                "type": "PHONE",
+                "value": "040 - 25 45 78 41"
+            }
+        ],
+        "emailAddresses": [
+            {
+                "value": "tim@otternasen.com",
+                "recipient": "Tim Otter"
+            }
+        ],
+        "postalCode": "20146"
+    },
+    "contact": {
+        "roleDescription": "Head of Everything",
+        "lastName": "Otter",
+        "firstName": "Roshanak"
+    },
+    "name": "Otternasen Deluxe-Store",
+    "lastModified": "2020-10-13T15:17:58.238Z",
+    "locationType": "STORE"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configurations">Configurations</h3>
+<div class="paragraph">
+<p>A facility is, similar to a couple of other entities in the platform, configurable.
+The configurations for a facility are accessible via
+<a href="https://fulfillmenttools.github.io/api-reference-ui/#/Facilities/getFacilityConfigurations">Get configurations for a facility</a>. The reponse to a request to this resource will contain a list of set / available configurations to the depicted facility.</p>
+</div>
+<div class="paragraph">
+<p>A facility can have some specific restrictions regarding stock. In a first version the available parameters for stock in a facility can be found within the next section.</p>
+</div>
+<div class="sect3">
+<h4 id="_stock_configuration">Stock Configuration</h4>
+<div class="paragraph">
+<p>Since a tenant might have ongoing offline sales (caused by offline consumers who walk into the facility and buy certain articles), we have to deal with the uncertainty that there will be stock which we cannot use for online orders.
+Furthermore we have to deal with the fact that the reported stock is not 100% correct for each given moment in time.</p>
+</div>
+<div class="paragraph">
+<p>Therefore we “split” the stock of each article into offline and online stock and reserve a certain stock level for offline sales. The Distributing Order Management System will not include any of this offline stock into its calculations.</p>
+</div>
+<div class="paragraph">
+<p>The reserved offline stock for a facility can be obtained, enabled or disabled by using the <a href="https://fulfillmenttools.github.io/api-reference-ui/#/Facilities/getFacilityStockConfiguration">Get Facility Stock Configuration</a> endpoint.</p>
+</div>
+<div class="paragraph">
+<p>This configuration can be enabled for facilties of type STORE while facilities of type WAREHOUSE do not have visiting offline consumers and thus do not need this configuration. Once the reserved offline stock is set, it is taken into consideration for every <strong>new order</strong> that is supplied to the platform - existing pickjobs that were routed beforehand are not reprocessed.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In the first iteration stage the retained offline stock needs to be set manually by defining a relative quantity ( % ) for offline stock with a decimal value between 0 and 100. The calculated offline stock is rounded off. Since the level for offline stock could vary for each facility (e.g. facilities in pedestrian zones should have a higher offline stock level than a facility outside the city) it is configurable by facility.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listings">Listings</h3>
+<div class="paragraph">
+<p>A listing describes the general availability of an article in <a href="#_facilities">Facilities</a> or, to be more precise, within one facility. It also contains facility-dependend
+information like the article image, title and its price.
+This information is essential for the Distributing Order Management System as an order should be ideally routed to a facility
+which has all requested articles in stock.</p>
+</div>
+<div class="paragraph">
+<p>A tenant can also be configured to have <strong>infiniteStockEnabled</strong> which means that when distributing an order only the
+state of a listing and not the actual amount of stock is considered. if a short pick is detected and the
+<strong>infiniteStockEnabled</strong> toggle is active the short picked article&#8217;s listing is deactivated. By default every deactivated
+listing is reactivated again after 24 hours.
+This behaviour can be configured on a facility base by setting the configuration <strong>listingReactivationAfter</strong> (in hours)
+using the <a href="https://fulfillmenttools.github.io/api-reference-ui/#/Facilities/getFacilityStockConfiguration">Get Facility Stock Configuration</a> endpoint.</p>
+</div>
+<div class="sect3">
+<h4 id="_createupdate_a_listing">Create/Update a listing</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --request PUT 'https://{host}}/api/facilities/x5jrZrDHvYYs6HpaDICKYG4QuIk2/listings' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer &lt;Valid idToken&gt;' \
+--data-raw '{
+    "listings": [
+        {
+            "title": "SUPERSTAR SCHUH",
+            "subtitle": "42-43",
+            "tenantArticleId": "116d0qb-a12",
+            "imageUrl": "https://yourshopshost.com/images/pictureUrlWithThePossibilityOfAutoscaleIfPossible.jpg",
+            "price": 1000,
+            "stockinformation":
+             {
+                    "stock": 8,
+                    "reserved": 1
+             }
+        },
+        {
+            "title": "SUPERSTAR SCHUH",
+            "subtitle": "42-43",
+            "tenantArticleId": "116d0qb-a13",
+            "imageUrl": "https://yourshopshost.com/images/pictureUrlWithThePossibilityOfAutoscaleIfPossible.jpg",
+            "price": 2000,
+            "stockinformation":
+             {
+                    "stock": 9,
+                    "reserved": 2
+             }
+        },
+        {
+            "title": "SUPERSTAR SCHUH",
+            "subtitle": "42-43",
+            "tenantArticleId": "116d0qb-a14",
+            "imageUrl": "https://yourshopshost.com/images/pictureUrlWithThePossibilityOfAutoscaleIfPossible.jpg",
+            "price": 3000,
+            "stockinformation":
+             {
+                    "stock": 12,
+                    "reserved": 3
+             }
+        }
+    ]
+}'
+
+Response:
+200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_stock">Stock</h4>
+<div class="paragraph">
+<p>An even further refined way to distribute an order is to consider the actual available stock of an article within a facility, namely a listing. This is why listings have attributes that in turn have impact on the distribution of orders and transforming them to pickjobs. Currently the following attributes are available:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Stock</strong>: This value depicts the amount of articles that is currently on stock. It is an absolute number and ist not taking reserved or offline retained stock into account.</p>
+</li>
+<li>
+<p><strong>Reserved</strong>: Reserved stock is the amount of articles, that is already planned to be used in OPEN Pick Line Items of Pickjobs. Whenever a new order arrives in the system the reserved value for the listing of the corresponding facility and article is being raised, whenever a Pickjob is finished the amount is substracted again.</p>
+</li>
+<li>
+<p><strong>Retained Offline Stock</strong>: See <a href="#_stock_configuration">Stock Configuration</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_orders">Orders</h2>
+<div class="sectionbody">
+<div class="imageblock text-center">
+<div class="content">
+<img src="doc/orders/DocOrdersOverview.png" alt="DocOrdersOverview">
+</div>
+</div>
+<div class="paragraph">
+<p>The distributed order management system (DOMS) is a backend component that orchestrates incoming orders from your eCommerce shop and decides based on routing rules where and how the order can be fulfilled best to meet your consumers needs.</p>
+</div>
+<div class="paragraph">
+<p>An order is a collection of the orderlines and some extra information, which should be fulfilled.
+It is also a typical entry point to the operational processes within the fulfillmenttools platform: An order is created after the consumer went through the checkout in the online shop. The following paragraph tells about the abilities and features that are enclosed within this entity.</p>
+</div>
+<div class="sect2">
+<h3 id="_default_behaviour">Default behaviour</h3>
+<div class="paragraph">
+<p>An order is typically mapped to one or more <a href="#_pickjobs">Pickjobs</a> and dispatched to <a href="#_facilities">Facilities</a> for fulfillment after it has been supplied to the platform. There are Routing rules present in the system, that could be configured in order to meet certain expectations towards for example stock or geolocation based distribution. These rules apply by default to every new order, that is entering the system.
+This default behaviour can be bypassed by certain information in the order message, namely the <code>deliverypreferences</code> field. If you provide an order not having this field the following default will be added:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">{
+    ...
+    "deliverypreferences" : [
+        "shipping": {
+             "servicetype": "BEST_EFFORT"
+            }
+    ]
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The order will be <strong>shipped</strong> by a carrier using a <strong>best effort</strong> servicetype.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_providing_preferred_delivery_types_per_order">Providing preferred delivery types per order</h3>
+<div class="paragraph">
+<p>With fulfillmenttools platform you can currently provide a certain set of parameters that are used within the process after the picking. The order can carry the following information about the desired delivery approaches:
+* the picked goods are handed over in person at the store where the pickjob was fulfilled (<strong>Click &amp; Collect</strong>)
+* the picked items are packed and sent via a parcel carrier to the consumer (<strong>Delivery</strong>, <em><strong>default</strong></em>)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">"deliveryPreferences": {
+        "collect": [
+            {
+             "facilityRef": "28MB9nc4njINUx9rDrCU"  // The facility which the consumer has chosen to hand over the order
+            }
+        ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pickjobs">Pickjobs</h2>
+<div class="sectionbody">
+<div class="imageblock text-center">
+<div class="content">
+<img src="doc/pickjobs/DocPickjobsHeader.png" alt="DocPickjobsHeader">
+</div>
+</div>
+<div class="paragraph">
+<p>PickJobs are collections of Pick Line Items wrapped in a meta data envelope. It is one of the central resources in the API
+and is used in a process to collect goods that were ordered by the consumer before packing and shipping them.</p>
+</div>
+<div class="sect2">
+<h3 id="_information_about_delivery">Information about delivery</h3>
+<div class="paragraph">
+<p>Complete set of delivery information is conveyed from order to pick job, so, type of order (<strong>Click &amp; Collect</strong> or <strong>default Delivery</strong>) could be fetched from <code>deliveryinformation</code> field in pick job.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">    "deliveryinformation": {
+        "channel": "COLLECT",
+        "details": {
+            "collect": {
+                 "identifier": "Stefan Bauer"  // Identity of the consumer
+            },
+            "shipping": {
+              // Contains address of the consumer
+            }
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By Default <code>channel</code> field of the delivery information is set to "SHIPPING" but in Click &amp; Collect option, it is "COLLECT"</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_shipments">Shipments</h2>
+<div class="sectionbody">
+<div class="imageblock text-center">
+<div class="content">
+<img src="doc/shipments/DocShipmentsOverview.png" alt="DocShipmentsOverview">
+</div>
+</div>
+<div class="paragraph">
+<p>Shipments are being created in order to place a request for the advise of possibly multiple <a href="#_parcels">Parcels</a> via a carrier. When creating a shipment the fulfillmenttools platform takes care of creating the amount of packages the shipment requires, advising those against the selected carrier and serves as a resource that bundles the information of the corresponding packages.</p>
+</div>
+<div class="sect2">
+<h3 id="_provided_information_to_a_shipment">Provided information to a Shipment</h3>
+<div class="paragraph">
+<p>When creating a shipment you have to provide a reference to an existing pickjob for a facility the user is also assigned to (see <a href="#_roles_and_permissions">Roles and permissions</a>).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_parcels">Parcels</h2>
+<div class="sectionbody">
+<div class="imageblock text-center">
+<div class="content">
+<img src="doc/parcels/DocParcelsOverview.png" alt="DocParcelsOverview">
+</div>
+</div>
+<div class="paragraph">
+<p>Parcels are (in contrast to <a href="#_shipments">Shipments</a>) the representation of physical packages that are handed over to carriers. A parcel resource has its own lifecycle, which is decoupled from the lifecycle of the (possibly) connected shipment.</p>
+</div>
+<div class="paragraph">
+<p>After a successful advise to a carrier, which will be done asynchronously by the platform, it will bear the information about status, tracking number and the link to the downloadable parcel label that has to be attached to the package.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_handoverjobs">Handoverjobs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A Handoverjob is the entity that supports the process around the handover of picked goods towards</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a carrier (in case of deliveries / ship from store)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Handoverjobs must be distinguished from <a href="#_parcels">Parcels</a> as the latter are the physical packages, that are sent, receive tracking information and are delivered to the consumer in the end.
+<a href="#_handoverjobs">Handoverjobs</a> on the other side are entities, that aid in the handover process of the physical picking result to the next process step, namely the pickup by a carrier.</p>
+</div>
+<div class="sect2">
+<h3 id="_lifecycle_of_handoverjobs">Lifecycle of Handoverjobs</h3>
+<div class="paragraph">
+<p>For now a handoverjob is automatically created whenever a label of a parcel is successfully being created. The current state transitions are</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">State</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OPEN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The parcel label was successfully created (carrier acknowledged the transportation of the connected parcel) &amp; the parcel should be ready to be picked up by the carrier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HANDED_OVER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The parcel was handed over to the carrier / put to the place where the carrier will find it for the actual pickup at a later point in time. The connected parcel will receive further tracking status updates.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Please use the file <code>api.swagger.yaml</code> within this project to get a comprehensive overview about the endpoints and the way to interact with them.</p>
+</div>
+<div class="paragraph">
+<p>Also you can use the SwaggerUI to better understand the capabilities of the API. It can be found here: <a href="https://fulfillmenttools.github.io/api-reference-ui/" class="bare">https://fulfillmenttools.github.io/api-reference-ui/</a></p>
+</div>
+<div class="sect2">
+<h3 id="_endpoints_resources">Endpoints / Resources</h3>
+<div class="paragraph">
+<p>Please refer to <a href="api.swagger.yaml">api.swagger.yaml</a> to learn about the provided endpoints and their methods.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_used_models">Used models</h3>
+<div class="paragraph">
+<p>Please refer to <a href="api.swagger.yaml">api.swagger.yaml</a> to learn about the used models.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+0.1-BETA <br>
+Last updated 2021-01-14 15:09:58 UTC
+</div>
+</div>
+</body>
+</html>

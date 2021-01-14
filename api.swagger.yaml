@@ -1,0 +1,4081 @@
+swagger: "2.0"
+info:
+  description: "This is the fulfillmenttools API for tenant %%PROJECT_ID%%"
+  version: "0.0.1"
+  title: "fulfillmenttools API for tenant %%PROJECT_ID%%"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    name: "OC fulfillment GmbH"
+    email: "api@fulfillmenttools.com"
+    url: "https://fulfillmenttools.com/"
+host: "%%HOST%%"
+tags:
+  - name: "Orders"
+    description: "Everything your customer ordered in your shop, so everything he or she orders for fulfillment."
+schemes:
+  - "https"
+paths:
+  /api/configurations/stock:
+    put:
+      tags:
+        - "Configurations"
+      summary: "Change the tenant wide stock configuration"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "putStockConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Desired stock configuration to put"
+          required: true
+          schema:
+            $ref: "#/definitions/StockConfiguration"
+      responses:
+        200:
+          description: "The stockConfiguration was successfully created."
+          schema:
+            $ref: "#/definitions/StockConfiguration"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/orders:
+    post:
+      tags:
+        - "Orders"
+      summary: "Add a new order for future fulfillment"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "addOrder"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Order object supplied by your shop instance"
+          required: true
+          schema:
+            $ref: "#/definitions/OrderForCreation"
+      responses:
+        201:
+          description: "The order was successfully created. The Location header contains the URL of the order."
+          schema:
+            $ref: "#/definitions/Order"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    get:
+      tags:
+        - "Orders"
+      summary: "Return all orders"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getAllOrders"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "page"
+          description: "requested page number"
+          required: false
+          type: "integer"
+          default: 1
+        - in: "query"
+          name: "size"
+          description: "number of entities to show"
+          required: false
+          type: "integer"
+          default: 25
+      responses:
+        200:
+          description: "Orders are found."
+          schema:
+            $ref: "#/definitions/StrippedOrders"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/orders/{orderId}:
+    get:
+      tags:
+        - "Orders"
+      summary: "Get a order with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getOrder"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "orderId"
+          description: "ID of order you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Order was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/Order"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/shipments:
+    post:
+      tags:
+        - "Shipments"
+      summary: "Add a new Shipment"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "addShipment"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Shipment object supplied by your picking app"
+          required: true
+          schema:
+            $ref: "#/definitions/ShipmentForCreation"
+      responses:
+        201:
+          description: "The Shipment was successfully created. The Location header contains the URL of the Shipment."
+          schema:
+            $ref: "#/definitions/Shipment"
+        303:
+          description: "The Shipment already exists. The Location header contains the URL of the Shipment."
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    get:
+      tags:
+        - "Shipments"
+      summary: "Return all shipments"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getAllShipments"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "page"
+          description: "requested page number"
+          required: false
+          type: "integer"
+          default: 1
+        - in: "query"
+          name: "size"
+          description: "number of entities to show"
+          required: false
+          type: "integer"
+          default: 25
+        - in: "query"
+          name: "pickJobRef"
+          description: "This query can be used to find shipments for a referenced pickjob"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Shipments are found."
+          schema:
+            $ref: "#/definitions/StrippedShipments"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/shipments/{shipmentId}:
+    get:
+      tags:
+        - "Shipments"
+      summary: "Get a Shipment with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getShipment"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "shipmentId"
+          description: "ID of Shipment you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Shipment was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/Shipment"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Shipment not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Shipments"
+      summary: "Patches a shipment with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "patchShipment"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "shipmentId"
+          description: "ID of shipment you want to patch"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/ShipmentPatchActions"
+      responses:
+        200:
+          description: "Shipment was found & patch-set has been applied. The patched entity is in the body."
+          schema:
+            $ref: "#/definitions/Shipment"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Entity version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/facilities:
+    post:
+      tags:
+        - "Facilities"
+      summary: "Add a new facility"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "addFacility"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Representation that describes the facility"
+          required: true
+          schema:
+            $ref: '#/definitions/FacilityForCreation'
+      responses:
+        201:
+          description: "The facility was successfully created. The Location header contains the URL of the facility."
+          schema:
+            $ref: "#/definitions/Facility"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    get:
+      tags:
+        - "Facilities"
+      summary: "Return all facilities"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getAllFacilities"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "page"
+          description: "requested page number"
+          required: false
+          type: "integer"
+          default: 1
+        - in: "query"
+          name: "size"
+          description: "number of facilities to show"
+          required: false
+          type: "integer"
+          default: 25
+        - in: "query"
+          description: "query facilities with the given tenantFacilityId"
+          name: "tenantFacilityId"
+          required: false
+          type: string
+      responses:
+        200:
+          description: "Facilities are found."
+          schema:
+            $ref: "#/definitions/StrippedFacilities"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/facilities/{facilityId}:
+    get:
+      tags:
+        - "Facilities"
+      summary: "Get a facility with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getFacility"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Facility was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/Facility"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - "Facilities"
+      summary: "deletes a facility with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "deleteFacility"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to delete"
+          required: true
+          type: "string"
+        - in: "query"
+          name: "forceDeletion"
+          description: "cascading deletion without pre condition check"
+          required: false
+          type: "boolean"
+          default: false
+      responses:
+        200:
+          description: "Facility was found & you were allowed to delete it."
+          schema:
+            $ref: "#/definitions/Facility"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Facilities"
+      summary: "Patches a facility with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "patchFacility"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to patch"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/FacilityPatchActions"
+      responses:
+        200:
+          description: "Facility was found & patch-set has been applied. The patched facility is in the body."
+          schema:
+            $ref: "#/definitions/Facility"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Facility version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/facilities/{facilityId}/configurations:
+    get:
+      tags:
+        - "Facilities Configurations"
+      summary: "Gets the list of currently available and applied configurations for the given facility. "
+      description: "The response will merely supply a list of links that lead to configurations - for changing them please refer to the resources below. The contents of this list depends on the layout of your system, entries can appear and disappear based on configuration or internal processing"
+      security:
+        - firebase: []
+      operationId: "getFacilityConfigurations"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to retrieve the configurations for"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Configurations were found. A link list can be found in the response."
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/LinkedConfiguration'
+        404:
+          description: "No active configurations found for this facility"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/facilities/{facilityId}/configurations/stock:
+    get:
+      tags:
+        - "Facilities Configurations"
+      summary: "Gets the facility's current configuration for stock related order distribution"
+      security:
+        - firebase: []
+      operationId: "getFacilityStockConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to retrieve the configurations for"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Configuration for stock routing was found."
+          schema:
+            $ref: '#/definitions/FacilityStockConfiguration'
+        404:
+          description: "No active configurations found for this facility"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Facilities Configurations"
+      summary: "Patches a facility configuration with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "patchFacilityConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to get"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/StockConfigurationPatchActions"
+      responses:
+        200:
+          description: "Facility was found & patch-set has been applied. The patched facility configuration is in the body."
+          schema:
+            $ref: "#/definitions/FacilityStockConfiguration"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility Configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Facility version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/facilities/{facilityId}/listings:
+    get:
+      tags:
+        - "Listings"
+      summary: "Get a facility with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getFacilityListing"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to get listing"
+          required: true
+          type: "string"
+        - in: "query"
+          name: "page"
+          description: "requested page number"
+          required: false
+          type: "integer"
+          default: 1
+        - in: "query"
+          name: "size"
+          description: "number of facilities to show"
+          required: false
+          type: "integer"
+          default: 25
+      responses:
+        200:
+          description: "Facility was found & you were allowed to access it. The result is in the body."
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/StrippedListings'
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Listings"
+      summary: "Update listings of a facility with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "putFacilityListing"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to get its listing"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "listings for put"
+          required: true
+          schema:
+            $ref: "#/definitions/ListingsForCreation"
+      responses:
+        200:
+          description: "Facility listing was found & you were allowed to access it."
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility listing not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/facilities/{facilityId}/listings/{tenantArticleId}:
+    get:
+      tags:
+        - "Listings"
+      summary: "Get a Listings with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getListing"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to get listing"
+          required: true
+          type: "string"
+        - in: "path"
+          name: "tenantArticleId"
+          description: "tenantArticleId of listing you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Listing is found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: '#/definitions/Listing'
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Listings not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Listings"
+      summary: "Update a listing with the given ID of a facility with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "patchFacilityListing"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to patch a listing of"
+          required: true
+          type: "string"
+        - in: "path"
+          name: "tenantArticleId"
+          description: "tenant ID of the articles listing you want to patch"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "listings for put"
+          required: true
+          schema:
+            $ref: "#/definitions/ListingPatchActions"
+      responses:
+        200:
+          description: "Facility listing was found and successfully patched"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility listing not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Listing version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - "Listings"
+      summary: "deletes a listing with the given ID of a facility with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "deleteFacilityListing"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to delete a listing of"
+          required: true
+          type: "string"
+        - in: "path"
+          name: "tenantArticleId"
+          description: "tenant ID of the articles listing you want to delete"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Facility listing was found and successfully deleted"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility listing not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/facilities/{facilityId}/carriers:
+    get:
+      tags:
+        - "Facilities"
+      summary: "Get the available CEPs for a facility"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getFacilityCeps"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to get"
+          required: true
+          type: "string"
+        - in: "query"
+          name: "targetTime"
+          description: "At which time is the parcel ready to be shipped? The answer to this question has direct impact to the list of available KEPs and their respective service levels. Default: Time of the request"
+          format: "date-time"
+          type: "string"
+        - in: "query"
+          required: true
+          type: "string"
+          name: "targetPostalcode"
+          description: "Postalcode of the consumer address. "
+      responses:
+        404:
+          description: "This endpoint is not implemented yet."
+        501:
+          description: "This endpoint is not implemented yet."
+  /api/facilities/{facilityId}/carriers/{carrierRef}:
+    put:
+      tags:
+        - "Facilities"
+      summary: "Connect an (existing) CEP with individual Cutoff-Times to the facility"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "connectCepToFacility"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Representation that describes the facility"
+          required: true
+          schema:
+            $ref: '#/definitions/FacilityCarrierConnection'
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to get"
+          required: true
+          type: "string"
+        - in: "path"
+          name: "carrierRef"
+          description: "ID of facility you want to get"
+          required: true
+          type: "string"
+      responses:
+        404:
+          description: "This endpoint is not implemented yet."
+        501:
+          description: "This endpoint is not implemented yet."
+  /api/pickjobs:
+    get:
+      tags:
+        - "PickJobs"
+      summary: "Simple query interface to find pickjobs"
+      security:
+        - firebase: []
+      operationId: "queryPickJobs"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "orderRef"
+          description: "Reference to the order you want to get the corresponding pickjobs"
+          type: "string"
+        - in: "query"
+          name: "page"
+          description: "requested page number"
+          required: false
+          type: "integer"
+          default: 1
+        - in: "query"
+          name: "size"
+          description: "number of entities to show"
+          required: false
+          type: "integer"
+          default: 25
+      responses:
+        200:
+          description: "PickJobs were found. The results are in the body."
+          schema:
+            $ref: "#/definitions/StrippedPickJobs"
+        204:
+          description: "No PickJobs were found as a result to the given query."
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+      # end::pickjobs[]
+    # tag::pickjobs[]
+    post:
+      tags:
+        - "PickJobs"
+      summary: "Add a new pick job for fulfillment"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "addPickJob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Pick job object"
+          required: true
+          schema:
+            $ref: "#/definitions/PickJobForCreation"
+      responses:
+        201:
+          description: "The pick job was successfully created. The Location header contains the URL of the pickjob."
+          schema:
+            $ref: "#/definitions/PickJob"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+      # end::pickjobs[]
+  # tag::pickjobs[]
+  /api/pickjobs/{pickJobId}:
+    get:
+      tags:
+        - "PickJobs"
+      summary: "Get a pick job with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getPickJob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "pickJobId"
+          description: "ID of the pickjob you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "PickJob was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/PickJob"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+      # end::pickjobs[]
+    # tag::pickjobs[]
+    patch:
+      tags:
+        - "PickJobs"
+      summary: "Patches a pick job with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "pathPickJob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "pickJobId"
+          description: "ID of the pickjob you want to get"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/PickingPatchActions"
+      responses:
+        200:
+          description: "PickJob was found & patch-set has been applied. The patched pick job is in the body."
+          schema:
+            $ref: "#/definitions/PickJob"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "PickJob not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "PickJob version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        # end::pickjobs[]
+  /api/parcels:
+    post:
+      tags:
+        - "Parcels"
+      summary: "Add a new parcel for being send via a CEP partner"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "addParcel"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Parcel object"
+          required: true
+          schema:
+            $ref: "#/definitions/ParcelForCreation"
+      responses:
+        201:
+          description: "The parcel was successfully created. The Location header contains the URL of the parcel."
+          schema:
+            $ref: "#/definitions/Parcel"
+        202:
+          description: "Your request was correct and the platform took note of your intentions. The creation of the parcel involves some async processing and the result was not present directly after the request was made. The Location header contains the URL where you can get additional information about the parcel and its state."
+          schema:
+            $ref: "#/definitions/Parcel"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    get:
+      tags:
+        - "Parcels"
+      summary: "Return all parcels"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getAllParcels"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "page"
+          description: "requested page number"
+          required: false
+          type: "integer"
+          default: 1
+        - in: "query"
+          name: "size"
+          description: "number of entities to show"
+          required: false
+          type: "integer"
+          default: 25
+      responses:
+        200:
+          description: "Parcels are found."
+          schema:
+            $ref: "#/definitions/StrippedParcels"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/parcels/{parcelId}:
+    get:
+      tags:
+        - "Parcels"
+      summary: "Get a parcel with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getParcel"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "parcelId"
+          description: "ID of the parcel you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Parcel was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/Parcel"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/handoverjobs:
+    get:
+      tags:
+        - "Handoverjobs"
+      summary: "Return all handoverjobs"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getAllHandoverjobs"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "page"
+          description: "requested page number"
+          required: false
+          type: "integer"
+          default: 1
+        - in: "query"
+          name: "size"
+          description: "number of entities to show"
+          required: false
+          type: "integer"
+          default: 25
+        - in: "query"
+          name: "pickJobRef"
+          description: "This query can be used to find handoverjobs for a referenced pickjob"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "shipmentRef"
+          description: "This query can be used to find handoverjobs for a referenced shipment"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Handoverjobs are found."
+          schema:
+            $ref: "#/definitions/StrippedHandoverjobs"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/handoverjobs/{handoverjobId}:
+    get:
+      tags:
+        - "Handoverjobs"
+      summary: "Get a Handoverjob with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getHandoverjob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "handoverjobId"
+          description: "ID of the handoverjob you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Handoverjob was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/Handoverjob"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Handoverjobs"
+      summary: "Patches a handoverjob with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "patchHandoverjob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "handoverjobId"
+          description: "ID of handoverjob you want to patch"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/HandoverjobPatchActions"
+      responses:
+        200:
+          description: "Handoverjob was found & patch-set has been applied. The patched entity is in the body."
+          schema:
+            $ref: "#/definitions/Handoverjob"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Entity version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/users:
+    post:
+      tags:
+        - "Users"
+      summary: "Create a new user"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "createUser"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "User object"
+          required: true
+          schema:
+            $ref: "#/definitions/UserForCreation"
+      responses:
+        201:
+          description: "The user is successfully created."
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    get:
+      tags:
+        - "Users"
+      summary: "Return all users"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getAllUsers"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "page"
+          description: "requested page number"
+          required: false
+          type: "integer"
+          default: 1
+        - in: "query"
+          name: "size"
+          description: "number of entities to show"
+          required: false
+          type: "integer"
+          default: 25
+      responses:
+        200:
+          description: "User are found."
+          schema:
+            $ref: "#/definitions/StrippedUsers"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/users/{userId}:
+    patch:
+      tags:
+        - "Users"
+      summary: "Patch an existing user with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "patchUser"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "userId"
+          description: "ID of the user you want to patch"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "ModifyUser object"
+          required: true
+          schema:
+            $ref: "#/definitions/UserPatchActions"
+      responses:
+        200:
+          description: "The user is successfully modified."
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Facility version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    get:
+      tags:
+        - "Users"
+      summary: "Get a User with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getUser"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "userId"
+          description: "ID of User you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "User was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "User not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - "Users"
+      summary: "Deletes a User with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "deleteUser"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "userId"
+          description: "user ID of the user you want to delete"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "User was found and successfully deleted"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "User not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/users/sign/transloadit/{templateId}:
+    get:
+      tags:
+        - "Users"
+      summary: "Sign an upload request for a given template"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "signTransloaditRequest"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "templateId"
+          description: "The id of the template to sign the request"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "The signed request is returned."
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/users/branding/{clientName}:
+    put:
+      tags:
+        - "Users"
+      summary: "Sets the branding "
+      description: ""
+      security:
+        - firebase: []
+      operationId: "putBranding"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "clientName"
+          description: "Identifier for the client you want to set the branding for."
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Branding object"
+          required: true
+          schema:
+            $ref: "#/definitions/Branding"
+      responses:
+        200:
+          description: "The branding was successfully set."
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Unknown clientName"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/carriers:
+    post:
+      tags:
+        - "Carriers"
+      summary: "Add a new carrier as a CEP partner"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "addCarrier"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Carrier object"
+          required: true
+          schema:
+            $ref: "#/definitions/CarrierForCreation"
+      responses:
+        201:
+          description: "The carrier was successfully created. The Location header contains the URL of the carrier."
+          schema:
+            $ref: "#/definitions/Carrier"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/carriers/{carrierId}:
+    get:
+      tags:
+        - "Carriers"
+      summary: "Get a carrier with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getCarrier"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "carrierId"
+          description: "ID of the carrier you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Carrier was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/Carrier"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "User not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Carriers"
+      summary: "Patches a carrier with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "patchCarrier"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "carrierId"
+          description: "ID of carrier you want to patch"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/CarrierPatchActions"
+      responses:
+        200:
+          description: "Carrier was found & patch-set has been applied. The patched entity is in the body."
+          schema:
+            $ref: "#/definitions/Carrier"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Entity version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/status:
+    get:
+      tags:
+        - "Infrastructure"
+      summary: "A public status endpoint that renders general availability information"
+      description: ""
+      operationId: "status"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "The status result"
+          schema:
+            $ref: "#/definitions/Status"
+
+securityDefinitions:
+  firebase:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "https://securetoken.google.com/%%PROJECT_ID%%"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "%%PROJECT_ID%%"
+definitions:
+  StockConfiguration:
+    type: object
+    properties:
+      stockModificationEnabled:
+        type: boolean
+        default: true
+        example: true
+        description: "Indicates if manual stock modification is allowed"
+    additionalProperties: false
+    required:
+      - stockModificationEnabled
+    xml:
+      name: "StockConfiguration"
+  OrderForCreation:
+    type: "object"
+    required:
+      - "orderDate"
+      - "orderLineItems"
+      - "consumer"
+    properties:
+      orderDate:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "The date this order was created at the supplying system."
+      consumer:
+        required:
+          - addresses
+        properties:
+          email:
+            type: "string"
+            format: "email"
+            example: "max@speedyboxales.com"
+            description: "The email address of the consumer."
+          addresses:
+            type: "array"
+            items:
+              maxItems: 1 # For the POC we allow only THE address. This is why it does not have any type currently.
+              $ref: '#/definitions/ConsumerAddress'
+          customAttributes:
+            type: "object"
+            description: "Attributes that can be added to the consumer. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+      tenantOrderId:
+        type: "string"
+        example: "R456728546"
+        description: "Field can be used as a reference number in foreign systems, for example as a reference to the source system's identifier for this order."
+      status:
+        $ref: '#/definitions/OrderStatus'
+      orderLineItems:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/OrderLineItemForCreation'
+      deliveryPreferences :
+        $ref:  '#/definitions/DeliveryPreferences'
+      customAttributes:
+        type: "object"
+        description: "Attributes that can be added to the order. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+    xml:
+      name: "Order"
+  DeliveryPreferences:
+    type: "object"
+    properties:
+      targetTime:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T09:45:51.525Z"
+        description: "At which time the result is expected."
+      collect :
+        type: "array"
+        maxItems: 1
+        items:
+          $ref: '#/definitions/CollectDelivery'
+      shipping:
+        type: "object"
+        properties:
+          "servicetype":
+            type: "string"
+            enum:
+              - "BEST_EFFORT"
+            description: "BEST_EFFORT: the parcel will reach the recipient as fast as possible without giving any guarantees. More types will be added in the future."
+  CollectDelivery:
+    type: object
+    required:
+      - "facilityRef"
+    properties:
+      "facilityRef":
+        type: string
+        description: "Reference to the facility where the consumer expects to collect the items"
+  OrderLineItemForCreation:
+    type: "object"
+    required:
+      - "article"
+      - "quantity"
+    properties:
+      article:
+        $ref:  '#/definitions/OrderLineItemArticle'
+      quantity:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        example: 21
+        description: "quantity of the specific article that has been ordered"
+      scannableCodes:
+        type: "array"
+        items:
+          type: "string"
+          description: "Strings, that identify the article"
+      customAttributes:
+        type: "object"
+        description: "Attributes that can be added to the orderline. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+  OrderLineItem:
+    allOf:
+      - $ref: '#/definitions/OrderLineItemForCreation'
+      - required:
+          - "id"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "LGMl2DuvPnfPoSHhYFOm"
+            description: "The id of this orderline. It is generated during creation automatically by the API and suits as the primary identifier of the described line."
+  OrderStatus:
+    type: "string"
+    enum:
+      - "OPEN"
+      - "CANCELLED"
+      - "LOCKED"
+    description: "The state of the order. Initially it is OPEN and it can be CANCELLED at any time. In such a case fulfillment will not be commenced. When fulfillment has begun and the point of no return (fulfillment wise) is reached the status is changed to LOCKED."
+  Order:
+    allOf:
+      - $ref: '#/definitions/OrderForCreation'
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "status"
+          - "orderLineItems"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "LGMl2DuvPnfPoSHhYFOm"
+            description: "The id of this order. It is generated during creation automatically and suits as the primary identifier of the described entity."
+          orderLineItems:
+            type: "array"
+            items:
+              $ref: '#/definitions/OrderLineItem'
+          status:
+            $ref: '#/definitions/OrderStatus'
+          anonymized:
+            type: "boolean"
+            example: false
+            description: "Indicates if gdpr related data was anonymized"
+    xml:
+      name: "Order"
+  FacilityStatus:
+    type: "string"
+    enum:
+      - "ONLINE"
+      - "SUSPENDED"
+      - "OFFLINE"
+    description: "The state of the facility. ONLINE means that this facility can process new orders and pickjobs, SUSPENDED means it cannot get new orders but is able to fulfill the current workload and OFFLINE means that it cannot fulfill any new or existing orders. Processes already running might be rescheduled to another facility depending on the preferences."
+  FacilityForCreation:
+    type: "object"
+    required:
+      - "name"
+      - "address"
+    properties:
+      name:
+        type: "string"
+        example: "Hamburg NW2"
+      locationType:
+        type: string
+        enum:
+          - "STORE"
+          - "WAREHOUSE"
+        default: "STORE"
+      tenantFacilityId:
+        type: "string"
+        description: "The id of the facility in the tenants own system"
+        example: "K12345"
+      address:
+        $ref: '#/definitions/FacilityAddress'
+      contact:
+        type: "object"
+        required:
+          - "firstName"
+          - "lastName"
+        properties:
+          firstName:
+            type: "string"
+          lastName:
+            type: "string"
+          roleDescription:
+            type: "string"
+            example: "Manager, Supervisor, Teamleader, etc."
+          customAttributes:
+            type: "object"
+            description: "Attributes that can be added to the contact. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+      status:
+        $ref: '#/definitions/FacilityStatus'
+      services:
+        type: "array"
+        items:
+          type: "object"
+          required:
+            - type
+          properties:
+            type:
+              type: "string"
+              enum:
+                - "SHIP_FROM_STORE"
+                - "PICKUP"
+              description: "The description of the service this facility offers."
+      customAttributes:
+        type: "object"
+        description: "Attributes that can be added to the facility. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+  LinkedConfiguration:
+    type: "object"
+    properties:
+      ref:
+        type: "string"
+      rel:
+        type: "string"
+  FacilityStockConfiguration:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "retainedOfflineStock"
+          - "listingReactivationAfter"
+          - "shortpick"
+        type: "object"
+        properties:
+          retainedOfflineStock:
+            type: "object"
+            properties:
+              value:
+                type: number
+                description: "The overall percentage of stock that should be reserved to offline clients."
+                default: 0.2
+                example: 0.15
+                minimum: 0.01
+                maximum: 1.0
+              active:
+                type: boolean
+                description: "The retained Offline Stock is enabled or disabled."
+          listingReactivationAfter:
+            type: "object"
+            properties:
+              value:
+                type: number
+                description: "Time in hours that has to pass for a deactivated listing (e.g. due to manual deactivation or as a result of a shortpick ) to be become active again."
+                default: 24
+              active:
+                type: boolean
+                description: "The disabling of listings is enabled or disabled."
+                default: true
+          shortpick:
+            type: "object"
+            properties:
+              active:
+                type: boolean
+                description: "Inventory adjustment in the case of insufficient order picking"
+                default: true
+            required:
+              - "active"
+  StrippedShipments:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      shipments:
+        type: array
+        items:
+          $ref: '#/definitions/Shipment'
+  StrippedUsers:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      users:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+  StrippedParcels:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      parcels:
+        type: array
+        items:
+          $ref: '#/definitions/StrippedParcel'
+  StrippedCarriers:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      carriers:
+        type: array
+        items:
+          $ref: '#/definitions/Carrier'
+  StrippedOrders:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      orders:
+        type: array
+        items:
+          $ref: '#/definitions/StrippedOrder'
+  StrippedOrder:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "status"
+          - "orderDate"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "LGMl2DuvPnfPoSHhYFOm"
+            description: "The id of this order. It is generated during creation automatically and suits as the primary identifier of the described entity."
+          orderLineItems:
+            type: "array"
+            items:
+              type: "object"
+              required:
+                - "quantity"
+                - "title"
+              properties:
+                quantity:
+                  type: "integer"
+                  format: "int64"
+                  minimum: 1
+                  example: 21
+                  description: "quantity of the specific article that has been ordered"
+                title:
+                  type: "string"
+                  example: "Cologne Water"
+          status:
+            $ref: '#/definitions/OrderStatus'
+          orderDate:
+            type: "string"
+            format: "date-time"
+            example: "2020-02-03T08:45:50.525Z"
+            description: "The date this order was created at the supplying system."
+  StrippedFacilities:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      facilities:
+        type: array
+        items:
+          $ref: '#/definitions/StrippedFacility'
+  StrippedFacility:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - $ref: '#/definitions/Address'
+      - required:
+          - "id"
+          - "status"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+          name:
+            type: "string"
+            description: "name of the facility"
+            example: "Köln store"
+          tenantFacilityId:
+            type: "string"
+            description: "The id of the facility in the tenants own system"
+            example: "K12345"
+          status:
+            $ref: '#/definitions/FacilityStatus'
+  Facility:
+    allOf:
+      - $ref: '#/definitions/FacilityForCreation'
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "status"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of this facility. It is generated during creation automatically and suits as the primary identifier of the described entity."
+          status:
+            $ref: '#/definitions/FacilityStatus'
+          configs:
+            type: "array"
+            items:
+              $ref: '#/definitions/LinkedConfiguration'
+  PickJobForCreation:
+    type: "object"
+    required:
+      - "orderDate"
+      - "facilityRef"
+      - "pickLineItems"
+    properties:
+      orderRef:
+        type: "string"
+        example: "LGMl2DuvPnfPoSHhYFOm"
+        description: "The id of the order reference. The given ID has to be present in the system."
+      orderDate:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "The date this order was created at the supplying system."
+      tenantOrderId:
+        type: "string"
+        example: "R456728546"
+        description: "Field can be used as a reference number in foreign systems, for example as a reference to the source system's identifier for this order."
+      facilityRef:
+        type: "string"
+        example: "Esb20gpHBL94X5NdMp3C"
+        description: "The id of the facility reference. The given ID has to be present in the system."
+      status:
+        $ref: '#/definitions/PickJobStatus'
+      pickLineItems:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/PickLineItemForCreation'
+      deliveryinformation:
+        $ref: '#/definitions/PickjobDeliveryInformationForCreation'
+      customAttributes:
+        type: "object"
+        description: "Attributes that can be added to the pickjob. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+    xml:
+      name: "Pickjob"
+  PickJob:
+    allOf:
+      - $ref: '#/definitions/PickJobForCreation'
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "status"
+          - "pickLineItems"
+          - "shortId"
+          - "deliveryinformation"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of this pickjob. It is generated during creation automatically and suits as the primary identifier of the described entity."
+          shortId:
+            type: "string"
+            example: "AS12"
+            description: "A short identifier that helps assigning a pickJob to a customer. This is automatically created during creation."
+          anonymized:
+            type: "boolean"
+            example: false
+            description: "Indicates if gdpr related data was anonymized"
+          pickLineItems:
+            type: "array"
+            items:
+              $ref: '#/definitions/PickLineItem'
+          status:
+            $ref: '#/definitions/PickJobStatus'
+          deliveryinformation:
+            $ref: '#/definitions/PickjobDeliveryInformation'
+  StrippedPickJob:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "status"
+          - "created"
+          - "lastModified"
+          - "version"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+          status:
+            $ref: '#/definitions/PickJobStatus'
+          orderRef:
+            type: "string"
+            example: "LGMl2DuvPnfPoSHhYFOm"
+            description: "The id of the order that lead to the creation of this pickjob. Can be empty / not present when the pickjob was created without having an order."
+          facilityRef:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of the facility reference. The given ID has to be present in the system."
+  StrippedListings:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      listings:
+        type: array
+        items:
+          $ref: '#/definitions/StrippedListing'
+  StrippedListing:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "status"
+          - "facilityId"
+          - "id"
+          - "tenantArticleId"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "fsfdsf87fsd"
+          status:
+            type: "string"
+            enum:
+              - "ACTIVE"
+              - "INACTIVE"
+          tenantArticleId:
+            type: "string"
+            example: "4711"
+            description: "This is a reference to an article Id"
+  StrippedPickJobs:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      pickjobs:
+        type: array
+        items:
+          $ref: '#/definitions/StrippedPickJob'
+  PickLineItemForCreation:
+    type: "object"
+    required:
+      - "quantity"
+      - "article"
+    properties:
+      article:
+        $ref:  '#/definitions/PickLineItemArticle'
+      quantity:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        example: 21
+        description: "quantity of the specific article that has been ordered"
+      scannableCodes:
+        type: "array"
+        items:
+          type: "string"
+          description: "Strings, that identify the article"
+      customAttributes:
+        type: "object"
+        description: "Attributes that can be added to the orderline. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+  PickLineItem:
+    allOf:
+      - $ref: '#/definitions/PickLineItemForCreation'
+      - required:
+          - "id"
+          - "picked"
+          - "status"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "climk4dcQFiPdA5ULuhS"
+            description: "The id of this lineItem. It is generated during creation automatically and suits as the primary
+             identifier of the described entity."
+          picked:
+            type: "integer"
+            format: "int64"
+            minimum: 0
+            example: 20
+            description: "The amount of articles that were picked for this pickline."
+          status:
+            $ref: '#/definitions/PickLineItemStatus'
+  AttributeItem:
+    type: "object"
+    required:
+      - "key"
+      - "value"
+    properties:
+      category:
+        type: "string"
+        enum:
+          - "descriptive"
+          - "miscellaneous"
+        example: "descriptive"
+        description: "This category is used by OCFF to customize implemented processes. Categorized attributes are used by various processes and tools throughout our platform. For a complete list of possible categories and the correct use of those please refer to the documentation. Default value: miscellaneous"
+      priority:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        maximum: 1000
+        example: 100
+        description: "This value gives the priority in the respective attribute category. The lower the value the higher is the priority, e.g. priority 1 is higher than priority 10. Attributes that have the highest priority might be selected for display in different articles of OCFF. Default Value is 1001. For details please contact the product owners."
+      key:
+        type: "string"
+        example: "subtitle"
+      value:
+        type: "string"
+        example: "585er Gold"
+  OrderArticleAttributeItem:
+    allOf:
+      - $ref: '#/definitions/ArticleAttributeItem'
+  ListingAttributeItem:
+    allOf:
+      - $ref: '#/definitions/ArticleAttributeItem'
+  ArticleAttributeItem:
+    type: "object"
+    required:
+      - "key"
+      - "value"
+    properties:
+      category:
+        type: "string"
+        enum:
+          - "descriptive"
+          - "miscellaneous"
+        example: "descriptive"
+        description: "This category is used by OCFF to customize implemented processes. Categorized attributes are used by various processes and tools throughout our platform. For a complete list of possible categories and the correct use of those please refer to the documentation. Default value: miscellaneous"
+      priority:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        maximum: 1000
+        example: 100
+        description: "This value gives the priority in the respective attribute category. The lower the value the higher is the priority, e.g. priority 1 is higher than priority 10. Attributes that have the highest priority might be selected for display in different articles of OCFF. Default Value is 1001. For details please contact the product owners."
+      key:
+        type: "string"
+        minLength: 1
+        example: "%%subtitle%%"
+        description: "Providing the key %%subtitle%% (see example) here will cause the value to appear for example in the App directly under the title. With all other attributes also the key will be displayed in the clients."
+      value:
+        type: "string"
+        minLength: 1
+        example: "585er Gold"
+  ParcelForCreation:
+    type: "object"
+    required:
+      - "shipmentRef"
+      - "carrier"
+      - "recipient"
+      - "dimensions"
+      - "sender"
+    properties:
+      shipmentRef:
+        type: "string"
+        example: "Esb20gpHBL94X5NdMp3C"
+        description: "The reference to the shipment for which the parcel is ordered"
+      carrier:
+        $ref: '#/definitions/CarrierReference'
+      recipient:
+        $ref: '#/definitions/ConsumerAddress'
+      dimensions:
+        type: "object"
+        properties:
+          width:
+            type: "number"
+            description: "The width of the package (in cm)"
+            example: 25
+          height:
+            type: "number"
+            description: "The height of the package (in cm)"
+            example: 50
+          length:
+            type: "number"
+            description: "The length of the package (in cm)"
+            example: 100
+          weight:
+            type: "number"
+            description: "The weight of the package (in g)"
+            example: 1700
+      sender:
+        $ref: '#/definitions/FacilityAddress'
+  Address:
+    required:
+      - "street"
+      - "houseNumber"
+      - "city"
+      - "postalCode"
+      - "country"
+    type: "object"
+    properties:
+      street:
+        type: "string"
+        example: "Hauptstr."
+        pattern: "^.+$"
+      houseNumber:
+        type: "string"
+        example: "42a"
+        pattern: "^.+$"
+      postalCode:
+        type: "string"
+        example: "40764"
+        pattern: "^.+$"
+      city:
+        type: "string"
+        example: "Langenfeld"
+        pattern: "^.+$"
+      country:
+        type: "string"
+        description: "A two-digit country code as per ISO 3166-1 alpha-2"
+        pattern: "^[A-Z]{2}$"
+        example: "DE"
+      phoneNumbers:
+        type: "array"
+        items:
+          type: "object"
+          required:
+            - value
+            - type
+          properties:
+            value:
+              type: "string"
+              description: "The number itself. We do not enforce any format (yet)."
+            label:
+              type: "string"
+              description: "Can be used to give a description for the number, like \"private\", \"business number\", etc."
+            type:
+              type: "string"
+              enum:
+                - "MOBILE"
+                - "PHONE"
+            customAttributes:
+              type: "object"
+              description: "Attributes that can be added to the phonenumber. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+      additionalAddressInfo:
+        type: "string"
+        example: "to care of: Mrs. Müller"
+      customAttributes:
+        type: "object"
+        description: "Attributes that can be added to the address. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+  ConsumerAddress:
+    allOf:
+      - $ref: '#/definitions/Address'
+      - required:
+          - "lastName"
+        type: "object"
+        properties:
+          salutation:
+            type: "string"
+            example: "Frau"
+          firstName:
+            type: "string"
+            example: "Maxine"
+          lastName:
+            type: "string"
+            example: "Muller"
+          companyName:
+            type: "string"
+            example: "Speedy Boxales Ltd."
+  FacilityAddress:
+    type: "object"
+    allOf:
+      - $ref: '#/definitions/Address'
+      - required:
+          - "companyName"
+        type: "object"
+        properties:
+          companyName:
+            type: "string"
+            example: "Speedy Boxales Ltd."
+          emailAddresses:
+            type: "array"
+            items:
+              type: "object"
+              required:
+                - "value"
+              properties:
+                value:
+                  type: "string"
+                recipient:
+                  type: "string"
+                  description: "Human readable information who is the recipient for emails sent to this address."
+                  example: "'Mailinglist reaching all the employees', 'Marc Fulton, Manager', etc."
+  Parcel:
+    allOf:
+      - $ref: '#/definitions/ParcelForCreation'
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "status"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "95EWrieX09OmeriXIUbb"
+            description: "The id of this parcel. It is generated during creation automatically and suits as the primary
+             identifier of the described entity."
+          status:
+            $ref: '#/definitions/ParcelStatus'
+          anonymized:
+            type: "boolean"
+            example: false
+            description: "Indicates if gdpr related data was anonymized"
+          result:
+            type: "object"
+            required:
+              - "summary"
+            description: "Within this object you can find the result of the request after it has been processed (status = DONE or FAILED)"
+            properties:
+              summary:
+                type: "string"
+                description: "Summary of the result of the request in a human readable form."
+                example: "Package label was successfully requested at DHL."
+              labelUrl:
+                type: "string"
+                description: "The URL where you can download the label relative to the path of this resource"
+                example: "%%HOST%%/api/parcels/{parcelId}/labels/84168117830018.pdf"
+              proxyId:
+                type: "string"
+                example: "3a186c51d4281acbecf5ed38805b1db92a9d668b"
+                description: "The ID of the corresponding job at the CEP proxy (if used)"
+              carrierTrackingNumber:
+                type: "string"
+                example: "84168117830018"
+              trackingUrl:
+                type: "string"
+                description: "The URL to track this parcel"
+                example: "http://track.shipcloud.io/3a186c51d4"
+              trackingStatus:
+                $ref: '#/definitions/TrackingStatus'
+  Handoverjob:
+    allOf:
+      - $ref: '#/definitions/StrippedHandoverjob'
+      - required:
+          - "targetTime"
+    properties:
+      targetTime:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T09:45:51.525Z"
+        description: "At which time the result is expected."
+      anonymized:
+        type: "boolean"
+        example: false
+        description: "Indicates if gdpr related data was anonymized"
+  StrippedHandoverjob:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "status"
+          - "facilityRef"
+          - "channel"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "95EWrieX09OmeriXIUbb"
+            description: "The id of this handoverjob. It is generated during creation automatically and suits as the primary
+               identifier of the described entity."
+          status:
+            $ref: '#/definitions/HandoverjobStatus'
+          tenantOrderId:
+            type: "string"
+            example: "R456728546"
+            description: "Field can be used as a reference number in foreign systems, for example as a reference to the source system's identifier for this order."
+          facilityRef:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of the facility reference."
+          pickJobRef:
+            type: "string"
+            example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
+            description: "The reference to the pickjob for which the handoverjob is assigned to"
+          parcelRef:
+            type: "string"
+            example: "2fOge2ZGW54K4TgvDTQw"
+            description: "The reference to the parcel."
+          shipmentRef:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The reference to the shipment belonging to the handoverjob"
+          orderDate:
+            type: "string"
+            format: "date-time"
+            example: "2020-02-03T08:45:50.525Z"
+            description: "The date this order was created at the supplying system."
+          carrier:
+            $ref: '#/definitions/CarrierReference'
+          channel:
+            type: "string"
+            enum:
+              - "DELIVERY"
+              - "COLLECT"
+  StrippedHandoverjobs:
+    properties:
+      handoverjobs:
+        type: array
+        items:
+          $ref: '#/definitions/StrippedHandoverjob'
+  HandoverjobStatus:
+    type: "string"
+    enum:
+      - "OPEN"
+      - "HANDED_OVER"
+  ShipmentForCreation:
+    description: "A Shipment can be created providing a pickjob reference."
+    type: "object"
+    required:
+      - "pickJobRef"
+    properties:
+      pickJobRef:
+        type: "string"
+        example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
+        description: "The reference to the pickjob for which the shipment is assigned to"
+      deliveryInformation:
+        $ref: '#/definitions/DeliveryInformation'
+  Shipment:
+    allOf:
+      - $ref: '#/definitions/ShipmentForCreation'
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "status"
+          - "pickJobRef"
+          - "facilityRef"
+          - "targetTime"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "95EWrieX09OmeriXIUbb"
+            description: "The id of this Shipment. It is generated during creation automatically and suits as the primary
+               identifier of the described entity."
+          facilityRef:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of the facility reference."
+          status:
+            $ref: '#/definitions/ShipmentStatus'
+          parcels:
+            type: "array"
+            items:
+              $ref: '#/definitions/StrippedParcel'
+          targetTime:
+            type: "string"
+            format: "date-time"
+            example: "2020-02-03T09:45:51.525Z"
+            description: "At which time the result is expected."
+  DeliveryInformation:
+    type: "object"
+    required:
+      - "carriers"
+    properties:
+      packages:
+        description: "Information about the number of packages that should be sent. Currently you can only send one package per shipment. Hence the default count is also 1."
+        type: "object"
+        properties:
+          count:
+            type: "number"
+            example: 1
+            default: 1
+            minimum: 1
+            maximum: 1
+            description: "The number of packages that are ready to be sent. Default: 1"
+      carriers:
+        type: "array"
+        maxItems: 1
+        items:
+          $ref: '#/definitions/CarrierPreference'
+  CarrierPreference:
+    type: "object"
+    required:
+      - "carrier"
+    properties:
+      carrier:
+        $ref: '#/definitions/CarrierReference'
+  ShipmentStatus:
+    type: "string"
+    enum:
+      - "INITIAL"
+      - "REQUEST"
+      - "CONFIRMED"
+      - "COMPLETED"
+    description: "Every newly created shipment is in state INITIAL. When the parcel labels should be requested the state changes to REQUEST and as soon as all parcel labels are successfully requested the state changes to CONFIRMED. The state COMPLETED is set in the end or the process"
+  ParcelStatus:
+    type: "string"
+    enum:
+      - "OPEN"
+      - "PROCESSING"
+      - "DONE"
+      - "FAILED"
+  StrippedParcel:
+    type: "object"
+    required:
+      - "parcelRef"
+      - "carrier"
+      - "status"
+    properties:
+      parcelRef:
+        type: "string"
+        example: "15EZrieW09OmeriXIUbc"
+      carrier:
+        $ref: '#/definitions/CarrierReference'
+      status:
+        $ref: '#/definitions/ParcelStatus'
+  VersionedResource:
+    type: "object"
+    required:
+      - "version"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      created:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:51.525Z"
+        description: "The date this order was created at the platform. This value is generated by the service."
+      lastModified:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T09:45:51.525Z"
+        description: "The date this order was modified last. This value is generated by the service."
+  Branding:
+    type: "object"
+    required:
+      - "primaryColor"
+      - "logoUrl"
+    properties:
+      primaryColor:
+        type: "string"
+        pattern: '^#([A-Fa-f0-9]{6})$'
+        example: "#FFC0CB"
+        description: "The hexcode representation of the desired primary color."
+      logoUrl:
+        type: "string"
+        format: "uri"
+        example: "https://ocff-transloadit.storage.googleapis.com/thumbnails/logo.jpg"
+        description: "The logo URL for the tenant"
+    xml:
+      name: "Branding"
+  Error:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        summary:
+          type: "string"
+          example: "One or more mandatory attributes were not provided."
+        description:
+          type: "string"
+          example: "Missing attributes were name, address, items"
+        version:
+          type: "integer"
+          format: "int64"
+          example: 42
+        requestVersion:
+          type: "integer"
+          format: "int64"
+          example: 41
+          description: "The version provided within an invalid request."
+      required:
+        - "summary"
+    xml:
+      name: "Error"
+  PickJobStatus:
+    type: "string"
+    enum:
+      - "OPEN"
+      - "IN_PROGRESS"
+      - "CLOSED"
+    description: "A pickjob initially has the status OPEN and picking can start. When picking has started, the pickjob changes its status to IN_PROGRESS. After a pickjob has been completely picked its status becomes CLOSED."
+    xml:
+      name: "PickJobStatus"
+  PickLineItemStatus:
+    type: "string"
+    enum:
+      - "OPEN"
+      - "IN_PROGRESS"
+      - "CLOSED"
+    description: "A pickjob line item initially has the status OPEN and picking can start. When a line item is opened within the picking app, the item changes its status to IN_PROGRESS. When the commissioning is finished the state is CLOSED"
+    xml:
+      name: "PickLineItemStatus"
+  PickingPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/AbstractModificationAction'
+    xml:
+      name: "PickingPatchActions"
+  FacilityPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/ModifyFacilityAction'
+    xml:
+      name: "FacilityPatchActions"
+  ShipmentPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/ModifyShipmentAction'
+    xml:
+      name: "ShipmentPatchActions"
+  UserPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/ModifyUserAction'
+    xml:
+      name: "UserPatchActions"
+  StockConfigurationPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/AbstractModificationAction'
+    xml:
+      name: "FacilityPatchActions"
+  ListingPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/ModifyListingAction'
+    xml:
+      name: "ListingPatchActions"
+  AbstractModificationAction:
+    type: "object"
+    required:
+      - "action"
+    discriminator: "action"
+    properties:
+      action:
+        type: "string"
+        enum:
+          - "ModifyPickJob"
+          - "ModifyPickLineItem"
+          - "ModifyFacility"
+          - "ModifyListing"
+          - "ModifyRetainedOfflineStock"
+          - "ModifyListingReactivationAfter"
+          - "ModifyUser"
+          - "ModifyShipment"
+          - "ModifyHandoverjob"
+          - "ModifyCarrier"
+          - "ModifyShortpick"
+        example: "<Use the corresponding action, see documentation>"
+        description: "Use value 'ModifyPickJob' when this action is regarding the Pickjob and 'ModifyPickLineItem' if this action is operating against a pickline and 'ModifyFacility' if you want to patch a facility "
+    xml:
+      name: "AbstractModificationAction"
+  CarrierPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/ModifyCarrierAction'
+    xml:
+      name: "ShipmentPatchActions"
+  ModifyPickJobAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "status"
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyPickJob"
+            description: "Use value 'ModifyPickJob', because you want to modify a pickjob"
+          status:
+            $ref: '#/definitions/PickJobStatus'
+    xml:
+      name: "ModifyPickJobAction"
+  ModifyListingAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyListing"
+            description: "Use value 'ModifyListing', because you want to modify a listing"
+          price:
+            type: "number"
+            example: 1200
+          stockinformation:
+            $ref: '#/definitions/StockInformation'
+          title:
+            type: "string"
+            example: "Adidas Superstar"
+            description: "a title describing the article"
+          subtitle:
+            type: "string"
+            example: "44 2/3"
+            description: "a subtitle describing the article"
+          imageUrl:
+            type: "string"
+            description: "A web link to a picture of this article. Please make sure that no authentication is required to fetch the image!"
+          status:
+            type: "string"
+            enum:
+              - "ACTIVE"
+              - "INACTIVE"
+            description: "The status indicates if a listing is available or not"
+          attributes:
+            type: "array"
+            items:
+              $ref: '#/definitions/ListingAttributeItem'
+            description: "The attributes of this listing"
+        additionalProperties: false
+    xml:
+      name: "ModifyListingAction"
+  ModifyShortpickAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyShortpick"
+            description: "Use value 'ModifyShortpick', if you want to modify the ModifyShortPick of a facility"
+          active:
+            type: boolean
+            description: "Inventory adjustment in the case of insufficient order picking"
+            default: true
+        additionalProperties: false
+    xml:
+      name: "ModifyShortpickAction"
+  ModifyRetainedOfflineStockAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyRetainedOfflineStock"
+            description: "Use value 'ModifyRetainedOfflineStock', if you want to modify the retained offline stocks of a facility"
+          value:
+            type: number
+            description: "The overall percentage of stock that should be reserved to offline clients."
+            default: 0.2
+            example: 0.15
+            minimum: 0.01
+            maximum: 1.0
+          active:
+            type: boolean
+            description: "The retained Offline Stock is enabled or disabled."
+        additionalProperties: false
+    xml:
+      name: "ModifyRetainedOfflineStockAction"
+  ModifyListingReactivationAfterAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyListingReactivationAfter"
+            description: "Use value 'ModifyListingReactivationAfter', if you want to modify the listingReactivationAfter of a facility"
+          listingReactivationAfter:
+            type: "object"
+            properties:
+              value:
+                type: number
+                description: "Time in hours that has to pass for a deactivated listing (e.g. due to manual deactivation or as a result of a shortpick ) to be become active again."
+                default: 24
+              active:
+                type: boolean
+                description: "The disabling of listings is enabled or disabled."
+                default: true
+        additionalProperties: false
+    xml:
+      name: "ModifyListingReactivationAfterAction"
+  ModifyUserAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyUser"
+            description: "Use value 'ModifyUser', because you want to modify a user"
+          password:
+            type: "string"
+            example: "fsdf6556"
+            minLength: 6
+          firstname:
+            type: "string"
+            example: "Alex"
+          lastname:
+            type: "string"
+            example: "Schneider"
+          roles:
+            $ref: '#/definitions/UserRoles'
+        additionalProperties: false
+    xml:
+      name: "ModifyUserAction"
+  ModifyPickLineItemAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "id"
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyPickLineItem"
+            description: "Use value 'ModifyPickLineItem', because you want to modify a pick line item"
+          picked:
+            type: "integer"
+            format: "int64"
+            minimum: 0
+            example: 20
+            description: "The amount of articles that were picked for this pickline."
+          status:
+            $ref: '#/definitions/PickLineItemStatus'
+          id:
+            type: "string"
+            example: "climk4dcQFiPdA5ULuhS"
+            description: "The id of this lineItem. It is generated during creation automatically and suits as the primary
+                   identifier of the described entity."
+    xml:
+      name: "ModifyPickLineItemAction"
+  ModifyAddress:
+    type: "object"
+    properties:
+      street:
+        type: "string"
+        example: "Hauptstr."
+        pattern: "^.+$"
+      houseNumber:
+        type: "string"
+        example: "42a"
+        pattern: "^.+$"
+      postalCode:
+        type: "string"
+        example: "40764"
+        pattern: "^.+$"
+      city:
+        type: "string"
+        example: "Langenfeld"
+        pattern: "^.+$"
+      country:
+        type: "string"
+        description: "A two-digit country code as per ISO 3166-1 alpha-2"
+        pattern: "^[A-Z]{2}$"
+        example: "DE"
+      phoneNumbers:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            value:
+              type: "string"
+              description: "The number itself. We do not enforce any format (yet)."
+            label:
+              type: "string"
+              description: "Can be used to give a description for the number, like \"private\", \"business number\", etc."
+            type:
+              type: "string"
+              enum:
+                - "MOBILE"
+                - "PHONE"
+            customAttributes:
+              type: "object"
+              description: "Attributes that can be added to the phonenumber. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+      additionalAddressInfo:
+        type: "string"
+        example: "to care of: Mrs. Müller"
+      customAttributes:
+        type: "object"
+        description: "Attributes that can be added to the address. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+  ModifyFacilityAddress:
+    allOf:
+      - $ref: '#/definitions/ModifyAddress'
+      - type: "object"
+      - properties:
+          companyName:
+            type: "string"
+            example: "Speedy Boxales Ltd."
+          emailAddresses:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                value:
+                  type: "string"
+                  format: "email"
+                recipient:
+                  type: "string"
+                  description: "Human readable information who is the recipient for emails sent to this address."
+                  example: "'Mailinglist reaching all the employees', 'Marc Fulton, Manager', etc."
+              required:
+                - "value"
+  ModifyFacilityAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyFacility"
+            description: "Use value 'ModifyFacility', because you want to modify a facility"
+          name:
+            type: "string"
+            example: "Hamburg NW2"
+          tenantFacilityId:
+            type: "string"
+            description: "The id of the facility in the tenants own system"
+            example: "K12345"
+          locationType:
+            type: "string"
+            enum:
+              - "STORE"
+              - "WAREHOUSE"
+            default: "STORE"
+          address:
+            $ref: '#/definitions/ModifyFacilityAddress'
+          contact:
+            type: "object"
+            required:
+              - "firstName"
+              - "lastName"
+            properties:
+              firstName:
+                type: "string"
+              lastName:
+                type: "string"
+              roleDescription:
+                type: "string"
+                example: "Manager, Supervisor, Teamleader, etc."
+              customAttributes:
+                type: "object"
+                description: "Attributes that can be added to the contact. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+          status:
+            type: "string"
+            enum:
+              - "ONLINE"
+              - "SUSPENDED"
+              - "OFFLINE"
+            description: "The state of the facility. ONLINE means that this facility can process new orders and pickjobs, SUSPENDED means it cannot get new orders but is able to fulfill the current workload and OFFLINE means that it cannot fulfill any new or existing orders. Processes already running might be rescheduled to another facility depending on the preferences."
+          services:
+            type: "array"
+            items:
+              type: "object"
+              required:
+                - type
+              properties:
+                type:
+                  type: "string"
+                  enum:
+                    - "SHIP_FROM_STORE"
+                    - "PICKUP"
+                  description: "The description of the service this facility offers."
+          customAttributes:
+            type: "object"
+            description: "Attributes that can be added to the facility. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+        additionalProperties: false
+    xml:
+      name: "ModifyFacilityAction"
+  ModifyShipmentAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyShipment"
+            description: "Use value 'ModifyShipment', because you want to modify a shipment"
+          status:
+            $ref: '#/definitions/ShipmentStatus'
+        additionalProperties: false
+    xml:
+      name: "ModifyShipmentAction"
+  AbstractArticle:
+    type: "object"
+    required:
+      - "title"
+      - "tenantArticleId"
+    properties:
+      tenantArticleId:
+        type: "string"
+        example: "4711"
+        description: "This is a reference to an article number"
+      title:
+        type: "string"
+        example: "Cologne Water"
+      imageUrl:
+        type: "string"
+        description: "A web link to a picture of this article. Please make sure that no authentication is required to fetch the image!"
+      customAttributes:
+        type: "object"
+        description: "Attributes that can be added to the article. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+    xml:
+      name: "AbstractArticle"
+  ListingForCreation:
+    type: "object"
+    required:
+      - "tenantArticleId"
+      - "title"
+    properties:
+      tenantArticleId:
+        type: "string"
+        example: "4711"
+        description: "This is a reference to an article Id"
+      price:
+        type: "number"
+        example: 1200
+      stockinformation:
+        $ref: '#/definitions/StockInformation'
+      title:
+        type: "string"
+        example: "Adidas Superstar"
+        description: "a title describing the article"
+      imageUrl:
+        type: "string"
+        description: "A web link to a picture of this article. Please make sure that no authentication is required to fetch the image!"
+      attributes:
+        type: "array"
+        items:
+          $ref: '#/definitions/ListingAttributeItem'
+    xml:
+      name: "ListingForCreation"
+  StockInformation:
+    type: "object"
+    description: "This object carries information about the current stock of this listing"
+    required:
+      - "stock"
+    properties:
+      stock:
+        type: "number"
+        minimum: 0
+        multipleOf: 1
+        example: 42
+        description: "This the amount of the given article that is in stock for the given facility"
+      reserved:
+        type: "number"
+        minimum: 0
+        multipleOf: 1
+        example: 24
+        description: "The amount of articles that currently open prickjobs need to be fulfilled."
+  ListingsForCreation:
+    type: "object"
+    required:
+      - "listings"
+    properties:
+      listings:
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/definitions/ListingForCreation'
+    xml:
+      name: "ListingsForCreation"
+  Listing:
+    allOf:
+      - $ref: '#/definitions/ListingForCreation'
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "status"
+          - "facilityId"
+          - "id"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "fsfdsf87fsd"
+          facilityId:
+            type: "string"
+            example: "4711"
+            description: "This is a reference to a facility"
+          status:
+            type: "string"
+            enum:
+              - "ACTIVE"
+              - "INACTIVE"
+    xml:
+      name: "Listing"
+  OrderLineItemArticle:
+    allOf:
+      - $ref: '#/definitions/AbstractArticle'
+      - type: "object"
+        properties:
+          attributes:
+            type: "array"
+            items:
+              $ref: '#/definitions/OrderArticleAttributeItem'
+    xml:
+      name: "OrderLineItemArticle"
+  PickLineItemArticle:
+    allOf:
+      - $ref: '#/definitions/AbstractArticle'
+      - type: "object"
+        properties:
+          attributes:
+            type: "array"
+            items:
+              $ref: '#/definitions/OrderArticleAttributeItem'
+    xml:
+      name: "PickLineItemArticle"
+  CarrierForCreation:
+    type: "object"
+    required:
+      - "name"
+      - "credentials"
+      - "key"
+    properties:
+      name:
+        type: "string"
+        example: "DHL Köln"
+        description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
+      key:
+        $ref: '#/definitions/CarrierKey'
+      status:
+        type: "string"
+        description: "Status of this CEP. It is taken into consideration for all your facilities. Default: ACTIVE"
+        enum:
+          - "ACTIVE"
+          - "INACTIVE"
+      credentials:
+        $ref: '#/definitions/AbstractCarrierCredentials'
+    xml:
+      name: "CarrierForCreation"
+  AbstractCarrierCredentials:
+    type: "object"
+    required:
+      - "key"
+    discriminator: "key"
+    properties:
+      key:
+        $ref: '#/definitions/CarrierKey'
+    xml:
+      name: "AbstractCarrierCredentials"
+  DhlCarrierCredentials:
+    allOf:
+      - $ref: '#/definitions/AbstractCarrierCredentials'
+      - required:
+          - "dhlGkUsername"
+          - "dhlGKPassword"
+          - "dhlAccountNumber"
+          - "key"
+        type: "object"
+        properties:
+          key:
+            $ref: '#/definitions/CarrierKey'
+            description: "Use value 'DHL' in order to provide DHL credentials"
+          dhlGkUsername:
+            type: "string"
+            description: "Username (Benutzername) you use to login to the DHL Geschäftskundenportal"
+          dhlGKPassword:
+            type: "string"
+            description: "Password you use to login to the DHL Geschäftskundenportal"
+          dhlAccountNumber:
+            type: "string"
+            description: "Abrechnungsnummer DHL Paket, displayed in the DHL Geschäftskundenportal under 'Vertragspositionen'"
+          apiKey:
+            type: "string"
+            description: "Internal API Key to communicate with the CEP Api"
+    xml:
+      name: "DhlCarrierCredentials"
+  FacilityCarrierConnection:
+    properties:
+      cutoffs:
+        type: "object"
+        properties:
+          sameday:
+            type: "object"
+            $ref: '#/definitions/CutoffTime'
+          nextday:
+            type: "object"
+            $ref: '#/definitions/CutoffTime'
+  CutoffTime:
+    type: "object"
+    required:
+      - "hour"
+      - "minute"
+    properties:
+      hour:
+        type: "number"
+        example: 16
+      minute:
+        type: "number"
+        example: 30
+  UserForCreation:
+    type: "object"
+    required:
+      - "username"
+      - "password"
+      - "firstname"
+      - "lastname"
+      - "roles"
+    properties:
+      firstname:
+        type: "string"
+        example: "Alex"
+      lastname:
+        type: "string"
+        example: "Schneider"
+      username:
+        type: "string"
+        example: "aschneider"
+      password:
+        type: "string"
+        example: "Ghg9u8X7ms8A8tLT"
+      roles:
+        $ref: '#/definitions/UserRoles'
+    xml:
+      name: "UserForCreation"
+  User:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "username"
+          - "firstname"
+          - "lastname"
+        type: "object"
+        properties:
+          firstname:
+            type: "string"
+            example: "Alex"
+          lastname:
+            type: "string"
+            example: "Schneider"
+          username:
+            type: "string"
+            example: "aschneider"
+          customClaims:
+            $ref: '#/definitions/CustomClaims'
+    xml:
+      name: "User"
+  UserRoles:
+    type: "array"
+    description: "roles of a user "
+    minItems: 1
+    maxItems: 1
+    items:
+      $ref: '#/definitions/UserRole'
+  UserRole:
+    type: "object"
+    required:
+      - "name"
+    properties:
+      name:
+        type: string
+        enum:
+          - "FULFILLER"
+          - "SUPERVISOR"
+          - "ADMINISTRATOR"
+      facilities:
+        type: array
+        example: ["0T1vKaEar0nuG58CxzA5"]
+        description: "List of facility Ids that the user is assigned to"
+        minItems: 0
+        maxItems: 1
+        default: []
+        items:
+          type: "string"
+  CustomClaims:
+    type: "object"
+    required:
+      - "roles"
+    properties:
+      roles:
+        $ref: '#/definitions/UserRoles'
+    description: "Include all different claims could be assigned to a user"
+    xml:
+      name: "CustomClaims"
+  HandoverjobPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/ModifyHandoverjobAction'
+    xml:
+      name: "HandoverjobPatchActions"
+  ModifyHandoverjobAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+          - "status"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyHandoverjob"
+            description: "Use value 'ModifyHandoverjob', because you want to modify a handoverjob"
+          status:
+            $ref: '#/definitions/HandoverjobStatus'
+        additionalProperties: false
+    xml:
+      name: "ModifyHandoverjobAction"
+  Carrier:
+    allOf:
+      - $ref: '#/definitions/CarrierForCreation'
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "status"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "LGMl2DuvPnfPoSHhYFOm"
+            description: "The id of the carrier"
+    xml:
+      name: "Carrier"
+  CarrierKey:
+    type: "string"
+    example: "DHL"
+    description: "Used to reference a carrier partner without the need to provide a specific carrier instance."
+    enum:
+      - "DHL"
+  CarrierReference:
+    type: "object"
+    required:
+      - "key"
+    properties:
+      key:
+        $ref: '#/definitions/CarrierKey'
+  AbstractModifyCarrierCredentials:
+    type: "object"
+    required:
+      - "key"
+    discriminator: "key"
+    properties:
+      key:
+        $ref: '#/definitions/CarrierKey'
+    xml:
+      name: "AbstractModifyCarrierCredentials"
+  ModifyDhlCarrierCredentials:
+    allOf:
+      - $ref: '#/definitions/AbstractModifyCarrierCredentials'
+      - required:
+          - "key"
+        type: "object"
+        properties:
+          key:
+            $ref: '#/definitions/CarrierKey'
+            description: "Use value 'DHL' in order to provide DHL credentials"
+          dhlGkUsername:
+            type: "string"
+            description: "Username (Benutzername) you use to login to the DHL Geschäftskundenportal"
+          dhlGKPassword:
+            type: "string"
+            description: "Password you use to login to the DHL Geschäftskundenportal"
+          dhlAccountNumber:
+            type: "string"
+            description: "Abrechnungsnummer DHL Paket, displayed in the DHL Geschäftskundenportal under 'Vertragspositionen'"
+    xml:
+      name: "ModifyDhlCarrierCredentials"
+  ModifyCarrierAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyCarrier"
+            description: "Use value 'ModifyCarrierAction', because you want to modify a carrier"
+          name:
+            type: "string"
+            example: "DHL Köln"
+            description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
+          status:
+            type: "string"
+            description: "It is taken into consideration for all carriers. Default: ACTIVE"
+            enum:
+              - "ACTIVE"
+              - "INACTIVE"
+          credentials:
+            $ref: '#/definitions/AbstractModifyCarrierCredentials'
+        additionalProperties: false
+    xml:
+      name: "ModifyCarrierAction"
+  Status:
+    required:
+      - "status"
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        enum:
+          - "UP"
+          - "DEGRADED"
+          - "DOWN"
+        description: "The current state of the API"
+    additionalProperties: false
+    xml:
+      name: "Status"
+  TrackingStatus:
+    type: "string"
+    enum:
+      - "registered"
+      - "picked_up"
+      - "delivered"
+      - "not_delivered"
+      - "transit"
+      - "exception"
+      - "out_for_delivery"
+      - "destroyed"
+      - "unknown"
+      - "canceled"
+      - "awaits_pickup_by_receiver"
+      - "delayed"
+      - "notification"
+    description: "The state of the KEP"
+  PickjobDeliveryInformationForCreation:
+    type: object
+    properties:
+      targetTime:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T09:45:51.525Z"
+        description: "At which time the result is expected."
+      channel:
+        type: "string"
+        enum:
+          - "COLLECT"
+          - "SHIPPING"
+      details:
+        type: object
+        properties:
+          collect:
+            type: object
+            properties:
+              identifier:
+                type: "string"
+                description: "Includes information about Click & Collect recipient"
+          shipping:
+            type: object
+            properties:
+              recipientaddress:
+                $ref: '#/definitions/ConsumerAddress'
+  PickjobDeliveryInformation:
+    allOf:
+      - $ref: '#/definitions/PickjobDeliveryInformationForCreation'
+      - required:
+          - "targetTime"
+          - "channel"
