@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "definitions": {
+    "WebConsumer": {
+      "properties": {
+        "address": {
+          "$ref": "#/definitions/WebConsumerAddress"
+        }
+      },
+      "type": "object",
+      "required": [
+        "address"
+      ]
+    },
+    "WebConsumerAddress": {
+      "properties": {
+        "city": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "houseNumber": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "WebPickLineItem": {
+      "properties": {
+        "article": {
+          "$ref": "#/definitions/WebPickLineItemArticle"
+        },
+        "id": {
+          "type": "string"
+        },
+        "picked": {
+          "type": "number"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "scannableCodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "status": {
+          "$ref": "#/definitions/WebPickLineItemStatus"
+        }
+      },
+      "type": "object",
+      "required": [
+        "quantity",
+        "article",
+        "status"
+      ]
+    },
+    "WebPickLineItemArticle": {
+      "properties": {
+        "attributes": {
+          "items": {
+            "$ref": "#/definitions/WebPickLineItemAttributes"
+          },
+          "type": "array"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "tenantArticleId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "tenantArticleId",
+        "title",
+        "attributes"
+      ]
+    },
+    "WebPickLineItemAttributeCategoryEnum": {
+      "enum": [
+        "descriptive",
+        "miscellaneous"
+      ],
+      "type": "string",
+      "tsEnumNames": [
+        "descriptive",
+        "miscellaneous"
+      ]
+    },
+    "WebPickLineItemAttributes": {
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/WebPickLineItemAttributeCategoryEnum"
+        },
+        "key": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "number"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ]
+    },
+    "WebPickLineItemStatus": {
+      "title": "WebPickLineItemStatus",
+      "enum": [
+        "OPEN",
+        "IN_PROGRESS",
+        "CLOSED"
+      ],
+      "type": "string",
+      "tsEnumNames": [
+        "OPEN",
+        "IN_PROGRESS",
+        "CLOSED"
+      ]
+    },
+    "WebPickJobStatus": {
+      "title": "WebPickJobStatus",
+      "enum": [
+        "OPEN",
+        "IN_PROGRESS",
+        "CLOSED_PERFECT",
+        "CLOSED_PARTLY",
+        "CLOSED"
+      ],
+      "type": "string",
+      "tsEnumNames": [
+        "OPEN",
+        "IN_PROGRESS",
+        "CLOSED_PERFECT",
+        "CLOSED_PARTLY",
+        "CLOSED"
+      ]
+    },
+    "WebLabelStatus": {
+      "title": "WebLabelStatus",
+      "enum": [
+        "OPEN",
+        "ERROR",
+        "REQUESTED",
+        "DONE"
+      ],
+      "type": "string",
+      "tsEnumNames": [
+        "OPEN",
+        "ERROR",
+        "REQUESTED",
+        "DONE"
+      ]
+    },
+    "WebHandoverStatus": {
+      "title": "WebHandoverStatus",
+      "enum": [
+        "OPEN",
+        "ERROR",
+        "HANDEDOVER"
+      ],
+      "type": "string",
+      "tsEnumNames": [
+        "OPEN",
+        "ERROR",
+        "HANDEDOVER"
+      ]
+    },
+    "WebPickJob": {
+      "properties": {
+        "consumer": {
+          "$ref": "#/definitions/WebConsumer"
+        },
+        "facilityRef": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "shortId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "orderDate": {
+          "description": "Enables basic storage and retrieval of dates and times.",
+          "format": "date-time",
+          "type": "string"
+        },
+        "orderedArticleCount": {
+          "type": "number"
+        },
+        "pickLineItems": {
+          "items": {
+            "$ref": "#/definitions/WebPickLineItem"
+          },
+          "type": "array"
+        },
+        "pickedArticleCount": {
+          "type": "number"
+        },
+        "status": {
+          "$ref": "#/definitions/WebPickJobStatus"
+        },
+        "labelStatus": {
+          "$ref": "#/definitions/WebLabelStatus"
+        },
+        "handoverStatus": {
+          "$ref": "#/definitions/WebHandoverStatus"
+        },
+        "tenantOrderId": {
+          "type": "string"
+        },
+        "version": {
+          "type": "number"
+        },
+        "lastModificationDate": {
+          "description": "Enables basic storage and retrieval of dates and times.",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "id",
+        "shortId",
+        "orderDate",
+        "tenantOrderId",
+        "facilityRef",
+        "status",
+        "orderedArticleCount",
+        "pickedArticleCount",
+        "pickLineItems",
+        "version",
+        "lastModificationDate"
+      ]
+    }
+  }
+}
