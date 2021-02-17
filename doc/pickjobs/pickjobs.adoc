@@ -4,7 +4,7 @@ PickJobs are collections of Pick Line Items wrapped in a meta data envelope. It 
 and is used in a process to collect goods that were ordered by the consumer before packing and shipping them.
 
 === Modifying a PickJob
-The following code snippet shows how to pick an existing pickjob using HTTP PATCH Operations:
+The following code snippet shows how to pick an existing pickjob using HTTP PATCH Operations.
 
 Let's imagine we have the following pickjob present:
 [source,curl]
@@ -87,7 +87,7 @@ curl --location --request PATCH 'https://{host}/api/pickjobs/91e343cb-08aa-4367-
           "action": "ModifyPickJob",
           "status": "IN_PROGRESS"
         }
-      ]
+      ]'
 
 
 Response:
@@ -123,9 +123,9 @@ Response:
     ...
 }
 ----
-Please note the increment in the pickjobs version and the changed state. Please also note that the picklines themselves are still in state _OPEN_.
+Please note the increment in the pickjob version and its changed state. Please also note that the picklines themselves are still in state _OPEN_.
 
-And here is the PATCH Call to close the Pickjob and perfect pick all the lines:
+The second PATCH call to close the Pickjob and perfect pick all the lines looks similar to the following:
 [source,curl]
 ----
 curl --location --request PATCH 'https://{host}/api/pickjobs/91e343cb-08aa-4367-8806-a2c0d732fb92-0' \
@@ -191,7 +191,7 @@ Response:
     ...
 }
 ----
-This concludes this example on how to perform changes on pickjobs. Details about which fields are patchable and some other useful information can be found at the api reference under _ModifyPickJobAction_ and _ModifyPickLineItemAction_.
+The last call concludes the example on how to perform changes on pickjobs. Details about which fields are patchable and some other useful information can be found in the OpenAPI reference under the models of _ModifyPickJobAction_ and _ModifyPickLineItemAction_ respectively.
 
 === Information about delivery
 Complete set of delivery information is conveyed from order to pick job, so, type of order (**Click & Collect** or **default Delivery**) could be fetched from `deliveryinformation` field in pick job.
