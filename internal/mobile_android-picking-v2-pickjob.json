@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "title": "AndroidClickAndCollectJob",
+  "title": "AndroidPickJob",
   "type": "object",
   "properties": {
     "id": {
@@ -15,29 +15,9 @@
       "type": "string",
       "minLength": 1
     },
-    "customerName": {
+    "shipmentRef": {
       "type": "string",
       "minLength": 1
-    },
-    "orderedArticleCount": {
-      "type": "integer",
-      "minimum": 0
-    },
-    "pickedArticleCount": {
-      "type": "integer",
-      "minimum": 0
-    },
-    "status": {
-      "title": "AndroidClickAndCollectJobStatus",
-      "type": "string",
-      "enum": [
-        "OPEN",
-        "HANDED_OVER"
-      ],
-      "tsEnumNames": [
-        "OPEN",
-        "HANDED_OVER"
-      ]
     },
     "orderDate": {
       "type": "string",
@@ -47,8 +27,49 @@
       "type": "string",
       "minLength": 1
     },
-    "pickUpDate": {
-      "type": "string"
+    "orderedArticleCount": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "pickedArticleCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "labelStatus": {
+      "title": "AndroidLabelStatus",
+      "type": "string",
+      "enum": [
+        "NOT_REQUESTED",
+        "REQUESTED",
+        "AVAILABLE",
+        "REQUEST_FAILED"
+      ],
+      "tsEnumNames": [
+        "NOT_REQUESTED",
+        "REQUESTED",
+        "AVAILABLE",
+        "REQUEST_FAILED"
+      ]
+    },
+    "channel": {
+      "title": "AndroidShipmentChannel",
+      "type": "string",
+      "enum": [
+        "SHIPPING",
+        "COLLECT"
+      ],
+      "tsEnumNames": [
+        "SHIPPING",
+        "COLLECT"
+      ]
+    },
+    "tenantOrderId": {
+      "type": "string",
+      "minLength": 1
     },
     "version": {
       "type": "integer",
@@ -56,36 +77,34 @@
     },
     "targetVersion": {
       "type": "integer",
-      "minimum": 1
-    },
-    "tenantOrderId": {
-      "type": "string",
-      "minLength": 1
+      "minimum": 0
     },
     "lastModificationDate": {
       "type": "string",
       "minLength": 1
     },
+    "hasScannableCodes": {
+      "type": "boolean"
+    },
     "priority": {
-      "type": "number",
-      "minimum": 1
+      "type": "string",
+      "minLength": 1
     }
   },
   "required": [
     "id",
     "shortId",
     "facilityRef",
-    "customerName",
+    "channel",
+    "orderDate",
+    "targetTime",
     "orderedArticleCount",
     "pickedArticleCount",
     "status",
-    "orderDate",
-    "targetTime",
+    "labelStatus",
     "version",
     "targetVersion",
     "lastModificationDate",
     "priority"
   ]
 }
-
-
