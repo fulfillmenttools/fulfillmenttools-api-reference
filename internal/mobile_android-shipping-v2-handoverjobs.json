@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "title": "AndroidClickAndCollectJob",
+  "title": "AndroidHandoverJob",
   "type": "object",
   "properties": {
     "id": {
@@ -15,20 +15,8 @@
       "type": "string",
       "minLength": 1
     },
-    "customerName": {
-      "type": "string",
-      "minLength": 1
-    },
-    "orderedArticleCount": {
-      "type": "integer",
-      "minimum": 0
-    },
-    "pickedArticleCount": {
-      "type": "integer",
-      "minimum": 0
-    },
     "status": {
-      "title": "AndroidClickAndCollectJobStatus",
+      "title": "AndroidHandoverjobStatus",
       "type": "string",
       "enum": [
         "OPEN",
@@ -39,6 +27,18 @@
         "HANDED_OVER"
       ]
     },
+    "carrier": {
+      "title": "AndroidCarrier",
+      "type": "string",
+      "enum": [
+        "DHL",
+        "NONE"
+      ],
+      "tsEnumNames": [
+        "DHL",
+        "NONE"
+      ]
+    },
     "orderDate": {
       "type": "string",
       "minLength": 1
@@ -46,9 +46,6 @@
     "targetTime": {
       "type": "string",
       "minLength": 1
-    },
-    "pickUpDate": {
-      "type": "string"
     },
     "version": {
       "type": "integer",
@@ -62,26 +59,29 @@
       "type": "string",
       "minLength": 1
     },
+    "carrierTrackingNumber": {
+      "type": "string",
+      "minLength": 1
+    },
     "lastModificationDate": {
       "type": "string",
       "minLength": 1
     },
     "priority": {
-      "type": "number",
-      "minimum": 1
+      "type": "string",
+      "minLength": 1
     }
   },
   "required": [
     "id",
     "shortId",
     "facilityRef",
-    "customerName",
-    "orderedArticleCount",
-    "pickedArticleCount",
+    "carrier",
     "status",
     "orderDate",
     "targetTime",
     "version",
+    "carrierTrackingNumber",
     "targetVersion",
     "lastModificationDate",
     "priority"

@@ -1,64 +1,63 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "title": "AndroidClickAndCollectJob",
+  "title": "AndroidShipment",
   "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "shortId": {
-      "type": "string",
-      "minLength": 1
-    },
     "facilityRef": {
       "type": "string",
       "minLength": 1
     },
-    "customerName": {
-      "type": "string",
-      "minLength": 1
-    },
-    "orderedArticleCount": {
-      "type": "integer",
-      "minimum": 0
-    },
-    "pickedArticleCount": {
-      "type": "integer",
-      "minimum": 0
-    },
-    "status": {
-      "title": "AndroidClickAndCollectJobStatus",
+    "labelStatus": {
+      "title": "AndroidShipmentStatus",
       "type": "string",
       "enum": [
-        "OPEN",
-        "HANDED_OVER"
+        "NOT_REQUESTED",
+        "REQUESTED",
+        "NOT_REQUESTABLE",
+        "AVAILABLE",
+        "REQUEST_FAILED"
       ],
       "tsEnumNames": [
-        "OPEN",
-        "HANDED_OVER"
+        "NOT_REQUESTED",
+        "REQUESTED",
+        "NOT_REQUESTABLE",
+        "AVAILABLE",
+        "REQUEST_FAILED"
       ]
     },
     "orderDate": {
       "type": "string",
       "minLength": 1
     },
+    "tenantOrderId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "carrier": {
+      "title": "AndroidShipmentCarrier",
+      "type": "string",
+      "enum": [
+        "DHL",
+        "MULTI"
+      ],
+      "tsEnumNames": [
+        "DHL",
+        "MULTI"
+      ]
+    },
     "targetTime": {
       "type": "string",
       "minLength": 1
     },
-    "pickUpDate": {
-      "type": "string"
-    },
     "version": {
       "type": "integer",
-      "minimum": 0
+      "minimum": 1
     },
     "targetVersion": {
       "type": "integer",
       "minimum": 1
     },
-    "tenantOrderId": {
+    "shortId": {
       "type": "string",
       "minLength": 1
     },
@@ -67,25 +66,19 @@
       "minLength": 1
     },
     "priority": {
-      "type": "number",
-      "minimum": 1
+      "type": "string",
+      "minLength": 1
     }
   },
   "required": [
-    "id",
-    "shortId",
     "facilityRef",
-    "customerName",
-    "orderedArticleCount",
-    "pickedArticleCount",
-    "status",
+    "labelStatus",
     "orderDate",
     "targetTime",
     "version",
     "targetVersion",
+    "shortId",
     "lastModificationDate",
     "priority"
   ]
 }
-
-
