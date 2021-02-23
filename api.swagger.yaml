@@ -1393,6 +1393,92 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+  /api/parcels/{parcelId}/labels/{labelDocument}:
+    get:
+      tags:
+        - "Parcels"
+      summary: "Get a label for the parcel with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getLabelForParcel"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/pdf"
+      parameters:
+        - in: "path"
+          name: "parcelId"
+          description: "ID of the parcel you want to get a label for"
+          required: true
+          type: "string"
+        - in: "path"
+          name: "labelDocument"
+          description: "Within a parcel different labels can be created. The following types of labels are currently supported: all.pdf = Parcel label plus (if configured) retoure label."
+          required: true
+          type: "string"
+          enum:
+            - "all.pdf"
+      responses:
+        200:
+          description: "Parcel was found & you were allowed to access it. The label is in the body."
+          schema:
+            type: file
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/pickjobs/{pickjobId}/returnnote:
+    get:
+      tags:
+        - "PickJobs"
+      summary: "Get the return note for the pickjob with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getReturnNotesForPickjob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/pdf"
+      parameters:
+        - in: "path"
+          name: "pickjobId"
+          description: "ID of the Pickjob"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns a return note for the pickjob."
+          schema:
+            type: file
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/handoverjobs:
     get:
       tags:
@@ -2502,6 +2588,10 @@ definitions:
             $ref: '#/definitions/PickJobStatus'
           deliveryinformation:
             $ref: '#/definitions/PickjobDeliveryInformation'
+          returnNoteURL:
+            type: "string"
+            description: "The original send label URL"
+            example: "%%HOST%%/pickjobs/{pickjoblId}/returnnote"
   StrippedPickJob:
     allOf:
       - $ref: '#/definitions/VersionedResource'
@@ -2845,6 +2935,14 @@ definitions:
                 type: "string"
                 description: "The URL where you can download the label relative to the path of this resource"
                 example: "%%HOST%%/api/parcels/{parcelId}/labels/84168117830018.pdf"
+              returnLabelUrl:
+                type: "string"
+                description: "The original return label URL"
+                example: "someCepProvider.com/pathToReturnLabel.pdf"
+              sendLabelUrl:
+                type: "string"
+                description: "The original send label URL"
+                example: "someCepProvider.com/pathToSendLabel.pdf"
               proxyId:
                 type: "string"
                 example: "3a186c51d4281acbecf5ed38805b1db92a9d668b"
