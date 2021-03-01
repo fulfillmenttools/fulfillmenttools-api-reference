@@ -492,6 +492,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_pickjobs">Pickjobs</a>
 <ul class="sectlevel2">
+<li><a href="#_modifying_a_pickjob">Modifying a PickJob</a></li>
 <li><a href="#_information_about_delivery">Information about delivery</a></li>
 </ul>
 </li>
@@ -1369,6 +1370,219 @@ This default behaviour can be bypassed by certain information in the order messa
 and is used in a process to collect goods that were ordered by the consumer before packing and shipping them.</p>
 </div>
 <div class="sect2">
+<h3 id="_modifying_a_pickjob">Modifying a PickJob</h3>
+<div class="paragraph">
+<p>The following code snippet shows how to pick an existing pickjob using HTTP PATCH Operations.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s imagine we have the following pickjob present:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --location --request GET 'https://{host}/api/pickjobs/91e343cb-08aa-4367-8806-a2c0d732fb92-0' \
+--header 'Authorization: Bearer &lt;secret&gt;'
+
+Response:
+{
+    "id": "91e343cb-08aa-4367-8806-a2c0d732fb92-0"
+    "status": "OPEN",
+    "version": 1,
+    "pickLineItems": [
+        {
+            "status": "OPEN",
+            "quantity": 9,
+            "article": {
+                "tenantArticleId": "116d0qb-a12",
+                "imageUrl": "https://cdn.pixabay.com/photo/2014/11/30/14/11/cat-551554_960_720.jpg",
+                "title": "SUPERSTAR SCHUH",
+                "attributes": []
+            },
+            "scannableCodes": [
+                "0815"
+            ],
+            "id": "f7c1d31c-f6d4-4418-8228-c9e88d8bc37b",
+            "picked": 0
+        },
+        {
+            "quantity": 6,
+            "picked": 0,
+            "status": "OPEN",
+            "id": "7bfc1500-adcf-482b-a279-8ca9bc5229f2",
+            "article": {
+                "imageUrl": "https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_960_720.jpg",
+                "title": "Birkenstock Classic",
+                "tenantArticleId": "116d0qb-a13",
+                "attributes": []
+            },
+            "scannableCodes": [
+                "0815-1"
+            ]
+        },
+        {
+            "quantity": 3,
+            "picked": 0,
+            "scannableCodes": [
+                "0815-2"
+            ],
+            "id": "c859373c-b055-459a-bf90-6126dd4ca48b",
+            "status": "OPEN",
+            "article": {
+                "attributes": [],
+                "imageUrl": "https://cdn.pixabay.com/photo/2016/03/28/12/35/cat-1285634_960_720.png",
+                "tenantArticleId": "116d0qb-a14",
+                "title": "FILA Halbschuh"
+            }
+        }
+    ],
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For this pickjob we want to</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Set the pickjob <em>IN_PROGRESS</em> (this is an indicator for other clients that somebody is already picking this pickjob)</p>
+</li>
+<li>
+<p><em>Perfect Pick</em> all the lines. That means we pick exactly the requested amounts for each line.</p>
+</li>
+<li>
+<p>Set the pickjob <em>DONE</em> which finalizes the picking process</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We split the above steps into two calls: The first sets the pickjob IN_PROGRESS, the second picks all the lines and closes the pickjob:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --location --request PATCH 'https://{host}/api/pickjobs/91e343cb-08aa-4367-8806-a2c0d732fb92-0' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer &lt;secret&gt;' \
+--data-raw '{
+      "version": 1,
+      "actions": [
+        {
+          "action": "ModifyPickJob",
+          "status": "IN_PROGRESS"
+        }
+      ]'
+
+
+Response:
+200 OK
+{
+    "status": "IN_PROGRESS",
+    "version": 2,
+    "facilityRef": "vipiMKWlogORdL4QOLXG",
+    "id": "91e343cb-08aa-4367-8806-a2c0d732fb92-0",
+    "pickLineItems": [
+        {
+            "status": "OPEN",
+            "picked": 0,
+            "quantity": 9,
+            "id": "f7c1d31c-f6d4-4418-8228-c9e88d8bc37b",
+            ...
+        },
+        {
+            "picked": 0,
+            "quantity": 6,
+            "status": "OPEN",
+            "id": "7bfc1500-adcf-482b-a279-8ca9bc5229f2",
+            ...
+        },
+        {
+            "id": "c859373c-b055-459a-bf90-6126dd4ca48b",
+            "picked": 0,
+            "status": "OPEN",
+            "quantity": 3,
+            ...
+        }
+    ],
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please note the increment in the pickjob version and its changed state. Please also note that the picklines themselves are still in state <em>OPEN</em>.</p>
+</div>
+<div class="paragraph">
+<p>The second PATCH call to close the Pickjob and perfect pick all the lines looks similar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-curl" data-lang="curl">curl --location --request PATCH 'https://{host}/api/pickjobs/91e343cb-08aa-4367-8806-a2c0d732fb92-0' \
+--header 'Authorization: Bearer &lt;secret&gt;' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+      "version": 2,
+      "actions": [
+        {
+            "action": "ModifyPickJob",
+            "status": "CLOSED"
+        },
+        {
+            "id": "f7c1d31c-f6d4-4418-8228-c9e88d8bc37b",
+            "action": "ModifyPickLineItem",
+            "status": "CLOSED",
+            "picked": 9
+        },
+        {
+            "id": "7bfc1500-adcf-482b-a279-8ca9bc5229f2",
+            "action": "ModifyPickLineItem",
+            "status": "CLOSED",
+            "picked": 6
+        },
+        {
+            "id": "c859373c-b055-459a-bf90-6126dd4ca48b",
+            "action": "ModifyPickLineItem",
+            "status": "CLOSED",
+            "picked": 3
+        }
+      ]
+    }'
+
+Response:
+200 OK
+{
+    "id": "91e343cb-08aa-4367-8806-a2c0d732fb92-0",
+    "status": "CLOSED",
+    "pickLineItems": [
+        {
+            "quantity": 9,
+            "picked": 9,
+            "status": "CLOSED",
+            "id": "f7c1d31c-f6d4-4418-8228-c9e88d8bc37b"
+            ...
+        },
+        {
+            "quantity": 6,
+            "id": "7bfc1500-adcf-482b-a279-8ca9bc5229f2",
+            "status": "CLOSED",
+            "picked": 6,
+            ...
+        },
+        {
+            "picked": 3,
+            "id": "c859373c-b055-459a-bf90-6126dd4ca48b",
+            "quantity": 3,
+            "status": "CLOSED"
+            ...
+        }
+    ],
+    "version": 3
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The last call concludes the example on how to perform changes on pickjobs. Details about which fields are patchable and some other useful information can be found in the OpenAPI reference under the models of <em>ModifyPickJobAction</em> and <em>ModifyPickLineItemAction</em> respectively.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_information_about_delivery">Information about delivery</h3>
 <div class="paragraph">
 <p>Complete set of delivery information is conveyed from order to pick job, so, type of order (<strong>Click &amp; Collect</strong> or <strong>default Delivery</strong>) could be fetched from <code>deliveryinformation</code> field in pick job.</p>
@@ -1503,7 +1717,7 @@ and is used in a process to collect goods that were ordered by the consumer befo
 <div id="footer">
 <div id="footer-text">
 0.1-BETA <br>
-Last updated 2021-03-01 12:58:07 UTC
+Last updated 2021-03-01 13:11:14 UTC
 </div>
 </div>
 </body>
