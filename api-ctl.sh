@@ -20,7 +20,7 @@ printUsage() {
 downloadApi() {
   echo "download ${apiVersion}"
   wget -N -nv -P "${SCRIPTDIR}" "${apiUrl}"
-  wget -N -nv -O swagger-codegen-cli.jar -P "${SCRIPTDIR}" "${swaggerCodeGen}"
+  wget -N -nv -O src-gen/swagger-codegen-cli.jar -P "${SCRIPTDIR}" "${swaggerCodeGen}"
 }
 
 convertToV3() {
