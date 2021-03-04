@@ -2105,6 +2105,100 @@ paths:
           description: "The status result"
           schema:
             $ref: "#/definitions/Status"
+  /api/returns/{returnId}:
+    get:
+      tags:
+        - "Returns"
+      summary: "Get return with the given return ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getReturnLines"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "returnId"
+          description: "ID of the return you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Return was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/Return"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "User not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Returns"
+      summary: "Patches a return with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "patchReturn"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "returnId"
+          description: "ID of return you want to patch"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/ReturnPatchActions"
+      responses:
+        200:
+          description: "Return was found & patch-set has been applied. The patched entity is in the body."
+          schema:
+            $ref: "#/definitions/Return"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Entity version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
 
 securityDefinitions:
   firebase:
@@ -3347,6 +3441,8 @@ definitions:
           - "ModifyHandoverjob"
           - "ModifyCarrier"
           - "ModifyShortpick"
+          - "ModifyReturn"
+          - "ModifyReturnLineItem"
         example: "<Use the corresponding action, see documentation>"
         description: "Use value 'ModifyPickJob' when this action is regarding the Pickjob and 'ModifyPickLineItem' if this action is operating against a pickline and 'ModifyFacility' if you want to patch a facility "
     xml:
@@ -4189,3 +4285,166 @@ definitions:
       - required:
           - "targetTime"
           - "channel"
+  Return:
+    type: "object"
+    properties:
+      tenantOrderId:
+        type: "string"
+      orderRef:
+        type: "string"
+        example: "LGMl2DuvPnfPoSHhYFOm"
+        description: "The id of the order that lead to the creation of this pickjob. Can be empty / not present when the pickjob was created without having an order."
+      status:
+        $ref: '#/definitions/ReturnStatus'
+      returnLines:
+        type: "array"
+        items:
+          $ref: '#/definitions/ReturnLine'
+          minItems: 1
+    required:
+      - "orderRef"
+      - "tenantOrderId"
+      - "status"
+      - "returnLines"
+  ReturnLine:
+    type: "object"
+    properties:
+      pickjobRefs:
+        type: "array"
+        minItems: 1
+        items:
+          type: "string"
+          description: "List of corresponding pickjob Ids"
+      article:
+        $ref: '#/definitions/ReturnItemArticle'
+      scannableCodes:
+        type: "array"
+        items:
+          type: "string"
+          description: "Strings, that identify the article"
+      returned:
+        $ref: '#/definitions/Returned'
+      delivered:
+        type: "integer"
+        format: "int64"
+        minimum: 0
+        example: 20
+        description: "The amount of articles that were delivered"
+      id:
+        type: "string"
+        example: "climk4dcQFiPdA5ULuhS"
+        description: "The id of this return Item. It is generated during creation automatically and suits as the primary
+         identifier of the described entity."
+      status:
+        $ref: '#/definitions/ReturnLineStatus'
+    required:
+      - "pickjobRefs"
+      - "id"
+      - "status"
+      - "items"
+      - "delivered"
+      - "returned"
+      - "scannableCodes"
+      - "article"
+  ReturnItemArticle:
+    allOf:
+      - $ref: '#/definitions/AbstractArticle'
+      - type: "object"
+        properties:
+          attributes:
+            type: "array"
+            items:
+              $ref: '#/definitions/ReturnArticleAttributeItem'
+    xml:
+      name: "ReturnItemArticle"
+  ReturnLineStatus:
+    type: "string"
+    enum:
+      - "INITIAL"
+      - "ADVISED"
+      - "ACCEPTED"
+      - "DECLINED"
+    description: "A return item line initially has the status INITIAL."
+    xml:
+      name: "ReturnItemStatus"
+  ReturnStatus:
+    type: "string"
+    enum:
+      - "INITIAL"
+      - "IN_PROGRESS"
+      - "CLAIMED"
+      - "CLOSED"
+    description: "A return item initially has the status INITIAL. When a return item is INITIAL within the handoverjob, the item changes its status to CLAIMED. When it is finished the state is CLOSED"
+    xml:
+      name: "ReturnItemStatus"
+  ReturnArticleAttributeItem:
+    allOf:
+      - $ref: '#/definitions/ArticleAttributeItem'
+  ReturnPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/ModifyReturnAction'
+    xml:
+      name: "ReturnPatchActions"
+  ModifyReturnAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyReturn"
+          status:
+            $ref: '#/definitions/ReturnStatus'
+        additionalProperties: false
+    xml:
+      name: "ModifyReturnAction"
+  ModifyReturnLineItemAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "id"
+          - "action"
+          - "returned"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyReturnLineItem"
+            description: "Use value 'ModifyReturnLineItem', because you want to modify a return line item"
+          returned:
+            $ref: '#/definitions/Returned'
+          status:
+            $ref: '#/definitions/ReturnLineStatus'
+    xml:
+      name: "ModifyReturnLineItemAction"
+  Returned:
+    type: "object"
+    properties:
+      returnedAmount:
+        type: "number"
+        example: 5
+        description: "Amount of item which is returned"
+      reason:
+        type: "string"
+        example: "Zu klein"
+        description: "Reason of return."
+    required:
+      - "returnedAmount"
+      - "reason"
