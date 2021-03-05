@@ -4286,26 +4286,33 @@ definitions:
           - "targetTime"
           - "channel"
   ReturnJob:
-    type: "object"
-    properties:
-      tenantOrderId:
-        type: "string"
-      orderRef:
-        type: "string"
-        example: "LGMl2DuvPnfPoSHhYFOm"
-        description: "The id of the order that lead to the creation of this pickjob. Can be empty / not present when the pickjob was created without having an order."
-      status:
-        $ref: '#/definitions/ReturnStatus'
-      returnLines:
-        type: "array"
-        items:
-          $ref: '#/definitions/ReturnLine'
-          minItems: 1
-    required:
-      - "orderRef"
-      - "tenantOrderId"
-      - "status"
-      - "returnLines"
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "orderRef"
+          - "tenantOrderId"
+          - "status"
+          - "returnLines"
+          - "id"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of this returnJob. It is generated during creation automatically and suits as the primary identifier of the described entity."
+          tenantOrderId:
+            type: "string"
+          orderRef:
+            type: "string"
+            example: "LGMl2DuvPnfPoSHhYFOm"
+            description: "The id of the order that lead to the creation of this pickjob. Can be empty / not present when the pickjob was created without having an order."
+          status:
+            $ref: '#/definitions/ReturnStatus'
+          returnLines:
+            type: "array"
+            items:
+              $ref: '#/definitions/ReturnLine'
+              minItems: 1
   ReturnLine:
     type: "object"
     properties:
