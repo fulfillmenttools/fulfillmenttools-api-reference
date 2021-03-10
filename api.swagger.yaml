@@ -1538,6 +1538,48 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+  /api/pickjobs/{pickjobId}/packingSlip:
+    get:
+      tags:
+        - "PickJobs"
+      summary: "Get the return note for the pickjob with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getPsckingSlipForPickjob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/pdf"
+      parameters:
+        - in: "path"
+          name: "pickjobId"
+          description: "ID of the Pickjob"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns a packing slip pdf for the pickjob."
+          schema:
+            type: file
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/handoverjobs/{handoverjobId}:
     get:
       tags:
