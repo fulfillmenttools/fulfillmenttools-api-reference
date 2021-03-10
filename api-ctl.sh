@@ -20,7 +20,6 @@ printUsage() {
 downloadApi() {
   echo "download ${apiVersion}"
   wget -N -nv -P "${SCRIPTDIR}" "${apiUrl}"
-  wget -N -nv -P "${SCRIPTDIR}" "${swaggerCodeGen}" -O "${SCRIPTDIR}/swagger-codegen-cli.jar"
 }
 
 convertToV3() {
@@ -30,6 +29,7 @@ convertToV3() {
 
 generate() {
   echo "generate code for version ${apiVersion}"
+  wget -N -nv -P "${SCRIPTDIR}" "${swaggerCodeGen}" -O "${SCRIPTDIR}/swagger-codegen-cli.jar"
   java -jar swagger-codegen-cli.jar generate -i api.swagger.yaml -l typescript-fetch -o ./typescript-fetch-client
   cd  typescript-fetch-client
   grep -n -A 64 "import \* as url" api.ts | sed -n 's/^\([0-9]\{1,\}\).*/\1d/p' | sed -f - api.ts  > api.tmp
@@ -53,4 +53,3 @@ main() {
 }
 
 main "$@"
-
