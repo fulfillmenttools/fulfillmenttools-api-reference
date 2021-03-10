@@ -4462,3 +4462,62 @@ definitions:
         description: "Reason of return."
     required:
       - "returnedAmount"
+  RoutingPlan:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "orderDate"
+          - "created"
+          - "lastModified"
+          - "version"
+          - "orderRef"
+          - "priority"
+          - "status"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+          status:
+            $ref: '#/definitions/RoutingPlanStatus'
+          orderRef:
+            type: "string"
+            example: "LGMl2DuvPnfPoSHhYFOm"
+            description: "The id of the order that lead to the creation of this pickjob. Can be empty / not present when the pickjob was created without having an order."
+          facilityRef:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of the facility reference. The given ID has to be present in the system."
+          orderDate:
+            type: "string"
+            format: "date-time"
+            example: "2020-02-03T08:45:50.525Z"
+            description: "The date this order was created at the supplying system."
+          priority:
+            type: "number"
+            minimum: 0
+            description: "priority of return plan"
+          calculationCount:
+            type: "number"
+            description: "TBD"
+          finalizeCount:
+            type: "number"
+            minimum: 0
+            example: 5
+            description: "TBD"
+    type: "object"
+  RoutingPlanStatus:
+    type: "string"
+    enum:
+      - "INITITAL"
+      - "PRIORITIZED"
+      - "CALCULATING"
+      - "PROPOSED"
+      - "PLANED"
+      - "ROUTED"
+    description: "A routing plan line initially has the status INITIAL. Final state is ROUTED"
+    xml:
+      name: "ReturnItemStatus"
+
+state: enum
+
