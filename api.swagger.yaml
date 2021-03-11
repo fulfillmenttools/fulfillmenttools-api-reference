@@ -2324,7 +2324,100 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-
+  /api/routingplan/{routingplanId}:
+    get:
+      tags:
+        - "RoutingPlans"
+      summary: "Get a routing plan with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getRoutingPlan"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "routingplanId"
+          description: "ID of the routing plan want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Routing plan was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/RoutingPlan"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Not found, please look at details."
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "RoutingPlans"
+      summary: "Patches a routing plan with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "patchRoutingPlan"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "routingplanId"
+          description: "ID of routing plan you want to patch"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/RoutingPlanPatchActions"
+      responses:
+        200:
+          description: "Routing plan was found & patch-set has been applied. The patched entity is in the body."
+          schema:
+            $ref: "#/definitions/RoutingPlan"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found, for more information please look at details."
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Entity version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
 securityDefinitions:
   firebase:
     authorizationUrl: ""
@@ -3615,6 +3708,7 @@ definitions:
           - "ModifyShortpick"
           - "ModifyReturn"
           - "ModifyReturnLineItem"
+          - "ModifyRoutingPlan"
         example: "<Use the corresponding action, see documentation>"
         description: "Use value 'ModifyPickJob' when this action is regarding the Pickjob and 'ModifyPickLineItem' if this action is operating against a pickline and 'ModifyFacility' if you want to patch a facility "
     xml:
@@ -4686,5 +4780,41 @@ definitions:
     description: "A routing plan line initially has the status INITIAL. Final state is ROUTED"
     xml:
       name: "ReturnItemStatus"
-
-
+  RoutingPlanPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/ModifyRoutingPlanAction'
+    xml:
+      name: "RoutingPlanPatchActions"
+  ModifyRoutingPlanAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+          - "facilityRef"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyRoutingPlan"
+            description: "Use value 'ModifyRoutingPlan', because you want to modify a routing plan"
+          facilityRef:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of the facility reference. The given ID has to be present in the system."
+        additionalProperties: false
+    xml:
+      name: "ModifyRoutingPlanAction"
