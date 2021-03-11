@@ -819,6 +819,59 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+  /api/facilities/{facilityId}/configurations/ftp/validate:
+    post:
+      tags:
+        - "Facilities Configurations"
+      summary: "Validates the facility ftp configuration without saving it"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "validateFacilityFtpConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to validate the configuration for"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Configuration object"
+          required: true
+          schema:
+            $ref: "#/definitions/FacilityFtpConfiguration"
+      responses:
+        200:
+          description: "Configuration was valid. The response will not contain the credentials."
+          schema:
+            $ref: "#/definitions/FacilityFtpConfigurationWithoutCredentials"
+        400:
+          description: "The ftp configuration were not valid"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/facilities/{facilityId}/listings:
     get:
       tags:
