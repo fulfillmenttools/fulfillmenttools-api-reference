@@ -2377,7 +2377,48 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-  /api/routingplan/{routingplanId}:
+  /api/routingplans:
+    get:
+      tags:
+        - "RoutingPlans"
+      summary: "Get a routing plan regarding to orderRef"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getRoutingPlanBaseOnOrderRef"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "orderRef"
+          description: "Reference to the order you want to get the corresponding routing plan."
+          type: "string"
+      responses:
+        200:
+          description: "Routing plan was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/RoutingPlans"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found, please look at details."
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/routingplans/{routingplanId}:
     get:
       tags:
         - "RoutingPlans"
@@ -4871,3 +4912,13 @@ definitions:
         additionalProperties: false
     xml:
       name: "ModifyRoutingPlanAction"
+  RoutingPlans:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      routingPlans:
+        type: array
+        items:
+          $ref: '#/definitions/RoutingPlan'
