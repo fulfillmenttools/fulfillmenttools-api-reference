@@ -2512,6 +2512,144 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+  /api/routing/commands/runFinalizer:
+    post:
+      tags:
+        - "Routings"
+      summary: "Triggers run of the finalizer."
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "runFinalizer"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      responses:
+        200:
+          description: "Finalizer was successfully triggered."
+        404:
+          description: "Not found. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/routing/commands/runRouter:
+    post:
+      tags:
+        - "Routings"
+      summary: "Triggers run of the router"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "runRouter"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      responses:
+        200:
+          description: "Routing was successfully triggered"
+        404:
+          description: "Not found. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+  /api/configurations/routing:
+    get:
+      tags:
+        - "Configurations"
+      summary: "Get a tenant routing config"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getRouringConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Routing configuration was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: '#/definitions/RoutingConfiguration'
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Routing configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Update routing configuration of a tenant"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "putRoutingConfiguraton"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/RoutingConfiguration"
+      responses:
+        200:
+          description: "Routing configuration was written successfully"
+          schema:
+            $ref: '#/definitions/RoutingConfiguration'
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Routing configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
 securityDefinitions:
   firebase:
     authorizationUrl: ""
@@ -4818,6 +4956,26 @@ definitions:
         description: "Reason of return."
     required:
       - "returnedAmount"
+  RoutingConfiguration:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+    type: "object"
+    properties:
+      prioritizationRules:
+        description: "Contains the routing configuration for prioritization & routing for the whole tenant"
+        type: "array"
+        items:
+          $ref: '#/definitions/PrioritizationRule'
+      routingRules:
+        properties:
+          ratings:
+            type: "array"
+            items:
+              $ref: '#/definitions/Rating'
+          fences:
+            type: "array"
+            items:
+              $ref: '#/definitions/Fence'
   RoutingPlan:
     allOf:
       - $ref: '#/definitions/VersionedResource'
@@ -4923,3 +5081,107 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/RoutingPlan'
+  PrioritizationRuleImplementation:
+    type: "string"
+    enum:
+      - "ITERATION"
+      - "CUSTOM"
+    xml:
+      name: "PrioritizationRuleImplementation"
+  PrioritizationRule:
+    description: "You can select a default Prioritization Rule from the catalog. When you decide to select 'CUSTOM' you must also provide a vmExpression to match the type CustomPrioritizationRule."
+    required:
+      - "active"
+      - "name"
+      - "implementation"
+    properties:
+      active:
+        type: "boolean"
+      name:
+        type: "string"
+      implementation:
+        $ref: '#/definitions/PrioritizationRuleImplementation'
+  CustomPrioritizationRule:
+    description: "You can supply a CUSTOM Prioritization rule. In order to successfully supply such a rule you also need to provide an evaluatable Expression in vmExpression. This expression needs to return an integer value that adds additional priority to an order."
+    allOf:
+      - $ref: '#/definitions/PrioritizationRule'
+    required:
+      - "vmExpression"
+    properties:
+      vmExpression:
+        example: "order.customAttributes && order.customAttributes.amazon === true ? 100 : 0"
+        type: "string"
+    xml:
+      name: "CustomPrioritizationRule"
+
+  Rating:
+    type: "object"
+    required:
+      - "name"
+      - "active"
+      - "implementation"
+      - "maxPenalty"
+    properties:
+      name:
+        type: "string"
+      active:
+        type: "boolean"
+      implementation:
+        $ref: '#/definitions/RatingImplementation'
+      maxPenalty:
+        type: "number"
+        example: 100
+  CustomRating:
+    description: "You can supply a CUSTOM Rating rule. In order to successfully supply such a rule you also need to provide an evaluatable Expression in vmExpression. This expression needs to return an integer value that adds additional priority to an order."
+    required:
+      - "vmExpression"
+    allOf:
+      - $ref: '#/definitions/Rating'
+    properties:
+      vmExpression:
+        type: "string"
+    xml:
+      name: "CustomPrioritizationRule"
+  RatingImplementation:
+    description: "If you choose to use CUSTOM here you need to also provide a vmExpression string to match type CustomRatingImplementation"
+    type: "string"
+    enum:
+      - "STOCK-BALANCING"
+      - "GEO-DISTANCE"
+      - "CUSTOM"
+    xml:
+      name: "RatingImplementation"
+
+  Fence:
+    type: "object"
+    required:
+      - "name"
+      - "active"
+      - "implementation"
+    properties:
+      name:
+        type: "string"
+      active:
+        type: "boolean"
+      implementation:
+        $ref: '#/definitions/FenceImplementation'
+  FenceImplementation:
+    description: "If you choose to use CUSTOM here you need to also provide a vmExpression string to match type CustomFenceImplementation"
+    type: "string"
+    enum:
+      - "FACILITY-SERVICETYPE"
+      - "STOCK-AVAILABILITY"
+      - "CUSTOM"
+    xml:
+      name: "FenceImplementation"
+  CustomFence:
+    description: "You can supply a CUSTOM Fencing rule. In order to successfully supply such a rule you also need to provide an evaluatable Expression in vmExpression. This expression needs to return an integer value that adds additional priority to an order."
+    required:
+      - "vmExpression"
+    allOf:
+      - $ref: '#/definitions/Fence'
+    properties:
+      vmExpression:
+        type: "string"
+    xml:
+      name: "CustomFenceImplementation"
