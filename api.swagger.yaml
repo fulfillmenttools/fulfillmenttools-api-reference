@@ -4957,6 +4957,9 @@ definitions:
     required:
       - "returnedAmount"
   RoutingConfiguration:
+    required:
+      - "prioritizationRules"
+      - "routingRule"
     allOf:
       - $ref: '#/definitions/VersionedResource'
     type: "object"
@@ -4966,16 +4969,23 @@ definitions:
         type: "array"
         items:
           $ref: '#/definitions/PrioritizationRule'
-      routingRules:
-        properties:
-          ratings:
-            type: "array"
-            items:
-              $ref: '#/definitions/Rating'
-          fences:
-            type: "array"
-            items:
-              $ref: '#/definitions/Fence'
+      routingRule:
+          $ref: '#/definitions/RoutingRule'
+
+  RoutingRule:
+    required:
+      - "ratings"
+      - "fences"
+    properties:
+      ratings:
+        type: "array"
+        items:
+          $ref: '#/definitions/Rating'
+      fences:
+        type: "array"
+        items:
+          $ref: '#/definitions/Fence'
+
   RoutingPlan:
     allOf:
       - $ref: '#/definitions/VersionedResource'
