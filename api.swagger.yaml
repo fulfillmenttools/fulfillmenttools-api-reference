@@ -4965,7 +4965,7 @@ definitions:
         items:
           $ref: '#/definitions/PrioritizationRule'
       routingRule:
-          $ref: '#/definitions/RoutingRule'
+        $ref: '#/definitions/RoutingRule'
 
   RoutingRule:
     required:
@@ -4984,103 +4984,104 @@ definitions:
   RoutingPlan:
     allOf:
       - $ref: '#/definitions/VersionedResource'
-      - required:
-          - "id"
-          - "orderDate"
-          - "created"
-          - "lastModified"
-          - "version"
-          - "orderRef"
-          - "priority"
-          - "status"
-          - "decisionLogs"
-          - "routingRun"
-          - "finalizeRun"
-        type: "object"
-        properties:
-          id:
-            type: "string"
-          status:
-            $ref: '#/definitions/RoutingPlanStatus'
-          orderRef:
-            type: "string"
-            example: "LGMl2DuvPnfPoSHhYFOm"
-            description: "The id of the order that lead to the creation of this pickjob. Can be empty / not present when the pickjob was created without having an order."
-          facilityRef:
-            type: "string"
-            example: "Esb20gpHBL94X5NdMp3C"
-            description: "The id of the facility reference. The given ID has to be present in the system."
-          pickJobRef:
-            type: "string"
-            example: "Esb20gpHBL94X5NdMp3C"
-            description: "The id of the pickjob that has been created from the routing plan."
-          orderDate:
-            type: "string"
-            format: "date-time"
-            example: "2020-02-03T08:45:50.525Z"
-            description: "The date this order was created at the supplying system."
-          priority:
-            type: "number"
-            minimum: 0
-            description: "priority of return plan"
-          routingRun:
-            type: "number"
-            description: "The iteration through the routing process"
-          finalizeRun:
-            type: "number"
-            minimum: 0
-            example: 5
-            description: "The iteration through the finalizer process"
-          decisionLogs:
-            type: "array"
-            items:
-              $ref: '#/definitions/DecisionLogRef'
+    required:
+      - "id"
+      - "orderDate"
+      - "created"
+      - "lastModified"
+      - "version"
+      - "orderRef"
+      - "priority"
+      - "status"
+      - "decisionLogs"
+      - "routingRun"
+      - "finalizeRun"
     type: "object"
+    properties:
+      id:
+        type: "string"
+      status:
+        $ref: '#/definitions/RoutingPlanStatus'
+      orderRef:
+        type: "string"
+        example: "LGMl2DuvPnfPoSHhYFOm"
+        description: "The id of the order that lead to the creation of this pickjob. Can be empty / not present when the pickjob was created without having an order."
+      facilityRef:
+        type: "string"
+        example: "Esb20gpHBL94X5NdMp3C"
+        description: "The id of the facility reference. The given ID has to be present in the system."
+      pickJobRef:
+        type: "string"
+        example: "Esb20gpHBL94X5NdMp3C"
+        description: "The id of the pickjob that has been created from the routing plan."
+      orderDate:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "The date this order was created at the supplying system."
+      priority:
+        type: "number"
+        minimum: 0
+        description: "priority of return plan"
+      routingRun:
+        type: "number"
+        description: "The iteration through the routing process"
+      finalizeRun:
+        type: "number"
+        minimum: 0
+        example: 5
+        description: "The iteration through the finalizer process"
+      decisionLogs:
+        type: "array"
+        items:
+          $ref: '#/definitions/DecisionLogRef'
 
   DecisionLogRef:
-    allOf:
-      - required:
-          - "url"
-          - "finalizeRun"
-        properties:
-          finalizeRun:
-            type: "number"
-            minimum: 0
-            example: 5
-            description: "The iteration through the finalizer process"
-          url:
-            type: "string"
-            example: "/api/routingplans/{routingPlaId}/decisionlogs/{decisionLogId}"
-            description: "A reference to the finalizer decision log"
+    required:
+      - "url"
+      - "finalizeRun"
+    properties:
+      finalizeRun:
+        type: "number"
+        minimum: 0
+        example: 5
+        description: "The iteration through the finalizer process"
+      url:
+        type: "string"
+        example: "/api/routingplans/{routingPlaId}/decisionlogs/{decisionLogId}"
+        description: "A reference to the finalizer decision log"
     type: "object"
+    xml:
+      name: "DecisionLogRef"
 
   DecisionLog:
     allOf:
       - $ref: '#/definitions/VersionedResource'
-      - required:
-          - "id"
-          - "finalizeRun"
-          - "created"
-          - "lastModified"
-          - "version"
-          - "routingDecisions"
-          - "priorizationDecisions"
-        type: "object"
-        properties:
-          finalizeRun:
-            type: "number"
-            minimum: 0
-            example: 5
-            description: "The iteration through the finalizer process"
-          routingDecisions:
-            type: "array"
-            items:
-              $ref: '#/definitions/RoutingDecision'
-          prioritizationDecisions:
-            type: "array"
-            items:
-              $ref: '#/definitions/DecisionLogEntry'
+    required:
+      - "id"
+      - "finalizeRun"
+      - "created"
+      - "lastModified"
+      - "version"
+      - "routingDecisions"
+      - "priorizationDecisions"
     type: "object"
+    properties:
+      finalizeRun:
+        type: "number"
+        minimum: 0
+        example: 5
+        description: "The iteration through the finalizer process"
+      routingDecisions:
+        type: "array"
+        items:
+          $ref: '#/definitions/RoutingDecision'
+      prioritizationDecisions:
+        type: "array"
+        items:
+          $ref: '#/definitions/DecisionLogEntry'
+    xml:
+      name: "DecisionLog"
 
   RoutingDecision:
     allOf:
