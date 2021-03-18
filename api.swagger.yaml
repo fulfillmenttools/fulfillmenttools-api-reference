@@ -2642,6 +2642,53 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+  /api/routingplans/{routingplanId}/decisionlogs/{decisionlogId}:
+    get:
+      tags:
+        - "routingplans"
+      summary: "Get decision log of a routing plan with the given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getDecisionlog"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "routingplanId"
+          description: "ID of the routing plan you want to get it's decision log"
+          required: true
+          type: "string"
+        - in: "path"
+          name: "decisionlogId"
+          description: "ID of the decision log you want to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Decision log was found."
+          schema:
+            $ref: "#/definitions/DecisionLog"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Decision log not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
 securityDefinitions:
   firebase:
     authorizationUrl: ""
