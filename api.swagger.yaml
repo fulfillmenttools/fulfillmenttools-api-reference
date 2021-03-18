@@ -4993,6 +4993,7 @@ definitions:
           - "orderRef"
           - "priority"
           - "status"
+          - "decisionLogs"
         type: "object"
         properties:
           id:
@@ -5020,21 +5021,134 @@ definitions:
             type: "number"
             minimum: 0
             description: "priority of return plan"
-          calculationCount:
+          routingRun:
             type: "number"
-            description: "TBD"
-          finalizeCount:
+            description: "The iteration through the routing process"
+          finalizerRun:
             type: "number"
             minimum: 0
             example: 5
-            description: "TBD"
+            description: "The iteration through the finalizer process"
+          decisionLogs:
+            type: "array"
+            items:
+              $ref: '#/definitions/DecisionLogRef'
+    type: "object"
+
+  DecisionLogRef:
+    allOf:
+      - required:
+        - "url"
+        - "finalizerRun"
+        properties:
+          finalizerRun:
+            type: "number"
+            minimum: 0
+            example: 5
+            description: "The iteration through the finalizer process"
+          url:
+            type: "string"
+            example: "/api/routingplans/{routingPlaId}/decisionlogs/{decisionLogId}"
+            description: "A reference to the finalizer decision log"
+    type: "object"
+
+  DecisionLog:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "id"
+          - "finalizerRun"
+          - "created"
+          - "lastModified"
+          - "version"
+          - "routingDecisions"
+          - "priorizationDecisions"
+        type: "object"
+        properties:
+          finalizerRun:
+            type: "number"
+            minimum: 0
+            example: 5
+            description: "The iteration through the finalizer process"
+          routingDecisions:
+            type: "array"
+            items:
+              $ref: '#/definitions/RoutingDecision'
+          prioritizationDecisions:
+            type: "array"
+            items:
+              $ref: '#/definitions/DecisionLogEntry'
+    type: "object"
+
+  RoutingDecision:
+    allOf:
+      - required:
+          - "routingRun"
+          - "decisionLogs"
+        type: "object"
+        properties:
+          routingRun:
+            type: "number"
+            minimum: 0
+            example: 5
+            description: "The iteration through the router process"
+          decisionLogs:
+            type: "array"
+            items:
+              $ref: '#/definitions/DecisionLogEntry'
+    type: "object"
+
+  DecisionLogEntryRuleType:
+    type: "string"
+    enum:
+      - "PRIORITIZATION"
+      - "FENCE"
+      - "RATING"
+    description: "The rule type of a decision log entry"
+    xml:
+      name: "DecisionLogEntryRuleType"
+  DecisionLogEntry:
+    allOf:
+      - required:
+          - "created"
+          - "ruleName"
+          - "ruleType"
+          - "details"
+          - "ruleConfig"
+          - "ruleActive"
+        type: "object"
+        properties:
+          created:
+            type: "string"
+            format: "date-time"
+            example: "2020-02-03T08:45:50.525Z"
+            description: "The date this rule was executed and the log has been written."
+          ruleName:
+            type: "string"
+            example: "Geo distancing rating"
+            description: "The name of the executed rule."
+          message:
+            type: "string"
+            example: "Geo distancing ranking executed successfully"
+            description: "A descriptive text of the rule execution result."
+          ruleType:
+            $ref: '#/definitions/DecisionLogEntryRuleType'
+          details:
+            type: "object"
+            description: "Rule specific payload describing the made decision"
+          ruleConfig:
+            type: "object"
+            description: "Rule config at the time of execution"
+          ruleActive:
+            type: "boolean"
+            description: "state of the rule"
     type: "object"
   RoutingPlanStatus:
     type: "string"
     enum:
       - "INITIAL"
       - "PRIORITIZED"
-      - "CALCULATING"
+      - "ROUTING"
       - "PROPOSED"
       - "PLANNED"
       - "ROUTED"
