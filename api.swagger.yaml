@@ -769,6 +769,44 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - "Facilities Configurations"
+      summary: "Deletes the facility's current ftp server configuration for order storage and picking result retrieval"
+      security:
+        - firebase: [ ]
+      operationId: "deleteFacilityFtpConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to delete the configuration for"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Configuration for ftp server was deleted."
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "The given facility was not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
     put:
       tags:
         - "Facilities Configurations"
