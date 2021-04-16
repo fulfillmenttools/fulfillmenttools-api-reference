@@ -2616,7 +2616,7 @@ paths:
       description: ""
       security:
         - firebase: [ ]
-      operationId: "getRouringConfiguration"
+      operationId: "getRoutingConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -2656,7 +2656,7 @@ paths:
       description: ""
       security:
         - firebase: [ ]
-      operationId: "putRoutingConfiguraton"
+      operationId: "putRoutingConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -2687,6 +2687,83 @@ paths:
               $ref: "#/definitions/Error"
         404:
           description: "Routing configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+  /api/configurations/gdpr:
+    get:
+      tags:
+        - "Configurations"
+      summary: "Get a tenant gdpr config"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getGdprConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Gdpr configuration was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: '#/definitions/GdprConfiguration'
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Gdpr configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Update gdpr configuration of a tenant"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "putGdprConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/GdprConfiguration"
+      responses:
+        200:
+          description: "Gdpr configuration was written successfully"
+          schema:
+            $ref: '#/definitions/GdprConfiguration'
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Gdpr configuration not found"
           schema:
             items:
               $ref: "#/definitions/Error"
@@ -5408,3 +5485,16 @@ definitions:
         type: "string"
     xml:
       name: "CustomFenceImplementation"
+  GdprConfiguration:
+    required:
+      - "retentionTime"
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+    type: "object"
+    properties:
+      retentionTime:
+        description: "Number of days that anonymization must happen after that."
+        type: "number"
+        example: "30"
+        default: "30"
+        minimum: "0"
