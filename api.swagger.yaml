@@ -2936,6 +2936,10 @@ definitions:
         items:
           type: "string"
           description: "Strings, that identify the article"
+      shopPrice:
+        type: "number"
+        minimum: 1
+        example: 1200
       customAttributes:
         type: "object"
         description: "Attributes that can be added to the orderline. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
@@ -5433,6 +5437,25 @@ definitions:
       maxPenalty:
         type: "number"
         example: 100
+      configuration:
+        $ref: '#/definitions/AbstractRatingConfiguration'
+  AbstractRatingConfiguration:
+    type: "object"
+    description: "BETA Base Configuration for Ratings. See documentation for Details."
+    xml:
+      name: "AbstractRatingConfiguration"
+  TurnoverStockAvailabilityRatingConfiguration:
+    description: "BETA Provide this configuration if you want to set the defaultPricePerItem for the Turnover-Stock-Availaility rating. "
+    required:
+      - "defaultPricePerItem"
+    allOf:
+      - $ref: '#/definitions/AbstractRatingConfiguration'
+    properties:
+      defaultPricePerItem:
+        type: "number"
+        minimum: 0
+    xml:
+      name: "TurnoverStockAvailabilityRatingConfiguration"
   CustomRating:
     description: "You can supply a CUSTOM Rating rule. In order to successfully supply such a rule you also need to provide an evaluatable Expression in vmExpression. This expression needs to return an integer value that adds additional priority to an order."
     required:
@@ -5445,12 +5468,13 @@ definitions:
     xml:
       name: "CustomPrioritizationRule"
   RatingImplementation:
-    description: "If you choose to use CUSTOM here you need to also provide a vmExpression string to match type CustomRatingImplementation"
+    description: "BETA If you choose to use CUSTOM here you need to also provide a vmExpression string to match type CustomRatingImplementation. "
     type: "string"
     enum:
       - "STOCK-BALANCING"
       - "GEO-DISTANCE"
       - "CUSTOM"
+      - "TURNOVER-STOCK-AVAILABILITY"
     xml:
       name: "RatingImplementation"
 
