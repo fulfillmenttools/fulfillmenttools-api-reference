@@ -2579,6 +2579,12 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+        422:
+          description: "Finalizer was requested, but manual routing is not active"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/routing/commands/runRouter:
     post:
       tags:
@@ -2608,6 +2614,12 @@ paths:
               $ref: "#/definitions/Error"
         403:
           description: "Your user, although recognized, is not authorized to use this endpoint"
+        422:
+          description: "Routing was requested, but manual routing is not active"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/configurations/routing:
     get:
       tags:
@@ -5147,6 +5159,32 @@ definitions:
           $ref: '#/definitions/PrioritizationRule'
       routingRule:
         $ref: '#/definitions/RoutingRule'
+      timingMode:
+        description: "BETA: Selects the desired routing timing"
+        $ref: '#/definitions/RoutingConfigurationTiming'
+
+  RoutingConfigurationTiming:
+    type: "object"
+    description: "BETA: Configuration for the timing of routing decisions"
+    properties:
+      type:
+        $ref: '#/definitions/RoutingConfigurationTimingTypes'
+      options:
+        type: "object"
+        description: "BETA: Additional options of the timing configuration."
+    required:
+      - "type"
+
+  RoutingConfigurationTimingTypesType:
+    type: "string"
+    description: "BETA: The available types for routing timing"
+    enum:
+      - "DIRECT"
+      - "PRESET"
+      - "MANUAL"
+    xml:
+      name: "RoutingConfigurationTimingTypesType"
+
 
   RoutingRule:
     required:
