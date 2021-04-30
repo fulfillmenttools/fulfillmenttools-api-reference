@@ -2702,6 +2702,53 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Configurations"
+      summary: "Patches routing configuration"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "patchRoutingConfig"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/RoutingConfigurationsPatchActions"
+      responses:
+        200:
+          description: "Routing configuration was found & patch-set has been applied."
+          schema:
+            $ref: "#/definitions/RoutingConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found, for more information please look at details."
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Entity version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/configurations/gdpr:
     get:
       tags:
@@ -4122,6 +4169,13 @@ definitions:
           - "ModifyReturn"
           - "ModifyReturnLineItem"
           - "ModifyRoutingPlan"
+          - "ModifyRoutingConfiguration"
+          - "ModifyRoutingRule"
+          - "ModifyFence"
+          - "ModifyRating"
+          - "ModifyTimingMode"
+          - "ModifyOrderSplit"
+          - "ModifyPrioritization"
         example: "<Use the corresponding action, see documentation>"
         description: ""
     xml:
@@ -5166,7 +5220,6 @@ definitions:
         description: "BETA: Selects the desired routing timing"
         $ref: '#/definitions/RoutingConfigurationTiming'
     additionalProperties: false
-
   RoutingConfigurationTiming:
     type: "object"
     description: "BETA: Configuration for the timing of routing decisions"
@@ -5188,12 +5241,11 @@ definitions:
       - "MANUAL"
     xml:
       name: "RoutingConfigurationTimingType"
-
-
   RoutingRule:
     required:
       - "ratings"
       - "fences"
+      - "orderSplit"
     properties:
       ratings:
         type: "array"
@@ -5203,8 +5255,21 @@ definitions:
         type: "array"
         items:
           $ref: '#/definitions/Fence'
+      orderSplit:
+        $ref: '#/definitions/OrderSplit'
+        description: "BETA, configuration for order split during routing."
     additionalProperties: false
-
+  OrderSplit:
+    type: "object"
+    required:
+      - "active"
+    properties:
+      active:
+        type: "boolean"
+        default: false
+      maxSplitCount:
+        type: "number"
+        default: 1
   RoutingPlan:
     allOf:
       - $ref: '#/definitions/VersionedResource'
@@ -5259,7 +5324,12 @@ definitions:
         type: "array"
         items:
           $ref: '#/definitions/DecisionLogRef'
-
+      parentRoutingPlanRef:
+        type: "string"
+      orderLineItems:
+        type: "array"
+        items:
+          $ref: '#/definitions/OrderLineItem'
   DecisionLogRef:
     required:
       - "url"
@@ -5586,3 +5656,174 @@ definitions:
         example: 30
         default: 30
         minimum: 1
+  ModifyRoutingConfigurationAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyRoutingConfiguration"
+            description: "Use value 'ModifyRoutingConfiguration', because you want to modify a routing configuration."
+          prioritizationRules:
+            type: "array"
+            items:
+              $ref: '#/definitions/ModifyPrioritizationAction'
+          routingRule:
+            $ref: '#/definitions/ModifyRoutingRuleAction'
+          timingMode:
+            $ref: '#/definitions/ModifyTimingModeAction'
+        additionalProperties: false
+    xml:
+      name: "ModifyRoutingConfigurationAction"
+  ModifyFenceAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+          - "id"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyFence"
+            description: "Use value 'ModifyFence', because you want to modify a fence."
+          id:
+            type: "string"
+          name:
+            type: "string"
+          active:
+            type: "boolean"
+        additionalProperties: false
+    xml:
+      name: "ModifyFenceAction"
+  ModifyRatingAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+          - "id"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyRating"
+            description: "Use value 'ModifyRating', because you want to modify a rating."
+          id:
+            type: "string"
+          name:
+            type: "string"
+          active:
+            type: "boolean"
+          maxPenalty:
+            type: "number"
+            example: 100
+        additionalProperties: false
+    xml:
+      name: "ModifyRatingAction"
+  ModifyTimingModeAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyTimingMode"
+            description: "Use value 'ModifyTimingMode', because you want to modify a timing mode."
+          timingMode:
+            description: "BETA: Selects the desired routing timing"
+            $ref: '#/definitions/RoutingConfigurationTiming'
+        additionalProperties: false
+    xml:
+      name: "ModifyTimingModeAction"
+  ModifyOrderSplitAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyOrderSplit"
+            description: "Use value 'ModifyOrderSplit', because you want to modify the configuration for the an order split."
+          orderSplit:
+            $ref: '#/definitions/OrderSplit'
+            description: "BETA, configuration to set order split during routing."
+        additionalProperties: false
+    xml:
+      name: "ModifyOrderSplitAction"
+  ModifyPrioritizationAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+          - "id"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyPrioritization"
+            description: "Use value 'ModifyPrioritization', because you want to modify prioritization."
+          id:
+            type: "string"
+          active:
+            type: "boolean"
+          name:
+            type: "string"
+        additionalProperties: false
+    xml:
+      name: "ModifyPrioritizationAction"
+  ModifyRoutingRuleAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyRoutingRule"
+            description: "Use value 'ModifyRoutingRule', because you want to modify routing rule."
+          fence:
+            type: "array"
+            items:
+              $ref: '#/definitions/ModifyFenceAction'
+          rating:
+            type: "array"
+            items:
+              $ref: '#/definitions/ModifyRatingAction'
+          splitOrder:
+            $ref: '#/definitions/ModifyOrderSplitAction'
+        additionalProperties: false
+    xml:
+      name: "ModifyRoutingRuleAction"
+  RoutingConfigurationsPatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/ModifyRoutingConfigurationAction'
+    xml:
+      name: "RoutingConfigurationsPatchActions"
