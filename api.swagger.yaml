@@ -2203,7 +2203,11 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-
+        404:
+          description: "No more elements available"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
     post:
       tags:
         - "Carriers"
@@ -3298,11 +3302,7 @@ definitions:
           key:
             $ref: '#/definitions/CarrierKey'
           status:
-            type: "string"
-            description: "Status of this CEP. It is taken into consideration for all your facilities. Default: ACTIVE"
-            enum:
-              - "ACTIVE"
-              - "INACTIVE"
+            $ref: '#/definitions/CarrierStatus'
           deliveryType:
             type: "string"
             description: "Provided delivery of this CEP. Default: DELIVERY"
@@ -4748,11 +4748,7 @@ definitions:
       key:
         $ref: '#/definitions/CarrierKey'
       status:
-        type: "string"
-        description: "Status of this CEP. It is taken into consideration for all your facilities. Default: ACTIVE"
-        enum:
-          - "ACTIVE"
-          - "INACTIVE"
+        $ref: '#/definitions/CarrierStatus'
       deliveryType:
         type: "string"
         description: "Provided delivery of this CEP. Default: DELIVERY"
@@ -4947,6 +4943,12 @@ definitions:
         additionalProperties: false
     xml:
       name: "ModifyHandoverjobAction"
+  CarrierStatus:
+    type: "string"
+    description: "It is taken into consideration for all carriers. Default: ACTIVE"
+    enum:
+      - "ACTIVE"
+      - "INACTIVE"
   Carrier:
     allOf:
       - $ref: '#/definitions/CarrierForCreation'
