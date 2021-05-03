@@ -2161,6 +2161,49 @@ paths:
             items:
               $ref: "#/definitions/Error"
   /api/carriers:
+    get:
+      tags:
+        - "Carriers"
+      summary: "Returns all configured CEP partners"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getCarriers"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "startAfterId"
+          description: "all entities after given Id"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "size"
+          description: "number of entities to show"
+          required: false
+          type: "integer"
+          default: 25
+      responses:
+        201:
+          description: "The current list of available carriers"
+          schema:
+            $ref: "#/definitions/StrippedCarriers"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
     post:
       tags:
         - "Carriers"
@@ -3240,7 +3283,34 @@ definitions:
       carriers:
         type: array
         items:
-          $ref: '#/definitions/Carrier'
+          $ref: '#/definitions/StrippedCarrier'
+  StrippedCarrier:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - required:
+          - "name"
+          - "key"
+        properties:
+          name:
+            type: "string"
+            example: "DHL Köln"
+            description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
+          key:
+            $ref: '#/definitions/CarrierKey'
+          status:
+            type: "string"
+            description: "Status of this CEP. It is taken into consideration for all your facilities. Default: ACTIVE"
+            enum:
+              - "ACTIVE"
+              - "INACTIVE"
+          deliveryType:
+            type: "string"
+            description: "Provided delivery of this CEP. Default: DELIVERY"
+            enum:
+              - "SAMEDAY"
+              - "DELIVERY"
+    xml:
+      name: "CarrierForCreation"
   StrippedOrders:
     properties:
       total:
@@ -4683,6 +4753,12 @@ definitions:
         enum:
           - "ACTIVE"
           - "INACTIVE"
+      deliveryType:
+        type: "string"
+        description: "Provided delivery of this CEP. Default: DELIVERY"
+        enum:
+          - "SAMEDAY"
+          - "DELIVERY"
       credentials:
         $ref: '#/definitions/AbstractCarrierCredentials'
     xml:
@@ -4952,6 +5028,12 @@ definitions:
             enum:
               - "ACTIVE"
               - "INACTIVE"
+          deliveryType:
+            type: "string"
+            description: "The delivery type of the carrier. Default: DELIVERY"
+            enum:
+              - "SAMEDAY"
+              - "DELIVERY"
           credentials:
             $ref: '#/definitions/AbstractModifyCarrierCredentials'
         additionalProperties: false
