@@ -3304,11 +3304,7 @@ definitions:
           status:
             $ref: '#/definitions/CarrierStatus'
           deliveryType:
-            type: "string"
-            description: "Provided delivery of this CEP. Default: DELIVERY"
-            enum:
-              - "SAMEDAY"
-              - "DELIVERY"
+            $ref: '#/definitions/CarrierDeliveryType'
     xml:
       name: "CarrierForCreation"
   StrippedOrders:
@@ -4750,11 +4746,7 @@ definitions:
       status:
         $ref: '#/definitions/CarrierStatus'
       deliveryType:
-        type: "string"
-        description: "Provided delivery of this CEP. Default: DELIVERY"
-        enum:
-          - "SAMEDAY"
-          - "DELIVERY"
+        $ref: '#/definitions/CarrierDeliveryType'
       credentials:
         $ref: '#/definitions/AbstractCarrierCredentials'
     xml:
@@ -4949,6 +4941,12 @@ definitions:
     enum:
       - "ACTIVE"
       - "INACTIVE"
+  CarrierDeliveryType:
+    type: "string"
+    description: "Provided delivery of this CEP. Default: DELIVERY"
+    enum:
+      - "SAMEDAY"
+      - "DELIVERY"
   Carrier:
     allOf:
       - $ref: '#/definitions/CarrierForCreation'
@@ -5025,11 +5023,7 @@ definitions:
             example: "DHL Köln"
             description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
           status:
-            type: "string"
-            description: "It is taken into consideration for all carriers. Default: ACTIVE"
-            enum:
-              - "ACTIVE"
-              - "INACTIVE"
+            - $ref: '#/definitions/CarrierStatus'
           deliveryType:
             type: "string"
             description: "The delivery type of the carrier. Default: DELIVERY"
