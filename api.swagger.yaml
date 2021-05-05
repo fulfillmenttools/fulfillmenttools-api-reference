@@ -5833,9 +5833,13 @@ definitions:
             enum:
               - "ModifyOrderSplit"
             description: "Use value 'ModifyOrderSplit', because you want to modify the configuration for the an order split."
-          orderSplit:
-            $ref: '#/definitions/OrderSplit'
-            description: "BETA, configuration to set order split during routing."
+          active:
+            type: "boolean"
+            default: false
+          maxSplitCount:
+            type: "number"
+            minimum: 1
+            description: "This setting defines how often an order split is performed to fulfill the order."
         additionalProperties: false
     xml:
       name: "ModifyOrderSplitAction"
@@ -5881,7 +5885,7 @@ definitions:
             type: "array"
             items:
               $ref: '#/definitions/ModifyRatingAction'
-          splitOrder:
+          orderSplit:
             $ref: '#/definitions/ModifyOrderSplitAction'
         additionalProperties: false
     xml:
