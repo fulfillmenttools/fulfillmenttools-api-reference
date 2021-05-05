@@ -4,38 +4,51 @@
   "definitions": {
     "WebCarrier": {
       "properties": {
-        "order": {
-          "type": "number",
-          "default": 40
-        },
-        "carrierRef": {
+        "id": {
           "type": "string"
         },
-        "settings": {
+        "credentials": {
           "properties": {
-            "accountNumber": {
+            "dhlAccountNumber": {
               "type": "string"
             },
-            "isEnabled": {
-              "type": "boolean",
-              "default": false
-            },
-            "websiteId": {
+            "dhlGkUsername": {
               "type": "string"
             }
           },
           "required": [
-            "accountNumber",
-            "isEnabled",
-            "websiteId"
+            "dhlAccountNumber",
+            "dhlGkUsername"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE"
+          ]
+        },
+        "lifecycle": {
+          "type": "string",
+          "enum": [
+            "GA",
+            "BETA",
+            "ALPHA"
+          ]
+        },
+        "key" : {
+          "type": "string"
+        },
+        "deliveryType": {
+          "type": "string",
+          "enum": [
+            "DELIVERY",
+            "SAMEDAY"
           ]
         },
         "version": {
           "type": "integer",
           "minimum": 0
-        },
-        "type": {
-          "type": "string"
         },
         "targetVersion": {
           "type": "integer",
@@ -44,12 +57,13 @@
       },
       "type": "object",
       "required": [
-        "order",
-        "settings",
-        "type",
+        "deliveryType",
+        "status",
+        "lifecycle",
+        "key",
         "targetVersion",
         "version",
-        "carrierRef"
+        "id"
       ]
     }
   }
