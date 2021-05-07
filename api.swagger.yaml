@@ -1185,30 +1185,80 @@ paths:
           description: "ID of facility you want to get"
           required: true
           type: "string"
-        - in: "query"
-          name: "targetTime"
-          description: "At which time is the parcel ready to be shipped? The answer to this question has direct impact to the list of available KEPs and their respective service levels. Default: Time of the request"
-          format: "date-time"
-          type: "string"
-        - in: "query"
+      responses:
+        200:
+          description: "Carriers are found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: '#/definitions/StrippedCarriers'
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Carriers not found"
+          schema:
+            $ref: "#/definitions/Error"
+  /api/facilities/{facilityId}/carriers/{carrierRef}:
+    get:
+      tags:
+        - "Facilities"
+      summary: "BETA Get the details for a carrier related to the facility with the given ID."
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getFacilityCarrier"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to get listing"
           required: true
           type: "string"
-          name: "targetPostalcode"
-          description: "Postalcode of the consumer address. "
+        - in: "path"
+          name: "carrierRef"
+          description: "The ID that describes the connection of this facility to the referenced carrier"
+          required: true
+          type: "string"
       responses:
+        200:
+          description: "Carrier to facility connections was found & you were allowed to access it. The result is in the body."
+          schema:
+             $ref: '#/definitions/FacilityCarrierConnection'
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
         404:
-          description: "This endpoint is not implemented yet."
-        501:
-          description: "This endpoint is not implemented yet."
-  /api/facilities/{facilityId}/carriers/{carrierRef}:
+          description: "There is no connection to a carrier with this facility referenced by the provided facilityCarrierConnectionId"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
     put:
       tags:
         - "Facilities"
-      summary: "Connect an (existing) CEP with individual Cutoff-Times to the facility"
+      summary: "BETA Connect a configured carrier to the facility with given ID"
       description: ""
       security:
         - firebase: []
-      operationId: "connectCepToFacility"
+      operationId: "connectCarrierToFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -1232,14 +1282,83 @@ paths:
           type: "string"
         - in: "path"
           name: "carrierRef"
-          description: "ID of facility you want to get"
+          description: "The referenced carrier ID"
           required: true
           type: "string"
       responses:
+        200:
+          description: "Modification was successful."
+          schema:
+            $ref: "#/definitions/FacilityCarrierConnection"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
         404:
-          description: "This endpoint is not implemented yet."
-        501:
-          description: "This endpoint is not implemented yet."
+          description: "There is no connection to a carrier with this facility referenced by the provided facilityCarrierConnectionId."
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    post:
+      tags:
+        - "Facilities"
+      summary: "BETA Create a connection of a configured carrier to the facility with given ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "createCarrierToFacility"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Representation that describes the facility"
+          required: true
+          schema:
+            $ref: '#/definitions/FacilityCarrierConnectionForCreation'
+        - in: "path"
+          name: "facilityId"
+          description: "ID of facility you want to get"
+          required: true
+          type: "string"
+        - in: "path"
+          name: "carrierRef"
+          description: "The referenced carrier ID"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Creation was successful."
+          schema:
+            $ref: "#/definitions/FacilityCarrierConnection"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "There is no connection to a carrier with this facility referenced by the provided facilityCarrierConnectionId."
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/pickjobs:
     get:
       tags:
@@ -4809,16 +4928,28 @@ definitions:
     xml:
       name: "DhlCarrierCredentials"
   FacilityCarrierConnection:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - $ref: '#/definitions/FacilityCarrierConnectionForCreation'
     properties:
-      cutoffs:
-        type: "object"
-        properties:
-          sameday:
-            type: "object"
-            $ref: '#/definitions/CutoffTime'
-          nextday:
-            type: "object"
-            $ref: '#/definitions/CutoffTime'
+      key:
+        $ref: '#/definitions/CarrierKey'
+      carrierRef:
+        type: "string"
+        description: "ID that references the configured carrier."
+      deliveryType:
+        $ref: '#/definitions/CarrierDeliveryType'
+  FacilityCarrierConnectionForCreation:
+    properties:
+      name:
+        type: "string"
+        example: "DHL Köln"
+        description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
+      status:
+        $ref: '#/definitions/CarrierStatus'
+      cutoffTime:
+        $ref: '#/definitions/CutoffTime'
+    additionalProperties: false
   CutoffTime:
     type: "object"
     required:
