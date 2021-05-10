@@ -1274,7 +1274,7 @@ paths:
           description: "Representation that describes the facility"
           required: true
           schema:
-            $ref: '#/definitions/FacilityCarrierConnection'
+            $ref: '#/definitions/FacilityCarrierConnectionForModification'
         - in: "path"
           name: "facilityId"
           description: "ID of facility you want to get"
@@ -4922,8 +4922,7 @@ definitions:
       name: "DhlCarrierCredentials"
   FacilityCarrierConnection:
     allOf:
-      - $ref: '#/definitions/VersionedResource'
-      - $ref: '#/definitions/FacilityCarrierConnectionForCreation'
+      - $ref: '#/definitions/FacilityCarrierConnectionForModification'
     properties:
       key:
         $ref: '#/definitions/CarrierKey'
@@ -4932,6 +4931,10 @@ definitions:
         description: "ID that references the configured carrier."
       deliveryType:
         $ref: '#/definitions/CarrierDeliveryType'
+  FacilityCarrierConnectionForModification:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - $ref: '#/definitions/FacilityCarrierConnectionForCreation'
   FacilityCarrierConnectionForCreation:
     properties:
       name:
