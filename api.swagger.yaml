@@ -3815,6 +3815,23 @@ definitions:
             example: 1700
       sender:
         $ref: '#/definitions/FacilityAddress'
+
+  Coordinate:
+    required:
+      - "lat"
+      - "lon"
+    type: "object"
+    description: "A coordinate of the WGS84 geodetic reference system in Mercator projection, as used e.g. by the Google Maps API"
+    properties:
+      lat:
+        type: number
+        example: 50.937531
+        description: "Latitude value"
+      lon:
+        type: number
+        example: 6.960279
+        description: "Longitude value"
+
   Address:
     required:
       - "street"
@@ -3903,6 +3920,9 @@ definitions:
           companyName:
             type: "string"
             example: "Speedy Boxales Ltd."
+          resolvedCoordinate:
+            description: "The resolved location of this facility - optional read-only property that is filled when the facility is first used in routing calculations"
+            $ref: "#/definitions/Coordinate"
           emailAddresses:
             type: "array"
             items:
