@@ -3326,7 +3326,7 @@ definitions:
         description: "The id of the facility in the tenants own system"
         example: "K12345"
       address:
-        $ref: '#/definitions/FacilityAddress'
+        $ref: '#/definitions/FacilityAddressForCreation'
       contact:
         type: "object"
         required:
@@ -3988,7 +3988,8 @@ definitions:
           companyName:
             type: "string"
             example: "Speedy Boxales Ltd."
-  FacilityAddress:
+
+  FacilityAddressForCreation:
     type: "object"
     allOf:
       - $ref: '#/definitions/Address'
@@ -3999,9 +4000,6 @@ definitions:
           companyName:
             type: "string"
             example: "Speedy Boxales Ltd."
-          resolvedCoordinates:
-            description: "The resolved location of this facility - optional read-only property that is filled when the facility is first used in routing calculations"
-            $ref: "#/definitions/Coordinates"
           emailAddresses:
             type: "array"
             items:
@@ -4015,6 +4013,16 @@ definitions:
                   type: "string"
                   description: "Human readable information who is the recipient for emails sent to this address."
                   example: "'Mailinglist reaching all the employees', 'Marc Fulton, Manager', etc."
+  FacilityAddress:
+    type: "object"
+    allOf:
+      - $ref: '#/definitions/FacilityAddressForCreation'
+      - type: "object"
+        properties:
+          resolvedCoordinates:
+            description: "The resolved location of this facility - optional read-only property that is filled when the facility is first used in routing calculations"
+            $ref: "#/definitions/Coordinates"
+
   Parcel:
     allOf:
       - $ref: '#/definitions/ParcelForCreation'
