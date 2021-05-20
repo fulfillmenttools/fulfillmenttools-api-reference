@@ -289,92 +289,6 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-  /api/shipments/{shipmentId}/parcels:
-    post:
-      tags:
-        - "Shipments"
-      summary: "Add a new parcel to shipment with given ID"
-      description: ""
-      security:
-        - firebase: [ ]
-      operationId: "addParcelShipment"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        deadline: 60.0
-        disable_auth: true
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "path"
-          name: "shipmentId"
-          description: "Shipment ID"
-          required: true
-          type: "string"
-        - in: "body"
-          name: "body"
-          description: "Carrier object"
-          required: true
-          schema:
-            $ref: "#/definitions/CarrierForParcelCreation"
-      responses:
-        201:
-          description: "The Parcel for given shipment was successfully created."
-          schema:
-            $ref: "#/definitions/Parcel"
-        400:
-          description: "Invalid input. See response for details"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-    get:
-      tags:
-        - "Shipments"
-      summary: "Return all parcels of the shipment with given ID"
-      description: ""
-      security:
-        - firebase: [ ]
-      operationId: "getAllShipmentParcels"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        disable_auth: true
-        deadline: 60.0
-      produces:
-        - "application/json"
-      parameters:
-        - in: "path"
-          name: "shipmentId"
-          description: "ID of the shipment to get related parcels"
-          required: true
-          type: "string"
-      responses:
-        200:
-          description: "Parcels are found."
-          schema:
-            $ref: "#/definitions/StrippedParcels"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
   /api/shipments/{shipmentId}:
     get:
       tags:
@@ -6152,12 +6066,4 @@ definitions:
           $ref: '#/definitions/AbstractModificationAction'
     xml:
       name: "RoutingConfigurationsPatchActions"
-  CarrierForParcelCreation:
-    type: "object"
-    properties:
-      carrierRef:
-        type: "string"
-      carrierKey:
-        $ref: "#/definitions/CarrierKey"
-    xml:
-      name: "CarrierForParcelCreation"
+
