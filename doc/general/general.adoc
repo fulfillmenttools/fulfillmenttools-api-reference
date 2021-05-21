@@ -18,6 +18,36 @@ We will release a new version of the API when we make backwards-incompatible cha
 - Adding new optional request parameters to existing API methods.
 - Adding new properties to existing API responses.
 - Changing the order of properties in existing API responses.
+- Adding values to enum fields (this is unusual - please also refer to <<BETA functionality>> for more details.)
+
+=== BETA functionality
+Due to the fact that the fulfillmenttools API is not strictly versioned (it does not have a version number assigned to it & it changes (see <<API Versioning>>)) Beta Flags are introduced. Those flags look like this in the OpenAPI-Specification under https://fulfillmenttools.github.io/api-reference-ui/:
+
+image::https://storage.googleapis.com/ocff-assets/api/beta_174x74.png[align="center"]
+
+You will find this flag on ressources, types (or part of types) and a few other places which are under development. If you encounter such a flag it means the following:
+
+- this endpoint, type, etc. might be subject to breaking changes in the future
+- it might not be available at all times
+- it could disapear without specific warning
+- it currently does not fall under our SLA regulations
+
+[IMPORTANT]
+====
+There are a lot enumerations in the OpenAPI Spec to ease the use of specific values for statuses, etc., for example:
+[source,yaml]
+----
+OrderStatus:
+   type: "string"
+   enum:
+   - "OPEN"
+   - "CANCELLED"
+   - "LOCKED"
+----
+Please be aware that adding a value to it is considered a _non breaking change_ (as described <<API Versioning>>). It happens very rarely, but it could happen that another value is added to an enumeration.
+
+However, the tooling around this kind of "exceptional" use of enumerations is not very good: A code generator will most likely produce enumerations which cannot contain different values than the one described. This is why most of the enumerations also carry a BETA-Flag: To make this behaviour more apparent. If you are handling enumerations best practice is to anticipate this kind of behaviour and map unknown enum values to one that you recognize or yield an error.
+====
 
 === Authorization
 Authorization against our API works by using a registered user and using the *OAuth-Protocol*. If the authentication
