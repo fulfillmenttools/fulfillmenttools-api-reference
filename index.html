@@ -453,6 +453,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_host">Host</a></li>
 <li><a href="#_region">Region</a></li>
 <li><a href="#_api_versioning">API Versioning</a></li>
+<li><a href="#_beta_functionality">BETA functionality</a></li>
 <li><a href="#_authorization">Authorization</a></li>
 <li><a href="#_representations">Representations</a></li>
 <li><a href="#_timeouts_response_times">Timeouts &amp; Response Times</a></li>
@@ -574,7 +575,70 @@ For documentation purposes the URLs referenced in the documentation are abbrevia
 <li>
 <p>Changing the order of properties in existing API responses.</p>
 </li>
+<li>
+<p>Adding values to enum fields (this is unusual - please also refer to <a href="#_beta_functionality">BETA functionality</a> for more details.)</p>
+</li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_beta_functionality">BETA functionality</h3>
+<div class="paragraph">
+<p>Due to the fact that the fulfillmenttools API is not strictly versioned (it does not have a version number assigned to it &amp; it changes (see <a href="#_api_versioning">API Versioning</a>)) Beta Flags are introduced. Those flags look like this in the OpenAPI-Specification under <a href="https://fulfillmenttools.github.io/api-reference-ui/" class="bare">https://fulfillmenttools.github.io/api-reference-ui/</a>:</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="https://storage.googleapis.com/ocff-assets/api/beta_174x74.png" alt="beta 174x74">
+</div>
+</div>
+<div class="paragraph">
+<p>You will find this flag on ressources, types (or part of types) and a few other places which are under development. If you encounter such a flag it means the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>this endpoint, type, etc. might be subject to breaking changes in the future</p>
+</li>
+<li>
+<p>it might not be available at all times</p>
+</li>
+<li>
+<p>it could disapear without specific warning</p>
+</li>
+<li>
+<p>it currently does not fall under our SLA regulations</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>There are a lot enumerations in the OpenAPI Spec to ease the use of specific values for statuses, etc., for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">OrderStatus:
+   type: "string"
+   enum:
+   - "OPEN"
+   - "CANCELLED"
+   - "LOCKED"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please be aware that adding a value to it is considered a <em>non breaking change</em> (as described <a href="#_api_versioning">API Versioning</a>). It happens very rarely, but it could happen that another value is added to an enumeration.</p>
+</div>
+<div class="paragraph">
+<p>However, the tooling around this kind of "exceptional" use of enumerations is not very good: A code generator will most likely produce enumerations which cannot contain different values than the one described. This is why most of the enumerations also carry a BETA-Flag: To make this behaviour more apparent. If you are handling enumerations best practice is to anticipate this kind of behaviour and map unknown enum values to one that you recognize or yield an error.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1714,7 +1778,7 @@ Response:
 <div id="footer">
 <div id="footer-text">
 0.1-BETA <br>
-Last updated 2021-05-21 12:22:48 UTC
+Last updated 2021-05-25 09:16:52 UTC
 </div>
 </div>
 </body>
