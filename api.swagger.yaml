@@ -3941,13 +3941,14 @@ definitions:
 
   Parcel:
     allOf:
-      - $ref: '#/definitions/ParcelForCreation'
       - $ref: '#/definitions/VersionedResource'
       - required:
           - "id"
           - "status"
           - "carrierRef"
           - "shipmentRef"
+          - "sender"
+          - "recipient"
         type: "object"
         properties:
           id:
@@ -3971,6 +3972,33 @@ definitions:
               - "summary"
             description: "Within this object you can find the result of the request after it has been processed (status = DONE or FAILED)"
             properties:
+              carrierRef:
+                type: "string"
+                example: "cf00e102-34f2-45c1-a846-6a21f384321e"
+                description: "Reference to the carrier this parcel should be send by"
+              recipient:
+                $ref: '#/definitions/ConsumerAddress'
+              dimensions:
+                type: "object"
+                properties:
+                  width:
+                    type: "number"
+                    description: "The width of the package (in cm)"
+                    example: 25
+                  height:
+                    type: "number"
+                    description: "The height of the package (in cm)"
+                    example: 50
+                  length:
+                    type: "number"
+                    description: "The length of the package (in cm)"
+                    example: 100
+                  weight:
+                    type: "number"
+                    description: "The weight of the package (in g)"
+                    example: 1700
+              sender:
+                $ref: '#/definitions/FacilityAddress'
               summary:
                 type: "string"
                 description: "Summary of the result of the request in a human readable form."
@@ -4004,6 +4032,7 @@ definitions:
                 example: "http://track.shipcloud.io/3a186c51d4"
               trackingStatus:
                 $ref: '#/definitions/TrackingStatus'
+
   Handoverjob:
     allOf:
       - $ref: '#/definitions/StrippedHandoverjob'
