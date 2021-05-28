@@ -433,6 +433,11 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+        422:
+          description: "Parcel could not be processed due to failing conditions"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/facilities:
     post:
       tags:
@@ -3778,8 +3783,10 @@ definitions:
   ParcelForCreation:
     type: "object"
     properties:
-      carrier:
-        $ref: '#/definitions/CarrierReference'
+      carrierRef:
+        type: "string"
+        example: "cf00e102-34f2-45c1-a846-6a21f384321e"
+        description: "Reference to the carrier this parcel should be send by"
       recipient:
         $ref: '#/definitions/ConsumerAddress'
       dimensions:
@@ -3939,6 +3946,7 @@ definitions:
       - required:
           - "id"
           - "status"
+          - "carrierRef"
         type: "object"
         properties:
           id:
