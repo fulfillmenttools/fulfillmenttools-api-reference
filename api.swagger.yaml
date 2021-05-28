@@ -383,6 +383,56 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+  /api/shipments/{shipmentId}/parcels:
+    post:
+      tags:
+        - "Shipments"
+      summary: "Creates a new parcel for a shipment"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "addParcel"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Payload of the parcel you want to create"
+          required: false
+          schema:
+            $ref: "#/definitions/ParcelForCreation"
+        - in: "path"
+          name: "shipmentId"
+          description: "ID of shipment you want to create parcel for"
+          required: true
+          type: "string"
+      responses:
+        201:
+          description: "The Parcel was successfully created. The Location header contains the URL of the Shipment."
+          schema:
+            $ref: "#/definitions/Parcel"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/facilities:
     post:
       tags:
@@ -1553,54 +1603,6 @@ paths:
               $ref: "#/definitions/Error"
         # end::pickjobs[]
   /api/parcels:
-    post:
-      tags:
-        - "Parcels"
-      summary: "Add a new parcel for being send via a CEP partner"
-      description: ""
-      security:
-        - firebase: []
-      operationId: "addParcel"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        deadline: 60.0
-        disable_auth: true
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Parcel object"
-          required: true
-          schema:
-            $ref: "#/definitions/ParcelForCreation"
-      responses:
-        201:
-          description: "The parcel was successfully created. The Location header contains the URL of the parcel."
-          schema:
-            $ref: "#/definitions/Parcel"
-        202:
-          description: "Your request was correct and the platform took note of your intentions. The creation of the parcel involves some async processing and the result was not present directly after the request was made. The Location header contains the URL where you can get additional information about the parcel and its state."
-          schema:
-            $ref: "#/definitions/Parcel"
-        400:
-          description: "Invalid input. See response for details"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
     get:
       tags:
         - "Parcels"
@@ -3775,12 +3777,6 @@ definitions:
         example: "585er Gold"
   ParcelForCreation:
     type: "object"
-    required:
-      - "shipmentRef"
-      - "carrier"
-      - "recipient"
-      - "dimensions"
-      - "sender"
     properties:
       shipmentRef:
         type: "string"
@@ -4088,8 +4084,10 @@ definitions:
         type: "string"
         example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
         description: "The reference to the pickjob for which the shipment is assigned to"
-      deliveryInformation:
-        $ref: '#/definitions/DeliveryInformation'
+      carrierRef:
+        type: "string"
+        example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
+        description: "The reference to the carrier for which the shipment is assigned to"
   Shipment:
     allOf:
       - $ref: '#/definitions/ShipmentForCreation'
@@ -4127,34 +4125,6 @@ definitions:
             example: false
             default: false
             description: "Indicates if gdpr related data was anonymized"
-  DeliveryInformation:
-    type: "object"
-    required:
-      - "carriers"
-    properties:
-      packages:
-        description: "Information about the number of packages that should be sent. Currently you can only send one package per shipment. Hence the default count is also 1."
-        type: "object"
-        properties:
-          count:
-            type: "number"
-            example: 1
-            default: 1
-            minimum: 1
-            maximum: 1
-            description: "The number of packages that are ready to be sent. Default: 1"
-      carriers:
-        type: "array"
-        maxItems: 1
-        items:
-          $ref: '#/definitions/CarrierPreference'
-  CarrierPreference:
-    type: "object"
-    required:
-      - "carrier"
-    properties:
-      carrier:
-        $ref: '#/definitions/CarrierReference'
   ShipmentStatus:
     type: "string"
     enum:
@@ -4163,6 +4133,7 @@ definitions:
       - "RETRYABLE"
       - "CONFIRMED"
       - "COMPLETED"
+      - "NO_ACTIVE_CARRIER"
     description: "Every newly created shipment is in state INITIAL. When the parcel labels should be requested the state changes to REQUEST and as soon as all parcel labels are successfully requested the state changes to CONFIRMED. The state COMPLETED is set in the end or the process"
   ParcelStatus:
     type: "string"
