@@ -4987,7 +4987,6 @@ definitions:
           - "dhlGkUsername"
           - "dhlGKPassword"
           - "dhlAccountNumber"
-          - "key"
         type: "object"
         properties:
           key:
@@ -5007,6 +5006,25 @@ definitions:
             description: "Internal API Key to communicate with the CEP Api"
     xml:
       name: "DhlCarrierCredentials"
+  DpdCarrierCredentials:
+    allOf:
+      - $ref: '#/definitions/AbstractCarrierCredentials'
+      - required:
+          - "delisId"
+          - "password"
+        type: "object"
+        properties:
+          key:
+            $ref: '#/definitions/CarrierKey'
+            description: "Use value 'DPD' in order to provide DPD credentials"
+          delisId:
+            type: "string"
+            description: "Delis ID to create a DPD auth token"
+          password:
+            type: "string"
+            description: "Password to create a DPD auth token"
+    xml:
+      name: "DpdCarrierCredentials"
   FacilityCarrierConnection:
     allOf:
       - $ref: '#/definitions/FacilityCarrierConnectionForModification'
@@ -5258,6 +5276,25 @@ definitions:
         additionalProperties: false
     xml:
       name: "ModifyDhlCarrierCredentials"
+  ModifyDpdCarrierCredentials:
+    allOf:
+      - $ref: '#/definitions/AbstractModifyCarrierCredentials'
+      - required:
+          - "key"
+        type: "object"
+        properties:
+          key:
+            $ref: '#/definitions/CarrierKey'
+            description: "Use value 'DPD' in order to provide DPD credentials"
+          delisId:
+            type: "string"
+            description: "Delis ID to create a DPD auth token."
+          password:
+            type: "string"
+            description: "Password to create a DPD auth token."
+        additionalProperties: false
+    xml:
+      name: "ModifyDpdCarrierCredentials"
   ModifyCarrierAction:
     allOf:
       - $ref: '#/definitions/AbstractModificationAction'
