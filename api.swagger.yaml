@@ -1692,6 +1692,45 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - "Parcels"
+      summary: "Delete a parcel with the given ID"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "deleteParcel"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "parcelId"
+          description: "ID of the parcel you want to delete"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Parcel was successfully deleted"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/parcels/{parcelId}/labels/{labelDocument}:
     get:
       tags:
