@@ -4136,6 +4136,7 @@ definitions:
           - "pickJobRef"
           - "facilityRef"
           - "targetTime"
+          - "hasActiveCarrier"
         type: "object"
         properties:
           id:
@@ -4163,6 +4164,11 @@ definitions:
             example: false
             default: false
             description: "Indicates if gdpr related data was anonymized"
+          hasActiveCarrier:
+            type: "boolean"
+            example: false
+            default: true
+            description: "Indicates if there is an active carrier configuration to fulfill this shipment"
   ShipmentStatus:
     type: "string"
     enum:
@@ -4171,7 +4177,6 @@ definitions:
       - "RETRYABLE"
       - "CONFIRMED"
       - "COMPLETED"
-      - "NO_ACTIVE_CARRIER"
     description: "Every newly created shipment is in state INITIAL. When the parcel labels should be requested the state changes to REQUEST and as soon as all parcel labels are successfully requested the state changes to CONFIRMED. The state COMPLETED is set in the end or the process"
   ParcelStatus:
     type: "string"
