@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft/2019-09/schema#",
-  "type": "object",
   "definitions": {
     "WebCarrier": {
       "properties": {
@@ -8,17 +7,9 @@
           "type": "string"
         },
         "credentials": {
-          "properties": {
-            "dhlAccountNumber": {
-              "type": "string"
-            },
-            "dhlGkUsername": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "dhlAccountNumber",
-            "dhlGkUsername"
+          "oneOf": [
+            {"$ref": "#/definitions/DHLCredentials"},
+            {"$ref": "#/definitions/DPDCredentials"}
           ]
         },
         "status": {
@@ -68,6 +59,31 @@
         "version",
         "id"
       ]
+    },
+    "DHLCredentials" : {
+      "properties": {
+        "dhlAccountNumber": {
+          "type": "string"
+        },
+        "dhlGkUsername": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "dhlAccountNumber",
+        "dhlGkUsername"
+      ]
+      },
+    "DPDCredentials" : {
+      "properties": {
+        "delisId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "delisId"
+      ]
     }
   }
 }
+
