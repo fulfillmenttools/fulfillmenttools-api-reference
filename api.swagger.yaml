@@ -5594,8 +5594,13 @@ definitions:
         type: number
         default: 10
         description: "Default price which is used if no price exists in order or listings"
+      routingTimeout:
+        type: number
+        default: 8
+        description: "Default amount of hours after which a routing plan is marked not routable"
     required:
       - "defaultPrice"
+      - "routingTimeout"
   RoutingConfigurationTiming:
     type: "object"
     description: "Configuration for the timing of routing decisions"
@@ -5705,6 +5710,11 @@ definitions:
         format: "date-time"
         example: "2020-02-03T08:45:50.525Z"
         description: "The date this order was created at the supplying system."
+      firstRoutingAttempt:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "The date of the first routing attempt."
       priority:
         type: "number"
         minimum: 0
@@ -5853,6 +5863,7 @@ definitions:
       - "PROPOSED"
       - "PLANNED"
       - "ROUTED"
+      - "NOT_ROUTABLE"
       - "MANUAL_PLANNED"
       - "FAILED"
     description: "A routing plan line initially has the status INITIAL. Final state is ROUTED"
@@ -6157,7 +6168,6 @@ definitions:
       - $ref: '#/definitions/AbstractModificationAction'
       - required:
           - "action"
-          - "defaultPrice"
         type: "object"
         properties:
           action :
@@ -6169,6 +6179,10 @@ definitions:
             type: number
             default: 10
             description: "Default price which is used if no price exists in order or listings"
+          routingTimeout:
+            type: number
+            default: 8
+            description: "Default amount of hours after which a routing plan is marked not routable"
   ModifyPrioritizationAction:
     allOf:
       - $ref: '#/definitions/AbstractModificationAction'
