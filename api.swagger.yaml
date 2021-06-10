@@ -5638,21 +5638,40 @@ definitions:
           $ref: '#/definitions/Fence'
       orderSplit:
         $ref: '#/definitions/OrderSplit'
+  OrderSplitType:
+    type: "string"
+    enum:
+      - "ECONOMICAL"
+      - "FIXED_COUNT"
+    description: "The type of economical split"
+    xml:
+      name: "OrderSplitType"
   OrderSplit:
     type: "object"
     description: "Configuration for order split during routing. <br> <br> <i><center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
     required:
       - "active"
+      - "orderSplitType"
     properties:
       active:
         type: "boolean"
         default: false
+      orderSplitType:
+        $ref: '#/definitions/OrderSplitType'
+      fixedCountConfiguration:
+        $ref: '#/definitions/FixedCountConfiguration'
+      economicalSplitConfiguration:
+        $ref: '#/definitions/EconomicalSplit'
+  FixedCountConfiguration:
+    type: "object"
+    description: "Configuration of economical split. <br> <br> <i><center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+    required:
+      - "maxSplitCount"
+    properties:
       maxSplitCount:
         type: "number"
         minimum: 1
         description: "This setting defines how often an order split might be performed to fulfill the order."
-      economicalSplit:
-        $ref: '#/definitions/EconomicalSplit'
   EconomicalSplit:
     type: "object"
     description: "Configuration of economical split. <br> <br> <i><center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
@@ -5665,6 +5684,9 @@ definitions:
       margin:
         type: "number"
         default: 0.2
+        exclusiveMinimum: true
+        minimum: 0
+        maximum: 1
         description: "This setting defines the margin in percentage used for calculating the total margin."
       economicalSplitType:
         $ref: '#/definitions/EconomicalSplitType'
@@ -6139,6 +6161,7 @@ definitions:
   ModifyOrderSplitAction:
     allOf:
       - $ref: '#/definitions/AbstractModificationAction'
+      - $ref: '#/definitions/OrderSplit'
       - required:
           - "action"
         type: "object"
@@ -6148,22 +6171,6 @@ definitions:
             enum:
               - "ModifyOrderSplit"
             description: "Use value 'ModifyOrderSplit', because you want to modify the configuration for the an order split."
-          active:
-            type: "boolean"
-            default: false
-          maxSplitCount:
-            type: "number"
-            minimum: 1
-            description: "This setting defines how often an order split is performed to fulfill the order."
-          threshold:
-            type: "number"
-            description: "This setting is the lower limit for either margin or turnover to allow a split."
-          margin:
-            type: "number"
-            default: 0.2
-            description: "This setting defines the margin in percentage used for calculating the total margin."
-          economicalSplitType:
-            $ref: '#/definitions/EconomicalSplitType'
         additionalProperties: false
     xml:
       name: "ModifyOrderSplitAction"
