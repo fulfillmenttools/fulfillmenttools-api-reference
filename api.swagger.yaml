@@ -2831,7 +2831,37 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-
+  /api/routing/commands/reroute:
+    post:
+      tags:
+        - "Routings"
+      summary: "Triggers rerouting of failed routing plans"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "reRoute"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "An object, that can contain either lists of identifiers for which a reroute should be executed or an option to reroute every reroutable plan."
+          required: true
+          schema:
+            $ref: "#/definitions/RerouteRoutingPlan"
+      responses:
+        200:
+          description: "Rerouting was successfully triggered"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
   /api/configurations/routing:
     get:
       tags:
@@ -6260,3 +6290,22 @@ definitions:
           $ref: '#/definitions/AbstractModificationAction'
     xml:
       name: "RoutingConfigurationsPatchActions"
+  RerouteRoutingPlan:
+    type: "object"
+    properties:
+      routingPlanIds:
+        type: "array"
+        items:
+          type: "string"
+      tenantOrderIds:
+        type: "array"
+        items:
+          type: "string"
+      orderRefs:
+        type: "array"
+        items:
+          type: "string"
+      allReroutable:
+        description: "if set to true every reroutable routing plan is rerouted. overrules every other identifier"
+        type: "boolean"
+
