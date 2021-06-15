@@ -15,6 +15,81 @@ tags:
 schemes:
   - "https"
 paths:
+  /api/configurations/language:
+    get:
+      tags:
+        - "Configurations"
+      summary: "Get the tenant wide default language configuration"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: []
+      operationId: "getLanguageConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "The languageConfiguration can be found in the body."
+          schema:
+            $ref: "#/definitions/LanguageConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Change the tenant wide default language configuration"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: []
+      operationId: "putLanguageConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Desired default language configuration to put"
+          required: true
+          schema:
+            $ref: "#/definitions/LanguageConfiguration"
+      responses:
+        200:
+          description: "The languageConfiguration was successfully set."
+          schema:
+            $ref: "#/definitions/LanguageConfiguration"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/configurations/stock:
     put:
       tags:
@@ -60,7 +135,6 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-
   /api/orders:
     post:
       tags:
@@ -2836,7 +2910,7 @@ paths:
       tags:
         - "Routings"
       summary: "Triggers rerouting of failed routing plans"
-      description: ""
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
         - firebase: [ ]
       operationId: "reRoute"
@@ -6295,17 +6369,37 @@ definitions:
     properties:
       routingPlanIds:
         type: "array"
+        maxItems: 10
         items:
           type: "string"
       tenantOrderIds:
         type: "array"
+        maxItems: 10
         items:
           type: "string"
       orderRefs:
         type: "array"
+        maxItems: 10
         items:
           type: "string"
       allReroutable:
         description: "if set to true every reroutable routing plan is rerouted. overrules every other identifier"
         type: "boolean"
+  LanguageConfiguration:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+    required:
+      - "language"
+    type: "object"
+    properties:
+      language:
+        $ref: '#/definitions/SupportedLanguages'
+
+  SupportedLanguages:
+    type: "string"
+    enum:
+      - "de_DE"
+      - "en_US"
+    description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br><i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.ISO 3166 conform country code and ISO 639-1 conform language code (de_DE, en_US, ch_FR, etc.)"
+    example: "de_DE"
 
