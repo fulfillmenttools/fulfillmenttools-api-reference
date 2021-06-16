@@ -15,15 +15,15 @@ tags:
 schemes:
   - "https"
 paths:
-  /api/configurations/language:
+  /api/configurations/locale:
     get:
       tags:
         - "Configurations"
-      summary: "Get the tenant wide default language configuration"
+      summary: "Get the tenant wide default locale configuration"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
         - firebase: []
-      operationId: "getLanguageConfiguration"
+      operationId: "getLocaleConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -33,9 +33,9 @@ paths:
         - "application/json"
       responses:
         200:
-          description: "The languageConfiguration can be found in the body."
+          description: "The locale Configuration can be found in the body."
           schema:
-            $ref: "#/definitions/LanguageConfiguration"
+            $ref: "#/definitions/LocaleConfiguration"
         401:
           description: "Your user is not allowed to operate against this API instance"
           schema:
@@ -49,11 +49,11 @@ paths:
     put:
       tags:
         - "Configurations"
-      summary: "Change the tenant wide default language configuration"
+      summary: "Change the tenant wide default locale configuration"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
         - firebase: []
-      operationId: "putLanguageConfiguration"
+      operationId: "putLocaleConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -66,15 +66,15 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Desired default language configuration to put"
+          description: "Desired default locale configuration to put"
           required: true
           schema:
-            $ref: "#/definitions/LanguageConfiguration"
+            $ref: "#/definitions/LocaleConfiguration"
       responses:
         200:
-          description: "The languageConfiguration was successfully set."
+          description: "The locale Configuration was successfully set."
           schema:
-            $ref: "#/definitions/LanguageConfiguration"
+            $ref: "#/definitions/LocaleConfiguration"
         400:
           description: "Invalid input. See response for details"
           schema:
@@ -4736,8 +4736,8 @@ definitions:
             example: "Schneider"
           roles:
             $ref: '#/definitions/UserRoles'
-          language:
-            $ref: '#/definitions/SupportedLanguage'
+          locale:
+            $ref: '#/definitions/SupportedLocale'
         additionalProperties: false
     xml:
       name: "ModifyUserAction"
@@ -5199,8 +5199,8 @@ definitions:
         example: "Ghg9u8X7ms8A8tLT"
       roles:
         $ref: '#/definitions/UserRoles'
-      language:
-        $ref: '#/definitions/SupportedLanguage'
+      locale:
+        $ref: '#/definitions/SupportedLocale'
     xml:
       name: "UserForCreation"
   User:
@@ -5211,7 +5211,7 @@ definitions:
           - "username"
           - "firstname"
           - "lastname"
-          - "language"
+          - "locale"
         type: "object"
         properties:
           id:
@@ -5228,8 +5228,8 @@ definitions:
             example: "aschneider"
           customClaims:
             $ref: '#/definitions/CustomClaims'
-          language:
-            $ref: '#/definitions/SupportedLanguage'
+          locale:
+            $ref: '#/definitions/SupportedLocale'
     xml:
       name: "User"
   UserRoles:
@@ -6392,17 +6392,17 @@ definitions:
       allReroutable:
         description: "if set to true every reroutable routing plan is rerouted. overrules every other identifier"
         type: "boolean"
-  LanguageConfiguration:
+  LocaleConfiguration:
     allOf:
       - $ref: '#/definitions/VersionedResource'
     required:
-      - "language"
+      - "locale"
     type: "object"
     properties:
-      language:
-        $ref: '#/definitions/SupportedLanguage'
+      locale:
+        $ref: '#/definitions/SupportedLocale'
 
-  SupportedLanguage:
+  SupportedLocale:
     type: "string"
     enum:
       - "de_DE"
