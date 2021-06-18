@@ -2957,6 +2957,10 @@ paths:
           name: "version"
           description: "Provide  to get an older version of the configuration"
           type: "number"
+        - in: "query"
+          name: "locale"
+          description: "Provide the localized names and descriptions for the routing configuration. If not provided the default locale is used., for example de_DE, <center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br><i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>."
+          type: "string"
       responses:
         200:
           description: "Routing configuration was found & you were allowed to access it. The result is in the body."
@@ -2981,7 +2985,7 @@ paths:
       tags:
         - "Configurations"
       summary: "Update routing configuration of a tenant"
-      description: ""
+      description: "Important: You can only change the name and the description for fences, ratings and prioritizations of type CUSTOM. For Fences and Ratings provided by fulfillmenttools you can not change the fields 'name' and 'description'. <br> Also you can not delete an existing fulfillmenttools Fence or Rating by calling this endpoint."
       security:
         - firebase: [ ]
       operationId: "putRoutingConfiguration"
@@ -3022,7 +3026,7 @@ paths:
       tags:
         - "Configurations"
       summary: "Patches routing configuration"
-      description: ""
+      description: "Important: You can only change the name and the description for fences, ratings and prioritizations of type CUSTOM. For Fences and Ratings provided by fulfillmenttools you can not change the fields 'name' and 'description'."
       security:
         - firebase: [ ]
       operationId: "patchRoutingConfig"
@@ -5679,7 +5683,7 @@ definitions:
     required:
       - "returnedAmount"
   RoutingConfiguration:
-    description: "This is the configuration for the distributing order management system. By changing the configuration you are able to change the behavior of the routing of orders henceforth. <br> <br> <center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+    description: "This is the configuration for the distributing order management system. By changing the configuration you are able to change the behavior of the routing of orders henceforth. <br> <br> <br> <center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
     required:
       - "prioritizationRules"
       - "routingRule"
@@ -6410,4 +6414,3 @@ definitions:
       - "en_US"
     description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br><i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.ISO 3166 conform country code and ISO 639-1 conform language code (de_DE, en_US, ch_FR, etc.)"
     example: "de_DE"
-
