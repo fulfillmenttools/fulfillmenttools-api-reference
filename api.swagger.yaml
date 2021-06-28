@@ -3502,7 +3502,7 @@ definitions:
           preferredCarriers:
             type: "array"
             items:
-              $ref: '#/definitions/CarrierKey'
+              type: "string"
               description: "Names of the preferred carriers to handle out the order"
   CollectDelivery:
     type: object
@@ -3794,7 +3794,7 @@ definitions:
             example: "DHL Köln"
             description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
           key:
-            $ref: '#/definitions/CarrierKey'
+            type: "string"
           status:
             $ref: '#/definitions/CarrierStatus'
           deliveryType:
@@ -4453,8 +4453,8 @@ definitions:
             format: "date-time"
             example: "2020-02-03T08:45:50.525Z"
             description: "The date this order was created at the supplying system."
-          carrier:
-            $ref: '#/definitions/CarrierReference'
+          carrierRef:
+            type: "string"
           channel:
             type: "string"
             enum:
@@ -5287,7 +5287,7 @@ definitions:
         example: "DHL Köln"
         description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
       key:
-        $ref: '#/definitions/CarrierKey'
+        type: "string"
       status:
         $ref: '#/definitions/CarrierStatus'
       lifecycle:
@@ -5308,7 +5308,7 @@ definitions:
     discriminator: "key"
     properties:
       key:
-        $ref: '#/definitions/CarrierKey'
+        type: "string"
     xml:
       name: "AbstractCarrierCredentials"
   DhlCarrierCredentials:
@@ -5359,7 +5359,7 @@ definitions:
       - "status"
     properties:
       key:
-        $ref: '#/definitions/CarrierKey'
+        type: "string"
       carrierRef:
         type: "string"
         description: "ID that references the configured carrier."
@@ -5559,21 +5559,6 @@ definitions:
             description: "The id of the carrier"
     xml:
       name: "Carrier"
-  CarrierKey:
-    type: "string"
-    example: "DHL"
-    description: "Used to reference a carrier partner without the need to provide a specific carrier instance."
-    enum:
-      - "DHL"
-      - "DPD"
-      - "ANGEL"
-  CarrierReference:
-    type: "object"
-    required:
-      - "key"
-    properties:
-      key:
-        $ref: '#/definitions/CarrierKey'
   AbstractModifyCarrierCredentials:
     type: "object"
     required:
@@ -5581,7 +5566,7 @@ definitions:
     discriminator: "key"
     properties:
       key:
-        $ref: '#/definitions/CarrierKey'
+        type: "string"
     xml:
       name: "AbstractModifyCarrierCredentials"
   ModifyDhlCarrierCredentials:
@@ -5592,7 +5577,7 @@ definitions:
         type: "object"
         properties:
           key:
-            $ref: '#/definitions/CarrierKey'
+            type: "string"
             description: "Use value 'DHL' in order to provide DHL credentials"
           dhlGkUsername:
             type: "string"
@@ -5614,7 +5599,7 @@ definitions:
         type: "object"
         properties:
           key:
-            $ref: '#/definitions/CarrierKey'
+            type: "string"
             description: "Use value 'DPD' in order to provide DPD credentials"
           delisId:
             type: "string"
