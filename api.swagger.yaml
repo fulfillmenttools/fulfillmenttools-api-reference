@@ -3224,6 +3224,191 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+  /api/loadunittypes:
+    get:
+      tags:
+        - "LoadUnitTypes"
+      summary: "Get all load unit types"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getLoadUnitTypes"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "startAfterId"
+          description: "all entities after given Id"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "size"
+          description: "number of entities to show"
+          required: false
+          type: "integer"
+          default: 25
+      responses:
+        200:
+          description: "All load unit types."
+          schema:
+            $ref: "#/definitions/LoadUnitType"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    post:
+      tags:
+        - "LoadUnitTypes"
+      summary: "Create new load unit type"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "createLoadUnitTypes"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/LoadUnitTypeForCreation"
+      responses:
+        201:
+          description: "Successfully created resource."
+          schema:
+            $ref: "#/definitions/LoadUnitType"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/loadunittypes/{loadUnitTypeId}:
+    put:
+      tags:
+        - "LoadUnitTypes"
+      summary: "Update load unit type"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "updateLoadUnitType"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "loadUnitTypeId"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/LoadUnitTypeForCreation"
+      responses:
+        200:
+          description: "Successfully updated load unit type."
+          schema:
+            $ref: "#/definitions/LoadUnitType"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/loadunittypes/{loadUnitTypeId}/icon:
+    put:
+      tags:
+        - "LoadUnitTypes"
+      summary: "Upload icon for load unit type."
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "uploadLoadUnitTypeIcon"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: "path"
+          name: "loadUnitTypeId"
+          required: true
+          type: "string"
+        - in: "formData"
+          name: "formData"
+          required: true
+          type: file
+          description: The icon file to upload.
+      responses:
+        200:
+          description: "Successfully updated load unit type icon."
+          schema:
+            $ref: "#/definitions/LoadUnitType"
+        201:
+          description: "Successfully created load unit type icon."
+          schema:
+            $ref: "#/definitions/LoadUnitType"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
 securityDefinitions:
   firebase:
     authorizationUrl: ""
@@ -6451,3 +6636,33 @@ definitions:
     items:
       $ref: '#/definitions/SupportedLocale'
 
+  LoadUnitTypeForCreation:
+    required:
+      - "name"
+    type: "object"
+    properties:
+      name:
+        description: ""
+        example: "FreezeBag"
+        type: "string"
+      description:
+        description: ""
+        example: "Bag for frozen goods"
+        type: "string"
+
+  LoadUnitType:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - $ref: '#/definitions/LoadUnitTypeForCreation'
+    required:
+      - "id"
+      - "version"
+      - "name"
+    type: "object"
+    properties:
+      id:
+        description: ""
+        type: "string"
+      iconUrl:
+        description: ""
+        type: "string"
