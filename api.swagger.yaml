@@ -3402,6 +3402,189 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/loadunits/{loadUnitId}:
+    get:
+      tags:
+        - "LoadUnits"
+      summary: "Get a loadUnit by its ID"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getLoadUnitByID"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "loadUnitId"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "The found load unit."
+          schema:
+            $ref: "#/definitions/LoadUnit"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "LoadUnits"
+      summary: "Update load unit"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "updateLoadUnit"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "loadUnitId"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/LoadUnit"
+      responses:
+        200:
+          description: "Successfully updated load unit."
+          schema:
+            $ref: "#/definitions/LoadUnit"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/loadunits:
+    post:
+      tags:
+        - "LoadUnits"
+      summary: "Add new load units"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "addLoadUnit"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Representation that describes the unit load"
+          required: true
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/LoadUnitForCreation'
+      responses:
+        201:
+          description: "Load units are successfully created."
+          schema:
+            $ref: "#/definitions/LoadUnits"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    get:
+      tags:
+        - "LoadUnits"
+      summary: "Return all load units"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getAllLoadUnits"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "startAfterId"
+          description: "all entities after given Id"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "size"
+          description: "number of facilities to show"
+          required: false
+          type: "integer"
+          default: 25
+        - in: "query"
+          description: "query load units with the given pickJobRef"
+          name: "pickJobRef"
+          required: false
+          type: string
+      responses:
+        200:
+          description: "Load units are found."
+          schema:
+            $ref: "#/definitions/LoadUnits"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+
   /api/loadunittypes/{loadUnitTypeId}/icon:
     put:
       tags:
@@ -4358,6 +4541,7 @@ definitions:
           - "shipmentRef"
           - "sender"
           - "recipient"
+          - "loadUnitRefs"
         type: "object"
         properties:
           id:
@@ -4441,6 +4625,11 @@ definitions:
                 example: "http://track.shipcloud.io/3a186c51d4"
               trackingStatus:
                 $ref: '#/definitions/TrackingStatus'
+          loadUnitRefs:
+            type: "array"
+            items:
+              type: "string"
+            description: "Reference to array of load unit Refs"
 
   Handoverjob:
     allOf:
@@ -6746,3 +6935,44 @@ definitions:
     type: "array"
     items:
       $ref: '#/definitions/LoadUnitType'
+
+  LoadUnitForCreation:
+    required:
+      - "loadUnitType"
+    type: "object"
+    properties:
+      codes:
+        type: "array"
+        items:
+          type: "string"
+          description: "List of codes"
+      pickJobRefs:
+        type: "array"
+        items:
+          type: "string"
+          description: "List of corresponding pickjob Ids"
+      loadUnitType:
+        $ref: '#/definitions/LoadUnitType'
+
+  LoadUnit:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - $ref: '#/definitions/LoadUnitForCreation'
+    required:
+      - "id"
+      - "version"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+
+  LoadUnits:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      facilities:
+        type: array
+        items:
+          $ref: '#/definitions/LoadUnit'
