@@ -3584,7 +3584,6 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
-
   /api/loadunittypes/{loadUnitTypeId}/icon:
     put:
       tags:
@@ -3601,18 +3600,17 @@ paths:
         deadline: 60.0
       produces:
         - "application/json"
-      consumes:
-        - multipart/form-data
       parameters:
         - in: "path"
           name: "loadUnitTypeId"
           required: true
           type: "string"
-        - in: "formData"
-          name: "formData"
+        - in: "body"
+          name: "body"
           required: true
-          type: file
-          description: The icon file to upload.
+          description: "Base64 encoded icon to upload"
+          schema:
+            $ref: '#/definitions/File'
       responses:
         200:
           description: "Successfully updated load unit type icon."
@@ -3647,6 +3645,22 @@ securityDefinitions:
     x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
     x-google-audiences: "%%PROJECT_ID%%"
 definitions:
+  File:
+    type: object
+    properties:
+      name:
+        type: string
+        example: "example.png"
+        description: "File name with extension"
+      content:
+        type: string
+        description: "File content base64 encoded"
+    additionalProperties: false
+    required:
+      - name
+      - content
+    xml:
+      name: "File"
   StockConfiguration:
     type: object
     properties:
@@ -6913,6 +6927,9 @@ definitions:
         description: ""
         example: "Bag for frozen goods"
         type: "string"
+      icon:
+        description: ""
+        $ref: '#/definitions/File'
 
   LoadUnitType:
     allOf:
