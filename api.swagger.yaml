@@ -3745,6 +3745,10 @@ definitions:
             items:
               type: "string"
               description: "Names of the preferred carriers to handle out the order"
+          preselectedFacilities:
+            type: "array"
+            items:
+              $ref: '#/definitions/PreselectedFacility'
   CollectDelivery:
     type: object
     required:
@@ -3753,6 +3757,14 @@ definitions:
       "facilityRef":
         type: string
         description: "Reference to the facility where the consumer expects to collect the items"
+  PreselectedFacility:
+    type: object
+    required:
+      - "facilityRef"
+    properties:
+      "facilityRef":
+        type: string
+        description: "Reference to the facility which is supposed to fulfill the order"
   OrderLineItemForCreation:
     type: "object"
     required:
@@ -6683,11 +6695,12 @@ definitions:
     description: "If you choose to use CUSTOM here you need to also provide a vmExpression string to match type CustomFenceImplementation <br> <br> <center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
     type: "string"
     enum:
-      - "FACILITY-SERVICETYPE"
+      - "FACILITY-BUSINESSTYPE"
       - "STOCK-AVAILABILITY"
       - "FACILITY-CAPACITY"
       - "FACILITY-CARRIERCAPACITY"
       - "FACILITY-CARRIERAVAILABILITY"
+      - "PRESELECTED-FACILITY"
       - "CUSTOM"
     xml:
       name: "FenceImplementation"
