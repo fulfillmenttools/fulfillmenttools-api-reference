@@ -3443,14 +3443,15 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-    put:
+
+    delete:
       tags:
         - "LoadUnits"
-      summary: "Update load unit"
+      summary: "Delete load unit"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
         - firebase: [ ]
-      operationId: "updateLoadUnit"
+      operationId: "deleteLoadUnit"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -3463,14 +3464,9 @@ paths:
           name: "loadUnitId"
           required: true
           type: "string"
-        - in: "body"
-          name: "body"
-          required: true
-          schema:
-            $ref: "#/definitions/LoadUnit"
       responses:
         200:
-          description: "Successfully updated load unit."
+          description: "Successfully deleted load unit."
           schema:
             $ref: "#/definitions/LoadUnit"
         401:
@@ -6973,10 +6969,12 @@ definitions:
       loadUnits:
         type: "array"
         items:
+          minItems: 1
           $ref: '#/definitions/LoadUnitForCreation'
+
   LoadUnitForCreation:
     required:
-      - "loadUnitType"
+      - "loadUnitTypeRef"
     type: "object"
     properties:
       codes:
@@ -6991,8 +6989,8 @@ definitions:
           minItems: 1
           type: "string"
           description: "List of corresponding pickjob Ids"
-      loadUnitType:
-        $ref: '#/definitions/LoadUnitType'
+      loadUnitTypeRef:
+        type: "string"
 
   LoadUnit:
     allOf:
@@ -7000,11 +6998,20 @@ definitions:
       - $ref: '#/definitions/LoadUnitForCreation'
     required:
       - "id"
+      - "name"
       - "version"
       - "facilityRef"
     type: "object"
     properties:
       id:
+        type: "string"
+      name:
+        example: "FreezeBag"
+        type: "string"
+      description:
+        example: "Bag for frozen goods"
+        type: "string"
+      iconUrl:
         type: "string"
       facilityRef:
         type: "string"
