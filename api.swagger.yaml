@@ -3530,6 +3530,59 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - "LoadUnits"
+      summary: "Delete loadunits by pickJobRef"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "deleteLoadUnits"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "pickJobRef"
+          description: "Reference to the pickJob of which you want to delete the loadUnits"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Load units are successfully deleted."
+          schema:
+            $ref: "#/definitions/LoadUnits"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        422:
+          description: "LoadUnits could not be removed due to failing conditions"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
     get:
       tags:
         - "LoadUnits"
