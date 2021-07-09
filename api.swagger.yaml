@@ -166,6 +166,57 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+
+  /api/configurations/orderrouting:
+    put:
+      tags:
+        - "Configurations"
+      summary: "Change the tenant wide order routing configuration"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "putOrderRoutingConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Desired order routing configuration to create/update"
+          required: true
+          schema:
+            $ref: "#/definitions/OrderRoutingConfiguration"
+      responses:
+        200:
+          description: "The order routing configuration was successfully updated."
+          schema:
+            $ref: "#/definitions/OrderRoutingConfiguration"
+        201:
+          description: "The order routing configuration was successfully created."
+          schema:
+            $ref: "#/definitions/OrderRoutingConfiguration"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/orders:
     post:
       tags:
@@ -7105,3 +7156,9 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/LoadUnit'
+
+  OrderRoutingConfiguration:
+    properties:
+      infiniteStockEnabled:
+        type: "boolean"
+        description: "Config to enable/disable infinite stock"
