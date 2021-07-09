@@ -217,6 +217,56 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/configurations/returnnote:
+    put:
+      tags:
+        - "Configurations"
+      summary: "Change the tenant wide return note configuration"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "putReturnNoteConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Desired return note configuration to create/update"
+          required: true
+          schema:
+            $ref: "#/definitions/ReturnNoteConfiguration"
+      responses:
+        200:
+          description: "The return note configuration was successfully updated."
+          schema:
+            $ref: "#/definitions/ReturnNoteConfiguration"
+        201:
+          description: "The return note configuration was successfully created."
+          schema:
+            $ref: "#/definitions/ReturnNoteConfiguration"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/orders:
     post:
       tags:
@@ -7162,3 +7212,14 @@ definitions:
       infiniteStockEnabled:
         type: "boolean"
         description: "Config to enable/disable infinite stock"
+
+  ReturnNoteConfiguration:
+    properties:
+      contactInformation:
+        type: "string"
+        description: "Return address "
+      reasons:
+        type: array
+        description: "Possible return reasons"
+        items:
+          type: string
