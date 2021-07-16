@@ -7062,6 +7062,18 @@ definitions:
     description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br><i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.ISO 3166 conform country code and ISO 639-1 conform language code (de_DE, en_US, ch_FR, etc.)"
     example: "de_DE"
 
+  LocaleString:
+    type: "object"
+    required:
+      - locale
+      - name
+    properties:
+      locale:
+        description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br><i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.ISO 3166 conform country code and ISO 639-1 conform language code (de_DE, en_US, ch_FR, etc.)"
+        type: "string"
+      name:
+        type: "string"
+
   SupportedLocales:
     type: "array"
     items:
@@ -7097,13 +7109,15 @@ definitions:
         description: ""
         type: "string"
       name:
-        description: ""
-        example: "FreezeBag"
-        type: "string"
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/LocaleString'
       description:
-        description: ""
-        example: "Bag for frozen goods"
-        type: "string"
+        type: "array"
+        minItems: 1
+        items:
+          $ref: '#/definitions/LocaleString'
       iconUrl:
         description: ""
         type: "string"
@@ -7197,4 +7211,4 @@ definitions:
         type: array
         description: "Possible return reasons"
         items:
-          type: string
+          $ref: '#/definitions/LocaleString'
