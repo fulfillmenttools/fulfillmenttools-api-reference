@@ -22,7 +22,7 @@ paths:
       summary: "Get the tenant wide default locale configuration"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getLocaleConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -52,7 +52,7 @@ paths:
       summary: "Change the tenant wide default locale configuration"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putLocaleConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -128,7 +128,7 @@ paths:
       summary: "Change the tenant wide stock configuration"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putStockConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -174,7 +174,7 @@ paths:
       summary: "Change the tenant wide order routing configuration"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putOrderRoutingConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -224,7 +224,7 @@ paths:
       summary: "Change the tenant wide return note configuration"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putReturnNoteConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -267,6 +267,87 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/configurations/loadunit:
+    put:
+      tags:
+        - "Configurations"
+      summary: "Change the tenant wide load unit configuration"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "putLoadUnitConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Desired load unit configuration to create/update"
+          required: true
+          schema:
+            $ref: "#/definitions/LoadUnitConfiguration"
+      responses:
+        200:
+          description: "The load unit configuration was successfully updated."
+          schema:
+            $ref: "#/definitions/LoadUnitConfiguration"
+        201:
+          description: "The load unit configuration was successfully created."
+          schema:
+            $ref: "#/definitions/LoadUnitConfiguration"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    get:
+      tags:
+        - "Configurations"
+      summary: "Get the load unit configuration"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getLoadUnitConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "The load unit configuration can be found in the body."
+          schema:
+            $ref: "#/definitions/LoadUnitConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+
   /api/orders:
     post:
       tags:
@@ -274,7 +355,7 @@ paths:
       summary: "Add a new order for future fulfillment"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addOrder"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -366,7 +447,7 @@ paths:
       summary: "Get a order with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getOrder"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -408,7 +489,7 @@ paths:
       summary: "Add a new Shipment"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addShipment"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -502,7 +583,7 @@ paths:
       summary: "Get a Shipment with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getShipment"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -543,7 +624,7 @@ paths:
       summary: "Patches a shipment with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchShipment"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -651,7 +732,7 @@ paths:
       summary: "Add a new facility"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -743,7 +824,7 @@ paths:
       summary: "Get a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -784,7 +865,7 @@ paths:
       summary: "deletes a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -831,7 +912,7 @@ paths:
       summary: "Patches a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -884,7 +965,7 @@ paths:
       summary: "Gets the list of currently available and applied configurations for the given facility. "
       description: "The response will merely supply a list of links that lead to configurations - for changing them please refer to the resources below. The contents of this list depends on the layout of your system, entries can appear and disappear based on configuration or internal processing"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacilityConfigurations"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -917,7 +998,7 @@ paths:
         - "Facilities Configurations"
       summary: "Gets the facility's current configuration for stock related order distribution"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacilityStockConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -948,7 +1029,7 @@ paths:
       summary: "Patches a facility configuration with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchFacilityConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1007,7 +1088,7 @@ paths:
       summary: "Get a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacilityListing"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1061,7 +1142,7 @@ paths:
       summary: "Update listings of a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putFacilityListing"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1153,7 +1234,7 @@ paths:
       summary: "Update a listing with the given ID of a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchFacilityListing"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1213,7 +1294,7 @@ paths:
       summary: "deletes a listing with the given ID of a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteFacilityListing"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1258,7 +1339,7 @@ paths:
       summary: "Get the available CEPs for a facility"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacilityCeps"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1345,7 +1426,7 @@ paths:
       summary: "Connect a configured carrier to the facility with given ID "
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "connectCarrierToFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1453,7 +1534,7 @@ paths:
         - "PickJobs"
       summary: "Simple query interface to find pickjobs"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "queryPickJobs"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1503,7 +1584,7 @@ paths:
       summary: "Add a new pick job for fulfillment"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addPickJob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1550,7 +1631,7 @@ paths:
       summary: "Get a pick job with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getPickJob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1593,7 +1674,7 @@ paths:
       summary: "Patches a pick job with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "pathPickJob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1690,7 +1771,7 @@ paths:
       summary: "Get a parcel with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getParcel"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1731,7 +1812,7 @@ paths:
       summary: "Delete a parcel with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteParcel"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1771,7 +1852,7 @@ paths:
       summary: "Get a label for the parcel with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getLabelForParcel"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1957,7 +2038,7 @@ paths:
       summary: "Get a Handoverjob with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getHandoverjob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2051,7 +2132,7 @@ paths:
       summary: "Create a new user"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "createUser"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2136,7 +2217,7 @@ paths:
       summary: "Patch an existing user with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchUser"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2190,7 +2271,7 @@ paths:
       summary: "Get a User with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getUser"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2231,7 +2312,7 @@ paths:
       summary: "Deletes a User with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteUser"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2272,7 +2353,7 @@ paths:
       summary: "Sign an upload request for a given template"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "signTransloaditRequest"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2312,7 +2393,7 @@ paths:
       summary: "Sets the branding "
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putBranding"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3697,8 +3778,8 @@ definitions:
         minItems: 1
         items:
           $ref: '#/definitions/OrderLineItemForCreation'
-      deliveryPreferences :
-        $ref:  '#/definitions/DeliveryPreferences'
+      deliveryPreferences:
+        $ref: '#/definitions/DeliveryPreferences'
       customAttributes:
         type: "object"
         description: "Attributes that can be added to the order. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
@@ -3712,7 +3793,7 @@ definitions:
         format: "date-time"
         example: "2020-02-03T09:45:51.525Z"
         description: "At which time the result is expected."
-      collect :
+      collect:
         type: "array"
         maxItems: 1
         items:
@@ -3757,7 +3838,7 @@ definitions:
       - "quantity"
     properties:
       article:
-        $ref:  '#/definitions/OrderLineItemArticle'
+        $ref: '#/definitions/OrderLineItemArticle'
       quantity:
         type: "integer"
         format: "int64"
@@ -4241,7 +4322,7 @@ definitions:
       - "article"
     properties:
       article:
-        $ref:  '#/definitions/PickLineItemArticle'
+        $ref: '#/definitions/PickLineItemArticle'
       quantity:
         type: "integer"
         format: "int64"
@@ -5702,11 +5783,11 @@ definitions:
           - "ADMINISTRATOR"
       facilities:
         type: array
-        example: ["0T1vKaEar0nuG58CxzA5"]
+        example: [ "0T1vKaEar0nuG58CxzA5" ]
         description: "List of facility Ids that the user is assigned to"
         minItems: 0
         maxItems: 1
-        default: []
+        default: [ ]
         items:
           type: "string"
   CustomClaims:
@@ -6755,7 +6836,7 @@ definitions:
           - "action"
         type: "object"
         properties:
-          action :
+          action:
             type: "string"
             enum:
               - "ModifyGlobalRoutingConfiguration"
@@ -6983,3 +7064,13 @@ definitions:
         description: "Possible return reasons"
         items:
           type: string
+
+  LoadUnitConfiguration:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+    properties:
+      maxCount:
+        type: "integer"
+        description: "Max creatable count of load units per load unit type"
+        example: 20
+        default: 20
