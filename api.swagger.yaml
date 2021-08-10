@@ -5199,6 +5199,7 @@ definitions:
           - "ModifyReturnLineItem"
           - "ModifyRoutingPlan"
           - "ModifyFence"
+          - "ModifyCustomFence"
           - "ModifyRating"
           - "ModifyTimingMode"
           - "ModifyGlobalRoutingConfiguration"
@@ -6910,15 +6911,32 @@ definitions:
             description: "Use value 'ModifyFence', because you want to modify a fence."
           id:
             type: "string"
-          name:
-            type: "string"
           active:
             type: "boolean"
-          description:
-            type: "string"
-        additionalProperties: false
     xml:
       name: "ModifyFenceAction"
+  ModifyCustomFenceAction:
+    allOf:
+      - $ref: '#/definitions/AbstractModificationAction'
+      - required:
+          - "action"
+          - "id"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyCustomFence"
+            description: "Use value 'ModifyCustomFence', because you want to modify a custom fence."
+          active:
+            type: "boolean"
+          nameLocalized:
+            $ref: '#/definitions/LocaleString'
+          descriptionLocalized:
+            $ref: '#/definitions/LocaleString'
+        additionalProperties: false
+    xml:
+      name: "ModifyCustomFenceAction"
   ModifyRatingAction:
     allOf:
       - $ref: '#/definitions/AbstractModificationAction'
