@@ -39,3 +39,31 @@ With fulfillmenttools platform you can currently provide a certain set of parame
 }
 ----
 
+=== Introducing Picking Sequence
+It is possible to sort the pick line items and show them in an order in the app. This enhances the picking speed of the picker since the items are presented to them in the correct running order.
+
+This can be done by providing a `PickingSequence` attribute of an pick line item. If more than one pick line item has the same `PickingSequence`, `tenantArticleId` will be used for the sorting.
+
+[source,json]
+----
+{
+    "article": {
+        "tenantArticleId": "your-tenantArticleId",
+        "title": "title",
+        "imageUrl": "imageUrl",
+        "attributes": [
+            {
+                "category": "pickingSequence", // Category must be set to `PickingSequence`
+                "priority": 1, // This property will be taken into account if there are multiple `PickingSequence` attributes defined for one article, otherwise you can leave it 
+                "key": "pickingSequence",
+                "value": "1" // This is the value that sorts the article.  The sorting is being done in an ascending way, so the value 1 will be on top of others.
+            }
+        ]
+    },
+    "quantity": 2,
+    "scannableCodes": [
+        "2020249"
+    ]
+}
+----
+

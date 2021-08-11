@@ -239,6 +239,38 @@ curl --request PUT 'https://{host}}/api/facilities/x5jrZrDHvYYs6HpaDICKYG4QuIk2/
 Response:
 200 OK
 ----
+
+==== Introducing Picking Sequence
+It is possible to sort the pick line items and show them in an order in the app. This enhances the picking speed of the picker since the items are presented to them in the correct running order.
+
+This can be done by providing a `PickingSequence` attribute of a listing. If more than one pick line item has the same `PickingSequence`, `tenantArticleId` will be used for the sorting.
+
+[source,json]
+----
+{
+    "listings": [
+        {
+            "tenantArticleId": "2020249",
+            "price": 19.95,
+            "stockinformation": {
+                "stock": 50,
+                "reserved": 10
+            },
+            "title": "T-Shirt",
+            "imageUrl": "https://example.com/image.jpg",
+            "attributes": [
+                {
+                "category": "pickingSequence", // Category must be set to `PickingSequence`
+                "priority": 1, // This property will be taken into account if there are multiple `PickingSequence` attributes defined for one listing, otherwise you can leave it 
+                "key": "pickingSequence",
+                "value": "1" // This is the value that sorts the article.  The sorting is being done in an ascending way, so the value 1 will be on top of others.
+                }
+            ]
+        }
+    ]
+}
+----
+
 ==== Stock
 
 An even further refined way to distribute an order is to consider the actual available stock of an article within a facility, namely a listing. This is why listings have attributes that in turn have impact on the distribution of orders and transforming them to pickjobs. Currently the following attributes are available:
