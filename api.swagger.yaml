@@ -3838,9 +3838,180 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/subscriptions:
+    get:
+      tags:
+        - "Eventing"
+      summary: "Get all subscriptions"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getSubscriptions"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "startAfterId"
+          description: "all entities after given Id"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "size"
+          description: "number of entities to show"
+          required: false
+          type: "integer"
+          default: 25
+      responses:
+        200:
+          description: "All subscriptions."
+          schema:
+            $ref: "#/definitions/Subscriptions"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    
+    post:
+      tags:
+        - "Eventing"
+      summary: "Add new Subscription. Please note: Currently it is only possible to add one subscription per event."
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "addSubscription"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Representation that describes the subscription"
+          required: true
+          schema:
+            $ref: "#/definitions/SubscriptionForCreation"
+      responses:
+        201:
+          description: "Subscription is successfully created."
+          schema:
+            $ref: "#/definitions/Subscription"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/subscriptions/{subscriptionId}:
+    delete:
+      tags:
+        - "Eventing"
+      summary: "Delete subscription by Id"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "deleteSubscription"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "subscriptionId"
+          description: "ID of the subscription you want to delete"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Subscription is successfully deleted."
+          schema:
+            $ref: "#/definitions/Subscription"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/supportedevents:
+    get:
+      tags:
+        - "Eventing"
+      summary: "Get a list of supported events you can subscribe to."
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getEvents"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "All supported events."
+          schema:
+            $ref: "#/definitions/SupportedEvents"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
 securityDefinitions:
   firebase:
-    authorizationUrl: ""
+    authorizationUrl: "https://"
     flow: "implicit"
     type: "oauth2"
     x-google-issuer: "https://securetoken.google.com/%%PROJECT_ID%%"
@@ -7289,3 +7460,51 @@ definitions:
         description: "Max creatable count of load units per load unit type"
         example: 20
         default: 20
+
+  Subscriptions:
+    type: "array"
+    items:
+      $ref: '#/definitions/Subscription'
+
+  Subscription:
+    allOf:
+      - $ref: '#/definitions/SubscriptionForCreation'
+    required:
+      - "id"
+      - "created"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      created:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:51.525Z"
+        description: "The date this subscription was created at the platform. This value is generated by the service."
+
+  SubscriptionForCreation:
+    required:
+      - "name"
+      - "event"
+      - "callbackUrl"
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      event:
+        type: "string"
+      callbackUrl:
+        type: "string"
+
+  SupportedEvents:
+    type: "array"
+    items:
+      $ref: '#/definitions/SupportedEvent'
+
+  SupportedEvent:        
+    type: "object"
+    properties:
+      event:
+        type: "string"      
+      description:
+        type: "string"
