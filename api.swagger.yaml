@@ -7700,10 +7700,18 @@ definitions:
   SubstituteAttributeItem:
     allOf:
       - $ref: "#/definitions/ArticleAttributeItem"
+  
   Subscriptions:
-    type: "array"
-    items:
-      $ref: "#/definitions/Subscription"
+    type: "object"
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      subscriptions:
+        type: array
+        items:
+          $ref: "#/definitions/Subscription"    
 
   Subscription:
     allOf:
@@ -7736,12 +7744,18 @@ definitions:
       callbackUrl:
         type: "string"
       headers:
-        $ref: "#/definitions/CallbackHeaders"
+        minItems: 1
+        type: "array"
+        items:
+          $ref: "#/definitions/CallbackHeader"
 
   SupportedEvents:
-    type: "array"
-    items:
-      $ref: "#/definitions/SupportedEvent"
+    type: "object"
+    properties:      
+      supportedEvents:
+        type: array
+        items:
+          $ref: "#/definitions/SupportedEvent"
 
   SupportedEvent:
     type: "object"
@@ -7750,12 +7764,6 @@ definitions:
         type: "string"
       description:
         type: "string"
-
-  CallbackHeaders:
-    minItems: 1
-    type: "array"
-    items:
-      $ref: "#/definitions/CallbackHeader"
 
   CallbackHeader:
     required:
