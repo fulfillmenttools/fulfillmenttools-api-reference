@@ -791,6 +791,11 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+        409:
+          description: "Entity version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/shipments/{shipmentId}/parcels:
     post:
       tags:
@@ -1202,6 +1207,178 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/substitutes:
+    get:
+      tags:
+        - "Substitutes"
+      summary: "Get the resulting substitutes for a specific tenantArticleId."
+      parameters:
+        - in: "query"
+          name: "tenantArticleId"
+          description: "the tenantArticleId substitutes are requested for"
+          required: true
+          type: "string"
+      security:
+        - firebase: [ ]
+      operationId: "getResultingSubstitutesForTenantArticleId"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "There are substitutes for the given tenantArticleId. The result can be found in the body."
+          schema:
+            $ref: "#/definitions/Substitutes"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/substitutes/{tenantArticleId}:
+    get:
+      tags:
+        - "Substitutes"
+      summary: "Get the substitutes for a given tenant article id"
+      description: "Get the substitutes for a given tenant article id"
+      security:
+        - firebase: [ ]
+      operationId: "getSubstitutesForTenantArticleId"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "tenantArticleId"
+          description: ""
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "The substitutes for the given tenantArticleId can be found in the body."
+          schema:
+            $ref: "#/definitions/Substitutes"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Substitutes"
+      summary: "Set possible substitutes for a tenant article ID"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "putSubstitutesForTenantArticleID"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "tenantArticleId"
+          description: "Tenant article ID of the article the substitutes should be set for"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "substitutes to set"
+          required: true
+          schema:
+            $ref: "#/definitions/SubstitutesForUpsert"
+      responses:
+        200:
+          description: "The substitutes for tenantArticleId were successfully updated"
+          schema:
+            $ref: "#/definitions/Substitutes"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility listing not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - "Substitutes"
+      summary: "deletes substitutes for the given tenant article id"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "deleteSubstitutesForTenantArticleId"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "tenantArticleId"
+          description: "the tenant article ID the subsitutes should be deleted for"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "The substitutes for the given tenantArticleId were successfully deleted"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Facility listing not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/facilities/{facilityId}/listings:
     get:
       tags:
@@ -3881,7 +4058,7 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-    
+
     post:
       tags:
         - "Eventing"
@@ -7461,6 +7638,66 @@ definitions:
         example: 20
         default: 20
 
+  SubstitutesForUpsert:
+    type: "object"
+    required:
+      - "substitutes"
+      - "version"
+    properties:
+      version:
+        type: number
+        description: "Version field is used in the optimistic locking process. If the Substitute is for the tenantArticleId is not set yet, this field is ignored."
+        example: 1
+      substitutes:
+        type: array
+        items:
+          $ref: '#/definitions/Substitute'
+    xml:
+      name: "SubstitutesForUpsert"
+      
+  Substitute:
+    type: "object"
+    required:
+      - "tenantArticleId"
+      - "title"
+    properties:
+      tenantArticleId:
+        type: string
+      title:
+        type: string
+      imageUrl:
+        type: string
+      priority:
+        type: number
+        minimum: 0
+        description: "This field allows you to rank substitutes against each other. The lowest number is the most preferrable substitute."
+      attributes:
+        type: "array"
+        items:
+          $ref: '#/definitions/SubstituteAttributeItem'
+      scannableCodes:
+        type: "array"
+        items:
+          type: "string"
+          description: "Strings, that identify the substitute article"
+    xml:
+      name: "Substitute"
+  Substitutes:
+    allOf:
+      - $ref: '#/definitions/VersionedResource'
+      - $ref: '#/definitions/SubstitutesForUpsert'
+    type: "object"
+    required:
+      - "tenantArticleId"
+      - "substitutes"
+    properties:
+      tenantArticleId:
+        type: string
+    xml:
+      name: "Substitutes"
+  SubstituteAttributeItem:
+    allOf:
+      - $ref: '#/definitions/ArticleAttributeItem'
   Subscriptions:
     type: "array"
     items:
@@ -7501,10 +7738,10 @@ definitions:
     items:
       $ref: '#/definitions/SupportedEvent'
 
-  SupportedEvent:        
+  SupportedEvent:
     type: "object"
     properties:
       event:
-        type: "string"      
+        type: "string"
       description:
         type: "string"
