@@ -472,6 +472,96 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/configurations/substitution:
+    get:
+      tags:
+        - "Configurations"
+      summary: "Get the current configuration for substitution"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: []
+      operationId: "getSubstitutionConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Substitution config found."
+          schema:
+            $ref: "#/definitions/SubstitutionConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Change the tenant wide substitution configuration"
+      description: ""
+      security:
+        - firebase: []
+      operationId: "putSubstitutionConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Desired substitution configuration to create/update"
+          required: true
+          schema:
+            $ref: "#/definitions/SubstitutionConfiguration"
+      responses:
+        200:
+          description: "The substitution configuration was successfully updated."
+          schema:
+            $ref: "#/definitions/SubstitutionConfiguration"
+        201:
+          description: "The substitution configuration was successfully created."
+          schema:
+            $ref: "#/definitions/SubstitutionConfiguration"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Facility version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/orders:
     post:
       tags:
@@ -7714,7 +7804,7 @@ definitions:
   SubstituteAttributeItem:
     allOf:
       - $ref: "#/definitions/ArticleAttributeItem"
-  
+
   Subscriptions:
     type: "object"
     properties:
@@ -7725,7 +7815,7 @@ definitions:
       subscriptions:
         type: array
         items:
-          $ref: "#/definitions/Subscription"    
+          $ref: "#/definitions/Subscription"
 
   Subscription:
     allOf:
@@ -7765,7 +7855,7 @@ definitions:
 
   SupportedEvents:
     type: "object"
-    properties:      
+    properties:
       supportedEvents:
         type: array
         items:
@@ -7791,3 +7881,15 @@ definitions:
       value:
         description: "This is the value for the header. e.g.: `Basic dXNlcm5hbWU6cGFzc3dvcmQ=`"
         type: "string"
+
+  SubstitutionConfiguration:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "active"
+    properties:
+      active:
+        type: "boolean"
+        description: "Toggle for substitution articles."
+        example: false
+        default: true
