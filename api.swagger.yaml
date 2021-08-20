@@ -4972,6 +4972,32 @@ definitions:
             description: "The amount of articles that were picked for this pickline."
           status:
             $ref: "#/definitions/PickLineItemStatus"
+          substituteLineItems:
+            description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+            type: "array"
+            items:
+              $ref: "#/definitions/SubstituteLineItem"
+
+  SubstituteLineItem:
+    type: "object"
+    required:
+      - "quantity"
+      - "article"
+    properties:
+      article:
+        $ref: "#/definitions/SubstituteLineItemArticle"
+      quantity:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        example: 21
+        description: "quantity of the specific article that has been picked to substitute the ordered line item"
+      scannableCodes:
+        type: "array"
+        items:
+          type: "string"
+          description: "Strings, that identify the article"
+
   OrderArticleAttributeItem:
     allOf:
       - $ref: "#/definitions/ArticleAttributeItem"
@@ -5896,6 +5922,11 @@ definitions:
             minimum: 0
             example: 20
             description: "The amount of articles that were picked for this pickline."
+          substituteLineItems:
+            description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+            type: "array"
+            items:
+              $ref: "#/definitions/SubstituteLineItem"
           status:
             $ref: "#/definitions/PickLineItemStatus"
           id:
@@ -5906,6 +5937,7 @@ definitions:
               identifier of the described entity."
     xml:
       name: "ModifyPickLineItemAction"
+
   ModifyAddress:
     type: "object"
     properties:
@@ -6218,6 +6250,19 @@ definitions:
               $ref: "#/definitions/OrderArticleAttributeItem"
     xml:
       name: "PickLineItemArticle"
+
+  SubstituteLineItemArticle:
+    allOf:
+      - $ref: "#/definitions/AbstractArticle"
+      - type: "object"
+        properties:
+          attributes:
+            type: "array"
+            items:
+              $ref: "#/definitions/OrderArticleAttributeItem"
+    xml:
+      name: "SubstituteLineItemArticle"
+
   CarrierForCreation:
     type: "object"
     required:
