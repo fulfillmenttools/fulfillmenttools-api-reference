@@ -70,9 +70,11 @@
     "hasSubstituteItems": {
       "type": "boolean"
     },
-    "pickedSubstituteItemsCount": {
-      "type": "integer",
-      "minimum": 0
+    "substituteItems": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SubstituteItem"
+      }
     }
   },
   "required": [
@@ -88,7 +90,7 @@
     "scannableCodes",
     "articleInfo",
     "hasSubstituteItems",
-    "pickedSubstituteItemsCount"
+    "substituteItems"
   ],
   "definitions": {
     "ArticleInfo": {
@@ -110,6 +112,23 @@
         "name",
         "info",
         "priority"
+      ]
+    },
+    "SubstituteItem": {
+      "type": "object",
+      "properties": {
+        "tenantArticleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pickedSubstituteCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "tenantArticleId",
+        "pickedSubstituteCount"
       ]
     }
   }
