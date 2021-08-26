@@ -7979,3 +7979,88 @@ definitions:
         description: "Toggle for substitution articles."
         example: false
         default: true
+
+  Event:
+    required:
+      - "event"
+    type: "object"
+    properties:
+      event:
+        description: "The type of the send event"
+        type: "string"
+
+  OrderCreatedEvent:
+    allOf:
+      - $ref: "#/definitions/Event"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Order"
+
+  FacilityCreatedEvent:
+    allOf:
+      - $ref: "#/definitions/Event"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Facility"
+
+  PickjobCreatedEvent:
+    allOf:
+      - $ref: "#/definitions/Event"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/PickJob"
+
+  PickjobPickingCommencedEvent:
+    allOf:
+      - $ref: "#/definitions/PickjobCreatedEvent"
+
+  PickjobPickingPausedEvent:
+    allOf:
+      - $ref: "#/definitions/PickjobCreatedEvent"
+
+  PickjobPickingFinishedEvent:
+    allOf:
+      - $ref: "#/definitions/PickjobCreatedEvent"
+
+  PickjobPickLinePickedEvent:
+    allOf:
+      - $ref: "#/definitions/Event"
+    required:
+      - "payload"
+      - "pickJobRef"
+    properties:
+      pickJobRef:
+        type: "string"
+      payload:
+        $ref: "#/definitions/PickLineItem"
+  ParcelCarrierAcknowledgedEvent:
+    allOf:
+      - $ref: "#/definitions/Event"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Parcel"
+
+  HandoverJobCreatedEvent:
+    allOf:
+      - $ref: "#/definitions/Event"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Handoverjob"
+
+  HandoverJobHandedOverEvent:
+    allOf:
+      - $ref: "#/definitions/HandoverJobCreatedEvent"
+
+  HandoverJobRevertedEvent:
+    allOf:
+      - $ref: "#/definitions/HandoverJobCreatedEvent"
