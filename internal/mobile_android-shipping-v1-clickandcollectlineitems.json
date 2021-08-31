@@ -38,6 +38,12 @@
     "orderedArticleCount": {
       "type": "integer",
       "minimum": 1
+    },
+    "pickedSubstituteItems": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SubstituteItem"
+      }
     }
   },
   "required": [
@@ -46,7 +52,72 @@
     "status",
     "title",
     "pickedArticleCount",
-    "orderedArticleCount"
+    "orderedArticleCount",
+    "pickedSubstituteItems"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "definitions": {
+    "ArticleInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "info": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priority": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "info",
+        "priority"
+      ]
+    },
+    "SubstituteItem": {
+      "type": "object",
+      "properties": {
+        "tenantArticleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "imageUrl": {
+          "type": "string",
+          "minLength": 1
+        },
+        "articleInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ArticleInfo"
+          }
+        },
+        "scannableCodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pickedSubstituteCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "tenantArticleId",
+        "title",
+        "articleInfo",
+        "scannableCodes",
+        "pickedSubstituteCount"
+      ]
+    }
+  }
 }
