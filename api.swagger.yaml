@@ -57,6 +57,38 @@ paths:
         400:
           description: "GraphQL validation error"
 
+  /api/moduleconfiguration:
+    get:
+      tags:
+        - "Module Configurations"
+      summary: "Get the current available modules for the tenant and their respective configuration"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: []
+      operationId: "getModuleConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "The module Configuration can be found in the body."
+          schema:
+            $ref: "#/definitions/ModuleConfigurations"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/configurations/locale:
     get:
       tags:
@@ -7061,7 +7093,7 @@ definitions:
     description: "The type of economical split"
     xml:
       name: "EconomicalSplitType"
-  
+
   RoutingPlan:
     allOf:
       - $ref: "#/definitions/VersionedResource"
@@ -7167,7 +7199,7 @@ definitions:
     properties:
       id:
         type: "string"
-      routingPlanRef: 
+      routingPlanRef:
         type: "string"
       finalizeRun:
         type: "number"
@@ -8117,3 +8149,81 @@ definitions:
     properties:
       payload:
         $ref: "#/definitions/Handoverjob"
+
+  ModuleConfigurations:
+    properties:
+      core:
+        $ref: "#/definitions/CoreConfiguration"
+      modules:
+        type: object
+        properties:
+          routing:
+            $ref: "#/definitions/RoutingModuleConfiguration"
+          operations:
+            $ref: "#/definitions/OperationsModuleConfiguration"
+
+
+  BaseModuleConfiguration:
+    required:
+      - "active"
+      - "name"
+    properties:
+      active:
+        type: "boolean"
+      name:
+        type: "string"
+        example: "Operations"
+      description:
+        type: "string"
+        example: "Module supports in many store fulfillment processes."
+      features:
+        type: object
+        description: "Here comes the module specific configuration"
+
+  RoutingModuleConfiguration:
+    allOf:
+      - $ref: "#/definitions/BaseModuleConfiguration"
+    properties:
+      features:
+        $ref: "#/definitions/RoutingFeatures"
+
+  RoutingFeatures:
+    properties:
+      routing:
+        $ref: "#/definitions/RoutingRule"
+
+  OperationsModuleConfiguration:
+    allOf:
+      - $ref: "#/definitions/BaseModuleConfiguration"
+    properties:
+      features:
+        $ref: "#/definitions/OperationsFeatures"
+
+  OperationsFeatures:
+    properties:
+      returnNote:
+        $ref: "#/definitions/ReturnNoteConfiguration"
+      return:
+        $ref: "#/definitions/ReturnConfiguration"
+      loadunit:
+        $ref: "#/definitions/LoadUnitConfiguration"
+      substitution:
+        $ref: "#/definitions/SubstitutionConfiguration"
+
+  CoreConfiguration:
+    properties:
+      features:
+        $ref: "#/definitions/CoreFeatures"
+
+  CoreFeatures:
+    properties:
+      locale:
+        $ref: "#/definitions/LocaleConfiguration"
+      supportedLocales:
+        $ref: "#/definitions/SupportedLocales"
+      stock:
+        $ref: "#/definitions/StockConfiguration"
+      orderRouting:
+        $ref: "#/definitions/OrderRoutingConfiguration"
+      gdpr:
+        $ref: "#/definitions/GdprConfiguration"
