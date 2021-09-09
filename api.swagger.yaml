@@ -4348,6 +4348,50 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/artifacts/{platform}:
+    get:
+      tags:
+        - "Artifacts"
+      summary: "Provides metadata for currently available artifacts for a platform"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getArtifacts"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      parameters:
+        - in: "path"
+          name: "platform"
+          description: "Platform for which to list artifacts"
+          required: true
+          type: "string"
+          enum:
+            - "android"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "All available artifacts for the selected platform"
+          schema:
+            $ref: "#/definitions/ArtifactMetadataItems"
+        400:
+          description: "The given platform is invalid"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
 securityDefinitions:
   firebase:
     authorizationUrl: ""
@@ -8330,3 +8374,48 @@ definitions:
         items:
           $ref: "#/definitions/UserRoleNames"
 
+  ArtifactMetadataItems:
+    required:
+      - "artifacts"
+      - "platform"
+    properties:
+      artifacts:
+        type: array
+        items:
+          $ref: "#/definitions/ArtifactMetadataItem"
+      platform:
+        type: string
+        example: "android"
+        description: "Platform name for which the artifact list is generated"
+
+  ArtifactMetadataItem:
+    required:
+      - "download"
+      - "versionCode"
+      - "versionName"
+      - "buildDate"
+    properties:
+      download:
+        type: "object"
+        properties:
+          expiration:
+            type: "string"
+            format: "date-time"
+            example: "2020-02-03T08:45:50.525Z"
+            description: "Expiration date of the download link"
+          url:
+            type: "string"
+            description: "URL for the download of the artifact"
+      versionCode:
+        type: "number"
+        example: 42
+        description: "Version Code of the artifact"
+      versionName:
+        type: "string"
+        example: "1.0.42"
+        description: "Version Name of the artifact"
+      buildDate:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "Date of the build of the artifact"
