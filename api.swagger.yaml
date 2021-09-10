@@ -8210,22 +8210,22 @@ definitions:
           distribution:
             $ref: "#/definitions/DistributionModuleConfiguration"
           inventoryManagement:
-            $ref: "#/definitions/InventoryManagement"
+            $ref: "#/definitions/InventoryManagementModuleConfiguration"
           operations:
             $ref: "#/definitions/OperationsModuleConfiguration"
           carrierManagement:
-            $ref: "#/definitions/CarrierManagementFeatureConfiguration"
+            $ref: "#/definitions/CarrierManagementModuleConfiguration"
           inStoreReturn:
-            $ref: "#/definitions/InStoreReturnFeature"
+            $ref: "#/definitions/InStoreReturnModuleConfiguration"
 
-  InStoreReturnFeature:
+  InStoreReturnModuleConfiguration:
      allOf:
        - $ref: "#/definitions/BaseModuleConfiguration"
      properties:
        features:
          $ref: "#/definitions/ReturnFeatureConfiguration"
 
-  InventoryManagement:
+  InventoryManagementModuleConfiguration:
     allOf:
       - $ref: "#/definitions/BaseModuleConfiguration"
     properties:
@@ -8292,25 +8292,27 @@ definitions:
       handover:
         $ref: "#/definitions/HandoverFeatureConfiguration"
 
-  CarrierFeatureConfiguration:
+  CarrierManagementModuleConfiguration:
     allOf:
-      - $ref: "#/definitions/AbstractFeatureConfiguration"
-    properties:
-      carriermanagement:
-        $ref: "#/definitions/CarrierManagementFeatureConfiguration"
-
-  CarrierManagementFeatureConfiguration:
+      - $ref: "#/definitions/BaseModuleConfiguration"
     properties:
       DHL:
-        $ref: "#/definitions/CarrierConfiguration"
+        $ref: "#/definitions/DhlFeature"
       DPD:
-        $ref: "#/definitions/CarrierConfiguration"
-
+        $ref: "#/definitions/DpdFeature"
+  DhlFeature:
+    allOf:
+      - $ref: "#/definitions/AbstractFeatureConfiguration"
+      - $ref: "#/definitions/CarrierConfiguration"
+  DpdFeature:
+    allOf:
+      - $ref: "#/definitions/AbstractFeatureConfiguration"
+      - $ref: "#/definitions/CarrierConfiguration"
   CarrierConfiguration:
     properties:
-      enabledShippingLable :
+      enabledShippingLabel :
         type: "boolean"
-      enabledReturnLable:
+      enabledReturnLabel:
         type: "boolean"
 
   ReturnFeatureConfiguration:
@@ -8335,10 +8337,11 @@ definitions:
       returnNote:
         $ref: "#/definitions/ReturnNoteConfiguration"
       customCarrier:
-        $ref: "#/definitions/CarrierConnection"
-  CarrierConnection:
+        $ref: "#/definitions/CustomCarrierConnection"
+  CustomCarrierConnection:
+    type: "object"
     properties:
-      EnabledCustomCarrier:
+      customCarrierConnectionEnabled:
         type: "boolean"
   PickingFeatureConfiguration:
     allOf:
