@@ -73,6 +73,12 @@ paths:
         deadline: 60.0
       produces:
         - "application/json"
+      parameters:
+        - in: "query"
+          name: "facilityRef"
+          description: "Refers to facility reference"
+          required: false
+          type: "string"
       responses:
         200:
           description: "The module Configuration can be found in the body."
@@ -7933,7 +7939,6 @@ definitions:
         description: "Max creatable count of load units per load unit type"
         example: 20
         default: 20
-
   SubstitutesForUpsert:
     type: "object"
     required:
@@ -8199,17 +8204,33 @@ definitions:
 
   ModuleConfigurations:
     properties:
-      core:
-        $ref: "#/definitions/CoreConfiguration"
       modules:
         type: object
         properties:
           distribution:
             $ref: "#/definitions/DistributionModuleConfiguration"
+          inventoryManagement:
+            $ref: "#/definitions/InventoryManagement"
           operations:
             $ref: "#/definitions/OperationsModuleConfiguration"
+          carrierManagement:
+            $ref: "#/definitions/CarrierManagementFeatureConfiguration"
+          inStoreReturn:
+            $ref: "#/definitions/InStoreReturnFeature"
 
+  InStoreReturnFeature:
+     allOf:
+       - $ref: "#/definitions/BaseModuleConfiguration"
+     properties:
+       features:
+         $ref: "#/definitions/ReturnFeatureConfiguration"
 
+  InventoryManagement:
+    allOf:
+      - $ref: "#/definitions/BaseModuleConfiguration"
+    properties:
+      features:
+        $ref: "#/definitions/InventoryFeatures"
   BaseModuleConfiguration:
     required:
       - "active"
@@ -8241,37 +8262,37 @@ definitions:
           - $ref: "#/definitions/AbstractFeatureConfiguration"
           - $ref: "#/definitions/RoutingConfiguration"
 
+
   OperationsModuleConfiguration:
     allOf:
       - $ref: "#/definitions/BaseModuleConfiguration"
     properties:
       features:
         $ref: "#/definitions/OperationsFeatures"
-
+  InventoryFeatures:
+    allOf:
+      - $ref: "#/definitions/AbstractFeatureConfiguration"
+    properties:
+      inventory:
+        $ref: "#/definitions/InventoryConfiguration"
+  InventoryConfiguration:
+    properties:
+      infiniteStock:
+        $ref: "#/definitions/OrderRoutingConfiguration"
+      facilityStockConfiguration:
+        $ref: "#/definitions/FacilityStockConfiguration"
+      stockModificationEnabled:
+        $ref: "#/definitions/StockConfiguration"
   OperationsFeatures:
     properties:
       picking:
         $ref: "#/definitions/PickingFeatureConfiguration"
-      packing:
-        $ref: "#/definitions/PackingFeatureConfiguration"
+      shipping:
+        $ref: "#/definitions/ShipingFeatureConfiguration"
       handover:
         $ref: "#/definitions/HandoverFeatureConfiguration"
-      return:
-        $ref: "#/definitions/ReturnFeatureConfiguration"
-      carriercontrol:
-        $ref: "#/definitions/CarrierControlFeatureConfiguration"
-      listings:
-        $ref: "#/definitions/StockFeatureConfiguration"
 
-  StockFeatureConfiguration:
-    allOf:
-      - $ref: "#/definitions/AbstractFeatureConfiguration"
-    type: "object"
-    properties:
-      stock:
-        $ref: "#/definitions/StockConfiguration"
-
-  CarrierControlFeatureConfiguration:
+  CarrierFeatureConfiguration:
     allOf:
       - $ref: "#/definitions/AbstractFeatureConfiguration"
     properties:
@@ -8280,19 +8301,17 @@ definitions:
 
   CarrierManagementFeatureConfiguration:
     properties:
-      availableCarriers:
-        type: array
-        items:
-          $ref: "#/definitions/AvailableCarrier"
+      DHL:
+        $ref: "#/definitions/CarrierConfiguration"
+      DPD:
+        $ref: "#/definitions/CarrierConfiguration"
 
-  AvailableCarrier:
+  CarrierConfiguration:
     properties:
-      name:
-        type: string
-      key:
-        type: string
-      lifecycle:
-        $ref: "#/definitions/CarrierLifecycle"
+      enabledShippingLable :
+        type: "boolean"
+      enabledReturnLable:
+        type: "boolean"
 
   ReturnFeatureConfiguration:
     allOf:
@@ -8303,14 +8322,24 @@ definitions:
   HandoverFeatureConfiguration:
     allOf:
       - $ref: "#/definitions/AbstractFeatureConfiguration"
+    properties:
+      displayClickAndCollect:
+        type: "boolean"
+      displayShipFromStore:
+        type: "boolean"
 
-  PackingFeatureConfiguration:
+  ShipingFeatureConfiguration:
     allOf:
       - $ref: "#/definitions/AbstractFeatureConfiguration"
     properties:
       returnNote:
         $ref: "#/definitions/ReturnNoteConfiguration"
-
+      customCarrier:
+        $ref: "#/definitions/CarrierConnection"
+  CarrierConnection:
+    properties:
+      EnabledCustomCarrier:
+        type: "boolean"
   PickingFeatureConfiguration:
     allOf:
       - $ref: "#/definitions/AbstractFeatureConfiguration"
@@ -8319,6 +8348,10 @@ definitions:
         $ref: "#/definitions/SubstitutionConfiguration"
       loadunit:
         $ref: "#/definitions/LoadUnitConfiguration"
+      multiOrderPick:
+        type: "boolean"
+      singleOrderPick:
+        type: "boolean"
 
   AbstractFeatureConfiguration:
     required:
@@ -8327,52 +8360,6 @@ definitions:
       active:
         type: "boolean"
         description: "Indicates wether the feature is enabled or disabled"
-
-  CoreConfiguration:
-    properties:
-      features:
-        $ref: "#/definitions/CoreFeatures"
-
-  CoreFeatures:
-    properties:
-      users:
-        $ref: "#/definitions/UsersFeatureConfiguration"
-      locales:
-        properties:
-          locale:
-            $ref: "#/definitions/LocaleConfiguration"
-          supportedLocales:
-            $ref: "#/definitions/SupportedLocales"
-      tenant:
-        properties:
-          gdpr:
-            $ref: "#/definitions/GdprConfiguration"
-          orderRouting:
-            $ref: "#/definitions/OrderRoutingConfiguration"
-      facilities:
-        $ref: "#/definitions/FacilitiesFeatureConfiguration"
-
-
-  FacilitiesFeatureConfiguration:
-    type: "object"
-    properties:
-      carrierConnection:
-        $ref: "#/definitions/CarrierConnection"
-
-  CarrierConnection:
-    type: "object"
-    properties:
-      customCarrierConnectionEnabled:
-        type: "boolean"
-
-  UsersFeatureConfiguration:
-    required:
-      - "roles"
-    properties:
-      roles:
-        type: array
-        items:
-          $ref: "#/definitions/UserRoleNames"
 
   ArtifactMetadataItems:
     required:
