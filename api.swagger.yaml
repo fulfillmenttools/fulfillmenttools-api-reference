@@ -57,10 +57,10 @@ paths:
         400:
           description: "GraphQL validation error"
 
-  /api/modules/features:
+  /api/modules/settings:
     get:
       tags:
-        - "Modules Features"
+        - "Modules Settings"
       summary: "Returns modules and their features."
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
@@ -73,17 +73,11 @@ paths:
         deadline: 60.0
       produces:
         - "application/json"
-      parameters:
-        - in: "query"
-          name: "facilityRef"
-          description: "Refers to facility reference"
-          required: false
-          type: "string"
       responses:
         200:
-          description: "The module Configuration can be found in the body."
+          description: "The module settings can be found in the body."
           schema:
-            $ref: "#/definitions/ModuleFeatures"
+            $ref: "#/definitions/ModuleSettings"
         401:
           description: "Your user is not allowed to operate against this API instance"
           schema:
@@ -99,15 +93,48 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-  /api/modules/{module}/features:
-    patch:
+
+  /api/features:
+    get:
       tags:
-        - "Modules Features"
-      summary: "Patches features of a module"
+        - "Feature"
+      summary: "Returns all features grouped by active modules"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
         - firebase: [ ]
-      operationId: "patchModuleFeatures"
+      operationId: "getFeatures"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "The available feature for all active modules"
+          schema:
+            $ref: "#/definitions/Features"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/features/{featureId}:
+    get:
+      tags:
+        - "Feature"
+      summary: "Returns a feature"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getFeature"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -117,8 +144,49 @@ paths:
         - "application/json"
       parameters:
         - in: "path"
-          name: "module"
-          description: "Name of the module you want to patch"
+          name: "featureId"
+          description: "id of the feature requested"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "The requested feature"
+          schema:
+            $ref: "#/definitions/Feature"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Feature"
+      summary: "Patches a feature"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "patchFeature"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "featureId"
+          description: "id of the feature requested"
           required: true
           type: "string"
         - in: "body"
@@ -131,7 +199,7 @@ paths:
         200:
           description: "Module was found & patch-set has been applied. The patched entity is in the body."
           schema:
-            $ref: "#/definitions/ModuleFeatures"
+            $ref: "#/definitions/Feature"
         401:
           description: "Your user is not allowed to operate against this API instance"
           schema:
@@ -152,15 +220,16 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-  /api/modules/distribution/setting:
+
+  /api/capabilities/resolved/facilities/{facilityId}:
     get:
       tags:
-        - "Modules Features"
-      summary: "Returns all the features of distribution module."
+        - "Capabilities"
+      summary: "Returns all capabilities which are at least inactive and available to a facility/user"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
         - firebase: [ ]
-      operationId: "getDistributionFeatures"
+      operationId: "getCapabilities"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -169,16 +238,16 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - in: "query"
-          name: "facilityRef"
-          description: "Refers to facility reference"
-          required: false
+        - in: "path"
+          name: "facilityId"
+          description: "id of the facility"
+          required: true
           type: "string"
       responses:
         200:
-          description: "The module Configuration can be found in the body."
+          description: "All Capabilities whic are at least inactive"
           schema:
-            $ref: "#/definitions/DistributionModuleConfiguration"
+            $ref: "#/definitions/Capablilities"
         401:
           description: "Your user is not allowed to operate against this API instance"
           schema:
@@ -194,174 +263,7 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-  /api/modules/operation/setting:
-    get:
-      tags:
-        - "Modules Features"
-      summary: "Returns all the features of operation module."
-      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
-      security:
-        - firebase: [ ]
-      operationId: "getOperationFeatures"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        disable_auth: true
-        deadline: 60.0
-      produces:
-        - "application/json"
-      parameters:
-        - in: "query"
-          name: "facilityRef"
-          description: "Refers to facility reference"
-          required: false
-          type: "string"
-      responses:
-        200:
-          description: "The module Configuration can be found in the body."
-          schema:
-            $ref: "#/definitions/OperationsModuleConfiguration"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        404:
-          description: "Entity not found"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-  /api/modules/inventory/setting:
-    get:
-      tags:
-        - "Modules Features"
-      summary: "Returns all the features of inventory module."
-      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
-      security:
-        - firebase: [ ]
-      operationId: "getInventoryFeatures"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        disable_auth: true
-        deadline: 60.0
-      produces:
-        - "application/json"
-      parameters:
-        - in: "query"
-          name: "facilityRef"
-          description: "Refers to facility reference"
-          required: false
-          type: "string"
-      responses:
-        200:
-          description: "The module Configuration can be found in the body."
-          schema:
-            $ref: "#/definitions/InventoryManagementModuleConfiguration"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        404:
-          description: "Entity not found"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-  /api/modules/instorereturn/setting:
-    get:
-      tags:
-        - "Modules Features"
-      summary: "Returns all the features of in-store return module."
-      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
-      security:
-        - firebase: [ ]
-      operationId: "getInStoreFeatures"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        disable_auth: true
-        deadline: 60.0
-      produces:
-        - "application/json"
-      parameters:
-        - in: "query"
-          name: "facilityRef"
-          description: "Refers to facility reference"
-          required: false
-          type: "string"
-      responses:
-        200:
-          description: "The module Configuration can be found in the body."
-          schema:
-            $ref: "#/definitions/InStoreReturnModuleConfiguration"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        404:
-          description: "Entity not found"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-  /api/modules/carriermanagement/setting:
-    get:
-      tags:
-        - "Modules Features"
-      summary: "Returns all the features of carrier management module."
-      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
-      security:
-        - firebase: [ ]
-      operationId: "getCarrierManagementFeatures"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        disable_auth: true
-        deadline: 60.0
-      produces:
-        - "application/json"
-      parameters:
-        - in: "query"
-          name: "facilityRef"
-          description: "Refers to facility reference"
-          required: false
-          type: "string"
-      responses:
-        200:
-          description: "The module Configuration can be found in the body."
-          schema:
-            $ref: "#/definitions/CarrierManagementModuleConfiguration"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        404:
-          description: "Entity not found"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
+
   /api/configurations/locale:
     get:
       tags:
@@ -8470,184 +8372,65 @@ definitions:
       payload:
         $ref: "#/definitions/Handoverjob"
 
-  ModuleFeatures:
+  ModuleSettings:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      modules:
+        type: array
+        items:
+          $ref: "#/definitions/Module"
+  Module:
     allOf:
       - $ref: "#/definitions/VersionedResource"
+    required:
+      - "id"
+      - "name"
+      - "enabled"
+      - "features"
     properties:
-      modules:
-        $ref: "#/definitions/Modules"
-  Modules:
-    properties:
-      distribution:
-        $ref: "#/definitions/BaseModuleFeatures"
-      inventoryManagement:
-        $ref: "#/definitions/BaseModuleFeatures"
-      operations:
-        $ref: "#/definitions/BaseModuleFeatures"
-      carrierManagement:
-        $ref: "#/definitions/BaseModuleFeatures"
-      inStoreReturn:
-        $ref: "#/definitions/BaseModuleFeatures"
-  InStoreReturnModuleConfiguration:
-     allOf:
-       - $ref: "#/definitions/BaseModuleConfiguration"
-     properties:
-       features:
-         $ref: "#/definitions/ReturnFeatureConfiguration"
-
-  InventoryManagementModuleConfiguration:
-    allOf:
-      - $ref: "#/definitions/BaseModuleConfiguration"
-    properties:
-      features:
-        $ref: "#/definitions/InventoryFeatures"
-
-  BaseModuleFeatures:
-    allOf:
-      - $ref: "#/definitions/BaseModuleConfiguration"
-    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      enabled:
+        type: "boolean"
       features:
         type: "array"
         items:
-          $ref: "#/definitions/AbstractModuleFeature"
-        description: "Here comes the module specific configuration"
-  BaseModuleConfiguration:
-    required:
-      - "active"
-      - "name"
+          $ref: "#/definitions/Feature"
+  FeatureStatus:
+    type: "string"
+    enum:
+      - "enabled"
+      - "inactive"
+      - "disabled"
+  Features:
     properties:
-      active:
-        type: "boolean"
-      name:
-        type: "string"
-        example: "Operations"
-      description:
-        type: "string"
-        example: "The module supports in fulfillment processes."
-
-  DistributionModuleConfiguration:
-    allOf:
-      - $ref: "#/definitions/BaseModuleConfiguration"
-    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
       features:
-        $ref: "#/definitions/DistributionFeatures"
-
-  AbstractModuleFeature:
-    properties:
-      name:
-        $ref: "#/definitions/FeatureName"
-      status:
-        type: "boolean"
-  DistributionFeatures:
-    properties:
-      routing:
-        allOf:
-          - $ref: "#/definitions/AbstractFeatureConfiguration"
-          - $ref: "#/definitions/RoutingConfiguration"
-  OperationsModuleConfiguration:
+        type: array
+        items:
+          $ref: "#/definitions/Feature"
+  Feature:
     allOf:
-      - $ref: "#/definitions/BaseModuleConfiguration"
-    properties:
-      features:
-        $ref: "#/definitions/OperationsFeatures"
-  InventoryFeatures:
-    allOf:
-      - $ref: "#/definitions/AbstractFeatureConfiguration"
-    properties:
-      inventory:
-        $ref: "#/definitions/InventoryConfiguration"
-  InventoryConfiguration:
-    properties:
-      infiniteStock:
-        $ref: "#/definitions/OrderRoutingConfiguration"
-      facilityStockConfiguration:
-        $ref: "#/definitions/FacilityStockConfiguration"
-      stockModificationEnabled:
-        $ref: "#/definitions/StockConfiguration"
-  OperationsFeatures:
-    properties:
-      picking:
-        $ref: "#/definitions/PickingFeatureConfiguration"
-      shipping:
-        $ref: "#/definitions/ShipingFeatureConfiguration"
-      handover:
-        $ref: "#/definitions/HandoverFeatureConfiguration"
-
-  CarrierManagementModuleConfiguration:
-    allOf:
-      - $ref: "#/definitions/BaseModuleConfiguration"
-    properties:
-      features:
-        $ref: "#/definitions/CarrierManagementFeatures"
-  CarrierManagementFeatures:
-    properties:
-      DHL:
-        $ref: "#/definitions/DhlFeature"
-      DPD:
-        $ref: "#/definitions/DpdFeature"
-  DhlFeature:
-    allOf:
-      - $ref: "#/definitions/AbstractFeatureConfiguration"
-      - $ref: "#/definitions/CarrierConfiguration"
-  DpdFeature:
-    allOf:
-      - $ref: "#/definitions/AbstractFeatureConfiguration"
-      - $ref: "#/definitions/CarrierConfiguration"
-  CarrierConfiguration:
-    properties:
-      enabledShippingLabel :
-        type: "boolean"
-      enabledReturnLabel:
-        type: "boolean"
-
-  ReturnFeatureConfiguration:
-    allOf:
-      - $ref: "#/definitions/ReturnConfiguration"
-      - $ref: "#/definitions/AbstractFeatureConfiguration"
       - $ref: "#/definitions/VersionedResource"
-
-  HandoverFeatureConfiguration:
-    allOf:
-      - $ref: "#/definitions/AbstractFeatureConfiguration"
-    properties:
-      displayClickAndCollect:
-        type: "boolean"
-      displayShipFromStore:
-        type: "boolean"
-
-  ShipingFeatureConfiguration:
-    allOf:
-      - $ref: "#/definitions/AbstractFeatureConfiguration"
-    properties:
-      returnNote:
-        $ref: "#/definitions/ReturnNoteConfiguration"
-      customCarrier:
-        $ref: "#/definitions/CustomCarrierConnection"
-  CustomCarrierConnection:
-    type: "object"
-    properties:
-      customCarrierConnectionEnabled:
-        type: "boolean"
-  PickingFeatureConfiguration:
-    allOf:
-      - $ref: "#/definitions/AbstractFeatureConfiguration"
-    properties:
-      substitution:
-        $ref: "#/definitions/SubstitutionConfiguration"
-      loadunit:
-        $ref: "#/definitions/LoadUnitConfiguration"
-      multiOrderPick:
-        type: "boolean"
-      singleOrderPick:
-        type: "boolean"
-
-  AbstractFeatureConfiguration:
     required:
-      - "active"
+      - "id"
+      - "name"
+      - "status"
     properties:
-      active:
-        type: "boolean"
-        description: "Indicates wether the feature is enabled or disabled"
+      id:
+        type: "string"
+      name:
+        type: "string"
+      status:
+        $ref: "#/definitions/FeatureStatus"
 
   ArtifactMetadataItems:
     required:
@@ -8694,24 +8477,22 @@ definitions:
         format: "date-time"
         example: "2020-02-03T08:45:50.525Z"
         description: "Date of the build of the artifact"
+
   ModifyFeatureAction:
     allOf:
       - $ref: "#/definitions/AbstractModificationAction"
       - required:
           - "action"
           - "status"
-          - "featureName"
         type: "object"
         properties:
           action:
             type: "string"
             enum:
               - "ModifyFeature"
-            description: "Use value 'ModifyFeature', because you want to modify a LoadUnitType"
-          featureName:
-            $ref: "#/definitions/FeatureName"
+            description: "Use value 'ModifyFeature', because you want to modify a Feature"
           status:
-            type: "boolean"
+            $ref: "#/definitions/FeatureStatus"
             description: "The state of the feature we want to change."
         additionalProperties: false
     xml:
@@ -8719,8 +8500,14 @@ definitions:
   FeaturePatchActions:
     type: "object"
     required:
+      - "version"
       - "actions"
     properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
       actions:
         type: "array"
         minItems: 1
@@ -8728,11 +8515,39 @@ definitions:
           $ref: "#/definitions/ModifyFeatureAction"
     xml:
       name: "FeaturePatchActions"
-  FeatureName:
+
+  Capablilities:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      capablilities:
+        type: array
+        items:
+          $ref: "#/definitions/Capablility"
+  CapablilityStatus:
     type: "string"
     enum:
-      - "routing"
-      - "inventory"
-      - "picking"
-      - "shipping"
-      - "handover"
+      - "enabled"
+      - "inactive"
+      - "disabled"
+
+  Capablility:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "id"
+      - "name"
+      - "status"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      status:
+        $ref: "#/definitions/CapablilityStatus"
+      currentUserPermissions:
+        type: "array"
+        items:
+          type: "string"
