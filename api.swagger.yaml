@@ -57,43 +57,6 @@ paths:
         400:
           description: "GraphQL validation error"
 
-  /api/modules/settings:
-    get:
-      tags:
-        - "Modules Settings"
-      summary: "Returns modules and their features."
-      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
-      security:
-        - firebase: []
-      operationId: "getModules"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        disable_auth: true
-        deadline: 60.0
-      produces:
-        - "application/json"
-      responses:
-        200:
-          description: "The module settings can be found in the body."
-          schema:
-            $ref: "#/definitions/ModuleSettings"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        404:
-          description: "Entity not found"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-
   /api/features:
     get:
       tags:
@@ -8468,39 +8431,12 @@ definitions:
       payload:
         $ref: "#/definitions/Handoverjob"
 
-  ModuleSettings:
-    properties:
-      total:
-        type: "integer"
-        example: 42
-        description: "Total number of found entities for this query"
-      modules:
-        type: array
-        items:
-          $ref: "#/definitions/Module"
-  Module:
-    allOf:
-      - $ref: "#/definitions/VersionedResource"
-    required:
-      - "name"
-      - "enabled"
-      - "featureRefs"
-    properties:
-      name:
-        type: "string"
-      enabled:
-        type: "boolean"
-      featureRefs:
-        type: "array"
-        items:
-          type: "string"
   FeatureStatus:
     type: "string"
     enum:
       - "enabled"
       - "inactive"
       - "disabled"
-      - "unavailable"
   Features:
     properties:
       total:
@@ -8607,7 +8543,7 @@ definitions:
     xml:
       name: "FeaturePatchActions"
 
-  Capabilities:
+  ScopedCapabilities:
     properties:
       total:
         type: "integer"
@@ -8616,7 +8552,7 @@ definitions:
       capabilities:
         type: array
         items:
-          $ref: "#/definitions/Capability"
+          $ref: "#/definitions/ScopedCapability"
   CapabilityStatus:
     type: "string"
     enum:
@@ -8624,7 +8560,7 @@ definitions:
       - "inactive"
       - "disabled"
 
-  Capability:
+  ScopedCapability:
     allOf:
       - $ref: "#/definitions/VersionedResource"
     required:
