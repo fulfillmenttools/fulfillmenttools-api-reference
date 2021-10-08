@@ -3792,6 +3792,84 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+  /api/configurations/routing/reroute:
+    get:
+      tags:
+        - "Configurations"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      summary: "Get a tenant reroute config"
+      security:
+        - firebase: [ ]
+      operationId: "getRerouteConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Reroute configuration was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/RerouteConfigurations"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Reroute configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Update reroute configuration of a tenant"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "putRerouteConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/RerouteConfigurations"
+      responses:
+        200:
+          description: "Reroute configuration was written successfully"
+          schema:
+            $ref: "#/definitions/RerouteConfigurations"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Reroute configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/configurations/gdpr:
     get:
       tags:
@@ -8575,3 +8653,24 @@ definitions:
         type: "array"
         items:
           type: "string"
+
+  RerouteConfigurations:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "clickAndCollectReroute"
+      - "shipFromStoreReroute"
+    properties:
+      clickAndCollectReroute:
+        $ref: "#/definitions/RerouteConfiguration"
+      shipFromStoreReroute:
+        $ref: "#/definitions/RerouteConfiguration"
+  RerouteConfiguration:
+    required:
+      - "active"
+      - "facilityWideRerouteOnShortPick"
+    properties:
+      active:
+        type: boolean
+      facilityWideRerouteOnShortPick:
+        type: boolean
