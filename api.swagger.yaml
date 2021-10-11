@@ -4781,6 +4781,14 @@ definitions:
   DeliveryPreferences:
     type: "object"
     properties:
+      supplyingFacilities:
+        type: array
+        description: "References of facility that could supply contents of the order to another facility"
+        items:
+          type: "string"
+          description: "Referece of a Facility"
+          example: "928f3730-bc48-4d85-b83f-3fd86b776178"
+
       targetTime:
         type: "string"
         format: "date-time"
@@ -4808,6 +4816,7 @@ definitions:
             type: "array"
             items:
               $ref: "#/definitions/PreselectedFacility"
+
   CollectDelivery:
     type: object
     required:
@@ -5954,6 +5963,9 @@ definitions:
       - "OPEN"
       - "IN_PROGRESS"
       - "CLOSED"
+      - "PICKED"
+      - "REROUTED"
+      - "PACKABLE"
     description: "A pickjob initially has the status OPEN and picking can start. When picking has started, the pickjob changes its status to IN_PROGRESS. After a pickjob has been completely picked its status becomes CLOSED."
     xml:
       name: "PickJobStatus"
@@ -7475,6 +7487,22 @@ definitions:
         type: "string"
         example: "Esb20gpHBL94X5NdMp3C"
         description: "The id of the pickjob that has been created from the routing plan."
+      reRoutedPickJobRef:
+        type: "string"
+        example: "Eghhj20878dhbd989NdMp3C"
+        description: "The id of the original pickjob that was rerouted."
+      reRoutedFacilityRef:
+        type: "string"
+        example: "1DEYZgmfAcXRVYv6KEka36"
+        description: "The id of the facility the order was rerouted from."
+      runType:
+        type: "string"
+        enum:
+          - "DEFAULT"
+          - "REROUTE"
+        description: "The rule type of a decision log entry"
+      targetAddress:
+        $ref: "#/definitions/ConsumerAddress"
       orderDate:
         type: "string"
         format: "date-time"
