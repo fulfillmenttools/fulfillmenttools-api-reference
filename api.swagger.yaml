@@ -4859,6 +4859,17 @@ definitions:
       customAttributes:
         type: "object"
         description: "Attributes that can be added to the orderline. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+
+  RoutingPlanLineItem:
+    allOf:
+      - $ref: "#/definitions/OrderLineItem"
+      - required:
+          - "picked"
+        type: "object"
+        properties:
+          picked:
+            type: "number"
+
   OrderLineItem:
     allOf:
       - $ref: "#/definitions/OrderLineItemForCreation"
@@ -7541,10 +7552,10 @@ definitions:
           $ref: "#/definitions/DecisionLogRef"
       parentRoutingPlanRef:
         type: "string"
-      orderLineItems:
+      routingPlanLineItem:
         type: "array"
         items:
-          $ref: "#/definitions/OrderLineItem"
+          $ref: "#/definitions/RoutingPlanLineItem"
       finalizeRun:
         type: "number"
         minimum: 0
