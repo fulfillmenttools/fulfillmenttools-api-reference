@@ -8720,19 +8720,25 @@ definitions:
       - "shipFromStoreReroute"
     properties:
       clickAndCollectReroute:
-        $ref: "#/definitions/RerouteConfiguration"
+        $ref: "#/definitions/ClickAndCollectRerouteConfiguration"
       shipFromStoreReroute:
-        $ref: "#/definitions/RerouteConfiguration"
-      rerouteTargetTime:
-        type: "number"
-        example: "48"
-        description: "Only pickJobs where the targetTime in not larger than now plus this number are rerouted"
-  RerouteConfiguration:
+        $ref: "#/definitions/ShipFromStoreRerouteConfiguration"
+  ClickAndCollectRerouteConfiguration:
+    required:
+      - "active"
+    properties:
+      active:
+        type: "boolean"
+  ShipFromStoreRerouteConfiguration:
     required:
       - "active"
       - "facilityWideRerouteOnShortPick"
     properties:
       active:
-        type: boolean
+        type: "boolean"
       facilityWideRerouteOnShortPick:
-        type: boolean
+        type: "boolean"
+      rerouteTargetTime:
+        type: "number"
+        example: "48"
+        description: "Only pickJobs where the targetTime in not larger than now plus this number are rerouted"
