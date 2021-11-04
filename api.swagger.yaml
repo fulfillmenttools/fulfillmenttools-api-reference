@@ -2672,6 +2672,49 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+    post:
+      tags:
+        - "Handoverjobs"
+      summary: "Add a new handoverjob"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "addHandoverjob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/HandoverjobForCreation"
+      responses:
+        201:
+          description: "The handoverjob was successfully created. The Location header contains the URL of it."
+          schema:
+            $ref: "#/definitions/Handoverjob"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/pickjobs/{pickjobId}/packingslip:
     get:
       tags:
@@ -2808,49 +2851,7 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-    post:
-      tags:
-        - "Handoverjobs"
-      summary: "Add a new handoverjob"
-      description: ""
-      security:
-        - firebase: [ ]
-      operationId: "addHandoverjob"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        deadline: 60.0
-        disable_auth: true
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          required: true
-          schema:
-            $ref: "#/definitions/HandoverjobForCreation"
-      responses:
-        201:
-          description: "The handoverjob was successfully created. The Location header contains the URL of it."
-          schema:
-            $ref: "#/definitions/Handoverjob"
-        400:
-          description: "Invalid input. See response for details"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
+
   /api/users:
     post:
       tags:
