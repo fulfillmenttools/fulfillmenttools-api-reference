@@ -6792,7 +6792,6 @@ definitions:
     type: "object"
     required:
       - "name"
-      - "credentials"
       - "key"
     properties:
       name:
@@ -6880,12 +6879,23 @@ definitions:
         description: "ID that references the configured carrier."
       deliveryType:
         $ref: "#/definitions/CarrierDeliveryType"
+
   FacilityCarrierConnectionForModification:
-    allOf:
-      - $ref: "#/definitions/FacilityCarrierConnectionForCreation"
+    required:
+      - "version"
     properties:
       version:
         type: number
+      name:
+        type: "string"
+        example: "DHL Köln"
+        description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
+      status:
+        $ref: "#/definitions/CarrierStatus"
+      cutoffTime:
+        $ref: "#/definitions/CutoffTime"
+    additionalProperties: false
+
   FacilityCarrierConnectionForCreation:
     properties:
       name:
