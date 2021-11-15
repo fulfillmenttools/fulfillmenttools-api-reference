@@ -5903,19 +5903,31 @@ definitions:
       - "OPEN"
       - "HANDED_OVER"
   ShipmentForCreation:
-    description: "A Shipment can be created providing a pickjob reference."
-    type: "object"
-    required:
-      - "pickJobRef"
-    properties:
-      pickJobRef:
-        type: "string"
-        example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
-        description: "The reference to the pickjob for which the shipment is assigned to"
-      carrierRef:
-        type: "string"
-        example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
-        description: "The reference to the carrier for which the shipment is assigned to"
+    allOf:
+      - required:
+          - "facilityRef"
+          - "targetTime"
+          - "sourceAddress"
+          - "targetAdress"
+        type: "object"
+        properties:
+          facilityRef:
+            type: "string"
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of the facility reference."
+          targetTime:
+            type: "string"
+            format: "date-time"
+            example: "2020-02-03T09:45:51.525Z"
+            description: "At which time the result is expected."
+          sourceAddress:
+            $ref: "#/definitions/FacilityAddress"
+          targetAdress:
+            $ref: "#/definitions/ConsumerAddress"
+          carrierRef:
+            type: "string"
+            example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
+            description: "The reference to the carrier for which the shipment is assigned to"
   Shipment:
     allOf:
       - $ref: "#/definitions/ShipmentForCreation"
@@ -5923,7 +5935,6 @@ definitions:
       - required:
           - "id"
           - "status"
-          - "pickJobRef"
           - "facilityRef"
           - "targetTime"
           - "hasActiveCarrier"
@@ -5960,6 +5971,10 @@ definitions:
             example: false
             default: true
             description: "Indicates if there is an active carrier configuration to fulfill this shipment"
+          pickJobRef:
+            type: "string"
+            example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
+            description: "The reference to the pickjob for which the shipment is assigned to"
   ShipmentStatus:
     type: "string"
     enum:
@@ -6621,6 +6636,10 @@ definitions:
             type: "string"
             example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
             description: "The reference to the carrier for which the shipment is assigned to"
+          pickJobRef:
+            type: "string"
+            example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
+            description: "The reference to the pickjob for which the shipment is assigned to"
         additionalProperties: false
     xml:
       name: "ModifyShipmentAction"
