@@ -998,7 +998,7 @@ paths:
       tags:
         - "Shipments"
       summary: "Add a new Shipment"
-      description: ""
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
         - firebase: []
       operationId: "addShipment"
@@ -5786,13 +5786,46 @@ definitions:
         type: "boolean"
         example: false
         description: "Indicates if gdpr related data was anonymized"
+
+  HandoverLineItem:
+    type: "object"
+    required:
+      - "quantity"
+      - "article"
+      - "picked"
+    properties:
+      article:
+        $ref: "#/definitions/HandoverLineItemArticle"
+      quantity:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        example: 21
+        description: "quantity of the specific article that has been ordered"
+      picked:
+        type: "integer"
+        format: "int64"
+        minimum: 0
+        example: 20
+        description: "The amount of articles that were picked for this pickline."
+      substituteLineItems:
+        description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+        type: "array"
+        items:
+          $ref: "#/definitions/SubstituteLineItem"
+
   HandoverjobForCreation:
     required:
       - "facilityRef"
+      - "targetTime"
       - "channel"
       - "orderDate"
       - "tenantOrderId"
     properties:
+      handoverJobLineItems:
+        type: "array"
+        items:
+          $ref: "#/definitions/HandoverLineItem"
       status:
         $ref: "#/definitions/HandoverjobStatus"
       tenantOrderId:
@@ -5803,6 +5836,10 @@ definitions:
         type: "string"
         example: "Esb20gpHBL94X5NdMp3C"
         description: "The id of the facility reference."
+      targetTime:
+        type: "string"
+        format: "date-time"
+        description: "The time the handoverjob is expected to be picked up at the facility."
       pickJobRef:
         type: "string"
         example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
@@ -5827,6 +5864,15 @@ definitions:
         enum:
           - "DELIVERY"
           - "COLLECT"
+      carrierLogoUrl:
+        type: "string"
+        description: "The URL to the carrier logo"
+      carrierTrackingNumber:
+        type: "string"
+        description: "Tracking number for the created shipment"
+      shortIdentifier:
+        type: "string"
+        description: "The short identifier of the shipment."
       loadUnitRefs:
         type: "array"
         items:
@@ -5911,11 +5957,31 @@ definitions:
     required:
       - "facilityRef"
       - "targetTime"
-      - "sourceAddress"
-      - "targetAdress"
-    type: "object"
+      - "targetAddress"
+      - "tenantOrderId"
+      - "orderDate"
     properties:
       facilityRef:
+        type: string
+        description: "The reference to the facility which the shipment is assigned to."
+      targetTime:
+        type: string
+        format: "date-time"
+        description: "The time the shipment is expected to be picked up at the facility."
+      sourceAddress:
+        $ref: "#/definitions/FacilityAddress"
+        description: "The address of the facility where the shipment is picked up from."
+      targetAddress:
+        $ref: "#/definitions/ConsumerAddress"
+        description: "The address of the target where the shipment is delivered to."
+      tenantOrderId:
+        type: string
+        description: "Reference to the order in the tenant system."
+      orderDate:
+        type: string
+        format: "date-time"
+        description: "The date this order was created at the supplying system."
+      pickJobRef:
         type: "string"
         example: "Esb20gpHBL94X5NdMp3C"
         description: "The id of the facility reference."
@@ -5932,10 +5998,15 @@ definitions:
         type: "string"
         example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
         description: "The reference to the carrier for which the shipment is assigned to"
-      pickJobRef:
+      shortIdentifier:
         type: "string"
-        example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
-        description: "The reference to the pickjob for which the shipment is assigned to"
+        description: "The short identifier of the shipment."
+      returnNoteUrl:
+        type: "string"
+        description: "The url to the return note of the shipment."
+      packingSlipUrl:
+        type: "string"
+        description: "The url to the packing slip of the shipment."
   Shipment:
     allOf:
       - $ref: "#/definitions/ShipmentForCreation"
@@ -5943,8 +6014,6 @@ definitions:
       - required:
           - "id"
           - "status"
-          - "facilityRef"
-          - "targetTime"
           - "hasActiveCarrier"
         type: "object"
         properties:
@@ -5954,21 +6023,12 @@ definitions:
             description:
               "The id of this Shipment. It is generated during creation automatically and suits as the primary
               identifier of the described entity."
-          facilityRef:
-            type: "string"
-            example: "Esb20gpHBL94X5NdMp3C"
-            description: "The id of the facility reference."
           status:
             $ref: "#/definitions/ShipmentStatus"
           parcels:
             type: "array"
             items:
               $ref: "#/definitions/StrippedParcel"
-          targetTime:
-            type: "string"
-            format: "date-time"
-            example: "2020-02-03T09:45:51.525Z"
-            description: "At which time the result is expected."
           anonymized:
             type: "boolean"
             example: false
@@ -6798,6 +6858,18 @@ definitions:
               $ref: "#/definitions/OrderArticleAttributeItem"
     xml:
       name: "PickLineItemArticle"
+
+  HandoverLineItemArticle:
+    allOf:
+      - $ref: "#/definitions/AbstractArticle"
+      - type: "object"
+        properties:
+          attributes:
+            type: "array"
+            items:
+              $ref: "#/definitions/OrderArticleAttributeItem"
+    xml:
+      name: "HandoverLineItemArticle"
 
   SubstituteLineItemArticle:
     allOf:
