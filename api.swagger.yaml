@@ -2620,6 +2620,49 @@ paths:
             items:
               $ref: "#/definitions/Error"
   /api/handoverjobs:
+    post:
+      tags:
+        - "Handoverjobs"
+      summary: "Add a new handoverjob"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "addHandoverjob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/HandoverjobForCreation"
+      responses:
+        201:
+          description: "The handoverjob was successfully created. The Location header contains the URL of it."
+          schema:
+            $ref: "#/definitions/Handoverjob"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
     get:
       tags:
         - "Handoverjobs"
@@ -2851,7 +2894,6 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-
   /api/users:
     post:
       tags:
@@ -5773,15 +5815,15 @@ definitions:
 
   Handoverjob:
     allOf:
-      - $ref: "#/definitions/StrippedHandoverjob"
-      - required:
-          - "targetTime"
+      - $ref: "#/definitions/VersionedResource"
+      - $ref: "#/definitions/HandoverjobForCreation"
     properties:
-      targetTime:
+      id:
         type: "string"
-        format: "date-time"
-        example: "2020-02-03T09:45:51.525Z"
-        description: "At which time the result is expected."
+        example: "95EWrieX09OmeriXIUbb"
+        description:
+          "The id of this handoverjob. It is generated during creation automatically and suits as the primary
+                    identifier of the described entity."
       anonymized:
         type: "boolean"
         example: false
@@ -5878,11 +5920,6 @@ definitions:
         items:
           type: "string"
         description: "Reference to array of load unit Refs"
-      targetTime:
-        type: "string"
-        format: "date-time"
-        example: "2020-02-03T09:45:51.525Z"
-        description: "At which time the result is expected."
   StrippedHandoverjob:
     allOf:
       - $ref: "#/definitions/VersionedResource"
