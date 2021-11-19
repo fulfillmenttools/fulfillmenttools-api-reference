@@ -2715,49 +2715,6 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-    post:
-      tags:
-        - "Handoverjobs"
-      summary: "Add a new handoverjob"
-      description: ""
-      security:
-        - firebase: [ ]
-      operationId: "addHandoverjob"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        deadline: 60.0
-        disable_auth: true
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          required: true
-          schema:
-            $ref: "#/definitions/HandoverjobForCreation"
-      responses:
-        201:
-          description: "The handoverjob was successfully created. The Location header contains the URL of it."
-          schema:
-            $ref: "#/definitions/Handoverjob"
-        400:
-          description: "Invalid input. See response for details"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
   /api/pickjobs/{pickjobId}/packingslip:
     get:
       tags:
@@ -6001,10 +5958,6 @@ definitions:
       facilityRef:
         type: string
         description: "The reference to the facility which the shipment is assigned to."
-      targetTime:
-        type: string
-        format: "date-time"
-        description: "The time the shipment is expected to be picked up at the facility."
       sourceAddress:
         $ref: "#/definitions/FacilityAddress"
         description: "The address of the facility where the shipment is picked up from."
@@ -6027,10 +5980,6 @@ definitions:
         format: "date-time"
         example: "2020-02-03T09:45:51.525Z"
         description: "At which time the result is expected."
-      sourceAddress:
-        $ref: "#/definitions/FacilityAddress"
-      targetAdress:
-        $ref: "#/definitions/ConsumerAddress"
       carrierRef:
         type: "string"
         example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
