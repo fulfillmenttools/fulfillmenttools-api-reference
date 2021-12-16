@@ -4785,6 +4785,74 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+
+  /api/processes:
+    get:
+      tags:
+        - "Process"
+      summary: "Returns a process belonging to the given parameters. At least one parameter needs to be supplied."
+      description: ""
+      security:
+        - firebase: []
+      operationId: "getProcesses"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      parameters:
+        - in: "query"
+          name: "tenantOrderId"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "orderRef"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "pickJobRef"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "shipmentRef"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "handoverJobRef"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "returnRef"
+          required: false
+          type: "string"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Process belonging to the given parameters"
+          schema:
+            $ref: "#/definitions/Process"
+        400:
+          description: "The given parameters are invalid"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
 securityDefinitions:
   firebase:
     authorizationUrl: ""
@@ -9002,3 +9070,44 @@ definitions:
         type: "boolean"
         default: false
         description: "Allows reroute to be triggered manually via api."
+
+  Process:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "gdprCleanupDate"
+    properties:
+      gdprCleanupDate:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "The date that defines when the entities will be anonymized."
+      tenantOrderId:
+        type: "string"
+        description: ""
+      orderRef:
+        type: "string"
+        description: ""
+      pickJobRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: ""
+      shipmentRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: ""
+      handoverJobRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: ""
+      returnRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: ""
+      isAnonymized:
+        type: "boolean"
+        description: "Indicates if the entities are already anonymized."
