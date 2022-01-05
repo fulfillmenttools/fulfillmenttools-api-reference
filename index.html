@@ -488,6 +488,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_default_behaviour">Default behaviour</a></li>
 <li><a href="#_providing_preferred_delivery_types_per_order">Providing preferred delivery types per order</a></li>
+<li><a href="#_introducing_picking_sequence_2">Introducing Picking Sequence</a></li>
 </ul>
 </li>
 <li><a href="#_pickjobs">Pickjobs</a>
@@ -1339,6 +1340,44 @@ Response:
 </div>
 </div>
 <div class="sect3">
+<h4 id="_introducing_picking_sequence">Introducing Picking Sequence</h4>
+<div class="paragraph">
+<p>It is possible to sort the pick line items and show them in an order in the app. This enhances the picking speed of the picker since the items are presented to them in the correct running order.</p>
+</div>
+<div class="paragraph">
+<p>This can be done by providing a <code>PickingSequence</code> attribute of a listing. If more than one pick line item has the same <code>PickingSequence</code>, <code>tenantArticleId</code> will be used for the sorting.</p>
+</div>
+<div class="paragraph">
+<p>Note: Listing&#8217;s <code>PickingSequence</code> attribute will override Order&#8217;s <code>PickingSequence</code> attribute.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+    "listings": [
+        {
+            "tenantArticleId": "2020249",
+            "price": 19.95,
+            "stockinformation": {
+                "stock": 50,
+                "reserved": 10
+            },
+            "title": "T-Shirt",
+            "imageUrl": "https://example.com/image.jpg",
+            "attributes": [
+                {
+                "category": "pickingSequence", // Category must be set to `PickingSequence`
+                "priority": 1, // This property will be taken into account if there are multiple `PickingSequence` attributes defined for one listing, otherwise you can leave it
+                "key": "pickingSequence",
+                "value": "1" // This is the value that sorts the article.  The sorting is being done in an ascending way, so the value 1 will be on top of others.
+                }
+            ]
+        }
+    ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_stock">Stock</h4>
 <div class="paragraph">
 <p>An even further refined way to distribute an order is to consider the actual available stock of an article within a facility, namely a listing. This is why listings have attributes that in turn have impact on the distribution of orders and transforming them to pickjobs. Currently the following attributes are available:</p>
@@ -1413,6 +1452,41 @@ This default behaviour can be bypassed by certain information in the order messa
              "facilityRef": "28MB9nc4njINUx9rDrCU"  // The facility which the consumer has chosen to hand over the order
             }
         ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_introducing_picking_sequence_2">Introducing Picking Sequence</h3>
+<div class="paragraph">
+<p>It is possible to sort the pick line items and show them in an order in the app. This enhances the picking speed of the picker since the items are presented to them in the correct running order.</p>
+</div>
+<div class="paragraph">
+<p>This can be done by providing a <code>PickingSequence</code> attribute of an pick line item. If more than one pick line item has the same <code>PickingSequence</code>, <code>tenantArticleId</code> will be used for the sorting.</p>
+</div>
+<div class="paragraph">
+<p>Note: Listing&#8217;s <code>PickingSequence</code> attribute will override Order&#8217;s <code>PickingSequence</code> attribute.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+    "article": {
+        "tenantArticleId": "your-tenantArticleId",
+        "title": "title",
+        "imageUrl": "imageUrl",
+        "attributes": [
+            {
+                "category": "pickingSequence", // Category must be set to `PickingSequence`
+                "priority": 1, // This property will be taken into account if there are multiple `PickingSequence` attributes defined for one article, otherwise you can leave it
+                "key": "pickingSequence",
+                "value": "1" // This is the value that sorts the article.  The sorting is being done in an ascending way, so the value 1 will be on top of others.
+            }
+        ]
+    },
+    "quantity": 2,
+    "scannableCodes": [
+        "2020249"
+    ]
 }</code></pre>
 </div>
 </div>
@@ -1779,7 +1853,7 @@ Response:
 <div id="footer">
 <div id="footer-text">
 0.1-BETA <br>
-Last updated 2022-01-04 11:23:49 UTC
+Last updated 2022-01-05 07:58:31 UTC
 </div>
 </div>
 </body>
