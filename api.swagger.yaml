@@ -9,12 +9,224 @@ info:
     email: "api@fulfillmenttools.com"
     url: "https://fulfillmenttools.com/"
 host: "%%HOST%%"
+x-google-endpoints:
+  - name: "%%HOST%%"
+    allowCors: True
+
 tags:
   - name: "Orders"
     description: "Everything your customer ordered in your shop, so everything he or she orders for fulfillment."
 schemes:
   - "https"
 paths:
+  /graphql:
+    get:
+      tags:
+        - "GraphQL"
+      summary: "Get the GraphQL playground"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      operationId: "getGraphQLPlayground"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://graphql-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "*/*"
+      responses:
+        200:
+          description: "The GraphQL playground"
+    post:
+      tags:
+        - "GraphQL"
+      summary: "Endpoint for executing GraphQL commands"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "executeGraphQLCommand"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://graphql-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "The GraphQL command was successfully executed."
+        400:
+          description: "GraphQL validation error"
+
+  /api/features:
+    get:
+      tags:
+        - "Feature"
+      summary: "Returns all features grouped by active modules"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getFeatures"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "The available feature for all active modules"
+          schema:
+            $ref: "#/definitions/Features"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/features/{featureName}:
+    get:
+      tags:
+        - "Feature"
+      summary: "Returns a feature"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getFeature"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "featureName"
+          description: "Name of the feature requested"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "The requested feature"
+          schema:
+            $ref: "#/definitions/Feature"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - "Feature"
+      summary: "Patches a feature"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "patchFeature"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "featureName"
+          description: "Name of the feature requested"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Patch set"
+          required: true
+          schema:
+            $ref: "#/definitions/FeaturePatchActions"
+      responses:
+        200:
+          description: "Module was found & patch-set has been applied. The patched entity is in the body."
+          schema:
+            $ref: "#/definitions/Feature"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Entity version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/scopedcapabilities:
+    get:
+      tags:
+        - "ScopedCapabilities"
+      summary: "Returns all scopedcapabilities which are at least inactive and available to a facility/user"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getCapabilities"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "facilityId"
+          description: "id of the facility"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "All ScopedCapabilities whic are at least inactive"
+          schema:
+            $ref: "#/definitions/ScopedCapabilities"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/configurations/locale:
     get:
       tags:
@@ -22,7 +234,7 @@ paths:
       summary: "Get the tenant wide default locale configuration"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getLocaleConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -52,7 +264,7 @@ paths:
       summary: "Change the tenant wide default locale configuration"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putLocaleConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -97,7 +309,7 @@ paths:
       summary: "Get the list of supported locales"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getLocales"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -128,7 +340,7 @@ paths:
       summary: "Change the tenant wide stock configuration"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putStockConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -174,7 +386,7 @@ paths:
       summary: "Change the tenant wide order routing configuration"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putOrderRoutingConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -217,6 +429,91 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/configurations/domain:
+    get:
+      tags:
+        - "Configurations"
+      summary: "Get default authentication domain of the tenant"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getDomainConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Domain config could be found in response body."
+          schema:
+            $ref: "#/definitions/DomainConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Change the tenant's default authentication domain configuration"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "putDomainConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Desired domain note configuration to create/update"
+          required: true
+          schema:
+            $ref: "#/definitions/DomainConfiguration"
+      responses:
+        200:
+          description: "The domain configuration was successfully updated."
+          schema:
+            $ref: "#/definitions/DomainConfiguration"
+        201:
+          description: "The domain configuration was successfully created."
+          schema:
+            $ref: "#/definitions/DomainConfiguration"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/configurations/returnnote:
     get:
       tags:
@@ -224,7 +521,7 @@ paths:
       summary: "Get defined return notes of the tenant"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getReturnNoteConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -259,7 +556,7 @@ paths:
       summary: "Change the tenant wide return note configuration"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putReturnNoteConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -309,7 +606,7 @@ paths:
       summary: "Get the current configuration for returns"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getReturnConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -344,7 +641,7 @@ paths:
       summary: "Change the tenant wide return configuration"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putReturnConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -399,7 +696,7 @@ paths:
       summary: "Change the tenant wide load unit configuration"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putLoadUnitConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -447,7 +744,7 @@ paths:
       summary: "Get the load unit configuration"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getLoadUnitConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -479,7 +776,7 @@ paths:
       summary: "Get the current configuration for substitution"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getSubstitutionConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -514,7 +811,7 @@ paths:
       summary: "Change the tenant wide substitution configuration"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putSubstitutionConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -569,7 +866,7 @@ paths:
       summary: "Add a new order for future fulfillment"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addOrder"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -613,7 +910,7 @@ paths:
       summary: "Return all orders"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getAllOrders"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -661,7 +958,7 @@ paths:
       summary: "Get a order with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getOrder"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -701,9 +998,9 @@ paths:
       tags:
         - "Shipments"
       summary: "Add a new Shipment"
-      description: ""
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addShipment"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -749,7 +1046,7 @@ paths:
       summary: "Return all shipments"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getAllShipments"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -797,7 +1094,7 @@ paths:
       summary: "Get a Shipment with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getShipment"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -838,7 +1135,7 @@ paths:
       summary: "Patches a shipment with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchShipment"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -891,7 +1188,7 @@ paths:
       summary: "Creates a new parcel for a shipment"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addParcel"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -946,7 +1243,7 @@ paths:
       summary: "Add a new facility"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -990,7 +1287,7 @@ paths:
       summary: "Return all facilities"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getAllFacilities"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1038,7 +1335,7 @@ paths:
       summary: "Get a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1079,7 +1376,7 @@ paths:
       summary: "deletes a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1126,7 +1423,7 @@ paths:
       summary: "Patches a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1179,7 +1476,7 @@ paths:
       summary: "Gets the list of currently available and applied configurations for the given facility. "
       description: "The response will merely supply a list of links that lead to configurations - for changing them please refer to the resources below. The contents of this list depends on the layout of your system, entries can appear and disappear based on configuration or internal processing"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacilityConfigurations"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1212,7 +1509,7 @@ paths:
         - "Facilities Configurations"
       summary: "Gets the facility's current configuration for stock related order distribution"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacilityStockConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1243,7 +1540,7 @@ paths:
       summary: "Patches a facility configuration with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchFacilityConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1307,7 +1604,7 @@ paths:
           required: true
           type: "string"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getResultingSubstitutesForTenantArticleId"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1344,7 +1641,7 @@ paths:
       summary: "Get the substitutes for a given tenant article id"
       description: "Get the substitutes for a given tenant article id"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getSubstitutesForTenantArticleId"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1385,7 +1682,7 @@ paths:
       summary: "Set possible substitutes for a tenant article ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putSubstitutesForTenantArticleID"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1434,7 +1731,7 @@ paths:
       summary: "deletes substitutes for the given tenant article id"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteSubstitutesForTenantArticleId"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1474,7 +1771,7 @@ paths:
       summary: "Get a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacilityListing"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1528,7 +1825,7 @@ paths:
       summary: "Update listings of a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putFacilityListing"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1574,7 +1871,7 @@ paths:
       summary: "Get a Listings with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getListing"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1620,7 +1917,7 @@ paths:
       summary: "Update a listing with the given ID of a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchFacilityListing"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1680,7 +1977,7 @@ paths:
       summary: "deletes a listing with the given ID of a facility with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteFacilityListing"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1725,7 +2022,7 @@ paths:
       summary: "Get the available CEPs for a facility"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacilityCeps"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1766,7 +2063,7 @@ paths:
       summary: "Get the details for a carrier related to the facility with the given ID"
       description: "<center> <center><img align='center' src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> </center> <br> This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getFacilityCarrier"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1812,7 +2109,7 @@ paths:
       summary: "Connect a configured carrier to the facility with given ID "
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "connectCarrierToFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1866,7 +2163,7 @@ paths:
       summary: "Create a connection of a configured carrier to the facility with given ID"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "createCarrierToFacility"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1920,7 +2217,7 @@ paths:
         - "PickJobs"
       summary: "Simple query interface to find pickjobs"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "queryPickJobs"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -1970,7 +2267,7 @@ paths:
       summary: "Add a new pick job for fulfillment"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addPickJob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2017,7 +2314,7 @@ paths:
       summary: "Get a pick job with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getPickJob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2060,7 +2357,7 @@ paths:
       summary: "Patches a pick job with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "pathPickJob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2107,6 +2404,55 @@ paths:
             items:
               $ref: "#/definitions/Error"
         # end::pickjobs[]
+
+  /api/pickjobs/{pickJobId}/reroute:
+    post:
+      tags:
+        - "ManualReroute"
+      summary: "Trigger manual reroute"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "triggerManualReroute"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      parameters:
+        - in: "path"
+          name: "pickJobId"
+          description: "ID of the pickjob you want to reroute"
+          required: true
+          type: "string"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "The manual reroute request was sent successfully."
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/parcels:
     get:
       tags:
@@ -2114,7 +2460,7 @@ paths:
       summary: "Return all parcels"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getAllParcels"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2157,7 +2503,7 @@ paths:
       summary: "Get a parcel with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getParcel"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2198,7 +2544,7 @@ paths:
       summary: "Delete a parcel with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteParcel"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2238,7 +2584,7 @@ paths:
       summary: "Get a label for the parcel with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getLabelForParcel"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2287,7 +2633,7 @@ paths:
       summary: "Get the return note for the pickjob with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getReturnNotesForPickjob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2323,13 +2669,56 @@ paths:
             items:
               $ref: "#/definitions/Error"
   /api/handoverjobs:
+    post:
+      tags:
+        - "Handoverjobs"
+      summary: "Add a new handoverjob"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "addHandoverjob"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/HandoverjobForCreation"
+      responses:
+        201:
+          description: "The handoverjob was successfully created. The Location header contains the URL of it."
+          schema:
+            $ref: "#/definitions/Handoverjob"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
     get:
       tags:
         - "Handoverjobs"
       summary: "Return all handoverjobs"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getAllHandoverjobs"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2382,7 +2771,7 @@ paths:
       summary: "Get the packing slip for the pickjob with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getPackingSlipForPickjob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2424,7 +2813,7 @@ paths:
       summary: "Get a Handoverjob with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getHandoverjob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2465,7 +2854,7 @@ paths:
       summary: "Patches a handoverjob with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchHandoverjob"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2518,7 +2907,7 @@ paths:
       summary: "Create a new user"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "createUser"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2560,7 +2949,7 @@ paths:
       summary: "Return all users"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getAllUsers"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2603,7 +2992,7 @@ paths:
       summary: "Patch an existing user with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchUser"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2657,7 +3046,7 @@ paths:
       summary: "Get a User with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getUser"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2698,7 +3087,7 @@ paths:
       summary: "Deletes a User with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteUser"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2739,7 +3128,7 @@ paths:
       summary: "Sign an upload request for a given template"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "signTransloaditRequest"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2779,7 +3168,7 @@ paths:
       summary: "Sets the branding "
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putBranding"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2832,7 +3221,7 @@ paths:
       summary: "Returns all configured CEP partners"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getCarriers"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2854,7 +3243,7 @@ paths:
           type: "integer"
           default: 25
       responses:
-        201:
+        200:
           description: "The current list of available carriers"
           schema:
             $ref: "#/definitions/StrippedCarriers"
@@ -2879,7 +3268,7 @@ paths:
       summary: "Add a new carrier as a CEP partner"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addCarrier"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2924,7 +3313,7 @@ paths:
       summary: "Get a carrier with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getCarrier"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -2965,7 +3354,7 @@ paths:
       summary: "Patches a carrier with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchCarrier"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3030,6 +3419,51 @@ paths:
           description: "The status result"
           schema:
             $ref: "#/definitions/Status"
+  /api/returns:
+    post:
+      tags:
+        - "Returns"
+      summary: "Add a new return"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "addReturn"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        deadline: 60.0
+        disable_auth: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "ReturnJob object "
+          required: true
+          schema:
+            $ref: "#/definitions/ReturnJobForCreation"
+      responses:
+        201:
+          description: "The return was successfully created"
+          schema:
+            $ref: "#/definitions/ReturnJob"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
   /api/returns/{returnId}:
     get:
       tags:
@@ -3037,7 +3471,7 @@ paths:
       summary: "Get return with the given return ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getReturnLines"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3078,7 +3512,7 @@ paths:
       summary: "Patches a return with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchReturn"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3131,7 +3565,7 @@ paths:
       summary: "Get a routing plan regarding to orderRef"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getRoutingPlanBaseOnOrderRef"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3172,7 +3606,7 @@ paths:
       summary: "Get a routing plan with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getRoutingPlan"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3213,7 +3647,7 @@ paths:
       summary: "Patches a routing plan with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchRoutingPlan"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3266,7 +3700,7 @@ paths:
       summary: "Triggers run of the finalizer."
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "runFinalizer"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3304,7 +3738,7 @@ paths:
       summary: "Triggers run of the router"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "runRouter"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3338,7 +3772,7 @@ paths:
       summary: "Triggers rerouting of failed routing plans"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "reRoute"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3369,7 +3803,7 @@ paths:
       summary: "Get a tenant routing config"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getRoutingConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3413,7 +3847,7 @@ paths:
       summary: "Update routing configuration of a tenant"
       description: "Important: You can only change the name and the description for fences, ratings and prioritizations of type CUSTOM. For Fences and Ratings provided by fulfillmenttools you can not change the fields 'name' and 'description'. <br> Also you can not delete an existing fulfillmenttools Fence or Rating by calling this endpoint."
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putRoutingConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3454,7 +3888,7 @@ paths:
       summary: "Patches routing configuration"
       description: "Important: You can only change the name and the description for fences, ratings and prioritizations of type CUSTOM. For Fences and Ratings provided by fulfillmenttools you can not change the fields 'name' and 'description'."
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "patchRoutingConfig"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3495,6 +3929,84 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+  /api/configurations/routing/reroute:
+    get:
+      tags:
+        - "Configurations"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      summary: "Get a tenant reroute config"
+      security:
+        - firebase: [ ]
+      operationId: "getRerouteConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Reroute configuration was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/RerouteConfigurations"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Reroute configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Update reroute configuration of a tenant"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "putRerouteConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/RerouteConfigurations"
+      responses:
+        200:
+          description: "Reroute configuration was written successfully"
+          schema:
+            $ref: "#/definitions/RerouteConfigurations"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Reroute configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/configurations/gdpr:
     get:
       tags:
@@ -3502,7 +4014,7 @@ paths:
       summary: "Get a tenant gdpr config"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getGdprConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3537,7 +4049,7 @@ paths:
       summary: "Update gdpr configuration of a tenant"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "putGdprConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3579,7 +4091,7 @@ paths:
       summary: "Get decision log of a routing plan with the given ID"
       description: ""
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getDecisionlog"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3627,7 +4139,7 @@ paths:
       summary: "Get all load unit types"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getLoadUnitTypes"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3678,7 +4190,7 @@ paths:
       summary: "Create new load unit type"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "createLoadUnitTypes"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3721,7 +4233,7 @@ paths:
       summary: "Get a loadUnitType by its ID"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getLoadUnitTypeByID"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3765,7 +4277,7 @@ paths:
       summary: "Update load unit type"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "updateLoadUnitType"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3813,7 +4325,7 @@ paths:
       summary: "Get a loadUnit by its ID"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getLoadUnitByID"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3858,7 +4370,7 @@ paths:
       summary: "Delete load unit"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteLoadUnit"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3900,7 +4412,7 @@ paths:
       summary: "Add new load units"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addLoadUnit"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -3944,7 +4456,7 @@ paths:
       summary: "Delete loadunits by pickJobRef"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteLoadUnits"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -4005,7 +4517,7 @@ paths:
       summary: "Return all load units"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getAllLoadUnits"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -4058,7 +4570,7 @@ paths:
       summary: "Upload icon for load unit type."
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "uploadLoadUnitTypeIcon"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -4110,7 +4622,7 @@ paths:
       summary: "Get all subscriptions"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getSubscriptions"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -4153,7 +4665,7 @@ paths:
       summary: "Add new Subscription. Please note: Currently it is only possible to add one subscription per event."
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "addSubscription"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -4199,7 +4711,7 @@ paths:
       summary: "Delete subscription by Id"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "deleteSubscription"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -4249,7 +4761,7 @@ paths:
       summary: "Get a list of supported events you can subscribe to."
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
-        - firebase: []
+        - firebase: [ ]
       operationId: "getEvents"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
@@ -4270,6 +4782,160 @@ paths:
               $ref: "#/definitions/Error"
         403:
           description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/artifacts/{platform}:
+    get:
+      tags:
+        - "Artifacts"
+      summary: "Provides metadata for currently available artifacts for a platform"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "getArtifacts"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      parameters:
+        - in: "path"
+          name: "platform"
+          description: "Platform for which to list artifacts"
+          required: true
+          type: "string"
+          enum:
+            - "android"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "All available artifacts for the selected platform"
+          schema:
+            $ref: "#/definitions/ArtifactMetadataItems"
+        400:
+          description: "The given platform is invalid"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/process:
+    get:
+      tags:
+        - "Process"
+      summary: "Returns a process belonging to the given parameters. At least one parameter needs to be supplied."
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getProcesses"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      parameters:
+        - in: "query"
+          name: "tenantOrderId"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "orderRef"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "pickJobRef"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "shipmentRef"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "handoverJobRef"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "returnRef"
+          required: false
+          type: "string"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Process belonging to the given parameters"
+          schema:
+            $ref: "#/definitions/Process"
+        400:
+          description: "The given parameters are invalid"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/processes/{processId}:
+    get:
+      tags:
+        - "Process"
+      summary: "Get a process by its ID"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getProcessByID"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "processId"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "The found process."
+          schema:
+            $ref: "#/definitions/Process"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
           schema:
             items:
               $ref: "#/definitions/Error"
@@ -4362,6 +5028,14 @@ definitions:
   DeliveryPreferences:
     type: "object"
     properties:
+      supplyingFacilities:
+        type: array
+        description: "DEPRECATED: User supplyingFacilities under collect"
+        items:
+          type: "string"
+          description: "Referece of a Facility"
+          example: "928f3730-bc48-4d85-b83f-3fd86b776178"
+
       targetTime:
         type: "string"
         format: "date-time"
@@ -4389,6 +5063,7 @@ definitions:
             type: "array"
             items:
               $ref: "#/definitions/PreselectedFacility"
+
   CollectDelivery:
     type: object
     required:
@@ -4397,6 +5072,14 @@ definitions:
       "facilityRef":
         type: string
         description: "Reference to the facility where the consumer expects to collect the items"
+      supplyingFacilities:
+        type: array
+        description: "References of facility that could supply contents of the order to another facility"
+        items:
+          type: "string"
+          description: "Referece of a Facility"
+          example: "928f3730-bc48-4d85-b83f-3fd86b776178"
+
   PreselectedFacility:
     type: object
     required:
@@ -4426,12 +5109,20 @@ definitions:
           description: "Strings, that identify the article"
       shopPrice:
         type: "number"
-        minimum: 1
         example: 1200
         description: "price per piece of this line item"
       customAttributes:
         type: "object"
         description: "Attributes that can be added to the orderline. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+
+  RoutingPlanLineItem:
+    allOf:
+      - $ref: "#/definitions/OrderLineItem"
+    type: "object"
+    properties:
+      picked:
+        type: "number"
+
   OrderLineItem:
     allOf:
       - $ref: "#/definitions/OrderLineItemForCreation"
@@ -4449,7 +5140,7 @@ definitions:
       - "OPEN"
       - "CANCELLED"
       - "LOCKED"
-    description: "The state of the order. Initially it is OPEN and it can be CANCELLED at any time. In such a case fulfillment will not be commenced. When fulfillment has begun and the point of no return (fulfillment wise) is reached the status is changed to LOCKED."
+    description: "The state of the order. Initially it is OPEN."
   Order:
     allOf:
       - $ref: "#/definitions/OrderForCreation"
@@ -4474,6 +5165,9 @@ definitions:
             type: "boolean"
             example: false
             description: "Indicates if gdpr related data was anonymized"
+          processId:
+            type: "string"
+            description: "Id of the global process related to this entity. For example used for starting the GDPR process and others."
     xml:
       name: "Order"
   FacilityStatus:
@@ -4761,6 +5455,9 @@ definitions:
       - "facilityRef"
       - "pickLineItems"
     properties:
+      processId:
+        type: "string"
+        description: "Id of the global process related to this entity. For example used for starting the GDPR process and others."
       orderRef:
         type: "string"
         example: "LGMl2DuvPnfPoSHhYFOm"
@@ -4824,6 +5521,8 @@ definitions:
             $ref: "#/definitions/PickJobStatus"
           deliveryinformation:
             $ref: "#/definitions/PickjobDeliveryInformation"
+          preReRoutedPickJobState:
+            $ref: "#/definitions/PickJobStatus"
   StrippedPickJob:
     allOf:
       - $ref: "#/definitions/VersionedResource"
@@ -4934,6 +5633,52 @@ definitions:
             description: "The amount of articles that were picked for this pickline."
           status:
             $ref: "#/definitions/PickLineItemStatus"
+          substituteLineItems:
+            description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+            type: "array"
+            items:
+              $ref: "#/definitions/SubstituteLineItem"
+
+  SubstituteLineItemForCreation:
+    type: "object"
+    required:
+      - "quantity"
+      - "tenantArticleId"
+    properties:
+      quantity:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        example: 21
+        description: "quantity of the specific article that has been picked to substitute the ordered line item"
+      tenantArticleId:
+        type: "string"
+        description: "TenantArticleId of the substitute article"
+
+  SubstituteLineItem:
+    type: "object"
+    required:
+      - "quantity"
+      - "article"
+    properties:
+      article:
+        $ref: "#/definitions/SubstituteLineItemArticle"
+      quantity:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        example: 21
+        description: "quantity of the specific article that has been picked to substitute the ordered line item"
+      scannableCodes:
+        type: "array"
+        items:
+          type: "string"
+          description: "Strings, that identify the article"
+      priority:
+        type: number
+        minimum: 0
+        description: "This field allows you to rank substitutes against each other. The lowest number is the most preferrable substitute."
+
   OrderArticleAttributeItem:
     allOf:
       - $ref: "#/definitions/ArticleAttributeItem"
@@ -5082,22 +5827,31 @@ definitions:
   ConsumerAddress:
     allOf:
       - $ref: "#/definitions/Address"
-      - required:
-          - "lastName"
-        type: "object"
+    type: "object"
+    properties:
+      salutation:
+        type: "string"
+        example: "Frau"
+      firstName:
+        type: "string"
+        example: "Maxine"
+      lastName:
+        type: "string"
+        example: "Muller"
+      companyName:
+        type: "string"
+        example: "Speedy Boxales Ltd."
+
+  TargetAddress:
+    type: "object"
+    allOf:
+      - $ref: "#/definitions/ConsumerAddress"
+      - type: "object"
         properties:
-          salutation:
+          facilityRef:
             type: "string"
-            example: "Frau"
-          firstName:
-            type: "string"
-            example: "Maxine"
-          lastName:
-            type: "string"
-            example: "Muller"
-          companyName:
-            type: "string"
-            example: "Speedy Boxales Ltd."
+            example: "Esb20gpHBL94X5NdMp3C"
+            description: "The id of the facility reference. The given ID has to be present in the system."
 
   FacilityAddressForCreation:
     type: "object"
@@ -5236,19 +5990,117 @@ definitions:
 
   Handoverjob:
     allOf:
-      - $ref: "#/definitions/StrippedHandoverjob"
-      - required:
-          - "targetTime"
+      - $ref: "#/definitions/VersionedResource"
+      - $ref: "#/definitions/HandoverjobForCreation"
+    required:
+      - "id"
+      - "status"
     properties:
-      targetTime:
+      id:
         type: "string"
-        format: "date-time"
-        example: "2020-02-03T09:45:51.525Z"
-        description: "At which time the result is expected."
+        example: "95EWrieX09OmeriXIUbb"
+        description:
+          "The id of this handoverjob. It is generated during creation automatically and suits as the primary
+          identifier of the described entity."
       anonymized:
         type: "boolean"
         example: false
         description: "Indicates if gdpr related data was anonymized"
+
+  HandoverLineItem:
+    type: "object"
+    required:
+      - "quantity"
+      - "article"
+      - "picked"
+    properties:
+      article:
+        $ref: "#/definitions/HandoverLineItemArticle"
+      quantity:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        example: 21
+        description: "quantity of the specific article that has been ordered"
+      picked:
+        type: "integer"
+        format: "int64"
+        minimum: 0
+        example: 20
+        description: "The amount of articles that were picked for this pickline."
+      substituteLineItems:
+        description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+        type: "array"
+        items:
+          $ref: "#/definitions/SubstituteLineItem"
+
+  HandoverjobForCreation:
+    required:
+      - "facilityRef"
+      - "targetTime"
+      - "channel"
+      - "orderDate"
+      - "tenantOrderId"
+    properties:
+      handoverJobLineItems:
+        type: "array"
+        items:
+          $ref: "#/definitions/HandoverLineItem"
+      status:
+        $ref: "#/definitions/HandoverjobStatus"
+      tenantOrderId:
+        type: "string"
+        example: "R456728546"
+        description: "Field can be used as a reference number in foreign systems, for example as a reference to the source system's identifier for this order."
+      facilityRef:
+        type: "string"
+        example: "Esb20gpHBL94X5NdMp3C"
+        description: "The id of the facility reference."
+      targetTime:
+        type: "string"
+        format: "date-time"
+        description: "The time the handoverjob is expected to be picked up at the facility."
+      pickJobRef:
+        type: "string"
+        example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
+        description: "The reference to the pickjob for which the handoverjob is assigned to"
+      parcelRef:
+        type: "string"
+        example: "2fOge2ZGW54K4TgvDTQw"
+        description: "The reference to the parcel."
+      shipmentRef:
+        type: "string"
+        example: "Esb20gpHBL94X5NdMp3C"
+        description: "The reference to the shipment belonging to the handoverjob"
+      orderDate:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "The date this order was created at the supplying system."
+      carrierRef:
+        type: "string"
+      channel:
+        type: "string"
+        enum:
+          - "DELIVERY"
+          - "COLLECT"
+      carrierLogoUrl:
+        type: "string"
+        description: "The URL to the carrier logo"
+      carrierTrackingNumber:
+        type: "string"
+        description: "Tracking number for the created shipment"
+      shortIdentifier:
+        type: "string"
+        description: "The short identifier of the shipment."
+      loadUnitRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: "Reference to array of load unit Refs"
+      processId:
+        type: "string"
+        description: "Id of the global process related to this entity. For example used for starting the GDPR process and others."
   StrippedHandoverjob:
     allOf:
       - $ref: "#/definitions/VersionedResource"
@@ -5320,19 +6172,57 @@ definitions:
       - "OPEN"
       - "HANDED_OVER"
   ShipmentForCreation:
-    description: "A Shipment can be created providing a pickjob reference."
-    type: "object"
     required:
-      - "pickJobRef"
+      - "facilityRef"
+      - "targetTime"
+      - "targetAddress"
+      - "tenantOrderId"
+      - "orderDate"
     properties:
+      facilityRef:
+        type: string
+        description: "The reference to the facility which the shipment is assigned to."
+      sourceAddress:
+        $ref: "#/definitions/FacilityAddress"
+        description: "The address of the facility where the shipment is picked up from."
+      targetAddress:
+        $ref: "#/definitions/ConsumerAddress"
+        description: "The address of the target where the shipment is delivered to."
+      tenantOrderId:
+        type: string
+        description: "Reference to the order in the tenant system."
+      orderDate:
+        type: string
+        format: "date-time"
+        description: "The date this order was created at the supplying system."
       pickJobRef:
         type: "string"
-        example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
-        description: "The reference to the pickjob for which the shipment is assigned to"
+        example: "Esb20gpHBL94X5NdMp3C"
+        description: "The id of the facility reference."
+      targetTime:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T09:45:51.525Z"
+        description: "At which time the result is expected."
       carrierRef:
         type: "string"
         example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
         description: "The reference to the carrier for which the shipment is assigned to"
+      shortIdentifier:
+        type: "string"
+        description: "The short identifier of the shipment."
+      returnNoteUrl:
+        type: "string"
+        description: "The url to the return note of the shipment."
+      packingSlipUrl:
+        type: "string"
+        description: "The url to the packing slip of the shipment."
+      carrierLogoUrl:
+        type: "string"
+        description: "The URL to the carrier logo"
+      processId:
+        type: "string"
+        description: "Id of the global process related to this entity. For example used for starting the GDPR process and others."
   Shipment:
     allOf:
       - $ref: "#/definitions/ShipmentForCreation"
@@ -5340,9 +6230,6 @@ definitions:
       - required:
           - "id"
           - "status"
-          - "pickJobRef"
-          - "facilityRef"
-          - "targetTime"
           - "hasActiveCarrier"
         type: "object"
         properties:
@@ -5352,21 +6239,12 @@ definitions:
             description:
               "The id of this Shipment. It is generated during creation automatically and suits as the primary
               identifier of the described entity."
-          facilityRef:
-            type: "string"
-            example: "Esb20gpHBL94X5NdMp3C"
-            description: "The id of the facility reference."
           status:
             $ref: "#/definitions/ShipmentStatus"
           parcels:
             type: "array"
             items:
               $ref: "#/definitions/StrippedParcel"
-          targetTime:
-            type: "string"
-            format: "date-time"
-            example: "2020-02-03T09:45:51.525Z"
-            description: "At which time the result is expected."
           anonymized:
             type: "boolean"
             example: false
@@ -5424,12 +6302,12 @@ definitions:
         type: "string"
         format: "date-time"
         example: "2020-02-03T08:45:51.525Z"
-        description: "The date this order was created at the platform. This value is generated by the service."
+        description: "The date this entity was created at the platform. This value is generated by the service."
       lastModified:
         type: "string"
         format: "date-time"
         example: "2020-02-03T09:45:51.525Z"
-        description: "The date this order was modified last. This value is generated by the service."
+        description: "The date this entity was modified last. This value is generated by the service."
 
   Entity:
     type: "object"
@@ -5490,6 +6368,11 @@ definitions:
       - "OPEN"
       - "IN_PROGRESS"
       - "CLOSED"
+      - "PICKED"
+      - "REROUTED"
+      - "PACKABLE"
+      - "REROUTING"
+      - "RESTOWED"
     description: "A pickjob initially has the status OPEN and picking can start. When picking has started, the pickjob changes its status to IN_PROGRESS. After a pickjob has been completely picked its status becomes CLOSED."
     xml:
       name: "PickJobStatus"
@@ -5659,6 +6542,7 @@ definitions:
           - "ModifyOrderSplit"
           - "ModifyPrioritization"
           - "ModifyLoadUnitType"
+          - "ModifyFeature"
         example: "<Use the corresponding action, see documentation>"
         description: ""
     xml:
@@ -5858,6 +6742,11 @@ definitions:
             minimum: 0
             example: 20
             description: "The amount of articles that were picked for this pickline."
+          substituteLineItems:
+            description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+            type: "array"
+            items:
+              $ref: "#/definitions/SubstituteLineItemForCreation"
           status:
             $ref: "#/definitions/PickLineItemStatus"
           id:
@@ -5868,6 +6757,7 @@ definitions:
               identifier of the described entity."
     xml:
       name: "ModifyPickLineItemAction"
+
   ModifyAddress:
     type: "object"
     properties:
@@ -6026,6 +6916,10 @@ definitions:
             type: "string"
             example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
             description: "The reference to the carrier for which the shipment is assigned to"
+          pickJobRef:
+            type: "string"
+            example: "ca525716-7208-4a63-a2a6-11274eb37f67-0"
+            description: "The reference to the pickjob for which the shipment is assigned to"
         additionalProperties: false
     xml:
       name: "ModifyShipmentAction"
@@ -6180,11 +7074,35 @@ definitions:
               $ref: "#/definitions/OrderArticleAttributeItem"
     xml:
       name: "PickLineItemArticle"
+
+  HandoverLineItemArticle:
+    allOf:
+      - $ref: "#/definitions/AbstractArticle"
+      - type: "object"
+        properties:
+          attributes:
+            type: "array"
+            items:
+              $ref: "#/definitions/OrderArticleAttributeItem"
+    xml:
+      name: "HandoverLineItemArticle"
+
+  SubstituteLineItemArticle:
+    allOf:
+      - $ref: "#/definitions/AbstractArticle"
+      - type: "object"
+        properties:
+          attributes:
+            type: "array"
+            items:
+              $ref: "#/definitions/OrderArticleAttributeItem"
+    xml:
+      name: "SubstituteLineItemArticle"
+
   CarrierForCreation:
     type: "object"
     required:
       - "name"
-      - "credentials"
       - "key"
     properties:
       name:
@@ -6193,6 +7111,8 @@ definitions:
         description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
       key:
         type: "string"
+        example: "DHL"
+        description: "References the KEP. Currently allowed values are DHL, DPD and CUSTOM."
       status:
         $ref: "#/definitions/CarrierStatus"
       lifecycle:
@@ -6270,12 +7190,21 @@ definitions:
         description: "ID that references the configured carrier."
       deliveryType:
         $ref: "#/definitions/CarrierDeliveryType"
+
   FacilityCarrierConnectionForModification:
-    allOf:
-      - $ref: "#/definitions/FacilityCarrierConnectionForCreation"
     properties:
       version:
         type: number
+      name:
+        type: "string"
+        example: "DHL Köln"
+        description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
+      status:
+        $ref: "#/definitions/CarrierStatus"
+      cutoffTime:
+        $ref: "#/definitions/CutoffTime"
+    additionalProperties: false
+
   FacilityCarrierConnectionForCreation:
     properties:
       name:
@@ -6370,20 +7299,22 @@ definitions:
       - "name"
     properties:
       name:
-        type: string
-        enum:
-          - "FULFILLER"
-          - "SUPERVISOR"
-          - "ADMINISTRATOR"
+        $ref: "#/definitions/UserRoleNames"
       facilities:
         type: array
-        example: ["0T1vKaEar0nuG58CxzA5"]
+        example: [ "0T1vKaEar0nuG58CxzA5" ]
         description: "List of facility Ids that the user is assigned to"
         minItems: 0
         maxItems: 1
-        default: []
+        default: [ ]
         items:
           type: "string"
+  UserRoleNames:
+    type: string
+    enum:
+      - "FULFILLER"
+      - "SUPERVISOR"
+      - "ADMINISTRATOR"
   CustomClaims:
     type: "object"
     required:
@@ -6602,22 +7533,55 @@ definitions:
           shipping:
             type: object
             properties:
+              carrierKey:
+                type: "string"
+                description: "Key name of the carrier that handles pickjob request."
               recipientaddress:
                 $ref: "#/definitions/ConsumerAddress"
+              identifier:
+                type: "string"
+                description: "Includes information on how to identify Ship from Store recipient (Name, PIN, Reference number, ...)"
   PickjobDeliveryInformation:
     allOf:
       - $ref: "#/definitions/PickjobDeliveryInformationForCreation"
       - required:
           - "targetTime"
           - "channel"
+  ReturnJobForCreation:
+    type: "object"
+    required:
+      - "returnLines"
+    properties:
+      processId:
+        type: "string"
+        description: "Id of the global process related to this entity. For example used for starting the GDPR process and others."
+      tenantOrderId:
+        type: "string"
+      orderRef:
+        type: "string"
+        example: "LGMl2DuvPnfPoSHhYFOm"
+        description: "The id of the order"
+      status:
+        $ref: "#/definitions/ReturnStatus"
+      returnLines:
+        type: "array"
+        items:
+          $ref: "#/definitions/ReturnLine"
+        minItems: 1
+      consumerAddress:
+        $ref: "#/definitions/ConsumerAddress"
+        description: "The address of the customer where the shipment is delivered to."
+      facilityAddress:
+        $ref: "#/definitions/FacilityAddress"
+        description: "The address of the facility where the return should deliver to."
+      carrierTrackingNumber:
+        type: "string"
+        example: "84168117830018"
   ReturnJob:
     allOf:
+      - $ref: "#/definitions/ReturnJobForCreation"
       - $ref: "#/definitions/VersionedResource"
       - required:
-          - "orderRef"
-          - "tenantOrderId"
-          - "status"
-          - "returnLines"
           - "id"
         type: "object"
         properties:
@@ -6625,27 +7589,17 @@ definitions:
             type: "string"
             example: "Esb20gpHBL94X5NdMp3C"
             description: "The id of this returnJob. It is generated during creation automatically and suits as the primary identifier of the described entity."
-          tenantOrderId:
-            type: "string"
-          orderRef:
-            type: "string"
-            example: "LGMl2DuvPnfPoSHhYFOm"
-            description: "The id of the order that lead to the creation of this pickjob. Can be empty / not present when the pickjob was created without having an order."
-          status:
-            $ref: "#/definitions/ReturnStatus"
-          returnLines:
-            type: "array"
-            items:
-              $ref: "#/definitions/ReturnLine"
-              minItems: 1
+            minItems: 1
           anonymized:
             type: "boolean"
             example: false
             description: "Indicates if gdpr related data was anonymized"
+    xml:
+      name: "ReturnJob"
   ReturnLine:
     type: "object"
     properties:
-      pickjobRefs:
+      pickJobRefs:
         type: "array"
         minItems: 1
         items:
@@ -6675,10 +7629,9 @@ definitions:
       status:
         $ref: "#/definitions/ReturnLineStatus"
     required:
-      - "pickjobRefs"
+      - "pickJobRefs"
       - "id"
       - "status"
-      - "items"
       - "delivered"
       - "returned"
       - "scannableCodes"
@@ -6955,6 +7908,7 @@ definitions:
     description: "The type of economical split"
     xml:
       name: "EconomicalSplitType"
+
   RoutingPlan:
     allOf:
       - $ref: "#/definitions/VersionedResource"
@@ -6988,6 +7942,24 @@ definitions:
         type: "string"
         example: "Esb20gpHBL94X5NdMp3C"
         description: "The id of the pickjob that has been created from the routing plan."
+      reRoutedPickJobRef:
+        type: "string"
+        example: "Eghhj20878dhbd989NdMp3C"
+        description: "The id of the original pickjob that was rerouted."
+      reRoutedFacilityRef:
+        type: "string"
+        example: "1DEYZgmfAcXRVYv6KEka36"
+        description: "The id of the facility the order was rerouted from."
+      reRouteReason:
+        $ref: "#/definitions/RerouteReason"
+      runType:
+        type: "string"
+        enum:
+          - "DEFAULT"
+          - "REROUTE"
+        description: "The rule type of a decision log entry"
+      targetAddress:
+        $ref: "#/definitions/TargetAddress"
       orderDate:
         type: "string"
         format: "date-time"
@@ -7020,12 +7992,21 @@ definitions:
       orderLineItems:
         type: "array"
         items:
-          $ref: "#/definitions/OrderLineItem"
+          $ref: "#/definitions/RoutingPlanLineItem"
       finalizeRun:
         type: "number"
         minimum: 0
         example: 5
         description: "The iteration through the finalizer process"
+      facilityBlackList:
+        type: "array"
+        items:
+          type: "string"
+          description: "Contains a list of facilities to ignore when rerouting happens."
+      anonymized:
+        type: "boolean"
+        example: false
+        description: "Indicates if gdpr related data was anonymized"
   DecisionLogRef:
     required:
       - "url"
@@ -7038,7 +8019,7 @@ definitions:
         description: "The iteration through the finalizer process"
       url:
         type: "string"
-        example: "/api/routingplans/{routingPlaId}/decisionlogs/{decisionLogId}"
+        example: "/api/routingplans/{routingPlanId}/decisionlogs/{decisionLogId}"
         description: "A reference to the finalizer decision log"
     type: "object"
     xml:
@@ -7049,6 +8030,7 @@ definitions:
       - $ref: "#/definitions/VersionedResource"
     required:
       - "id"
+      - "routingPlanRef"
       - "finalizeRun"
       - "created"
       - "lastModified"
@@ -7058,6 +8040,8 @@ definitions:
     type: "object"
     properties:
       id:
+        type: "string"
+      routingPlanRef:
         type: "string"
       finalizeRun:
         type: "number"
@@ -7149,6 +8133,7 @@ definitions:
       - "NOT_ROUTABLE"
       - "MANUAL_PLANNED"
       - "FAILED"
+      - "REDUNDANT_REROUTE"
     description: "A routing plan line initially has the status INITIAL. Final state is ROUTED"
     xml:
       name: "ReturnItemStatus"
@@ -7288,6 +8273,9 @@ definitions:
       - "TURNOVER"
       - "STOCK-AVAILABILITY"
       - "WORKLOAD-BALANCING"
+      - "MATCHING-BUSINESSTYPE"
+      - "PREFER-STORE"
+      - "PREFER-WAREHOUSE"
     xml:
       name: "RatingImplementation"
 
@@ -7526,6 +8514,11 @@ definitions:
           $ref: "#/definitions/AbstractModificationAction"
     xml:
       name: "RoutingConfigurationsPatchActions"
+  RerouteReason:
+    type: "string"
+    enum:
+      - "MANUAL"
+      - "SHORTPICK"
   RerouteRoutingPlan:
     type: "object"
     properties:
@@ -7714,6 +8707,8 @@ definitions:
         description: "Config to enable/disable infinite stock"
 
   ReturnConfiguration:
+    required:
+      - "active"
     allOf:
       - $ref: "#/definitions/VersionedResource"
     properties:
@@ -7721,8 +8716,6 @@ definitions:
         type: boolean
         default: true
         description: "Enable or disable returns"
-    required:
-      - "active"
 
   ReturnNoteConfiguration:
     properties:
@@ -7735,6 +8728,17 @@ definitions:
         items:
           type: string
 
+  DomainConfiguration:
+    required:
+      - value
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    properties:
+      value:
+        type: "string"
+        example: "yourDomain.com"
+        description: "User's default domain for authentication"
+
   LoadUnitConfiguration:
     allOf:
       - $ref: "#/definitions/VersionedResource"
@@ -7744,7 +8748,6 @@ definitions:
         description: "Max creatable count of load units per load unit type"
         example: 20
         default: 20
-
   SubstitutesForUpsert:
     type: "object"
     required:
@@ -7769,7 +8772,10 @@ definitions:
     type: "object"
     required:
       - "title"
+      - "tenantArticleId"
     properties:
+      tenantArticleId:
+        type: string
       title:
         type: string
       imageUrl:
@@ -7893,3 +8899,355 @@ definitions:
         description: "Toggle for substitution articles."
         example: false
         default: true
+
+  WebHookEvent:
+    required:
+      - "event"
+      - "eventId"
+    type: "object"
+    properties:
+      event:
+        description: "The type of the send event"
+        type: "string"
+      eventId:
+        description: "The id of the event"
+        type: "string"
+
+  OrderCreatedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Order"
+
+  FacilityCreatedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Facility"
+
+  PickjobCreatedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/PickJob"
+
+  PickjobPickingCommencedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/PickJob"
+
+  PickjobPickingPausedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/PickJob"
+
+  PickjobPickingFinishedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/PickJob"
+
+  PickjobPickLinePickedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+      - "pickJobRef"
+    properties:
+      pickJobRef:
+        type: "string"
+      payload:
+        $ref: "#/definitions/PickLineItem"
+
+  ParcelCarrierAcknowledgedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Parcel"
+
+  HandoverJobCreatedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Handoverjob"
+
+  HandoverJobHandedOverWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Handoverjob"
+
+  HandoverJobRevertedWebHookEvent:
+    allOf:
+      - $ref: "#/definitions/WebHookEvent"
+    required:
+      - "payload"
+    properties:
+      payload:
+        $ref: "#/definitions/Handoverjob"
+
+  FeatureStatus:
+    type: "string"
+    enum:
+      - "enabled"
+      - "inactive"
+      - "disabled"
+  Features:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      features:
+        type: array
+        items:
+          $ref: "#/definitions/Feature"
+  Feature:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "name"
+      - "status"
+    properties:
+      name:
+        type: "string"
+      status:
+        $ref: "#/definitions/FeatureStatus"
+
+  ArtifactMetadataItems:
+    required:
+      - "artifacts"
+      - "platform"
+    properties:
+      artifacts:
+        type: array
+        items:
+          $ref: "#/definitions/ArtifactMetadataItem"
+      platform:
+        type: string
+        example: "android"
+        description: "Platform name for which the artifact list is generated"
+
+  ArtifactMetadataItem:
+    required:
+      - "download"
+      - "versionCode"
+      - "versionName"
+      - "buildDate"
+    properties:
+      download:
+        type: "object"
+        properties:
+          expiration:
+            type: "string"
+            format: "date-time"
+            example: "2020-02-03T08:45:50.525Z"
+            description: "Expiration date of the download link"
+          url:
+            type: "string"
+            description: "URL for the download of the artifact"
+      versionCode:
+        type: "number"
+        example: 42
+        description: "Version Code of the artifact"
+      versionName:
+        type: "string"
+        example: "1.0.42"
+        description: "Version Name of the artifact"
+      buildDate:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "Date of the build of the artifact"
+
+  ModifyFeatureAction:
+    allOf:
+      - $ref: "#/definitions/AbstractModificationAction"
+      - required:
+          - "action"
+          - "status"
+        type: "object"
+        properties:
+          action:
+            type: "string"
+            enum:
+              - "ModifyFeature"
+            description: "Use value 'ModifyFeature', because you want to modify a Feature"
+          status:
+            $ref: "#/definitions/FeatureStatus"
+            description: "The state of the feature we want to change."
+        additionalProperties: false
+    xml:
+      name: "ModifyFeatureAction"
+  FeaturePatchActions:
+    type: "object"
+    required:
+      - "version"
+      - "actions"
+    properties:
+      version:
+        type: "integer"
+        format: "int64"
+        example: 42
+        description: "The version of the document to be used in optimistic locking mechanisms."
+      actions:
+        type: "array"
+        minItems: 1
+        items:
+          $ref: "#/definitions/ModifyFeatureAction"
+    xml:
+      name: "FeaturePatchActions"
+
+  ScopedCapabilities:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      capabilities:
+        type: array
+        items:
+          $ref: "#/definitions/ScopedCapability"
+  CapabilityStatus:
+    type: "string"
+    enum:
+      - "enabled"
+      - "inactive"
+      - "disabled"
+
+  ScopedCapability:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "name"
+      - "status"
+    properties:
+      name:
+        type: "string"
+      status:
+        $ref: "#/definitions/CapabilityStatus"
+      currentUserPermissions:
+        type: "array"
+        items:
+          type: "string"
+
+  RerouteConfigurations:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "clickAndCollectReroute"
+      - "shipFromStoreReroute"
+    properties:
+      clickAndCollectReroute:
+        $ref: "#/definitions/ClickAndCollectRerouteConfiguration"
+      shipFromStoreReroute:
+        $ref: "#/definitions/ShipFromStoreRerouteConfiguration"
+      restowAfterMinutes:
+        type: "number"
+        example: "60"
+        description: "The amount of minutes after which an automated restow is executed"
+      blacklistAssignedFacilities:
+        type: "boolean"
+        default: false
+        description: "Does not consider facilities which previously owned the pickjob during routing."
+  ClickAndCollectRerouteConfiguration:
+    required:
+      - "active"
+    properties:
+      active:
+        type: "boolean"
+  ShipFromStoreRerouteConfiguration:
+    required:
+      - "active"
+      - "facilityWideRerouteOnShortPick"
+    properties:
+      active:
+        type: "boolean"
+      facilityWideRerouteOnShortPick:
+        type: "boolean"
+      rerouteTargetTime:
+        type: "number"
+        example: "48"
+        description: "Only pickJobs where the targetTime in not larger than now plus this number are rerouted"
+      allowManualReroute:
+        type: "boolean"
+        default: false
+        description: "Allows reroute to be triggered manually via api."
+
+  Process:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "gdprCleanupDate"
+      - "id"
+    properties:
+      id:
+        type: "string"
+      gdprCleanupDate:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "The date that defines when the entities will be anonymized."
+      tenantOrderId:
+        type: "string"
+        description: ""
+      orderRef:
+        type: "string"
+        description: ""
+      pickJobRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: ""
+      shipmentRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: ""
+      handoverJobRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: ""
+      returnRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: ""
+      isAnonymized:
+        type: "boolean"
+        description: "Indicates if the entities are already anonymized."
+      flatRefs:
+        type: "array"
+        items:
+          type: "string"
+        description: "This field is used to search all arrays at once."
