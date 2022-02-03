@@ -3880,15 +3880,15 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-  /api/configurations/routing/reroute:
+  /api/configurations/routing/rerouteshortpick:
     get:
       tags:
         - "Configurations"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
-      summary: "Get a tenant reroute config"
+      summary: "Get a tenant reroute short pick config"
       security:
         - firebase: [ ]
-      operationId: "getRerouteConfiguration"
+      operationId: "getRerouteShortPickConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -3898,9 +3898,9 @@ paths:
         - "application/json"
       responses:
         200:
-          description: "Reroute configuration was found & you were allowed to access it. The result is in the body."
+          description: "Reroute short pick configuration was found & you were allowed to access it. The result is in the body."
           schema:
-            $ref: "#/definitions/RerouteConfigurations"
+            $ref: "#/definitions/RerouteShortPickConfiguration"
         401:
           description: "Your user is not allowed to operate against this API instance"
           schema:
@@ -3919,11 +3919,11 @@ paths:
     put:
       tags:
         - "Configurations"
-      summary: "Update reroute configuration of a tenant"
+      summary: "Update reroute short pick configuration of a tenant"
       description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
       security:
         - firebase: [ ]
-      operationId: "putRerouteConfiguration"
+      operationId: "putRerouteShortPickConfiguration"
       x-google-backend:
         path_translation: "APPEND_PATH_TO_ADDRESS"
         address: "https://http-api%%ENDPOINT_SUFFIX%%"
@@ -3936,12 +3936,90 @@ paths:
           name: "body"
           required: true
           schema:
-            $ref: "#/definitions/RerouteConfigurations"
+            $ref: "#/definitions/RerouteShortPickConfiguration"
       responses:
         200:
-          description: "Reroute configuration was written successfully"
+          description: "Reroute short pick configuration was written successfully"
           schema:
-            $ref: "#/definitions/RerouteConfigurations"
+            $ref: "#/definitions/RerouteShortPickConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Reroute short pick configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/configurations/routing/reroutetimetriggered:
+    get:
+      tags:
+        - "Configurations"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      summary: "Get a tenant reroute time triggered config"
+      security:
+        - firebase: [ ]
+      operationId: "getRerouteTimeTriggeredConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Reroute time triggered configuration was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/RerouteTimeTriggeredConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Reroute configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Update reroute time triggered configuration of a tenant"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "putRerouteTimeTriggeredConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/RerouteTimeTriggeredConfiguration"
+      responses:
+        200:
+          description: "Reroute time triggered configuration was written successfully"
+          schema:
+            $ref: "#/definitions/RerouteTimeTriggeredConfiguration"
         401:
           description: "Your user is not allowed to operate against this API instance"
           schema:
@@ -5472,8 +5550,6 @@ definitions:
             $ref: "#/definitions/PickJobStatus"
           deliveryinformation:
             $ref: "#/definitions/PickjobDeliveryInformation"
-          preReRoutedPickJobState:
-            $ref: "#/definitions/PickJobStatus"
   StrippedPickJob:
     allOf:
       - $ref: "#/definitions/VersionedResource"
@@ -6323,7 +6399,6 @@ definitions:
       - "REROUTED"
       - "PACKABLE"
       - "REJECTED"
-      - "REROUTING"
       - "RESTOWED"
     description: "A pickjob initially has the status OPEN and picking can start. When picking has started, the pickjob changes its status to IN_PROGRESS. After a pickjob has been completely picked its status becomes CLOSED."
     xml:
@@ -8472,6 +8547,7 @@ definitions:
     enum:
       - "MANUAL"
       - "SHORTPICK"
+      - "TIMETRIGGERED"
   RerouteRoutingPlan:
     type: "object"
     properties:
@@ -9113,7 +9189,7 @@ definitions:
         items:
           type: "string"
 
-  RerouteConfigurations:
+  RerouteShortPickConfiguration:
     allOf:
       - $ref: "#/definitions/VersionedResource"
     required:
@@ -9132,6 +9208,23 @@ definitions:
         type: "boolean"
         default: false
         description: "Does not consider facilities which previously owned the pickjob during routing."
+
+  RerouteTimeTriggeredConfiguration:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "rerouteAfterMinutes"
+      - "active"
+    properties:
+      rerouteAfterMinutes:
+        type: "number"
+        example: "60"
+        default: 1440
+        minimum: 5
+        description: "The amount of minutes after which an automated reroute is executed"
+      active:
+        type: "boolean"
+
   ClickAndCollectRerouteConfiguration:
     required:
       - "active"
