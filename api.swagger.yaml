@@ -859,6 +859,92 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/configurations/pickingtimes:
+    get:
+      tags:
+        - "Configurations"
+      summary: "Get the current configuration for tenant wide default picking times"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getDefaultPickingTimesConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Picking Times config found."
+          schema:
+            $ref: "#/definitions/DefaultPickingTimesConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Change the tenant wide default picking times configuration"
+      description: ""
+      security:
+        - firebase: [ ]
+      operationId: "putDefaultPickingTimesConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Desired default picking times configuration to create/update"
+          required: true
+          schema:
+            $ref: "#/definitions/DefaultPickingTimesConfiguration"
+      responses:
+        200:
+          description: "The default picking times configuration was successfully updated."
+          schema:
+            $ref: "#/definitions/DefaultPickingTimesConfiguration"
+        400:
+          description: "Invalid input. See response for details"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        409:
+          description: "Configuration version conflict"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/orders:
     post:
       tags:
@@ -5227,6 +5313,14 @@ definitions:
         example: "K12345"
       address:
         $ref: "#/definitions/FacilityAddressForCreation"
+      pickingTimes:
+        description: "Time ranges defining the picking times per weekday. No overlapping ranges are allowed"
+        $ref: "#/definitions/PickingTimes"
+      closingDays:
+        type: "array"
+        items:
+          $ref: "#/definitions/ClosingDay"
+        description: "Days of the year where the facility is closed and doesn't allows picking"
       contact:
         type: "object"
         required:
@@ -5477,6 +5571,82 @@ definitions:
             type: "array"
             items:
               $ref: "#/definitions/LinkedConfiguration"
+
+  PickingTimes:
+    type: "object"
+    description: "There must be no overlaps for time ranges on a day"
+    properties:
+      monday:
+        type: array
+        items:
+          $ref: "#/definitions/TimeRange"
+      tuesday:
+        type: array
+        items:
+          $ref: "#/definitions/TimeRange"
+      wednesday:
+        type: array
+        items:
+          $ref: "#/definitions/TimeRange"
+      thursday:
+        type: array
+        items:
+          $ref: "#/definitions/TimeRange"
+      friday:
+        type: array
+        items:
+          $ref: "#/definitions/TimeRange"
+      saturday:
+        type: array
+        items:
+          $ref: "#/definitions/TimeRange"
+      sunday:
+        type: array
+        items:
+          $ref: "#/definitions/TimeRange"
+
+  TimeRange:
+    type: "object"
+    required:
+      - "start"
+      - "end"
+    properties:
+      start:
+        $ref: "#/definitions/TimeStamp"
+      end:
+        $ref: "#/definitions/TimeStamp"
+
+  TimeStamp:
+    type: "object"
+    required:
+      - "hour"
+      - "minute"
+    properties:
+      hour:
+        type: "number"
+        minimum: 0
+        maximum: 23
+      minute:
+        type: "number"
+        minimum: 0
+        maximum: 59
+
+  ClosingDay:
+    type: "object"
+    description: "At this day the facility is closed and does not do picking"
+    required:
+      - "reason"
+      - "date"
+    properties:
+      reason:
+        type: "string"
+        description: "The reason why the Facility is closed on this day"
+      date:
+        type: "string"
+        format: "date-time"
+        example: "2020-02-03T09:45:51.525Z"
+        description: "The day at which the Facility is closed"
+
   PickJobForCreation:
     type: "object"
     required:
@@ -6925,6 +7095,14 @@ definitions:
           customAttributes:
             type: "object"
             description: "Attributes that can be added to the facility. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+          pickingTimes:
+            description: "Time ranges defining the picking times per weekday. No overlapping ranges are allowed"
+            $ref: "#/definitions/PickingTimes"
+          closingDays:
+            type: "array"
+            items:
+              $ref: "#/definitions/ClosingDay"
+            description: "Days of the year where the facility is closed and doesn't allows picking"
         additionalProperties: false
     xml:
       name: "ModifyFacilityAction"
@@ -8931,6 +9109,16 @@ definitions:
         description: "Toggle for substitution articles."
         example: false
         default: true
+
+  DefaultPickingTimesConfiguration:
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - pickingTimes
+    properties:
+      pickingTimes:
+        description: "The default picking times are Mo-Sa 09:00-17:00"
+        $ref: "#/definitions/PickingTimes"
 
   WebHookEvent:
     required:
