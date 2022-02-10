@@ -5962,7 +5962,26 @@ definitions:
         type: number
         example: 6.960279
         description: "Longitude value"
-
+  TimeZone:
+    required:
+      - "timeZoneId"
+      - "timeZoneName"
+      - "offsetInSeconds"
+    type: "object"
+    description: "Timezone for information retrieved e.g. by the Google Maps API"
+    properties:
+      timeZoneId:
+        type: "string"
+        example: "America/Los_Angeles"
+        description: "official id of the timezone"
+      timeZoneName:
+        type: "string"
+        example: "Pacific Standard Time"
+        description: "descriptive name of the timezone"
+      offsetInSeconds:
+        type: "number"
+        example: 28800
+        description: "offset in seconds to standard time"
   Address:
     required:
       - "street"
@@ -6083,6 +6102,9 @@ definitions:
           resolvedCoordinates:
             description: "The resolved location of this facility - optional read-only property that is filled when the facility is first used in routing calculations"
             $ref: "#/definitions/Coordinates"
+          resolvedTimeZone:
+            description: "The resolved timezone of this facility - optional read-only property that is filled when the facility is first used in routing calculations"
+            $ref: "#/definitions/TimeZone"
 
   Parcel:
     allOf:
