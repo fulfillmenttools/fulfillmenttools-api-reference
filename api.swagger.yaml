@@ -7461,18 +7461,26 @@ definitions:
         $ref: "#/definitions/CarrierDeliveryType"
 
   FacilityCarrierConnectionForModification:
-    properties:
-      version:
-        type: number
-      name:
-        type: "string"
-        example: "DHL Köln"
-        description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
-      status:
-        $ref: "#/definitions/CarrierStatus"
-      cutoffTime:
-        $ref: "#/definitions/CutoffTime"
-    additionalProperties: false
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+      - required:
+          - "version"
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            example: "DHL Köln"
+            description: "This is the well known name for a supported CEP partner. Can be adapted to the clients needs."
+          status:
+            $ref: "#/definitions/CarrierStatus"
+          cutoffTime:
+            $ref: "#/definitions/CutoffTime"
+          version:
+            type: "integer"
+            format: "int64"
+            example: 42
+            description: "The version of the document to be used in optimistic locking mechanisms."
+        additionalProperties: false
 
   FacilityCarrierConnectionForCreation:
     properties:
