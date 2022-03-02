@@ -4769,7 +4769,7 @@ paths:
           type: "string"
         - in: "query"
           name: "size"
-          description: "number of facilities to show"
+          description: "number of loadUnits to show"
           required: false
           type: "integer"
           default: 25
@@ -5175,6 +5175,230 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/measurementunits:
+    post:
+      tags:
+        - "Measurement"
+      summary: "Create measurementUnit"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "createMeasurementUnit"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/MeasurementUnitForCreation"
+      responses:
+        201:
+          description: "Successfully created the measurementUnit."
+          schema:
+            $ref: "#/definitions/MeasurementUnit"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+    get:
+      tags:
+        - "Measurement"
+      summary: "Get all measurementUnits"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getAllMeasurementUnits"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "startAfterId"
+          description: "all entities after given Id"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "size"
+          description: "number of measurementUnits to show"
+          required: false
+          type: "integer"
+          default: 25
+        - in: "query"
+          name: "key"
+          description: "key of the measurementUnit"
+          required: false
+          type: "string"
+        - in: "query"
+          name: "locale"
+          description: "Provide the localized names for the measurementUnit. If not provided the default locale is used., for example de_DE, <center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br><i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>."
+          type: string
+      responses:
+        200:
+          description: "The found measurementUnit."
+          schema:
+            $ref: "#/definitions/MeasurementUnits"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/measurementunits/{measurementUnitId}:
+    get:
+      tags:
+        - "Measurement"
+      summary: "Get a measurementUnit by its ID"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getMeasurementUnitByID"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "measurementUnitId"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "The found measurementUnit."
+          schema:
+            $ref: "#/definitions/MeasurementUnit"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Measurement"
+      summary: "Update measurementUnit"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "updateMeasurementUnit"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "measurementUnitId"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/MeasurementUnitForCreation"
+      responses:
+        200:
+          description: "Successfully updated the measurementUnit."
+          schema:
+            $ref: "#/definitions/MeasurementUnit"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+    delete:
+      tags:
+        - "Measurement"
+      summary: "Delete measurementUnit"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "deleteMeasurementUnit"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      parameters:
+        - in: "path"
+          name: "measurementUnitId"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successfully deleted the measurementUnit."
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
 securityDefinitions:
   firebase:
     authorizationUrl: ""
@@ -5337,6 +5561,10 @@ definitions:
         minimum: 1
         example: 21
         description: "quantity of the specific article that has been ordered"
+      measurementUnitKey:
+        type: "string"
+        example: "liter"
+        description: "Identifier for items unit of measurement."
       scannableCodes:
         type: "array"
         items:
@@ -5927,6 +6155,10 @@ definitions:
         minimum: 1
         example: 21
         description: "quantity of the specific article that has been ordered"
+      measurementUnitKey:
+        type: "string"
+        example: "liter"
+        description: "Identifier for items unit of measurement."
       scannableCodes:
         type: "array"
         items:
@@ -8939,8 +9171,9 @@ definitions:
     additionalProperties:
       type: string
     example:
-      en_US: Hello!
-      de_DE: Hallo!
+      en_US: Value
+      de_DE: Wert
+      ru_RU: значение
 
   SupportedLocales:
     type: "array"
@@ -9673,3 +9906,62 @@ definitions:
         items:
           type: "string"
         description: "This field is used to search all arrays at once."
+
+  MeasurementUnitForCreation:
+    additionalProperties: false
+    required:
+      - "nameLocalized"
+      - "abbreviationLocalized"
+      - "key"
+    properties:
+      key:
+        type: "string"
+        example: "kilogramm"
+        description: "Descriptor for the measurement unit"
+      abbreviationLocalized:
+        $ref: "#/definitions/LocaleString"
+        description: "Abbreviation of the unit. Maximum 4 chars long."
+      nameLocalized:
+        $ref: "#/definitions/LocaleString"
+      requiresMeasurement:
+        type: "boolean"
+        example: true
+        description: "Indicates that the given unit need to be measured."
+
+  MeasurementUnit:
+    allOf:
+      - $ref: "#/definitions/MeasurementUnitForCreation"
+      - $ref: "#/definitions/VersionedResource"
+    additionalProperties: false
+    required:
+      - "id"
+    properties:
+      id:
+        type: string
+        example: "c5300790-9477-475c-bd6d-98e5d61f6413"
+      name:
+        type: string
+        example: "kilogramm"
+        description: "Translated name of the measurement unit"
+      abbreviation:
+        type: string
+        example: "kg"
+        description: "Translated abbreviation of the measurement unit"
+  MeasurementUnits:
+    properties:
+      total:
+        type: "integer"
+        example: 42
+        description: "Total number of found entities for this query"
+      measurementUnits:
+        type: array
+        items:
+          $ref: "#/definitions/MeasurementUnit"
+
+
+
+
+
+
+
+
