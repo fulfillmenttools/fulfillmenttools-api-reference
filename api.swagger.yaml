@@ -2357,6 +2357,11 @@ paths:
           type: "boolean"
           required: false
         - in: "query"
+          name: "username"
+          description: "Reference to the username of the editor to get the corresponding pickjobs"
+          type: "string"
+          required: false
+        - in: "query"
           name: "startAfterId"
           description: "all entities after given Id"
           required: false
@@ -6160,6 +6165,10 @@ definitions:
         description: "The id of the facility reference. The given ID has to be present in the system."
       status:
         $ref: "#/definitions/PickJobStatus"
+      shortId:
+        type: "string"
+        example: "AS12"
+        description: "A short identifier that helps assigning a pick job to a customer."
       pickLineItems:
         type: "array"
         minItems: 1
@@ -6204,6 +6213,19 @@ definitions:
             $ref: "#/definitions/PickJobStatus"
           deliveryinformation:
             $ref: "#/definitions/PickjobDeliveryInformation"
+          editor:
+            $ref: "#/definitions/Editor"
+  Editor:
+    required:
+      - "userId"
+      - "username"
+    properties:
+      userId:
+        type: "string"
+        description: "ID of the user who edits the pickjob"
+      username:
+        type: "string"
+        description: "username of the user who edits the pickjob"
   StrippedPickJob:
     allOf:
       - $ref: "#/definitions/VersionedResource"
@@ -7083,6 +7105,7 @@ definitions:
       - "PACKABLE"
       - "REJECTED"
       - "RESTOWED"
+      - "EXPIRED"
     description: "A pickjob initially has the status OPEN and picking can start. When picking has started, the pickjob changes its status to IN_PROGRESS. After a pickjob has been completely picked its status becomes CLOSED."
     xml:
       name: "PickJobStatus"
