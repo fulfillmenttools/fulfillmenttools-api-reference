@@ -5625,7 +5625,7 @@ definitions:
         description: "DEPRECATED: User supplyingFacilities under collect"
         items:
           type: "string"
-          description: "Referece of a Facility"
+          description: "Reference of a Facility"
           example: "928f3730-bc48-4d85-b83f-3fd86b776178"
 
       targetTime:
@@ -5667,7 +5667,11 @@ definitions:
     required:
       - "facilityRef"
     properties:
-      "facilityRef":
+      paid:
+        type: boolean
+        default: false
+        description: "Indicates if the order is already paid."
+      facilityRef:
         type: string
         description: "Reference to the facility where the consumer expects to collect the items"
       supplyingFacilities:
@@ -8283,6 +8287,7 @@ definitions:
       - "delayed"
       - "notification"
     description: "The state of the KEP"
+
   PickjobDeliveryInformationForCreation:
     type: object
     properties:
@@ -8305,6 +8310,10 @@ definitions:
               identifier:
                 type: "string"
                 description: "Includes information about Click & Collect recipient"
+              paid:
+                type: boolean
+                default: false
+                description: "Indicates if the order is already paid."
           shipping:
             type: object
             properties:
