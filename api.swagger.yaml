@@ -5644,7 +5644,7 @@ definitions:
           servicetype:
             type: "string"
             enum:
-              - "BEST_EFFORT"                       
+              - "BEST_EFFORT"
             description: "DEPRECATED: BEST_EFFORT: the parcel will reach the recipient as fast as possible without giving any guarantees. More types will be added in the future."
           serviceLevel:
             type: "string"
@@ -7304,13 +7304,14 @@ definitions:
           $ref: "#/definitions/ModifyCarrierAction"
     xml:
       name: "ShipmentPatchActions"
+
   ModifyPickJobAction:
     allOf:
       - $ref: "#/definitions/AbstractModificationAction"
       - required:
-          - "status"
           - "action"
         type: "object"
+        additionalProperties: false
         properties:
           action:
             type: "string"
@@ -7319,8 +7320,12 @@ definitions:
             description: "Use value 'ModifyPickJob', because you want to modify a pickjob"
           status:
             $ref: "#/definitions/PickJobStatus"
+          customAttributes:
+            type: "object"
+            description: "Attributes that can be added to the pickJob. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
     xml:
       name: "ModifyPickJobAction"
+
   ModifyListingAction:
     allOf:
       - $ref: "#/definitions/AbstractModificationAction"
@@ -8109,12 +8114,12 @@ definitions:
           $ref: "#/definitions/ModifyHandoverjobAction"
     xml:
       name: "HandoverjobPatchActions"
+
   ModifyHandoverjobAction:
     allOf:
       - $ref: "#/definitions/AbstractModificationAction"
       - required:
           - "action"
-          - "status"
         type: "object"
         properties:
           action:
@@ -8124,9 +8129,13 @@ definitions:
             description: "Use value 'ModifyHandoverjob', because you want to modify a handoverjob"
           status:
             $ref: "#/definitions/HandoverjobStatus"
+          customAttributes:
+            type: "object"
+            description: "Attributes that can be added to the handoverJob. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
         additionalProperties: false
     xml:
       name: "ModifyHandoverjobAction"
+
   CarrierStatus:
     type: "string"
     description: "It is taken into consideration for all carriers. Default: INACTIVE"
