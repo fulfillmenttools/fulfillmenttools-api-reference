@@ -6357,6 +6357,47 @@ definitions:
             items:
               $ref: "#/definitions/SubstituteLineItem"
 
+  ShipmentLineItemForCreation:
+    type: "object"
+    required:
+      - "quantity"
+      - "article"
+    properties:
+      article:
+        $ref: "#/definitions/ShipmentLineItemArticle"
+      quantity:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        example: 21
+        description: "quantity of the specific article that has been ordered"
+      measurementUnitKey:
+        type: "string"
+        example: "liter"
+        description: "Identifier for items unit of measurement."
+      scannableCodes:
+        type: "array"
+        items:
+          type: "string"
+          description: "Strings, that identify the article"
+      customAttributes:
+        type: "object"
+        description: "Attributes that can be added to the orderline. These attributes cannot be used within fulfillment processes, but it could be useful to have the informations carried here."
+
+  ShipmentLineItem:
+    allOf:
+      - $ref: "#/definitions/ShipmentLineItemForCreation"
+      - required:
+          - "id"
+        type: "object"
+        properties:
+          id:
+            type: "string"
+            example: "climk4dcQFiPdA5ULuhS"
+            description:
+              "The id of this lineItem. It is generated during creation automatically and suits as the primary
+              identifier of the described entity."
+
   SubstituteLineItemForCreation:
     type: "object"
     required:
@@ -6966,6 +7007,11 @@ definitions:
       processId:
         type: "string"
         description: "Id of the global process related to this entity. For example used for starting the GDPR process and others."
+      lineItems:
+        type: "array"
+        items:
+          $ref: "#/definitions/ShipmentLineItemForCreation"
+
   Shipment:
     allOf:
       - $ref: "#/definitions/ShipmentForCreation"
@@ -6998,6 +7044,11 @@ definitions:
             example: false
             default: true
             description: "Indicates if there is an active carrier configuration to fulfill this shipment"
+          lineItems:
+            type: "array"
+            items:
+              $ref: "#/definitions/ShipmentLineItem"
+
   ShipmentStatus:
     type: "string"
     enum:
@@ -7827,6 +7878,18 @@ definitions:
     xml:
       name: "OrderLineItemArticle"
   PickLineItemArticle:
+    allOf:
+      - $ref: "#/definitions/AbstractArticle"
+      - type: "object"
+        properties:
+          attributes:
+            type: "array"
+            items:
+              $ref: "#/definitions/OrderArticleAttributeItem"
+    xml:
+      name: "PickLineItemArticle"
+
+  ShipmentLineItemArticle:
     allOf:
       - $ref: "#/definitions/AbstractArticle"
       - type: "object"
