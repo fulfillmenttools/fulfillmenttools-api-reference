@@ -1322,6 +1322,54 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
+
+  /api/shipments/{shipmentId}/deliverynote:
+    get:
+      tags:
+        - "DeliveryNote"
+      summary: "Get delivery note for a shipment"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "getShipmentDeliveryNote"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/pdf"
+      parameters:
+        - in: "path"
+          name: "shipmentId"
+          description: "ID of shipment you want to retrieve delivery note for"
+          required: true
+          type: "string"
+        - in: "query"
+          name: "locale"
+          description: "Provide the localized values for the delivery note. If not provided the default locale is used. For example de_DE, <center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br><i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>."
+          type: string
+      responses:
+        200:
+          description: "Get delivery note as pdf."
+          schema:
+            $ref: "#/definitions/DeliveryNote"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Shipment not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/facilities:
     post:
       tags:
@@ -2845,48 +2893,7 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Error"
-  /api/pickjobs/{pickjobId}/packingslip:
-    get:
-      tags:
-        - "PickJobs"
-      summary: "Get the packing slip for the pickjob with the given ID"
-      description: ""
-      security:
-        - firebase: [ ]
-      operationId: "getPackingSlipForPickjob"
-      x-google-backend:
-        path_translation: "APPEND_PATH_TO_ADDRESS"
-        address: "https://http-api%%ENDPOINT_SUFFIX%%"
-        disable_auth: true
-        deadline: 60.0
-      produces:
-        - "application/pdf"
-      parameters:
-        - in: "path"
-          name: "pickjobId"
-          description: "ID of the Pickjob"
-          required: true
-          type: "string"
-      responses:
-        200:
-          description: "Returns a packing slip pdf for the pickjob."
-          schema:
-            type: file
-        401:
-          description: "Your user is not allowed to operate against this API instance"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        403:
-          description: "Your user, although recognized, is not authorized to use this endpoint"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
-        404:
-          description: "Entity not found"
-          schema:
-            items:
-              $ref: "#/definitions/Error"
+
   /api/handoverjobs/{handoverjobId}:
     get:
       tags:
@@ -4403,6 +4410,83 @@ paths:
             items:
               $ref: "#/definitions/Error"
 
+  /api/configurations/deliverynote:
+    get:
+      tags:
+        - "Configurations"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      summary: "Get a tenant wide delivery configuration"
+      security:
+        - firebase: [ ]
+      operationId: "getDeliveryNoteConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Delivery note configuration was found & you were allowed to access it. The result is in the body."
+          schema:
+            $ref: "#/definitions/DeliveryNoteConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        404:
+          description: "Delivery note configuration not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+    put:
+      tags:
+        - "Configurations"
+      summary: "Update delivery note configuration of a tenant"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "putDeliveryNoteConfiguration"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/DeliveryNoteConfigurationForUpsert"
+      responses:
+        200:
+          description: "Delivery note configuration was successfully updated"
+          schema:
+            $ref: "#/definitions/DeliveryNoteConfiguration"
+        201:
+          description: "Delivery note configuration was successfully created"
+          schema:
+            $ref: "#/definitions/DeliveryNoteConfiguration"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
   /api/routingplans/{routingplanId}/decisionlogs/{decisionlogId}:
     get:
       tags:
@@ -5528,6 +5612,48 @@ paths:
               $ref: "#/definitions/Error"
         404:
           description: "Entity not found"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+
+  /api/deliverynotes:
+    post:
+      tags:
+        - "DeliveryNote"
+      summary: "Create delivery note"
+      description: "<center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br> <i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>"
+      security:
+        - firebase: [ ]
+      operationId: "createDeliveryNote"
+      x-google-backend:
+        path_translation: "APPEND_PATH_TO_ADDRESS"
+        address: "https://http-api%%ENDPOINT_SUFFIX%%"
+        disable_auth: true
+        deadline: 60.0
+      produces:
+        - "application/pdf"
+      parameters:
+        - in: "query"
+          name: "locale"
+          description: "Provide the localized values for the delivery note. If not provided the default locale is used. For example de_DE, <center><img src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png' /></center> <br><i>This part of the API is currently under development. That means that this endpoint, model, etc. can contain breaking changes and / or might not be available at all times in your API instance. It could disapear also without warning. Thus it currently does not fall under our SLA regulations. For details on this topic please check our documentation under https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>."
+          type: string
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/DeliveryNote"
+      responses:
+        201:
+          description: "Successfully created the delivery note."
+          schema:
+            $ref: "#/definitions/DeliveryNote"
+        401:
+          description: "Your user is not allowed to operate against this API instance"
+          schema:
+            items:
+              $ref: "#/definitions/Error"
+        403:
+          description: "Your user, although recognized, is not authorized to use this endpoint"
           schema:
             items:
               $ref: "#/definitions/Error"
@@ -6998,9 +7124,6 @@ definitions:
       returnNoteUrl:
         type: "string"
         description: "The url to the return note of the shipment."
-      packingSlipUrl:
-        type: "string"
-        description: "The url to the packing slip of the shipment."
       carrierLogoUrl:
         type: "string"
         description: "The URL to the carrier logo"
@@ -10409,10 +10532,201 @@ definitions:
         items:
           $ref: "#/definitions/MeasurementUnit"
 
+  DeliveryNote:
+    required:
+      - orderInformation
+      - deliveryAddress
+      - items
+    properties:
+      orderInformation:
+        $ref: "#/definitions/OrderInformation"
+      companyAddress:
+        $ref: "#/definitions/CompanyAddress"
+      deliveryAddress:
+        $ref: "#/definitions/DeliveryAddress"
+      items:
+        type: array
+        items:
+          $ref: "#/definitions/DeliveryNoteItem"
 
+  OrderInformation:
+    type: object
+    required:
+      - 'orderNumber'
+      - 'orderDate'
+    properties:
+      orderNumber:
+        type: string
+        pattern: "^.+$"
+        example: "R456728546"
+        description: "An identifier for the order."
+      orderDate:
+        type: string
+        format: "date-time"
+        example: "2020-02-03T08:45:50.525Z"
+        description: "The date the order was created."
 
+  CompanyAddress:
+    type: "object"
+    required:
+      - "name"
+      - "street"
+      - "houseNumber"
+      - "postalCode"
+      - "city"
+      - "country"
+    properties:
+      name:
+        type: "string"
+        example: "OC fulfillment GmbH"
+        pattern: "^.+$"
+      street:
+        type: "string"
+        example: "Hauptstr."
+        pattern: "^.+$"
+      houseNumber:
+        type: "string"
+        example: "42a"
+        pattern: "^.+$"
+      postalCode:
+        type: "string"
+        example: "40764"
+        pattern: "^.+$"
+      city:
+        type: "string"
+        example: "Langenfeld"
+        pattern: "^.+$"
+      country:
+        type: "string"
+        example: "Germany"
+        pattern: "^.+$"
 
+  DeliveryAddress:
+    type: "object"
+    required:
+      - "street"
+      - "houseNumber"
+      - "postalCode"
+      - "city"
+    properties:
+      companyName:
+        type: "string"
+        example: "OC Fulfillment GmbH"
+        pattern: "^.+$"
+      firstName:
+        type: "string"
+        example: "Maxine"
+        pattern: "^.+$"
+      lastName:
+        type: "string"
+        example: "Muller"
+        pattern: "^.+$"
+      street:
+        type: "string"
+        example: "Hauptstr."
+        pattern: "^.+$"
+      houseNumber:
+        type: "string"
+        example: "42a"
+        pattern: "^.+$"
+      postalCode:
+        type: "string"
+        example: "40764"
+        pattern: "^.+$"
+      city:
+        type: "string"
+        example: "Langenfeld"
+        pattern: "^.+$"
 
+  DeliveryNoteItem:
+    type: object
+    required:
+      - "id"
+      - "title"
+      - "quantity"
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      quantity:
+        type: string
 
+  DeliveryNoteConfiguration:
+    type: object
+    allOf:
+      - $ref: "#/definitions/VersionedResource"
+    required:
+      - "id"
+      - "orderNumberLabel"
+      - "orderDateLabel"
+      - "headline"
+      - "quantityLabel"
+      - "articleIdLabel"
+      - "articleTitleLabel"
+      - "pageLabel"
+    properties:
+      id:
+        type: string
+        example: "delivery-note"
+      logoUrl:
+        type: string
+      companyAddress:
+        $ref: "#/definitions/CompanyAddress"
+      orderNumberLabel:
+        $ref: "#/definitions/LocaleString"
+      orderDateLabel:
+        $ref: "#/definitions/LocaleString"
+      headline:
+        $ref: "#/definitions/LocaleString"
+      description:
+        $ref: "#/definitions/LocaleString"
+      quantityLabel:
+        $ref: "#/definitions/LocaleString"
+      articleIdLabel:
+        $ref: "#/definitions/LocaleString"
+      articleTitleLabel:
+        $ref: "#/definitions/LocaleString"
+      disclaimer:
+        $ref: "#/definitions/LocaleString"
+      pageLabel:
+        $ref: "#/definitions/LocaleString"
 
-
+  DeliveryNoteConfigurationForUpsert:
+    type: object
+    required:
+      - "version"
+      - "orderNumberLabel"
+      - "orderDateLabel"
+      - "headline"
+      - "quantityLabel"
+      - "articleIdLabel"
+      - "articleTitleLabel"
+      - "pageLabel"
+    properties:
+      version:
+        type: number
+        description: "Version field is used in the optimistic locking process. If the configuration doesn't exists, this field is ignored."
+        example: 1
+      logo:
+        $ref: "#/definitions/File"
+      orderNumberLabel:
+        $ref: "#/definitions/LocaleString"
+      orderDateLabel:
+        $ref: "#/definitions/LocaleString"
+      companyAddress:
+        $ref: "#/definitions/CompanyAddress"
+      headline:
+        $ref: "#/definitions/LocaleString"
+      description:
+        $ref: "#/definitions/LocaleString"
+      quantityLabel:
+        $ref: "#/definitions/LocaleString"
+      articleIdLabel:
+        $ref: "#/definitions/LocaleString"
+      articleTitleLabel:
+        $ref: "#/definitions/LocaleString"
+      disclaimer:
+        $ref: "#/definitions/LocaleString"
+      pageLabel:
+        $ref: "#/definitions/LocaleString"
