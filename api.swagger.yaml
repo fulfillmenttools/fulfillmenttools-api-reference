@@ -2938,7 +2938,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ListingsForCreation'
+              $ref: '#/components/schemas/ListingsForReplacement'
         description: listings for put
         required: true
       summary: Update listings of a facility with the given ID
@@ -9349,6 +9349,22 @@ components:
       type: object
       xml:
         name: ListingForCreation
+    ListingForReplacement:
+      allOf:
+        - $ref: '#/components/schemas/ListingForCreation'
+      properties:
+        version:
+          example: 42
+          format: int64
+          type: integer
+        status:
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+      type: object
+      xml:
+        name: ListingForReplacement
     ListingPatchActions:
       properties:
         actions:
@@ -9381,6 +9397,18 @@ components:
       type: object
       xml:
         name: ListingsForCreation
+    ListingsForReplacement:
+      properties:
+        listings:
+          items:
+            $ref: '#/components/schemas/ListingForReplacement'
+          minItems: 1
+          type: array
+      required:
+        - listings
+      type: object
+      xml:
+        name: ListingsForReplacement
     LoadUnit:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
