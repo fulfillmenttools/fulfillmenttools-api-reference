@@ -7433,6 +7433,17 @@ components:
       type: object
       xml:
         name: AbstractCarrierCredentials
+    AbstractFacilityCarrierConfiguration:
+      discriminator:
+        propertyName: key
+      properties:
+        key:
+          type: string
+      required:
+        - key
+      type: object
+      xml:
+        name: AbstractFacilityCarrierConfiguration
     AbstractFulfillabilityConstraintType:
       properties:
         type:
@@ -7740,6 +7751,10 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/CarrierStatus'
+        defaultParcelWeight:
+          description: Default weight for a parcel in gram
+          default: 1000
+          type: number
       required:
         - name
         - key
@@ -8357,6 +8372,52 @@ components:
           type: object
       xml:
         name: DpdCarrierCredentials
+    DhlFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - type: object
+          properties:
+            accountingNumberParcel:
+              description: Billing number for DHL package
+              type: string
+              pattern: '^[A-z0-9-]{14}$'
+            accountingNumberParcelInternational:
+              description: Billing number for international DHL package
+              type: string
+              pattern: '^[A-z0-9-]{14}$'
+            accountingNumberStandardNationalGoGreen:
+              description: Standard national GoGreen billing number
+              type: string
+              pattern: '^[A-z0-9-]{14}$'
+            accountingNumberReturn:
+              type: string
+              pattern: '^[A-z0-9-]{14}$'
+            returnReceiverId:
+              type: string
+              pattern: '^[A-z0-9-]{15}$'
+      xml:
+        name: DhlFacilityCarrierConfiguration
+    AngelFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            pickupLocationId:
+              description: The id of the Pickup Location
+              type: string
+              pattern: '^[A-z0-9-]{15}$'
+          type: object
+      xml:
+        name: AngelFacilityCarrierConfiguration
+    GlsFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            contactId:
+              type: string
+              pattern: '^[A-z0-9-]{15}$'
+          type: object
+      xml:
+        name: GlsFacilityCarrierConfiguration
     AngelCarrierCredentials:
       allOf:
         - $ref: "#/components/schemas/AbstractCarrierCredentials"
@@ -8577,6 +8638,12 @@ components:
     FacilityCarrierConnectionForCreation:
       additionalProperties: false
       properties:
+        configuration:
+          description: Facility specific configuration for this carrier
+          anyOf:
+            - $ref: "#/components/schemas/DhlFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -8595,6 +8662,12 @@ components:
     FacilityCarrierConnectionForModification:
       additionalProperties: false
       properties:
+        configuration:
+          description: Facility specific configuration for this carrier
+          anyOf:
+            - $ref: "#/components/schemas/DhlFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
