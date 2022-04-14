@@ -4962,6 +4962,63 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+    patch:
+      parameters:
+        - description: ID of the parcel you want to get
+          in: path
+          name: parcelId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+          description: Successfully updated the parcel.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Parcels
+      description: ''
+      operationId: patchParcel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelPatchActions'
+        description: Patch set
+        required: true
+      summary: Patches a parcel with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   '/api/parcels/{parcelId}/labels/{labelDocument}':
     get:
       parameters:
@@ -7676,6 +7733,7 @@ components:
             - ModifyPrioritization
             - ModifyLoadUnitType
             - ModifyFeature
+            - ModifyParcel
           example: '<Use the corresponding action, see documentation>'
           type: string
       required:
@@ -10274,6 +10332,45 @@ components:
                 type: object
               type: array
           type: object
+    ModifyParcelAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: 'Use value ''ModifyParcel'', because you want to modify a Parcel'
+              enum:
+                - ModifyParcel
+              type: string
+            status:
+              $ref: '#/components/schemas/ParcelStatus'
+              description: The state of the parcel we want to change.
+          required:
+            - action
+            - status
+          type: object
+      xml:
+        name: ModifyParcelAction
+    ParcelPatchActions:
+      properties:
+        actions:
+          items:
+            $ref: '#/components/schemas/ModifyParcelAction'
+          minItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: ParcelPatchActions
     ModifyFeatureAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
