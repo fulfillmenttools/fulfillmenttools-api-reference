@@ -9434,14 +9434,22 @@ components:
           description: Default price which is used if no price exists in order or listings
           type: number
         routingTimeout:
+          deprecated: true
           default: 8
           description: >-
+            @deprecated
             Default amount of hours after which a routing plan is marked not
-            routable
+            routable. This field is deprecated in favour of stopRoutingAttemptsAfterTime
           type: number
+        stopRoutingAttemptsAfterTime:
+          default: PT8H
+          description: >-
+            Default amount of time in ISO 8601 duration format after which a routing plan is marked not routable.
+            The duration need to be a multiple of 60 seconds.
+          type: string
+          pattern: '^P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$'
       required:
         - defaultPrice
-        - routingTimeout
       type: object
     HandoverJobCreatedWebHookEvent:
       allOf:
@@ -10427,11 +10435,20 @@ components:
                 listings
               type: number
             routingTimeout:
+              deprecated: true
               default: 8
               description: >-
+                @deprecated
                 Default amount of hours after which a routing plan is marked not
-                routable
+                routable. This field is deprecated in favour of stopRoutingAttemptsAfterTime
               type: number
+            stopRoutingAttemptsAfterTime:
+              default: PT8H
+              description: >-
+                Default amount of time in ISO 8601 duration format after which a routing plan is marked not routable.
+                The duration need to be a multiple of 60 seconds.
+              type: string
+              pattern: '^P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$'
           required:
             - action
           type: object
