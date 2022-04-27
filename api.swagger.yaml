@@ -2038,6 +2038,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/deliverynotes:
     post:
       parameters:
@@ -2106,6 +2107,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/facilities:
     get:
       parameters:
@@ -7418,6 +7420,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
   '/api/users/{userId}':
     delete:
       parameters:
@@ -7581,6 +7584,76 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/returnnotes:
+    post:
+      parameters:
+        - description: >-
+            Provide the localized values for the return note. If not provided
+            the default locale is used. For example de_DE, <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+            /></center> <br><i>This part of the API is currently under
+            development. That means that this endpoint, model, etc. can contain
+            breaking changes and / or might not be available at all times in
+            your API instance. It could disapear also without warning. Thus it
+            currently does not fall under our SLA regulations. For details on
+            this topic please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/pdf:
+              schema:
+                $ref: '#/components/schemas/ReturnNote'
+          description: Successfully created the return note.
+        '401':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - ReturnNote
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: createReturnNote
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnNote'
+        required: true
+      summary: Create return note
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /graphql:
     get:
       responses:
@@ -8524,6 +8597,37 @@ components:
         - title
         - quantity
       type: object
+
+    ReturnNote:
+      properties:
+        companyAddress:
+          $ref: '#/components/schemas/CompanyAddress'
+        orderInformation:
+          $ref: '#/components/schemas/OrderInformation'
+        deliveryAddress:
+          $ref: '#/components/schemas/DeliveryAddress'
+        qrCodeContent:
+          type: string
+        items:
+          items:
+            $ref: '#/components/schemas/ReturnNoteItem'
+          type: array
+      required:
+        - orderInformation
+        - items
+      type: object
+
+    ReturnNoteItem:
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+      required:
+        - title
+        - quantity
+      type: object
+
     DeliveryPreferences:
       properties:
         collect:
@@ -8686,6 +8790,9 @@ components:
             password:
               type: "string"
               description: "angel password"
+            authToken:
+              type: "string"
+              description: "auth token for angel"
       xml:
         name: "AngelCarrierCredentials"
 
@@ -12068,6 +12175,7 @@ components:
         - scannableCodes
         - article
       type: object
+
     ReturnLineStatus:
       description: A return item line initially has the status INITIAL.
       enum:
@@ -12078,19 +12186,61 @@ components:
       type: string
       xml:
         name: ReturnItemStatus
+
     ReturnNoteConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
-        contactInformation:
-          description: 'Return address '
+        id:
+          example: delivery-note
           type: string
+        logoUrl:
+          type: string
+        companyAddress:
+          $ref: '#/components/schemas/CompanyAddress'
+        orderDateLabel:
+          $ref: '#/components/schemas/LocaleString'
+        orderNumberLabel:
+          $ref: '#/components/schemas/LocaleString'
+        headline:
+          $ref: '#/components/schemas/LocaleString'
+        quantityLabel:
+          $ref: '#/components/schemas/LocaleString'
+        articleIdLabel:
+          $ref: '#/components/schemas/LocaleString'
+        articleTitleLabel:
+          $ref: '#/components/schemas/LocaleString'
+        returnReasonLabel:
+          $ref: '#/components/schemas/LocaleString'
+        returnReasonExplanationHeadline:
+          $ref: '#/components/schemas/LocaleString'
+        returnReasonExplanation:
+          $ref: '#/components/schemas/LocaleString'
         reasons:
           description: Possible return reasons
           items:
-            type: string
+            $ref: '#/components/schemas/LocaleString'
           type: array
+        disclaimerHeadline:
+          $ref: '#/components/schemas/LocaleString'
+        disclaimer:
+          $ref: '#/components/schemas/LocaleString'
+        pageLabel:
+          $ref: '#/components/schemas/LocaleString'
+      required:
+        - id
+        - orderDateLabel
+        - orderNumberLabel
+        - headline
+        - quantityLabel
+        - articleIdLabel
+        - articleTitleLabel
+        - returnReasonLabel
+        - disclaimerHeadline
+        - disclaimer
+        - pageLabel
       type: object
+
     ReturnPatchActions:
       description: >-
         You can choose from patch actions for the ReturnLineItems
