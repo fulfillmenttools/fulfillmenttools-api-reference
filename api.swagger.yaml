@@ -5519,6 +5519,72 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+  /api/processes:
+    get:
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: Processes matching the given status
+          in: query
+          name: status
+          required: false
+          schema:
+            $ref: '#/components/schemas/ProcessStatus'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Processes'
+          description: Process are found.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Processes
+      description: >-
+          <center><img
+          src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getAllProcesses
+      summary: Return all processes
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   '/api/processes/{processId}':
     get:
       parameters:
@@ -11821,6 +11887,17 @@ components:
       type: string
       xml:
         name: PrioritizationRuleImplementation
+    Processes:
+      properties:
+        processes:
+          items:
+            $ref: '#/components/schemas/Process'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
     Process:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -11870,10 +11947,56 @@ components:
           items:
             type: string
           type: array
+        status:
+          $ref: '#/components/schemas/ProcessStatus'
+          default: "CREATED"
+        domainStatuses:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ProcessStatus'
       required:
         - gdprCleanupDate
         - id
       type: object
+    ProcessProgressLog:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          type: string
+        processRef:
+          type: "string"
+        domainProcessStatus:
+          $ref: '#/components/schemas/ProcessStatus'
+        domain:
+          $ref: '#/components/schemas/DomainType'
+        domainRef:
+          type: "string"
+        domainStatus:
+          type: "string"
+        attributes:
+          type: "object"
+      required:
+        - id
+    ProcessStatus:
+      enum:
+        - PENDING
+        - CREATED
+        - IN_PROGRESS
+        - STUCK
+        - FINISHED
+        - INCOMPLETE
+        - CANCELED
+      type: string
+    DomainType:
+      enum:
+        - ORDER
+        - ROUTING_PLAN
+        - PICKJOB
+        - SHIPMENT
+        - HANDOVER
+        - RETURN
+      type: string
     Section:
       enum:
         - PACKING
@@ -12569,6 +12692,11 @@ components:
           $ref: '#/components/schemas/RoutingPlanStatus'
         targetAddress:
           $ref: '#/components/schemas/TargetAddress'
+        processId:
+          description: >-
+            Id of the global process related to this entity. For example used
+            for starting the GDPR process and others.
+          type: string
       required:
         - id
         - orderDate
