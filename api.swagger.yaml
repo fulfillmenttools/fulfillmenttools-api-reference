@@ -1307,6 +1307,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/configurations/returnnote:
     get:
       responses:
@@ -1407,7 +1408,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReturnNoteConfiguration'
+              $ref: '#/components/schemas/ReturnNoteConfigurationForUpsert'
         description: Desired return note configuration to create/update
         required: true
       summary: Change the tenant wide return note configuration
@@ -1416,6 +1417,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/configurations/routing:
     get:
       parameters:
@@ -8505,6 +8507,7 @@ components:
         - deliveryAddress
         - items
       type: object
+
     DeliveryNoteConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -8544,6 +8547,7 @@ components:
         - articleTitleLabel
         - pageLabel
       type: object
+
     DeliveryNoteConfigurationForUpsert:
       properties:
         articleIdLabel:
@@ -8584,6 +8588,7 @@ components:
         - articleTitleLabel
         - pageLabel
       type: object
+
     DeliveryNoteItem:
       properties:
         id:
@@ -12230,6 +12235,56 @@ components:
           $ref: '#/components/schemas/LocaleString'
       required:
         - id
+        - orderDateLabel
+        - orderNumberLabel
+        - headline
+        - quantityLabel
+        - articleIdLabel
+        - articleTitleLabel
+        - returnReasonLabel
+        - disclaimerHeadline
+        - disclaimer
+        - pageLabel
+      type: object
+
+    ReturnNoteConfigurationForUpsert:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        logo:
+          $ref: '#/components/schemas/NamedFile'
+        companyAddress:
+          $ref: '#/components/schemas/CompanyAddress'
+        orderDateLabel:
+          $ref: '#/components/schemas/LocaleString'
+        orderNumberLabel:
+          $ref: '#/components/schemas/LocaleString'
+        headline:
+          $ref: '#/components/schemas/LocaleString'
+        quantityLabel:
+          $ref: '#/components/schemas/LocaleString'
+        articleIdLabel:
+          $ref: '#/components/schemas/LocaleString'
+        articleTitleLabel:
+          $ref: '#/components/schemas/LocaleString'
+        returnReasonLabel:
+          $ref: '#/components/schemas/LocaleString'
+        returnReasonExplanationHeadline:
+          $ref: '#/components/schemas/LocaleString'
+        returnReasonExplanation:
+          $ref: '#/components/schemas/LocaleString'
+        reasons:
+          description: Possible return reasons
+          items:
+            $ref: '#/components/schemas/LocaleString'
+          type: array
+        disclaimerHeadline:
+          $ref: '#/components/schemas/LocaleString'
+        disclaimer:
+          $ref: '#/components/schemas/LocaleString'
+        pageLabel:
+          $ref: '#/components/schemas/LocaleString'
+      required:
         - orderDateLabel
         - orderNumberLabel
         - headline
