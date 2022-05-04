@@ -518,6 +518,117 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/configurations/picking/takeoverpickjob:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TakeOverPickJobConfiguration'
+          description: TakeOverPickJob config could be found in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+        - Picking
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getTakeOverPickJobConfiguartion
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TakeOverPickJobConfiguration'
+          description: The takeOverPickJob configuration was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TakeOverPickJobConfiguration'
+          description: The domain configuration was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+        - Picking
+      description: ''
+      operationId: putTakeOverPickJobConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TakeOverPickJobConfiguration'
+        description: Desired takeOverPickJob configuration to create/update
+        required: true
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/configurations/domain:
     get:
       responses:
@@ -10185,6 +10296,19 @@ components:
       required:
         - loadUnits
       type: object
+
+    TakeOverPickJobConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        active:
+          default: false
+          description: Enable or disable returns
+          type: boolean
+      required:
+        - active
+      type: object
+
     LocaleConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
