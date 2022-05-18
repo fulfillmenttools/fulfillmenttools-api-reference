@@ -8286,6 +8286,7 @@ components:
           description: ''
           enum:
             - ModifyPickJob
+            - ModifyPickJobLastEditor
             - ModifyPickRun
             - ModifyPickLineItem
             - ModifyPickRunLineItem
@@ -11243,6 +11244,23 @@ components:
           type: object
       xml:
         name: ModifyOrderSplitAction
+
+    ModifyPickJobLastEditorAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: 'Use value ''ModifyPickJobLastEditorAction'' to set the last editor to your user and therefor take over the pickjob.'
+              enum:
+                - ModifyPickJobLastEditor
+              type: string
+          required:
+            - action
+          type: object
+      xml:
+        name: ModifyPickJobLastEditorAction
+
     ModifyPickJobAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -12164,6 +12182,7 @@ components:
             anyOf:
               - $ref: "#/components/schemas/ModifyPickLineItemAction"
               - $ref: "#/components/schemas/ModifyPickJobAction"
+              - $ref: "#/components/schemas/ModifyPickJobLastEditorAction"
           minItems: 1
           type: array
         version:
