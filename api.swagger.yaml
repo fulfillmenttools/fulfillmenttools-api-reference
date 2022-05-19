@@ -3876,6 +3876,52 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  /api/pickruns/{pickRunId}/pickjobs:
+    patch:
+      parameters:
+        - description: id of pickRun
+          in: path
+          name: pickRunId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PickRunPickJobsPatchAction'
+      responses:
+        '200':
+          description: Pick job was successfully from pick run removed.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - PickRuns
+      description: ''
+      operationId: patchPickRunPickJobs
+      summary: Update pick jobs of a pick run
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/handoverjobs:
     get:
       parameters:
@@ -8424,6 +8470,7 @@ components:
             - ModifyLoadUnitType
             - ModifyFeature
             - ModifyParcel
+            - RemovePickJobFromPickRunAction
           example: '<Use the corresponding action, see documentation>'
           type: string
       required:
@@ -12334,6 +12381,29 @@ components:
       xml:
         name: PickRunPatchAction
 
+    PickRunPickJobsPatchAction:
+      properties:
+        actions:
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/RemovePickJobFromPickRunAction"
+          minItems: 1
+          maxItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: PickRunPickJobsPatchAction
+
     ModifyPickRunAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -12390,6 +12460,26 @@ components:
           type: object
       xml:
         name: ModifyPickRunLineItemAction
+
+    RemovePickJobFromPickRunAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: 'Use value ''RemovePickJobFromPickRunAction'', because you want to remove a pickjob'
+              enum:
+                - RemovePickJobFromPickRunAction
+              type: string
+            pickJobRef:
+              description: PickJob reference of the PickJob you want to remove.
+              type: string
+          required:
+            - action
+            - pickJobRef
+          type: object
+      xml:
+        name: RemovePickJobFromPickRunAction
 
     PickingTimes:
       description: There must be no overlaps for time ranges on a day
