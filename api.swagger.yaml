@@ -293,6 +293,118 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+  /api/carriers/{carrierId}/configuration:
+    get:
+      parameters:
+        - description: ID of the carrier you want to get the configuration
+          in: path
+          name: carrierId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrierConfiguration'
+          description: >-
+            Carrier Configuration was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Carrier Configuration not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Carriers
+      description: ''
+      operationId: getCarrierConfiguration
+      summary: Get a carrier configuration with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      parameters:
+        - description: ID of the carrier you want to update the configuration
+          in: path
+          name: carrierId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrierConfiguration'
+          description: >-
+            Carrier Configuration was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Carrier Configuration not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Carriers
+      description: ''
+      operationId: putCarrierConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarrierConfiguration'
+        description: Carrier Configuration
+        required: true
+      summary: Update a carrier configuration with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   /api/configurations/cutofftime:
     get:
       responses:
@@ -13382,6 +13494,14 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/CapabilityStatus'
+        configurations:
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/TakeOverPickJobConfiguration"
+              - $ref: "#/components/schemas/BatchPickingConfiguration"
+              - $ref: "#/components/schemas/SubstitutionConfiguration"
+              - $ref: "#/components/schemas/CarrierConfiguration"
+          type: array
       required:
         - name
         - status
@@ -14507,6 +14627,22 @@ components:
       type: string
       xml:
         name: FacilityOrderBy
+
+    CarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        carrierRef:
+          type: string
+        returnLabel:
+          default: false
+          description: When enabled, a return label will be created by creating a shipping label
+          example: false
+          type: boolean
+      required:
+        - returnLabel
+        - carrierRef
+      type: object
 
   securitySchemes:
     firebase:
