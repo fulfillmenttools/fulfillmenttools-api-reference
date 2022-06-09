@@ -15222,6 +15222,97 @@ components:
       xml:
         name: ModifyPackJobAction
 
+    RestowItem:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          example: LGMl2DuvPnfPoSHhYFOm
+          type: string
+        quantity:
+          example: 1
+          format: int64
+          minimum: 1
+          type: integer
+          default: 1
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        article:
+          $ref: '#/components/schemas/RestowItemArticle'
+        restowed:
+          type: boolean
+          example: true
+          default: false
+          description: Indicates if the restowItem has been restowed
+        scannableCodes:
+          items:
+            description: 'Strings, that identify the article'
+            type: string
+          type: array
+        facilityRef:
+          description: 'The id of the facility reference. The given ID has to be present in the system.'
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+      required:
+        - id
+        - article
+        - restowed
+        - facilityRef
+        - quantity
+      type: object
+
+    RestowItemForCreation:
+      properties:
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        quantity:
+          example: 1
+          format: int64
+          minimum: 1
+          type: integer
+          default: 1
+        article:
+          $ref: '#/components/schemas/RestowItemArticle'
+        restowed:
+          type: boolean
+          example: true
+          default: false
+          description: Indicates if the restowItem has been restowed
+        scannableCodes:
+          items:
+            description: 'Strings, that identify the article'
+            type: string
+          type: array
+        facilityRef:
+          description: 'The id of the facility reference. The given ID has to be present in the system.'
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+      required:
+        - facilityRef
+        - article
+        - quantity
+      type: object
+
+    RestowItemArticle:
+      allOf:
+        - $ref: '#/components/schemas/AbstractArticle'
+        - properties:
+            attributes:
+              items:
+                $ref: '#/components/schemas/RestowAttributeItem'
+              type: array
+          type: object
+      xml:
+        name: RestowItemArticle
+
+    RestowAttributeItem:
+      allOf:
+        - $ref: '#/components/schemas/ArticleAttributeItem'
+
   securitySchemes:
     firebase:
       flows:
