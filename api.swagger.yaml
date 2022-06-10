@@ -8601,6 +8601,74 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  '/api/restowitems/{restowItemId}':
+    patch:
+      parameters:
+        - description: ID of the restow item you want to update
+          in: path
+          name: restowItemId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestowItem'
+          description: >-
+            RestowItem was found & patch-set has been applied. The patched restow item
+            is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: RestowItem not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: RestowItem version conflict
+      security:
+        - firebase: [ ]
+      tags:
+        - RestowItems
+      description: ''
+      operationId: patchRestowItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestowItemPatchActions'
+        description: Patch set
+        required: true
+      summary: Patches a restow item with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /graphql:
     get:
       responses:
@@ -8723,6 +8791,7 @@ components:
           description: Additional parameters needed for the referenced type of constraint.
           type: object
       type: object
+
     AbstractModificationAction:
       discriminator:
         propertyName: action
@@ -8758,6 +8827,7 @@ components:
             - ModifyLoadUnitType
             - ModifyFeature
             - ModifyParcel
+            - ModifyRestowItem
             - RemovePickJobFromPickRunAction
           example: '<Use the corresponding action, see documentation>'
           type: string
@@ -15312,6 +15382,50 @@ components:
     RestowAttributeItem:
       allOf:
         - $ref: '#/components/schemas/ArticleAttributeItem'
+
+    RestowItemPatchActions:
+      properties:
+        actions:
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/ModifyRestowItemAction"
+          minItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: RestowItemPatchActions
+
+    ModifyRestowItemAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: 'Use value ''ModifyRestowItem'', because you want to modify a restow item'
+              enum:
+                - ModifyRestowItem
+              type: string
+            restowed:
+              type: boolean
+              example: true
+              default: false
+              description: Indicates if the restowItem has been restowed
+          required:
+            - action
+            - restowed
+          type: object
+      xml:
+        name: ModifyRestowItemAction
 
   securitySchemes:
     firebase:
