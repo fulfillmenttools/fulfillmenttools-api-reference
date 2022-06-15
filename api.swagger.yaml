@@ -3526,6 +3526,242 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+  '/api/facilities/{facilityId}/listings/{listingId}/partialStocks':
+    get:
+      parameters:
+        - description: ID of facility you want to get listing
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: ID of listing you want to get partial stocks
+          in: path
+          name: listingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PartialStock'
+                type: array
+          description: >-
+            Facility and listing were found & you are allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility or Listing not found
+      security:
+        - firebase: [ ]
+      tags:
+        - PartialStock
+      description: ''
+      operationId: getFacilityListingPartialStock
+      summary: Get a partial stocks for a listing
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      parameters:
+        - description: ID of facility you want to get listing
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: ID of listing you want to get partial stocks
+          in: path
+          name: listingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Facility listing was found & you were allowed to update it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility listing not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Listings
+      description: 'Replaces the current partial stock object related to its listing'
+      operationId: putFacilityListingPartialStock
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartialStocksForReplacement'
+        description: Patch set
+        required: true
+      summary: Replace partial stocks of a listings of a facility with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    patch:
+      parameters:
+        - description: ID of facility you want to get listing
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: ID of listing you want to get partial stocks
+          in: path
+          name: listingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Facility listing was found & you were allowed to update it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility listing not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Listings
+      description: |
+        Adds new partial stocks, updates existing partial stocks and keeps stocks that are previously present in the database.
+
+        1. If a stock exists in the patch action but not in the database it is added.
+        2. If a stock exists both in the patch action and in the database it is updated.
+        3. If a stock exists only in the database, it is left untouched.
+      operationId: patchFacilityListingPartialStock
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartialStockPatchActions'
+        description: Patch set
+        required: true
+      summary: Patches partial stocks of a listings of a facility with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    delete:
+      parameters:
+        - description: ID of facility you want to get listing
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: ID of listing you want to get partial stocks
+          in: path
+          name: listingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Facility listing was found & you were allowed to delete the partial stock.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility listing not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Listings
+      description: ''
+      operationId: deleteFacilityListingPartialStock
+      summary: Delete partial stocks of a listings of a facility with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   /api/features:
     get:
       responses:
@@ -8968,6 +9204,7 @@ components:
             - ModifyParcel
             - ModifyRestowItem
             - RemovePickJobFromPickRunAction
+            - ModifyPartialStock
           example: '<Use the corresponding action, see documentation>'
           type: string
       required:
@@ -10997,6 +11234,10 @@ components:
           description: a title describing the article
           example: Adidas Superstar
           type: string
+        partialStocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartialStock'
       required:
         - tenantArticleId
         - title
@@ -14004,6 +14245,24 @@ components:
       properties:
         picked:
           type: number
+        pieces:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingPlanLineItemPiece'
+    RoutingPlanLineItemPiece:
+      properties:
+        partialStockRef:
+          type: string
+        quantity:
+          type: number
+        available:
+          type: number
+        mandatoryScore:
+          type: number
+        sequenceScore:
+          type: number
+        location:
+          $ref: '#/components/schemas/Location'
       type: object
     RoutingPlanPatchActions:
       properties:
@@ -14372,7 +14631,7 @@ components:
       properties:
         reserved:
           description: >-
-            The amount of articles that currently open prickjobs need to be
+            The amount of articles that currently open pickjobs need to be
             fulfilled.
           example: 24
           minimum: 0
@@ -15442,7 +15701,131 @@ components:
           type: object
       xml:
         name: ModifyPackJobAction
+    PartialStock:
+      properties:
+        tenantPartialStockId:
+          description: 'The id associated with the partial stock'
+          type: string
+        stockInformation:
+          $ref: '#/components/schemas/StockInformation'
+        scores:
+          type: array
+          items:
+            $ref: '#/components/schemas/Score'
+        location:
+          $ref: '#/components/schemas/Location'
+      required:
+        - tenantPartialStockId
+        - stockInformation
+      type: object
+      xml:
+        name: PartialStock
+    Location:
+      properties:
+        locationRef:
+          description: 'The id of the location'
+          type: string
+        scannableCodes:
+          description: 'Represents barcodes that may be scanned at this location'
+          type: array
+          items:
+            type: string
+      xml:
+        name: Location
+    ScoreType:
+      description: 'Describes what kind of score is represented'
+      enum:
+        - RATING
+        - SEQUENCE
+      type: string
+      xml:
+        name: ScoreType
+    ScoreName:
+      description: 'Describes the name of the score for humans to identify'
+      enum:
+        - ZONE
+        - RUNNING_SEQUENCE
+      type: string
+      xml:
+        name: ScoreName
+    Score:
+      properties:
+        scoreType:
+          $ref: '#/components/schemas/ScoreType'
+        scoreName:
+          $ref: '#/components/schemas/ScoreName'
+        scoreValue:
+          description: 'Describes the performance of the score'
+          type: number
+      required:
+        - scoreType
+        - scoreName
+        - scoreValue
+      type: object
+      xml:
+        name: Score
+    ModifyPartialStockAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: 'Use value ''ModifyPartialStock'', because you want to modify a partial stock'
+              enum:
+                - ModifyPartialStock
+              type: string
+            partialStocks:
+              items:
+                $ref: '#/components/schemas/PartialStock'
+              minItems: 0
+              type: array
+          required:
+            - action
 
+          type: object
+      xml:
+        name: ModifyPartialStockAction
+    PartialStockPatchActions:
+      properties:
+        actions:
+          items:
+            $ref: '#/components/schemas/ModifyPartialStockAction'
+          minItems: 1
+          maxItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the listing where we want to patch the partialStocks,
+            to be used in optimistic locking mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: ParcelPatchActions
+    PartialStocksForReplacement:
+      properties:
+        partialStocks:
+          items:
+            $ref: '#/components/schemas/PartialStock'
+          minItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the listing where we want to put the partialStocks,
+            to be used in optimistic locking mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - partialStocks
+        - version
+      type: object
+      xml:
+        name: PartialStocksForReplacement
     RestowItem:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
