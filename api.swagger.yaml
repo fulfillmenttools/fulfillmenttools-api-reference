@@ -5731,6 +5731,208 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+  /api/restowitems:
+    get:
+      parameters:
+        - description: Reference to the facility you want to get the corresponding restows
+          in: query
+          name: facilityRef
+          required: false
+          schema:
+            type: string
+        - description: Reference restowed status of the restoe items
+          in: query
+          name: restowed
+          required: false
+          schema:
+            type: boolean
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestowedItems'
+          description: Restow items were found. The results are in the body.
+        '204':
+          description: No restow items were found as a result to the given query.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - RestowItems
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: queryRestowItems
+      summary: Simple query interface to find restowItems
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+  '/api/restowitems/{restowItemId}':
+    get:
+      parameters:
+        - description: ID of the restow item you want to get
+          in: path
+          name: restowItemId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestowItem'
+          description: >-
+            RestowItem was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - RestowItems
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getRestowItem
+      summary: Get a restow item with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    patch:
+      parameters:
+        - description: ID of the restow item you want to update
+          in: path
+          name: restowItemId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestowItem'
+          description: >-
+            RestowItem was found & patch-set has been applied. The patched restow item
+            is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: RestowItem not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: RestowItem version conflict
+      security:
+        - firebase: [ ]
+      tags:
+        - RestowItems
+      description: ''
+      operationId: patchRestowItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestowItemPatchActions'
+        description: Patch set
+        required: true
+      summary: Patches a restow item with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   /api/pickjobs:
     get:
       parameters:
@@ -8604,73 +8806,7 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
-  '/api/restowitems/{restowItemId}':
-    patch:
-      parameters:
-        - description: ID of the restow item you want to update
-          in: path
-          name: restowItemId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RestowItem'
-          description: >-
-            RestowItem was found & patch-set has been applied. The patched restow item
-            is in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: RestowItem not found
-        '409':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: RestowItem version conflict
-      security:
-        - firebase: [ ]
-      tags:
-        - RestowItems
-      description: ''
-      operationId: patchRestowItem
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RestowItemPatchActions'
-        description: Patch set
-        required: true
-      summary: Patches a restow item with the given ID
-      x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
+
 
   /graphql:
     get:
@@ -14551,17 +14687,29 @@ components:
           type: integer
       type: object
 
+    RestowedItems:
+      properties:
+        restowedItems:
+          items:
+            $ref: '#/components/schemas/RestowItem'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
+
     PickRunForCreation:
       properties:
         pickJobRefs:
-            items:
-              type: string
-            type: array
-            minItems: 1
-        status:
-            $ref: '#/components/schemas/PickRunStatus'
-        facilityRef:
+          items:
             type: string
+          type: array
+          minItems: 1
+        status:
+          $ref: '#/components/schemas/PickRunStatus'
+        facilityRef:
+          type: string
       required:
         - pickJobRefs
         - facilityRef
