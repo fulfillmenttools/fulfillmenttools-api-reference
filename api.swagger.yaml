@@ -6628,6 +6628,12 @@ paths:
             type: array
             items:
               type: string
+        - description: Perform full text search base on the tenantOrderId
+          in: query
+          name: tenantOrderId
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -6685,7 +6691,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExternalDocument'
+                $ref: '#/components/schemas/Process'
           description: The found process.
         '401':
           content:
@@ -9166,7 +9172,6 @@ components:
           description: Additional parameters needed for the referenced type of constraint.
           type: object
       type: object
-
     AbstractModificationAction:
       discriminator:
         propertyName: action
@@ -13408,64 +13413,68 @@ components:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
         flatRefs:
-          description: This field is used to search all arrays at once.
+          description: This field references all IDs of any entity connected to this process.
           items:
             type: string
           type: array
         gdprCleanupDate:
-          description: The date that defines when the entities will be anonymized.
+          description: The date that defines when the entities will be or have been anonymized.
           example: '2020-02-03T08:45:50.525Z'
           format: date-time
           type: string
         handoverJobRefs:
-          description: ''
+          description: References to Handoverjobs connected to this process (if present).
           items:
             type: string
           type: array
         id:
+          description: ID of this process
           type: string
         isAnonymized:
-          description: Indicates if the entities are already anonymized.
+          description: Indicates if the entities have been anonymized.
           type: boolean
         orderRef:
-          description: ''
+          description: References to the Order connected to this process (if present).
           type: string
         routingPlanRefs:
-          description: ''
+          description: References the RoutingPlans that were used during this process (if present).
           items:
             type: string
           type: array
         pickJobRefs:
-          description: ''
+          description: References to the Pickjobs connected to this process (if present).
           items:
             type: string
           type: array
         returnRefs:
-          description: ''
+          description: References to the Returns connected to this process (if present).
           items:
             type: string
           type: array
         shipmentRefs:
-          description: ''
+          description: References to the Shipments connected to this process (if present).
           items:
             type: string
           type: array
         tenantOrderId:
-          description: ''
+          description: The tenantOrderId referencing this process.
           type: string
         documentRefs:
+          description: References to documents that are attached to this process.
           items:
             type: string
           type: array
         status:
+          description: Overall status of the process.
           $ref: '#/components/schemas/ProcessStatus'
           default: "CREATED"
         domainStatuses:
           type: object
+          description: Overview of the different domain adherent status of the process.
           additionalProperties:
             $ref: '#/components/schemas/ProcessStatus'
         packJobRefs:
-          description: ''
+          description: References of the Packjobs connected to this process (if present).
           items:
             type: string
           type: array
