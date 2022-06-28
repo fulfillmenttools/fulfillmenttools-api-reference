@@ -12256,6 +12256,9 @@ components:
               format: int64
               minimum: 0
               type: integer
+            partialStockLocations:
+              items:
+                $ref: '#/components/schemas/PickJobLineItemPartialStockLocationForUpdate'
             status:
               $ref: '#/components/schemas/PickLineItemStatus'
             substituteLineItems:
@@ -13067,11 +13070,59 @@ components:
               items:
                 $ref: '#/components/schemas/SubstituteLineItem'
               type: array
+            partialStockLocations:
+              description: "Indicates where the items to pick could be found and from where the picking should be started."
+              items:
+                $ref: '#/components/schemas/PickJobLineItemPartialStockLocation'
           required:
             - id
             - picked
             - status
           type: object
+
+    PickJobLineItemPartialStockLocationForUpdate:
+      properties:
+        tenantPartialStockId:
+          type: string
+        picked:
+          example: 21
+          format: int64
+          minimum: 0
+          type: number
+      required:
+        - tenantPartialStockId
+        - picked
+      type: object
+
+    PickJobLineItemPartialStockLocation:
+      properties:
+        tenantPartialStockId:
+          type: string
+        quantity:
+          example: 21
+          format: int64
+          minimum: 0
+          type: number
+        picked:
+          example: 21
+          format: int64
+          minimum: 0
+          type: number
+        available:
+          example: 21
+          format: int64
+          minimum: 0
+          type: number
+        ratingScore:
+          type: number
+        sequenceScore:
+          type: number
+        location:
+          $ref: '#/components/schemas/Location'
+      required:
+        - tenantPartialStockId
+        - quantity
+      type: object
 
     PickLineItemArticle:
       allOf:
@@ -15916,6 +15967,9 @@ components:
           description: 'The id of the facility reference. The given ID has to be present in the system.'
           example: Esb20gpHBL94X5NdMp3C
           type: string
+        tenantPartialStockId:
+          description: "Indicates to which partialStockLocation the item has been restowed to."
+          type: string
       required:
         - id
         - article
@@ -16011,6 +16065,8 @@ components:
               example: true
               default: false
               description: Indicates if the restowItem has been restowed
+            tenantPartialStockId:
+              type: string
           required:
             - action
             - restowed
