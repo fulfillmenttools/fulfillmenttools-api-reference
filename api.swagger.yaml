@@ -15934,6 +15934,7 @@ components:
       type: object
       xml:
         name: PartialStocksForReplacement
+
     RestowItem:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -15967,9 +15968,8 @@ components:
           description: 'The id of the facility reference. The given ID has to be present in the system.'
           example: Esb20gpHBL94X5NdMp3C
           type: string
-        tenantPartialStockId:
-          description: "Indicates to which partialStockLocation the item has been restowed to."
-          type: string
+        location:
+          $ref: '#/components/schemas/Location'
       required:
         - id
         - article
@@ -16006,6 +16006,8 @@ components:
           description: 'The id of the facility reference. The given ID has to be present in the system.'
           example: Esb20gpHBL94X5NdMp3C
           type: string
+        location:
+          $ref: '#/components/schemas/Location'
       required:
         - facilityRef
         - article
@@ -16065,8 +16067,8 @@ components:
               example: true
               default: false
               description: Indicates if the restowItem has been restowed
-            tenantPartialStockId:
-              type: string
+            location:
+              $ref: '#/components/schemas/Location'
           required:
             - action
             - restowed
