@@ -9093,7 +9093,264 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  /api/tags:
+    get:
+      parameters:
+        - description: all entities
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrippedTags'
+          description: The current list of available tags
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: No more elements available
+      security:
+        - firebase: [ ]
+      tags:
+        - Tags
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getTags
+      summary: Returns all tags
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: >-
+            The tag was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Tags
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: addTag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagForCreation'
+        description: Tag object
+        required: true
+      summary: Add a new tag
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
 
+  '/api/tags/{tagkey}':
+    get:
+      parameters:
+        - description: Key of the tag you want to get
+          in: path
+          name: tagkey
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: >-
+            Tag was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: User not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Tags
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getTag
+      summary: Get a tag with the given key
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      parameters:
+        - description: Key of the tag you want to update
+          in: path
+          name: tagkey
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: >-
+            Tag was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Tag not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Tags
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: putTag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagForModification'
+        description: Tag
+        required: true
+      summary: Update a tag with the given key
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
 
   /graphql:
     get:
@@ -16075,7 +16332,54 @@ components:
           type: object
       xml:
         name: ModifyRestowItemAction
-
+    Tag:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/TagForCreation'
+      properties:
+        id:
+          type: string
+      xml:
+        name: Tag
+      required:
+        - 'id'
+    TagForCreation:
+      additionalProperties: false
+      required:
+        - 'key'
+        - 'allowedValues'
+      properties:
+        key:
+          type: string
+        allowedValues:
+          type: array
+          minItems: 1
+          items:
+            type: string
+    TagForModification:
+      additionalProperties: false
+      required:
+        - 'allowedValues'
+        - 'version'
+      properties:
+        version:
+          type: number
+        allowedValues:
+          type: array
+          minItems: 1
+          items:
+            type: string
+    StrippedTags:
+      properties:
+        tags:
+          items:
+            $ref: '#/components/schemas/Tag'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
   securitySchemes:
     firebase:
       flows:
