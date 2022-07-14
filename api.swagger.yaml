@@ -9483,7 +9483,9 @@ components:
           enum:
             - ModifyPickJob
             - ModifyPickJobLastEditor
-            - ModifyPickRun
+            - CancelPickRun
+            - FinishPickRun
+            - StartPickRun
             - ModifyPickLineItem
             - ModifyPickRunLineItem
             - ModifyPackJob
@@ -13465,7 +13467,9 @@ components:
           items:
             anyOf:
               - $ref: "#/components/schemas/ModifyPickRunLineItemAction"
-              - $ref: "#/components/schemas/ModifyPickRunAction"
+              - $ref: "#/components/schemas/StartPickRunAction"
+              - $ref: "#/components/schemas/CancelPickRunAction"
+              - $ref: "#/components/schemas/FinishPickRunAction"
           minItems: 1
           type: array
         version:
@@ -13505,29 +13509,53 @@ components:
       xml:
         name: PickRunPickJobsPatchAction
 
-    ModifyPickRunAction:
+    CancelPickRunAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
-              description: 'Use value ''ModifyPickRun'', because you want to modify a pickjob'
+              description: Use value 'CancelPickRun', because you want to cancel a pickrun
               enum:
-                - ModifyPickRun
+                - CancelPickRun
               type: string
-            customAttributes:
-              description: >-
-                Attributes that can be added to the pickRun. These attributes
-                cannot be used within fulfillment processes, but it could be
-                useful to have the informations carried here.
-              type: object
-            status:
-              $ref: '#/components/schemas/PickRunStatus'
           required:
             - action
           type: object
       xml:
-        name: ModifyPickRunAction
+        name: CancelPickRunAction
+
+    StartPickRunAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: Use value 'StartPickRun', because you want to start a pickrun
+              enum:
+                - StartPickRun
+              type: string
+          required:
+            - action
+          type: object
+      xml:
+        name: StartPickRunAction
+
+    FinishPickRunAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: Use value 'FinishPickRun', because you want to finish a pickrun
+              enum:
+                - FinishPickRun
+              type: string
+          required:
+            - action
+          type: object
+      xml:
+        name: FinishPickRunAction
 
     ModifyPickRunLineItemAction:
       allOf:
@@ -15708,6 +15736,7 @@ components:
         - OPEN
         - IN_PROGRESS
         - CLOSED
+        - CANCELED
       type: string
 
     User:
