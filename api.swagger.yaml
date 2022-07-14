@@ -3571,7 +3571,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
-  '/api/facilities/{facilityId}/listings/{listingId}/partialStocks':
+  '/api/facilities/{facilityId}/listings/{tenantArticleId}/partialstocks':
     get:
       parameters:
         - description: ID of facility you want to get listing
@@ -3582,7 +3582,7 @@ paths:
             type: string
         - description: ID of listing you want to get partial stocks
           in: path
-          name: listingId
+          name: tenantArticleId
           required: true
           schema:
             type: string
@@ -3623,7 +3623,7 @@ paths:
       security:
         - firebase: [ ]
       tags:
-        - PartialStock
+        - Listings
       description: ''
       operationId: getFacilityListingPartialStock
       summary: Get a partial stocks for a listing
@@ -3642,7 +3642,7 @@ paths:
             type: string
         - description: ID of listing you want to get partial stocks
           in: path
-          name: listingId
+          name: tenantArticleId
           required: true
           schema:
             type: string
@@ -3701,7 +3701,7 @@ paths:
             type: string
         - description: ID of listing you want to get partial stocks
           in: path
-          name: listingId
+          name: tenantArticleId
           required: true
           schema:
             type: string
@@ -3765,7 +3765,7 @@ paths:
             type: string
         - description: ID of listing you want to get partial stocks
           in: path
-          name: listingId
+          name: tenantArticleId
           required: true
           schema:
             type: string
@@ -11497,6 +11497,8 @@ components:
         - $ref: '#/components/schemas/ListingForCreation'
         - $ref: '#/components/schemas/VersionedResource'
         - properties:
+            stockinformation:
+              $ref: '#/components/schemas/StockInformation'
             facilityId:
               description: This is a reference to a facility
               example: '4711'
@@ -11509,6 +11511,10 @@ components:
                 - ACTIVE
                 - INACTIVE
               type: string
+            partialStocks:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartialStock'
           required:
             - status
             - facilityId
@@ -11534,7 +11540,7 @@ components:
           example: 1200
           type: number
         stockinformation:
-          $ref: '#/components/schemas/StockInformation'
+          $ref: '#/components/schemas/StockInformationForCreation'
         tenantArticleId:
           description: This is a reference to an article Id
           example: '4711'
@@ -11546,7 +11552,7 @@ components:
         partialStocks:
           type: array
           items:
-            $ref: '#/components/schemas/PartialStock'
+            $ref: '#/components/schemas/PartialStockForCreation'
       required:
         - tenantArticleId
         - title
@@ -12346,7 +12352,7 @@ components:
                 - INACTIVE
               type: string
             stockinformation:
-              $ref: '#/components/schemas/StockInformation'
+              $ref: '#/components/schemas/StockInformationForCreation'
             subtitle:
               description: a subtitle describing the article
               example: 44 2/3
@@ -14015,6 +14021,8 @@ components:
         - MATCHING-BUSINESSTYPE
         - PREFER-STORE
         - PREFER-WAREHOUSE
+        - ZONE
+        - EXPIRY-DATE
       type: string
       xml:
         name: RatingImplementation
@@ -14636,6 +14644,8 @@ components:
       properties:
         picked:
           type: number
+        available:
+          type: number
         pieces:
           type: array
           items:
@@ -15019,7 +15029,7 @@ components:
       type: object
       xml:
         name: FacilityPatchActions
-    StockInformation:
+    StockInformationForCreation:
       description: This object carries information about the current stock of this listing
       properties:
         reserved:
@@ -15040,6 +15050,20 @@ components:
           type: number
       required:
         - stock
+      type: object
+    StockInformation:
+      allOf:
+        - $ref: '#/components/schemas/StockInformationForCreation'
+        - properties:
+            available:
+              description: >-
+                The actual available amount for this stock
+              example: 24
+              minimum: 0
+              multipleOf: 1
+              type: number
+      required:
+        - available
       type: object
     StrippedCarrier:
       allOf:
@@ -16095,13 +16119,13 @@ components:
           type: object
       xml:
         name: ModifyPackJobAction
-    PartialStock:
+    PartialStockForCreation:
       properties:
         tenantPartialStockId:
           description: 'The id associated with the partial stock'
           type: string
-        stockInformation:
-          $ref: '#/components/schemas/StockInformation'
+        stockinformation:
+          $ref: '#/components/schemas/StockInformationForCreation'
         scores:
           type: array
           items:
@@ -16110,7 +16134,19 @@ components:
           $ref: '#/components/schemas/Location'
       required:
         - tenantPartialStockId
-        - stockInformation
+        - stockinformation
+      type: object
+      xml:
+        name: PartialStock
+    PartialStock:
+      allOf:
+        - $ref: '#/components/schemas/PartialStockForCreation'
+      properties:
+        stockinformation:
+          $ref: '#/components/schemas/StockInformation'
+      required:
+        - tenantPartialStockId
+        - stockinformation
       type: object
       xml:
         name: PartialStock
@@ -16138,6 +16174,7 @@ components:
       description: 'Describes the name of the score for humans to identify'
       enum:
         - ZONE
+        - EXPIRY_DATE
         - RUNNING_SEQUENCE
       type: string
       xml:
@@ -16170,7 +16207,7 @@ components:
               type: string
             partialStocks:
               items:
-                $ref: '#/components/schemas/PartialStock'
+                $ref: '#/components/schemas/PartialStockForCreation'
               minItems: 0
               type: array
           required:
@@ -16204,7 +16241,7 @@ components:
       properties:
         partialStocks:
           items:
-            $ref: '#/components/schemas/PartialStock'
+            $ref: '#/components/schemas/PartialStockForCreation'
           minItems: 1
           type: array
         version:
