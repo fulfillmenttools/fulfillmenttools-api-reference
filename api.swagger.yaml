@@ -80,6 +80,14 @@ paths:
           schema:
             default: 25
             type: integer
+        - description: >-
+            Provide the localized names and descriptions for the parcel label classifications.
+            If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -123,6 +131,15 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
     post:
+      parameters:
+        - description: >-
+            Provide the localized names and descriptions for the parcel label classifications.
+            If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
       responses:
         '201':
           content:
@@ -183,6 +200,14 @@ paths:
           required: true
           schema:
             type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label classifications.
+            If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -233,6 +258,14 @@ paths:
           in: path
           name: carrierId
           required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label classifications.
+            If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
           schema:
             type: string
       responses:
@@ -2909,6 +2942,14 @@ paths:
           required: true
           schema:
             type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label classifications.
+            If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -2976,6 +3017,14 @@ paths:
           in: path
           name: carrierRef
           required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label classifications.
+            If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
           schema:
             type: string
       responses:
@@ -3052,6 +3101,14 @@ paths:
           in: path
           name: carrierRef
           required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label classifications.
+            If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
           schema:
             type: string
       responses:
@@ -9731,6 +9788,43 @@ components:
         - inactive
         - disabled
       type: string
+
+    ParcelLabelClassificationForCreation:
+      properties:
+        nameLocalized:
+          description: Localized name for parcel label classification
+          example:
+            de_DE: S-Paket
+            en_US: S-Parcel
+            ru_RU: S-пакет
+          $ref: '#/components/schemas/LocaleString'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+      required:
+        - nameLocalized
+        - dimensions
+      type: object
+
+    ParcelLabelClassification:
+      properties:
+        name:
+          description: Name of the parcel label classification
+          example: S-Parcel
+          type: string
+        nameLocalized:
+          description: Localized name for parcel label classification
+          example:
+            de_DE: S-Paket
+            en_US: S-Parcel
+            ru_RU: S-пакет
+          $ref: '#/components/schemas/LocaleString'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+      required:
+        - nameLocalized
+        - dimensions
+      type: object
+
     Carrier:
       allOf:
         - $ref: '#/components/schemas/CarrierForCreation'
@@ -9740,6 +9834,10 @@ components:
               description: The id of the carrier
               example: LGMl2DuvPnfPoSHhYFOm
               type: string
+            parcelLabelClassifications:
+              items:
+                $ref: '#/components/schemas/ParcelLabelClassification'
+              type: array
           required:
             - id
             - status
@@ -9781,6 +9879,10 @@ components:
           description: Default weight for a parcel in gram
           default: 1000
           type: number
+        parcelLabelClassifications:
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
+          type: array
       required:
         - name
         - key
@@ -10690,9 +10792,9 @@ components:
             - companyName
           type: object
       type: object
+
     FacilityCarrierConnection:
       allOf:
-        - $ref: '#/components/schemas/FacilityCarrierConnectionForModification'
         - $ref: '#/components/schemas/VersionedResource'
       properties:
         carrierRef:
@@ -10702,11 +10804,36 @@ components:
           $ref: '#/components/schemas/CarrierDeliveryType'
         key:
           type: string
+        configuration:
+          description: Facility specific configuration for this carrier
+          anyOf:
+            - $ref: "#/components/schemas/DhlFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
+        cutoffTime:
+          $ref: '#/components/schemas/CutoffTime'
+        deliveryAreas:
+          items:
+            $ref: '#/components/schemas/DeliveryArea'
+          type: array
+        name:
+          description: >-
+            This is the well known name for a supported CEP partner. Can be
+            adapted to the clients needs.
+          example: DHL Köln
+          type: string
+        status:
+          $ref: '#/components/schemas/CarrierStatus'
+        parcelLabelClassifications:
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassification'
+          type: array
       required:
         - carrierRef
         - key
         - status
       type: object
+
     FacilityCarrierConnectionForCreation:
       additionalProperties: false
       properties:
@@ -10721,6 +10848,10 @@ components:
         deliveryAreas:
           items:
             $ref: '#/components/schemas/DeliveryArea'
+          type: array
+        parcelLabelClassifications:
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
           type: array
         name:
           description: >-
@@ -10756,6 +10887,10 @@ components:
           $ref: '#/components/schemas/CarrierStatus'
         version:
           type: number
+        parcelLabelClassifications:
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
+          type: array
       required:
         - version
       type: object
@@ -11930,6 +12065,10 @@ components:
               enum:
                 - ModifyCarrier
               type: string
+            parcelLabelClassifications:
+              items:
+                $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
+              type: array
             credentials:
               $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
             deliveryType:
@@ -13020,6 +13159,27 @@ components:
         - CANCELLED
         - LOCKED
       type: string
+
+    ParcelDimensions:
+      properties:
+        height:
+          description: The height of the package (in cm)
+          example: 50
+          type: number
+        length:
+          description: The length of the package (in cm)
+          example: 100
+          type: number
+        weight:
+          description: The weight of the package (in g)
+          example: 1700
+          type: number
+        width:
+          description: The width of the package (in cm)
+          example: 25
+          type: number
+      type: object
+
     Parcel:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -13033,24 +13193,7 @@ components:
               example: cf00e102-34f2-45c1-a846-6a21f384321e
               type: string
             dimensions:
-              properties:
-                height:
-                  description: The height of the package (in cm)
-                  example: 50
-                  type: number
-                length:
-                  description: The length of the package (in cm)
-                  example: 100
-                  type: number
-                weight:
-                  description: The weight of the package (in g)
-                  example: 1700
-                  type: number
-                width:
-                  description: The width of the package (in cm)
-                  example: 25
-                  type: number
-              type: object
+              $ref: '#/components/schemas/ParcelDimensions'
             id:
               description: >-
                 The id of this parcel. It is generated during creation
@@ -13143,24 +13286,7 @@ components:
           example: cf00e102-34f2-45c1-a846-6a21f384321e
           type: string
         dimensions:
-          properties:
-            height:
-              description: The height of the package (in cm)
-              example: 50
-              type: number
-            length:
-              description: The length of the package (in cm)
-              example: 100
-              type: number
-            weight:
-              description: The weight of the package (in g)
-              example: 1700
-              type: number
-            width:
-              description: The width of the package (in cm)
-              example: 25
-              type: number
-          type: object
+          $ref: '#/components/schemas/ParcelDimensions'
         loadUnitRefs:
           description: Reference to array of load unit Refs
           items:
