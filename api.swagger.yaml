@@ -774,6 +774,111 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+
+  /api/configurations/packing:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingConfigurations'
+          description: packing config is in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getPackingConfigurations
+      summary: Read packing configuration
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingConfigurations'
+          description: The packing configuration was successfully updated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+      description: ''
+      operationId: putPackingConfigurations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingConfigurations'
+        description: Desired PackingConfigurations
+        required: true
+      summary: Change the packing configuration
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/configurations/domain:
     get:
       responses:
@@ -10526,6 +10631,48 @@ components:
       required:
         - value
       type: object
+    PackingConfigurations:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+        - type: object
+          properties:
+            offeredDocumentsPerTag:
+              type: array
+              items:
+                $ref: '#/components/schemas/OfferedDocumentPerTag'
+          required:
+            - offeredDocumentsPerTag
+    OfferedDocumentPerTag:
+      properties:
+        tagRef:
+          type: string
+        matchingValues:
+          type: array
+          items:
+            type: string
+            minItems: 1
+        offeredDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferedDocument'
+      required:
+        - offeredDocuments
+        - matchingValues
+        - tagRef
+      type: object
+    OfferedDocument:
+      type: object
+      properties:
+        offeredDocumentType:
+          enum:
+            - EXTERNAL
+            - DELIVERY
+            - RETURNNOTE
+            - SENDLABEL
+          type: string
+      required:
+        - offeredDocumentType
+
     DpdCarrierCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractCarrierCredentials'
