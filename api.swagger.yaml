@@ -775,14 +775,21 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
 
 
-  /api/configurations/packing:
+  /api/configurations/tags/{section}:
     get:
+      parameters:
+        - description: Section you want to get
+          in: path
+          name: section
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PackingConfigurations'
+                $ref: '#/components/schemas/TagConfiguration'
           description: packing config is in response body.
         '401':
           content:
@@ -829,12 +836,19 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
     put:
+      parameters:
+        - description: Section you want to update
+          in: path
+          name: section
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PackingConfigurations'
+                $ref: '#/components/schemas/TagConfiguration'
           description: The packing configuration was successfully updated.
         '400':
           content:
@@ -869,8 +883,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PackingConfigurations'
-        description: Desired PackingConfigurations
+              $ref: '#/components/schemas/TagConfiguration'
+        description: Desired TagConfiguration
         required: true
       summary: Change the packing configuration
       x-google-backend:
@@ -10631,7 +10645,7 @@ components:
       required:
         - value
       type: object
-    PackingConfigurations:
+    TagConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
         - type: object
@@ -14199,6 +14213,7 @@ components:
     Section:
       enum:
         - PACKING
+        - PICKING
       type: string
     DocumentType:
       enum:
