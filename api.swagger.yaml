@@ -13622,6 +13622,10 @@ components:
               items:
                 $ref: '#/components/schemas/SubstituteLineItem'
               type: array
+            partialStockLocations:
+              description: "Indicates where the items to pick could be found and from where the picking should be started."
+              items:
+                $ref: '#/components/schemas/PickJobLineItemPartialStockLocation'
           required:
             - id
             - picked
@@ -13643,19 +13647,22 @@ components:
       type: object
 
     PickJobLineItemPartialStockLocation:
+      allOf:
+        - $ref: '#/components/schemas/PickJobLineItemPartialStockLocationForCreation'
       properties:
-        tenantPartialStockId:
-          type: string
-        quantity:
-          example: 21
-          format: int64
-          minimum: 0
-          type: number
         picked:
           example: 21
           format: int64
           minimum: 0
           type: number
+      required:
+        - tenantPartialStockId
+      type: object
+
+    PickJobLineItemPartialStockLocationForCreation:
+      properties:
+        tenantPartialStockId:
+          type: string
         available:
           example: 21
           format: int64
@@ -13669,7 +13676,6 @@ components:
           $ref: '#/components/schemas/Location'
       required:
         - tenantPartialStockId
-        - quantity
       type: object
 
     PickLineItemArticle:
@@ -13711,7 +13717,7 @@ components:
         partialStockLocations:
           description: "Indicates where the items to pick could be found and from where the picking should be started."
           items:
-            $ref: '#/components/schemas/PickJobLineItemPartialStockLocation'
+            $ref: '#/components/schemas/PickJobLineItemPartialStockLocationForCreation'
       required:
         - quantity
         - article
