@@ -3750,7 +3750,7 @@ paths:
   '/api/facilities/{facilityId}/listings/{tenantArticleId}/partialstocks':
     get:
       parameters:
-        - description: ID of facility you want to get listing
+        - description: ID of facility you want to get the partial stocks
           in: path
           name: facilityId
           required: true
@@ -3869,7 +3869,7 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
     patch:
       parameters:
-        - description: ID of facility you want to get listing
+        - description: ID of facility you want to patch the partial stocks
           in: path
           name: facilityId
           required: true
@@ -3915,7 +3915,7 @@ paths:
         Adds new partial stocks, updates existing partial stocks and keeps stocks that are previously present in the database.
 
         1. If a stock exists in the patch action but not in the database it is added.
-        2. If a stock exists both in the patch action and in the database it is updated.
+        2. If a stock exists both in the patch action and in the database it is updated and the contents are merged.
         3. If a stock exists only in the database, it is left untouched.
       operationId: patchFacilityListingPartialStock
       requestBody:
@@ -3933,7 +3933,7 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
     delete:
       parameters:
-        - description: ID of facility you want to get listing
+        - description: ID of facility from whom you want to delete the partial stock
           in: path
           name: facilityId
           required: true
@@ -3983,6 +3983,371 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
+  '/api/facilities/{facilityId}/storagelocations':
+    get:
+      parameters:
+        - description: ID of facility from whom you want to get the storage locations
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/StorageLocation'
+                type: array
+          description: >-
+            Facility was found & you are allowed to get the storage locations. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      security:
+        - firebase: [ ]
+      tags:
+        - StorageLocations
+      description: ''
+      operationId: getFacilityStorageLocations
+      summary: Get the storage locations of this facility
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    post:
+      parameters:
+        - description: ID of facility from whom you want to create the storage location
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageLocation'
+          description: >-
+            The storage location was successfully created.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      security:
+        - firebase: [ ]
+      tags:
+        - StorageLocations
+      description: 'Creates a new storage location in this facility.'
+      operationId: postFacilityStorageLocations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageLocationForCreation'
+        description: Patch set
+        required: true
+      summary: Create a new storage location
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  '/api/facilities/{facilityId}/storagelocations/{storageLocationId}':
+    get:
+      parameters:
+        - description: ID of facility from whom you want to get the storage locations
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: the ID of the storageLocation
+          in: path
+          name: storageLocationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/StorageLocation'
+                type: array
+          description: >-
+            Facility was found & you are allowed to get the storage locations. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      security:
+        - firebase: [ ]
+      tags:
+        - StorageLocations
+      description: ''
+      operationId: getFacilityStorageLocation
+      summary: Get the storage location of this facility
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    delete:
+      parameters:
+        - description: ID of facility from whom you want to delete the storage location
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: ID of the storageLocation you want to delete
+          in: path
+          name: storageLocationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Storage location was found & you were allowed to delete it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility or storage location not found
+      security:
+        - firebase: [ ]
+      tags:
+        - StorageLocations
+      description: ''
+      operationId: deleteFacilityStorageLocation
+      summary: Delete a storage location of a facility with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      parameters:
+        - description: ID of facility from whom you want to put the storage locations
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: the ID of the storageLocation
+          in: path
+          name: storageLocationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Facility was found & you are allowed to update it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      security:
+        - firebase: [ ]
+      tags:
+        - StorageLocations
+      description: 'Replaces the current storage locations of this Facility with the provided in the body.'
+      operationId: putFacilityStorageLocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageLocationForReplacement'
+        description: Patch set
+        required: true
+      summary: Replace the storage locations of a Facility
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    patch:
+      parameters:
+        - description: ID of facility you want to patch the storage locations
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: the ID of the storageLocation
+          in: path
+          name: storageLocationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Facility listing was found & you were allowed to update it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      security:
+        - firebase: [ ]
+      tags:
+        - StorageLocations
+      description: |
+        Adds new storage locations, updates existing ones and keeps the previously present ones in the database.
+
+        1. If a storage location exists in the patch action but not in the database it is added.
+        2. If a storage location exists both in the patch action and in the database it is updated and the contents merged.
+        3. If a storage location exists only in the database, it is left untouched.
+      operationId: patchFacilityStorageLocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageLocationPatchActions'
+        description: Patch set
+        required: true
+      summary: Patches the storage locations of a facility with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/features:
     get:
       responses:
@@ -9690,6 +10055,7 @@ components:
             - ModifyRestowItem
             - RemovePickJobFromPickRunAction
             - ModifyPartialStock
+            - ModifyStorageLocation
           example: '<Use the corresponding action, see documentation>'
           type: string
       required:
@@ -16550,7 +16916,7 @@ components:
         - actions
       type: object
       xml:
-        name: ParcelPatchActions
+        name: PartialStockPatchActions
     PartialStocksForReplacement:
       properties:
         partialStocks:
@@ -16571,6 +16937,166 @@ components:
       type: object
       xml:
         name: PartialStocksForReplacement
+
+    StorageLocationForCreation:
+      properties:
+        name:
+          description: 'The name of this storage location'
+          type: string
+        tenantLocationId:
+          description: 'The internal tenant id for this location'
+          type: string
+        type:
+          $ref: '#/components/schemas/StorageLocationType'
+        scannableCodes:
+          description: 'Barcodes representing this storage location'
+          type: array
+          items:
+            type: string
+        runningSequences:
+          description: 'The Sequence item/s of this location'
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageLocationSequenceItem'
+      required:
+        - name
+        - tenantLocationId
+        - runningSequences
+        - scannableCodes
+        - type
+      type: object
+      xml:
+        name: StorageLocationForCreation
+
+    StorageLocationForReplacement:
+      allOf:
+        - $ref: '#/components/schemas/StorageLocationForCreation'
+      properties:
+        version:
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+      type: object
+      xml:
+        name: StorageLocationForReplacement
+
+
+    StorageLocation:
+      allOf:
+        - $ref: '#/components/schemas/StorageLocationForReplacement'
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          description: 'The id of this storage location'
+          type: string
+        facilityRef:
+          description: The id of the facility reference.
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+      required:
+        - id
+        - facilityRef
+      type: object
+      xml:
+        name: StorageLocation
+
+    StorageLocationType:
+      description: >-
+        Describes the kind of a storage location:
+          * `SINGLE_STORAGE`- it is only allowed to connect one partial stock to such a storage location
+          * `BULK_STORAGE`- more than one partial stock and its quantities can be linked to such an storage location
+      enum:
+        - SINGLE_STORAGE
+        - BULK_STORAGE
+      type: string
+      xml:
+        name: StorageLocationType
+
+    StorageLocationSequenceType:
+      description: >-
+        Describes the type of a storage location sequence type
+          * `PICKING_SEQUENCE`- The sequence in wich the storage locations are picked.
+          * `RESTOW_SEQUENCE`- The sequence in wich the storage locations are restowed.
+      enum:
+        - PICKING_SEQUENCE
+        - RESTOW_SEQUENCE
+      type: string
+      xml:
+        name: StorageLocationType
+
+    StorageLocationSequenceItem:
+      properties:
+        type:
+          $ref: '#/components/schemas/StorageLocationSequenceType'
+        previousStorageLocationRef:
+          description: 'The previous storage from which to pick up after this one'
+          type: string
+        nextStorageLocationRef:
+          description: 'The next storage from which to pick up after this one'
+          type: string
+      required:
+        - type
+      type: object
+      xml:
+        name: StorageLocationSequenceItem
+
+
+    ModifyStorageLocationAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: 'Use value ''ModifyStorageLocation'', because you want to modify a storage location'
+              enum:
+                - ModifyStorageLocation
+              type: string
+            name:
+              description: 'The name of this storage location'
+              type: string
+            tenantLocationId:
+              description: 'The internal tenant id for this location'
+              type: string
+            type:
+              $ref: '#/components/schemas/StorageLocationType'
+            scannableCodes:
+              description: 'Barcodes representing this storage location'
+              type: array
+              items:
+                type: string
+            runningSequences:
+              description: 'The Sequence item/s of this location'
+              type: array
+              items:
+                $ref: '#/components/schemas/StorageLocationSequenceItem'
+          required:
+            - action
+          type: object
+      xml:
+        name: ModifyStorageLocationAction
+
+    StorageLocationPatchActions:
+      properties:
+        actions:
+          items:
+            $ref: '#/components/schemas/ModifyStorageLocationAction'
+          minItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the facility where we want to patch the storage locations
+            to be used in optimistic locking mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: StorageLocationPatchActions
 
     RestowItem:
       allOf:
