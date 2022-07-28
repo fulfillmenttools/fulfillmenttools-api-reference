@@ -828,8 +828,8 @@ paths:
         under our SLA regulations. For details on this topic please check our
         documentation under
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      operationId: getPackingConfigurations
-      summary: Read packing configuration
+      operationId: getTagConfigurations
+      summary: Read tag configuration for the specified section
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
@@ -878,7 +878,7 @@ paths:
       tags:
         - Configurations
       description: ''
-      operationId: putPackingConfigurations
+      operationId: putTagConfigurations
       requestBody:
         content:
           application/json:
@@ -886,7 +886,7 @@ paths:
               $ref: '#/components/schemas/TagConfiguration'
         description: Desired TagConfiguration
         required: true
-      summary: Change the packing configuration
+      summary: Change the tag configuration for the provided section
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
@@ -10652,10 +10652,17 @@ components:
           properties:
             offeredDocumentsPerTag:
               type: array
+              description: All entries with a match in their matchingValues will be combined when determining what documents belong to an entity
               items:
                 $ref: '#/components/schemas/OfferedDocumentPerTag'
+            offeredDocumentsByDefault:
+              type: array
+              description: This configuration is a fallback and applies only if none of the entries in offeredDocumentsPerTag can be applied
+              items:
+                $ref: '#/components/schemas/OfferedDocument'
           required:
             - offeredDocumentsPerTag
+            - offeredDocumentsByDefault
     OfferedDocumentPerTag:
       properties:
         tagRef:
@@ -14230,8 +14237,9 @@ components:
       type: string
     Section:
       enum:
-        - PACKING
-        - PICKING
+        - PACKJOB
+        - PICKJOB
+        - PICKRUN
       type: string
     DocumentType:
       enum:
