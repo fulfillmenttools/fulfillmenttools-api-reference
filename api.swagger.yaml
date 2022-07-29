@@ -7265,6 +7265,72 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
   '/api/processes/{processId}':
+    patch:
+      parameters:
+        - description: ID of process you want to patch
+          in: path
+          name: processId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Process'
+          description: >-
+            Process was found & patch-set has been applied. The patched
+            process is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Process not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Process version conflict
+      security:
+        - firebase: [ ]
+      tags:
+        - Processes
+      description: ''
+      operationId: patchProcess
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessPatchActions'
+        description: Patch set
+        required: true
+      summary: Patches a process with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
     get:
       parameters:
         - in: path
@@ -7305,7 +7371,7 @@ paths:
       security:
         - firebase: [ ]
       tags:
-        - Process
+        - Processes
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -7355,7 +7421,7 @@ paths:
       security:
         - firebase: [ ]
       tags:
-        - Process
+        - Processes
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -7395,7 +7461,7 @@ paths:
       security:
         - firebase: [ ]
       tags:
-        - Process
+        - Processes
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -7449,7 +7515,7 @@ paths:
       security:
         - firebase: [ ]
       tags:
-        - Process
+        - Processes
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -7491,7 +7557,7 @@ paths:
       security:
         - firebase: [ ]
       tags:
-        - Process
+        - Processes
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -10055,6 +10121,7 @@ components:
             - ModifyRestowItem
             - RemovePickJobFromPickRunAction
             - ModifyPartialStock
+            - AddTagsToProcess
             - ModifyStorageLocation
           example: '<Use the corresponding action, see documentation>'
           type: string
@@ -13504,6 +13571,11 @@ components:
               type: string
             status:
               $ref: '#/components/schemas/OrderStatus'
+            tags:
+              type: array
+              minItems: 1
+              items:
+                $ref: '#/components/schemas/TagType'
           required:
             - id
             - status
@@ -13573,6 +13645,11 @@ components:
             order.
           example: R456728546
           type: string
+        tags:
+          type: array
+          items:
+            minItems: 1
+            $ref: '#/components/schemas/TagTypeForCreation'
       required:
         - orderDate
         - orderLineItems
@@ -14478,6 +14555,11 @@ components:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagType'
         flatRefs:
           description: This field references all IDs of any entity connected to this process.
           items:
@@ -16641,6 +16723,11 @@ components:
           example: '2020-02-03T09:45:51.525Z'
           format: date-time
           type: string
+        tags:
+          type: array
+          items:
+            minItems: 1
+            $ref: '#/components/schemas/TagTypeForCreation'
       required:
         - facilityRef
         - lineItems
@@ -16685,6 +16772,11 @@ components:
               example: '2020-02-03T09:45:51.525Z'
               format: date-time
               type: string
+            tags:
+              type: array
+              minItems: 1
+              items:
+                $ref: '#/components/schemas/TagType'
           required:
             - id
             - facilityRef
@@ -16694,7 +16786,18 @@ components:
           type: object
           xml:
             name: PackJob
-
+    TagType:
+      required:
+        - 'tagRef'
+        - 'value'
+        - 'key'
+      properties:
+        tagRef:
+          type: string
+        value:
+          type: string
+        key:
+          type: string
     PackJobStatus:
       description: >-
         A pack job initially has the status OPEN and packing can start. When
@@ -17287,6 +17390,57 @@ components:
           example: 42
           type: integer
       type: object
+    ProcessPatchActions:
+      properties:
+        actions:
+          items:
+            $ref: '#/components/schemas/AddTagsToProcessAction'
+          minItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: ProcessPatchActions
+    AddTagsToProcessAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value 'AddTagsToProcess', because you want to modify a process
+              enum:
+                - AddTagsToProcess
+              type: string
+            tags:
+              type: array
+              items:
+                minItems: 1
+                $ref: '#/components/schemas/TagTypeForCreation'
+          required:
+            - action
+          type: object
+      xml:
+        name: AddTagsToProcessAction
+    TagTypeForCreation:
+      additionalProperties: false
+      required:
+        - 'tagRef'
+        - 'value'
+      properties:
+        tagRef:
+          type: string
+        value:
+          type: string
   securitySchemes:
     firebase:
       flows:
