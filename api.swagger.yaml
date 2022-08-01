@@ -3690,6 +3690,12 @@ paths:
             type: string
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Listing'
+                type: array
           description: Facility listing was found and successfully patched
         '400':
           content:
@@ -15369,6 +15375,7 @@ components:
           enum:
             - DEFAULT
             - REROUTE
+            - ORDERSPLIT_ON_SHORTPICK
           type: string
         splitCount:
           default: 0
@@ -15531,6 +15538,15 @@ components:
         - name
         - status
       type: object
+    ShipFromStoreRerouteType:
+      description: >-
+        The type of reroute to apply to the order
+          * `REROUTE`- the complete routing plan is rerouted.
+          * `ORDERSPLIT`- the order is splitted. The short picked line items will be moved to a new routing plan and rerouted
+      enum:
+        - REROUTE
+        - ORDERSPLIT
+      type: string
     ShipFromStoreRerouteConfiguration:
       properties:
         active:
@@ -15548,8 +15564,12 @@ components:
             number are rerouted
           example: '48'
           type: number
+        rerouteType:
+          $ref: '#/components/schemas/ShipFromStoreRerouteType'
+          default: 'REROUTE'
       required:
         - active
+        - rerouteType
       type: object
     Shipment:
       allOf:
