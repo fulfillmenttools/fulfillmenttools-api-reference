@@ -10020,6 +10020,73 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  '/api/packjobs/{packJobId}/deliverynote':
+    get:
+      parameters:
+        - description: ID of the pack job for which you want to get a deliverynote
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized values for the delivery note. If not provided
+            the default locale is used. For example de_DE, <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+            /></center> <br><i>This part of the API is currently under
+            development. That means that this endpoint, model, etc. can contain
+            breaking changes and / or might not be available at all times in
+            your API instance. It could disapear also without warning. Thus it
+            currently does not fall under our SLA regulations. For details on
+            this topic please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: { }
+          description: >-
+            The deliverynote for the given packjob
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - PackJobs
+      description: ''
+      operationId: getPackJobDeliveryNote
+      summary: Get a deliverynote for the pack job with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+
   /api/tags:
     get:
       parameters:
@@ -13989,9 +14056,6 @@ components:
           example: R456728546
           pattern: ^.+$
           type: string
-      required:
-        - orderNumber
-        - orderDate
       type: object
     OrderLineItem:
       allOf:
@@ -17052,6 +17116,8 @@ components:
             Id of the global process related to this entity. For example used
             for starting the GDPR process and others.
           type: string
+        tenantOrderId:
+          type: string
         targetTime:
           description: Until when the pack job must be finished.
           example: '2020-02-03T09:45:51.525Z'
@@ -17062,6 +17128,8 @@ components:
           items:
             minItems: 1
             $ref: '#/components/schemas/TagTypeForCreation'
+        recipient:
+          $ref: '#/components/schemas/ConsumerAddress'
       required:
         - facilityRef
         - lineItems
@@ -17111,6 +17179,10 @@ components:
               minItems: 1
               items:
                 $ref: '#/components/schemas/TagType'
+            recipient:
+              $ref: '#/components/schemas/ConsumerAddress'
+            tenantOrderId:
+              type: string
           required:
             - id
             - facilityRef
@@ -17850,6 +17922,4 @@ tags:
 x-google-endpoints:
   - allowCors: true
     name: '%%HOST%%'
-
-
 
