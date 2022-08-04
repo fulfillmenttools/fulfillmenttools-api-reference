@@ -10019,7 +10019,70 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
-
+  '/api/packjobs/{packJobId}/returnnote':
+    get:
+      parameters:
+        - description: ID of the PackJob
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized values for the delivery note. If not provided
+            the default locale is used. For example de_DE, <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+            /></center> <br><i>This part of the API is currently under
+            development. That means that this endpoint, model, etc. can contain
+            breaking changes and / or might not be available at all times in
+            your API instance. It could disapear also without warning. Thus it
+            currently does not fall under our SLA regulations. For details on
+            this topic please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: { }
+          description: Returns a return note for the packjob.
+        '401':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - PackJobs
+      description: ''
+      operationId: getReturnNotesForPackJob
+      summary: Get the return note for the packjob with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   '/api/packjobs/{packJobId}/deliverynote':
     get:
       parameters:
@@ -10030,7 +10093,7 @@ paths:
           schema:
             type: string
         - description: >-
-            Provide the localized values for the delivery note. If not provided
+            Provide the localized values for the return note. If not provided
             the default locale is used. For example de_DE, <center><img
             src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
             /></center> <br><i>This part of the API is currently under
@@ -10783,12 +10846,26 @@ components:
           type: object
       xml:
         name: Carrier
+
+    DhlCarrierConfiguration:
+      properties:
+        alterantiveSendAddress:
+          $ref: '#/components/schemas/DeliveryAddress'
+
+    GlsCarrierConfiguration:
+      properties:
+        alterantiveSendAddress:
+          $ref: '#/components/schemas/DeliveryAddress'
+        alternativeReturnAddress:
+          $ref: '#/components/schemas/DeliveryAddress'
+
     CarrierDeliveryType:
       description: 'Provided delivery of this CEP. Default: DELIVERY'
       enum:
         - SAMEDAY
         - DELIVERY
       type: string
+
     CarrierForCreation:
       properties:
         credentials:
@@ -10822,6 +10899,11 @@ components:
           items:
             $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
           type: array
+        configuration:
+          anyOf:
+            - $ref: "#/components/schemas/DhlCarrierConfiguration"
+            - $ref: "#/components/schemas/GlsCarrierConfiguration"
+          description: 'Additional carrier specific configuration. ConfigurationType must match the carrier.'
       required:
         - name
         - key
@@ -13086,6 +13168,11 @@ components:
               type: string
             status:
               $ref: '#/components/schemas/CarrierStatus'
+            configuration:
+              anyOf:
+                - $ref: "#/components/schemas/DhlCarrierConfiguration"
+                - $ref: "#/components/schemas/GlsCarrierConfiguration"
+              description: 'Additional carrier specific configuration. ConfigurationType must match the carrier.'
           required:
             - action
           type: object
@@ -16257,7 +16344,7 @@ components:
             - key
           type: object
       xml:
-        name: CarrierForCreation
+        name: StrippedCarrier
     StrippedCarriers:
       properties:
         carriers:
