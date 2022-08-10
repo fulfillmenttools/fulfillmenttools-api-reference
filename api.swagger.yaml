@@ -11586,15 +11586,10 @@ components:
     OfferedDocument:
       type: object
       properties:
-        offeredDocumentType:
-          enum:
-            - EXTERNAL
-            - DELIVERY
-            - RETURNNOTE
-            - SENDLABEL
-          type: string
+        documentCategory:
+          $ref: '#/components/schemas/DocumentCategory'
       required:
-        - offeredDocumentType
+        - documentCategory
 
     DpdCarrierCredentials:
       allOf:
@@ -14302,6 +14297,8 @@ components:
               type: array
             recipient:
               $ref: '#/components/schemas/ConsumerAddress'
+            processRef:
+              type: string
             result:
               description: >-
                 Within this object you can find the result of the request after
@@ -14360,6 +14357,7 @@ components:
             - status
             - carrierRef
             - shipmentRef
+            - processRef
             - sender
             - recipient
             - loadUnitRefs
@@ -15218,7 +15216,7 @@ components:
         id:
           description: >-
             This value identifies this very instance of the rating. It is set
-            autmatically by the server when the configuration is updated.
+            automatically by the server when the configuration is updated.
           example: 579ff115-8941-4221-8530-04f8b4adf59f
           type: string
         implementation:
@@ -17270,6 +17268,10 @@ components:
               $ref: '#/components/schemas/ConsumerAddress'
             tenantOrderId:
               type: string
+            documents:
+              type: array
+              items:
+                $ref: '#/components/schemas/PrintableDocument'
           required:
             - id
             - facilityRef
@@ -17901,12 +17903,12 @@ components:
       xml:
         name: Tag
       required:
-        - 'id'
+        - id
     TagForCreation:
       additionalProperties: false
       required:
-        - 'key'
-        - 'allowedValues'
+        - key
+        - allowedValues
       properties:
         key:
           type: string
@@ -17918,8 +17920,8 @@ components:
     TagForModification:
       additionalProperties: false
       required:
-        - 'allowedValues'
-        - 'version'
+        - allowedValues
+        - version
       properties:
         version:
           type: number
@@ -17983,13 +17985,46 @@ components:
     TagTypeForCreation:
       additionalProperties: false
       required:
-        - 'tagRef'
-        - 'value'
+        - tagRef
+        - value
       properties:
         tagRef:
           type: string
         value:
           type: string
+    PrintableDocument:
+      type: object
+      properties:
+        id:
+          type: string
+        documentType:
+          $ref: '#/components/schemas/DocumentType'
+        documentCategory:
+          $ref: '#/components/schemas/DocumentCategory'
+        status:
+          $ref: '#/components/schemas/DocumentStatus'
+        name:
+          type: string
+        path:
+          type: string
+      required:
+        - documentType
+        - id
+        - status
+        - DocumentCategory
+    DocumentStatus:
+      type: string
+      enum:
+        - AVAILABLE
+        - LOADING
+        - REQUESTABLE
+    DocumentCategory:
+      enum:
+        - EXTERNAL
+        - DELIVERYNOTE
+        - RETURNNOTE
+        - SENDLABEL
+      type: string
   securitySchemes:
     firebase:
       flows:
