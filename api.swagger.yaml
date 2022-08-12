@@ -10572,6 +10572,7 @@ components:
             - RemovePickJobFromPickRunAction
             - ModifyPartialStock
             - AddTagsToProcess
+            - AssignFacilityToProcess
             - ModifyStorageLocation
           example: '<Use the corresponding action, see documentation>'
           type: string
@@ -15095,6 +15096,11 @@ components:
           items:
             type: string
           type: array
+        facilityRefs:
+          description: References of the Facilities connected to this process (if any).
+          items:
+            type: string
+          type: array
       required:
         - gdprCleanupDate
         - id
@@ -17945,7 +17951,9 @@ components:
       properties:
         actions:
           items:
-            $ref: '#/components/schemas/AddTagsToProcessAction'
+            anyOf:
+              - $ref: '#/components/schemas/AddTagsToProcessAction'
+              - $ref: '#/components/schemas/AssignFacilityToProcessAction'
           minItems: 1
           type: array
         version:
@@ -17982,6 +17990,25 @@ components:
           type: object
       xml:
         name: AddTagsToProcessAction
+    AssignFacilityToProcessAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value to manually assign a facility to a process
+              enum:
+                - AssignFacilityToProcess
+              type: string
+            facilityRef:
+              type: string
+          required:
+            - action
+            - facilityRef
+          type: object
+      xml:
+        name: AssignFacilityToProcessAction
     TagTypeForCreation:
       additionalProperties: false
       required:
