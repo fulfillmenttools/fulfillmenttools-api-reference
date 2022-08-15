@@ -7416,6 +7416,73 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
+  '/api/pickjobs/{pickJobId}/deliverynote':
+    get:
+      parameters:
+        - description: ID of the pick job for which you want to get a deliverynote
+          in: path
+          name: pickJobId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized values for the delivery note. If not provided
+            the default locale is used. For example de_DE, <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+            /></center> <br><i>This part of the API is currently under
+            development. That means that this endpoint, model, etc. can contain
+            breaking changes and / or might not be available at all times in
+            your API instance. It could disapear also without warning. Thus it
+            currently does not fall under our SLA regulations. For details on
+            this topic please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: { }
+          description: >-
+            The deliverynote for the given pickjob
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - PickJobs
+      description: ''
+      operationId: getPickJobDeliveryNote
+      summary: Get a deliverynote for the pick job with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/process:
     get:
       parameters:
@@ -10145,7 +10212,7 @@ paths:
           schema:
             type: string
         - description: >-
-            Provide the localized values for the return note. If not provided
+            Provide the localized values for the delivery note. If not provided
             the default locale is used. For example de_DE, <center><img
             src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
             /></center> <br><i>This part of the API is currently under
@@ -10200,7 +10267,6 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
-
 
   /api/tags:
     get:
@@ -14097,7 +14163,7 @@ components:
               type: array
               minItems: 1
               items:
-                $ref: '#/components/schemas/TagType'
+                $ref: '#/components/schemas/TagReference'
           required:
             - id
             - status
@@ -14171,7 +14237,7 @@ components:
           type: array
           items:
             minItems: 1
-            $ref: '#/components/schemas/TagTypeForCreation'
+            $ref: '#/components/schemas/TagReferenceForCreation'
       required:
         - orderDate
         - orderLineItems
@@ -14488,6 +14554,15 @@ components:
             pickRunRef:
               type: string
               description: Pick run id to which the pick job belongs
+            documents:
+              type: array
+              items:
+                $ref: '#/components/schemas/PrintableDocument'
+            tags:
+              type: array
+              minItems: 1
+              items:
+                $ref: '#/components/schemas/TagReference'
           required:
             - id
             - status
@@ -14545,6 +14620,11 @@ components:
             order.
           example: R456728546
           type: string
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReferenceForCreation'
       required:
         - orderDate
         - facilityRef
@@ -15095,7 +15175,7 @@ components:
           type: array
           minItems: 1
           items:
-            $ref: '#/components/schemas/TagType'
+            $ref: '#/components/schemas/TagReference'
         flatRefs:
           description: This field references all IDs of any entity connected to this process.
           items:
@@ -17287,7 +17367,7 @@ components:
           type: array
           items:
             minItems: 1
-            $ref: '#/components/schemas/TagTypeForCreation'
+            $ref: '#/components/schemas/TagReferenceForCreation'
         recipient:
           $ref: '#/components/schemas/ConsumerAddress'
       required:
@@ -17346,7 +17426,7 @@ components:
               type: array
               minItems: 1
               items:
-                $ref: '#/components/schemas/TagType'
+                $ref: '#/components/schemas/TagReference'
             recipient:
               $ref: '#/components/schemas/ConsumerAddress'
             tenantOrderId:
@@ -17366,7 +17446,7 @@ components:
           type: object
           xml:
             name: PackJob
-    TagType:
+    TagReference:
       required:
         - 'tagRef'
         - 'value'
@@ -18067,32 +18147,13 @@ components:
               type: array
               items:
                 minItems: 1
-                $ref: '#/components/schemas/TagTypeForCreation'
+                $ref: '#/components/schemas/TagReferenceForCreation'
           required:
             - action
           type: object
       xml:
         name: AddTagsToProcessAction
-    AssignFacilityToProcessAction:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use value to manually assign a facility to a process
-              enum:
-                - AssignFacilityToProcess
-              type: string
-            facilityRef:
-              type: string
-          required:
-            - action
-            - facilityRef
-          type: object
-      xml:
-        name: AssignFacilityToProcessAction
-    TagTypeForCreation:
+    TagReferenceForCreation:
       additionalProperties: false
       required:
         - tagRef
@@ -18135,6 +18196,25 @@ components:
         - RETURNNOTE
         - SENDLABEL
       type: string
+    AssignFacilityToProcessAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value to manually assign a facility to a process
+              enum:
+                - AssignFacilityToProcess
+              type: string
+            facilityRef:
+              type: string
+          required:
+            - action
+            - facilityRef
+          type: object
+      xml:
+        name: AssignFacilityToProcessAction
   securitySchemes:
     firebase:
       flows:
