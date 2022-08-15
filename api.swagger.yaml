@@ -9899,7 +9899,59 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
-
+  '/api/packjobs/{packJobId}/documenthandling':
+    get:
+      parameters:
+        - description: ID of the pack job you want to get document handling information
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentHandling'
+          description: >-
+            Pack job document handling was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - PackJobs
+      description: ''
+      operationId: getPackJobDocumentHandling
+      summary: Get a pack job document handling information with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   '/api/packjobs/{packJobId}':
     get:
       parameters:
@@ -14610,6 +14662,20 @@ components:
         - tenantPartialStockId
       type: object
 
+    SubstituteLineItemPartialStockLocation:
+      properties:
+        quantity:
+          example: 21
+          format: int64
+          minimum: 0
+          type: number
+        location:
+          $ref: '#/components/schemas/Location'
+      required:
+        - location
+        - quantity
+      type: object
+
     PickLineItemArticle:
       allOf:
         - $ref: '#/components/schemas/AbstractArticle'
@@ -16808,6 +16874,9 @@ components:
             description: 'Strings, that identify the article'
             type: string
           type: array
+        partialStockLocations:
+          items:
+            $ref: '#/components/schemas/SubstituteLineItemPartialStockLocation'
       required:
         - quantity
         - article
@@ -17227,7 +17296,15 @@ components:
       type: object
       xml:
         name: PackJobForCreation
-
+    DocumentHandling:
+      type: object
+      properties:
+        sendLabel:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+              default: false
     PackJob:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -17278,6 +17355,8 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/PrintableDocument'
+            documentHandling:
+              $ref: '#/components/schemas/DocumentHandling'
           required:
             - id
             - facilityRef
