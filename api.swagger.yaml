@@ -326,6 +326,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/carriers/{carrierId}/configuration:
     get:
       parameters:
@@ -340,7 +341,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarrierConfiguration'
+                anyOf:
+                  - $ref: '#/components/schemas/CarrierConfiguration'
+                  - $ref: '#/components/schemas/DhlCarrierConfiguration'
+                  - $ref: '#/components/schemas/GlsCarrierConfiguration'
+                  - $ref: '#/components/schemas/DpdCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The result is in
             the body.
@@ -392,7 +397,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarrierConfiguration'
+                anyOf:
+                  - $ref: '#/components/schemas/CarrierConfiguration'
+                  - $ref: '#/components/schemas/DhlCarrierConfiguration'
+                  - $ref: '#/components/schemas/GlsCarrierConfiguration'
+                  - $ref: '#/components/schemas/DpdCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The result is in
             the body.
@@ -429,7 +438,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CarrierConfiguration'
+              anyOf:
+                - $ref: '#/components/schemas/CarrierConfiguration'
+                - $ref: '#/components/schemas/DhlCarrierConfiguration'
+                - $ref: '#/components/schemas/GlsCarrierConfiguration'
+                - $ref: '#/components/schemas/DpdCarrierConfiguration'
         description: Carrier Configuration
         required: true
       summary: Update a carrier configuration with the given ID
@@ -438,6 +451,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/configurations/cutofftime:
     get:
       responses:
@@ -11021,16 +11035,31 @@ components:
         name: Carrier
 
     DhlCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
       properties:
-        alterantiveSendAddress:
-          $ref: '#/components/schemas/DeliveryAddress'
+        alternativeSendAddress:
+          $ref: '#/components/schemas/FacilityAddress'
+
+    DpdCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
+      properties:
+        alternativeSendAddress:
+          $ref: '#/components/schemas/FacilityAddress'
+        alternativeReturnAddress:
+          $ref: '#/components/schemas/FacilityAddress'
 
     GlsCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
       properties:
-        alterantiveSendAddress:
-          $ref: '#/components/schemas/DeliveryAddress'
-        alternativeReturnAddress:
-          $ref: '#/components/schemas/DeliveryAddress'
+        alternativeSendAddressLocationId:
+          type: string
+          minLength: 1
+        alternativeReturnAddressLocationId:
+          type: string
+          minLength: 1
 
     CarrierDeliveryType:
       description: 'Provided delivery of this CEP. Default: DELIVERY'
@@ -11072,11 +11101,6 @@ components:
           items:
             $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
           type: array
-        configuration:
-          anyOf:
-            - $ref: "#/components/schemas/DhlCarrierConfiguration"
-            - $ref: "#/components/schemas/GlsCarrierConfiguration"
-          description: 'Additional carrier specific configuration. ConfigurationType must match the carrier.'
       required:
         - name
         - key
@@ -11821,6 +11845,9 @@ components:
         - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
         - properties:
             contactId:
+              type: string
+              pattern: '^[A-z0-9-]{15}$'
+            returnContactId:
               type: string
               pattern: '^[A-z0-9-]{15}$'
           type: object
@@ -13336,11 +13363,6 @@ components:
               type: string
             status:
               $ref: '#/components/schemas/CarrierStatus'
-            configuration:
-              anyOf:
-                - $ref: "#/components/schemas/DhlCarrierConfiguration"
-                - $ref: "#/components/schemas/GlsCarrierConfiguration"
-              description: 'Additional carrier specific configuration. ConfigurationType must match the carrier.'
           required:
             - action
           type: object
@@ -14472,6 +14494,8 @@ components:
               $ref: '#/components/schemas/ConsumerAddress'
             processRef:
               type: string
+            returnAddress:
+              $ref: '#/components/schemas/FacilityAddress'
             result:
               description: >-
                 Within this object you can find the result of the request after
@@ -14535,6 +14559,7 @@ components:
             - recipient
             - loadUnitRefs
           type: object
+
     ParcelCarrierAcknowledgedWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
@@ -14544,6 +14569,7 @@ components:
       required:
         - payload
       type: object
+
     ParcelForCreation:
       properties:
         carrierRef:
@@ -14561,7 +14587,10 @@ components:
           $ref: '#/components/schemas/ConsumerAddress'
         sender:
           $ref: '#/components/schemas/FacilityAddress'
+        returnAddress:
+          $ref: '#/components/schemas/FacilityAddress'
       type: object
+
     ParcelStatus:
       enum:
         - OPEN
