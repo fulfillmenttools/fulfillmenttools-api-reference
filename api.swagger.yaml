@@ -9966,6 +9966,59 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+  '/api/pickjobs/{pickJobId}/documenthandling':
+    get:
+      parameters:
+        - description: ID of the pick job you want to get document handling information
+          in: path
+          name: pickJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentHandling'
+          description: >-
+            Pick job document handling was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - PickJobs
+      description: ''
+      operationId: getPickJobDocumentHandling
+      summary: Get a pick job document handling information with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   '/api/packjobs/{packJobId}/documenthandling':
     get:
       parameters:
@@ -10267,6 +10320,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
 
   /api/tags:
     get:
@@ -14563,6 +14617,8 @@ components:
               minItems: 1
               items:
                 $ref: '#/components/schemas/TagReference'
+            documentHandling:
+              $ref: '#/components/schemas/DocumentHandling'
           required:
             - id
             - status
