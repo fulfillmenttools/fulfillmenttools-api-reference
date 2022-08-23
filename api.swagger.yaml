@@ -345,6 +345,7 @@ paths:
                   - $ref: '#/components/schemas/CarrierConfiguration'
                   - $ref: '#/components/schemas/DhlCarrierConfiguration'
                   - $ref: '#/components/schemas/GlsCarrierConfiguration'
+                  - $ref: '#/components/schemas/FedexCarrierConfiguration'
                   - $ref: '#/components/schemas/DpdCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The result is in
@@ -401,6 +402,7 @@ paths:
                   - $ref: '#/components/schemas/CarrierConfiguration'
                   - $ref: '#/components/schemas/DhlCarrierConfiguration'
                   - $ref: '#/components/schemas/GlsCarrierConfiguration'
+                  - $ref: '#/components/schemas/FedexCarrierConfiguration'
                   - $ref: '#/components/schemas/DpdCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The result is in
@@ -443,6 +445,7 @@ paths:
                 - $ref: '#/components/schemas/DhlCarrierConfiguration'
                 - $ref: '#/components/schemas/GlsCarrierConfiguration'
                 - $ref: '#/components/schemas/DpdCarrierConfiguration'
+                - $ref: '#/components/schemas/FedexCarrierConfiguration'
         description: Carrier Configuration
         required: true
       summary: Update a carrier configuration with the given ID
@@ -10681,6 +10684,7 @@ components:
       type: object
       xml:
         name: AbstractArticle
+
     AbstractCarrierCredentials:
       discriminator:
         propertyName: key
@@ -10692,6 +10696,7 @@ components:
       type: object
       xml:
         name: AbstractCarrierCredentials
+
     AbstractFacilityCarrierConfiguration:
       discriminator:
         propertyName: key
@@ -10796,6 +10801,10 @@ components:
           description: A two-digit country code as per ISO 3166-1 alpha-2
           example: DE
           pattern: '^[A-Z]{2}$'
+          type: string
+        province:
+          example: "NRW"
+          pattern: ^.+$
           type: string
         customAttributes:
           description: >-
@@ -11033,6 +11042,41 @@ components:
           type: object
       xml:
         name: Carrier
+
+    FedexCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
+      properties:
+        useEconomyService:
+          type: boolean
+          example: true
+          description: "Indicates if the economy services of fedex should be used."
+        defaultPriceValue:
+          type: number
+          example: 10.99
+          description: "Default value of shipped goods"
+        defaultPriceCurrency:
+          type: string
+          example: "EUR"
+          description: "default currency of shipped goods as 3 letter iso code"
+          pattern: '^[A-Z]{3}$'
+        defaultManufactureCountry:
+          description: A two-digit country code as per ISO 3166-1 alpha-2
+          example: DE
+          pattern: '^[A-Z]{2}$'
+          type: string
+        defaultCommodityDescription:
+          type: string
+          example: "Description goes here"
+          description: "Describes the shipped goods"
+      required:
+        - useEconomyService
+        - defaultPriceCurrency
+        - defaultPriceValue
+        - defaultManufactureCountry
+        - defaultCommodityDescription
+
+
 
     DhlCarrierConfiguration:
       allOf:
@@ -11733,6 +11777,28 @@ components:
           type: object
       xml:
         name: DhlCarrierCredentials
+
+    FedexCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractCarrierCredentials'
+        - properties:
+            accountNumber:
+              description: Your fedex accountnumber
+              type: string
+            apiKey:
+              description: Internal API Key to communicate with the CEP Api
+              type: string
+            secretKey:
+              description: Internal API Key to communicate with the CEP Api
+              type: string
+          required:
+            - apiKey
+            - secretKey
+            - accountNumber
+          type: object
+      xml:
+        name: FedexCarrierCredentials
+
     DomainConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
