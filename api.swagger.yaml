@@ -7624,6 +7624,40 @@ paths:
           required: false
           schema:
             type: string
+        - description: Return the Processes created on or after this date
+          in: query
+          name: startDate
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: Return the Processes created on or before this date
+          in: query
+          name: endDate
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: Id's of the facilities from which you want to get the processes
+          explode: true
+          in: query
+          name: facilityRefs
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - description: Country codes from which you want to get the processes
+          explode: true
+          in: query
+          name: countries
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           content:
@@ -15372,6 +15406,11 @@ components:
           type: boolean
         orderRef:
           description: References to the Order connected to this process (if present).
+          type: string
+        orderCountry:
+          description: The country where to order has to be delivered. A two-digit country code as per ISO 3166-1 alpha-2
+          example: DE
+          pattern: '^[A-Z]{2}$'
           type: string
         routingPlanRefs:
           description: References the RoutingPlans that were used during this process (if present).
