@@ -5163,6 +5163,35 @@ paths:
           required: false
           schema:
             type: string
+        - description: Reference to the facility you want to get the corresponding handoverJobs
+          in: query
+          name: facilityRef
+          required: false
+          schema:
+            type: string
+        - description: Reference to the status you want to get the corresponding handoverJobs
+          explode: true
+          in: query
+          name: status
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - description: Reference to the carriers you want to get the corresponding handoverJobs
+          in: query
+          name: carrierRefs
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - description: Reference to the channel you want to get the corresponding handoverJobs
+          in: query
+          name: channel
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -11735,7 +11764,11 @@ components:
         - title
         - quantity
       type: object
-
+    HandoverJobOrderBy:
+      description: 'STATUS_TARGET_TIME_LAST_MODIFIED_DATE is depricated'
+      enum:
+        - STATUS_TARGET_TIME_LAST_MODIFIED_DATE
+        - TARGET_TIME_ASC
     DeliveryPreferences:
       properties:
         collect:
