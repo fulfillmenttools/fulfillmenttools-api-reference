@@ -11973,6 +11973,22 @@ components:
           type: object
       xml:
         name: AngelFacilityCarrierConfiguration
+
+    PostNLFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            customerId:
+              type: string
+            customerCode:
+              type: string
+          type: object
+          required:
+            - customerId
+            - customerCode
+      xml:
+        name: PostNLFacilityCarrierConfiguration
+
     GlsFacilityCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
@@ -12031,6 +12047,19 @@ components:
               description: "GLS Track And Trace password"
       xml:
         name: "GLSCarrierCredentials"
+
+    PostNLCarrierCredentials:
+      allOf:
+        - $ref: "#/components/schemas/AbstractCarrierCredentials"
+        - required:
+            - "apiKey"
+          type: "object"
+          properties:
+            apiKey:
+              type: "string"
+              description: "PostNL API Key"
+      xml:
+        name: "PostNLCarrierCredentials"
 
     EconomicalSplit:
       description: >-
@@ -12208,6 +12237,7 @@ components:
             - $ref: "#/components/schemas/DhlFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -12269,6 +12299,7 @@ components:
             - $ref: "#/components/schemas/DhlFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -13578,6 +13609,20 @@ components:
       xml:
         name: ModifyDpdCarrierCredentials
 
+    ModifyPostNLCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
+        - additionalProperties: false
+          properties:
+            apiKey:
+              description: Key to access the postNl api.
+              type: string
+          required:
+            - apiKey
+          type: object
+      xml:
+        name: ModifyDpdCarrierCredentials
+
     ModifyFedexCarrierCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
@@ -13598,6 +13643,52 @@ components:
           type: object
       xml:
         name: ModifyFedexCarrierCredentials
+
+    ModifyAngelCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
+        - properties:
+            username:
+              description: Your Angel username
+              type: string
+            password:
+              description: Your password for Angel carrier
+              type: string
+            authToken:
+              description: X-Auth-Token for callbacks from Angel
+              type: string
+          required:
+            - username
+            - password
+            - authToken
+          type: object
+      xml:
+        name: ModifyAngelCarrierCredentials
+
+    ModifyGLSCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
+        - properties:
+            username:
+              description: Your Angel username
+              type: string
+            password:
+              description: Your password for Angel carrier
+              type: string
+            trackAndTraceUsername:
+              description: GLS Track And Trace username
+              type: string
+            trackAndTracePassword:
+              description: GLS Track And Trace passworde
+              type: string
+          required:
+            - username
+            - password
+            - trackAndTraceUsername
+            - trackAndTracePassword
+          type: object
+      xml:
+        name: ModifyGLSCarrierCredentials
 
     ModifyEconomicalSplit:
       description: >-
