@@ -5192,6 +5192,12 @@ paths:
           required: false
           schema:
             type: string
+        - description: Parameter to filter anonymized handover jobs
+          in: query
+          name: anonymized
+          required: false
+          schema:
+            type: boolean
       responses:
         '200':
           content:
@@ -8671,6 +8677,12 @@ paths:
           required: false
           schema:
             type: string
+        - description: Parameter to filter anonymized shipments
+          in: query
+          name: anonymized
+          required: false
+          schema:
+            type: boolean
       responses:
         '200':
           content:
@@ -11764,11 +11776,13 @@ components:
         - title
         - quantity
       type: object
+
     HandoverJobOrderBy:
       description: 'STATUS_TARGET_TIME_LAST_MODIFIED_DATE is depricated'
       enum:
         - STATUS_TARGET_TIME_LAST_MODIFIED_DATE
         - TARGET_TIME_ASC
+
     DeliveryPreferences:
       properties:
         collect:
@@ -16540,6 +16554,12 @@ components:
         - active
         - rerouteType
       type: object
+
+    ShipmentOrderBy:
+      description: 'STATUS_TARGET_TIME_LAST_MODIFIED_DATE is depricated'
+      enum:
+        - STATUS_TARGET_TIME_ORDER_DATE
+
     Shipment:
       allOf:
         - $ref: '#/components/schemas/ShipmentForCreation'
@@ -16579,6 +16599,7 @@ components:
             - status
             - hasActiveCarrier
           type: object
+
     ShipmentForCreation:
       properties:
         carrierLogoUrl:
