@@ -347,6 +347,7 @@ paths:
                   - $ref: '#/components/schemas/GlsCarrierConfiguration'
                   - $ref: '#/components/schemas/FedexCarrierConfiguration'
                   - $ref: '#/components/schemas/DpdCarrierConfiguration'
+                  - $ref: '#/components/schemas/BringCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The result is in
             the body.
@@ -404,6 +405,7 @@ paths:
                   - $ref: '#/components/schemas/GlsCarrierConfiguration'
                   - $ref: '#/components/schemas/FedexCarrierConfiguration'
                   - $ref: '#/components/schemas/DpdCarrierConfiguration'
+                  - $ref: '#/components/schemas/BringCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The result is in
             the body.
@@ -446,6 +448,7 @@ paths:
                 - $ref: '#/components/schemas/GlsCarrierConfiguration'
                 - $ref: '#/components/schemas/DpdCarrierConfiguration'
                 - $ref: '#/components/schemas/FedexCarrierConfiguration'
+                - $ref: '#/components/schemas/BringCarrierConfiguration'
         description: Carrier Configuration
         required: true
       summary: Update a carrier configuration with the given ID
@@ -11122,6 +11125,23 @@ components:
       xml:
         name: Carrier
 
+    BringCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
+      properties:
+        customerId:
+          type: string
+          example: "12345"
+          description: "Bring customer number."
+        supportPhoneNumber:
+          type: string
+          example: "0031121424242"
+          description: "Bring support phone number."
+      required:
+        - customerId
+        - supportPhoneNumber
+
+
     FedexCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
@@ -11884,6 +11904,30 @@ components:
       xml:
         name: FedexCarrierCredentials
 
+    BringCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractCarrierCredentials'
+        - properties:
+            apiUid:
+              description: Internal API Uid to communicate with the CEP Api
+              type: string
+            apiKey:
+              description: Internal API Key to communicate with the CEP Api
+              type: string
+            clientUrl:
+              description: Url of the requesting client, can be a static value
+              type: string
+            authToken:
+              description: Identifier for Track&Trace Webhook
+              type: string
+          required:
+            - apiUid
+            - apiKey
+            - clientUrl
+          type: object
+      xml:
+        name: BringCarrierCredentials
+
     DomainConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -12289,6 +12333,7 @@ components:
             - $ref: "#/components/schemas/DhlFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -13639,10 +13684,33 @@ components:
               description: Key to access the postNl api.
               type: string
           required:
-            - apiKey
+            - key
           type: object
       xml:
-        name: ModifyDpdCarrierCredentials
+        name: ModifyPostNLCarrierCredentials
+
+    ModifyBringCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
+        - additionalProperties: false
+          properties:
+            apiUid:
+              type: "string"
+              description: "Bring API uid"
+            apiKey:
+              type: "string"
+              description: "Bring API Key"
+            clientUrl:
+              type: "string"
+              description: "Bring clientUrl"
+            authToken:
+              type: "string"
+              description: "Bring AuthToken"
+          required:
+            - key
+          type: object
+      xml:
+        name: ModifyBringCarrierCredentials
 
     ModifyFedexCarrierCredentials:
       allOf:
@@ -17714,6 +17782,10 @@ components:
           description: When enabled, a return label will be created by creating a shipping label
           example: false
           type: boolean
+        additionalWeightInPercent:
+          description: It is an amount of percentage for packaging weight which will be added to the calculated shipping weight
+          type: number
+          minimum: 0
       required:
         - returnLabel
         - carrierRef
@@ -17821,6 +17893,10 @@ components:
                 $ref: '#/components/schemas/PrintableDocument'
             documentHandling:
               $ref: '#/components/schemas/DocumentHandling'
+            anonymized:
+              description: Indicates if gdpr related data was anonymized
+              example: false
+              type: boolean
           required:
             - id
             - facilityRef
