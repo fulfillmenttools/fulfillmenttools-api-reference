@@ -7696,6 +7696,15 @@ paths:
             type: array
             items:
               type: string
+        - description: Brand ids for which you want to get the processes
+          explode: true
+          in: query
+          name: brandRefs
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           content:
@@ -9874,6 +9883,58 @@ paths:
         description: ModifyUser object
         required: true
       summary: Patch an existing user with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+  /api/brands:
+    get:
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrippedBrands'
+          description: >-
+            All brands on listings for this tenant
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Brands
+      description: ''
+      operationId: getAllBrands
+      summary: Return all brands
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
@@ -13159,6 +13220,52 @@ components:
     ListingAttributeItem:
       allOf:
         - $ref: '#/components/schemas/ArticleAttributeItem'
+
+
+    BrandForCreation:
+      properties:
+        name:
+          description: 'The name of the brand for this listing'
+          type: string
+          example: Adidas
+      required:
+        - name
+      type: object
+      xml:
+        name: BrandForCreation
+
+
+    Brand:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/BrandForCreation'
+      properties:
+        id:
+          example: fsfdsf87fsd
+          type: string
+        name:
+          description: 'The name of the brand for this listing'
+          type: string
+          example: Adidas
+      required:
+        - name
+        - id
+      type: object
+      xml:
+        name: Brand
+
+    StrippedBrands:
+      properties:
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+        brands:
+          items:
+            $ref: '#/components/schemas/Brand'
+          type: array
+      type: object
+
     ListingForCreation:
       properties:
         attributes:
@@ -13196,6 +13303,7 @@ components:
       type: object
       xml:
         name: ListingForCreation
+
     ListingForReplacement:
       allOf:
         - $ref: '#/components/schemas/ListingForCreation'
@@ -15645,6 +15753,11 @@ components:
           example: DE
           pattern: '^[A-Z]{2}$'
           type: string
+        brandRefs:
+          description: Brand ids corresponding to the listings of this order
+          items:
+            type: string
+          type: array
         routingPlanRefs:
           description: References the RoutingPlans that were used during this process (if present).
           items:
