@@ -11286,7 +11286,7 @@ components:
           $ref: '#/components/schemas/CarrierDeliveryType'
         key:
           description: >-
-            References the KEP. Currently allowed values are DHL, DPD and
+            References the KEP. Currently allowed values are DHL, DPD, ANGEL, GLS, FEDEX, POSTNL, BRING and
             CUSTOM.
           example: DHL
           type: string
@@ -13768,6 +13768,9 @@ components:
             key:
               description: Use value 'DHL' in order to provide DHL credentials
               type: string
+            apiKey:
+              description: Internal API Key to communicate with the CEP Api
+              type: string
           required:
             - key
           type: object
@@ -13801,6 +13804,9 @@ components:
             apiKey:
               description: Key to access the postNl api.
               type: string
+            key:
+              description: Use value 'POSTNL' in order to provide POSTNL credentials
+              type: string
           required:
             - key
           type: object
@@ -13814,16 +13820,19 @@ components:
           properties:
             apiUid:
               type: "string"
-              description: "Bring API uid"
+              description: "Internal API Uid to communicate with the CEP Api"
             apiKey:
               type: "string"
-              description: "Bring API Key"
+              description: "Internal API Key to communicate with the CEP Api"
             clientUrl:
               type: "string"
-              description: "Bring clientUrl"
+              description: "Url of the requesting client, can be a static value"
             authToken:
               type: "string"
-              description: "Bring AuthToken"
+              description: "Identifier for Track&Trace Webhook"
+            key:
+              description: Use value 'BRING' in order to provide BRING credentials
+              type: string
           required:
             - key
           type: object
@@ -13843,10 +13852,11 @@ components:
             secretKey:
               description: Internal API Key to communicate with the CEP Api
               type: string
+            key:
+              description: Use value 'FEDEX' in order to provide FEDEX credentials
+              type: string
           required:
-            - apiKey
-            - secretKey
-            - accountNumber
+            - key
           type: object
       xml:
         name: ModifyFedexCarrierCredentials
@@ -13864,10 +13874,11 @@ components:
             authToken:
               description: X-Auth-Token for callbacks from Angel
               type: string
+            key:
+              description: Use value 'ANGEL' in order to provide ANGEL credentials
+              type: string
           required:
-            - username
-            - password
-            - authToken
+            - key
           type: object
       xml:
         name: ModifyAngelCarrierCredentials
@@ -13888,11 +13899,11 @@ components:
             trackAndTracePassword:
               description: GLS Track And Trace passworde
               type: string
+            key:
+              description: Use value 'GLS' in order to provide GLS credentials
+              type: string
           required:
-            - username
-            - password
-            - trackAndTraceUsername
-            - trackAndTracePassword
+            - key
           type: object
       xml:
         name: ModifyGLSCarrierCredentials
