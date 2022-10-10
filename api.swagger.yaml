@@ -15643,6 +15643,11 @@ components:
           example: '2020-02-03T09:45:51.525Z'
           format: date-time
           type: string
+        targetTimeBaseDate:
+          description: The start date for the targetTime calculation.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
       type: object
     PickjobPickLinePickedWebHookEvent:
       allOf:
@@ -15979,6 +15984,7 @@ components:
         - PREFER-WAREHOUSE
         - ZONE
         - EXPIRY-DATE
+        - CAPACITY
       type: string
       xml:
         name: RatingImplementation
@@ -16587,6 +16593,12 @@ components:
             Id of the global process related to this entity. For example used
             for starting the GDPR process and others.
           type: string
+        targetTimeBaseDate:
+          description: This date is used as base/start to calculate the target time date.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+
       required:
         - id
         - orderDate
@@ -16600,6 +16612,7 @@ components:
         - routingRun
         - finalizeRun
       type: object
+
     RoutingPlanLineItem:
       allOf:
         - $ref: '#/components/schemas/OrderLineItem'
@@ -16866,6 +16879,11 @@ components:
           type: string
         tenantOrderId:
           description: Reference to the order in the tenant system.
+          type: string
+        targetTimeBaseDate:
+          description: The start date for the targetTime calculation.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
           type: string
       required:
         - facilityRef
