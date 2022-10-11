@@ -1117,6 +1117,101 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+  /api/configurations/capacityplanningtimeframe:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapacityPlanningTimeframeConfiguration'
+          description: >-
+            Configuration was found & you were allowed to access it. The result
+            is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Configuration not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+      description: ''
+      operationId: getCapacityPlanningTimeframeConfiguration
+      summary: Get a tenant capacity planning timeframe configuration
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapacityPlanningTimeframeConfiguration'
+          description: Configuration was written successfully
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Configuration not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+      description: ''
+      operationId: putCapacityPlanningTimeframeConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapacityPlanningTimeframeConfiguration'
+        required: true
+      summary: Update capacity planning timeframe configuration of a tenant
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   /api/configurations/gdpr:
     get:
       responses:
@@ -12698,6 +12793,10 @@ components:
         name:
           example: Hamburg NW2
           type: string
+        capacityPlanningTimeframe:
+          description: The range in days per facility which defines how many days in the future the capacity of the facility can be planned
+          type: integer
+          minimum: 1
         pickingTimes:
           $ref: '#/components/schemas/PickingTimes'
           description: >-
@@ -12899,6 +12998,7 @@ components:
         - FACILITY-CARRIERCAPACITY
         - FACILITY-CARRIERAVAILABILITY
         - FACILITY-COUNTRY
+        - FACILITY-PICKING-TIME-CAPACITY
         - PRESELECTED-FACILITY
         - SAMEDAY-POSSIBLE
         - CUSTOM
@@ -13114,6 +13214,19 @@ components:
           type: integer
       required:
         - minutes
+      type: object
+    CapacityPlanningTimeframeConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        days:
+          default: 100
+          description: The range in days per facility which defines how many days in the future the capacity of the facility can be planned
+          example: '240'
+          minimum: 1
+          type: integer
+      required:
+        - days
       type: object
     GdprConfiguration:
       allOf:
@@ -14284,6 +14397,10 @@ components:
             name:
               example: Hamburg NW2
               type: string
+            capacityPlanningTimeframe:
+              description: The range in days per facility which defines how many days in the future the capacity of the facility can be planned
+              type: integer
+              minimum: 1
             pickingTimes:
               $ref: '#/components/schemas/PickingTimes'
               description: >-
