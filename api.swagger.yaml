@@ -12276,6 +12276,42 @@ components:
       xml:
         name: DhlCarrierCredentials
 
+    DHLV2CarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractCarrierCredentials'
+        - properties:
+            apiKey:
+              description: Internal API Key to communicate with the DHL Api
+              type: string
+            billingNumber:
+              description: >-
+                Abrechnungsnummer DHL Paket, displayed in the DHL
+                Geschäftskundenportal under 'Vertragspositionen'
+              type: string
+              example: 22222222220101
+            retoureBillingNumber:
+              description: >-
+                Abrechnungsnummer DHL Retoure, displayed in the DHL
+                Geschäftskundenportal under 'Vertragspositionen'
+              type: string
+              example: 22222222220701
+            dhlGKPassword:
+              description: Password you use to login to the DHL Geschäftskundenportal
+              type: string
+            dhlGkUsername:
+              description: >-
+                Username (Benutzername) you use to login to the DHL
+                Geschäftskundenportal
+              type: string
+          required:
+            - apiKey
+            - dhlGkUsername
+            - dhlGKPassword
+            - billingNumber
+          type: object
+      xml:
+        name: DhlV2CarrierCredentials
+
     FedexCarrierCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractCarrierCredentials'
@@ -14282,6 +14318,40 @@ components:
           type: object
       xml:
         name: ModifyBringCarrierCredentials
+
+    ModifyDHLV2CarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
+        - additionalProperties: false
+          properties:
+            apiKey:
+              description: Internal API Key to communicate with the DHL Api
+              type: string
+            billingNumber:
+              description: >-
+                Abrechnungsnummer DHL Paket, displayed in the DHL
+                Geschäftskundenportal under 'Vertragspositionen'
+              type: string
+              example: 22222222220101
+            retoureBillingNumber:
+              description: >-
+                Abrechnungsnummer DHL Retoure, displayed in the DHL
+                Geschäftskundenportal under 'Vertragspositionen'
+              type: string
+              example: 22222222220701
+            dhlGKPassword:
+              description: Password you use to login to the DHL Geschäftskundenportal
+              type: string
+            dhlGkUsername:
+              description: >-
+                Username (Benutzername) you use to login to the DHL
+                Geschäftskundenportal
+              type: string
+          required:
+            - key
+          type: object
+      xml:
+        name: ModifyDHLV2CarrierCredentials
 
     ModifyFedexCarrierCredentials:
       allOf:
