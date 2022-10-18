@@ -10406,6 +10406,271 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
+  '/api/packingcontainertypes':
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainerType'
+          description: >-
+            The packing container type was successfully created. The Location header contains
+            the URL of the packing container type.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - PackingContainerTypes
+      description: ''
+      operationId: addPackingContainerType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingContainerTypeForCreation'
+        description: Packing type object
+        required: true
+      summary: Add a new packing container type
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    get:
+      parameters:
+        - description: >-
+            Provide the localized values for the entity. If not provided
+            the default locale is used. For example de_DE, <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+            /></center> <br><i>This part of the API is currently under
+            development. That means that this endpoint, model, etc. can contain
+            breaking changes and / or might not be available at all times in
+            your API instance. It could disapear also without warning. Thus it
+            currently does not fall under our SLA regulations. For details on
+            this topic please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.
+          in: query
+          name: locale
+          schema:
+            type: string
+        - description: all entities after given id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PackingContainerType'
+                type: array
+          description: >-
+            Found PackingContainerTypes
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - PackingContainerTypes
+      description: ''
+      operationId: getPackingContainerTypes
+      summary: Get all packing container types
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  '/api/packingcontainertypes/{packingContainerTypeId}':
+    get:
+      parameters:
+        - description: >-
+            Provide the localized values for the entity. If not provided
+            the default locale is used. For example de_DE, <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+            /></center> <br><i>This part of the API is currently under
+            development. That means that this endpoint, model, etc. can contain
+            breaking changes and / or might not be available at all times in
+            your API instance. It could disapear also without warning. Thus it
+            currently does not fall under our SLA regulations. For details on
+            this topic please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.
+          in: query
+          name: locale
+          schema:
+            type: string
+        - description: id of entity
+          in: path
+          name: packingContainerTypeId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainerType'
+          description: >-
+            Found PackingContainerType
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - PackingContainerTypes
+      description: ''
+      operationId: getPackingContainerType
+      summary: Get a packing container type by its id
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    patch:
+      parameters:
+        - description: ID of the packingcontainertype you want to change
+          in: path
+          name: packingContainerTypeId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainerType'
+          description: >-
+            PackingContainerType was found & patch-set has been applied. The patched PackingContainerType
+            is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: PackingContainerType not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: PackingContainerType version conflict
+      security:
+        - firebase: [ ]
+      tags:
+        - PackingContainerTypes
+      description: ''
+      operationId: updatePackingContainerType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingContainerTypePatchActions'
+        description: Patch set
+        required: true
+      summary: Patches a PackingContainerType with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+
   '/api/pickjobs/{pickJobId}/documenthandling':
     get:
       parameters:
@@ -10761,6 +11026,268 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  '/api/packjobs/{packJobId}/containers/{containerId}':
+    get:
+      parameters:
+        - description: >-
+            Provide the localized values for the entity. If not provided
+            the default locale is used. For example de_DE, <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+            /></center> <br><i>This part of the API is currently under
+            development. That means that this endpoint, model, etc. can contain
+            breaking changes and / or might not be available at all times in
+            your API instance. It could disapear also without warning. Thus it
+            currently does not fall under our SLA regulations. For details on
+            this topic please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.
+          in: query
+          name: locale
+          schema:
+            type: string
+        - description: ID of the pack job you want to get
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: ID of the packing container you want to get
+          in: path
+          name: containerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainer'
+          description: >-
+            Entity was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - PackJobs
+      description: ''
+      operationId: getPackingContainer
+      summary: Get a packing container with the given ID on given packJob
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+    patch:
+      parameters:
+        - description: ID of corresponding packJob you want to patch
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: ID of container you want to patch
+          in: path
+          name: containerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainer'
+          description: >-
+            Container was found & patch-set has been applied. The patched entity
+            is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity version conflict
+      security:
+        - firebase: [ ]
+      tags:
+        - PackJobs
+      description: ''
+      operationId: patchPackingContainer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingContainerPatchActions'
+        description: Patch set
+        required: true
+      summary: Patches a packing container with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+
+  '/api/packjobs/{packJobId}/containers':
+    get:
+      parameters:
+        - description: ID of the pack job you want to get
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PackingContainer'
+          description: >-
+            Entity was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - PackJobs
+      description: ''
+      operationId: getAllPackingContainerForPackJob
+      summary: Get all packing container on given packJob
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+    post:
+      parameters:
+        - description: ID of the pack job you want to get
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainer'
+          description: >-
+            The packing container was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - PackJobs
+      description: ''
+      operationId: addPackingContainer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingContainerForCreation'
+        description: Packing Container object
+        required: true
+      summary: Add a new packing container
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
 
   /api/tags:
     get:
@@ -11239,6 +11766,9 @@ components:
             - AddTagsToProcess
             - AssignFacilityToProcess
             - ModifyStorageLocation
+            - ModifyPackingContainerType
+            - ModifyPackingContainerTypeIcon
+            - ReplaceCodesInPackingContainer
             - ReplaceLoadUnitLineItems
           example: '<Use the corresponding action, see documentation>'
           type: string
@@ -19426,6 +19956,237 @@ components:
           type: object
       xml:
         name: AssignFacilityToProcessAction
+
+    PackingContainer:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/PackingContainerForCreation'
+      properties:
+        description:
+          type: string
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        facilityRef:
+          description: >-
+            The id of the facility reference. The given ID has to be present in
+            the system. But it is not updatable via PUT request
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+        packJobRef:
+          type: string
+        iconUrl:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      required:
+        - id
+        - nameLocalized
+        - version
+        - facilityRef
+        - packJobRef
+      type: object
+    PackingContainerForCreation:
+      properties:
+        codes:
+          items:
+            description: List of codes
+            type: string
+            minItems: 1
+          type: array
+        packingContainerTypeRef:
+          type: string
+      required:
+        - packingContainerTypeRef
+        - codes
+      type: object
+
+    PackingContainerPatchActions:
+      properties:
+        actions:
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/ReplaceCodesInPackingContainerAction'
+          minItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: PackingContainerPatchActions
+
+    ReplaceCodesInPackingContainerAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use ReplaceCodesInPackingContainer to add a code to an existing packing container
+              enum:
+                - ReplaceCodesInPackingContainer
+              type: string
+            codes:
+              items:
+                description: List of codes
+                type: string
+                minItems: 1
+              type: array
+          required:
+            - action
+          type: object
+      xml:
+        name: ReplaceCodesInPackingContainer
+
+    PackingContainerType:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        description:
+          type: string
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        iconUrl:
+          description: ''
+          type: string
+        id:
+          description: ''
+          type: string
+        name:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        priority:
+          description: >-
+            This value gives the priority of the respective packingContainerType. The
+            lower the value the higher is the priority, e.g. priority 1 is
+            higher than priority 10. The priority can be used to order
+            packingContainerTypes in the UI.
+          example: 100
+          format: int64
+          maximum: 10000
+          minimum: 1
+          type: integer
+      required:
+        - id
+        - version
+        - nameLocalized
+      type: object
+    PackingContainerTypeForCreation:
+      properties:
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        icon:
+          $ref: '#/components/schemas/NamedFile'
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        priority:
+          description: >-
+            This value gives the priority in the respective packingContainerType. The
+            lower the value the higher is the priority, e.g. priority 1 is
+            higher than priority 10. The priority can be used to order
+            packingContainerTypes.
+          example: 100
+          format: int64
+          maximum: 10000
+          minimum: 1
+          type: integer
+      required:
+        - nameLocalized
+      type: object
+    PackingContainerTypePatchActions:
+      properties:
+        actions:
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/ModifyPackingContainerTypeAction'
+              - $ref: '#/components/schemas/ModifyPackingContainerTypeIconAction'
+          minItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: PackingContainerTypePatchActions
+
+    ModifyPackingContainerTypeAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value 'ModifyPackingContainerType', because you want to modify a
+                PackingContainerType
+              enum:
+                - ModifyPackingContainerType
+              type: string
+            descriptionLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            nameLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            priority:
+              description: >-
+                This value gives the priority in the respective packingContainerType.
+                The lower the value the higher is the priority, e.g. priority 1
+                is higher than priority 10. The priority can be used to order
+                PackingContainerTypes.
+              example: 100
+              format: int64
+              maximum: 10000
+              minimum: 1
+              type: integer
+          required:
+            - action
+          type: object
+      xml:
+        name: ModifyPackingContainerType
+
+    ModifyPackingContainerTypeIconAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value 'ModifyPackingContainerTypeIcon', because you want to modify a
+                PackingContainerTypes icon
+              enum:
+                - ModifyPackingContainerTypeIcon
+              type: string
+            content:
+              type: string
+              description: Content of the icon as base64 string
+            name:
+              type: string
+              description: icons filename
+          required:
+            - action
+            - name
+            - content
+          type: object
+      xml:
+        name: ModifyPackingContainerTypeIcon
+
 
     StockSummaryArticle:
       type: object
