@@ -11782,6 +11782,9 @@ components:
             - ModifyPackingContainerTypeIcon
             - ReplaceCodesInPackingContainer
             - ReplaceLoadUnitLineItems
+            - AddLineItemToPackingContainer
+            - RemoveLineItemFromPackingContainer
+            - UpdateLineItemOnPackingContainer
           example: '<Use the corresponding action, see documentation>'
           type: string
       required:
@@ -20026,6 +20029,9 @@ components:
             type: string
             minItems: 1
           type: array
+        lineItems:
+          items:
+            $ref: '#/components/schemas/PackingContainerLineItem'
         packingContainerTypeRef:
           type: string
       required:
@@ -20039,6 +20045,9 @@ components:
           items:
             anyOf:
               - $ref: '#/components/schemas/ReplaceCodesInPackingContainerAction'
+              - $ref: '#/components/schemas/AddLineItemToPackingContainerAction'
+              - $ref: '#/components/schemas/RemoveLineItemFromPackingContainerAction'
+              - $ref: '#/components/schemas/UpdateLineItemOnPackingContainerAction'
           minItems: 1
           type: array
         version:
@@ -20077,6 +20086,122 @@ components:
           type: object
       xml:
         name: ReplaceCodesInPackingContainer
+
+    AddLineItemToPackingContainerAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use AddLineItemToPackingContainer to add a line item to an existing packing container
+              enum:
+                - AddLineItemToPackingContainer
+              type: string
+            lineItem:
+              $ref: '#/components/schemas/PackingContainerLineItemForCreation'
+          required:
+            - action
+            - lineItem
+          type: object
+      xml:
+        name: AddLineItemToPackingContainer
+
+    RemoveLineItemFromPackingContainerAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use RemoveLineItemFromPackingContainer to remove a line item from an existing packing container
+              enum:
+                - RemoveLineItemFromPackingContainer
+              type: string
+            lineItem:
+              $ref: '#/components/schemas/PackingContainerLineItem'
+          required:
+            - action
+            - lineItem
+          type: object
+      xml:
+        name: RemoveLineItemFromPackingContainer
+
+    UpdateLineItemOnPackingContainerAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use UpdateLineItemOnPackingContainer to change a line item on an existing packing container
+              enum:
+                - UpdateLineItemOnPackingContainer
+              type: string
+            lineItem:
+              $ref: '#/components/schemas/PackingContainerLineItem'
+          required:
+            - action
+            - lineItem
+          type: object
+      xml:
+        name: UpdateLineItemOnPackingContainer
+
+    PackingContainerLineItem:
+      allOf:
+        - $ref: '#/components/schemas/PackingContainerLineItemForCreation'
+      properties:
+        id:
+          description: >-
+            The id of this lineItem. It is generated during creation
+            automatically and suits as the primary identifier of the
+            described entity.
+          example: climk4dcQFiPdA5ULuhS
+          type: string
+      required:
+        - id
+
+    PackingContainerLineItemForCreation:
+      properties:
+        article:
+          $ref: '#/components/schemas/PackingContainerLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the line item. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        quantity:
+          description: quantity of the specific article that has been ordered
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        scannableCodes:
+          items:
+            description: 'Strings, that identify the article'
+            type: string
+          type: array
+
+    PackingContainerLineItemArticle:
+      allOf:
+        - $ref: '#/components/schemas/AbstractArticle'
+        - properties:
+            attributes:
+              items:
+                $ref: '#/components/schemas/PackingContainerAttributeItem'
+              type: array
+          type: object
+      xml:
+        name: PackingContainerLineItemArticle
+
+    PackingContainerAttributeItem:
+      allOf:
+        - $ref: '#/components/schemas/ArticleAttributeItem'
 
     PackingContainerType:
       allOf:
