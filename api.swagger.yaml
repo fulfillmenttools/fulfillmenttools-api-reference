@@ -13942,9 +13942,50 @@ components:
             The duration need to be a multiple of 60 seconds.
           type: string
           pattern: '^P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$'
+        fallbackFacilityConfiguration:
+          $ref: '#/components/schemas/FallbackFacilityConfiguration'
       required:
         - defaultPrice
       type: object
+
+    FallbackFacilityConfigurationForPatch:
+      properties:
+        facilityRefs:
+          type: array
+          items:
+            type: string
+          maxItems: 1
+          minItems: 1
+        active:
+          type: boolean
+        fallbackAfterTime:
+          description: >-
+            Default amount of time in ISO 8601 duration format after which a not routable routingplan is routed to a configured fallback facility.
+          type: string
+          pattern: '^P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$'
+
+    FallbackFacilityConfiguration:
+      properties:
+        facilityRefs:
+          type: array
+          items:
+            type: string
+          maxItems: 1
+          minItems: 1
+        active:
+          type: boolean
+          default: false
+        fallbackAfterTime:
+          default: PT0H
+          description: >-
+            Default amount of time in ISO 8601 duration format after which a not routable routingplan is routed to a configured fallback facility.
+          type: string
+          pattern: '^P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$'
+      required:
+        - facilityRefs
+        - active
+        - fallbackAfterTime
+
     HandoverJobCreatedWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
@@ -15359,6 +15400,8 @@ components:
                 The duration need to be a multiple of 60 seconds.
               type: string
               pattern: '^P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$'
+            fallbackFacilityConfiguration:
+              $ref: '#/components/schemas/FallbackFacilityConfigurationForPatch'
           required:
             - action
           type: object
@@ -17861,6 +17904,7 @@ components:
         - REDUNDANT_REROUTE
         - FAILED_REROUTE
         - RETRYABLE
+        - FALLBACK_ROUTING
       type: string
       xml:
         name: ReturnItemStatus
