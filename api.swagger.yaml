@@ -11616,6 +11616,44 @@ paths:
         - firebase: []
       tags:
         - StockSummaries
+  "/api/inventory/stocks/{tenantArticleId}/distribution":
+    get:
+      operationId: getStockDistribution
+      x-google-backend:
+        address: https://http-api%%ENDPOINT_SUFFIX%%
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      parameters:
+        - name: tenantArticleId
+          required: true
+          in: path
+          schema:
+            minLength: 1
+            type: string
+      responses:
+        "200":
+          description: Stock distribution was loaded & you were allowed to access it. The
+            result is in the body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockDistribution"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - StockDistribution
 
   /graphql:
     get:
@@ -20404,6 +20442,51 @@ components:
       required:
         - total
         - stockSummaries
+    FacilityServiceType:
+      type: string
+      enum:
+        - SHIP_FROM_STORE
+        - PICKUP
+    StockFacilityDistribution:
+      type: object
+      properties:
+        facilityId:
+          type: string
+        facilityServiceTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/FacilityServiceType"
+        facilityStatus:
+          type: string
+          enum:
+            - ONLINE
+            - SUSPENDED
+            - OFFLINE
+        reserved:
+          type: number
+        totalAmount:
+          type: number
+        available:
+          type: number
+      required:
+        - facilityId
+        - facilityServiceTypes
+        - facilityStatus
+        - reserved
+        - totalAmount
+        - available
+    StockDistribution:
+      type: object
+      properties:
+        summary:
+          $ref: "#/components/schemas/StockSummaryDetails"
+        facilityDistributions:
+          type: array
+          items:
+            $ref: "#/components/schemas/StockFacilityDistribution"
+      required:
+        - summary
+        - facilityDistributions
   securitySchemes:
     firebase:
       flows:
