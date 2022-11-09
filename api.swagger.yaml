@@ -4783,6 +4783,56 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  '/api/facilities/validation/postalcode':
+    post:
+      responses:
+        '200':
+          description: >-
+            The given postal code is valid for the given country
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            The given postal code is invalid for the given country
+        '422':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            The given country can't be validated
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Facilities
+      description: ''
+      operationId: validatePostalCode
+      summary: Validate a given postal code for a given country
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostalCodeValidation'
+        description: Branding object
+        required: true
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/features:
     get:
       responses:
@@ -13304,6 +13354,23 @@ components:
             - companyName
           type: object
       type: object
+
+    PostalCodeValidation:
+      properties:
+        country:
+          description: Country in Format [A-Z]{2}
+          example: 'DE'
+          type: string
+        postalCode:
+          description: Postal code for validation
+          example: '50667'
+          type: string
+      required:
+        - country
+        - postalCode
+      type: object
+      xml:
+        name: PostalCodeValidation
 
     FacilityCarrierConnection:
       allOf:
