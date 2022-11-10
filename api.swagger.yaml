@@ -11610,13 +11610,72 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
-  /api/inventory/stocksummaries:
+  /api/inventory/stocks/summaries:
     get:
       operationId: getStockSummaries
       x-google-backend:
         address: https://http-api%%ENDPOINT_SUFFIX%%
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+      parameters:
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: facilityServiceTypes
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - SHIP_FROM_STORE
+                - PICKUP
+      responses:
+        "200":
+          description: Stock summaries was loaded & you were allowed to access it. The
+            result is in the body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockSummaries"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - StockSummaries
+  /api/inventory/stocksummaries:
+    get:
+      operationId: getStockSummariesDeprecated
+      x-google-backend:
+        address: https://http-api%%ENDPOINT_SUFFIX%%
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: This endpoint is deprecated. Please use /api/inventory/stocks/summaries
+        instead.
+      deprecated: true
       parameters:
         - name: size
           required: false
@@ -20558,10 +20617,12 @@ components:
       enum:
         - SHIP_FROM_STORE
         - PICKUP
-    StockFacilityDistribution:
+    FacilityStock:
       type: object
       properties:
         facilityId:
+          type: string
+        facilityName:
           type: string
         facilityServiceTypes:
           type: array
@@ -20581,6 +20642,7 @@ components:
           type: number
       required:
         - facilityId
+        - facilityName
         - facilityServiceTypes
         - facilityStatus
         - reserved
@@ -20591,13 +20653,13 @@ components:
       properties:
         summary:
           $ref: "#/components/schemas/StockSummaryDetails"
-        facilityDistributions:
+        facilityStocks:
           type: array
           items:
-            $ref: "#/components/schemas/StockFacilityDistribution"
+            $ref: "#/components/schemas/FacilityStock"
       required:
         - summary
-        - facilityDistributions
+        - facilityStocks
   securitySchemes:
     firebase:
       flows:
