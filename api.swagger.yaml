@@ -20233,12 +20233,16 @@ components:
           type: string
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
+        lineItems:
+          items:
+            $ref: '#/components/schemas/PackingContainerLineItem'
       required:
         - id
         - nameLocalized
         - version
         - facilityRef
         - packJobRef
+        - lineItems
       type: object
     PackingContainerForCreation:
       properties:
@@ -20250,7 +20254,7 @@ components:
           type: array
         lineItems:
           items:
-            $ref: '#/components/schemas/PackingContainerLineItem'
+            $ref: '#/components/schemas/PackingContainerLineItemForCreation'
         packingContainerTypeRef:
           type: string
       required:
@@ -20337,11 +20341,12 @@ components:
               enum:
                 - RemoveLineItemFromPackingContainer
               type: string
-            lineItem:
-              $ref: '#/components/schemas/PackingContainerLineItem'
+            lineItemRef:
+              description: Id of the PackLineItem you want to remove.
+              type: string
           required:
             - action
-            - lineItem
+            - lineItemRef
           type: object
       xml:
         name: RemoveLineItemFromPackingContainer
