@@ -12496,6 +12496,9 @@ components:
       properties:
         active:
           type: boolean
+        rerouteType:
+          $ref: '#/components/schemas/RerouteType'
+          default: 'REROUTE'
       required:
         - active
       type: object
@@ -12533,16 +12536,50 @@ components:
           type: boolean
         supplyingFacilities:
           description: >-
-            References of facility that could supply contents of the order to
-            another facility
+            DEPRECATED
           items:
-            description: Referece of a Facility
+            description: Reference of a Facility
             example: 928f3730-bc48-4d85-b83f-3fd86b776178
             type: string
+          type: array
+        supplyingFacilitiesConfigurations:
+          description: >-
+            References of facility that could supply contents of the order to
+            another facility with specific configuration of its usage
+          items:
+            description: Reference of a Facility
+            example: 928f3730-bc48-4d85-b83f-3fd86b776178
+            $ref: '#/components/schemas/SupplyingFacilityConfiguration'
           type: array
       required:
         - facilityRef
       type: object
+    SupplyingFacilityConfiguration:
+      properties:
+        facilityRef:
+          type: string
+        deliveryEvents:
+          items:
+            description: configuration of a delivery event
+            $ref: '#/components/schemas/DeliveryEvent'
+          type: array
+      required:
+        - facilityRef
+        - deliveryEvents
+    DeliveryEvent:
+      properties:
+        deliveryTarget:
+          enum:
+            - SHIP_TO_STORE
+            - SHIP_TO_CUSTOMER
+          type: string
+        deliveryTrigger:
+          enum:
+            - DEFAULT
+          type: string
+      required:
+        - deliveryTarget
+        - deliveryTrigger
     CompanyAddress:
       properties:
         city:
@@ -18048,6 +18085,10 @@ components:
           $ref: '#/components/schemas/RoutingPlanStatus'
         targetAddress:
           $ref: '#/components/schemas/TargetAddress'
+        targetAddressesByDeliveryEvent:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryEventTargetAddress'
         processId:
           description: >-
             Id of the global process related to this entity. For example used
@@ -18072,6 +18113,20 @@ components:
         - routingRun
         - finalizeRun
       type: object
+
+    DeliveryEventTargetAddress:
+      type: object
+      properties:
+        facilityRef:
+          type: string
+        targetAddress:
+          $ref: '#/components/schemas/TargetAddress'
+        deliveryEvent:
+          $ref: '#/components/schemas/DeliveryEvent'
+      required:
+        - facilityRef
+        - targetAddress
+        - deliveryEvent
 
     RoutingPlanLineItem:
       allOf:
@@ -18207,7 +18262,7 @@ components:
         - name
         - status
       type: object
-    ShipFromStoreRerouteType:
+    RerouteType:
       description: >-
         The type of reroute to apply to the order
           * `REROUTE`- the complete routing plan is rerouted.
@@ -18234,7 +18289,7 @@ components:
           example: '48'
           type: number
         rerouteType:
-          $ref: '#/components/schemas/ShipFromStoreRerouteType'
+          $ref: '#/components/schemas/RerouteType'
           default: 'REROUTE'
       required:
         - active
