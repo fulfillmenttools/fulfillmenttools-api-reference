@@ -11865,6 +11865,18 @@ paths:
               enum:
                 - SHIP_FROM_STORE
                 - PICKUP
+        - name: facilityStatus
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ONLINE
+                - SUSPENDED
+                - OFFLINE
       responses:
         "200":
           description: Stock summaries was loaded & you were allowed to access it. The
@@ -11924,6 +11936,18 @@ paths:
               enum:
                 - SHIP_FROM_STORE
                 - PICKUP
+        - name: facilityStatus
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ONLINE
+                - SUSPENDED
+                - OFFLINE
       responses:
         "200":
           description: Stock summaries was loaded & you were allowed to access it. The
@@ -13805,6 +13829,12 @@ components:
       required:
         - payload
       type: object
+    FacilityServiceType:
+      type: string
+      description: The description of the service this facility offers.
+      enum:
+       - SHIP_FROM_STORE
+       - PICKUP
     FacilityForCreation:
       properties:
         address:
@@ -13869,11 +13899,7 @@ components:
           items:
             properties:
               type:
-                description: The description of the service this facility offers.
-                enum:
-                  - SHIP_FROM_STORE
-                  - PICKUP
-                type: string
+                $ref: '#/components/schemas/FacilityServiceType'
             required:
               - type
             type: object
@@ -20957,11 +20983,6 @@ components:
       required:
         - total
         - stockSummaries
-    FacilityServiceType:
-      type: string
-      enum:
-        - SHIP_FROM_STORE
-        - PICKUP
     FacilityStock:
       type: object
       properties:
@@ -20972,13 +20993,11 @@ components:
         facilityServiceTypes:
           type: array
           items:
+            type: string
             $ref: "#/components/schemas/FacilityServiceType"
         facilityStatus:
           type: string
-          enum:
-            - ONLINE
-            - SUSPENDED
-            - OFFLINE
+          $ref: "#/components/schemas/FacilityStatus"
         reserved:
           type: number
         totalAmount:
