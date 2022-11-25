@@ -904,22 +904,15 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
-  /api/configurations/tags/{section}:
+  /api/configurations/tags/packjob:
     get:
-      parameters:
-        - description: Section you want to get
-          in: path
-          name: section
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagConfiguration'
-          description: packing config is in response body.
+                $ref: '#/components/schemas/PackJobTagConfiguration'
+          description: Packjob tag config is in response body.
         '401':
           content:
             application/json:
@@ -957,7 +950,7 @@ paths:
         under our SLA regulations. For details on this topic please check our
         documentation under
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      operationId: getTagConfigurations
+      operationId: getPackJobTagConfiguration
       summary: Read tag configuration for the specified section
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
@@ -965,19 +958,12 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
     put:
-      parameters:
-        - description: Section you want to update
-          in: path
-          name: section
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagConfiguration'
+                $ref: '#/components/schemas/PackJobTagConfiguration'
           description: The packing configuration was successfully updated.
         '400':
           content:
@@ -1007,15 +993,119 @@ paths:
       tags:
         - Configurations
       description: ''
-      operationId: putTagConfigurations
+      operationId: putPackJobTagConfiguration
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TagConfiguration'
-        description: Desired TagConfiguration
+              $ref: '#/components/schemas/PackJobTagConfiguration'
+        description: Desired PackJobTagConfiguration
         required: true
-      summary: Change the tag configuration for the provided section
+      summary: Change the tag configuration for packjobs
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/configurations/tags/pickjob:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickJobTagConfiguration'
+          description: pickjob tag config is in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getPickJobTagConfiguration
+      summary: Read tag configuration for pickjobs
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickJobTagConfiguration'
+          description: The packing configuration was successfully updated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+      description: ''
+      operationId: putPickJobTagConfigurations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PickJobTagConfiguration'
+        description: Desired Tag Configuration for Pickjobs
+        required: true
+      summary: Change the tag configuration for Pickjobs
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
@@ -11009,6 +11099,62 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
+  '/api/pickjobs/{pickJobId}/needspacking':
+    get:
+      parameters:
+        - description: ID of the pick job you want to get packing information for
+          in: path
+          name: pickJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PickJobPackingInformation'
+          description: >-
+            Packing information for this pickJob was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - PickJobs
+      description: ''
+      operationId: getPickJobNeedsPacking
+      summary: Get packing information for pick job with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   '/api/packjobs/{packJobId}/documenthandling':
     get:
       parameters:
@@ -13357,23 +13503,60 @@ components:
         - value
       type: object
     TagConfiguration:
+      properties:
+        offeredDocumentsPerTag:
+          type: array
+          description: All entries with a match in their matchingValues will be combined when determining what documents belong to an entity
+          items:
+            $ref: '#/components/schemas/OfferedDocumentPerTag'
+        offeredDocumentsByDefault:
+          type: array
+          description: This configuration is a fallback and applies only if none of the entries in offeredDocumentsPerTag can be applied
+          items:
+            $ref: '#/components/schemas/OfferedDocument'
+      required:
+        - offeredDocumentsPerTag
+        - offeredDocumentsByDefault
+    PackJobTagConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/TagConfiguration'
         - type: object
           properties:
-            offeredDocumentsPerTag:
+            packJobCreationPerTag:
               type: array
               description: All entries with a match in their matchingValues will be combined when determining what documents belong to an entity
               items:
-                $ref: '#/components/schemas/OfferedDocumentPerTag'
-            offeredDocumentsByDefault:
-              type: array
-              description: This configuration is a fallback and applies only if none of the entries in offeredDocumentsPerTag can be applied
-              items:
-                $ref: '#/components/schemas/OfferedDocument'
+                $ref: '#/components/schemas/PackJobCreationPerTag'
           required:
-            - offeredDocumentsPerTag
-            - offeredDocumentsByDefault
+            - packJobCreationPerTag
+    PickJobTagConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/TagConfiguration'
+    PackJobCreationPerTag:
+      properties:
+        tagRef:
+          type: string
+        matchingValues:
+          type: array
+          items:
+            type: string
+            minItems: 1
+        packJobCreationDisabled:
+          type: boolean
+      required:
+        - packJobCreationDisabled
+        - matchingValues
+        - tagRef
+      type: object
+    PickJobPackingInformation:
+      properties:
+        needsPacking:
+          type: boolean
+      required:
+        - needsPacking
+      type: object
     OfferedDocumentPerTag:
       properties:
         tagRef:
