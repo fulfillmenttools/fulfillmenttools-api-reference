@@ -11100,61 +11100,6 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
-  '/api/pickjobs/{pickJobId}/needspacking':
-    get:
-      parameters:
-        - description: ID of the pick job you want to get packing information for
-          in: path
-          name: pickJobId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/PickJobPackingInformation'
-          description: >-
-            Packing information for this pickJob was found & you were allowed to access it. The result is in
-            the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Entity not found
-      security:
-        - firebase: [ ]
-      tags:
-        - PickJobs
-      description: ''
-      operationId: getPickJobNeedsPacking
-      summary: Get packing information for pick job with the given ID
-      x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-
   '/api/packjobs/{packJobId}/documenthandling':
     get:
       parameters:
@@ -11978,6 +11923,61 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
+  '/api/tags/needspacking':
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/TagReference'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/NeedsPacking'
+          description: >-
+            NeedsPacking information for this tag was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Tags
+      description: ''
+      operationId: getNeedsPacking
+      summary: Get packing information for given Tag
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
 
   /api/inventory/stocks/summaries:
     get:
@@ -13550,7 +13550,7 @@ components:
         - matchingValues
         - tagRef
       type: object
-    PickJobPackingInformation:
+    NeedsPacking:
       properties:
         needsPacking:
           type: boolean
