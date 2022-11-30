@@ -12296,6 +12296,7 @@ components:
             - ModifyPickJobLastEditor
             - RestartPickJob
             - CancelPickRun
+            - AbortPickJob
             - FinishPickRun
             - StartPickRun
             - ModifyPickLineItem
@@ -16213,12 +16214,28 @@ components:
                 useful to have the informations carried here.
               type: object
             status:
-              $ref: '#/components/schemas/PickJobStatus'
+              $ref: '#/components/schemas/PickJobStatusUnprotected'
           required:
             - action
           type: object
       xml:
         name: ModifyPickJobAction
+
+    AbortPickJobAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: 'Use value ''AbortPickJob'', because you want to cancel a pickjob'
+              enum:
+                - AbortPickJob
+              type: string
+          required:
+            - action
+          type: object
+      xml:
+        name: AbortPickJobAction
 
     ModifyPickLineItemAction:
       allOf:
@@ -17033,12 +17050,28 @@ components:
       xml:
         name: Pickjob
 
+    PickJobStatusUnprotected:
+      description: >-
+        The status of a pickjob. These are the status that are still allowed to be used in the deprecated status field of ModifyPickJob actions
+      enum:
+        - OPEN
+        - IN_PROGRESS
+        - CLOSED
+        - PICKED
+        - REROUTED
+        - PACKABLE
+        - REJECTED
+        - RESTOWED
+        - EXPIRED
+      type: string
+      xml:
+        name: PickJobStatusUnprotected
+
     PickJobStatus:
       description: >-
-        A pickjob initially has the status OPEN and picking can start. When
-        picking has started, the pickjob changes its status to IN_PROGRESS.
-        After a pickjob has been completely picked its status becomes CLOSED.
+        The status of a pickjob.
       enum:
+        - ABORTED
         - OPEN
         - IN_PROGRESS
         - CLOSED
@@ -17229,6 +17262,7 @@ components:
               - $ref: "#/components/schemas/ModifyPickJobAction"
               - $ref: "#/components/schemas/ModifyPickJobLastEditorAction"
               - $ref: "#/components/schemas/RestartPickJobAction"
+              - $ref: "#/components/schemas/AbortPickJobAction"
           minItems: 1
           type: array
         version:
