@@ -16264,6 +16264,11 @@ components:
             partialStockLocations:
               items:
                 $ref: '#/components/schemas/PickJobLineItemPartialStockLocationForUpdate'
+            scannedCodes:
+              description: "Scanned Codes of the given picked line item"
+              items:
+                $ref: '#/components/schemas/PickLineItemScannedCode'
+              minItems: 0
             status:
               $ref: '#/components/schemas/PickLineItemStatus'
             substituteLineItems:
@@ -17231,6 +17236,11 @@ components:
             description: 'Strings, that identify the article'
             type: string
           type: array
+        scannedCodes:
+          items:
+            $ref: '#/components/schemas/PickLineItemScannedCode'
+          type: array
+          minimum: 0
         partialStockLocations:
           description: "Indicates where the items to pick could be found and from where the picking should be started."
           items:
@@ -17239,6 +17249,24 @@ components:
         - quantity
         - article
       type: object
+
+    PickLineItemScannedCode:
+      properties:
+        code:
+          description: scannable code i.e. barcode
+          example: 1245678
+          type: string
+        quantity:
+          description: scanned quantity
+          example: 7
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+        - code
+        - quantity
+      type: object
+
     PickLineItemStatus:
       description: >-
         A pickjob line item initially has the status OPEN and picking can start.
