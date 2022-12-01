@@ -3051,6 +3051,118 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  /api/configurations/packing/containerrequired:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
+          description: The requirement of containers in packing can be found in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+        - Packing
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getPackingContainerRequirement
+      summary: Get the packing container requirement configuration
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
+          description: The packing container requirement configuration was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
+          description: The packing container requirement configuration was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+        - Packing
+      description: ''
+      operationId: putPackingContainerRequirement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
+        description: Validation picking scan code to activate/deactivate
+        required: true
+      summary: Change the tenant wide packing container requirement configuration
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/deliverynotes:
     post:
       parameters:
@@ -12044,7 +12156,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - firebase: []
+        - firebase: [ ]
       tags:
         - StockSummaries
   /api/inventory/stocksummaries:
@@ -12115,7 +12227,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - firebase: []
+        - firebase: [ ]
       tags:
         - StockSummaries
   "/api/inventory/stocks/{tenantArticleId}/distribution":
@@ -12153,7 +12265,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - firebase: []
+        - firebase: [ ]
       tags:
         - StockDistribution
 
@@ -14017,8 +14129,8 @@ components:
       type: string
       description: The description of the service this facility offers.
       enum:
-       - SHIP_FROM_STORE
-       - PICKUP
+        - SHIP_FROM_STORE
+        - PICKUP
     FacilityForCreation:
       properties:
         address:
@@ -19596,6 +19708,17 @@ components:
           $ref: '#/components/schemas/PickingScanCodeValidationEnum'
       required:
         - pickingScanCodeValidationType
+      type: object
+
+    PackingContainerRequiredConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        active:
+          type: boolean
+          default: false
+      required:
+        - active
       type: object
 
     SubstitutionConfiguration:
