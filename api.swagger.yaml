@@ -11793,12 +11793,12 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
-  '/api/tags/{tagkey}':
+  '/api/tags/{tagRef}':
     get:
       parameters:
-        - description: Key of the tag you want to get
+        - description: Id of the tag you want to get
           in: path
-          name: tagkey
+          name: tagRef
           required: true
           schema:
             type: string
@@ -11857,9 +11857,9 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
     put:
       parameters:
-        - description: Key of the tag you want to update
+        - description: Id of the tag you want to update
           in: path
-          name: tagkey
+          name: tagRef
           required: true
           schema:
             type: string
@@ -16646,7 +16646,7 @@ components:
           type: array
           minItems: 1
           items:
-            $ref: '#/components/schemas/TagReferenceForCreation'
+            $ref: '#/components/schemas/TagReference'
       required:
         - orderDate
         - orderLineItems
@@ -17046,7 +17046,7 @@ components:
           type: array
           minItems: 1
           items:
-            $ref: '#/components/schemas/TagReferenceForCreation'
+            $ref: '#/components/schemas/TagReference'
       required:
         - orderDate
         - facilityRef
@@ -19960,7 +19960,7 @@ components:
           type: array
           minItems: 1
           items:
-            $ref: '#/components/schemas/TagReferenceForCreation'
+            $ref: '#/components/schemas/TagReference'
         recipient:
           $ref: '#/components/schemas/ConsumerAddress'
       required:
@@ -20045,15 +20045,12 @@ components:
             name: PackJob
     TagReference:
       required:
-        - 'tagRef'
         - 'value'
-        - 'key'
+        - 'id'
       properties:
-        tagRef:
-          type: string
         value:
           type: string
-        key:
+        id:
           type: string
     PackJobStatus:
       description: >-
@@ -20674,10 +20671,10 @@ components:
     TagForCreation:
       additionalProperties: false
       required:
-        - key
+        - id
         - allowedValues
       properties:
-        key:
+        id:
           type: string
         allowedValues:
           type: array
@@ -20745,22 +20742,12 @@ components:
               type: array
               minItems: 1
               items:
-                $ref: '#/components/schemas/TagReferenceForCreation'
+                $ref: '#/components/schemas/TagReference'
           required:
             - action
           type: object
       xml:
         name: AddTagsToProcessAction
-    TagReferenceForCreation:
-      additionalProperties: false
-      required:
-        - tagRef
-        - value
-      properties:
-        tagRef:
-          type: string
-        value:
-          type: string
     PrintableDocument:
       type: object
       properties:
