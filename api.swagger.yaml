@@ -348,6 +348,7 @@ paths:
                   - $ref: '#/components/schemas/FedexCarrierConfiguration'
                   - $ref: '#/components/schemas/DpdCarrierConfiguration'
                   - $ref: '#/components/schemas/BringCarrierConfiguration'
+                  - $ref: '#/components/schemas/DpdChCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The result is in
             the body.
@@ -12156,7 +12157,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - firebase: [ ]
+        - firebase: []
       tags:
         - StockSummaries
   /api/inventory/stocksummaries:
@@ -12227,7 +12228,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - firebase: [ ]
+        - firebase: []
       tags:
         - StockSummaries
   "/api/inventory/stocks/{tenantArticleId}/distribution":
@@ -12265,7 +12266,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - firebase: [ ]
+        - firebase: []
       tags:
         - StockDistribution
 
@@ -12787,6 +12788,13 @@ components:
         alternativeSendAddress:
           $ref: '#/components/schemas/FacilityAddress'
 
+    DpdChCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
+      properties:
+        alternativeSendAddress:
+          $ref: '#/components/schemas/FacilityAddress'
+
     DpdCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
@@ -12822,7 +12830,7 @@ components:
           $ref: '#/components/schemas/CarrierDeliveryType'
         key:
           description: >-
-            References the KEP. Currently allowed values are DHL, DPD, ANGEL, GLS, FEDEX, POSTNL, BRING and
+            References the KEP. Currently allowed values are DHL, DPD, DPD_CH, ANGEL, GLS, FEDEX, POSTNL, BRING and
             CUSTOM.
           example: DHL
           type: string
@@ -13712,6 +13720,24 @@ components:
           type: object
       xml:
         name: DpdCarrierCredentials
+
+    DpdChCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractCarrierCredentials'
+        - properties:
+            delisId:
+              description: Delis ID to create a DPD auth token
+              type: string
+            password:
+              description: Password to create a DPD auth token
+              type: string
+          required:
+            - delisId
+            - password
+          type: object
+      xml:
+        name: DpdChCarrierCredentials
+
     DhlFacilityCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
@@ -13777,6 +13803,17 @@ components:
           type: object
       xml:
         name: GlsFacilityCarrierConfiguration
+
+    DpdChFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            depot:
+              type: string
+          type: object
+      xml:
+        name: DpdChFacilityCarrierConfiguration
+
     AngelCarrierCredentials:
       allOf:
         - $ref: "#/components/schemas/AbstractCarrierCredentials"
@@ -14030,6 +14067,7 @@ components:
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/DpdChFacilityCarrierConfiguration"
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -15623,6 +15661,26 @@ components:
           type: object
       xml:
         name: ModifyDpdCarrierCredentials
+
+    ModifyDpdChCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
+        - additionalProperties: false
+          properties:
+            delisId:
+              description: Delis ID to create a DPD auth token.
+              type: string
+            key:
+              description: Use value 'DPD' in order to provide DPD credentials
+              type: string
+            password:
+              description: Password to create a DPD auth token.
+              type: string
+          required:
+            - key
+          type: object
+      xml:
+        name: ModifyDpdChCarrierCredentials
 
     ModifyPostNLCarrierCredentials:
       allOf:
