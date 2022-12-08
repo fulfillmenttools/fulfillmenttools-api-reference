@@ -15167,6 +15167,7 @@ components:
         - version
         - facilityRef
       type: object
+
     LoadUnitConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -15176,7 +15177,30 @@ components:
           description: Max creatable count of load units per load unit type
           example: 20
           type: integer
+        assignments:
+          $ref: '#/components/schemas/LoadUnitAssignmentConfiguration'
       type: object
+
+    LoadUnitAssignmentConfiguration:
+      description: Who do the load units need to be assigned in pickJob (SingleOrderPick) and pickRun (MultiOrderPick)
+      properties:
+        pickJob:
+          $ref: '#/components/schemas/LoadUnitAssignmentType'
+        pickRun:
+          $ref: '#/components/schemas/LoadUnitAssignmentType'
+      required:
+        - pickJob
+        - pickRun
+      type: object
+
+    LoadUnitAssignmentType:
+      example: AT_THE_END
+      description: Where do the load unit needs to be assigned?
+      enum:
+        - INACTIVE
+        - AT_THE_END
+        - REQUIRED_DURING_PICKING
+      type: string
 
     LoadUnitLineItemForCreation:
       properties:
