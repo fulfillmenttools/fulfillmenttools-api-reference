@@ -21032,6 +21032,13 @@ components:
           type: string
         id:
           type: string
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        weightLimitInG:
+          description: "Maximal weight in gramm(gr) the container can be loaded with. "
+          example: 2500
+          type: number
+          minimum: 1
         name:
           type: string
         nameLocalized:
@@ -21047,6 +21054,7 @@ components:
         - packJobRef
         - lineItems
       type: object
+
     PackingContainerForCreation:
       properties:
         codes:
@@ -21063,6 +21071,27 @@ components:
       required:
         - packingContainerTypeRef
         - codes
+      type: object
+
+    ContainerDimensions:
+      additionalProperties: false
+      properties:
+        heightInCm:
+          description: The height of the container (in cm)
+          example: 50.0
+          type: number
+        lengthInCm:
+          description: The length of the container (in cm)
+          example: 100
+          type: number
+        weightInG:
+          description: The weight of the container (in g)
+          example: 1700
+          type: number
+        widthInCm:
+          description: The width of the container (in cm)
+          example: 25.5
+          type: number
       type: object
 
     PackingContainerPatchActions:
@@ -21233,6 +21262,7 @@ components:
     PackingContainerType:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+      additionalProperties: false
       properties:
         description:
           type: string
@@ -21255,16 +21285,25 @@ components:
             higher than priority 10. The priority can be used to order
             packingContainerTypes in the UI.
           example: 100
-          format: int64
+          format: int32
           maximum: 10000
           minimum: 1
           type: integer
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        weightLimitInG:
+          description: "Maximal weight in gramm(gr) the container can be loaded with. "
+          example: 2500
+          type: number
+          minimum: 1
       required:
         - id
         - version
         - nameLocalized
       type: object
+
     PackingContainerTypeForCreation:
+      additionalProperties: false
       properties:
         descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -21279,13 +21318,21 @@ components:
             higher than priority 10. The priority can be used to order
             packingContainerTypes.
           example: 100
-          format: int64
+          format: int32
           maximum: 10000
           minimum: 1
           type: integer
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        weightLimitInG:
+          description: "Maximal weight in gramm(gr) the container can be loaded with. "
+          example: 2500
+          type: number
+          minimum: 1
       required:
         - nameLocalized
       type: object
+
     PackingContainerTypePatchActions:
       properties:
         actions:
@@ -21332,10 +21379,17 @@ components:
                 is higher than priority 10. The priority can be used to order
                 PackingContainerTypes.
               example: 100
-              format: int64
+              format: int32
               maximum: 10000
               minimum: 1
               type: integer
+            dimensions:
+              $ref: '#/components/schemas/ContainerDimensions'
+            weightLimitInG:
+              description: "Maximal weight in gramm(gr) the container can be loaded with. "
+              example: 2500
+              type: number
+              minimum: 1
           required:
             - action
           type: object
