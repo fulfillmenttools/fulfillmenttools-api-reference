@@ -15134,11 +15134,38 @@ components:
       type: object
       xml:
         name: ListingsForReplacement
+
+    LoadUnitDimensions:
+      properties:
+        heightInCm:
+          description: The height of the container (in cm)
+          example: 50
+          type: number
+        lengthInCm:
+          description: The length of the container (in cm)
+          example: 100
+          type: number
+        weightInG:
+          description: The weight of the container (in g)
+          example: 1700
+          type: number
+        widthInCm:
+          description: The width of the container (in cm)
+          example: 25
+          type: number
+      type: object
+
     LoadUnit:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/LoadUnitForCreation'
       properties:
+        dimensions:
+          $ref: '#/components/schemas/LoadUnitDimensions'
+        weightLimitInG:
+          description: "Maximal weight in gramm(gr) the loadunit can handle. "
+          type: number
+          minimum: 1
         description:
           type: string
         descriptionLocalized:
@@ -15320,6 +15347,12 @@ components:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
+        dimensions:
+          $ref: '#/components/schemas/LoadUnitDimensions'
+        weightLimitInG:
+          description: "Maximal weight in gramm(gr) the loadunit can handle. "
+          type: number
+          minimum: 1
         description:
           type: string
         descriptionLocalized:
@@ -15351,7 +15384,14 @@ components:
         - nameLocalized
       type: object
     LoadUnitTypeForCreation:
+      additionalProperties: false
       properties:
+        dimensions:
+          $ref: '#/components/schemas/LoadUnitDimensions'
+        weightLimitInG:
+          description: "Maximal weight in gramm(gr) the loadunit can handle. "
+          type: number
+          minimum: 1
         descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
         icon:
@@ -16325,6 +16365,12 @@ components:
               maximum: 10000
               minimum: 1
               type: integer
+            dimensions:
+              $ref: '#/components/schemas/LoadUnitDimensions'
+            weightLimitInG:
+              description: "Maximal weight in gramm(gr) the loadunit can handle. "
+              type: number
+              minimum: 1
           required:
             - action
           type: object
