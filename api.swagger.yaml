@@ -685,15 +685,15 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
-  /api/configurations/picking/takeoverpickjob:
+  /api/configurations/picking:
     get:
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TakeOverPickJobConfiguration'
-          description: TakeOverPickJob config could be found in response body.
+                $ref: '#/components/schemas/PickingConfigurations'
+          description: Central Configuration of all picking related things
         '401':
           content:
             application/json:
@@ -701,15 +701,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Error'
           description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
         '404':
           content:
             application/json:
@@ -717,6 +708,15 @@ paths:
                 items:
                   $ref: '#/components/schemas/Error'
           description: Entity not found
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
       security:
         - firebase: [ ]
       tags:
@@ -732,26 +732,27 @@ paths:
         under our SLA regulations. For details on this topic please check our
         documentation under
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      operationId: getTakeOverPickJobConfiguartion
+      operationId: getPickingConfigurations
+      summary: Get the picking configurations
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
-    put:
+    patch:
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TakeOverPickJobConfiguration'
-          description: The takeOverPickJob configuration was successfully updated.
+                $ref: '#/components/schemas/PickingConfigurations'
+          description: The picking central configuration was successfully updated.
         '201':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TakeOverPickJobConfiguration'
-          description: The domain configuration was successfully created.
+                $ref: '#/components/schemas/PickingConfigurations'
+          description: The picking central configuration was successfully created.
         '400':
           content:
             application/json:
@@ -781,124 +782,15 @@ paths:
         - Configurations
         - Picking
       description: ''
-      operationId: putTakeOverPickJobConfiguration
+      operationId: putPickingConfigurations
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TakeOverPickJobConfiguration'
-        description: Desired takeOverPickJob configuration to create/update
+              $ref: '#/components/schemas/PickingConfigurations'
+        description: create/update picking central configuration
         required: true
-      x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-
-  /api/configurations/picking/scanning:
-    get:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickingScanningConfiguration'
-          description: config could be found in response body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: entity not found
-      security:
-        - firebase: [ ]
-      tags:
-        - Configurations
-        - Picking
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-        /></center> <br> <i>This part of the API is currently under development.
-        That means that this endpoint, model, etc. can contain breaking changes
-        and / or might not be available at all times in your API instance. It
-        could disapear also without warning. Thus it currently does not fall
-        under our SLA regulations. For details on this topic please check our
-        documentation under
-        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      operationId: getPickingScanningConfiguration
-      x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-    put:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickingScanningConfiguration'
-          description: The resulting configuration was successfully updated.
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickingScanningConfiguration'
-          description: The configuration was successfully created.
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - Configurations
-        - Picking
-      description: ''
-      operationId: putPickingScanningConfiguration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PickingScanningConfiguration'
-        description: Desired configuration to create/update
-        required: true
+      summary: Change the tenant wide picking central configuration
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
@@ -2822,230 +2714,6 @@ paths:
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
       operationId: getLocales
       summary: Get the list of supported locales
-      x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-
-  /api/configurations/picking/batchpicking:
-    get:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BatchPickingConfiguration'
-          description: The batch picking configuration can be found in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Entity not found
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - Configurations
-        - Picking
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-        /></center> <br> <i>This part of the API is currently under development.
-        That means that this endpoint, model, etc. can contain breaking changes
-        and / or might not be available at all times in your API instance. It
-        could disapear also without warning. Thus it currently does not fall
-        under our SLA regulations. For details on this topic please check our
-        documentation under
-        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      operationId: getBatchPickingConfiguration
-      summary: Get the batch picking configuration
-      x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-    put:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BatchPickingConfiguration'
-          description: The batch picking configuration was successfully updated.
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BatchPickingConfiguration'
-          description: The batch picking configuration was successfully created.
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - Configurations
-        - Picking
-      description: ''
-      operationId: putBatchPickingConfiguration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BatchPickingConfiguration'
-        description: Batch picking configuration to activate/deactivate
-        required: true
-      summary: Change the tenant wide batch picking configuration
-      x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-
-  /api/configurations/picking/scancodevalidation:
-    get:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickingScanCodeValidationConfiguration'
-          description: The validation of scan code picking configuration can be found in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Entity not found
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - Configurations
-        - Picking
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-        /></center> <br> <i>This part of the API is currently under development.
-        That means that this endpoint, model, etc. can contain breaking changes
-        and / or might not be available at all times in your API instance. It
-        could disapear also without warning. Thus it currently does not fall
-        under our SLA regulations. For details on this topic please check our
-        documentation under
-        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      operationId: getPickingScanCodeValidation
-      summary: Get the picking scan code validation configuration
-      x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-    put:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickingScanCodeValidationConfiguration'
-          description: The picking scan code configuration was successfully updated.
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickingScanCodeValidationConfiguration'
-          description: The picking scan code configuration was successfully created.
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - Configurations
-        - Picking
-      description: ''
-      operationId: putPickingScanCodeValidation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PickingScanCodeValidationConfiguration'
-        description: Validation picking scan code to activate/deactivate
-        required: true
-      summary: Change the tenant wide picking scan code validation configuration
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
@@ -14233,6 +13901,12 @@ components:
           description: >-
             Time ranges defining the picking times per weekday. No overlapping
             ranges are allowed
+        pickingMethods:
+          description: >-
+            Picking Methods supported by this facility.
+          items:
+            $ref: '#/components/schemas/PickingMethodEnum'
+          type: array
         services:
           items:
             properties:
@@ -15213,30 +14887,7 @@ components:
           description: Max creatable count of load units per load unit type
           example: 20
           type: integer
-        assignments:
-          $ref: '#/components/schemas/LoadUnitAssignmentConfiguration'
       type: object
-
-    LoadUnitAssignmentConfiguration:
-      description: Who do the load units need to be assigned in pickJob (SingleOrderPick) and pickRun (MultiOrderPick)
-      properties:
-        pickJob:
-          $ref: '#/components/schemas/LoadUnitAssignmentType'
-        pickRun:
-          $ref: '#/components/schemas/LoadUnitAssignmentType'
-      required:
-        - pickJob
-        - pickRun
-      type: object
-
-    LoadUnitAssignmentType:
-      example: AT_THE_END
-      description: Where do the load unit needs to be assigned?
-      enum:
-        - INACTIVE
-        - AT_THE_END
-        - REQUIRED_DURING_PICKING
-      type: string
 
     LoadUnitLineItemForCreation:
       properties:
@@ -15470,8 +15121,6 @@ components:
       type: object
 
     TakeOverPickJobConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
       properties:
         active:
           default: false
@@ -16003,6 +15652,12 @@ components:
               description: >-
                 Time ranges defining the picking times per weekday. No
                 overlapping ranges are allowed
+            pickingMethods:
+              description: >-
+                Picking Methods supported by this facility.
+              items:
+                $ref: '#/components/schemas/PickingMethodEnum'
+              type: array
             services:
               items:
                 properties:
@@ -18921,12 +18576,11 @@ components:
         configurations:
           items:
             anyOf:
-              - $ref: "#/components/schemas/TakeOverPickJobConfiguration"
-              - $ref: "#/components/schemas/BatchPickingConfiguration"
               - $ref: "#/components/schemas/SubstitutionConfiguration"
               - $ref: "#/components/schemas/CarrierConfiguration"
               - $ref: "#/components/schemas/RerouteShortPickConfiguration"
               - $ref: "#/components/schemas/ReturnNoteConfiguration"
+              - $ref: "#/components/schemas/PickingConfigurations"
           type: array
       required:
         - name
@@ -19812,9 +19466,58 @@ components:
       type: object
       xml:
         name: SubstitutesForUpsert
-    BatchPickingConfiguration:
+
+    PickingConfigurations:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        pickingShortPickConfiguration:
+          $ref: '#/components/schemas/PickingShortPickConfiguration'
+        scanningConfiguration:
+          $ref: '#/components/schemas/PickingScanningConfiguration'
+        scanCodeValidationConfiguration:
+          $ref: '#/components/schemas/PickingScanCodeValidationConfiguration'
+        takeOverPickJobConfiguration:
+          $ref: '#/components/schemas/TakeOverPickJobConfiguration'
+        batchPickingConfiguration:
+          $ref: '#/components/schemas/BatchPickingConfiguration'
+        loadUnitAssignmentConfiguration:
+          $ref: '#/components/schemas/LoadUnitAssignmentConfiguration'
+        pickingMethodsConfiguration:
+          $ref: '#/components/schemas/PickingMethodsConfiguration'
+
+      type: object
+
+    PickingMethodsConfiguration:
+      properties:
+        defaultPickingMethod:
+          $ref: '#/components/schemas/PickingMethodEnum'
+      required:
+        - defaultPickingMethod
+      type: object
+
+    LoadUnitAssignmentConfiguration:
+      description: Who do the load units need to be assigned in pickJob (SingleOrderPick) and pickRun (MultiOrderPick)
+      properties:
+        pickJob:
+          $ref: '#/components/schemas/LoadUnitAssignmentType'
+        pickRun:
+          $ref: '#/components/schemas/LoadUnitAssignmentType'
+      required:
+        - pickJob
+        - pickRun
+      type: object
+
+    LoadUnitAssignmentType:
+      example: AT_THE_END
+      description: Where do the load unit needs to be assigned?
+      enum:
+        - INACTIVE
+        - AT_THE_END
+        - REQUIRED_DURING_PICKING
+      type: string
+
+    BatchPickingConfiguration:
       properties:
         active:
           default: false
@@ -19823,9 +19526,17 @@ components:
         - active
       type: object
 
+    PickingShortPickConfiguration:
+      properties:
+        confirmationOnShortPick:
+          description: Does the picker needs to confirm a stock correction before adding a short pick
+          default: false
+          type: boolean
+      required:
+        - confirmationOnShortPick
+      type: object
+
     PickingScanningConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
       properties:
         scanningType:
           $ref: '#/components/schemas/PickingScanningConfigurationEnum'
@@ -19841,6 +19552,15 @@ components:
         - SCAN_NOT_REQUIRED
       type: string
 
+    PickingMethodEnum:
+      example: SINGLE_ORDER
+      description: Way in which the picking should be handled
+      enum:
+        - SINGLE_ORDER
+        - MULTI_ORDER
+        - BATCH_PICKING
+      type: string
+
     PickingScanCodeValidationEnum:
       description: State that defines if unknown scan codes can be accepted
       enum:
@@ -19849,8 +19569,6 @@ components:
       type: string
 
     PickingScanCodeValidationConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
       properties:
         pickingScanCodeValidationType:
           $ref: '#/components/schemas/PickingScanCodeValidationEnum'
