@@ -8084,6 +8084,22 @@ paths:
           required: false
           schema:
             type: string
+        - description: Return the Processes which have related pickjobs with a targettime on or after this date
+          in: query
+          name: startTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: Return the Processes which have related pickjobs with a targettime on or before this date
+          in: query
+          name: endTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
         - description: Return the Processes created on or after this date
           in: query
           name: startDate
@@ -13953,6 +13969,8 @@ components:
           items:
             $ref: '#/components/schemas/PickingMethodEnum'
           type: array
+        scanningRule:
+          $ref: '#/components/schemas/ScanningRuleConfiguration'
         services:
           items:
             properties:
@@ -14796,6 +14814,8 @@ components:
         weight:
           type: number
           minimum: 0
+        scanningRule:
+          $ref: '#/components/schemas/ScanningRuleConfiguration'
       required:
         - tenantArticleId
         - title
@@ -15704,6 +15724,8 @@ components:
               items:
                 $ref: '#/components/schemas/PickingMethodEnum'
               type: array
+            scanningRule:
+              $ref: '#/components/schemas/ScanningRuleConfiguration'
             services:
               items:
                 properties:
@@ -16013,6 +16035,8 @@ components:
               description: a title describing the article
               example: Adidas Superstar
               type: string
+            scanningRule:
+              $ref: '#/components/schemas/ScanningRuleConfiguration'
             weight:
               type: number
           required:
@@ -17082,6 +17106,11 @@ components:
               description: "Indicates where the items to pick could be found and from where the picking should be started."
               items:
                 $ref: '#/components/schemas/PickJobLineItemPartialStockLocation'
+            scanningRule:
+              description: >-
+                This value indicates which scanning rule should be applied for this pick line.
+                Only generated on demand on separate call, no persistence.
+              $ref: '#/components/schemas/ScanningRuleConfiguration'
           required:
             - id
             - picked
@@ -19600,9 +19629,42 @@ components:
       properties:
         scanningType:
           $ref: '#/components/schemas/PickingScanningConfigurationEnum'
+        scanningRule:
+          $ref: '#/components/schemas/ScanningRuleConfiguration'
       required:
         - scanningType
       type: object
+
+    ScanningRuleConfiguration:
+      description: >-
+        Configuration to show the client how the items should be scanned during picking
+      properties:
+        values:
+          items:
+            $ref: '#/components/schemas/ScanningRuleValue'
+          type: array
+
+    ScanningRuleValue:
+      properties:
+        priority:
+          description: >-
+            This field allows you to rank scanningRuleType against each other. The
+            lowest number is the most preferable.
+          minimum: 0
+          type: number
+        scanningRuleType:
+          $ref: '#/components/schemas/ScanningRuleTypeEnum'
+      required:
+        - priority
+        - scanningRuleType
+
+    ScanningRuleTypeEnum:
+      example: ARTICLE
+      description: Type of scanning rule
+      enum:
+        - ARTICLE
+        - LOCATION
+      type: string
 
     PickingScanningConfigurationEnum:
       example: MUST_SCAN_FIRST
