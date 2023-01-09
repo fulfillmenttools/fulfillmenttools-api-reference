@@ -11979,6 +11979,7 @@ paths:
         address: https://http-api%%ENDPOINT_SUFFIX%%
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Get the accumulated Stock for each Article
       parameters:
         - name: size
           required: false
@@ -12039,7 +12040,7 @@ paths:
       security:
         - firebase: []
       tags:
-        - StockSummaries
+        - Inventory
   /api/inventory/stocksummaries:
     get:
       operationId: getStockSummariesDeprecated
@@ -12110,7 +12111,7 @@ paths:
       security:
         - firebase: []
       tags:
-        - StockSummaries
+        - Inventory
   "/api/inventory/stocks/{tenantArticleId}/distribution":
     get:
       operationId: getStockDistribution
@@ -12118,6 +12119,8 @@ paths:
         address: https://http-api%%ENDPOINT_SUFFIX%%
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Stock per Facility for a specific tenantArticleId, also includes the
+        Tenant-Wide Summary
       parameters:
         - name: tenantArticleId
           required: true
@@ -12148,7 +12151,59 @@ paths:
       security:
         - firebase: []
       tags:
-        - StockDistribution
+        - Inventory
+  /api/inventory/articles:
+    get:
+      operationId: getArticles
+      x-google-backend:
+        address: https://http-api%%ENDPOINT_SUFFIX%%
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Search articles tenant-wide based on title or tenantArticleId
+      parameters:
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: searchTerm
+          required: false
+          in: query
+          schema:
+            minLength: 1
+            type: string
+      responses:
+        "200":
+          description: Articles search result according to the request. The result is in
+            the body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryArticlePaginatedResult"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
 
   /graphql:
     get:
@@ -21637,6 +21692,36 @@ components:
       required:
         - summary
         - facilityStocks
+    InventoryArticle:
+      type: object
+      properties:
+        attributes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ArticleAttributeItem"
+        imageUrl:
+          type: string
+        tenantArticleId:
+          type: string
+        title:
+          type: string
+      required:
+        - imageUrl
+        - tenantArticleId
+        - title
+    InventoryArticlePaginatedResult:
+      type: object
+      properties:
+        total:
+          type: number
+          minimum: 0
+        articles:
+          type: array
+          items:
+            $ref: "#/components/schemas/InventoryArticle"
+      required:
+        - total
+        - articles
   securitySchemes:
     firebase:
       flows:
