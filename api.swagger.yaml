@@ -2454,6 +2454,119 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+  /api/configurations/routing/manualreroute:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManualRerouteConfiguration'
+          description: >-
+            Manual reroute configuration was found & you were allowed to
+            access it. The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Manual reroute configuration not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getManualRerouteConfiguration
+      summary: Get a tenant manual reroute config
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManualRerouteConfiguration'
+          description: Manual reroute configuration was written successfully
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Reroute configuration not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Configurations
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: putManualRerouteConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManualRerouteConfiguration'
+        required: true
+      summary: Update manual reroute configuration of a tenant
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   /api/configurations/stock:
     get:
       responses:
@@ -8325,6 +8438,71 @@ paths:
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
       operationId: getProcessByID
       summary: Get a process by its ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+  /api/processes/{processId}/reroute:
+    post:
+      parameters:
+        - description: ID of process you want to reroute
+          in: path
+          name: processId
+          required: true
+          schema:
+            type: string
+        - description: Version of process you want to reroute
+          in: query
+          name: version
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Process'
+          description: >-
+            Process was found the corresponding reroute operations have been triggered.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Process not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Process version conflict
+      security:
+        - firebase: [ ]
+      tags:
+        - Processes
+      description: ''
+      operationId: postProcess
+      summary: Reroutes a process with the given ID
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
@@ -17889,6 +18067,7 @@ components:
         name: RatingImplementation
     RerouteReason:
       enum:
+        - PROCESSREROUTE
         - MANUAL
         - SHORTPICK
         - TIMETRIGGERED
@@ -17941,6 +18120,18 @@ components:
       required:
         - clickAndCollectReroute
         - shipFromStoreReroute
+      type: object
+
+    ManualRerouteConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        active:
+          type: "boolean"
+        id:
+          type: string
+      required:
+        - active
       type: object
     RerouteTimeTriggeredConfiguration:
       allOf:
@@ -20917,6 +21108,7 @@ components:
         - SENDLABEL
         - RETURNLABEL
       type: string
+
     AssignFacilityToProcessAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
