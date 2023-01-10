@@ -19561,6 +19561,8 @@ components:
           $ref: '#/components/schemas/PickRunStatus'
         facilityRef:
           type: string
+        pickRunType:
+          $ref: '#/components/schemas/PickRunType'
       required:
         - pickJobRefs
         - facilityRef
@@ -19586,7 +19588,8 @@ components:
               type: string
             editor:
               $ref: '#/components/schemas/Editor'
-
+            pickRunType:
+              $ref: '#/components/schemas/PickRunType'
       required:
         - pickLineItems
         - pickJobRefs
@@ -21594,7 +21597,11 @@ components:
           type: object
       xml:
         name: ModifyPackingContainerTypeIcon
-
+    PickRunType:
+      enum:
+        - multiOrderPick
+        - batchPick
+      type: string
 
     StockSummaryArticle:
       type: object
@@ -21733,6 +21740,7 @@ components:
       x-google-issuer: 'https://securetoken.google.com/%%PROJECT_ID%%'
       x-google-jwks_uri: >-
         https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com
+
 tags:
   - description: >-
       Everything your customer ordered in your shop, so everything he or she
