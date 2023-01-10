@@ -7596,6 +7596,15 @@ paths:
           required: false
           schema:
             type: string
+        - description: The channel of the pickJob you want to filter by
+          in: query
+          name: channel
+          required: false
+          schema:
+            enum:
+              - COLLECT
+              - SHIPPING
+            type: string
         - description: >-
             Reference to the consumer name you want to get the corresponding
             pickjobs
@@ -7647,6 +7656,12 @@ paths:
           schema:
             default: 25
             type: integer
+        - description: query pickjobs orderBy
+          in: query
+          name: orderBy
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -10678,6 +10693,36 @@ paths:
           required: false
           schema:
             type: boolean
+        - description: Reference to the status you want to get the corresponding pickjobs
+          explode: false
+          in: query
+          name: status
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - description: Reference to the facility you want to get the corresponding packjobs
+          in: query
+          name: facilityRef
+          required: false
+          schema:
+            type: string
+        - description: Parameter to filter pack jobs by channel (SfS or C&C)
+          in: query
+          name: channel
+          required: false
+          schema:
+            enum:
+              - COLLECT
+              - SHIPPING
+            type: string
+        - description: query packjobs orderBy
+          in: query
+          name: orderBy
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -17725,6 +17770,7 @@ components:
       required:
         - payload
       type: object
+
     PickjobDeliveryInformation:
       allOf:
         - $ref: '#/components/schemas/PickjobDeliveryInformationForCreation'
@@ -20263,6 +20309,34 @@ components:
         - eventId
       type: object
 
+    PickJobOrderBy:
+      description: >-
+        Attribute to order a pickJobs by
+      enum:
+        - TARGET_TIME_DESC
+        - TARGET_TIME_ASC
+        - LAST_MODIFIED_DESC
+        - LAST_MODIFIED_ASC
+        - ORDER_DATE_DESC
+        - ORDER_DATE_ASC
+      type: string
+      xml:
+        name: PickJobOrderBy
+
+    PackJobOrderBy:
+      description: >-
+        Attribute to order a packJobs by
+      enum:
+        - TARGET_TIME_DESC
+        - TARGET_TIME_ASC
+        - LAST_MODIFIED_DESC
+        - LAST_MODIFIED_ASC
+        - ORDER_DATE_DESC
+        - ORDER_DATE_ASC
+      type: string
+      xml:
+        name: PackJobOrderBy
+
     FacilityOrderBy:
       description: >-
         Attribute to order a facility list
@@ -20336,6 +20410,11 @@ components:
           example: '2020-02-03T09:45:51.525Z'
           format: date-time
           type: string
+        orderDate:
+          description: Date when the order was placed.
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
         tags:
           type: array
           minItems: 1
@@ -20343,6 +20422,11 @@ components:
             $ref: '#/components/schemas/TagReference'
         recipient:
           $ref: '#/components/schemas/ConsumerAddress'
+        deliveryChannel:
+          enum:
+            - COLLECT
+            - SHIPPING
+          type: string
       required:
         - facilityRef
         - lineItems
@@ -20395,6 +20479,11 @@ components:
               example: '2020-02-03T09:45:51.525Z'
               format: date-time
               type: string
+            orderDate:
+              description: Date when the order was placed.
+              example: '2020-02-03T09:45:51.525Z'
+              format: date-time
+              type: string
             tags:
               type: array
               minItems: 1
@@ -20414,6 +20503,11 @@ components:
               description: Indicates if gdpr related data was anonymized
               example: false
               type: boolean
+            deliveryChannel:
+              enum:
+                - COLLECT
+                - SHIPPING
+              type: string
           required:
             - id
             - facilityRef
