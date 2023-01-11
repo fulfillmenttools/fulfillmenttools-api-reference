@@ -13548,34 +13548,50 @@ components:
             apiKey:
               description: Internal API Key to communicate with the DHL Api
               type: string
+            fallback:
+              $ref: '#/components/schemas/DHLV2BusinessCredentials'
+          required:
+            - apiKey
+          type: object
+      xml:
+        name: DhlV2CarrierCredentials
+
+    DHLV2BusinessCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractCarrierCredentials'
+        - properties:
             billingNumber:
               description: >-
                 Abrechnungsnummer DHL Paket, displayed in the DHL
                 Geschäftskundenportal under 'Vertragspositionen'
               type: string
               example: 22222222220101
+              minLength: 1
             retoureBillingNumber:
               description: >-
                 Abrechnungsnummer DHL Retoure, displayed in the DHL
                 Geschäftskundenportal under 'Vertragspositionen'
               type: string
               example: 22222222220701
-            dhlGKPassword:
+              minLength: 1
+            dhlBusinessPassword:
               description: Password you use to login to the DHL Geschäftskundenportal
               type: string
-            dhlGkUsername:
+              minLength: 1
+            dhlBusinessUsername:
               description: >-
                 Username (Benutzername) you use to login to the DHL
                 Geschäftskundenportal
               type: string
+              minLength: 1
           required:
-            - apiKey
-            - dhlGkUsername
-            - dhlGKPassword
+            - dhlBusinessUsername
+            - dhlBusinessPassword
             - billingNumber
           type: object
-      xml:
-        name: DhlV2CarrierCredentials
+          xml:
+            name: DHLV2BusinessCredentials
+
 
     FedexCarrierCredentials:
       allOf:
@@ -13749,6 +13765,12 @@ components:
           type: object
       xml:
         name: DpdChCarrierCredentials
+
+    DhlV2FacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+      xml:
+        name: DhlV2FacilityCarrierConfiguration
 
     DhlFacilityCarrierConfiguration:
       allOf:
@@ -14080,6 +14102,11 @@ components:
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/DpdChFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/DhlV2FacilityCarrierConfiguration"
+        credentials:
+          description: Facility specific credentials for this carrier
+          anyOf:
+            - $ref: "#/components/schemas/DHLV2BusinessCredentials"
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -14107,6 +14134,10 @@ components:
     FacilityCarrierConnectionForCreation:
       additionalProperties: false
       properties:
+        credentials:
+          description: Facility specific credentials for this carrier
+          anyOf:
+            - $ref: "#/components/schemas/DHLV2BusinessCredentials"
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
@@ -14114,6 +14145,7 @@ components:
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
+            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -14136,6 +14168,10 @@ components:
     FacilityCarrierConnectionForModification:
       additionalProperties: false
       properties:
+        credentials:
+          description: Facility specific credentials for this carrier
+          anyOf:
+            - $ref: "#/components/schemas/DHLV2BusinessCredentials"
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
@@ -14143,6 +14179,7 @@ components:
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
+            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -15807,28 +15844,12 @@ components:
             apiKey:
               description: Internal API Key to communicate with the DHL Api
               type: string
-            billingNumber:
-              description: >-
-                Abrechnungsnummer DHL Paket, displayed in the DHL
-                Geschäftskundenportal under 'Vertragspositionen'
-              type: string
-              example: 22222222220101
-            retoureBillingNumber:
-              description: >-
-                Abrechnungsnummer DHL Retoure, displayed in the DHL
-                Geschäftskundenportal under 'Vertragspositionen'
-              type: string
-              example: 22222222220701
-            dhlGKPassword:
-              description: Password you use to login to the DHL Geschäftskundenportal
-              type: string
-            dhlGkUsername:
-              description: >-
-                Username (Benutzername) you use to login to the DHL
-                Geschäftskundenportal
-              type: string
+              minLength: 1
+            fallback:
+              $ref: '#/components/schemas/DHLV2BusinessCredentials'
           required:
             - key
+            - apiKey
           type: object
       xml:
         name: ModifyDHLV2CarrierCredentials
