@@ -12016,7 +12016,317 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  '/api/toolkit/fences':
+    get:
+      parameters:
+        - description: all entities
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/ToolkitFencesTransporter'
+          description: The current list of available toolkit fences
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: No more elements available
+      security:
+        - firebase: [ ]
+      tags:
+        - Toolkit
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getToolkitFences
+      summary: Returns all toolkit fences
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolkitFenceForCreation'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ToolkitFence'
+          description: >-
+            Toolkit Fence was created successfully.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Toolkit
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: postToolkitFence
+      summary: Creates a toolkit fence
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
 
+  '/api/toolkit/fences/{toolkitFenceId}':
+    get:
+      parameters:
+        - description: Id of the tag you want to get
+          in: path
+          name: toolkitFenceId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolkitFence'
+          description: >-
+            ToolkitFence was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: User not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Toolkit
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getToolkitFenceById
+      summary: Get a tag with the given key
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      parameters:
+        - description: ID of the toolkit fence you want to update
+          in: path
+          name: toolkitFenceId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolkitFenceForModification'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolkitFence'
+          description: >-
+            Toolkit fence was found & you were allowed to access it. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Toolkit fence not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Toolkit
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: putToolkitFence
+      summary: Update a toolkit fence
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    delete:
+      parameters:
+        - description: ID of the toolkit fence you want to delete
+          in: path
+          name: toolkitFenceId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            Toolkit fence was found & you were allowed to delete it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Toolkit fence not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Toolkit
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: deleteToolkitFence
+      summary: Delete a toolkit fence
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   /api/inventory/stocks/summaries:
     get:
       operationId: getStockSummaries
@@ -21723,6 +22033,151 @@ components:
       type: string
       default: batchPick
 
+    ToolkitOperatorType:
+      description: >-
+        Type of operator used for a toolkit fence or rating:
+          * `TAG_EQUALS`- the entity2 should have a tag with the same id as the entity1 and the value is dynamically matched
+          * `VALUE_EQUALS`- compares the tag of entity1 with the tag of entity2 attending to the configured rule and returns true if it does match
+          * `VALUE_NOT_EQUALS`- compares the tag of entity1 with the tag of entity2 attending to the configured rule and returns true if it does not match
+      enum:
+        - TAG_EQUALS
+        - VALUE_EQUALS
+        - VALUE_NOT_EQUALS
+      type: string
+      xml:
+        name: ToolkitOperatorType
+
+    ToolkitOperatorTagReference:
+      required:
+        - 'id'
+      properties:
+        value:
+          type: string
+        id:
+          type: string
+      xml:
+        name: ToolkitOperatorTagReference
+
+    ToolkitOperator:
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/ToolkitOperatorType'
+        tagEntity1:
+          $ref: '#/components/schemas/ToolkitOperatorTagReference'
+        tagEntity2:
+          $ref: '#/components/schemas/ToolkitOperatorTagReference'
+      required:
+        - type
+        - tagEntity1
+        - tagEntity2
+      type: object
+      xml:
+        name: ToolkitOperator
+
+
+    ToolkitAllowedEntities:
+      description: >-
+        The entities that can be compared by the toolkit fence or rating
+          * `ORDER`
+          * `FACILITY`
+      enum:
+        - ORDER
+        - FACILITY
+      type: string
+      xml:
+        name: ToolkitAllowedEntities
+
+    ToolkitFenceForCreation:
+      properties:
+        name:
+          description: The name of the fence.
+          example: CustomFence
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        description:
+          description: The description of this fence.
+          example: Some text that describes what the fence does.
+          type: string
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        active:
+          default: false
+          description: Indicates if this fence is active or not.
+          type: boolean
+        order:
+          description: Order in which this fence is executed
+          example: 1
+          type: integer
+        entity1:
+          $ref: '#/components/schemas/ToolkitAllowedEntities'
+        entity2:
+          $ref: '#/components/schemas/ToolkitAllowedEntities'
+        operator:
+          $ref: '#/components/schemas/ToolkitOperator'
+      required:
+        - name
+        - nameLocalized
+        - active
+        - order
+        - entity1
+        - entity2
+        - operator
+      type: object
+      xml:
+        name: ToolkitFenceForCreation
+
+
+    ToolkitFenceForModification:
+      allOf:
+        - $ref: '#/components/schemas/ToolkitFenceForCreation'
+      properties:
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+      type: object
+      xml:
+        name: ToolkitFenceForModification
+
+    ToolkitFence:
+      allOf:
+        - $ref: '#/components/schemas/ToolkitFenceForModification'
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          description: The id of the toolkit fence
+          example: LGMl2DuvPnfPoSHhYFOm
+          type: string
+      required:
+        - id
+      type: object
+      xml:
+        name: ToolkitFence
+
+    ToolkitFencesTransporter:
+      properties:
+        fences:
+          items:
+            $ref: '#/components/schemas/ToolkitFence'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      required:
+        - fences
+        - total
+      type: object
+      xml:
+        name: ToolkitFenceTransporter
+
     StockSummaryArticle:
       type: object
       properties:
@@ -21860,7 +22315,6 @@ components:
       x-google-issuer: 'https://securetoken.google.com/%%PROJECT_ID%%'
       x-google-jwks_uri: >-
         https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com
-
 tags:
   - description: >-
       Everything your customer ordered in your shop, so everything he or she
