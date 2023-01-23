@@ -13081,7 +13081,6 @@ components:
             - ModifyReturnLineItem
             - ModifyRoutingPlan
             - ModifyFence
-            - ModifyCustomFence
             - ModifyRating
             - ModifyTimingMode
             - ModifyGlobalRoutingConfiguration
@@ -13745,27 +13744,6 @@ components:
       type: object
       xml:
         name: CustomClaims
-    CustomFence:
-      allOf:
-        - $ref: '#/components/schemas/Fence'
-      description: >-
-        You can supply a CUSTOM Fencing rule. In order to successfully supply
-        such a rule you also need to provide an evaluatable Expression in
-        vmExpression. This expression needs to return an integer value that adds
-        additional priority to an order.
-      properties:
-        descriptionLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        vmExpression:
-          type: string
-      required:
-        - vmExpression
-        - nameLocalized
-      type: object
-      xml:
-        name: CustomFenceImplementation
     CustomPrioritizationRule:
       allOf:
         - $ref: '#/components/schemas/PrioritizationRule'
@@ -13779,22 +13757,6 @@ components:
           example: >-
             order.customAttributes && order.customAttributes.amazon === true ?
             100 : 0
-          type: string
-      required:
-        - vmExpression
-      type: object
-      xml:
-        name: CustomPrioritizationRule
-    CustomRating:
-      allOf:
-        - $ref: '#/components/schemas/Rating'
-      description: >-
-        You can supply a CUSTOM Rating rule. In order to successfully supply
-        such a rule you also need to provide an evaluatable Expression in
-        vmExpression. This expression needs to return an integer value that adds
-        additional priority to an order.
-      properties:
-        vmExpression:
           type: string
       required:
         - vmExpression
@@ -15146,10 +15108,7 @@ components:
       type: object
     FenceImplementation:
       description: >-
-        If you choose to use CUSTOM here you need to also provide a vmExpression
-        string to match type CustomFenceImplementation <br> <br> <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-        /></center> <br> <i>This part of the API is currently under development.
+        <i>This part of the API is currently under development.
         That means that this endpoint, model, etc. can contain breaking changes
         and / or might not be available at all times in your API instance. It
         could disapear also without warning. Thus it currently does not fall
@@ -15165,7 +15124,6 @@ components:
         - FACILITY-PICKING-TIME-CAPACITY
         - PRESELECTED-FACILITY
         - SAMEDAY-POSSIBLE
-        - CUSTOM
       type: string
       xml:
         name: FenceImplementation
@@ -16370,36 +16328,6 @@ components:
           type: object
       xml:
         name: ModifyCarrierAction
-    ModifyCustomFenceAction:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - properties:
-            action:
-              description: >-
-                Use value 'ModifyCustomFence', because you want to modify a
-                custom fence.
-              enum:
-                - ModifyCustomFence
-              type: string
-            active:
-              type: boolean
-            descriptionLocalized:
-              $ref: '#/components/schemas/LocaleString'
-            id:
-              type: string
-            nameLocalized:
-              $ref: '#/components/schemas/LocaleString'
-            vmExpression:
-              example: >-
-                order.customAttributes && order.customAttributes.amazon === true
-                ? 100 : 0
-              type: string
-          required:
-            - action
-            - id
-          type: object
-      xml:
-        name: ModifyCustomFenceAction
     ModifyDhlCarrierCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
@@ -19340,7 +19268,6 @@ components:
           items:
             anyOf:
               - $ref: "#/components/schemas/ModifyFenceAction"
-              - $ref: "#/components/schemas/ModifyCustomFenceAction"
               - $ref: "#/components/schemas/ModifyRatingAction"
               - $ref: "#/components/schemas/ModifyTimingModeAction"
               - $ref: "#/components/schemas/ModifyOrderSplitAction"
