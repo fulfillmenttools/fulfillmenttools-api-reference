@@ -14815,6 +14815,11 @@ components:
           items:
             $ref: '#/components/schemas/ParcelLabelClassification'
           type: array
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
       required:
         - carrierRef
         - key
@@ -14836,16 +14841,13 @@ components:
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/DpdChFacilityCarrierConfiguration"
             - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
           items:
             $ref: '#/components/schemas/DeliveryArea'
-          type: array
-        parcelLabelClassifications:
-          items:
-            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
           type: array
         name:
           description: >-
@@ -14855,6 +14857,15 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/CarrierStatus'
+        parcelLabelClassifications:
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
+          type: array
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
       type: object
     FacilityCarrierConnectionForModification:
       additionalProperties: false
@@ -14871,6 +14882,7 @@ components:
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
+            - $ref: "#/components/schemas/DpdChFacilityCarrierConfiguration"
             - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
@@ -14886,12 +14898,16 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/CarrierStatus'
-        version:
-          type: number
         parcelLabelClassifications:
           items:
             $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
           type: array
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagReference'
+        version:
+          type: number
       required:
         - version
       type: object
@@ -22419,9 +22435,11 @@ components:
         The entities that can be compared by the toolkit fence or rating
           * `ORDER`
           * `FACILITY`
+          * `CARRIERCONNECTION`
       enum:
         - ORDER
         - FACILITY
+        - CARRIERCONNECTION
       type: string
       xml:
         name: ToolkitAllowedEntities
@@ -22551,6 +22569,7 @@ components:
         - entity1
         - entity2
         - operator
+        - maxPenalty
       type: object
       xml:
         name: ToolkitRatingForCreation
