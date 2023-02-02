@@ -4509,6 +4509,53 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+    delete:
+      parameters:
+        - description: ID of facility you want to delete a listing of
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Facility listing was found and successfully deleted
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility listing not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Listings
+      description: ''
+      operationId: deleteListingsOfFacility
+      summary: deletes a listing with the given ID of a facility with the given ID
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   '/api/facilities/{facilityId}/listings/{tenantArticleId}':
     delete:
       parameters:
