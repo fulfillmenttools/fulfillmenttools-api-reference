@@ -4511,7 +4511,7 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
     delete:
       parameters:
-        - description: ID of facility you want to delete a listing of
+        - description: ID of facility you want to delete all listings of
           in: path
           name: facilityId
           required: true
@@ -4519,7 +4519,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Facility listing was found and successfully deleted
+          description: Facility listings were found and successfully deleted
         '401':
           content:
             application/json:
@@ -4549,7 +4549,7 @@ paths:
         - Listings
       description: ''
       operationId: deleteListingsOfFacility
-      summary: deletes a listing with the given ID of a facility with the given ID
+      summary: deletes all listings of a facility with the given ID
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
@@ -8432,6 +8432,50 @@ paths:
         description: Pick job object
         required: true
       summary: Add a new pick job for fulfillment
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/documents/{documentsRef}:
+    get:
+      parameters:
+        - description: Reference to the entity you want to get
+          in: path
+          name: documentsRef
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentSet'
+          description: Documents were found. The results are in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - Documents
+      operationId: getDocumentSet
+      summary: Simple query interface to find documents
       x-google-backend:
         address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
@@ -12943,6 +12987,14 @@ paths:
           schema:
             minLength: 1
             type: string
+        - name: facilityIds
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         "200":
           description: Stock distribution was loaded & you were allowed to access it. The
@@ -18050,6 +18102,9 @@ components:
             order.
           example: R456728546
           type: string
+        documentsRef:
+          description: Reference to the documents collection from this entity
+          type: string
         tags:
           type: array
           minItems: 1
@@ -21236,6 +21291,9 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/PrintableDocument'
+            documentsRef:
+              description: Reference to the documents collection from this entity
+              type: string
             documentHandling:
               $ref: '#/components/schemas/DocumentHandling'
             anonymized:
@@ -21981,6 +22039,19 @@ components:
         - id
         - status
         - documentCategory
+
+    DocumentSet:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          type: string
+        documents:
+          type: array
+          items:
+           $ref: '#/components/schemas/PrintableDocument'
+      required:
+        - id
 
     DocumentStatus:
       type: string
