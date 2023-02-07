@@ -17329,6 +17329,8 @@ components:
               minItems: 0
             status:
               $ref: '#/components/schemas/PickLineItemStatus'
+            secondaryPicked:
+              type: integer
             substituteLineItems:
               description: >-
                 <center><img
@@ -17348,6 +17350,7 @@ components:
             - id
             - action
           type: object
+          additionalProperties: false
       xml:
         name: ModifyPickLineItemAction
 
@@ -17770,6 +17773,16 @@ components:
           format: int64
           minimum: 1
           type: integer
+        secondaryMeasurementUnitKey:
+          description: Secondary identifier for items unit of measurement.
+          example: liter
+          type: string
+        secondaryQuantity:
+          description: Secondary quantity of the specific article that has been ordered
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
         scannableCodes:
           items:
             description: 'Strings, that identify the article'
@@ -18170,6 +18183,12 @@ components:
               format: int64
               minimum: 0
               type: integer
+            secondaryPicked:
+              description: The secondary amount of articles that were picked for this pickline.
+              example: 20
+              format: int64
+              minimum: 0
+              type: integer
             status:
               $ref: '#/components/schemas/PickLineItemStatus'
             substituteLineItems:
@@ -18294,6 +18313,16 @@ components:
           example: liter
           type: string
         quantity:
+          description: quantity of the specific article that has been ordered
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        secondaryMeasurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        secondaryQuantity:
           description: quantity of the specific article that has been ordered
           example: 21
           format: int64
