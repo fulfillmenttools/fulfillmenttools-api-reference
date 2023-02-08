@@ -17319,6 +17319,9 @@ components:
               format: int64
               minimum: 0
               type: integer
+            stockEmptied:
+              example: true
+              type: boolean
             partialStockLocations:
               items:
                 $ref: '#/components/schemas/PickJobLineItemPartialStockLocationForUpdate'
@@ -17753,6 +17756,30 @@ components:
           type: object
       xml:
         name: OrderLineItemArticle
+    MeasurementValidation:
+      properties:
+        shortPickSoftTolerancePercentage:
+          description: Allowed soft short pick deviation tolerance.
+          example: 10.0
+          minimum: 0
+          maximum: 100
+          type: number
+        shortPickHardTolerancePercentage:
+          description: Allowed hard short pick deviation tolerance.
+          example: 15.0
+          minimum: 0
+          maximum: 100
+          type: number
+        overPickSoftTolerancePercentage:
+          description: Allowed soft over pick deviation tolerance.
+          example: 15.0
+          minimum: 0
+          type: number
+        overPickHardTolerancePercentage:
+          description: Allowed hard over pick deviation tolerance.
+          example: 20.0
+          minimum: 0
+          type: number
     OrderLineItemForCreation:
       properties:
         article:
@@ -17781,13 +17808,15 @@ components:
           description: Secondary quantity of the specific article that has been ordered
           example: 21
           format: int64
-          minimum: 1
+          minimum: 0
           type: integer
         scannableCodes:
           items:
             description: 'Strings, that identify the article'
             type: string
           type: array
+        measurementValidation:
+          $ref: '#/components/schemas/MeasurementValidation'
         shopPrice:
           description: price per piece of this line item
           example: 1200
@@ -18206,6 +18235,9 @@ components:
               items:
                 $ref: '#/components/schemas/SubstituteLineItem'
               type: array
+            stockEmptied:
+              example: true
+              type: boolean
             partialStockLocations:
               description: "Indicates where the items to pick could be found and from where the picking should be started."
               items:
@@ -18230,6 +18262,9 @@ components:
           format: int64
           minimum: 0
           type: number
+        stockEmptied:
+          example: true
+          type: boolean
       required:
         - tenantPartialStockId
         - picked
@@ -18244,6 +18279,9 @@ components:
           format: int64
           minimum: 0
           type: number
+        stockEmptied:
+          example: true
+          type: boolean
       required:
         - tenantPartialStockId
       type: object
@@ -18326,8 +18364,10 @@ components:
           description: quantity of the specific article that has been ordered
           example: 21
           format: int64
-          minimum: 1
+          minimum: 0
           type: integer
+        measurementValidation:
+          $ref: '#/components/schemas/MeasurementValidation'
         scannableCodes:
           items:
             description: 'Strings, that identify the article'
