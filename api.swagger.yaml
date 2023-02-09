@@ -15272,10 +15272,21 @@ components:
           $ref: '#/components/schemas/FenceImplementation'
         name:
           type: string
+        supportedModes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FenceMode'
+        activeMode:
+          $ref: '#/components/schemas/FenceMode'
       required:
         - active
         - implementation
       type: object
+    FenceMode:
+      enum:
+        - static
+        - reactive
+      type: string
     FenceImplementation:
       description: >-
         <i>This part of the API is currently under development.
@@ -17010,6 +17021,8 @@ components:
               type: boolean
             id:
               type: string
+            activeMode:
+              $ref: '#/components/schemas/FenceMode'
           required:
             - action
             - id
