@@ -15985,12 +15985,27 @@ components:
           minimum: 0
         scanningRule:
           $ref: '#/components/schemas/ScanningRuleConfiguration'
+        outOfStockBehaviour:
+          enum:
+            - BACKORDER
+          type: string
+        availabilityTimeframe:
+          $ref: '#/components/schemas/AvailabilityTimeframe'
       required:
         - tenantArticleId
         - title
       type: object
       xml:
         name: ListingForCreation
+
+
+    AvailabilityTimeframe:
+      properties:
+        start:
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+      type: object
 
     ListingForReplacement:
       allOf:
@@ -17167,6 +17182,12 @@ components:
               $ref: '#/components/schemas/ScanningRuleConfiguration'
             weight:
               type: number
+            outOfStockBehaviour:
+              enum:
+                - BACKORDER
+              type: string
+            availabilityTimeframe:
+              $ref: '#/components/schemas/AvailabilityTimeframe'
           required:
             - action
           type: object
