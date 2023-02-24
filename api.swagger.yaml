@@ -13104,6 +13104,51 @@ paths:
         - firebase: []
       tags:
         - Inventory
+  "/api/facilities/{facilityId}/stocks":
+    put:
+      operationId: bulkUpdateFacilityStock
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Update Stock in bulk facilityRef and tenantArticleId
+      parameters:
+        - name: facilityId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FacilityStockBulkOperations"
+      responses:
+        "207":
+          description: Update Result of each targeted tenantArticleId
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FacilityStockBulkResult"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
 
   /graphql:
     get:
@@ -23036,6 +23081,60 @@ components:
       required:
         - total
         - articles
+    FacilityStockBulkOperation:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+          minLength: 1
+        value:
+          type: number
+          minimum: 0
+      required:
+        - tenantArticleId
+        - value
+    FacilityStockBulkOperations:
+      type: object
+      properties:
+        operations:
+          minItems: 1
+          type: array
+          items:
+            $ref: "#/components/schemas/FacilityStockBulkOperation"
+      required:
+        - operations
+    BulkOperationError:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - NOT_FOUND
+            - NOT_ALLOWED
+        message:
+          type: string
+      required:
+        - type
+        - message
+    FacilityStockBulkResult:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        facilityRef:
+          type: string
+        status:
+          type: string
+          enum:
+            - UPDATED
+            - CREATED
+            - FAILED
+        error:
+          $ref: "#/components/schemas/BulkOperationError"
+      required:
+        - tenantArticleId
+        - facilityRef
+        - status
   securitySchemes:
     firebase:
       flows:
