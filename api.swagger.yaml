@@ -13105,6 +13105,55 @@ paths:
       tags:
         - Inventory
   "/api/facilities/{facilityId}/stocks":
+    get:
+      operationId: getFacilityStocks
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Get stock related to a facilityRef
+      parameters:
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: facilityId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Stock was loaded and you were allowed to access it.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FacilityStock"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
     put:
       operationId: bulkUpdateFacilityStock
       x-google-backend:
@@ -23013,36 +23062,25 @@ components:
     FacilityStock:
       type: object
       properties:
-        facilityId:
-          type: string
-        facilityName:
-          type: string
-        facilityServiceTypes:
-          type: array
-          items:
-            type: string
-            $ref: "#/components/schemas/FacilityServiceType"
-        facilityStatus:
-          type: string
-          $ref: "#/components/schemas/FacilityStatus"
-        reserved:
-          type: number
-        totalAmount:
-          type: number
         available:
           type: number
-        price:
+        reserved:
           type: number
-          nullable: true
+        value:
+          type: number
+        tenantArticleId:
+          type: string
+        facilityRef:
+          type: string
+        id:
+          type: string
       required:
-        - facilityId
-        - facilityName
-        - facilityServiceTypes
-        - facilityStatus
-        - reserved
-        - totalAmount
         - available
-        - price
+        - reserved
+        - value
+        - tenantArticleId
+        - facilityRef
+        - id
     StockDistribution:
       type: object
       properties:
