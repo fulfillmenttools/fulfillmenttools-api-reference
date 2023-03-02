@@ -18978,6 +18978,35 @@ components:
           example: 42
           type: integer
       type: object
+
+    DomainStatusHistoryItem:
+      description: >-
+        This item represent a process status change triggered by a specific domain.
+      properties:
+        timestamp:
+          description: >-
+            Timestamp of the moment at which the state was notified by the domain.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        domain:
+          description: >-
+            The domain of the entity that caused the status change.
+          $ref: '#/components/schemas/DomainType'
+        domainRef:
+          description: >-
+            The id of the domain entity that caused the status change.
+          type: string
+        domainProcessStatus:
+          description: The assigned status
+          $ref: '#/components/schemas/ProcessStatus'
+      required:
+        - timestamp
+        - domain
+        - domainProcessStatus
+        - domainRef
+      type: object
+
     Process:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -19058,6 +19087,11 @@ components:
           items:
             type: string
           type: array
+        domainStatusHistory:
+          description: History of process status changes caused by changes on the related domains.
+          type: array
+          items:
+            $ref: '#/components/schemas/DomainStatusHistoryItem'
       required:
         - gdprCleanupDate
         - id
@@ -19095,6 +19129,11 @@ components:
       required:
         - id
         - domainVersion
+        - processRef
+        - domainProcessStatus
+        - domain
+        - domainRef
+        - domainStatus
     ProcessStatus:
       enum:
         - PENDING
