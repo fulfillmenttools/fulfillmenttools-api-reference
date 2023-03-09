@@ -8330,12 +8330,12 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
-  /api/documents/{documentsRef}:
+  /api/documentSet/{documentSetRef}:
     get:
       parameters:
         - description: Reference to the entity you want to get
           in: path
-          name: documentsRef
+          name: documentSetRef
           required: true
           schema:
             type: string
@@ -8377,6 +8377,70 @@ paths:
         under our SLA regulations. For details on this topic please check our
         documentation under
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      summary: Simple query interface to find documents
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/documentSet/{documentSetRef}/documents/{documentRef}:
+    patch:
+      parameters:
+        - description: Reference to the documentSet you want to update
+          in: path
+          name: documentSetRef
+          required: true
+          schema:
+            type: string
+        - description: Reference to the single document you want to update
+          in: path
+          name: documentRef
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrintableDocumentForUpdate'
+        description: PartialDocument
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintableDocument'
+          description: Document was found. The results are in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Documents
+      operationId: updateDocument
       summary: Simple query interface to find documents
       x-google-backend:
         address: 'ocff-service://http'
@@ -22334,6 +22398,7 @@ components:
           type: object
       xml:
         name: AddTagsToProcessAction
+
     PrintableDocument:
       type: object
       properties:
@@ -22345,6 +22410,11 @@ components:
           $ref: '#/components/schemas/DocumentCategory'
         status:
           $ref: '#/components/schemas/DocumentStatus'
+        operations:
+          type: array
+          description: Offered operations for this document
+          items:
+           $ref: '#/components/schemas/DocumentOperations'
         name:
           type: string
         path:
@@ -22357,6 +22427,29 @@ components:
         - id
         - status
         - documentCategory
+
+    PrintableDocumentForUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        version:
+          description: Version of the documentSet you want to update a document of
+          example: 42
+          format: int64
+          type: integer
+        priority:
+          description: Sorting display order of document
+          example: 42
+          format: int64
+          type: integer
+        operations:
+          type: array
+          description: Offered operations for this document
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/DocumentOperations'
+      required:
+        - version
 
     DocumentSet:
       allOf:
@@ -22379,6 +22472,12 @@ components:
         - REQUESTABLE
         - CANCELED
         - WAITING_FOR_INPUT
+
+    DocumentOperations:
+      type: string
+      enum:
+        - PRINT
+        - VIEW
 
     DocumentCategory:
       enum:
