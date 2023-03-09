@@ -5909,6 +5909,72 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  /api/fulfillability/clickandcollect:
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FulfillabilityResult'
+          description: The result of the fulfillability for click and collect.
+        '204':
+          description: >-
+            There was no result of the fulfillability request. Please make sure
+            to provide at least one of the attributes shipping or collect.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - FulfillabilityClickAndCollect
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: queryFulfillabilityClickAndCollect
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FulfillabilityClickAndCollectQuery'
+        description: Representation that describes the fulfillability query
+        required: true
+      summary: >-
+        Provides information which kind of fulfillment is possible under given
+        circumstances.
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   /api/pickruns:
     post:
       responses:
@@ -15346,6 +15412,54 @@ components:
               type: object
           type: object
       type: object
+
+    FulfillabilityResult:
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/FulfillabilityDetail'
+      required:
+        - details
+    FulfillabilityDetail:
+      properties:
+        facilityRef:
+          type: string
+        tenntFacilityId:
+          type: string
+        facilityName:
+          type: string
+        closingDays:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClosingDay'
+        pickingTimes:
+          $ref: '#/components/schemas/PickingTimes'
+        address:
+          $ref: '#/components/schemas/FacilityAddress'
+        targetTime:
+          type: string
+          format: date-time
+        articleAvailabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleAvailability'
+      required:
+        - facilityRef
+        - facilityName
+        - address
+        - targetTime
+        - articleAvailabilities
+    ArticleAvailability:
+      properties:
+        tenantArticleId:
+          type: string
+        availableStock:
+          type: number
+      required:
+        - tenantArticleId
+        - availableStock
+
     FulfillabilityFacility:
       allOf:
         - $ref: '#/components/schemas/StrippedFacility'
@@ -15380,6 +15494,24 @@ components:
         - mode
         - items
       type: object
+    FulfillabilityClickAndCollectQuery:
+      description: >-
+        Provides the paramters you are interested in. You must supply at least
+        either one or more facilityRefs or an object containing lat , long and a radius.
+      properties:
+        geoFence:
+          $ref: '#/components/schemas/GeoFence'
+        facilityRefs:
+          type: array
+          items:
+            type: string
+        tenantArticleIds:
+          type: array
+          minItems: 1
+          items:
+            type: string
+      required:
+        - tenantArticleIds
     FulfillabilityQuery:
       description: >-
         Provides the paramters you are interested in. You must supply at least
@@ -15392,28 +15524,7 @@ components:
             for considered facilities to collect the goods.
           properties:
             geoFence:
-              description: >-
-                Center (described with lon and lat attributes) and a circular
-                geofence (described as radius around the center)
-              properties:
-                lat:
-                  description: 'The latitude of the center, provided as decimal coordinate'
-                  example: 50.968713
-                  type: number
-                lon:
-                  description: 'The longitude of the center, provided as decimal coordinate'
-                  example: 7.011375
-                  type: number
-                radius:
-                  description: 'Radius around the center in kilometers (km, max. 100)'
-                  maximum: 100
-                  minimum: 1
-                  type: number
-              required:
-                - lat
-                - lon
-                - radius
-              type: object
+              $ref: '#/components/schemas/GeoFence'
           required:
             - geoFence
           type: object
@@ -15456,6 +15567,31 @@ components:
       required:
         - estimatedOrderDate
       type: object
+
+    GeoFence:
+      description: >-
+        Center (described with lon and lat attributes) and a circular
+        geofence (described as radius around the center)
+      properties:
+        lat:
+          description: 'The latitude of the center, provided as decimal coordinate'
+          example: 50.968713
+          type: number
+        lon:
+          description: 'The longitude of the center, provided as decimal coordinate'
+          example: 7.011375
+          type: number
+        radius:
+          description: 'Radius around the center in kilometers (km, max. 100)'
+          maximum: 100
+          minimum: 1
+          type: number
+      required:
+        - lat
+        - lon
+        - radius
+      type: object
+
     FulfillmentProcessBufferConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
