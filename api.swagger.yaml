@@ -13156,7 +13156,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FacilityStock"
+                type: array
+                items:
+                  $ref: "#/components/schemas/FacilityStock"
         "401":
           description: Your user is not allowed to operate against this API instance
           content:
@@ -14554,12 +14556,53 @@ components:
       required:
         - offeredDocumentsPerTag
         - offeredDocumentsByDefault
+
+    StickerConfiguration:
+      additionalProperties: false
+      properties:
+        stickers:
+          type: array
+          description: available stickers coming with this config
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/Sticker'
+
+    Sticker:
+      additionalProperties: false
+      properties:
+        key:
+          type: string
+          description: unique identifier
+          example: LGMl2DuvPnfPoSHhYFOm
+        priority:
+          description: priority of the given sticker
+          example: 100
+          format: int64
+          maximum: 10000
+          minimum: 1
+          type: integer
+        nameLocalized:
+          description: Dictionary of possible transactions, min 1 entry, max 14 characters per description
+          example: >-
+            { en_US: 'SomeName' }
+          $ref: '#/components/schemas/LocaleString'
+        color:
+          type: string
+          description: optional color coding for the sticker
+          example: #19b6b5
+      required:
+        - key
+        - nameLocalized
+        - priority
+
     PackJobTagConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/TagConfiguration'
         - type: object
           properties:
+            stickerConfiguration:
+              $ref: '#/components/schemas/StickerConfiguration'
             packJobCreationPerTag:
               type: array
               description: All entries with a match in their matchingValues will be combined when determining what documents belong to an entity
@@ -14567,10 +14610,16 @@ components:
                 $ref: '#/components/schemas/PackJobCreationPerTag'
           required:
             - packJobCreationPerTag
+
     PickJobTagConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/TagConfiguration'
+      properties:
+        stickerConfiguration:
+          $ref: '#/components/schemas/StickerConfiguration'
+
+
     PackJobCreationPerTag:
       properties:
         tagRef:
