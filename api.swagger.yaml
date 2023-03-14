@@ -343,10 +343,8 @@ paths:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/CarrierConfiguration'
-                  - $ref: '#/components/schemas/DhlCarrierConfiguration'
                   - $ref: '#/components/schemas/GlsCarrierConfiguration'
                   - $ref: '#/components/schemas/FedexCarrierConfiguration'
-                  - $ref: '#/components/schemas/DpdCarrierConfiguration'
                   - $ref: '#/components/schemas/BringCarrierConfiguration'
                   - $ref: '#/components/schemas/DpdChCarrierConfiguration'
           description: >-
@@ -402,10 +400,8 @@ paths:
               schema:
                 anyOf:
                   - $ref: '#/components/schemas/CarrierConfiguration'
-                  - $ref: '#/components/schemas/DhlCarrierConfiguration'
                   - $ref: '#/components/schemas/GlsCarrierConfiguration'
                   - $ref: '#/components/schemas/FedexCarrierConfiguration'
-                  - $ref: '#/components/schemas/DpdCarrierConfiguration'
                   - $ref: '#/components/schemas/BringCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The result is in
@@ -445,9 +441,7 @@ paths:
             schema:
               anyOf:
                 - $ref: '#/components/schemas/CarrierConfiguration'
-                - $ref: '#/components/schemas/DhlCarrierConfiguration'
                 - $ref: '#/components/schemas/GlsCarrierConfiguration'
-                - $ref: '#/components/schemas/DpdCarrierConfiguration'
                 - $ref: '#/components/schemas/FedexCarrierConfiguration'
                 - $ref: '#/components/schemas/BringCarrierConfiguration'
         description: Carrier Configuration
@@ -13733,29 +13727,11 @@ components:
         - defaultManufactureCountry
         - defaultCommodityDescription
 
-
-
-    DhlCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      properties:
-        alternativeSendAddress:
-          $ref: '#/components/schemas/FacilityAddress'
-
     DpdChCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
       properties:
         alternativeSendAddress:
-          $ref: '#/components/schemas/FacilityAddress'
-
-    DpdCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      properties:
-        alternativeSendAddress:
-          $ref: '#/components/schemas/FacilityAddress'
-        alternativeReturnAddress:
           $ref: '#/components/schemas/FacilityAddress'
 
     GlsCarrierConfiguration:
@@ -13784,9 +13760,9 @@ components:
           $ref: '#/components/schemas/CarrierDeliveryType'
         key:
           description: >-
-            References the KEP. Currently allowed values are DHL, DPD, DPD_CH, ANGEL, GLS, FEDEX, POSTNL, BRING and
+            References the KEP. Currently allowed values are DHL_V2, DPD_CH, ANGEL, GLS, FEDEX, POSTNL, BRING and
             CUSTOM.
-          example: DHL
+          example: DHL_V2
           type: string
         lifecycle:
           $ref: '#/components/schemas/CarrierLifecycle'
@@ -14447,33 +14423,6 @@ components:
           format: date-time
           type: string
       type: object
-    DhlCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            apiKey:
-              description: Internal API Key to communicate with the CEP Api
-              type: string
-            dhlAccountNumber:
-              description: >-
-                Abrechnungsnummer DHL Paket, displayed in the DHL
-                Geschäftskundenportal under 'Vertragspositionen'
-              type: string
-            dhlGKPassword:
-              description: Password you use to login to the DHL Geschäftskundenportal
-              type: string
-            dhlGkUsername:
-              description: >-
-                Username (Benutzername) you use to login to the DHL
-                Geschäftskundenportal
-              type: string
-          required:
-            - dhlGkUsername
-            - dhlGKPassword
-            - dhlAccountNumber
-          type: object
-      xml:
-        name: DhlCarrierCredentials
 
     DHLV2CarrierCredentials:
       allOf:
@@ -14671,32 +14620,15 @@ components:
       required:
         - documentCategory
 
-    DpdCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            delisId:
-              description: Delis ID to create a DPD auth token
-              type: string
-            password:
-              description: Password to create a DPD auth token
-              type: string
-          required:
-            - delisId
-            - password
-          type: object
-      xml:
-        name: DpdCarrierCredentials
-
     DpdChCarrierCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractCarrierCredentials'
         - properties:
             delisId:
-              description: Delis ID to create a DPD auth token
+              description: Delis ID to create a DPD CH auth token
               type: string
             password:
-              description: Password to create a DPD auth token
+              description: Password to create a DPD CH auth token
               type: string
           required:
             - delisId
@@ -14711,31 +14643,6 @@ components:
       xml:
         name: DhlV2FacilityCarrierConfiguration
 
-    DhlFacilityCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - type: object
-          properties:
-            accountingNumberParcel:
-              description: Billing number for DHL package
-              type: string
-              pattern: '^[A-z0-9-]{14}$'
-            accountingNumberParcelInternational:
-              description: Billing number for international DHL package
-              type: string
-              pattern: '^[A-z0-9-]{14}$'
-            accountingNumberStandardNationalGoGreen:
-              description: Standard national GoGreen billing number
-              type: string
-              pattern: '^[A-z0-9-]{14}$'
-            accountingNumberReturn:
-              type: string
-              pattern: '^[A-z0-9-]{14}$'
-            returnReceiverId:
-              type: string
-              pattern: '^[A-z0-9-]{15}$'
-      xml:
-        name: DhlFacilityCarrierConfiguration
     AngelFacilityCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
@@ -15036,7 +14943,6 @@ components:
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
-            - $ref: "#/components/schemas/DhlFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
@@ -15089,7 +14995,6 @@ components:
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
-            - $ref: "#/components/schemas/DhlFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
@@ -15131,7 +15036,6 @@ components:
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
-            - $ref: "#/components/schemas/DhlFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/GlsFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/AngelFacilityCarrierConfiguration"
             - $ref: "#/components/schemas/PostNLFacilityCarrierConfiguration"
@@ -16768,54 +16672,6 @@ components:
           type: object
       xml:
         name: ModifyCarrierAction
-    ModifyDhlCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - additionalProperties: false
-          properties:
-            dhlAccountNumber:
-              description: >-
-                Abrechnungsnummer DHL Paket, displayed in the DHL
-                Geschäftskundenportal under 'Vertragspositionen'
-              type: string
-            dhlGKPassword:
-              description: Password you use to login to the DHL Geschäftskundenportal
-              type: string
-            dhlGkUsername:
-              description: >-
-                Username (Benutzername) you use to login to the DHL
-                Geschäftskundenportal
-              type: string
-            key:
-              description: Use value 'DHL' in order to provide DHL credentials
-              type: string
-            apiKey:
-              description: Internal API Key to communicate with the CEP Api
-              type: string
-          required:
-            - key
-          type: object
-      xml:
-        name: ModifyDhlCarrierCredentials
-    ModifyDpdCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - additionalProperties: false
-          properties:
-            delisId:
-              description: Delis ID to create a DPD auth token.
-              type: string
-            key:
-              description: Use value 'DPD_CH' in order to provide DPD_CH credentials
-              type: string
-            password:
-              description: Password to create a DPD auth token.
-              type: string
-          required:
-            - key
-          type: object
-      xml:
-        name: ModifyDpdCarrierCredentials
 
     ModifyDpdChCarrierCredentials:
       allOf:
@@ -16823,13 +16679,13 @@ components:
         - additionalProperties: false
           properties:
             delisId:
-              description: Delis ID to create a DPD auth token.
+              description: Delis ID to create a DPD CH auth token.
               type: string
             key:
-              description: Use value 'DPD' in order to provide DPD credentials
+              description: Use value 'DPD_CH' in order to provide DPD credentials
               type: string
             password:
-              description: Password to create a DPD auth token.
+              description: Password to create a DPD CH auth token.
               type: string
           required:
             - key
@@ -18249,7 +18105,7 @@ components:
                   $ref: '#/components/schemas/TrackingStatus'
                 trackingUrl:
                   description: The URL to track this parcel
-                  example: 'http://track.shipcloud.io/3a186c51d4'
+                  example: 'http://track.io/3a186c51d4'
                   type: string
               required:
                 - summary
