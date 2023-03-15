@@ -13360,6 +13360,7 @@ components:
             - ModifyPickJobLastEditor
             - RestartPickJob
             - CancelPickRun
+            - CancelHandoverjob
             - AbortPickJob
             - FinishPickRun
             - StartPickRun
@@ -15689,7 +15690,6 @@ components:
           type: number
         radius:
           description: 'Radius around the center in kilometers (km, max. 100)'
-          maximum: 100
           minimum: 1
           type: number
       required:
@@ -15982,6 +15982,8 @@ components:
           description: Indicates if the order is already paid
           example: false
           type: boolean
+        cancelReason:
+          $ref: '#/components/schemas/HandoverJobCancelReason'
       required:
         - facilityRef
         - targetTime
@@ -15993,7 +15995,9 @@ components:
       properties:
         actions:
           items:
-            $ref: '#/components/schemas/ModifyHandoverjobAction'
+            anyOf:
+              - $ref: '#/components/schemas/ModifyHandoverjobAction'
+              - $ref: '#/components/schemas/CancelHandoverjobAction'
           minItems: 1
           type: array
         version:
@@ -16014,7 +16018,16 @@ components:
         - OPEN
         - HANDED_OVER
         - OBSOLETE
+        - CANCELED
       type: string
+
+    HandoverJobCancelReason:
+      enum:
+        - CONSUMER_NO_SHOW
+        - CONSUMER_REJECTS
+        - ORDER_CANCELED
+      type: string
+
     ItemsFulfillabilityConstraintType:
       allOf:
         - $ref: '#/components/schemas/AbstractFulfillabilityConstraintType'
@@ -17255,6 +17268,26 @@ components:
           type: object
       xml:
         name: ModifyHandoverjobAction
+    CancelHandoverjobAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value 'CancelHandoverjob', because you want to cancel a
+                handover job
+              enum:
+                - CancelHandoverjob
+              type: string
+            handoverJobCancelReason:
+              $ref: '#/components/schemas/HandoverJobCancelReason'
+          required:
+            - action
+            - handoverJobCancelReason
+          type: object
+      xml:
+        name: CancelHandoverjobAction
     ModifyListingAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
