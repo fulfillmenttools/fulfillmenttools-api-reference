@@ -14561,12 +14561,31 @@ components:
     StickerConfiguration:
       additionalProperties: false
       properties:
+        offeredStickersByTag:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferedStickersByTag'
+
+    OfferedStickersByTag:
+      additionalProperties: false
+      properties:
+        tagRef:
+          type: string
+        matchingValues:
+          type: array
+          minItems: 1
+          items:
+            type: string
         stickers:
           type: array
-          description: available stickers coming with this config
-          minItems: 0
+          minItems: 1
           items:
             $ref: '#/components/schemas/Sticker'
+      required:
+        - tagRef
+        - matchingValues
+        - stickers
+      type: object
 
     Sticker:
       additionalProperties: false
