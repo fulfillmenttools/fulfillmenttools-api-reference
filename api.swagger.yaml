@@ -969,110 +969,6 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
-  /api/configurations/tags/handoverjob:
-    get:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HandoverJobTagConfiguration'
-          description: handoverJob tag config is in response body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Entity not found
-      security:
-        - firebase: [ ]
-      tags:
-        - Configurations
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-        /></center> <br> <i>This part of the API is currently under development.
-        That means that this endpoint, model, etc. can contain breaking changes
-        and / or might not be available at all times in your API instance. It
-        could disapear also without warning. Thus it currently does not fall
-        under our SLA regulations. For details on this topic please check our
-        documentation under
-        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      operationId: getHandoverJobTagConfiguration
-      summary: Read tag configuration for handoverJobs
-      x-google-backend:
-        address: 'ocff-service://http'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-    put:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HandoverJobTagConfiguration'
-          description: The handoverjob tag configuration was successfully updated.
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - Configurations
-      description: ''
-      operationId: putHandoverTagConfigurations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/HandoverJobTagConfiguration'
-        description: Desired Tag Configuration for HandoverJobs
-        required: true
-      summary: Change the tag configuration for HandoverJobs
-      x-google-backend:
-        address: 'ocff-service://http'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-
   /api/configurations/domain:
     get:
       responses:
@@ -14646,7 +14542,6 @@ components:
       required:
         - value
       type: object
-
     TagConfiguration:
       properties:
         offeredDocumentsPerTag:
@@ -14746,13 +14641,6 @@ components:
         lineItemStickerConfiguration:
           $ref: '#/components/schemas/StickerConfiguration'
 
-    HandoverJobTagConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-        - $ref: '#/components/schemas/TagConfiguration'
-      properties:
-        stickerConfiguration:
-          $ref: '#/components/schemas/StickerConfiguration'
 
     PackJobCreationPerTag:
       properties:
@@ -19389,7 +19277,6 @@ components:
       enum:
         - PACKJOB
         - PICKJOB
-        - HANDOVERJOB
       type: string
     DocumentType:
       enum:
