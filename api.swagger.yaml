@@ -8493,6 +8493,39 @@ paths:
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
 
+  /api/documents/{documentId}/file:
+    get:
+      parameters:
+        - in: path
+          name: documentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            The document with given id
+      security:
+        - firebase: [ ]
+      tags:
+        - Processes
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: downloadDocument
+      summary: Download a document
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   /api/documentSet/{documentSetRef}:
     get:
       parameters:
@@ -8708,6 +8741,104 @@ paths:
       summary: Add a new load unit for pick job
       x-google-backend:
         address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/pickjobs/{pickJobId}/documents:
+    post:
+      parameters:
+        - description: Reference to the pick job
+          in: path
+          name: pickJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalDocumentForCreation'
+          description: Document that should be added.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - PickJobs
+      operationId: addExternalDocumentToPickJob
+      summary: Add a given external document to the entity
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+  /api/pickjobs/{pickJobId}/documents/{documentId}/file:
+    put:
+      parameters:
+        - description: Reference to the pick job
+          in: path
+          name: pickJobId
+          required: true
+          schema:
+            type: string
+        - description: Reference to the document
+          in: path
+          name: documentId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalDocumentForUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalDocument'
+          description: Document that should be added.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - PickJobs
+      operationId: updateExternalDocumentInPickJob
+      summary: Update an external document inside a pickjob
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
@@ -12221,6 +12352,103 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+  /api/packjobs/{packJobId}/documents:
+    post:
+      parameters:
+        - description: Reference to the pack job
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalDocumentForCreation'
+          description: Document that should be added.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - PackJobs
+      operationId: addExternalDocumentToPackJob
+      summary: Add a given external document to the entity
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+  /api/packjobs/{packJobId}/documents/{documentId}/file:
+    put:
+      parameters:
+        - description: Reference to the pack job
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: Reference to the document
+          in: path
+          name: documentId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalDocumentForUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalDocument'
+          description: Document that should be added.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      security:
+        - firebase: [ ]
+      tags:
+        - PackJobs
+      operationId: updateExternalDocumentInPackJob
+      summary: Update an external document inside a packjob
+      x-google-backend:
+        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   '/api/packjobs/{packJobId}/returnnote':
     get:
       parameters:
@@ -15637,7 +15865,7 @@ components:
 
     FulfillabilityResult:
       properties:
-        details:
+        fulfillability:
           type: array
           items:
             $ref: '#/components/schemas/FulfillabilityDetail'
@@ -15647,7 +15875,7 @@ components:
       properties:
         facilityRef:
           type: string
-        tenntFacilityId:
+        tenantFacilityId:
           type: string
         facilityName:
           type: string
@@ -15678,6 +15906,12 @@ components:
           type: string
         availableStock:
           type: number
+        outOfStockBehaviour:
+          enum:
+            - BACKORDER
+          type: string
+        availabilityTimeframe:
+          $ref: '#/components/schemas/AvailabilityTimeframe'
       required:
         - tenantArticleId
         - availableStock
@@ -15728,13 +15962,29 @@ components:
           type: array
           items:
             type: string
-        tenantArticleIds:
+        articles:
           type: array
           minItems: 1
           items:
-            type: string
+            type: object
+            properties:
+              tenantArticleId:
+                type: string
+              quantity:
+                type: number
+            required:
+              - tenantArticleId
+        deliveryPreferences:
+          $ref: '#/components/schemas/DeliveryPreferences'
+        deliveryCountry:
+          description: A two-digit country code as per ISO 3166-1 alpha-2
+          example: DE
+          pattern: '^[A-Z]{2}$'
+          type: string
+        deliveryPostalCode:
+          type: string
       required:
-        - tenantArticleIds
+        - articles
     FulfillabilityClickAndCollectQuery:
       description: >-
         Provides the paramters you are interested in. You must supply at least
@@ -15746,13 +15996,29 @@ components:
           type: array
           items:
             type: string
-        tenantArticleIds:
+        deliveryPreferences:
+          $ref: '#/components/schemas/DeliveryPreferences'
+        deliveryCountry:
+          description: A two-digit country code as per ISO 3166-1 alpha-2
+          example: DE
+          pattern: '^[A-Z]{2}$'
+          type: string
+        deliveryPostalCode:
+          type: string
+        articles:
           type: array
           minItems: 1
           items:
-            type: string
+            type: object
+            properties:
+              tenantArticleId:
+                type: string
+              quantity:
+                type: number
+            required:
+              - tenantArticleId
       required:
-        - tenantArticleIds
+        - articles
     FulfillabilityQuery:
       description: >-
         Provides the paramters you are interested in. You must supply at least
@@ -19424,7 +19690,21 @@ components:
         - section
         - id
       type: object
+    ExternalDocumentInSectionForCreation:
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/DocumentType'
+        file:
+          $ref: '#/components/schemas/NamedFile'
+        priority:
+          type: number
+          minimum: 0
+      required:
+        - type
+      type: object
     ExternalDocumentForCreation:
+      additionalProperties: false
       properties:
         type:
           $ref: '#/components/schemas/DocumentType'
@@ -22628,7 +22908,7 @@ components:
           type: array
           description: Offered operations for this document
           items:
-           $ref: '#/components/schemas/DocumentOperations'
+            $ref: '#/components/schemas/DocumentOperations'
         name:
           type: string
         path:
