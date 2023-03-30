@@ -13690,6 +13690,7 @@ components:
             - ModifyPickJob
             - ModifyPickJobLastEditor
             - RestartPickJob
+            - ResetPickJob
             - CancelPickRun
             - CancelHandoverjob
             - AbortPickJob
@@ -17875,6 +17876,22 @@ components:
       xml:
         name: RestartPickJobAction
 
+    ResetPickJobAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: 'Use value ''ResetPickJobAction'' to reset the pickJob and set it back to status OPEN.'
+              enum:
+                - ResetPickJob
+              type: string
+          required:
+            - action
+          type: object
+      xml:
+        name: ResetPickJobAction
+
     ModifyPickJobLastEditorAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -19095,6 +19112,7 @@ components:
               - $ref: "#/components/schemas/ModifyPickJobAction"
               - $ref: "#/components/schemas/ModifyPickJobLastEditorAction"
               - $ref: "#/components/schemas/RestartPickJobAction"
+              - $ref: "#/components/schemas/ResetPickJobAction"
               - $ref: "#/components/schemas/AbortPickJobAction"
           minItems: 1
           type: array
