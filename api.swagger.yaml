@@ -13551,6 +13551,352 @@ paths:
         - firebase: []
       tags:
         - Inventory
+  "/api/inventory/purchaseorders/{purchaseOrderId}":
+    get:
+      operationId: getPurchaseOrder
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Get a Purchase Order by ID
+      parameters:
+        - name: purchaseOrderId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Purchase Order entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PurchaseOrder"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
+    put:
+      operationId: upsertPurchaseOrder
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Update or create a Purchase Order
+      parameters:
+        - name: purchaseOrderId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PurchaseOrderForUpdate"
+      responses:
+        "200":
+          description: Updated/created Purchase Order entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PurchaseOrder"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
+    patch:
+      operationId: patchPurchaseOrder
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Partially updates a Purchase Order using a selection of fields
+      parameters:
+        - name: purchaseOrderId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PurchaseOrderForPartialUpdate"
+      responses:
+        "200":
+          description: Updated Purchase Order entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PurchaseOrder"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
+  /api/inventory/purchaseorders:
+    post:
+      operationId: createPurchaseOrder
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Create a new Purchase Order
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PurchaseOrderForCreation"
+      responses:
+        "201":
+          description: Created Purchase Order entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PurchaseOrder"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
+  /api/inventory/inboundprocesses:
+    get:
+      operationId: getInboundProcesses
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Get multiple Inbound Processes
+      parameters:
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: facilityRef
+          required: false
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: Paginated result containing the matching Inbound Process entities
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundProcessPaginatedResult"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
+    post:
+      operationId: createInboundProcess
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Create a new Inbound Process
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InboundProcessForCreation"
+      responses:
+        "200":
+          description: Created Inbound Process entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundProcess"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
+  "/api/inventory/inboundprocesses/{inboundProcessId}":
+    get:
+      operationId: getInboundProcess
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Get an Inbound Process by ID
+      parameters:
+        - name: inboundProcessId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Requested Inbound Process entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundProcess"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
+    delete:
+      operationId: InboundProcessController_deleteInboundProcess
+      parameters:
+        - name: inboundProcessId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+  "/api/inventory/inboundprocesses/{inboundProcessId}/purchaseorder":
+    put:
+      operationId: upsertInboundProcessPurchaseOrder
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Creates or updates the specific purchase order of an existing inbound
+        process.
+      parameters:
+        - name: inboundProcessId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InboundProcessPurchaseOrderForUpsert"
+      responses:
+        "200":
+          description: Purchase order successfully updated on inbound process
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundProcessPurchaseOrder"
+        "201":
+          description: Purchase order successfully created on inbound process
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundProcessPurchaseOrder"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
   /graphql:
     get:
       responses:
@@ -23852,6 +24198,256 @@ components:
         - tenantArticleId
         - facilityRef
         - status
+    RequestedDateASAP:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ASAP
+            - TIME_POINT
+      required:
+        - type
+    RequestedDateTimePoint:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ASAP
+            - TIME_POINT
+        value:
+          type: string
+          format: date-time
+      required:
+        - type
+        - value
+    Quantity:
+      type: object
+      properties:
+        unit:
+          type: string
+        value:
+          type: number
+      required:
+        - value
+    InboundLineItem:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        quantity:
+          $ref: "#/components/schemas/Quantity"
+      required:
+        - tenantArticleId
+        - quantity
+    PurchaseOrder:
+      type: object
+      properties:
+        id:
+          type: object
+        version:
+          type: object
+        facilityRef:
+          type: string
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          oneOf:
+            - $ref: "#/components/schemas/RequestedDateASAP"
+            - $ref: "#/components/schemas/RequestedDateTimePoint"
+        requestedItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/InboundLineItem"
+      required:
+        - id
+        - version
+        - facilityRef
+        - orderDate
+        - requestedDate
+        - requestedItems
+    InputRequestedDate:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ASAP
+            - TIME_POINT
+        value:
+          type: string
+          format: date-time
+      required:
+        - type
+    PurchaseOrderForCreation:
+      type: object
+      properties:
+        facilityRef:
+          type: string
+          minLength: 1
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          $ref: "#/components/schemas/InputRequestedDate"
+        requestedItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/InboundLineItem"
+      required:
+        - facilityRef
+        - orderDate
+        - requestedDate
+        - requestedItems
+    PurchaseOrderForUpdate:
+      type: object
+      properties:
+        version:
+          type: number
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          $ref: "#/components/schemas/InputRequestedDate"
+        requestedItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/InboundLineItem"
+      required:
+        - version
+        - orderDate
+        - requestedDate
+        - requestedItems
+    PurchaseOrderForPartialUpdate:
+      type: object
+      properties:
+        version:
+          type: number
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          $ref: "#/components/schemas/InputRequestedDate"
+        requestedItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/InboundLineItem"
+      required:
+        - version
+        - requestedDate
+    StrippedInboundProcess:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: number
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        tenantInboundProcessId:
+          type: string
+        facilityRef:
+          type: string
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - facilityRef
+    InboundProcessPaginatedResult:
+      type: object
+      properties:
+        total:
+          type: number
+          minimum: 0
+        inboundProcesses:
+          type: array
+          items:
+            $ref: "#/components/schemas/StrippedInboundProcess"
+      required:
+        - total
+        - inboundProcesses
+    InboundProcessPurchaseOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          oneOf:
+            - $ref: "#/components/schemas/RequestedDateASAP"
+            - $ref: "#/components/schemas/RequestedDateTimePoint"
+        requestedItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/InboundLineItem"
+      required:
+        - id
+        - orderDate
+        - requestedDate
+        - requestedItems
+    InboundProcess:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: number
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        tenantInboundProcessId:
+          type: string
+        facilityRef:
+          type: string
+        purchaseOrder:
+          $ref: "#/components/schemas/InboundProcessPurchaseOrder"
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - facilityRef
+    InboundProcessForCreation:
+      type: object
+      properties:
+        tenantInboundProcessId:
+          type: string
+        facilityRef:
+          type: string
+      required:
+        - facilityRef
+    InboundProcessPurchaseOrderForUpsert:
+      type: object
+      properties:
+        version:
+          type: number
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          type: string
+          format: date-time
+        requestedItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/InboundLineItem"
+      required:
+        - version
+        - orderDate
+        - requestedDate
+        - requestedItems
   securitySchemes:
     firebase:
       flows:
