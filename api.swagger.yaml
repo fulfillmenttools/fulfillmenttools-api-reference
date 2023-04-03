@@ -19071,9 +19071,6 @@ components:
               items:
                 $ref: '#/components/schemas/PickLineItem'
               type: array
-            routingPlanRef:
-              description: Reference to the routingplan which created this pickjob
-              type: string
             shortId:
               description: >-
                 A short identifier that helps assigning a pickJob to a customer.
@@ -19085,10 +19082,6 @@ components:
             pickRunRef:
               type: string
               description: Pick run id to which the pick job belongs
-            documents:
-              type: array
-              items:
-                $ref: '#/components/schemas/PrintableDocument'
             tags:
               type: array
               minItems: 1
@@ -19100,12 +19093,16 @@ components:
               type: boolean
               default: false
               description: 'Indicates if pickJob can still be resetted or restarted'
+            documentsRef:
+              description: Reference to the documents collection from this entity
+              type: string
           required:
             - id
             - status
             - pickLineItems
             - shortId
             - deliveryinformation
+            - documentsRef
           type: object
     PickJobForCreation:
       properties:
@@ -19157,9 +19154,6 @@ components:
             order.
           example: R456728546
           type: string
-        documentsRef:
-          description: Reference to the documents collection from this entity
-          type: string
         tags:
           type: array
           minItems: 1
@@ -19170,6 +19164,9 @@ components:
           minItems: 0
           items:
             $ref: '#/components/schemas/Sticker'
+        routingPlanRef:
+          description: Reference to the routingplan which created this pickjob
+          type: string
       required:
         - orderDate
         - facilityRef
@@ -22497,10 +22494,6 @@ components:
               $ref: '#/components/schemas/ConsumerAddress'
             tenantOrderId:
               type: string
-            documents:
-              type: array
-              items:
-                $ref: '#/components/schemas/PrintableDocument'
             documentsRef:
               description: Reference to the documents collection from this entity
               type: string
@@ -22518,6 +22511,7 @@ components:
           required:
             - id
             - facilityRef
+            - documentsRef
             - status
             - lineItems
             - processId
