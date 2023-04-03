@@ -15281,10 +15281,14 @@ components:
           minimum: 1
           type: integer
         nameLocalized:
-          description: Dictionary of possible transactions, min 1 entry, max 14 characters per description
+          description: Dictionary of possible translations, min 1 entry, max 14 characters per description
           example: >-
             { en_US: 'SomeName' }
           $ref: '#/components/schemas/LocaleString'
+        name:
+          description: Translated display name
+          type: string
+          example: 'SomeName'
         color:
           type: string
           description: optional color coding for the sticker
@@ -16646,6 +16650,7 @@ components:
           type: object
       xml:
         name: HandoverLineItemArticle
+
     Handoverjob:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -16661,6 +16666,17 @@ components:
                 automatically and suits as the primary identifier of the described
                 entity.
               example: 95EWrieX09OmeriXIUbb
+              type: string
+            documents:
+              type: array
+              items:
+                $ref: '#/components/schemas/PrintableDocument'
+            stickers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Sticker'
+            documentsRef:
+              description: Reference to the documents collection from this entity
               type: string
       required:
         - id
@@ -16746,6 +16762,17 @@ components:
           description: Indicates if the order is already paid
           example: false
           type: boolean
+        tags:
+          description: Tags can only be set when there is no process related with this handoverJob. Setting processId and tags will lead to an validationError.
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        stickers:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Sticker'
         cancelReason:
           $ref: '#/components/schemas/HandoverJobCancelReason'
       required:
@@ -19155,6 +19182,7 @@ components:
           example: R456728546
           type: string
         tags:
+          description: Tags can only be set when there is no process related with this pickJob. Setting processId and tags will lead to an validationError.
           type: array
           minItems: 1
           items:
@@ -22413,6 +22441,7 @@ components:
           format: date-time
           type: string
         tags:
+          description: Tags can only be set when there is no process related with this packJob. Setting processId and tags will lead to an validationError.
           type: array
           minItems: 1
           items:
