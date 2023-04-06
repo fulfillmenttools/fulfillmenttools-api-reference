@@ -23900,6 +23900,8 @@ components:
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         operator:
           $ref: '#/components/schemas/ToolkitOperator'
+        rule:
+          $ref: '#/components/schemas/ToolkitRule'
       required:
         - name
         - nameLocalized
@@ -23907,7 +23909,6 @@ components:
         - order
         - entity1
         - entity2
-        - operator
       type: object
       xml:
         name: ToolkitFenceForCreation
@@ -23939,8 +23940,12 @@ components:
           description: The id of the toolkit fence
           example: LGMl2DuvPnfPoSHhYFOm
           type: string
+        toolkitVersion:
+          description: v1 or v2, depending of the version toolkit business logic applied to the fence
+          type: string
       required:
         - id
+        - toolkitVersion
       type: object
       xml:
         name: ToolkitFence
@@ -23986,6 +23991,8 @@ components:
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         operator:
           $ref: '#/components/schemas/ToolkitOperator'
+        rule:
+          $ref: '#/components/schemas/ToolkitRule'
         maxPenalty:
           type: integer
           example: 100
@@ -23996,7 +24003,6 @@ components:
         - active
         - entity1
         - entity2
-        - operator
         - maxPenalty
       type: object
       xml:
@@ -24028,8 +24034,12 @@ components:
           description: The id of the toolkit rating
           example: LGMl2DuvPnfPoSHhYFOm
           type: string
+        toolkitVersion:
+          description: v1 or v2, depending of the version toolkit business logic applied to the fence
+          type: string
       required:
         - id
+        - toolkitVersion
       type: object
       xml:
         name: ToolkitRating
@@ -24050,6 +24060,80 @@ components:
       type: object
       xml:
         name: ToolkitRatingTransporter
+
+    ToolkitEntityOperatorType:
+      description: The possible operator types that can be used on given entities
+      enum:
+        - VALUEEQUALS
+        - VALUENOTEQUALS
+      type: string
+      xml:
+        name: ToolkitEntityOperatorType
+
+    ToolkitTransformationType:
+      description: The transformations available to apply on the entity property value before a predicate is evaluated
+      enum:
+        - SUBSTRING
+        - COUNT
+        - SUM
+      type: string
+      xml:
+        name: ToolkitTransformationType
+
+    ToolkitRuleOperatorType:
+      description: The type of the rule operator applied to the results of evaluating the left predicates and the right predicates
+      enum:
+        - EQUALS
+      type: string
+      xml:
+        name: ToolkitTransformationType
+
+    ToolkitPredicate:
+      description: The predicate for a Toolkit V2 Fence that defines how conditions are constructed
+      properties:
+        propertyPath:
+          type: string
+          minLength: 1
+        entityOperator:
+          $ref: '#/components/schemas/ToolkitEntityOperatorType'
+        transformation:
+          $ref: '#/components/schemas/ToolkitTransformationType'
+        expectedValue:
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+      required:
+        - propertyPath
+        - entityOperator
+      type: object
+      xml:
+        name: ToolkitPredicate
+
+    ToolkitRule:
+      description: >-
+        The rule, containing the left predicates and the right predicates, that will be evaluated
+        applying a RuleOperator
+      properties:
+        operator:
+          $ref: '#/components/schemas/ToolkitRuleOperatorType'
+        leftPredicates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolkitPredicate'
+          minItems: 1
+        rightPredicates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolkitPredicate'
+          minItems: 1
+      required:
+        - operator
+        - leftPredicates
+        - rightPredicates
+      type: object
+      xml:
+        name: ToolkitRule
 
     StockSummaryArticle:
       type: object
