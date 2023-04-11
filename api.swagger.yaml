@@ -22423,7 +22423,7 @@ components:
           $ref: '#/components/schemas/PackJobStatus'
         lineItems:
           items:
-            $ref: '#/components/schemas/PackLineItem'
+            $ref: '#/components/schemas/PackLineItemForCreation'
           type: array
         processId:
           description: >-
@@ -22611,15 +22611,8 @@ components:
       xml:
         name: AddAllowedValueToTagAction
 
-    PackLineItem:
+    PackLineItemForCreation:
       properties:
-        id:
-          description: >-
-            The id of this lineItem. It is generated during creation
-            automatically and suits as the primary identifier of the
-            described entity.
-          example: climk4dcQFiPdA5ULuhS
-          type: string
         article:
           $ref: '#/components/schemas/PackLineItemArticle'
         quantity:
@@ -22641,9 +22634,25 @@ components:
             $ref: '#/components/schemas/Sticker'
           type: array
       required:
-        - id
         - quantity
         - article
+      type: object
+      xml:
+        name: PackLineItemForCreation
+
+    PackLineItem:
+      allOf:
+        - $ref: '#/components/schemas/PackLineItemForCreation'
+        - properties:
+            id:
+              description: >-
+                The id of this lineItem. It is generated during creation
+                automatically and suits as the primary identifier of the
+                described entity.
+              example: climk4dcQFiPdA5ULuhS
+              type: string
+          required:
+            - id
       type: object
       xml:
         name: PackLineItem
