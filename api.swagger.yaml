@@ -19292,6 +19292,11 @@ components:
               description: "Indicates where the items to pick could be found and from where the picking should be started."
               items:
                 $ref: '#/components/schemas/PickJobLineItemPartialStockLocation'
+            scannedCodes:
+              items:
+                $ref: '#/components/schemas/PickLineItemScannedCode'
+              type: array
+              minimum: 0
             scanningRule:
               description: >-
                 This value indicates which scanning rule should be applied for this pick line.
@@ -19423,11 +19428,6 @@ components:
             description: 'Strings, that identify the article'
             type: string
           type: array
-        scannedCodes:
-          items:
-            $ref: '#/components/schemas/PickLineItemScannedCode'
-          type: array
-          minimum: 0
         partialStockLocations:
           description: "Indicates where the items to pick could be found and from where the picking should be started."
           items:
@@ -22470,6 +22470,10 @@ components:
             enabled:
               type: boolean
               default: false
+          required:
+            - enabled
+      required:
+        - sendLabel
     PackJob:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
