@@ -11609,6 +11609,61 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
+  '/api/users/{userId}/permissions':
+    get:
+      parameters:
+        - description: ID of User you want to get
+          in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Roles'
+          description: >-
+            User was found & you were allowed to access it. The result is in the
+            body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: User not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Users
+      description: ''
+      operationId: getUserRoles
+      summary: Get a User with the given ID
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
   /api/brands:
     get:
       parameters:
@@ -14699,6 +14754,27 @@ components:
         - lat
         - lon
       type: object
+
+    Roles:
+      description: A list of all rolenames and permissions assigned to the user
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            $ref: '#/components/schemas/UserRoleNames'
+          facilityRefs:
+            type: array
+            items:
+              type: string
+          permissions:
+            type: array
+            items:
+              type: string
+        required:
+          - name
+          - permissions
+
     CustomClaims:
       description: Include all different claims could be assigned to a user
       properties:
