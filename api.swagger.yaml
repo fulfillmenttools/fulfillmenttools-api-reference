@@ -13892,7 +13892,12 @@ paths:
       tags:
         - Inventory
     delete:
-      operationId: InboundProcessController_deleteInboundProcess
+      operationId: deleteInboundProcess
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Delete an Inbound Process by ID
       parameters:
         - name: inboundProcessId
           required: true
@@ -13901,7 +13906,23 @@ paths:
             type: string
       responses:
         "200":
-          description: ""
+          description: Inbound Process successfully deleted
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
   "/api/inventory/inboundprocesses/{inboundProcessId}/purchaseorder":
     put:
       operationId: upsertInboundProcessPurchaseOrder
