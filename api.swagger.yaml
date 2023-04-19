@@ -8784,7 +8784,7 @@ paths:
       operationId: addExternalDocumentToPickJob
       summary: Add a given external document to the entity
       x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        address: 'ocff-service://http'
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
@@ -8838,7 +8838,7 @@ paths:
       operationId: updateExternalDocumentInPickJob
       summary: Update an external document inside a pickjob
       x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        address: 'ocff-service://http'
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
@@ -12446,7 +12446,7 @@ paths:
       operationId: addExternalDocumentToPackJob
       summary: Add a given external document to the entity
       x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        address: 'ocff-service://http'
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
@@ -12500,7 +12500,7 @@ paths:
       operationId: updateExternalDocumentInPackJob
       summary: Update an external document inside a packjob
       x-google-backend:
-        address: 'https://http-api%%ENDPOINT_SUFFIX%%'
+        address: 'ocff-service://http'
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
@@ -24230,23 +24230,45 @@ components:
       properties:
         operator:
           $ref: '#/components/schemas/ToolkitRuleOperatorType'
-        leftPredicates:
-          type: array
-          items:
-            $ref: '#/components/schemas/ToolkitPredicate'
-          minItems: 1
-        rightPredicates:
+        leftPart:
+          $ref: '#/components/schemas/ToolkitRulePart'
+        rightPart:
+          $ref: '#/components/schemas/ToolkitRulePart'
+      required:
+        - operator
+        - leftPart
+        - rightPart
+      type: object
+      xml:
+        name: ToolkitRule
+
+    ToolkitRulePart:
+      description: >-
+        One half of the rule, containing either the left or right predicates and booleanOperator
+      properties:
+        predicateConnector:
+          $ref: '#/components/schemas/ToolkitPredicateConnector'
+        predicates:
           type: array
           items:
             $ref: '#/components/schemas/ToolkitPredicate'
           minItems: 1
       required:
-        - operator
-        - leftPredicates
-        - rightPredicates
+        - predicateConnector
+        - predicates
       type: object
       xml:
-        name: ToolkitRule
+        name: ToolkitRulePart
+
+    ToolkitPredicateConnector:
+      description: >-
+        The allowed operators for connecting multiple predicates
+      enum:
+        - OR
+        - AND
+      type: string
+      xml:
+        name: ToolkitPredicateConnector
 
     StockSummaryArticle:
       type: object
