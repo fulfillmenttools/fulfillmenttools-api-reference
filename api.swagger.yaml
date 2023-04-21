@@ -8310,7 +8310,7 @@ paths:
         under our SLA regulations. For details on this topic please check our
         documentation under
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      operationId: downloadDocument
+      operationId: downloadProcessDocument
       summary: Download a document
       x-google-backend:
         address: 'ocff-service://http'
@@ -8365,6 +8365,62 @@ paths:
         documentation under
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
       summary: Simple query interface to find documents
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/documentSet/{documentSetRef}/documents:
+    post:
+      parameters:
+        - description: Reference to the documentSet you want to add a file to
+          in: path
+          name: documentSetRef
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalPrintableDocumentForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintableDocument'
+          description: Document was found. The results are in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Documents
+      operationId: addDocument
       x-google-backend:
         address: 'ocff-service://http'
         deadline: 60
@@ -8434,6 +8490,109 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/documentSet/{documentSetRef}/documents/{documentRef}/file:
+    get:
+      parameters:
+        - description: Reference to the documentSet you want to download a file from
+          in: path
+          name: documentSetRef
+          required: true
+          schema:
+            type: string
+        - description: Reference to the single document you want to download
+          in: path
+          name: documentRef
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            The document as a stream
+      security:
+        - firebase: [ ]
+      tags:
+        - Documents
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disapear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: downloadDocument
+      summary: Download a document
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+    put:
+      parameters:
+        - description: Reference to the documentSet you want to update
+          in: path
+          name: documentSetRef
+          required: true
+          schema:
+            type: string
+        - description: Reference to the single document you want to update
+          in: path
+          name: documentRef
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalDocumentContentForUpdate'
+        description: Document Content with id and version
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintableDocument'
+          description: Changed Document
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      security:
+        - firebase: [ ]
+      tags:
+        - Documents
+      operationId: addContentToDocument
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+
 
   /api/pickjobs/{pickJobId}/loadunits:
     get:
@@ -8530,104 +8689,6 @@ paths:
         description: Pick job load unit object
         required: true
       summary: Add a new load unit for pick job
-      x-google-backend:
-        address: 'ocff-service://http'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-
-  /api/pickjobs/{pickJobId}/documents:
-    post:
-      parameters:
-        - description: Reference to the pick job
-          in: path
-          name: pickJobId
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExternalDocumentForCreation'
-          description: Document that should be added.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - PickJobs
-      operationId: addExternalDocumentToPickJob
-      summary: Add a given external document to the entity
-      x-google-backend:
-        address: 'ocff-service://http'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-  /api/pickjobs/{pickJobId}/documents/{documentId}/file:
-    put:
-      parameters:
-        - description: Reference to the pick job
-          in: path
-          name: pickJobId
-          required: true
-          schema:
-            type: string
-        - description: Reference to the document
-          in: path
-          name: documentId
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExternalDocumentForUpdate'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExternalDocument'
-          description: Document that should be added.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - PickJobs
-      operationId: updateExternalDocumentInPickJob
-      summary: Update an external document inside a pickjob
       x-google-backend:
         address: 'ocff-service://http'
         deadline: 60
@@ -12198,103 +12259,7 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
-  /api/packjobs/{packJobId}/documents:
-    post:
-      parameters:
-        - description: Reference to the pack job
-          in: path
-          name: packJobId
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExternalDocumentForCreation'
-          description: Document that should be added.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - PackJobs
-      operationId: addExternalDocumentToPackJob
-      summary: Add a given external document to the entity
-      x-google-backend:
-        address: 'ocff-service://http'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
-  /api/packjobs/{packJobId}/documents/{documentId}/file:
-    put:
-      parameters:
-        - description: Reference to the pack job
-          in: path
-          name: packJobId
-          required: true
-          schema:
-            type: string
-        - description: Reference to the document
-          in: path
-          name: documentId
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExternalDocumentForUpdate'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExternalDocument'
-          description: Document that should be added.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      security:
-        - firebase: [ ]
-      tags:
-        - PackJobs
-      operationId: updateExternalDocumentInPackJob
-      summary: Update an external document inside a packjob
-      x-google-backend:
-        address: 'ocff-service://http'
-        deadline: 60
-        disable_auth: true
-        path_translation: APPEND_PATH_TO_ADDRESS
+
   '/api/packjobs/{packJobId}/returnnote':
     get:
       parameters:
@@ -23321,11 +23286,47 @@ components:
       required:
         - version
 
+    ExternalPrintableDocumentForCreation:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/DocumentType'
+        file:
+          $ref: '#/components/schemas/NamedFile'
+        priority:
+          type: number
+          minimum: 0
+        operations:
+          type: array
+          description: Offered operations for this document
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/DocumentOperations'
+      required:
+        - type
+
+    ExternalDocumentContentForUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        file:
+          $ref: '#/components/schemas/NamedFile'
+        documentSetVersion:
+          type: number
+          example: 2
+          description: Version of documentSet to which this document belongs.
+      required:
+        - file
+        - documentSetVersion
+
     DocumentSet:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
         id:
+          type: string
+        facilityRef:
           type: string
         documents:
           type: array
