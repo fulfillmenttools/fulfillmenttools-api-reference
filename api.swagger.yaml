@@ -13940,6 +13940,46 @@ paths:
         - firebase: []
       tags:
         - Inventory
+  /api/inventory/safetystocks:
+    put:
+      operationId: bulkUpdateSafetyStock
+      x-google-backend:
+        address: ocff-service://http
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Update Safety Stocks in bulk
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SafetyStockBulkOperations"
+      responses:
+        "207":
+          description: Result of the bulk operations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SafetyStockBulkOperationResult"
+        "401":
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - firebase: []
+      tags:
+        - Inventory
   /graphql:
     get:
       responses:
@@ -24453,8 +24493,7 @@ components:
         type:
           type: string
           enum:
-            - NOT_FOUND
-            - NOT_ALLOWED
+            - VALIDATION
             - UNKNOWN
         message:
           type: string
@@ -24730,6 +24769,51 @@ components:
         - orderDate
         - requestedDate
         - requestedItems
+    SafetyStockBulkOperation:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        value:
+          type: number
+        facilityRef:
+          type: string
+      required:
+        - tenantArticleId
+        - value
+    SafetyStockBulkOperations:
+      type: object
+      properties:
+        operations:
+          minItems: 1
+          maxItems: 500
+          type: array
+          items:
+            $ref: "#/components/schemas/SafetyStockBulkOperation"
+      required:
+        - operations
+    SafetyStockBulkOperationResult:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        facilityRef:
+          type: string
+        value:
+          type: number
+        status:
+          type: string
+          enum:
+            - UPDATED
+            - CREATED
+            - FAILED
+        error:
+          $ref: "#/components/schemas/BulkOperationError"
+      required:
+        - tenantArticleId
+        - facilityRef
+        - value
+        - status
   securitySchemes:
     firebase:
       flows:
