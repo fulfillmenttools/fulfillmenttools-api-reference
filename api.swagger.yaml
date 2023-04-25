@@ -18406,6 +18406,11 @@ components:
               enum:
                 - ModifyPickJob
               type: string
+            preferredPickingMethods:
+              description: Preferred way of picking a given pickJob.
+              items:
+                $ref: '#/components/schemas/PickingMethods'
+              type: array
             customAttributes:
               description: >-
                 Attributes that can be added to the pickJob. These attributes
@@ -19189,6 +19194,15 @@ components:
         - FAILED
         - CANCELED
       type: string
+
+    PickingMethods:
+      additionalProperties: false
+      type: string
+      enum:
+        - SINGLE_ORDER
+        - MULTI_ORDER
+        - BATCH
+
     PickJob:
       allOf:
         - $ref: '#/components/schemas/PickJobForCreation'
@@ -19313,6 +19327,11 @@ components:
         routingPlanRef:
           description: Reference to the routingplan which created this pickjob
           type: string
+        preferredPickingMethods:
+          description: Preferred way of picking a given pickJob.
+          items:
+            $ref: '#/components/schemas/PickingMethods'
+          type: array
       required:
         - orderDate
         - facilityRef
