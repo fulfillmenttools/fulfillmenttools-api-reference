@@ -23172,6 +23172,9 @@ components:
           description: 'The id of the Zone to which this storage location belongs'
           example: Esb20gpHBL94X5NdMp3C
           type: string
+        zoneName:
+          description: 'The name of the Zone to which this storage location belongs'
+          type: string
       required:
         - name
         - tenantLocationId
@@ -24539,6 +24542,27 @@ components:
       required:
         - tenantArticleId
         - title
+    Quantity:
+      type: object
+      properties:
+        unit:
+          type: string
+        value:
+          type: number
+      required:
+        - value
+    StockSummaryExpectedStock:
+      type: object
+      properties:
+        expectedDate:
+          oneOf:
+            - $ref: "#/components/schemas/RequestedDateASAP"
+            - $ref: "#/components/schemas/RequestedDateTimePoint"
+        quantity:
+          $ref: "#/components/schemas/Quantity"
+      required:
+        - expectedDate
+        - quantity
     StockSummaryDetails:
       type: object
       properties:
@@ -24551,10 +24575,15 @@ components:
         available:
           type: number
           minimum: 0
+        expectedStocks:
+          type: array
+          items:
+            $ref: "#/components/schemas/StockSummaryExpectedStock"
       required:
         - reserved
         - totalAmount
         - available
+        - expectedStocks
     StockSummary:
       type: object
       properties:
@@ -24578,51 +24607,6 @@ components:
       required:
         - total
         - stockSummaries
-    RequestedDateASAP:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - ASAP
-            - TIME_POINT
-      required:
-        - type
-    RequestedDateTimePoint:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - ASAP
-            - TIME_POINT
-        value:
-          type: string
-          format: date-time
-      required:
-        - type
-        - value
-    Quantity:
-      type: object
-      properties:
-        unit:
-          type: string
-        value:
-          type: number
-      required:
-        - value
-    ExpectedStock:
-      type: object
-      properties:
-        quantity:
-          $ref: "#/components/schemas/Quantity"
-        expectedDate:
-          oneOf:
-            - $ref: "#/components/schemas/RequestedDateASAP"
-            - $ref: "#/components/schemas/RequestedDateTimePoint"
-      required:
-        - quantity
-        - expectedDate
     FacilityStock:
       type: object
       properties:
@@ -24741,6 +24725,30 @@ components:
         - tenantArticleId
         - facilityRef
         - status
+    RequestedDateASAP:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ASAP
+            - TIME_POINT
+      required:
+        - type
+    RequestedDateTimePoint:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ASAP
+            - TIME_POINT
+        value:
+          type: string
+          format: date-time
+      required:
+        - type
+        - value
     InboundLineItem:
       type: object
       properties:
