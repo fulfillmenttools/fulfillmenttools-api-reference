@@ -14545,11 +14545,11 @@ components:
         customerId:
           type: string
           example: "12345"
-          description: "Bring customer number."
+          description: "Bring Carrier customer number."
         supportPhoneNumber:
           type: string
           example: "0031121424242"
-          description: "Bring support phone number."
+          description: "Bring Carrier support phone number."
       required:
         - customerId
         - supportPhoneNumber
@@ -15325,6 +15325,23 @@ components:
       xml:
         name: DhlV2CarrierCredentials
 
+    VceCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractCarrierCredentials'
+        - properties:
+            user:
+              description: Internal user to identify with the VCE Api
+              type: string
+            password:
+              description: Password to authenticate with the VCE Api
+              type: string
+          required:
+            - user
+            - password
+          type: object
+      xml:
+        name: VceCarrierCredentials
+
     DHLV2BusinessCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractCarrierCredentials'
@@ -15925,6 +15942,7 @@ components:
             - $ref: "#/components/schemas/DHLV2BusinessCredentials"
             - $ref: "#/components/schemas/DpdChCarrierCredentials"
             - $ref: "#/components/schemas/PostNLCarrierCredentials"
+            - $ref: "#/components/schemas/VceCarrierCredentials"
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -16004,6 +16022,7 @@ components:
             - $ref: "#/components/schemas/DHLV2BusinessCredentials"
             - $ref: "#/components/schemas/DpdChCarrierCredentials"
             - $ref: "#/components/schemas/PostNLCarrierCredentials"
+            - $ref: "#/components/schemas/VceCarrierCredentials"
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
