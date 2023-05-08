@@ -15547,6 +15547,35 @@ components:
           $ref: '#/components/schemas/StickerConfiguration'
         lineItemStickerConfiguration:
           $ref: '#/components/schemas/StickerConfiguration'
+        preferredPickingMethodsConfiguration:
+          $ref: '#/components/schemas/PreferredPickingMethodsConfiguration'
+
+    PreferredPickingMethodsConfiguration:
+      properties:
+        PreferredPickingMethodsPerTag:
+          type: array
+          items:
+            $ref: '#/components/schemas/PreferredPickingMethodsPerTag'
+
+    PreferredPickingMethodsPerTag:
+      additionalProperties: false
+      required:
+        - tagRef
+        - pickingMethods
+        - matchingValues
+      properties:
+        tagRef:
+          type: string
+        matchingValues:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        pickingMethods:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/PickingMethodEnum'
 
     HandoverJobTagConfiguration:
       allOf:
