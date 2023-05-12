@@ -665,6 +665,93 @@ paths:
         description: create/update picking central configuration
         required: true
       summary: Change the tenant wide picking central configuration
+  /api/configurations/packing:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingConfigurations'
+          description: Central Configuration of all packing related things
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      tags:
+        - Configurations
+        - Packing
+      operationId: getPackingConfigurations
+      summary: Get the packing configurations
+    patch:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingConfigurations'
+          description: The packing central configuration was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingConfigurations'
+          description: The packing central configuration was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Configurations
+        - Packing
+      description: ''
+      operationId: upsertPackingConfigurations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingConfigurations'
+        description: create/update packing central configuration
+        required: true
+      summary: Change the tenant wide packing central configuration
   /api/configurations/tags/packjob:
     get:
       responses:
@@ -2544,6 +2631,7 @@ paths:
         - Configurations
         - Packing
       description: >-
+        Deprecated, will be replaced with /api/configurations/packing:
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
         /></center> <br> <i>This part of the API is currently under development.
@@ -2600,6 +2688,7 @@ paths:
         - Configurations
         - Packing
       description: >-
+        Deprecated, will be replaced with /api/configurations/packing:
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
         /></center> <br> <i>This part of the API is currently under development.
@@ -20427,6 +20516,13 @@ components:
         backofficePickingConfiguration:
           $ref: '#/components/schemas/BackofficePickingConfiguration'
       type: object
+    PackingConfigurations:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        packingContainerRequiredConfiguration:
+          $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
+      type: object
     BackofficePickingConfiguration:
       description: Can this tenant use the backoffice for picking?
       properties:
@@ -20553,6 +20649,9 @@ components:
     PackingContainerRequiredConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+      description: >-
+        DEPRECATED: version, lastModified and created. will be replaced with
+        packingConfiguration
       properties:
         active:
           type: boolean
