@@ -20548,6 +20548,8 @@ components:
       properties:
         packingContainerRequiredConfiguration:
           $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
+        packingItemConfirmationNeededConfiguration:
+          $ref: '#/components/schemas/PackingItemConfirmationNeededConfiguration'
       type: object
     BackofficePickingConfiguration:
       description: Can this tenant use the backoffice for picking?
@@ -20673,15 +20675,21 @@ components:
         - pickingScanCodeValidationType
       type: object
     PackingContainerRequiredConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-      description: >-
-        DEPRECATED: version, lastModified and created. will be replaced with
-        packingConfiguration
+      additionalProperties: false
       properties:
         active:
           type: boolean
           default: false
+      required:
+        - active
+      type: object
+    PackingItemConfirmationNeededConfiguration:
+      description: Do the customer need to validate which items are part of a pack job
+      additionalProperties: false
+      properties:
+        active:
+          type: boolean
+          default: true
       required:
         - active
       type: object
