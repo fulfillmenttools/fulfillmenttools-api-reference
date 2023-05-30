@@ -23334,6 +23334,53 @@ components:
         - requestedDate
         - requestedItems
         - status
+    InboundReceiptComment:
+      type: object
+      properties:
+        userRef:
+          type: string
+        content:
+          type: string
+      required:
+        - content
+    InboundReceiptLineItem:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptComment'
+      required:
+        - tenantArticleId
+        - quantity
+        - comments
+    InboundReceipt:
+      type: object
+      properties:
+        asnRef:
+          type: string
+        receivedDate:
+          format: date-time
+          type: string
+        receivedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptLineItem'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptComment'
+        id:
+          type: string
+      required:
+        - receivedDate
+        - receivedItems
+        - comments
+        - id
     InboundProcess:
       type: object
       properties:
@@ -23357,6 +23404,10 @@ components:
           type: string
           enum:
             - OPEN
+        receipts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceipt'
       required:
         - id
         - version
@@ -23364,6 +23415,27 @@ components:
         - lastModified
         - facilityRef
         - status
+        - receipts
+    InboundReceiptForCreation:
+      type: object
+      properties:
+        asnRef:
+          type: string
+        receivedDate:
+          format: date-time
+          type: string
+        receivedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptLineItem'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptComment'
+      required:
+        - receivedDate
+        - receivedItems
+        - comments
     InboundProcessForCreation:
       type: object
       properties:
@@ -23375,6 +23447,10 @@ components:
             - OPEN
         facilityRef:
           type: string
+        receipts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptForCreation'
       required:
         - facilityRef
     InboundProcessPurchaseOrderForUpsert:
