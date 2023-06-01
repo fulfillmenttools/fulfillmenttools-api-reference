@@ -12475,6 +12475,38 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
+  /api/inventory/intake:
+    post:
+      operationId: performIntake
+      summary: Perform intake
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntakeInput'
+      responses:
+        '200':
+          description: Intake result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntakeResult'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
   /graphql:
     get:
       responses:
@@ -22943,6 +22975,7 @@ components:
           type: string
         value:
           type: number
+          minimum: 0
       required:
         - value
     StockSummaryExpectedStock:
@@ -23574,6 +23607,82 @@ components:
         - facilityRef
         - value
         - status
+    IntakeInput:
+      type: object
+      properties:
+        receipt:
+          $ref: '#/components/schemas/InboundReceiptForCreation'
+        storageLocationRef:
+          type: string
+        inboundProcessRef:
+          type: string
+      required:
+        - receipt
+        - storageLocationRef
+    Stock:
+      type: object
+      properties:
+        reserved:
+          type: number
+        facilityWideReserved:
+          type: number
+        available:
+          type: number
+        id:
+          type: string
+        facilityRef:
+          type: string
+        tenantArticleId:
+          type: string
+        tenantStockId:
+          type: string
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        value:
+          type: number
+        locationRef:
+          type: string
+        traits:
+          type: array
+          items:
+            type: string
+            enum:
+              - PICKABLE
+        scores:
+          type: array
+          items:
+            type: string
+        scannableCodes:
+          type: array
+          items:
+            type: string
+      required:
+        - reserved
+        - facilityWideReserved
+        - available
+        - id
+        - facilityRef
+        - tenantArticleId
+        - created
+        - lastModified
+        - value
+        - traits
+    IntakeResult:
+      type: object
+      properties:
+        inboundProcess:
+          $ref: '#/components/schemas/InboundProcess'
+        stocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stock'
+      required:
+        - inboundProcess
+        - stocks
 tags:
   - description: >-
       Everything your customer ordered in your shop, so everything he or she
