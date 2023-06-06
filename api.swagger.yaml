@@ -13054,7 +13054,8 @@ components:
         key:
           description: >-
             References the KEP. Currently allowed values are DHL_V2, DPD_CH,
-            ANGEL, GLS, FEDEX, POSTNL, BRING and CUSTOM.
+            ANGEL, GLS, FEDEX, POSTNL, BRING, UPS, POST_NORD, DHL_EXPRESS and
+            CUSTOM.
           example: DHL_V2
           type: string
         logoUrl:
@@ -14483,6 +14484,25 @@ components:
       properties:
         payload:
           $ref: '#/components/schemas/Facility'
+      required:
+        - payload
+      type: object
+    FacilityUpdatedWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/Facility'
+      required:
+        - payload
+      type: object
+    FacilityDeletedWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          description: The id of the deleted facility
+          type: string
       required:
         - payload
       type: object
