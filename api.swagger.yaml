@@ -23262,6 +23262,8 @@ components:
           type: string
           enum:
             - OPEN
+        cancelled:
+          type: boolean
       required:
         - id
         - version
@@ -23270,6 +23272,7 @@ components:
         - requestedDate
         - requestedItems
         - status
+        - cancelled
     InputRequestedDate:
       type: object
       properties:
@@ -23372,6 +23375,10 @@ components:
           type: string
           enum:
             - OPEN
+            - PARTIAL_DELIVERY
+            - CLOSED
+        onHold:
+          type: boolean
       required:
         - id
         - version
@@ -23379,6 +23386,7 @@ components:
         - lastModified
         - facilityRef
         - status
+        - onHold
     InboundProcessPaginatedResult:
       type: object
       properties:
@@ -23412,12 +23420,15 @@ components:
           type: string
           enum:
             - OPEN
+        cancelled:
+          type: boolean
       required:
         - id
         - orderDate
         - requestedDate
         - requestedItems
         - status
+        - cancelled
     InboundReceiptComment:
       type: object
       properties:
@@ -23488,10 +23499,14 @@ components:
           type: string
           enum:
             - OPEN
+            - PARTIAL_DELIVERY
+            - CLOSED
         receipts:
           type: array
           items:
             $ref: '#/components/schemas/InboundReceipt'
+        onHold:
+          type: boolean
       required:
         - id
         - version
@@ -23500,6 +23515,7 @@ components:
         - facilityRef
         - status
         - receipts
+        - onHold
     InboundReceiptForCreation:
       type: object
       properties:
@@ -23525,16 +23541,14 @@ components:
       properties:
         tenantInboundProcessId:
           type: string
-        status:
-          type: string
-          enum:
-            - OPEN
         facilityRef:
           type: string
         receipts:
           type: array
           items:
             $ref: '#/components/schemas/InboundReceiptForCreation'
+        onHold:
+          type: boolean
       required:
         - facilityRef
     InboundProcessPurchaseOrderForUpsert:
@@ -23556,6 +23570,8 @@ components:
           type: string
           enum:
             - OPEN
+        cancelled:
+          type: boolean
       required:
         - version
         - orderDate
