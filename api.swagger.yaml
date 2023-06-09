@@ -10742,6 +10742,227 @@ paths:
       description: ''
       operationId: getPickJobDocumentHandling
       summary: Get a pick job document handling information with the given ID
+  /api/packingSourceContainers/{packingSourceContainerId}:
+    get:
+      parameters:
+        - description: ID of the packingSourceContainer
+          in: path
+          name: packingSourceContainerId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized values for the entity. If not provided the
+            default locale is used. For example de_DE, <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+            /></center> <br><i>This part of the API is currently under
+            development. That means that this endpoint, model, etc. can contain
+            breaking changes and / or might not be available at all times in
+            your API instance. It could disapear also without warning. Thus it
+            currently does not fall under our SLA regulations. For details on
+            this topic please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PackingSourceContainer'
+                type: array
+          description: Found packingSourceContainer
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      tags:
+        - PackingSourceContainers
+      description: >-
+        Get PackingSourceContainer by ID. <br><br> <i><center> <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disapear also without warning. Thus it currently does not fall under our
+        SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getPackingSourceContainerById
+      summary: Get a single packingSourceContainer
+  /api/packingSourceContainers:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingSourceContainer'
+          description: >-
+            The packing source container  was successfully created. The Location
+            header contains the URL of the packing source container.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - PackingSourceContainers
+      description: >-
+        Creating new packingSourceContainer. <br><br> <i><center> <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disapear also without warning. Thus it currently does not fall under our
+        SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: addPackingSourceContainer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingSourceContainerForCreation'
+        description: Packing type object
+        required: true
+      summary: Add a new packingSourceContainer
+    get:
+      parameters:
+        - description: >-
+            Provide the localized values for the entity. If not provided the
+            default locale is used. For example de_DE, <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+            /></center> <br><i>This part of the API is currently under
+            development. That means that this endpoint, model, etc. can contain
+            breaking changes and / or might not be available at all times in
+            your API instance. It could disapear also without warning. Thus it
+            currently does not fall under our SLA regulations. For details on
+            this topic please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>.
+          in: query
+          name: locale
+          schema:
+            type: string
+        - description: all entities after given id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+            maximum: 500
+        - description: filter by packJobRef
+          in: query
+          name: packJobRef
+          required: false
+          schema:
+            type: string
+        - description: filter by facilityRef
+          in: query
+          name: facilityRef
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PaginatedPackingSourceContainers'
+                type: array
+          description: Found Packing Source Container
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - PackingSourceContainers
+      description: >-
+        Listing packingSourceContainer.<br><br> <i><center> <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disapear also without warning. Thus it currently does not fall under our
+        SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getPackingSourceContainers
+      summary: Get all packingSourceContainers
   /api/packjobs/{packJobId}/documenthandling:
     get:
       parameters:
@@ -15998,6 +16219,96 @@ components:
           type: array
       required:
         - loadUnits
+      type: object
+    PackingSourceContainerForCreation:
+      properties:
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        facilityRef:
+          description: >-
+            The id of the facility reference. The given ID has to be present in
+            the system. But it is not updatable.
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+        icon:
+          $ref: '#/components/schemas/NamedFile'
+          description: ''
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        packJobRefs:
+          type: array
+          minItems: 1
+          description: List of references to packJobs
+          items:
+            type: string
+            example: 0857914c-d965-421e-b6cf-330501bcca58
+        codes:
+          items:
+            description: Codes, that identify the article
+            type: string
+          type: array
+          minItems: 1
+      required:
+        - packJobRefs
+        - nameLocalized
+        - facilityRef
+      type: object
+    PaginatedPackingSourceContainers:
+      properties:
+        packingSourceContainers:
+          items:
+            $ref: '#/components/schemas/PackingSourceContainer'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
+    PackingSourceContainer:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        facilityRef:
+          description: >-
+            The id of the facility reference. The given ID has to be present in
+            the system. But it is not updatable.
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+        iconUrl:
+          description: ''
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        id:
+          type: string
+          example: c7467ba8-c28a-4473-8748-a4e54e675e4c
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        packJobRefs:
+          type: array
+          minItems: 1
+          description: List of references to packJobs
+          items:
+            type: string
+            example: 0857914c-d965-421e-b6cf-330501bcca58
+        codes:
+          items:
+            description: Codes, that identify the article
+            type: string
+          type: array
+          minItems: 1
+      required:
+        - packJobRefs
+        - nameLocalized
+        - facilityRef
+        - id
+        - version
+        - lastModified
+        - created
       type: object
     TakeOverPickJobConfiguration:
       properties:
