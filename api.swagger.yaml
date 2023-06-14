@@ -12194,6 +12194,54 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
+  /api/inventory/articles/{tenantArticleId}/forecasts:
+    get:
+      operationId: getForecastsForArticle
+      summary: Get the forecast for a specific tenantArticleId
+      parameters:
+        - name: tenantArticleId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: period
+          required: false
+          in: query
+          schema:
+            enum:
+              - DAILY
+            type: string
+      responses:
+        '200':
+          description: >-
+            Forecast for the specified tenantArticleId. The result is in the
+            body.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleStockForecast'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
   /api/facilities/{facilityId}/stocks:
     get:
       operationId: getFacilityStocks
@@ -23530,6 +23578,67 @@ components:
       required:
         - total
         - articles
+    ArticleStockForecast:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantArticleId:
+          type: string
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        sourceDate:
+          format: date-time
+          type: string
+        targetDate:
+          format: date-time
+          type: string
+        loadTime:
+          format: date-time
+          type: string
+        cumulated:
+          type: number
+        cumulatedLowerBounds:
+          type: array
+          items:
+            type: number
+        cumulatedUpperBounds:
+          type: array
+          items:
+            type: number
+        lowerBounds:
+          type: array
+          items:
+            type: number
+        upperBounds:
+          type: array
+          items:
+            type: number
+        period:
+          type: string
+          enum:
+            - DAILY
+        point:
+          type: number
+      required:
+        - id
+        - tenantArticleId
+        - created
+        - lastModified
+        - sourceDate
+        - targetDate
+        - loadTime
+        - cumulated
+        - cumulatedLowerBounds
+        - cumulatedUpperBounds
+        - lowerBounds
+        - upperBounds
+        - period
+        - point
     FacilityStockBulkOperation:
       type: object
       properties:
