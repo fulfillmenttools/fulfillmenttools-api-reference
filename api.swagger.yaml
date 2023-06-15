@@ -14243,8 +14243,11 @@ components:
           properties:
             preferredCarriers:
               items:
-                description: Names of the preferred carriers to handle out the order
-                type: string
+                $ref: '#/components/schemas/PreferredCarrier'
+              type: array
+            preferredCarriersWithProduct:
+              items:
+                $ref: '#/components/schemas/PreferredCarrierWithProduct'
               type: array
             preselectedFacilities:
               items:
@@ -14274,6 +14277,20 @@ components:
           format: date-time
           type: string
       type: object
+    PreferredCarrier:
+      description: Names of the preferred carriers to handle out the order
+      type: string
+    PreferredCarrierWithProduct:
+      additionalProperties: false
+      properties:
+        carrierKey:
+          type: string
+          example: 2119398b-d4a5-48f0-8727-6bd377721306
+        carrierProduct:
+          type: string
+          example: WORLDWIDE
+      required:
+        - carrierKey
     DHLV2CarrierCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractCarrierCredentials'
@@ -17865,6 +17882,10 @@ components:
                 to
               example: ca525716-7208-4a63-a2a6-11274eb37f67-0
               type: string
+            carrierProduct:
+              description: Desired product of given carrier to choose when ordering a label
+              type: string
+              example: EXPRESS
             pickJobRef:
               description: >-
                 The reference to the pickjob for which the shipment is assigned
@@ -19099,6 +19120,12 @@ components:
                 carrierKey:
                   description: Key name of the carrier that handles pickjob request.
                   type: string
+                carrierProduct:
+                  description: >-
+                    Desired product of given carrier to choose when ordering a
+                    label
+                  type: string
+                  example: EXPRESS
                 identifier:
                   description: >-
                     Includes information on how to identify Ship from Store
@@ -20467,6 +20494,10 @@ components:
           description: The reference to the carrier for which the shipment is assigned to
           example: ca525716-7208-4a63-a2a6-11274eb37f67-0
           type: string
+        carrierProduct:
+          description: Desired product of given carrier to choose when ordering a label
+          type: string
+          example: EXPRESS
         customAttributes:
           description: >-
             Attributes that can be added to the shipment. These attributes
