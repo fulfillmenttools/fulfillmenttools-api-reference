@@ -12808,6 +12808,54 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
+  /api/inventory/inboundprocesses/{inboundProcessId}/receipts:
+    post:
+      operationId: addReceiptToInboundProcess
+      summary: Adds a receipt to an inbound process.
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: inboundProcessId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboundReceiptForCreation'
+      responses:
+        '201':
+          description: Receipt was added to the inbound process
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InboundReceipt'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
   /api/inventory/safetystocks:
     get:
       operationId: getSafetyStocks
@@ -12954,49 +13002,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
-  /api/inventory/intake:
-    post:
-      operationId: performIntake
-      summary: Perform intake
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IntakeInput'
-      responses:
-        '200':
-          description: Intake result
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IntakeResult'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
   /api/inventory/inboundentries:
     get:
       operationId: getInboundEntries
@@ -13061,6 +13066,97 @@ paths:
                 $ref: '#/components/schemas/Error'
         '403':
           description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/inventory/receipts:
+    post:
+      operationId: createReceipt
+      summary: Creates a receipt
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiptForCreation'
+      responses:
+        '201':
+          description: Created inbound receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Receipt'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/inventory/receipts/{receiptId}:
+    get:
+      operationId: getReceipt
+      summary: Get receipt by id
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: receiptId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Receipt'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The requested entity was not found
           content:
             application/json:
               schema:
@@ -24208,6 +24304,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
+        storageLocationRef:
+          type: string
       required:
         - tenantArticleId
         - quantity
@@ -24421,82 +24519,6 @@ components:
         - facilityRef
         - value
         - status
-    IntakeInput:
-      type: object
-      properties:
-        receipt:
-          $ref: '#/components/schemas/InboundReceiptForCreation'
-        storageLocationRef:
-          type: string
-        inboundProcessRef:
-          type: string
-      required:
-        - receipt
-        - storageLocationRef
-    Stock:
-      type: object
-      properties:
-        reserved:
-          type: number
-        facilityWideReserved:
-          type: number
-        available:
-          type: number
-        id:
-          type: string
-        facilityRef:
-          type: string
-        tenantArticleId:
-          type: string
-        tenantStockId:
-          type: string
-        created:
-          format: date-time
-          type: string
-        lastModified:
-          format: date-time
-          type: string
-        value:
-          type: number
-        locationRef:
-          type: string
-        traits:
-          type: array
-          items:
-            type: string
-            enum:
-              - PICKABLE
-        scores:
-          type: array
-          items:
-            type: string
-        scannableCodes:
-          type: array
-          items:
-            type: string
-      required:
-        - reserved
-        - facilityWideReserved
-        - available
-        - id
-        - facilityRef
-        - tenantArticleId
-        - created
-        - lastModified
-        - value
-        - traits
-    IntakeResult:
-      type: object
-      properties:
-        inboundProcess:
-          $ref: '#/components/schemas/InboundProcess'
-        stocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Stock'
-      required:
-        - inboundProcess
-        - stocks
     InboundEntryOrigin:
       type: object
       properties:
@@ -24551,6 +24573,66 @@ components:
       required:
         - total
         - inboundEntries
+    ReceiptForCreation:
+      type: object
+      properties:
+        asnRef:
+          type: string
+        receivedDate:
+          format: date-time
+          type: string
+        receivedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptLineItem'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptComment'
+        facilityRef:
+          type: string
+      required:
+        - receivedDate
+        - receivedItems
+        - comments
+        - facilityRef
+    Receipt:
+      type: object
+      properties:
+        asnRef:
+          type: string
+        receivedDate:
+          format: date-time
+          type: string
+        receivedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptLineItem'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptComment'
+        id:
+          type: string
+        inboundProcessRef:
+          type: string
+        version:
+          type: number
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+      required:
+        - receivedDate
+        - receivedItems
+        - comments
+        - id
+        - inboundProcessRef
+        - version
+        - created
+        - lastModified
 tags:
   - description: >-
       Everything your customer ordered in your shop, so everything he or she
