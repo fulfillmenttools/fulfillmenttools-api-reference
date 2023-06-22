@@ -13051,6 +13051,24 @@ paths:
                 - PARTIAL_DELIVERY
                 - ON_HOLD
                 - CLOSED
+        - name: searchTerm
+          required: false
+          in: query
+          schema:
+            minLength: 1
+            type: string
+        - name: fromDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: toDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
       responses:
         '200':
           description: Paginated Inbound Entries
@@ -24227,6 +24245,9 @@ components:
             - CLOSED
         onHold:
           type: boolean
+        inboundDate:
+          format: date-time
+          type: string
       required:
         - id
         - version
@@ -24235,6 +24256,7 @@ components:
         - facilityRef
         - status
         - onHold
+        - inboundDate
     InboundProcessPaginatedResult:
       type: object
       properties:
@@ -24358,6 +24380,9 @@ components:
             $ref: '#/components/schemas/InboundReceipt'
         onHold:
           type: boolean
+        inboundDate:
+          format: date-time
+          type: string
       required:
         - id
         - version
@@ -24367,6 +24392,7 @@ components:
         - status
         - receipts
         - onHold
+        - inboundDate
     InboundReceiptForCreation:
       type: object
       properties:
