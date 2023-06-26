@@ -13093,6 +13093,48 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
+  /api/inventory/inboundentries/{inboundEntryId}:
+    get:
+      operationId: getInboundEntry
+      summary: Get an Inbound Entry by ID
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: inboundEntryId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InboundEntry'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
   /api/inventory/receipts:
     post:
       operationId: createReceipt
@@ -19595,6 +19637,7 @@ components:
         - ORDER
         - ROUTING_PLAN
         - PICKJOB
+        - PACKJOB
         - SHIPMENT
         - HANDOVER
         - RETURN
