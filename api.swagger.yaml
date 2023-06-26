@@ -312,6 +312,7 @@ paths:
                   - $ref: '#/components/schemas/BringCarrierConfiguration'
                   - $ref: '#/components/schemas/DpdChCarrierConfiguration'
                   - $ref: '#/components/schemas/DhlV2CarrierConfiguration'
+                  - $ref: '#/components/schemas/VceCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The
             result is in the body.
@@ -362,6 +363,7 @@ paths:
                   - $ref: '#/components/schemas/FedexCarrierConfiguration'
                   - $ref: '#/components/schemas/BringCarrierConfiguration'
                   - $ref: '#/components/schemas/DhlV2CarrierConfiguration'
+                  - $ref: '#/components/schemas/VceCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The
             result is in the body.
@@ -402,6 +404,7 @@ paths:
                 - $ref: '#/components/schemas/FedexCarrierConfiguration'
                 - $ref: '#/components/schemas/BringCarrierConfiguration'
                 - $ref: '#/components/schemas/DhlV2CarrierConfiguration'
+                - $ref: '#/components/schemas/VceCarrierConfiguration'
         description: Carrier Configuration
         required: true
       summary: Update a carrier configuration with the given ID
@@ -13695,6 +13698,12 @@ components:
       properties:
         alternativeReturnAddress:
           $ref: '#/components/schemas/FacilityAddress'
+    VceCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
+      properties:
+        alternativeReturnAddress:
+          $ref: '#/components/schemas/FacilityAddress'
     GlsCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
@@ -14744,6 +14753,14 @@ components:
           $ref: '#/components/schemas/FacilityAddress'
       xml:
         name: DhlV2FacilityCarrierConfiguration
+    VceFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+      properties:
+        alternativeReturnAddress:
+          $ref: '#/components/schemas/FacilityAddress'
+      xml:
+        name: VceFacilityCarrierConfiguration
     AngelFacilityCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
@@ -15039,6 +15056,7 @@ components:
             - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
         credentials:
           description: Facility specific credentials for this carrier
           anyOf:
@@ -15091,6 +15109,7 @@ components:
             - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
@@ -15133,6 +15152,7 @@ components:
             - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
         cutoffTime:
           $ref: '#/components/schemas/CutoffTime'
         deliveryAreas:
