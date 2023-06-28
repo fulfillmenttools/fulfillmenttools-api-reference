@@ -10233,6 +10233,99 @@ paths:
       description: ''
       operationId: getUserRoles
       summary: Get a User with the given ID
+  /api/users/{userId}/assignedFacilities:
+    post:
+      parameters:
+        - description: ID of User you want to assign a facility
+          in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The facility was correctly assigned
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: User not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAssignedFacilityForCreation'
+        description: The facility you want to assign the user
+        required: true
+      tags:
+        - Users
+      description: ''
+      operationId: postAssignedFacilities
+      summary: Assigns a facility to an user
+  /api/users/{userId}/assignedFacilities/{assignedFacilityId}:
+    delete:
+      parameters:
+        - description: User ID from whom you want to delete the facility
+          in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+        - description: Facility id you want to delete from the user
+          in: path
+          name: assignedFacilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The assigned facility was correctly removed from the user.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: User not found
+      tags:
+        - Users
+      description: ''
+      operationId: deleteAssignedFacilities
+      summary: Removes an assigned facility from the user
   /api/brands:
     get:
       parameters:
@@ -18094,6 +18187,10 @@ components:
               type: string
             roles:
               $ref: '#/components/schemas/UserRoles'
+            assignedFacilities:
+              items:
+                $ref: '#/components/schemas/UserAssignedFacilityForCreation'
+              type: array
           required:
             - action
           type: object
@@ -21730,6 +21827,40 @@ components:
         - CLOSED
         - CANCELED
       type: string
+    UserAssignedZone:
+      description: A facility zone that was assigned to an user
+      properties:
+        zoneRef:
+          example: LGMl2DuvPnfPoSHhYFOm
+          type: string
+      required:
+        - zoneRef
+      type: object
+    UserAssignedFacilityForCreation:
+      description: A facility that was assigned to an user
+      properties:
+        facilityRef:
+          description: The id of the assigned facility
+          example: 0T1vKaEar0nuG58CxzA5
+          type: string
+        assignedZones:
+          items:
+            $ref: '#/components/schemas/UserAssignedZone'
+          type: array
+      required:
+        - facilityRef
+      type: object
+    UserAssignedFacility:
+      description: A facility that was assigned to an user
+      allOf:
+        - $ref: '#/components/schemas/UserAssignedFacilityForCreation'
+        - properties:
+            id:
+              example: LGMl2DuvPnfPoSHhYFOm
+              type: string
+      required:
+        - id
+      type: object
     User:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -21750,6 +21881,10 @@ components:
             username:
               example: aschneider
               type: string
+            assignedFacilities:
+              items:
+                $ref: '#/components/schemas/UserAssignedFacility'
+              type: array
           required:
             - id
             - username
@@ -21777,6 +21912,10 @@ components:
         username:
           example: aschneider
           type: string
+        assignedFacilities:
+          items:
+            $ref: '#/components/schemas/UserAssignedFacilityForCreation'
+          type: array
       required:
         - username
         - password
