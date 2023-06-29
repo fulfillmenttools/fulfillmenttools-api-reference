@@ -10450,7 +10450,7 @@ paths:
           required: false
           schema:
             type: string
-        - description: Parameter to filter pack jobs by channel (SfS or C&C)
+        - description: Reference to the facility you want to get the corresponding packjobs
           in: query
           name: channel
           required: false
@@ -10967,6 +10967,14 @@ paths:
           required: true
           schema:
             type: string
+        - description: filter by scannablecodes
+          in: query
+          name: codes
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           content:
@@ -13354,6 +13362,85 @@ paths:
                 $ref: '#/components/schemas/Error'
         '404':
           description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/configurations/inventory:
+    patch:
+      operationId: upsertInventoryConfigurations
+      summary: Update Inventory Configuration
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryConfiguration'
+      responses:
+        '200':
+          description: Requested Inventory Configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryConfiguration'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+    get:
+      operationId: getInventoryConfigurations
+      summary: Update Inventory Configuration
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters: []
+      responses:
+        '200':
+          description: Requested Inventory Configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryConfiguration'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
           content:
             application/json:
               schema:
@@ -16891,7 +16978,6 @@ components:
           type: string
         icon:
           $ref: '#/components/schemas/NamedFile'
-          description: ''
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
         packJobRefs:
@@ -16954,12 +17040,16 @@ components:
           items:
             type: string
             example: 0857914c-d965-421e-b6cf-330501bcca58
+        loadUnitRef:
+          type: string
+          example: 2357914c-d965-421e-b6cf-330501bccaab
         codes:
           items:
             description: Codes, that identify the article
             type: string
           type: array
           minItems: 1
+      additionalProperties: false
       required:
         - packJobRefs
         - nameLocalized
@@ -21665,9 +21755,20 @@ components:
           $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
         packingItemConfirmationNeededConfiguration:
           $ref: '#/components/schemas/PackingItemConfirmationNeededConfiguration'
+        packingSourceContainerConfiguration:
+          $ref: '#/components/schemas/PackingSourceContainerConfiguration'
       type: object
     BackofficePickingConfiguration:
       description: Can this tenant use the backoffice for picking?
+      properties:
+        active:
+          default: false
+          type: boolean
+      required:
+        - active
+      type: object
+    PackingSourceContainerConfiguration:
+      description: Can this tenant use the packing source container
       properties:
         active:
           default: false
@@ -24513,8 +24614,8 @@ components:
           type: string
           minLength: 1
         orderDate:
-          format: date-time
           type: string
+          format: date-time
         requestedDate:
           $ref: '#/components/schemas/InputRequestedDate'
         requestedItems:
@@ -24795,8 +24896,7 @@ components:
           type: string
           format: date-time
         requestedDate:
-          type: string
-          format: date-time
+          $ref: '#/components/schemas/InputRequestedDate'
         requestedItems:
           type: array
           items:
@@ -25010,6 +25110,16 @@ components:
         - version
         - created
         - lastModified
+    InventoryConfiguration:
+      type: object
+      properties:
+        version:
+          type: number
+        enableStorageLocationOverview:
+          type: boolean
+      required:
+        - version
+        - enableStorageLocationOverview
 tags:
   - description: >-
       Everything your customer ordered in your shop, so everything he or she
