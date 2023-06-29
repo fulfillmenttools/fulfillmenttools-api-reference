@@ -12443,6 +12443,95 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
+  /api/inventory/stocks:
+    post:
+      operationId: createStock
+      summary: Create stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockForCreation'
+      responses:
+        '201':
+          description: Stock was created.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stock'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/inventory/stocks/{stockId}:
+    delete:
+      operationId: deleteStock
+      summary: Delete stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: stockId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stock was deleted.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stock'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
   /api/inventory/purchaseorders/{purchaseOrderId}:
     get:
       operationId: getPurchaseOrder
@@ -14435,12 +14524,14 @@ components:
           type: string
         title:
           type: string
+        quantity:
+          description: optional parameter for picked quantity of the given line item
+          type: integer
       required:
         - title
-        - quantity
       type: object
     HandoverJobOrderBy:
-      description: STATUS_TARGET_TIME_LAST_MODIFIED_DATE is depricated
+      description: STATUS_TARGET_TIME_LAST_MODIFIED_DATE is deprecated
       enum:
         - STATUS_TARGET_TIME_LAST_MODIFIED_DATE
         - TARGET_TIME_ASC
@@ -20081,6 +20172,8 @@ components:
           type: string
         logoUrl:
           type: string
+        pdfBackgroundConfiguration:
+          $ref: '#/components/schemas/PdfBackgroundConfiguration'
         companyAddress:
           $ref: '#/components/schemas/CompanyAddress'
         orderDateLabel:
@@ -20125,12 +20218,31 @@ components:
         - disclaimer
         - pageLabel
       type: object
+    PdfBackgroundConfiguration:
+      properties:
+        firstPageBackgroundFileUrl:
+          description: >-
+            File url of the background image that will be used for the first
+            page
+          type: string
+        followingPageBackgroundFileUrl:
+          description: File url of background image that will be used for 2-n pages
+          type: string
+      type: object
+    PdfBackgroundConfigurationForUpsert:
+      properties:
+        firstPageBackgroundFile:
+          $ref: '#/components/schemas/NamedFile'
+        followingPageBackgroundFile:
+          $ref: '#/components/schemas/NamedFile'
+      type: object
     ReturnNoteConfigurationForUpsert:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
+      additionalProperties: false
       properties:
         logo:
           $ref: '#/components/schemas/NamedFile'
+        pdfBackgroundConfiguration:
+          $ref: '#/components/schemas/PdfBackgroundConfigurationForUpsert'
         companyAddress:
           $ref: '#/components/schemas/CompanyAddress'
         orderDateLabel:
@@ -20162,6 +20274,13 @@ components:
           $ref: '#/components/schemas/LocaleString'
         pageLabel:
           $ref: '#/components/schemas/LocaleString'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
       required:
         - orderDateLabel
         - orderNumberLabel
@@ -20173,6 +20292,7 @@ components:
         - disclaimerHeadline
         - disclaimer
         - pageLabel
+        - version
       type: object
     ReturnPatchActions:
       description: >-
@@ -24223,6 +24343,87 @@ components:
         - tenantArticleId
         - facilityRef
         - status
+    StockForCreation:
+      type: object
+      properties:
+        facilityRef:
+          type: string
+        tenantArticleId:
+          type: string
+        value:
+          type: number
+          minimum: 0
+        locationRef:
+          type: string
+      required:
+        - facilityRef
+        - tenantArticleId
+        - value
+    StockScore:
+      type: object
+      properties:
+        name:
+          type: string
+          $ref: '#/components/schemas/ScoreName'
+        type:
+          type: string
+          $ref: '#/components/schemas/ScoreType'
+        value:
+          type: number
+          description: Describes the performance of the score
+      required:
+        - name
+        - type
+        - value
+    Stock:
+      type: object
+      properties:
+        id:
+          type: string
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        facilityRef:
+          type: string
+        tenantArticleId:
+          type: string
+        tenantStockId:
+          type: string
+        locationRef:
+          type: string
+        value:
+          type: number
+        available:
+          type: number
+        reserved:
+          type: number
+        facilityWideReserved:
+          type: number
+        traits:
+          type: array
+          items:
+            type: string
+            $ref: '#/components/schemas/StorageLocationTrait'
+        scannableCodes:
+          type: array
+          items:
+            type: string
+        scores:
+          $ref: '#/components/schemas/StockScore'
+      required:
+        - id
+        - created
+        - lastModified
+        - facilityRef
+        - tenantArticleId
+        - value
+        - available
+        - reserved
+        - facilityWideReserved
+        - traits
     RequestedDateASAP:
       type: object
       properties:
