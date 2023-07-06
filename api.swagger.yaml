@@ -7316,6 +7316,15 @@ paths:
             items:
               type: string
             type: array
+        - description: Reference to the zones you want to get the corresponding pickjobs
+          explode: false
+          in: query
+          name: zoneRefs
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
         - description: >-
             Reference to the tenantOrderId you want to get the corresponding
             pickjobs
@@ -16658,6 +16667,10 @@ components:
           minItems: 0
           items:
             $ref: '#/components/schemas/TagReference'
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
       required:
         - tenantArticleId
         - title
@@ -18912,6 +18925,10 @@ components:
               description: >-
                 The reason for the current status. Currently, only reroute
                 reasons are supported.
+            pickingZones:
+              type: array
+              items:
+                $ref: '#/components/schemas/PickingZone'
           required:
             - id
             - status
@@ -19000,6 +19017,16 @@ components:
       type: object
       xml:
         name: Pickjob
+    PickingZone:
+      description: Zones from which items can be picked
+      properties:
+        zoneRef:
+          type: string
+        zoneName:
+          type: string
+      required:
+        - zoneName
+        - zoneRef
     PaymentInformation:
       properties:
         currency:
