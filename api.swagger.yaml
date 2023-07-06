@@ -21690,6 +21690,8 @@ components:
           $ref: '#/components/schemas/PackingItemConfirmationNeededConfiguration'
         packingSourceContainerConfiguration:
           $ref: '#/components/schemas/PackingSourceContainerConfiguration'
+        scanningConfiguration:
+          $ref: '#/components/schemas/PackingScanningConfiguration'
       type: object
     BackofficePickingConfiguration:
       description: Can this tenant use the backoffice for picking?
@@ -21764,6 +21766,11 @@ components:
         scanningRule:
           $ref: '#/components/schemas/ScanningRuleConfiguration'
       type: object
+    PackingScanningConfiguration:
+      properties:
+        scanningType:
+          $ref: '#/components/schemas/PackingScanningConfigurationEnum'
+      type: object
     ScanningRuleConfiguration:
       description: >-
         Configuration to show the client how the items should be scanned during
@@ -21796,6 +21803,11 @@ components:
     PickingScanningConfigurationEnum:
       example: MUST_SCAN_FIRST
       description: Way in which the scanning of articles during picking is enforced
+      enum:
+        - MUST_SCAN_FIRST
+        - SCAN_NOT_REQUIRED
+      type: string
+    PackingScanningConfigurationEnum:
       enum:
         - MUST_SCAN_FIRST
         - SCAN_NOT_REQUIRED
