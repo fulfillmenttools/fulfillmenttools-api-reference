@@ -13664,6 +13664,7 @@ components:
             - ModifyPickLineItem
             - ModifyPickRunLineItem
             - ModifyPackJob
+            - ModifyPackLineItem
             - ModifyFacility
             - ModifyListing
             - ModifyRetainedOfflineStock
@@ -22407,6 +22408,11 @@ components:
           items:
             $ref: '#/components/schemas/Sticker'
           type: array
+        scannableCodes:
+          items:
+            description: Codes, that identify the article
+            type: string
+          type: array
       required:
         - quantity
         - article
@@ -22424,6 +22430,12 @@ components:
                 described entity.
               example: climk4dcQFiPdA5ULuhS
               type: string
+            packed:
+              description: The amount of articles that were packed for this packline.
+              example: 20
+              format: int32
+              minimum: 0
+              type: integer
           required:
             - id
       type: object
@@ -22457,6 +22469,7 @@ components:
           items:
             anyOf:
               - $ref: '#/components/schemas/ModifyPackJobAction'
+              - $ref: '#/components/schemas/ModifyPackLineItemAction'
           minItems: 1
           type: array
         version:
@@ -22489,6 +22502,35 @@ components:
           type: object
       xml:
         name: ModifyPackJobAction
+    ModifyPackLineItemAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value 'ModifyPackLineItem', because you want to modify a
+                packjobs lineItem
+              enum:
+                - ModifyPackLineItem
+              type: string
+            id:
+              type: string
+              description: references the id of the packLineItem of a packJob
+            packed:
+              description: >-
+                The amount of articles that were packed for this packline. Can't
+                be more than picked before.
+              example: 20
+              format: int64
+              minimum: 0
+              type: integer
+          required:
+            - action
+            - id
+          type: object
+      xml:
+        name: ModifyPackLieItemAction
     PartialStockForCreation:
       additionalProperties: false
       properties:
