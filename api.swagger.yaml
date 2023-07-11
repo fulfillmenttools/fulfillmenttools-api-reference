@@ -24515,32 +24515,32 @@ components:
     PurchaseOrderForCreation:
       type: object
       properties:
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          $ref: '#/components/schemas/InputRequestedDate'
+        requestedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundLineItem'
+        status:
+          type: string
+          enum:
+            - OPEN
+        cancelled:
+          type: boolean
         facilityRef:
           type: string
           minLength: 1
-        orderDate:
-          type: string
-          format: date-time
-        requestedDate:
-          $ref: '#/components/schemas/InputRequestedDate'
-        requestedItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundLineItem'
-        status:
-          type: string
-          enum:
-            - OPEN
       required:
-        - facilityRef
         - orderDate
         - requestedDate
         - requestedItems
+        - facilityRef
     PurchaseOrderForUpdate:
       type: object
       properties:
-        version:
-          type: number
         orderDate:
           type: string
           format: date-time
@@ -24554,11 +24554,15 @@ components:
           type: string
           enum:
             - OPEN
+        cancelled:
+          type: boolean
+        version:
+          type: number
       required:
-        - version
         - orderDate
         - requestedDate
         - requestedItems
+        - version
     PurchaseOrderForPartialUpdate:
       type: object
       properties:
@@ -24900,26 +24904,9 @@ components:
         - receivedDate
         - receivedItems
         - comments
-    InboundProcessForCreation:
+    InboundProcessPurchaseOrderForCreation:
       type: object
       properties:
-        tenantInboundProcessId:
-          type: string
-        facilityRef:
-          type: string
-        receipts:
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundReceiptForCreation'
-        onHold:
-          type: boolean
-      required:
-        - facilityRef
-    InboundProcessPurchaseOrderForUpsert:
-      type: object
-      properties:
-        version:
-          type: number
         orderDate:
           type: string
           format: date-time
@@ -24936,10 +24923,51 @@ components:
         cancelled:
           type: boolean
       required:
-        - version
         - orderDate
         - requestedDate
         - requestedItems
+    InboundProcessForCreation:
+      type: object
+      properties:
+        tenantInboundProcessId:
+          type: string
+        facilityRef:
+          type: string
+        receipts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptForCreation'
+        onHold:
+          type: boolean
+        purchaseOrder:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderForCreation'
+      required:
+        - facilityRef
+    InboundProcessPurchaseOrderForUpsert:
+      type: object
+      properties:
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          $ref: '#/components/schemas/InputRequestedDate'
+        requestedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundLineItem'
+        status:
+          type: string
+          enum:
+            - OPEN
+        cancelled:
+          type: boolean
+        version:
+          type: number
+      required:
+        - orderDate
+        - requestedDate
+        - requestedItems
+        - version
     SafetyStock:
       type: object
       properties:
