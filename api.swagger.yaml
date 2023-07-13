@@ -16629,12 +16629,31 @@ components:
           description: Identifier for items unit of measurement.
           example: liter
           type: string
+        stockProperties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/StockPropertyDefinition'
       required:
         - tenantArticleId
         - title
       type: object
       xml:
         name: ListingForCreation
+    StockPropertyDefinition:
+      properties:
+        inputType:
+          description: Input Type for this property, used for clients.
+          type: string
+          enum:
+            - TEXT
+            - DATE
+        required:
+          description: Indicates if this property is required.
+          type: boolean
+      required:
+        - inputType
+        - required
+      type: object
     AvailabilityTimeframe:
       properties:
         start:
@@ -21739,7 +21758,7 @@ components:
       type: string
     PackingScanningConfigurationEnum:
       enum:
-        - MUST_SCAN_FIRST
+        - MUST_SCAN_EACH
         - SCAN_NOT_REQUIRED
       type: string
     PickingMethodEnum:
@@ -24359,6 +24378,10 @@ components:
           minimum: 0
         locationRef:
           type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
       required:
         - facilityRef
         - tenantArticleId
@@ -24417,6 +24440,10 @@ components:
             type: string
         scores:
           $ref: '#/components/schemas/StockScore'
+        properties:
+          type: object
+          additionalProperties:
+            type: string
       required:
         - id
         - created
@@ -24428,6 +24455,7 @@ components:
         - reserved
         - facilityWideReserved
         - traits
+        - properties
     RequestedDateASAP:
       type: object
       properties:
