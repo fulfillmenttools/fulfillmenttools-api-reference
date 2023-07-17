@@ -24460,163 +24460,6 @@ components:
         - facilityWideReserved
         - traits
         - properties
-    RequestedDateASAP:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - ASAP
-            - TIME_POINT
-      required:
-        - type
-    RequestedDateTimePoint:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - ASAP
-            - TIME_POINT
-        value:
-          type: string
-          format: date-time
-      required:
-        - type
-        - value
-    InboundLineItem:
-      type: object
-      properties:
-        tenantArticleId:
-          type: string
-        quantity:
-          $ref: '#/components/schemas/Quantity'
-      required:
-        - tenantArticleId
-        - quantity
-    PurchaseOrder:
-      type: object
-      properties:
-        id:
-          type: object
-        version:
-          type: object
-        facilityRef:
-          type: string
-        orderDate:
-          type: string
-          format: date-time
-        requestedDate:
-          oneOf:
-            - $ref: '#/components/schemas/RequestedDateASAP'
-            - $ref: '#/components/schemas/RequestedDateTimePoint'
-        requestedItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundLineItem'
-        status:
-          type: string
-          enum:
-            - OPEN
-        cancelled:
-          type: boolean
-        inboundProcessRef:
-          type: string
-      required:
-        - id
-        - version
-        - facilityRef
-        - orderDate
-        - requestedDate
-        - requestedItems
-        - status
-        - cancelled
-        - inboundProcessRef
-    InputRequestedDate:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - ASAP
-            - TIME_POINT
-        value:
-          type: string
-          format: date-time
-      required:
-        - type
-    PurchaseOrderForCreation:
-      type: object
-      properties:
-        orderDate:
-          type: string
-          format: date-time
-        requestedDate:
-          $ref: '#/components/schemas/InputRequestedDate'
-        requestedItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundLineItem'
-        status:
-          type: string
-          enum:
-            - OPEN
-        cancelled:
-          type: boolean
-        facilityRef:
-          type: string
-          minLength: 1
-      required:
-        - orderDate
-        - requestedDate
-        - requestedItems
-        - facilityRef
-    PurchaseOrderForUpdate:
-      type: object
-      properties:
-        orderDate:
-          type: string
-          format: date-time
-        requestedDate:
-          $ref: '#/components/schemas/InputRequestedDate'
-        requestedItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundLineItem'
-        status:
-          type: string
-          enum:
-            - OPEN
-        cancelled:
-          type: boolean
-        version:
-          type: number
-      required:
-        - orderDate
-        - requestedDate
-        - requestedItems
-        - version
-    PurchaseOrderForPartialUpdate:
-      type: object
-      properties:
-        version:
-          type: number
-        orderDate:
-          type: string
-          format: date-time
-        requestedDate:
-          $ref: '#/components/schemas/InputRequestedDate'
-        requestedItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundLineItem'
-        status:
-          type: string
-          enum:
-            - OPEN
-      required:
-        - version
-        - requestedDate
     InboundReceipt:
       type: object
       properties:
@@ -24740,6 +24583,174 @@ components:
         - available
         - byTrait
         - changeReason
+    RequestedDateASAP:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ASAP
+            - TIME_POINT
+      required:
+        - type
+    RequestedDateTimePoint:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ASAP
+            - TIME_POINT
+        value:
+          type: string
+          format: date-time
+      required:
+        - type
+        - value
+    InboundLineItem:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+      required:
+        - tenantArticleId
+        - quantity
+    InboundProcessPurchaseOrderSupplier:
+      type: object
+      properties:
+        name:
+          type: string
+    PurchaseOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          oneOf:
+            - $ref: '#/components/schemas/RequestedDateASAP'
+            - $ref: '#/components/schemas/RequestedDateTimePoint'
+        requestedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundLineItem'
+        status:
+          type: string
+          enum:
+            - OPEN
+        cancelled:
+          type: boolean
+        supplier:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplier'
+        version:
+          type: number
+        facilityRef:
+          type: string
+        inboundProcessRef:
+          type: string
+      required:
+        - id
+        - orderDate
+        - requestedDate
+        - requestedItems
+        - status
+        - cancelled
+        - version
+        - facilityRef
+        - inboundProcessRef
+    InputRequestedDate:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ASAP
+            - TIME_POINT
+        value:
+          type: string
+          format: date-time
+      required:
+        - type
+    PurchaseOrderForCreation:
+      type: object
+      properties:
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          $ref: '#/components/schemas/InputRequestedDate'
+        requestedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundLineItem'
+        status:
+          type: string
+          enum:
+            - OPEN
+        cancelled:
+          type: boolean
+        supplier:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplier'
+        facilityRef:
+          type: string
+          minLength: 1
+      required:
+        - orderDate
+        - requestedDate
+        - requestedItems
+        - facilityRef
+    PurchaseOrderForUpdate:
+      type: object
+      properties:
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          $ref: '#/components/schemas/InputRequestedDate'
+        requestedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundLineItem'
+        status:
+          type: string
+          enum:
+            - OPEN
+        cancelled:
+          type: boolean
+        supplier:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplier'
+        version:
+          type: number
+      required:
+        - orderDate
+        - requestedDate
+        - requestedItems
+        - version
+    PurchaseOrderForPartialUpdate:
+      type: object
+      properties:
+        version:
+          type: number
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          $ref: '#/components/schemas/InputRequestedDate'
+        requestedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundLineItem'
+        status:
+          type: string
+          enum:
+            - OPEN
+      required:
+        - version
+        - requestedDate
     InboundProcessOrigin:
       type: object
       properties:
@@ -24803,11 +24814,6 @@ components:
       required:
         - total
         - inboundProcesses
-    InboundProcessPurchaseOrderSupplier:
-      type: object
-      properties:
-        name:
-          type: string
     InboundProcessPurchaseOrder:
       type: object
       properties:
@@ -24958,6 +24964,8 @@ components:
             - OPEN
         cancelled:
           type: boolean
+        supplier:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplier'
       required:
         - orderDate
         - requestedDate
@@ -24997,6 +25005,8 @@ components:
             - OPEN
         cancelled:
           type: boolean
+        supplier:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplier'
         version:
           type: number
       required:
