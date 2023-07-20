@@ -14966,6 +14966,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OfferedStickersByTag'
+    TagScanningConfiguration:
+      additionalProperties: false
+      properties:
+        offeredScanningRuleByTag:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferedScanningRuleByTag'
     OfferedStickersByTag:
       additionalProperties: false
       properties:
@@ -14985,6 +14992,24 @@ components:
         - tagRef
         - matchingValues
         - stickers
+      type: object
+    OfferedScanningRuleByTag:
+      additionalProperties: false
+      properties:
+        tagRef:
+          type: string
+          minLength: 1
+        matchingValues:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        scanningType:
+          $ref: '#/components/schemas/PickingScanningConfigurationEnum'
+      required:
+        - tagRef
+        - matchingValues
+        - scanningType
       type: object
     Sticker:
       additionalProperties: false
@@ -15046,6 +15071,8 @@ components:
           $ref: '#/components/schemas/StickerConfiguration'
         lineItemStickerConfiguration:
           $ref: '#/components/schemas/StickerConfiguration'
+        lineItemScanningConfiguration:
+          $ref: '#/components/schemas/TagScanningConfiguration'
         preferredPickingMethodsConfiguration:
           $ref: '#/components/schemas/PreferredPickingMethodsConfiguration'
     PreferredPickingMethodsConfiguration:
