@@ -14306,6 +14306,8 @@ components:
           minLength: 1
           format: email
           example: test@try.de
+        addressType:
+          $ref: '#/components/schemas/AddressType'
       type: object
     Coordinates:
       description: >-
@@ -23275,6 +23277,11 @@ components:
           example: 25.5
           type: number
       type: object
+    AddressType:
+      type: string
+      enum:
+        - POSTAL_ADDRESS
+        - PARCEL_LOCKER
     PackingContainerPatchActions:
       properties:
         actions:
@@ -23992,6 +23999,27 @@ components:
           example: 42
           type: integer
       type: object
+    ModifyRestowItemAction:
+      additionalProperties: false
+      properties:
+        action:
+          description: >-
+            Use value 'ModifyRestowItem', because you want to modify a restow
+            item
+          enum:
+            - ModifyRestowItem
+          type: string
+        restowed:
+          type: boolean
+          example: true
+          default: false
+          description: Indicates if the restowItem has been restowed
+        location:
+          $ref: '#/components/schemas/Location'
+      required:
+        - action
+        - restowed
+      type: object
     RestowItem:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -24108,31 +24136,6 @@ components:
       type: object
       xml:
         name: RestowItemPatchActions
-    ModifyRestowItemAction:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use value 'ModifyRestowItem', because you want to modify a
-                restow item
-              enum:
-                - ModifyRestowItem
-              type: string
-            restowed:
-              type: boolean
-              example: true
-              default: false
-              description: Indicates if the restowItem has been restowed
-            location:
-              $ref: '#/components/schemas/Location'
-          required:
-            - action
-            - restowed
-          type: object
-      xml:
-        name: ModifyRestowItemAction
     StockSummaryArticle:
       type: object
       properties:
