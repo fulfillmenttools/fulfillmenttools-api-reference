@@ -5788,6 +5788,47 @@ paths:
         href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
       operationId: patchPickRunPickJobs
       summary: Update pick jobs of a pick run
+  /api/pickruns/{pickRunId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PickRunActionsParameter'
+      parameters:
+        - description: Reference to the pick run you want to call the action for
+          in: path
+          name: pickRunId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickRun'
+          description: Updated Pick Run in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - PickRuns
+      operationId: pickRunAction
+      summary: Call a single action on a given pickRun
   /api/handoverjobs:
     get:
       parameters:
@@ -6037,6 +6078,47 @@ paths:
         description: Patch set
         required: true
       summary: Patches a handoverjob with the given ID
+  /api/handoverjobs/{handoverJobId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandoverJobActionsParameter'
+      parameters:
+        - description: Reference to the handover job you want to call the action for
+          in: path
+          name: handoverJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Handoverjob'
+          description: Updated Handover job in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Handoverjobs
+      operationId: handoverJobAction
+      summary: Call a single action on a given Handover job
   /api/loadunits:
     delete:
       parameters:
@@ -7747,6 +7829,47 @@ paths:
       tags:
         - Documents
       operationId: addContentToDocument
+  /api/pickjobs/{pickJobId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PickJobActionsParameter'
+      parameters:
+        - description: Reference to the pick job you want to call an action for
+          in: path
+          name: pickJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickJob'
+          description: Updated PickJob in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - PickJobs
+      operationId: pickJobAction
+      summary: Call a single action on a given pickJob
   /api/pickjobs/{pickJobId}/loadunits:
     get:
       parameters:
@@ -17831,6 +17954,8 @@ components:
       xml:
         name: ModifyHandoverjobAction
     CancelHandoverjobAction:
+      deprecated: true
+      description: '@deprecated Use api/handoverjobs/:id/actions instead'
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
@@ -18013,6 +18138,8 @@ components:
       xml:
         name: ModifyOrderSplitAction
     RestartPickJobAction:
+      deprecated: true
+      description: '@deprecated Use api/pickjobs/:id/actions instead'
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
@@ -18030,6 +18157,8 @@ components:
       xml:
         name: RestartPickJobAction
     ResetPickJobAction:
+      deprecated: true
+      description: '@deprecated Use api/pickjobs/:id/actions instead'
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
@@ -18094,6 +18223,8 @@ components:
       xml:
         name: ModifyPickJobAction
     AbortPickJobAction:
+      deprecated: true
+      description: '@deprecated Use api/pickjobs/:id/actions instead'
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
@@ -19359,6 +19490,8 @@ components:
       xml:
         name: PickRunPickJobsPatchAction
     CancelPickRunAction:
+      deprecated: true
+      description: '@deprecated Use api/pickruns/:id/actions instead'
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
@@ -19374,6 +19507,8 @@ components:
       xml:
         name: CancelPickRunAction
     StartPickRunAction:
+      deprecated: true
+      description: '@deprecated Use api/pickruns/:id/actions instead'
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
@@ -19389,6 +19524,8 @@ components:
       xml:
         name: StartPickRunAction
     FinishPickRunAction:
+      deprecated: true
+      description: '@deprecated Use api/pickruns/:id/actions instead'
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
@@ -19403,6 +19540,134 @@ components:
           type: object
       xml:
         name: FinishPickRunAction
+    PickJobActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/PickJobAbortActionParameter'
+        - $ref: '#/components/schemas/PickJobRestartActionParameter'
+        - $ref: '#/components/schemas/PickJobResetActionParameter'
+    PickJobAbortActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobAbortActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    PickJobAbortActionEnum:
+      enum:
+        - ABORT
+    PickJobRestartActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobRestartActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    PickJobRestartActionEnum:
+      enum:
+        - RESTART
+    PickJobResetActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobResetActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    PickJobResetActionEnum:
+      enum:
+        - RESET
+    PickRunActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/PickRunStartActionParameter'
+        - $ref: '#/components/schemas/PickRunFinishActionParameter'
+        - $ref: '#/components/schemas/PickRunCancelActionParameter'
+    PickRunFinishActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickRunFinishActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    PickRunFinishActionEnum:
+      enum:
+        - FINISH
+    PickRunStartActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickRunStartActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    PickRunStartActionEnum:
+      enum:
+        - START
+    PickRunCancelActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickRunCancelActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    PickRunCancelActionEnum:
+      enum:
+        - CANCEL
+      type: string
+    HandoverJobActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/HandoverJobCancelActionParameter'
+    HandoverJobCancelActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/HandoverJobCancelActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        payload:
+          additionalProperties: false
+          properties:
+            handoverJobCancelReason:
+              $ref: '#/components/schemas/HandoverJobCancelReason'
+          required:
+            - handoverJobCancelReason
+      required:
+        - name
+        - version
+        - payload
+    HandoverJobCancelActionEnum:
+      enum:
+        - CANCEL
+      type: string
     ModifyPickRunLineItemAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
