@@ -13359,10 +13359,10 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
-  /api/inboundentries:
+  /api/inboundreceiptjobs:
     get:
-      operationId: getInboundEntries
-      summary: Get an Inbound Entries
+      operationId: getInboundReceiptJobs
+      summary: Get InboundReceiptJobs
       deprecated: false
       description: |-
         <i><center>
@@ -13434,11 +13434,11 @@ paths:
             type: string
       responses:
         '200':
-          description: Paginated Inbound Entries
+          description: Paginated Inbound Receipt Jobs
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InboundEntryPaginatedResult'
+                $ref: '#/components/schemas/InboundReceiptJobPaginatedResult'
         '401':
           description: Your user is not allowed to operate against this API instance
           content:
@@ -13453,10 +13453,10 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
-  /api/inboundentries/{inboundEntryId}:
+  /api/inboundreceiptjobs/{inboundEntryId}:
     get:
-      operationId: getInboundEntry
-      summary: Get an Inbound Entry by ID
+      operationId: getInboundReceiptJob
+      summary: Get an Inbound Receipt Job by ID
       deprecated: false
       description: |-
         <i><center>
@@ -13480,7 +13480,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InboundEntry'
+                $ref: '#/components/schemas/InboundReceiptJob'
         '401':
           description: Your user is not allowed to operate against this API instance
           content:
@@ -25497,12 +25497,12 @@ components:
         - facilityRef
         - value
         - status
-    InboundEntryOrigin:
+    InboundReceiptJobOrigin:
       type: object
       properties:
         name:
           type: string
-    InboundEntry:
+    InboundReceiptJob:
       type: object
       properties:
         id:
@@ -25529,7 +25529,7 @@ components:
         items:
           $ref: '#/components/schemas/InboundLineItem'
         origin:
-          $ref: '#/components/schemas/InboundEntryOrigin'
+          $ref: '#/components/schemas/InboundReceiptJobOrigin'
       required:
         - id
         - facilityRef
@@ -25538,19 +25538,19 @@ components:
         - expectedDate
         - items
         - origin
-    InboundEntryPaginatedResult:
+    InboundReceiptJobPaginatedResult:
       type: object
       properties:
         total:
           type: number
           minimum: 0
-        inboundEntries:
+        inboundReceiptJobs:
           type: array
           items:
-            $ref: '#/components/schemas/InboundEntry'
+            $ref: '#/components/schemas/InboundReceiptJob'
       required:
         - total
-        - inboundEntries
+        - inboundReceiptJobs
     ReceiptForCreation:
       type: object
       properties:
