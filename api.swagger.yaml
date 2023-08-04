@@ -3952,42 +3952,6 @@ paths:
         description: Representation that describes the facility
         required: true
       summary: 'Connect a configured carrier to the facility with given ID '
-  /api/facilities/{facilityId}/configurations:
-    get:
-      parameters:
-        - description: ID of facility you want to retrieve the configurations for
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/LinkedConfiguration'
-                type: array
-          description: Configurations were found. A link list can be found in the response.
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: No active configurations found for this facility
-      tags:
-        - Facilities Configurations
-      description: >-
-        The response will merely supply a list of links that lead to
-        configurations - for changing them please refer to the resources below.
-        The contents of this list depends on the layout of your system, entries
-        can appear and disappear based on configuration or internal processing
-      operationId: getFacilityConfigurations
-      summary: >-
-        Gets the list of currently available and applied configurations for the
-        given facility.
   /api/facilities/{facilityId}/configurations/stock:
     get:
       parameters:
@@ -13632,7 +13596,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InventoryConfiguration'
+              $ref: '#/components/schemas/InventoryConfigurationForPatch'
       responses:
         '200':
           description: Requested Inventory Configuration
@@ -13656,7 +13620,7 @@ paths:
         - Inventory
     get:
       operationId: getInventoryConfigurations
-      summary: Update Inventory Configuration
+      summary: Get Inventory Configuration
       deprecated: false
       description: |-
         <i><center>
@@ -13669,6 +13633,95 @@ paths:
           documentation under
           https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
       parameters: []
+      responses:
+        '200':
+          description: Requested Inventory Configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryConfiguration'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/facilities/{facilityId}/configurations/inventory:
+    patch:
+      operationId: upsertInventoryFacilityConfigurations
+      summary: Update Inventory Configuration for a Facility
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: facilityId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryFacilityConfigurationForPatch'
+      responses:
+        '200':
+          description: Requested Inventory Configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryConfiguration'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+    get:
+      operationId: getInventoryFacilityConfigurations
+      summary: Get Inventory Configuration for a Facility
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: facilityId
+          required: true
+          in: path
+          schema:
+            type: string
       responses:
         '200':
           description: Requested Inventory Configuration
@@ -25705,6 +25758,19 @@ components:
         - version
         - created
         - lastModified
+    InventoryConfigurationForPatch:
+      type: object
+      properties:
+        version:
+          type: number
+        enableStorageLocationOverview:
+          type: boolean
+          deprecated: true
+        isMixedStorage:
+          type: boolean
+          nullable: true
+      required:
+        - version
     InventoryConfiguration:
       type: object
       properties:
@@ -25713,9 +25779,21 @@ components:
         enableStorageLocationOverview:
           type: boolean
           deprecated: true
+        isMixedStorage:
+          type: boolean
       required:
         - version
         - enableStorageLocationOverview
+    InventoryFacilityConfigurationForPatch:
+      type: object
+      properties:
+        version:
+          type: number
+        isMixedStorage:
+          type: boolean
+          nullable: true
+      required:
+        - version
     WebHookEvent:
       properties:
         event:
