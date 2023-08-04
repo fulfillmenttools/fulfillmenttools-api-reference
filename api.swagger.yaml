@@ -14241,6 +14241,13 @@ components:
           items:
             $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
           type: array
+        productValueNeeded:
+          type: boolean
+          example: true
+          description: >-
+            Setting to enable the Client to ask for the parcel product value
+            while ordering a label. This information is mandatory for sending
+            parcels between different countries (customs declaration)
       required:
         - name
         - key
@@ -17468,6 +17475,14 @@ components:
               type: string
             status:
               $ref: '#/components/schemas/CarrierStatus'
+            productValueNeeded:
+              type: boolean
+              example: true
+              description: >-
+                Setting to enable the Client to ask for the parcel product value
+                while ordering a label. This information is mandatory for
+                sending parcels between different countries (customs
+                declaration)
           required:
             - action
           type: object
@@ -18961,6 +18976,13 @@ components:
               $ref: '#/components/schemas/ParcelStatus'
             paymentInformation:
               $ref: '#/components/schemas/PaymentInformation'
+            productValue:
+              description: >-
+                Monetary value of all goods in this parcel. Needed for sending
+                cross border packages (customs) To be interpreted as money in
+                the currency given under paymentInformation.currency
+              type: number
+              example: 12.5
           required:
             - id
             - status
@@ -18996,6 +19018,13 @@ components:
           $ref: '#/components/schemas/FacilityAddress'
         paymentInformation:
           $ref: '#/components/schemas/PaymentInformation'
+        productValue:
+          description: >-
+            Monetary value of all goods in this parcel. Needed for sending cross
+            border packages (customs) To be interpreted as money in the currency
+            given under paymentInformation.currency
+          type: number
+          example: 12.5
       type: object
     ParcelStatus:
       enum:
