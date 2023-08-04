@@ -6427,8 +6427,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoadUnitPatchActions'
-        description: Patch set
+              anyOf:
+                - $ref: '#/components/schemas/LoadUnitPatchActions'
+                - $ref: '#/components/schemas/LoadUnit'
+      description: >-
+        LoadUnitPatchActions: Deprecated - For future usage please use the
+        /actions endpoints mentioned in the corresponding PatchActions
+
+        LoadUnit: Partial Patch on this entity.
+
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/></center><br>
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and / or might
+        not be available at all times in your API instance. It could disappear
+        also without warning. Thus it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
         required: true
   /api/loadunittypes:
     get:
@@ -19614,6 +19629,7 @@ components:
     PickJobAbortActionEnum:
       enum:
         - ABORT
+      type: string
     PickJobRestartActionParameter:
       additionalProperties: false
       properties:
@@ -19629,6 +19645,7 @@ components:
     PickJobRestartActionEnum:
       enum:
         - RESTART
+      type: string
     PickJobResetActionParameter:
       additionalProperties: false
       properties:
@@ -19644,11 +19661,13 @@ components:
     PickJobResetActionEnum:
       enum:
         - RESET
+      type: string
     PickRunActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/PickRunStartActionParameter'
         - $ref: '#/components/schemas/PickRunFinishActionParameter'
         - $ref: '#/components/schemas/PickRunCancelActionParameter'
+        - $ref: '#/components/schemas/PickRunRemovePickJobActionParameter'
     PickRunFinishActionParameter:
       additionalProperties: false
       properties:
@@ -19680,6 +19699,31 @@ components:
     PickRunStartActionEnum:
       enum:
         - START
+      type: string
+    PickRunRemovePickJobActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickRunRemovePickJobActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        payload:
+          additionalProperties: false
+          properties:
+            pickJobId:
+              type: string
+              example: 4baaa052-7286-4dc2-937f-6e703ece25ac
+          required:
+            - pickJobId
+      required:
+        - name
+        - version
+        - payload
+    PickRunRemovePickJobActionEnum:
+      enum:
+        - REMOVE_PICK_JOB
       type: string
     PickRunCancelActionParameter:
       additionalProperties: false
@@ -19761,6 +19805,8 @@ components:
       xml:
         name: ModifyPickRunLineItemAction
     RemovePickJobFromPickRunAction:
+      deprecated: true
+      description: '@deprecated Use /api/pickruns/{pickRunId}/actions instead'
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
