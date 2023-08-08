@@ -23089,6 +23089,7 @@ components:
       enum:
         - ZONE
         - EXPIRY_DATE
+        - RECEIPT_DATE
         - RUNNING_SEQUENCE
         - RESTOW_SEQUENCE
       type: string
@@ -24868,6 +24869,13 @@ components:
         - tenantArticleId
         - facilityRef
         - status
+    StockPropertyPreset:
+      type: object
+      properties:
+        expiry:
+          type: string
+        receiptDate:
+          type: string
     StockForCreation:
       type: object
       properties:
@@ -24881,9 +24889,10 @@ components:
         locationRef:
           type: string
         properties:
-          type: object
           additionalProperties:
             type: string
+          allOf:
+            - $ref: '#/components/schemas/StockPropertyPreset'
       required:
         - facilityRef
         - tenantArticleId
@@ -25404,9 +25413,10 @@ components:
         storageLocationRef:
           type: string
         stockProperties:
-          type: object
           additionalProperties:
             type: string
+          allOf:
+            - $ref: '#/components/schemas/StockPropertyPreset'
       required:
         - tenantArticleId
         - acceptedQuantity
