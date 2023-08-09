@@ -11591,7 +11591,17 @@ paths:
           description: Entity version conflict
       tags:
         - PackJobs
-      description: ''
+      description: >-
+        Deprecated - please use
+        /api/packjobs/{packJobId}/containers/{containerId}/{lineItemId}
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/></center><br>
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and / or might
+        not be available at all times in your API instance. It could disappear
+        also without warning. Thus it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
       operationId: patchPackingContainer
       requestBody:
         content:
@@ -11601,6 +11611,185 @@ paths:
         description: Patch set
         required: true
       summary: Patches a packing container with the given ID
+    post:
+      parameters:
+        - description: ID of the pack job you want to get
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: ID of the container you want to add new line item to it
+          in: path
+          name: containerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainer'
+          description: The packing container was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - PackJobs
+      description: ''
+      operationId: addPackingContainerLineItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingContainerLineItemForCreation'
+        description: Packing Container line item object
+        required: true
+      summary: Add a new packing container line item
+  /api/packjobs/{packJobId}/containers/{containerId}/item/{lineItemId}:
+    patch:
+      parameters:
+        - description: ID of corresponding packJob you want to patch
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: ID of container you want to patch
+          in: path
+          name: containerId
+          required: true
+          schema:
+            type: string
+        - description: ID of line item you want to patch
+          in: path
+          name: lineItemId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainer'
+          description: >-
+            Container was found & patch-set has been applied. The patched entity
+            is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity version conflict
+      tags:
+        - PackingContainers
+      description: Patch line item of a packing container
+      operationId: patchPackingContainerLineItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingContainerActionsParameter'
+        description: Patch set
+        required: true
+      summary: Patches a packing container with the given ID
+    delete:
+      parameters:
+        - description: ID of corresponding packJob you want to patch
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: ID of container you want to patch
+          in: path
+          name: containerId
+          required: true
+          schema:
+            type: string
+        - description: ID of line item you want to patch
+          in: path
+          name: lineItemId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: LineItem was found & you were allowed to delete it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      tags:
+        - PackingContainers
+      description: ''
+      operationId: deleteLineItemContainer
+      summary: deletes a lineItem of a packing container with the given ID
   /api/packjobs/{packJobId}/containers:
     get:
       parameters:
@@ -19725,6 +19914,62 @@ components:
       enum:
         - RESET
       type: string
+    PackingContainerActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/UpdatePackingContainerLineItemAction'
+        - $ref: '#/components/schemas/ReplacePackingContainerLineItemCodesAction'
+    UpdatePackingContainerLineItemAction:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/UpdatePackingContainerLineItemEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        payload:
+          additionalProperties: false
+          properties:
+            lineItem:
+              $ref: '#/components/schemas/PackingContainerLineItem'
+          required:
+            - lineItem
+      required:
+        - version
+        - payload
+        - name
+    UpdatePackingContainerLineItemEnum:
+      enum:
+        - UpdateLineItem
+      type: string
+    ReplacePackingContainerLineItemCodesEnum:
+      enum:
+        - ReplaceLineItemCodes
+      type: string
+    ReplacePackingContainerLineItemCodesAction:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ReplacePackingContainerLineItemCodesEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        payload:
+          additionalProperties: false
+          properties:
+            codes:
+              items:
+                description: List of codes
+                type: string
+                minItems: 1
+              type: array
+          required:
+            - codes
+      required:
+        - payload
+        - version
+        - name
     PickRunActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/PickRunStartActionParameter'
