@@ -12044,52 +12044,6 @@ paths:
         description: Tag patch action
         required: true
       summary: Update a tag with the given key
-  /api/tags/needspacking:
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              items:
-                $ref: '#/components/schemas/TagReference'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/NeedsPacking'
-          description: >-
-            NeedsPacking information for this tag was found & you were allowed
-            to access it. The result is in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Entity not found
-      tags:
-        - Tags
-      description: DEPRECATED, use /api/tags/packing/needspacking instead
-      operationId: getNeedsPackingDeprecated
-      summary: Get packing information for given Tag
   /api/tags/packing/needspacking:
     post:
       requestBody:
