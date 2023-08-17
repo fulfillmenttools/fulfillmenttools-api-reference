@@ -13829,6 +13829,52 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
+  /api/stocks/{stockId}/locationrecommendations:
+    get:
+      operationId: getStorageLocationRecommendations
+      summary: Get the Storage Location recommendations for a specific Stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: stockId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            List of Storage Locations sorted by the stock sum ascending. The
+            result is in the body.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorageLocationRecommendation'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
   /graphql:
     get:
       responses:
@@ -25053,32 +25099,16 @@ components:
         - facilityRef
         - tenantArticleId
         - value
-    StockScore:
-      type: object
-      properties:
-        name:
-          type: string
-          $ref: '#/components/schemas/ScoreName'
-        type:
-          type: string
-          $ref: '#/components/schemas/ScoreType'
-        value:
-          type: number
-          description: Describes the performance of the score
-      required:
-        - name
-        - type
-        - value
     Stock:
       type: object
       properties:
+        reserved:
+          type: number
+        facilityWideReserved:
+          type: number
+        available:
+          type: number
         id:
-          type: string
-        created:
-          format: date-time
-          type: string
-        lastModified:
-          format: date-time
           type: string
         facilityRef:
           type: string
@@ -25086,45 +25116,49 @@ components:
           type: string
         tenantStockId:
           type: string
-        locationRef:
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
           type: string
         value:
           type: number
-        available:
-          type: number
-        reserved:
-          type: number
-        facilityWideReserved:
-          type: number
+        locationRef:
+          type: string
         traits:
           type: array
           items:
             type: string
-            $ref: '#/components/schemas/StorageLocationTrait'
+            enum:
+              - PICKABLE
+              - ACCESSIBLE
+        scores:
+          type: array
+          items:
+            type: string
         scannableCodes:
           type: array
           items:
             type: string
-        scores:
-          type: array
-          items:
-            $ref: '#/components/schemas/StockScore'
         properties:
           type: object
           additionalProperties:
             type: string
+        serializedProperties:
+          type: string
       required:
-        - id
-        - created
-        - lastModified
-        - facilityRef
-        - tenantArticleId
-        - value
-        - available
         - reserved
         - facilityWideReserved
+        - available
+        - id
+        - facilityRef
+        - tenantArticleId
+        - created
+        - lastModified
+        - value
         - traits
-        - properties
+        - serializedProperties
     InboundReceipt:
       type: object
       properties:
@@ -25970,6 +26004,17 @@ components:
           nullable: true
       required:
         - version
+    StorageLocationRecommendation:
+      type: object
+      properties:
+        storageLocation:
+          type: object
+          $ref: '#/components/schemas/StorageLocation'
+        stockCount:
+          type: number
+      required:
+        - storageLocation
+        - stockCount
     WebHookEvent:
       properties:
         event:
