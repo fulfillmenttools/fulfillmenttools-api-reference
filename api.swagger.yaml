@@ -20321,7 +20321,7 @@ components:
           type: string
         domainEntityProcessStatus:
           description: The assigned status
-          $ref: '#/components/schemas/ProcessStatus'
+          $ref: '#/components/schemas/DomainStatus'
       required:
         - timestamp
         - domain
@@ -20404,13 +20404,17 @@ components:
           type: array
         status:
           description: Overall status of the process.
+          $ref: '#/components/schemas/DomainStatus'
+          default: CREATED
+        operativeStatus:
+          description: Overall status of the process
           $ref: '#/components/schemas/ProcessStatus'
           default: CREATED
         domainStatuses:
           type: object
           description: Overview of the different domain adherent status of the process.
           additionalProperties:
-            $ref: '#/components/schemas/ProcessStatus'
+            $ref: '#/components/schemas/DomainStatus'
         packJobRefs:
           description: References of the Packjobs connected to this process (if present).
           items:
@@ -20441,7 +20445,7 @@ components:
         processRef:
           type: string
         domainEntityProcessStatus:
-          $ref: '#/components/schemas/ProcessStatus'
+          $ref: '#/components/schemas/DomainStatus'
         domain:
           $ref: '#/components/schemas/DomainType'
         domainRef:
@@ -20468,7 +20472,7 @@ components:
         - domain
         - domainRef
         - domainStatus
-    ProcessStatus:
+    DomainStatus:
       enum:
         - PENDING
         - CREATED
@@ -20477,6 +20481,14 @@ components:
         - FINISHED
         - INCOMPLETE
         - CANCELED
+      type: string
+    ProcessStatus:
+      enum:
+        - CREATED
+        - IN_PROGRESS
+        - FINISHED
+        - CANCELED
+        - ERROR
       type: string
     DomainType:
       enum:
