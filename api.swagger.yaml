@@ -1174,6 +1174,94 @@ paths:
         description: Desired Tag Configuration for HandoverJobs
         required: true
       summary: Change the tag configuration for HandoverJobs
+  /api/configurations/tags/order:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderTagConfiguration'
+          description: order tag config is in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      tags:
+        - Configurations
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disappear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
+      operationId: getOrderTagConfiguration
+      summary: Read tag configuration for orders
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderTagConfiguration'
+          description: The order tag configuration was successfully updated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Configurations
+      description: ''
+      operationId: putOrderTagConfigurations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderTagConfiguration'
+        description: Desired Tag Configuration for orders
+        required: true
+      summary: Change the tag configuration for orders
   /api/configurations/domain:
     get:
       responses:
@@ -15528,6 +15616,13 @@ components:
       properties:
         stickerConfiguration:
           $ref: '#/components/schemas/StickerConfiguration'
+    OrderTagConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/TagConfiguration'
+      properties:
+        stickerConfiguration:
+          $ref: '#/components/schemas/StickerConfiguration'
     PackJobCreationPerTag:
       properties:
         tagRef:
@@ -18972,6 +19067,12 @@ components:
           type: array
         status:
           $ref: '#/components/schemas/OrderStatus'
+        stickers:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Sticker'
         tenantOrderId:
           description: >-
             Field can be used as a reference number in foreign systems, for
@@ -20502,6 +20603,7 @@ components:
       type: string
     Section:
       enum:
+        - ORDER
         - PACKJOB
         - PICKJOB
         - HANDOVERJOB
@@ -22027,6 +22129,10 @@ components:
               type: array
             status:
               $ref: '#/components/schemas/OrderStatus'
+            stickers:
+              items:
+                $ref: '#/components/schemas/Sticker'
+              type: array
           required:
             - id
             - status
