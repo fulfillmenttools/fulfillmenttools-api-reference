@@ -408,6 +408,260 @@ paths:
         description: Carrier Configuration
         required: true
       summary: Update a carrier configuration with the given ID
+  /api/carriers/{carrierId}/configuration/countryservicemappings:
+    get:
+      parameters:
+        - description: ID of the carrier you want to get the countryservicemappings for
+          in: path
+          name: carrierId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          description: >-
+            Carrier's countryservicemappings found & you are allowed to access
+            it. The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Carrier's countryservicemappings Configuration not found
+      tags:
+        - Carriers
+      description: ''
+      operationId: getCarrierCountryServiceMappings
+      summary: Get a CarrierCountryServiceMappings for carrier with given ID
+    post:
+      parameters:
+        - description: ID of the carrier you want to create a countryservicemapping for
+          in: path
+          name: carrierId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          description: >-
+            CarrierCountryServiceMapping successfully created. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Carrier not found
+      tags:
+        - Carriers
+      description: ''
+      operationId: createCarrierCountryServiceMapping
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarrierCountryServiceMappingForCreation'
+        description: Carrier Configuration
+        required: true
+      summary: Crwate a carrierCountryServiceMapping for carrier with given ID
+  /api/carriers/{carrierId}/configuration/countryservicemappings/{countryServiceMappingId}:
+    get:
+      parameters:
+        - description: ID of the carrier you want to get a countryservicemapping for
+          in: path
+          name: carrierId
+          required: true
+          schema:
+            type: string
+        - description: ID of the countryservicemapping
+          in: path
+          name: countryServiceMappingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          description: >-
+            Carrier's countryservicemapping found & you are allowed to access
+            it. The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Carrier's countryservicemappings Configuration not found
+      tags:
+        - Carriers
+      description: ''
+      operationId: getCarrierCountryServiceMapping
+      summary: Get a CarrierCountryServiceMappings for carrier with given ID
+    patch:
+      parameters:
+        - description: ID of the carrier you want to update a countryservicemapping of
+          in: path
+          name: carrierId
+          required: true
+          schema:
+            type: string
+        - description: ID of the countryservicemapping
+          in: path
+          name: countryServiceMappingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          description: >-
+            CarrierCountryServiceMapping successfully updated. The result is in
+            the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Carrier or CarrierCountryServiceMapping not found
+      tags:
+        - Carriers
+      description: ''
+      operationId: updateCarrierCountryServiceMapping
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarrierCountryServiceMappingForUpdate'
+        description: Carrier Mapping for update
+        required: true
+      summary: Update a carrierCountryServiceMapping for carrier with given ID
+    delete:
+      parameters:
+        - description: ID of the carrier you want to delete a countryservicemapping from
+          in: path
+          name: carrierId
+          required: true
+          schema:
+            type: string
+        - description: ID of the countryservicemapping
+          in: path
+          name: countryServiceMappingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CarrierCountryServiceMapping successfully deleted.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Carrier or CarrierCountryServiceMapping not found
+      tags:
+        - Carriers
+      description: ''
+      operationId: deleteCarrierCountryServiceMapping
+      summary: Delete a carrierCountryServiceMapping for carrier with given ID
   /api/configurations/cutofftime:
     get:
       responses:
@@ -23026,6 +23280,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
+        id:
+          type: string
         carrierRef:
           type: string
         returnLabel:
@@ -23056,10 +23312,117 @@ components:
           example: max@speedyboxales.com
           format: email
           minLength: 1
+        countryServiceMappings:
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          type: array
       required:
         - returnLabel
         - carrierRef
       type: object
+    CarrierCountryServiceMapping:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          description: unique identifier for a countryServiceMapping
+          example: bc5b581a-8f65-45b0-9f81-6e0d4babbcb2
+          type: string
+        sourceCountry:
+          $ref: '#/components/schemas/CountryCode'
+        destinationCountry:
+          items:
+            $ref: '#/components/schemas/CountryCode'
+          minItems: 1
+          type: array
+        mandatoryValues:
+          items:
+            $ref: '#/components/schemas/ShippingAttributes'
+          type: array
+          minItems: 1
+        products:
+          items:
+            type: string
+            example: EXPRESS
+          minItems: 1
+      required:
+        - id
+        - sourceCountry
+        - destinationCountry
+    CarrierCountryServiceMappingForCreation:
+      type: object
+      additionalProperties: false
+      properties:
+        carrierConfigurationVersion:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+        sourceCountry:
+          $ref: '#/components/schemas/CountryCode'
+        destinationCountry:
+          items:
+            $ref: '#/components/schemas/CountryCode'
+          minItems: 1
+          type: array
+        mandatoryValues:
+          items:
+            $ref: '#/components/schemas/ShippingAttributes'
+          type: array
+          minItems: 1
+        products:
+          items:
+            type: string
+            example: EXPRESS
+          minItems: 1
+      required:
+        - carrierConfigurationVersion
+        - sourceCountry
+        - destinationCountry
+    CarrierCountryServiceMappingForUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        carrierConfigurationVersion:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+        sourceCountry:
+          $ref: '#/components/schemas/CountryCode'
+        destinationCountry:
+          items:
+            $ref: '#/components/schemas/CountryCode'
+          minItems: 1
+          type: array
+        mandatoryValues:
+          items:
+            $ref: '#/components/schemas/ShippingAttributes'
+          type: array
+          minItems: 1
+        products:
+          items:
+            type: string
+            example: EXPRESS
+          minItems: 1
+      required:
+        - carrierConfigurationVersion
+    ShippingAttributes:
+      description: Attributes that might be needed for shipping
+      enum:
+        - PRICE_VALUE
+        - CURRENCY
+      type: string
+    CountryCode:
+      type: string
+      minLength: 2
+      maxLength: 2
+      description: ISO 3166 ALPHA-2 of country
+      example: DE
     PackJobForCreation:
       properties:
         facilityRef:
