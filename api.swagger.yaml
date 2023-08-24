@@ -13198,6 +13198,53 @@ paths:
       tags:
         - Inventory
   /api/stocks/{stockId}:
+    put:
+      operationId: updateStock
+      summary: Update stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: stockId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockForUpdate'
+      responses:
+        '200':
+          description: Stock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
     delete:
       operationId: deleteStock
       summary: Delete stock
@@ -13221,6 +13268,47 @@ paths:
       responses:
         '200':
           description: Stock was deleted.
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+    get:
+      operationId: getStock
+      summary: Get stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: stockId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
         '401':
           description: Your user is not allowed to operate against this API instance
           content:
@@ -25707,6 +25795,17 @@ components:
         - value
         - traits
         - serializedProperties
+    StockForUpdate:
+      type: object
+      properties:
+        value:
+          type: number
+          minimum: 0
+        locationRef:
+          type: string
+          nullable: true
+      required:
+        - value
     StockPaginatedResult:
       type: object
       properties:
