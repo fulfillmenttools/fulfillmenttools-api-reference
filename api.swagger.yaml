@@ -8608,6 +8608,17 @@ paths:
             type: array
             items:
               type: string
+        - description: >-
+            Reference to the operativeStatus you want to get the corresponding
+            processes
+          explode: true
+          in: query
+          name: operativeStatus
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
         - description: Perform full text search base on the tenantOrderId
           in: query
           name: tenantOrderId
@@ -15003,6 +15014,7 @@ components:
         - NAME
         - ADDRESS
         - STATUS
+        - OPERATIVESTATUS
         - SERVICETYPE
         - ORDEREDAMOUNT
         - ORDERDATE
@@ -17528,6 +17540,19 @@ components:
       type: object
       xml:
         name: ListingForCreation
+    PickingStockProperty:
+      additionalProperties:
+        type: string
+      example:
+        color: yellow
+      type: object
+    PickingStockPropertyPreset:
+      type: object
+      properties:
+        expiry:
+          type: string
+        receiptDate:
+          type: string
     StockPropertyDefinition:
       properties:
         inputType:
@@ -20090,6 +20115,10 @@ components:
           type: number
         location:
           $ref: '#/components/schemas/Location'
+        stockProperties:
+          anyOf:
+            - $ref: '#/components/schemas/PickingStockPropertyPreset'
+            - $ref: '#/components/schemas/PickingStockProperty'
       required:
         - tenantPartialStockId
       type: object
