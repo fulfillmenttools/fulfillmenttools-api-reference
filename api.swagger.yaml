@@ -17531,14 +17531,13 @@ components:
     StockPropertyDefinition:
       properties:
         inputType:
-          description: Input Type for this property, used for clients.
-          type: string
-          enum:
-            - TEXT
-            - DATE
+          $ref: '#/components/schemas/StockPropertyInputType'
         required:
           description: Indicates if this property is required.
           type: boolean
+        defaultValue:
+          description: If {{NOW}} is provided, this will be replaced with a timestamp.
+          type: string
       required:
         - inputType
         - required
@@ -22957,6 +22956,13 @@ components:
       enum:
         - ARTICLE
         - LOCATION
+      type: string
+    StockPropertyInputType:
+      example: DATE
+      description: Input Type for this property, used for clients.
+      enum:
+        - DATE
+        - TEXT
       type: string
     PickingScanningConfigurationEnum:
       example: MUST_SCAN_FIRST
