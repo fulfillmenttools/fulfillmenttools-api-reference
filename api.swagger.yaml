@@ -8787,6 +8787,15 @@ paths:
             type: array
             items:
               type: string
+        - description: Stickers attached to a order
+          explode: true
+          in: query
+          name: stickers
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
         - description: Perform full text search over all searchable attributes
           in: query
           name: searchTerm
@@ -17475,6 +17484,42 @@ components:
         brands:
           items:
             $ref: '#/components/schemas/Brand'
+          type: array
+      type: object
+    SupportedFilterEntityTypesEnum:
+      example: STICKER
+      description: Entity types supported as filter entities
+      enum:
+        - STICKER
+      type: string
+    FilterEntity:
+      properties:
+        id:
+          example: fsfdsf87fsd
+          type: string
+        type:
+          $ref: '#/components/schemas/SupportedFilterEntityTypesEnum'
+        value:
+          example: stickerValue
+          type: string
+        valueLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      required:
+        - valueLocalized
+        - id
+        - type
+      type: object
+      xml:
+        name: FilterEntity
+    StrippedFilterEntities:
+      properties:
+        total:
+          description: Total number of found filter entities for this query
+          example: 42
+          type: integer
+        filterEntities:
+          items:
+            $ref: '#/components/schemas/FilterEntity'
           type: array
       type: object
     ListingForCreation:
