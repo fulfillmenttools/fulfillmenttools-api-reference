@@ -17596,8 +17596,6 @@ components:
       properties:
         expiry:
           type: string
-        receiptDate:
-          type: string
     StockPropertyDefinition:
       properties:
         inputType:
@@ -17606,7 +17604,17 @@ components:
           description: Indicates if this property is required.
           type: boolean
         defaultValue:
-          description: If {{NOW}} is provided, this will be replaced with a timestamp.
+          description: >-
+            <img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+            </center> <br> This part of the API is currently under development.
+            That means that this endpoint, model, etc. can contain breaking
+            changes and / or might not be available at all times in your API
+            instance. It could disappear also without warning. Thus it currently
+            does not fall under our SLA regulations. For details on this topic
+            please check our documentation under
+            https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+            If {{NOW}} is provided, this will be replaced with a timestamp.
           type: string
       required:
         - inputType
@@ -25821,6 +25829,9 @@ components:
             type: string
           allOf:
             - $ref: '#/components/schemas/StockPropertyPreset'
+        receiptDate:
+          format: date-time
+          type: string
       required:
         - facilityRef
         - tenantArticleId
@@ -25874,6 +25885,9 @@ components:
             type: string
         serializedProperties:
           type: string
+        receiptDate:
+          format: date-time
+          type: string
       required:
         - reserved
         - facilityWideReserved
@@ -25886,6 +25900,7 @@ components:
         - value
         - traits
         - serializedProperties
+        - receiptDate
     StockForUpdate:
       type: object
       properties:
