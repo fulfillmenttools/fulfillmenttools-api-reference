@@ -12653,241 +12653,6 @@ paths:
         description: Patch set
         required: true
       summary: Patches a restow item with the given ID
-  /api/stocks/summaries:
-    get:
-      operationId: getStockSummaries
-      summary: Get the accumulated Stock for each Article
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: size
-          required: false
-          in: query
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 25
-            type: number
-        - name: startAfterId
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: facilityServiceTypes
-          required: false
-          in: query
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - SHIP_FROM_STORE
-                - PICKUP
-        - name: facilityStatus
-          required: false
-          in: query
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - ONLINE
-                - SUSPENDED
-                - OFFLINE
-        - name: allowStale
-          required: false
-          in: query
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: >-
-            Stock summaries was loaded & you were allowed to access it. The
-            result is in the body.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StockSummaries'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-  /api/inventory/stocks/summaries:
-    get:
-      operationId: getStockSummariesDeprecated
-      summary: This endpoint is deprecated. Please use /api/stocks/summaries instead.
-      deprecated: true
-      description: DEPRECATED
-      parameters:
-        - name: size
-          required: false
-          in: query
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 25
-            type: number
-        - name: startAfterId
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: facilityServiceTypes
-          required: false
-          in: query
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - SHIP_FROM_STORE
-                - PICKUP
-        - name: facilityStatus
-          required: false
-          in: query
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - ONLINE
-                - SUSPENDED
-                - OFFLINE
-        - name: allowStale
-          required: false
-          in: query
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: >-
-            Stock summaries was loaded & you were allowed to access it. The
-            result is in the body.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StockSummaries'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-  /api/articles/{tenantArticleId}/stockdistribution:
-    get:
-      operationId: getStockDistribution
-      summary: >-
-        Stock per Facility for a specific tenantArticleId, also includes the
-        Tenant-Wide Summary
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: tenantArticleId
-          required: true
-          in: path
-          schema:
-            minLength: 1
-            type: string
-        - name: facilityServiceTypes
-          required: false
-          in: query
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - SHIP_FROM_STORE
-                - PICKUP
-        - name: facilityStatus
-          required: false
-          in: query
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - ONLINE
-                - SUSPENDED
-                - OFFLINE
-        - name: facilityName
-          required: false
-          in: query
-          schema:
-            minLength: 1
-            type: string
-        - name: facilityIds
-          required: false
-          in: query
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: >-
-            Stock distribution was loaded & you were allowed to access it. The
-            result is in the body.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StockDistribution'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
   /api/articles:
     get:
       operationId: getArticles
@@ -12999,345 +12764,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         '404':
           description: The requested entity was not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-  /api/facilities/{facilityId}/stocks:
-    get:
-      operationId: getFacilityStocks
-      summary: Get stock related to a facilityRef
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: size
-          required: false
-          in: query
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 25
-            type: number
-        - name: startAfterId
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: facilityId
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Stock was loaded and you were allowed to access it.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FacilityStock'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-    put:
-      operationId: bulkUpdateFacilityStock
-      summary: Update Stock in bulk facilityRef and tenantArticleId
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: facilityId
-          required: true
-          in: path
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FacilityStockBulkOperations'
-      responses:
-        '207':
-          description: Update Result of each targeted tenantArticleId
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FacilityStockBulkResult'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-  /api/stocks:
-    post:
-      operationId: createStock
-      summary: Create stock
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StockForCreation'
-      responses:
-        '201':
-          description: Stock was created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Stock'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-    get:
-      operationId: getStocks
-      summary: Get stocks
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: facilityRef
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: tenantArticleId
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: locationRef
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: size
-          required: false
-          in: query
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 25
-            type: number
-        - name: startAfterId
-          required: false
-          in: query
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Stocks
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StockPaginatedResult'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-  /api/stocks/{stockId}:
-    put:
-      operationId: updateStock
-      summary: Update stock
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: stockId
-          required: true
-          in: path
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StockForUpdate'
-      responses:
-        '200':
-          description: Stock
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Stock'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-    delete:
-      operationId: deleteStock
-      summary: Delete stock
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: stockId
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Stock was deleted.
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-    get:
-      operationId: getStock
-      summary: Get stock
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: stockId
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Stock
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Stock'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
           content:
             application/json:
               schema:
@@ -13805,152 +13231,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Inventory
-  /api/safetystocks:
-    get:
-      operationId: getSafetyStocks
-      summary: Get all Safety Stocks
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: size
-          required: false
-          in: query
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 25
-            type: number
-        - name: startAfterId
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: tenantArticleId
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: facilityRef
-          required: false
-          in: query
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Available Safety Stocks
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SafetyStocksPaginatedResult'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-    put:
-      operationId: bulkUpdateSafetyStock
-      summary: Update Safety Stocks in bulk
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SafetyStockBulkOperations'
-      responses:
-        '207':
-          description: Result of the bulk operations
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SafetyStockBulkOperationResult'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
-  /api/safetystocks/{safetyStockId}:
-    delete:
-      operationId: deleteSafetyStock
-      summary: Delete a single Safety Stock
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      parameters:
-        - name: safetyStockId
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Result of the bulk operations
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: The requested entity was not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Inventory
   /api/inboundreceiptjobs:
     get:
       operationId: getInboundReceiptJobs
@@ -14386,6 +13666,726 @@ paths:
                 $ref: '#/components/schemas/Error'
         '403':
           description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/stocks/summaries:
+    get:
+      operationId: getStockSummaries
+      summary: Get the accumulated Stock for each Article
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: facilityServiceTypes
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - SHIP_FROM_STORE
+                - PICKUP
+        - name: facilityStatus
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ONLINE
+                - SUSPENDED
+                - OFFLINE
+        - name: allowStale
+          required: false
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: >-
+            Stock summaries was loaded & you were allowed to access it. The
+            result is in the body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockSummaries'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/inventory/stocks/summaries:
+    get:
+      operationId: getStockSummariesDeprecated
+      summary: This endpoint is deprecated. Please use /api/stocks/summaries instead.
+      deprecated: true
+      description: DEPRECATED
+      parameters:
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: facilityServiceTypes
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - SHIP_FROM_STORE
+                - PICKUP
+        - name: facilityStatus
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ONLINE
+                - SUSPENDED
+                - OFFLINE
+        - name: allowStale
+          required: false
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: >-
+            Stock summaries was loaded & you were allowed to access it. The
+            result is in the body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockSummaries'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/articles/{tenantArticleId}/stockdistribution:
+    get:
+      operationId: getStockDistribution
+      summary: >-
+        Stock per Facility for a specific tenantArticleId, also includes the
+        Tenant-Wide Summary
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: tenantArticleId
+          required: true
+          in: path
+          schema:
+            minLength: 1
+            type: string
+        - name: facilityServiceTypes
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - SHIP_FROM_STORE
+                - PICKUP
+        - name: facilityStatus
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ONLINE
+                - SUSPENDED
+                - OFFLINE
+        - name: facilityName
+          required: false
+          in: query
+          schema:
+            minLength: 1
+            type: string
+        - name: facilityIds
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >-
+            Stock distribution was loaded & you were allowed to access it. The
+            result is in the body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockDistribution'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/facilities/{facilityId}/stocks:
+    get:
+      operationId: getFacilityStocks
+      summary: Get stock related to a facilityRef
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: facilityId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stock was loaded and you were allowed to access it.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FacilityStock'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+    put:
+      operationId: bulkUpdateFacilityStock
+      summary: Update Stock in bulk facilityRef and tenantArticleId
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: facilityId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityStockBulkOperations'
+      responses:
+        '207':
+          description: Update Result of each targeted tenantArticleId
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FacilityStockBulkResult'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/stocks:
+    post:
+      operationId: createStock
+      summary: Create stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockForCreation'
+      responses:
+        '201':
+          description: Stock was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+    get:
+      operationId: getStocks
+      summary: Get stocks
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: facilityRef
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: tenantArticleId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: locationRef
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stocks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockPaginatedResult'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/stocks/{stockId}:
+    put:
+      operationId: updateStock
+      summary: Update stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: stockId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockForUpdate'
+      responses:
+        '200':
+          description: Stock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+    delete:
+      operationId: deleteStock
+      summary: Delete stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: stockId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stock was deleted.
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+    get:
+      operationId: getStock
+      summary: Get stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: stockId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/safetystocks:
+    get:
+      operationId: getSafetyStocks
+      summary: Get all Safety Stocks
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: tenantArticleId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: facilityRef
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Available Safety Stocks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SafetyStocksPaginatedResult'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+    put:
+      operationId: bulkUpdateSafetyStock
+      summary: Update Safety Stocks in bulk
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafetyStockBulkOperations'
+      responses:
+        '207':
+          description: Result of the bulk operations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SafetyStockBulkOperationResult'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/safetystocks/{safetyStockId}:
+    delete:
+      operationId: deleteSafetyStock
+      summary: Delete a single Safety Stock
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters:
+        - name: safetyStockId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Result of the bulk operations
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The requested entity was not found
           content:
             application/json:
               schema:
@@ -26092,138 +26092,6 @@ components:
       type: object
       xml:
         name: RestowItemPatchActions
-    StockSummaryArticle:
-      type: object
-      properties:
-        tenantArticleId:
-          type: string
-        title:
-          type: string
-        imageUrl:
-          type: string
-      required:
-        - tenantArticleId
-        - title
-    Quantity:
-      type: object
-      properties:
-        unit:
-          type: string
-        value:
-          type: number
-          minimum: 0
-      required:
-        - value
-    StockSummaryExpectedStock:
-      type: object
-      properties:
-        expectedDate:
-          oneOf:
-            - $ref: '#/components/schemas/RequestedDateASAP'
-            - $ref: '#/components/schemas/RequestedDateTimePoint'
-        quantity:
-          $ref: '#/components/schemas/Quantity'
-      required:
-        - expectedDate
-        - quantity
-    ByTrait:
-      type: object
-      properties:
-        PICKABLE:
-          type: number
-        ACCESSIBLE:
-          type: number
-      required:
-        - PICKABLE
-        - ACCESSIBLE
-    StockSummaryDetails:
-      type: object
-      properties:
-        reserved:
-          type: number
-          minimum: 0
-        totalAmount:
-          type: number
-          minimum: 0
-        available:
-          type: number
-          minimum: 0
-        safetyStock:
-          type: number
-          minimum: 0
-        expectedStocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/StockSummaryExpectedStock'
-        byTrait:
-          $ref: '#/components/schemas/ByTrait'
-      required:
-        - reserved
-        - totalAmount
-        - available
-        - safetyStock
-        - expectedStocks
-        - byTrait
-    StockSummary:
-      type: object
-      properties:
-        article:
-          $ref: '#/components/schemas/StockSummaryArticle'
-        details:
-          $ref: '#/components/schemas/StockSummaryDetails'
-      required:
-        - article
-        - details
-    StockSummaries:
-      type: object
-      properties:
-        total:
-          type: number
-          minimum: 0
-        stockSummaries:
-          type: array
-          items:
-            $ref: '#/components/schemas/StockSummary'
-      required:
-        - total
-        - stockSummaries
-    FacilityStock:
-      type: object
-      properties:
-        available:
-          type: number
-        reserved:
-          type: number
-        value:
-          type: number
-        tenantArticleId:
-          type: string
-        facilityRef:
-          type: string
-        id:
-          type: string
-      required:
-        - available
-        - reserved
-        - value
-        - tenantArticleId
-        - facilityRef
-        - id
-    StockDistribution:
-      type: object
-      properties:
-        tenantArticleId:
-          type: string
-        summary:
-          $ref: '#/components/schemas/StockSummaryDetails'
-        facilityStocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/FacilityStock'
-      required:
-        - tenantArticleId
-        - summary
-        - facilityStocks
     InventoryArticle:
       type: object
       properties:
@@ -26315,180 +26183,6 @@ components:
         - upperBounds
         - period
         - point
-    FacilityStockBulkOperation:
-      type: object
-      properties:
-        tenantArticleId:
-          type: string
-          minLength: 1
-        value:
-          type: number
-          minimum: 0
-      required:
-        - tenantArticleId
-        - value
-    FacilityStockBulkOperations:
-      type: object
-      properties:
-        operations:
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/FacilityStockBulkOperation'
-      required:
-        - operations
-    BulkOperationError:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - VALIDATION
-            - UNKNOWN
-        message:
-          type: string
-      required:
-        - type
-        - message
-    FacilityStockBulkResult:
-      type: object
-      properties:
-        tenantArticleId:
-          type: string
-        facilityRef:
-          type: string
-        status:
-          type: string
-          enum:
-            - UPDATED
-            - CREATED
-            - FAILED
-        error:
-          $ref: '#/components/schemas/BulkOperationError'
-      required:
-        - tenantArticleId
-        - facilityRef
-        - status
-    StockPropertyPreset:
-      type: object
-      properties:
-        expiry:
-          type: string
-        receiptDate:
-          type: string
-    StockForCreation:
-      type: object
-      properties:
-        facilityRef:
-          type: string
-        tenantArticleId:
-          type: string
-        value:
-          type: number
-          minimum: 0
-        locationRef:
-          type: string
-        properties:
-          additionalProperties:
-            type: string
-          allOf:
-            - $ref: '#/components/schemas/StockPropertyPreset'
-        receiptDate:
-          format: date-time
-          type: string
-      required:
-        - facilityRef
-        - tenantArticleId
-        - value
-    Stock:
-      type: object
-      properties:
-        reserved:
-          type: number
-        facilityWideReserved:
-          type: number
-        available:
-          type: number
-        id:
-          type: string
-        facilityRef:
-          type: string
-        tenantArticleId:
-          type: string
-        tenantStockId:
-          type: string
-        created:
-          format: date-time
-          type: string
-        lastModified:
-          format: date-time
-          type: string
-        value:
-          type: number
-        locationRef:
-          type: string
-        traits:
-          type: array
-          items:
-            type: string
-            enum:
-              - PICKABLE
-              - ACCESSIBLE
-              - KEEP_ON_ZERO
-        scores:
-          type: array
-          items:
-            type: string
-        scannableCodes:
-          type: array
-          items:
-            type: string
-        properties:
-          type: object
-          additionalProperties:
-            type: string
-        serializedProperties:
-          type: string
-        receiptDate:
-          format: date-time
-          type: string
-      required:
-        - reserved
-        - facilityWideReserved
-        - available
-        - id
-        - facilityRef
-        - tenantArticleId
-        - created
-        - lastModified
-        - value
-        - traits
-        - serializedProperties
-        - receiptDate
-    StockForUpdate:
-      type: object
-      properties:
-        value:
-          type: number
-          minimum: 0
-        locationRef:
-          type: string
-          nullable: true
-      required:
-        - value
-    StockPaginatedResult:
-      type: object
-      properties:
-        total:
-          type: number
-          minimum: 0
-        stocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Stock'
-      required:
-        - total
-        - stocks
     InboundReceipt:
       type: object
       properties:
@@ -26645,6 +26339,16 @@ components:
           format: date-time
       required:
         - type
+        - value
+    Quantity:
+      type: object
+      properties:
+        unit:
+          type: string
+        value:
+          type: number
+          minimum: 0
+      required:
         - value
     InboundLineItem:
       type: object
@@ -26916,6 +26620,13 @@ components:
           type: string
       required:
         - content
+    StockPropertyPreset:
+      type: object
+      properties:
+        expiry:
+          type: string
+        receiptDate:
+          type: string
     InboundReceiptLineItem:
       type: object
       properties:
@@ -27096,90 +26807,6 @@ components:
         - requestedDate
         - requestedItems
         - version
-    SafetyStock:
-      type: object
-      properties:
-        tenantArticleId:
-          type: string
-        value:
-          type: number
-        facilityRef:
-          type: string
-        created:
-          format: date-time
-          type: string
-        id:
-          type: string
-        lastModified:
-          format: date-time
-          type: string
-        version:
-          type: number
-      required:
-        - tenantArticleId
-        - value
-        - created
-        - id
-        - lastModified
-        - version
-    SafetyStocksPaginatedResult:
-      type: object
-      properties:
-        total:
-          type: number
-          minimum: 0
-        safetyStocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/SafetyStock'
-      required:
-        - total
-        - safetyStocks
-    SafetyStockBulkOperation:
-      type: object
-      properties:
-        tenantArticleId:
-          type: string
-        value:
-          type: number
-        facilityRef:
-          type: string
-      required:
-        - tenantArticleId
-        - value
-    SafetyStockBulkOperations:
-      type: object
-      properties:
-        operations:
-          minItems: 1
-          maxItems: 500
-          type: array
-          items:
-            $ref: '#/components/schemas/SafetyStockBulkOperation'
-      required:
-        - operations
-    SafetyStockBulkOperationResult:
-      type: object
-      properties:
-        tenantArticleId:
-          type: string
-        facilityRef:
-          type: string
-        value:
-          type: number
-        status:
-          type: string
-          enum:
-            - UPDATED
-            - CREATED
-            - FAILED
-        error:
-          $ref: '#/components/schemas/BulkOperationError'
-      required:
-        - tenantArticleId
-        - facilityRef
-        - value
-        - status
     InboundReceiptJobOrigin:
       type: object
       properties:
@@ -27345,6 +26972,379 @@ components:
       required:
         - storageLocation
         - stockCount
+    StockSummaryArticle:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        title:
+          type: string
+        imageUrl:
+          type: string
+      required:
+        - tenantArticleId
+        - title
+    StockSummaryExpectedStock:
+      type: object
+      properties:
+        expectedDate:
+          oneOf:
+            - $ref: '#/components/schemas/RequestedDateASAP'
+            - $ref: '#/components/schemas/RequestedDateTimePoint'
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+      required:
+        - expectedDate
+        - quantity
+    ByTrait:
+      type: object
+      properties:
+        PICKABLE:
+          type: number
+        ACCESSIBLE:
+          type: number
+      required:
+        - PICKABLE
+        - ACCESSIBLE
+    StockSummaryDetails:
+      type: object
+      properties:
+        reserved:
+          type: number
+          minimum: 0
+        totalAmount:
+          type: number
+          minimum: 0
+        available:
+          type: number
+          minimum: 0
+        safetyStock:
+          type: number
+          minimum: 0
+        expectedStocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockSummaryExpectedStock'
+        byTrait:
+          $ref: '#/components/schemas/ByTrait'
+      required:
+        - reserved
+        - totalAmount
+        - available
+        - safetyStock
+        - expectedStocks
+        - byTrait
+    StockSummary:
+      type: object
+      properties:
+        article:
+          $ref: '#/components/schemas/StockSummaryArticle'
+        details:
+          $ref: '#/components/schemas/StockSummaryDetails'
+      required:
+        - article
+        - details
+    StockSummaries:
+      type: object
+      properties:
+        total:
+          type: number
+          minimum: 0
+        stockSummaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockSummary'
+      required:
+        - total
+        - stockSummaries
+    FacilityStock:
+      type: object
+      properties:
+        available:
+          type: number
+        reserved:
+          type: number
+        value:
+          type: number
+        tenantArticleId:
+          type: string
+        facilityRef:
+          type: string
+        id:
+          type: string
+      required:
+        - available
+        - reserved
+        - value
+        - tenantArticleId
+        - facilityRef
+        - id
+    StockDistribution:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        summary:
+          $ref: '#/components/schemas/StockSummaryDetails'
+        facilityStocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityStock'
+      required:
+        - tenantArticleId
+        - summary
+        - facilityStocks
+    FacilityStockBulkOperation:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+          minLength: 1
+        value:
+          type: number
+          minimum: 0
+      required:
+        - tenantArticleId
+        - value
+    FacilityStockBulkOperations:
+      type: object
+      properties:
+        operations:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityStockBulkOperation'
+      required:
+        - operations
+    BulkOperationError:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - VALIDATION
+            - UNKNOWN
+        message:
+          type: string
+      required:
+        - type
+        - message
+    FacilityStockBulkResult:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        facilityRef:
+          type: string
+        status:
+          type: string
+          enum:
+            - UPDATED
+            - CREATED
+            - FAILED
+        error:
+          $ref: '#/components/schemas/BulkOperationError'
+      required:
+        - tenantArticleId
+        - facilityRef
+        - status
+    StockForCreation:
+      type: object
+      properties:
+        facilityRef:
+          type: string
+        tenantArticleId:
+          type: string
+        value:
+          type: number
+          minimum: 0
+        locationRef:
+          type: string
+        properties:
+          additionalProperties:
+            type: string
+          allOf:
+            - $ref: '#/components/schemas/StockPropertyPreset'
+        receiptDate:
+          format: date-time
+          type: string
+      required:
+        - facilityRef
+        - tenantArticleId
+        - value
+    Stock:
+      type: object
+      properties:
+        reserved:
+          type: number
+        facilityWideReserved:
+          type: number
+        available:
+          type: number
+        id:
+          type: string
+        facilityRef:
+          type: string
+        tenantArticleId:
+          type: string
+        tenantStockId:
+          type: string
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        value:
+          type: number
+        locationRef:
+          type: string
+        traits:
+          type: array
+          items:
+            type: string
+            enum:
+              - PICKABLE
+              - ACCESSIBLE
+              - KEEP_ON_ZERO
+        scores:
+          type: array
+          items:
+            type: string
+        scannableCodes:
+          type: array
+          items:
+            type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+        serializedProperties:
+          type: string
+        receiptDate:
+          format: date-time
+          type: string
+      required:
+        - reserved
+        - facilityWideReserved
+        - available
+        - id
+        - facilityRef
+        - tenantArticleId
+        - created
+        - lastModified
+        - value
+        - traits
+        - serializedProperties
+        - receiptDate
+    StockForUpdate:
+      type: object
+      properties:
+        value:
+          type: number
+          minimum: 0
+        locationRef:
+          type: string
+          nullable: true
+      required:
+        - value
+    StockPaginatedResult:
+      type: object
+      properties:
+        total:
+          type: number
+          minimum: 0
+        stocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stock'
+      required:
+        - total
+        - stocks
+    SafetyStock:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        value:
+          type: number
+        facilityRef:
+          type: string
+        created:
+          format: date-time
+          type: string
+        id:
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        version:
+          type: number
+      required:
+        - tenantArticleId
+        - value
+        - created
+        - id
+        - lastModified
+        - version
+    SafetyStocksPaginatedResult:
+      type: object
+      properties:
+        total:
+          type: number
+          minimum: 0
+        safetyStocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SafetyStock'
+      required:
+        - total
+        - safetyStocks
+    SafetyStockBulkOperation:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        value:
+          type: number
+        facilityRef:
+          type: string
+      required:
+        - tenantArticleId
+        - value
+    SafetyStockBulkOperations:
+      type: object
+      properties:
+        operations:
+          minItems: 1
+          maxItems: 500
+          type: array
+          items:
+            $ref: '#/components/schemas/SafetyStockBulkOperation'
+      required:
+        - operations
+    SafetyStockBulkOperationResult:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        facilityRef:
+          type: string
+        value:
+          type: number
+        status:
+          type: string
+          enum:
+            - UPDATED
+            - CREATED
+            - FAILED
+        error:
+          $ref: '#/components/schemas/BulkOperationError'
+      required:
+        - tenantArticleId
+        - facilityRef
+        - value
+        - status
     WebHookEvent:
       properties:
         event:
