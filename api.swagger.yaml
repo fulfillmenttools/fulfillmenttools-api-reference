@@ -4720,6 +4720,8 @@ paths:
       summary: Update a listing with the given ID of a facility with the given ID
   /api/facilities/{facilityId}/listings/{tenantArticleId}/partialstocks:
     get:
+      deprecated: true
+      description: This endpoint is deprecated. Use /api/stocks endpoints instead.
       parameters:
         - description: ID of facility you want to get the partial stocks
           in: path
@@ -4769,10 +4771,13 @@ paths:
           description: Facility or Listing not found
       tags:
         - Listings
-      description: ''
       operationId: getFacilityListingPartialStock
       summary: Get a partial stocks for a listing
     put:
+      deprecated: true
+      description: |
+        This endpoint is deprecated. Use /api/stocks endpoints instead. 
+        Replaces the current partial stock object related to its listing
       parameters:
         - description: ID of facility you want to get listing
           in: path
@@ -4814,7 +4819,6 @@ paths:
           description: Facility listing not found
       tags:
         - Listings
-      description: Replaces the current partial stock object related to its listing
       operationId: putFacilityListingPartialStock
       requestBody:
         content:
@@ -4825,6 +4829,21 @@ paths:
         required: true
       summary: Replace partial stocks of a listings of a facility with the given ID
     patch:
+      deprecated: true
+      description: >
+        This endpoint is deprecated. Use /api/stocks endpoints instead.
+
+        Adds new partial stocks, updates existing partial stocks and keeps
+        stocks that are previously present in the database.
+
+
+        1. If a stock exists in the patch action but not in the database it is
+        added.
+
+        2. If a stock exists both in the patch action and in the database it is
+        updated and the contents are merged.
+
+        3. If a stock exists only in the database, it is left untouched.
       parameters:
         - description: ID of facility you want to patch the partial stocks
           in: path
@@ -4866,18 +4885,6 @@ paths:
           description: Facility listing not found
       tags:
         - Listings
-      description: >
-        Adds new partial stocks, updates existing partial stocks and keeps
-        stocks that are previously present in the database.
-
-
-        1. If a stock exists in the patch action but not in the database it is
-        added.
-
-        2. If a stock exists both in the patch action and in the database it is
-        updated and the contents are merged.
-
-        3. If a stock exists only in the database, it is left untouched.
       operationId: patchFacilityListingPartialStock
       requestBody:
         content:
@@ -4888,6 +4895,8 @@ paths:
         required: true
       summary: Patches partial stocks of a listings of a facility with the given ID
     delete:
+      deprecated: true
+      description: This endpoint is deprecated. Use /api/stocks endpoints instead.
       parameters:
         - description: ID of facility from whom you want to delete the partial stock
           in: path
@@ -4931,7 +4940,6 @@ paths:
           description: Facility listing not found
       tags:
         - Listings
-      description: ''
       operationId: deleteFacilityListingPartialStock
       summary: Delete partial stocks of a listings of a facility with the given ID
   /api/facilities/{facilityId}/storagelocations:
@@ -14019,10 +14027,10 @@ paths:
       operationId: createStock
       summary: Create stock
       deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br> <i>This part of the API is currently under development.
           That means that this endpoint, model, etc. can contain breaking changes
           and / or might not be available at all times in your API instance. It
           could disapear also without warning. Thus it currently does not fall
@@ -14061,10 +14069,10 @@ paths:
       operationId: getStocks
       summary: Get stocks
       deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br> <i>This part of the API is currently under development.
           That means that this endpoint, model, etc. can contain breaking changes
           and / or might not be available at all times in your API instance. It
           could disapear also without warning. Thus it currently does not fall
@@ -14126,10 +14134,10 @@ paths:
       operationId: updateStock
       summary: Update stock
       deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br> <i>This part of the API is currently under development.
           That means that this endpoint, model, etc. can contain breaking changes
           and / or might not be available at all times in your API instance. It
           could disapear also without warning. Thus it currently does not fall
@@ -14173,10 +14181,10 @@ paths:
       operationId: deleteStock
       summary: Delete stock
       deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br> <i>This part of the API is currently under development.
           That means that this endpoint, model, etc. can contain breaking changes
           and / or might not be available at all times in your API instance. It
           could disapear also without warning. Thus it currently does not fall
@@ -14210,10 +14218,10 @@ paths:
       operationId: getStock
       summary: Get stock
       deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br> <i>This part of the API is currently under development.
           That means that this endpoint, model, etc. can contain breaking changes
           and / or might not be available at all times in your API instance. It
           could disapear also without warning. Thus it currently does not fall
@@ -17987,6 +17995,8 @@ components:
         - properties:
             stockinformation:
               $ref: '#/components/schemas/StockInformation'
+              deprecated: true
+              description: This field is deprecated. Use /api/stocks endpoints instead.
             facilityId:
               description: This is a reference to a facility
               example: '4711'
@@ -18001,6 +18011,8 @@ components:
               type: string
             partialStocks:
               type: array
+              deprecated: true
+              description: This field is deprecated. Use /api/stocks endpoints instead.
               items:
                 $ref: '#/components/schemas/PartialStock'
             scannableCodes:
@@ -18110,6 +18122,8 @@ components:
           type: number
         stockinformation:
           $ref: '#/components/schemas/StockInformationForCreation'
+          deprecated: true
+          description: This field is deprecated. Use /api/stocks endpoints instead.
         tenantArticleId:
           description: This is a reference to an article Id
           example: '4711'
@@ -18120,6 +18134,8 @@ components:
           type: string
         partialStocks:
           type: array
+          deprecated: true
+          description: This field is deprecated. Use /api/stocks endpoints instead.
           items:
             $ref: '#/components/schemas/PartialStockForCreation'
         weight:
@@ -19408,6 +19424,8 @@ components:
               type: string
             stockinformation:
               $ref: '#/components/schemas/StockInformationForCreation'
+              deprecated: true
+              description: This field is deprecated. Use /api/stocks endpoints instead.
             subtitle:
               description: a subtitle describing the article
               example: 44 2/3
