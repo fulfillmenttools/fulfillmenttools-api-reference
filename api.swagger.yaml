@@ -7670,6 +7670,7 @@ paths:
               - return.pdf
               - all.pdf
               - send.pdf
+              - customs.pdf
             type: string
       responses:
         '200':
@@ -16300,6 +16301,13 @@ components:
               type: string
               example: 22222222220701
               minLength: 1
+            internationalBillingNumber:
+              description: >-
+                Abrechnungsnummer DHL international shipping, displayed in the
+                DHL Geschäftskundenportal under 'Vertragspositionen'
+              type: string
+              example: 22222222220701
+              minLength: 1
             dhlBusinessPassword:
               description: Password you use to login to the DHL Geschäftskundenportal
               type: string
@@ -20292,6 +20300,12 @@ components:
               $ref: '#/components/schemas/ConsumerAddress'
             processRef:
               type: string
+            items:
+              items:
+                $ref: '#/components/schemas/ParcelItem'
+              type: array
+            postalCharges:
+              $ref: '#/components/schemas/ParcelPostalCharge'
             returnAddress:
               $ref: '#/components/schemas/FacilityAddress'
             result:
@@ -20318,6 +20332,14 @@ components:
                   type: string
                 returnLabelUrl:
                   description: The original return label URL
+                  example: someCepProvider.com/pathToReturnLabel.pdf
+                  type: string
+                customsDocumentId:
+                  description: The customs document id
+                  example: 3a186c51d4281acbecf5ed38805b1db92a9d668b
+                  type: string
+                customsDocumentUrl:
+                  description: The original customs document URL
                   example: someCepProvider.com/pathToReturnLabel.pdf
                   type: string
                 sendLabelUrl:
@@ -20383,6 +20405,10 @@ components:
           items:
             type: string
           type: array
+        items:
+          items:
+            $ref: '#/components/schemas/ParcelItem'
+          type: array
         recipient:
           $ref: '#/components/schemas/ConsumerAddress'
         sender:
@@ -20398,6 +20424,55 @@ components:
             given under paymentInformation.currency
           type: number
           example: 12.5
+      type: object
+    ParcelPostalCharge:
+      properties:
+        value:
+          type: number
+          description: Monetary Value in the given currency
+          example: 15.5
+        currency:
+          type: string
+          description: Currency of the given value
+          example: EUR
+      required:
+        - currency
+        - value
+    ParcelItem:
+      properties:
+        tenantArticleId:
+          description: Customer article id of the given item
+          example: 221e13f7-b823-4914-99f5-8c39d63eee49
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+          description: amount of the given items
+          example: 5
+        description:
+          description: Description of the given item/items
+          example: Item Description
+          type: string
+        weightInGram:
+          type: integer
+          description: Weight of a single item in gram
+          example: 10000
+        parcelItemValue:
+          $ref: '#/components/schemas/ParcelItemValue'
+      type: object
+    ParcelItemValue:
+      properties:
+        value:
+          type: number
+          description: Monetary Value of a single item in the given currency
+          example: 15.5
+        currency:
+          type: string
+          description: Currency of the given value
+          example: EUR
+      required:
+        - value
+        - currency
       type: object
     ParcelStatus:
       enum:
@@ -24069,25 +24144,28 @@ components:
           type: string
         sourceCountry:
           $ref: '#/components/schemas/CountryCode'
-        destinationCountry:
+        destinationCountries:
           items:
             $ref: '#/components/schemas/CountryCode'
           minItems: 1
           type: array
-        mandatoryAttributes:
+        mandatoryShippingAttributes:
           items:
-            $ref: '#/components/schemas/ShippingAttributes'
+            $ref: '#/components/schemas/MandatoryShippingAttribute'
           type: array
-          minItems: 1
-        products:
+          minItems: 0
+        mandatoryShippingItemAttributes:
           items:
-            type: string
-            example: EXPRESS
-          minItems: 1
+            $ref: '#/components/schemas/MandatoryShippingItemAttribute'
+          type: array
+          minItems: 0
+        product:
+          type: string
+          example: EXPRESS
       required:
         - id
         - sourceCountry
-        - destinationCountry
+        - destinationCountries
     CarrierCountryServiceMappingForCreation:
       type: object
       additionalProperties: false
@@ -24101,25 +24179,28 @@ components:
           type: integer
         sourceCountry:
           $ref: '#/components/schemas/CountryCode'
-        destinationCountry:
+        destinationCountries:
           items:
             $ref: '#/components/schemas/CountryCode'
           minItems: 1
           type: array
-        mandatoryAttributes:
+        mandatoryShippingAttributes:
           items:
-            $ref: '#/components/schemas/ShippingAttributes'
+            $ref: '#/components/schemas/MandatoryShippingAttribute'
           type: array
-          minItems: 1
-        products:
+          minItems: 0
+        mandatoryShippingItemAttributes:
           items:
-            type: string
-            example: EXPRESS
-          minItems: 1
+            $ref: '#/components/schemas/MandatoryShippingItemAttribute'
+          type: array
+          minItems: 0
+        product:
+          type: string
+          example: EXPRESS
       required:
         - carrierConfigurationVersion
         - sourceCountry
-        - destinationCountry
+        - destinationCountries
     CarrierCountryServiceMappingForUpdate:
       type: object
       additionalProperties: false
@@ -24133,29 +24214,63 @@ components:
           type: integer
         sourceCountry:
           $ref: '#/components/schemas/CountryCode'
-        destinationCountry:
+        destinationCountries:
           items:
             $ref: '#/components/schemas/CountryCode'
           minItems: 1
           type: array
-        mandatoryAttributes:
+        mandatoryShippingAttributes:
           items:
-            $ref: '#/components/schemas/ShippingAttributes'
+            $ref: '#/components/schemas/MandatoryShippingAttribute'
           type: array
-          minItems: 1
-        products:
+          minItems: 0
+        mandatoryShippingItemAttributes:
           items:
-            type: string
-            example: EXPRESS
-          minItems: 1
+            $ref: '#/components/schemas/MandatoryShippingItemAttribute'
+          type: array
+          minItems: 0
+        product:
+          type: string
+          example: EXPRESS
       required:
         - carrierConfigurationVersion
-    ShippingAttributes:
-      description: Attributes that might be needed for shipping
-      enum:
-        - PRICEVALUE
-        - CURRENCY
-      type: string
+    MandatoryShippingItemAttribute:
+      properties:
+        referencedField:
+          type: string
+          enum:
+            - description
+            - weightInGram
+            - quantity
+            - parcelItemValue.value
+            - parcelItemValue.currency
+        dataType:
+          type: string
+          enum:
+            - Number
+            - String
+        description:
+          type: string
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      type: object
+    MandatoryShippingAttribute:
+      properties:
+        referencedField:
+          type: string
+          enum:
+            - dimensions.weight
+            - productValue
+        dataType:
+          type: string
+          enum:
+            - Number
+            - String
+        description:
+          type: string
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      type: object
     CountryCode:
       type: string
       minLength: 2
