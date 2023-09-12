@@ -24822,10 +24822,15 @@ components:
         type:
           $ref: '#/components/schemas/StorageLocationType'
         traits:
-          description: The traits of this storage location
+          description: >-
+            The traits of this storage location, includes both local config and
+            and defaults. Do not use to write to traits, use traitConfig
+            instead.
           type: array
           items:
             $ref: '#/components/schemas/StorageLocationTrait'
+        traitConfig:
+          $ref: '#/components/schemas/StorageLocationTraitConfig'
         scannableCodes:
           description: Barcodes representing this storage location
           type: array
@@ -24895,6 +24900,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StorageLocationTrait'
+        traitConfig:
+          $ref: '#/components/schemas/StorageLocationTraitConfig'
         schemaVersion:
           type: number
       required:
@@ -24904,6 +24911,19 @@ components:
       type: object
       xml:
         name: StorageLocation
+    StorageLocationTraitConfig:
+      description: The configuration of the traits of this storage location
+      type: array
+      items:
+        type: object
+        properties:
+          trait:
+            $ref: '#/components/schemas/StorageLocationTrait'
+          enabled:
+            type: boolean
+        required:
+          - trait
+          - enabled
     StorageLocationType:
       description: |-
         Describes the kind of a storage location:
@@ -24978,10 +24998,15 @@ components:
             type:
               $ref: '#/components/schemas/StorageLocationType'
             traits:
-              description: The traits of this storage location
+              deprecated: true
+              description: >-
+                The traits of this storage location. Do not use this to write
+                traits, use traitConfig instead.
               type: array
               items:
                 $ref: '#/components/schemas/StorageLocationTrait'
+            traitConfig:
+              $ref: '#/components/schemas/StorageLocationTraitConfig'
             scannableCodes:
               description: Barcodes representing this storage location
               type: array
