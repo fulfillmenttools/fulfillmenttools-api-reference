@@ -990,93 +990,6 @@ paths:
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
       operationId: updateTenantConnectorConfigurations
       summary: Updates a Tenant Connector Configuration
-  /api/configurations/picking:
-    get:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickingConfigurations'
-          description: Central Configuration of all picking related things
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Entity not found
-      tags:
-        - Configurations
-        - Picking
-      operationId: getPickingConfigurations
-      summary: Get the picking configurations
-    patch:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickingConfigurations'
-          description: The picking central configuration was successfully updated.
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickingConfigurations'
-          description: The picking central configuration was successfully created.
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      tags:
-        - Configurations
-        - Picking
-      description: ''
-      operationId: putPickingConfigurations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PickingConfigurations'
-        description: create/update picking central configuration
-        required: true
-      summary: Change the tenant wide picking central configuration
   /api/configurations/packing:
     get:
       responses:
@@ -1252,94 +1165,6 @@ paths:
         description: Desired PackJobTagConfiguration
         required: true
       summary: Change the tag configuration for packjobs
-  /api/configurations/tags/pickjob:
-    get:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickJobTagConfiguration'
-          description: pickjob tag config is in response body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Entity not found
-      tags:
-        - Configurations
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-        /></center> <br> <i>This part of the API is currently under development.
-        That means that this endpoint, model, etc. can contain breaking changes
-        and / or might not be available at all times in your API instance. It
-        could disappear also without warning. Thus it currently does not fall
-        under our SLA regulations. For details on this topic please check our <a
-        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
-      operationId: getPickJobTagConfiguration
-      summary: Read tag configuration for pickjobs
-    put:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PickJobTagConfiguration'
-          description: The packing configuration was successfully updated.
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      tags:
-        - Configurations
-      description: ''
-      operationId: putPickJobTagConfigurations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PickJobTagConfiguration'
-        description: Desired Tag Configuration for Pickjobs
-        required: true
-      summary: Change the tag configuration for Pickjobs
   /api/configurations/tags/handoverjob:
     get:
       responses:
@@ -4776,7 +4601,7 @@ paths:
     put:
       deprecated: true
       description: |
-        This endpoint is deprecated. Use /api/stocks endpoints instead. 
+        This endpoint is deprecated. Use /api/stocks endpoints instead.
         Replaces the current partial stock object related to its listing
       parameters:
         - description: ID of facility you want to get listing
@@ -12673,6 +12498,181 @@ paths:
         description: Patch set
         required: true
       summary: Patches a restow item with the given ID
+  /api/configurations/picking:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickingConfigurations'
+          description: Central Configuration of all picking related things
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      tags:
+        - Configurations
+        - Picking
+      operationId: getPickingConfigurations
+      summary: Get the picking configurations
+    patch:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickingConfigurations'
+          description: The picking central configuration was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickingConfigurations'
+          description: The picking central configuration was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Configurations
+        - Picking
+      description: ''
+      operationId: putPickingConfigurations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PickingConfigurations'
+        description: create/update picking central configuration
+        required: true
+      summary: Change the tenant wide picking central configuration
+  /api/configurations/tags/pickjob:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickJobTagConfiguration'
+          description: pickjob tag config is in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      tags:
+        - Configurations
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disappear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
+      operationId: getPickJobTagConfiguration
+      summary: Read tag configuration for pickjobs
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickJobTagConfiguration'
+          description: The packing configuration was successfully updated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Configurations
+      description: ''
+      operationId: putPickJobTagConfigurations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PickJobTagConfiguration'
+        description: Desired Tag Configuration for Pickjobs
+        required: true
+      summary: Change the tag configuration for Pickjobs
   /api/articles:
     get:
       operationId: getArticles
@@ -16430,13 +16430,178 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OfferedStickersByTag'
-    TagScanningConfiguration:
-      additionalProperties: false
+    PickLineItemForCreation:
       properties:
-        offeredScanningRuleByTag:
-          type: array
+        article:
+          $ref: '#/components/schemas/PickLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the orderline. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        quantity:
+          description: quantity of the specific article that has been ordered
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        secondaryMeasurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        secondaryQuantity:
+          description: quantity of the specific article that has been ordered
+          example: 21
+          format: int64
+          minimum: 0
+          type: integer
+        measurementValidation:
+          $ref: '#/components/schemas/MeasurementValidation'
+        scannableCodes:
           items:
-            $ref: '#/components/schemas/OfferedScanningRuleByTag'
+            description: Codes, that identify the article
+            type: string
+          type: array
+        partialStockLocations:
+          description: >-
+            Indicates where the items to pick could be found and from where the
+            picking should be started.
+          items:
+            $ref: >-
+              #/components/schemas/PickJobLineItemPartialStockLocationForCreation
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+      required:
+        - quantity
+        - article
+      type: object
+    PickLineItem:
+      allOf:
+        - $ref: '#/components/schemas/PickLineItemForCreation'
+        - properties:
+            id:
+              description: >-
+                The id of this lineItem. It is generated during creation
+                automatically and suits as the primary identifier of the
+                described entity.
+              example: climk4dcQFiPdA5ULuhS
+              type: string
+            picked:
+              description: The amount of articles that were picked for this pickline.
+              example: 20
+              format: int64
+              minimum: 0
+              type: integer
+            secondaryPicked:
+              description: >-
+                The secondary amount of articles that were picked for this
+                pickline.
+              example: 20
+              format: int64
+              minimum: 0
+              type: integer
+            status:
+              $ref: '#/components/schemas/PickLineItemStatus'
+            substituteLineItems:
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+                /></center> <br> <i>This part of the API is currently under
+                development. That means that this endpoint, model, etc. can
+                contain breaking changes and / or might not be available at all
+                times in your API instance. It could disappear also without
+                warning. Thus it currently does not fall under our SLA
+                regulations. For details on this topic please check our <a
+                href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
+              items:
+                $ref: '#/components/schemas/SubstituteLineItem'
+              type: array
+            stockEmptied:
+              example: true
+              type: boolean
+            pickJobLineItemRef:
+              example: '12345'
+              type: string
+              description: used for line items in pick runs to be split up correctly again
+            partialStockLocations:
+              description: >-
+                Indicates where the items to pick could be found and from where
+                the picking should be started.
+              items:
+                $ref: '#/components/schemas/PickJobLineItemPartialStockLocation'
+            scannedCodes:
+              items:
+                $ref: '#/components/schemas/PickLineItemScannedCode'
+              type: array
+              minimum: 0
+            scanningRule:
+              deprecated: true
+              description: >-
+                Deprecated: Use scanningRules instead. This value indicates
+                which scanning rule should be applied for this pick line. Only
+                generated on demand on separate call, no persistence.
+              $ref: '#/components/schemas/ScanningRuleConfiguration'
+            scanningRules:
+              properties:
+                scanningMode:
+                  $ref: '#/components/schemas/PickingScanningConfigurationEnum'
+                scanningType:
+                  items:
+                    $ref: '#/components/schemas/ScanningRuleValue'
+                  type: array
+          required:
+            - id
+            - picked
+            - status
+          type: object
+    PickingScanningConfigurationEnum:
+      example: MUST_SCAN_FIRST
+      description: Way in which the scanning of articles during picking is enforced
+      enum:
+        - MUST_SCAN_FIRST
+        - MUST_SCAN_EACH
+        - SCAN_NOT_REQUIRED
+      type: string
+    PickLineItemStatus:
+      description: >-
+        A pickjob line item initially has the status OPEN and picking can start.
+        When a line item is opened within the picking app, the item changes its
+        status to IN_PROGRESS. When the commissioning is finished the state is
+        CLOSED
+      enum:
+        - OPEN
+        - IN_PROGRESS
+        - CLOSED
+      type: string
+      xml:
+        name: PickLineItemStatus
+    PickLineItemScannedCode:
+      properties:
+        code:
+          description: scannable code i.e. barcode
+          example: 1245678
+          type: string
+        quantity:
+          description: scanned quantity
+          example: 7
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+        - code
+        - quantity
+      type: object
     OfferedStickersByTag:
       additionalProperties: false
       properties:
@@ -16456,24 +16621,6 @@ components:
         - tagRef
         - matchingValues
         - stickers
-      type: object
-    OfferedScanningRuleByTag:
-      additionalProperties: false
-      properties:
-        tagRef:
-          type: string
-          minLength: 1
-        matchingValues:
-          type: array
-          minItems: 1
-          items:
-            type: string
-        scanningType:
-          $ref: '#/components/schemas/PickingScanningConfigurationEnum'
-      required:
-        - tagRef
-        - matchingValues
-        - scanningType
       type: object
     Sticker:
       additionalProperties: false
@@ -16526,44 +16673,6 @@ components:
                 $ref: '#/components/schemas/PackJobCreationPerTag'
           required:
             - packJobCreationPerTag
-    PickJobTagConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-        - $ref: '#/components/schemas/TagConfiguration'
-      properties:
-        stickerConfiguration:
-          $ref: '#/components/schemas/StickerConfiguration'
-        lineItemStickerConfiguration:
-          $ref: '#/components/schemas/StickerConfiguration'
-        lineItemScanningConfiguration:
-          $ref: '#/components/schemas/TagScanningConfiguration'
-        preferredPickingMethodsConfiguration:
-          $ref: '#/components/schemas/PreferredPickingMethodsConfiguration'
-    PreferredPickingMethodsConfiguration:
-      properties:
-        PreferredPickingMethodsPerTag:
-          type: array
-          items:
-            $ref: '#/components/schemas/PreferredPickingMethodsPerTag'
-    PreferredPickingMethodsPerTag:
-      additionalProperties: false
-      required:
-        - tagRef
-        - pickingMethods
-        - matchingValues
-      properties:
-        tagRef:
-          type: string
-        matchingValues:
-          type: array
-          minItems: 1
-          items:
-            type: string
-        pickingMethods:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/PickingMethodEnum'
     HandoverJobTagConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -18689,15 +18798,6 @@ components:
         - lastModified
         - created
       type: object
-    TakeOverPickJobConfiguration:
-      properties:
-        active:
-          default: false
-          description: Enable or disable returns
-          type: boolean
-      required:
-        - active
-      type: object
     LocaleConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -20699,85 +20799,6 @@ components:
       type: string
       xml:
         name: PickJobStatus
-    PickLineItem:
-      allOf:
-        - $ref: '#/components/schemas/PickLineItemForCreation'
-        - properties:
-            id:
-              description: >-
-                The id of this lineItem. It is generated during creation
-                automatically and suits as the primary identifier of the
-                described entity.
-              example: climk4dcQFiPdA5ULuhS
-              type: string
-            picked:
-              description: The amount of articles that were picked for this pickline.
-              example: 20
-              format: int64
-              minimum: 0
-              type: integer
-            secondaryPicked:
-              description: >-
-                The secondary amount of articles that were picked for this
-                pickline.
-              example: 20
-              format: int64
-              minimum: 0
-              type: integer
-            status:
-              $ref: '#/components/schemas/PickLineItemStatus'
-            substituteLineItems:
-              description: >-
-                <center><img
-                src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-                /></center> <br> <i>This part of the API is currently under
-                development. That means that this endpoint, model, etc. can
-                contain breaking changes and / or might not be available at all
-                times in your API instance. It could disappear also without
-                warning. Thus it currently does not fall under our SLA
-                regulations. For details on this topic please check our <a
-                href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
-              items:
-                $ref: '#/components/schemas/SubstituteLineItem'
-              type: array
-            stockEmptied:
-              example: true
-              type: boolean
-            pickJobLineItemRef:
-              example: '12345'
-              type: string
-              description: used for line items in pick runs to be split up correctly again
-            partialStockLocations:
-              description: >-
-                Indicates where the items to pick could be found and from where
-                the picking should be started.
-              items:
-                $ref: '#/components/schemas/PickJobLineItemPartialStockLocation'
-            scannedCodes:
-              items:
-                $ref: '#/components/schemas/PickLineItemScannedCode'
-              type: array
-              minimum: 0
-            scanningRule:
-              deprecated: true
-              description: >-
-                Deprecated: Use scanningRules instead. This value indicates
-                which scanning rule should be applied for this pick line. Only
-                generated on demand on separate call, no persistence.
-              $ref: '#/components/schemas/ScanningRuleConfiguration'
-            scanningRules:
-              properties:
-                scanningMode:
-                  $ref: '#/components/schemas/PickingScanningConfigurationEnum'
-                scanningType:
-                  items:
-                    $ref: '#/components/schemas/ScanningRuleValue'
-                  type: array
-          required:
-            - id
-            - picked
-            - status
-          type: object
     PickJobLineItemPartialStockLocationForUpdate:
       properties:
         tenantPartialStockId:
@@ -20863,91 +20884,6 @@ components:
           type: object
       xml:
         name: PickLineItemArticle
-    PickLineItemForCreation:
-      properties:
-        article:
-          $ref: '#/components/schemas/PickLineItemArticle'
-        customAttributes:
-          description: >-
-            Attributes that can be added to the orderline. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the informations carried here.
-          type: object
-        measurementUnitKey:
-          description: Identifier for items unit of measurement.
-          example: liter
-          type: string
-        quantity:
-          description: quantity of the specific article that has been ordered
-          example: 21
-          format: int64
-          minimum: 1
-          type: integer
-        secondaryMeasurementUnitKey:
-          description: Identifier for items unit of measurement.
-          example: liter
-          type: string
-        secondaryQuantity:
-          description: quantity of the specific article that has been ordered
-          example: 21
-          format: int64
-          minimum: 0
-          type: integer
-        measurementValidation:
-          $ref: '#/components/schemas/MeasurementValidation'
-        scannableCodes:
-          items:
-            description: Codes, that identify the article
-            type: string
-          type: array
-        partialStockLocations:
-          description: >-
-            Indicates where the items to pick could be found and from where the
-            picking should be started.
-          items:
-            $ref: >-
-              #/components/schemas/PickJobLineItemPartialStockLocationForCreation
-        tags:
-          items:
-            $ref: '#/components/schemas/TagReference'
-          type: array
-        stickers:
-          items:
-            $ref: '#/components/schemas/Sticker'
-          type: array
-      required:
-        - quantity
-        - article
-      type: object
-    PickLineItemScannedCode:
-      properties:
-        code:
-          description: scannable code i.e. barcode
-          example: 1245678
-          type: string
-        quantity:
-          description: scanned quantity
-          example: 7
-          format: int64
-          minimum: 0
-          type: integer
-      required:
-        - code
-        - quantity
-      type: object
-    PickLineItemStatus:
-      description: >-
-        A pickjob line item initially has the status OPEN and picking can start.
-        When a line item is opened within the picking app, the item changes its
-        status to IN_PROGRESS. When the commissioning is finished the state is
-        CLOSED
-      enum:
-        - OPEN
-        - IN_PROGRESS
-        - CLOSED
-      type: string
-      xml:
-        name: PickLineItemStatus
     PickingPatchActions:
       properties:
         actions:
@@ -23555,27 +23491,6 @@ components:
       type: object
       xml:
         name: SubstitutesForUpsert
-    PickingConfigurations:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        pickingShortPickConfiguration:
-          $ref: '#/components/schemas/PickingShortPickConfiguration'
-        scanningConfiguration:
-          $ref: '#/components/schemas/PickingScanningConfiguration'
-        scanCodeValidationConfiguration:
-          $ref: '#/components/schemas/PickingScanCodeValidationConfiguration'
-        takeOverPickJobConfiguration:
-          $ref: '#/components/schemas/TakeOverPickJobConfiguration'
-        loadUnitAssignmentConfiguration:
-          $ref: '#/components/schemas/LoadUnitAssignmentConfiguration'
-        pickingMethodsConfiguration:
-          $ref: '#/components/schemas/PickingMethodsConfiguration'
-        restartPickJobConfiguration:
-          $ref: '#/components/schemas/RestartPickJobConfiguration'
-        backofficePickingConfiguration:
-          $ref: '#/components/schemas/BackofficePickingConfiguration'
-      type: object
     PackingConfigurations:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -23589,15 +23504,6 @@ components:
         scanningConfiguration:
           $ref: '#/components/schemas/PackingScanningConfiguration'
       type: object
-    BackofficePickingConfiguration:
-      description: Can this tenant use the backoffice for picking?
-      properties:
-        active:
-          default: false
-          type: boolean
-      required:
-        - active
-      type: object
     PackingSourceContainerConfiguration:
       description: Can this tenant use the packing source container
       properties:
@@ -23606,66 +23512,6 @@ components:
           type: boolean
       required:
         - active
-      type: object
-    PickingMethodsConfiguration:
-      properties:
-        defaultPickingMethod:
-          $ref: '#/components/schemas/PickingMethodEnum'
-      required:
-        - defaultPickingMethod
-      type: object
-    LoadUnitAssignmentConfiguration:
-      description: >-
-        Who do the load units need to be assigned in pickJob (SingleOrderPick)
-        and pickRun (MultiOrderPick)
-      properties:
-        pickJob:
-          $ref: '#/components/schemas/LoadUnitAssignmentType'
-        pickRun:
-          $ref: '#/components/schemas/LoadUnitAssignmentType'
-      required:
-        - pickJob
-        - pickRun
-      type: object
-    LoadUnitAssignmentType:
-      example: AT_END
-      description: Where do the load unit needs to be assigned?
-      enum:
-        - INACTIVE
-        - AT_START
-        - AT_END
-        - DURING_PICKING
-      type: string
-    RestartPickJobConfiguration:
-      properties:
-        active:
-          default: true
-          type: boolean
-      required:
-        - active
-      type: object
-    PickingShortPickConfiguration:
-      properties:
-        confirmationOnShortPick:
-          description: >-
-            Does the picker needs to confirm a stock correction before adding a
-            short pick
-          default: false
-          type: boolean
-      required:
-        - confirmationOnShortPick
-      type: object
-    PickingScanningConfiguration:
-      properties:
-        scanningType:
-          $ref: '#/components/schemas/PickingScanningConfigurationEnum'
-        scanningRule:
-          $ref: '#/components/schemas/ScanningRuleConfiguration'
-        rolesWithOverwritingScanningPermission:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserRoleNames'
-          minItems: 1
       type: object
     PackingScanningConfiguration:
       properties:
@@ -23708,14 +23554,6 @@ components:
         - DATE
         - TEXT
       type: string
-    PickingScanningConfigurationEnum:
-      example: MUST_SCAN_FIRST
-      description: Way in which the scanning of articles during picking is enforced
-      enum:
-        - MUST_SCAN_FIRST
-        - MUST_SCAN_EACH
-        - SCAN_NOT_REQUIRED
-      type: string
     PackingScanningConfigurationEnum:
       enum:
         - MUST_SCAN_EACH
@@ -23732,19 +23570,6 @@ components:
         - BATCH_PICKING
         - BATCH
       type: string
-    PickingScanCodeValidationEnum:
-      description: State that defines if unknown scan codes can be accepted
-      enum:
-        - NO_VALIDATION
-        - CODE_MUST_BE_KNOWN
-      type: string
-    PickingScanCodeValidationConfiguration:
-      properties:
-        pickingScanCodeValidationType:
-          $ref: '#/components/schemas/PickingScanCodeValidationEnum'
-      required:
-        - pickingScanCodeValidationType
-      type: object
     PackingContainerRequiredConfiguration:
       additionalProperties: false
       properties:
@@ -26255,6 +26080,197 @@ components:
       type: object
       xml:
         name: RestowItemPatchActions
+    PickingConfigurations:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        pickingShortPickConfiguration:
+          $ref: '#/components/schemas/PickingShortPickConfiguration'
+        scanningConfiguration:
+          $ref: '#/components/schemas/PickingScanningConfiguration'
+        scanCodeValidationConfiguration:
+          $ref: '#/components/schemas/PickingScanCodeValidationConfiguration'
+        takeOverPickJobConfiguration:
+          $ref: '#/components/schemas/TakeOverPickJobConfiguration'
+        loadUnitAssignmentConfiguration:
+          $ref: '#/components/schemas/LoadUnitAssignmentConfiguration'
+        pickingMethodsConfiguration:
+          $ref: '#/components/schemas/PickingMethodsConfiguration'
+        restartPickJobConfiguration:
+          $ref: '#/components/schemas/RestartPickJobConfiguration'
+        backofficePickingConfiguration:
+          $ref: '#/components/schemas/BackofficePickingConfiguration'
+      type: object
+    PickingScanCodeValidationConfiguration:
+      properties:
+        pickingScanCodeValidationType:
+          $ref: '#/components/schemas/PickingScanCodeValidationEnum'
+      required:
+        - pickingScanCodeValidationType
+      type: object
+    PickingScanCodeValidationEnum:
+      description: State that defines if unknown scan codes can be accepted
+      enum:
+        - NO_VALIDATION
+        - CODE_MUST_BE_KNOWN
+      type: string
+    TakeOverPickJobConfiguration:
+      properties:
+        active:
+          default: false
+          description: Enable or disable returns
+          type: boolean
+      required:
+        - active
+      type: object
+    PickingMethodsConfiguration:
+      properties:
+        defaultPickingMethod:
+          $ref: '#/components/schemas/PickingMethodEnum'
+      required:
+        - defaultPickingMethod
+      type: object
+    RestartPickJobConfiguration:
+      properties:
+        active:
+          default: true
+          type: boolean
+      required:
+        - active
+      type: object
+    BackofficePickingConfiguration:
+      description: Can this tenant use the backoffice for picking?
+      properties:
+        active:
+          default: false
+          type: boolean
+      required:
+        - active
+      type: object
+    PickingShortPickConfiguration:
+      properties:
+        confirmationOnShortPick:
+          description: >-
+            Does the picker needs to confirm a stock correction before adding a
+            short pick
+          default: false
+          type: boolean
+      required:
+        - confirmationOnShortPick
+      type: object
+    PickingScanningConfiguration:
+      properties:
+        scanningType:
+          $ref: '#/components/schemas/PickingScanningConfigurationEnum'
+        scanningRule:
+          $ref: '#/components/schemas/ScanningRuleConfiguration'
+        rolesWithOverwritingScanningPermission:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRoleNames'
+          minItems: 1
+      type: object
+    LoadUnitAssignmentConfiguration:
+      description: >-
+        Who do the load units need to be assigned in pickJob (SingleOrderPick)
+        and pickRun (MultiOrderPick)
+      properties:
+        pickJob:
+          $ref: '#/components/schemas/LoadUnitAssignmentType'
+        pickRun:
+          $ref: '#/components/schemas/LoadUnitAssignmentType'
+      required:
+        - pickJob
+        - pickRun
+      type: object
+    LoadUnitAssignmentType:
+      example: AT_END
+      description: Where do the load unit needs to be assigned?
+      enum:
+        - INACTIVE
+        - AT_START
+        - AT_END
+        - DURING_PICKING
+      type: string
+    TagScanningConfiguration:
+      additionalProperties: false
+      properties:
+        offeredScanningRuleByTag:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferedScanningRuleByTag'
+    OfferedScanningRuleByTag:
+      additionalProperties: false
+      properties:
+        tagRef:
+          type: string
+          minLength: 1
+        matchingValues:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        scanningType:
+          $ref: '#/components/schemas/PickingScanningConfigurationEnum'
+      required:
+        - tagRef
+        - matchingValues
+        - scanningType
+      type: object
+    PreferredPickingMethodsPerTag:
+      additionalProperties: false
+      required:
+        - tagRef
+        - pickingMethods
+        - matchingValues
+      properties:
+        tagRef:
+          type: string
+        matchingValues:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        pickingMethods:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/PickingMethodEnum'
+    PreferredPickingMethodsConfiguration:
+      properties:
+        PreferredPickingMethodsPerTag:
+          type: array
+          items:
+            $ref: '#/components/schemas/PreferredPickingMethodsPerTag'
+    PickJobTagConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        stickerConfiguration:
+          $ref: '#/components/schemas/StickerConfiguration'
+        lineItemStickerConfiguration:
+          $ref: '#/components/schemas/StickerConfiguration'
+        lineItemScanningConfiguration:
+          $ref: '#/components/schemas/TagScanningConfiguration'
+        preferredPickingMethodsConfiguration:
+          $ref: '#/components/schemas/PreferredPickingMethodsConfiguration'
+        offeredDocumentsPerTag:
+          type: array
+          description: >-
+            All entries with a match in their matchingValues will be combined
+            when determining what documents belong to an entity
+          items:
+            $ref: '#/components/schemas/OfferedDocumentPerTag'
+        offeredDocumentsByDefault:
+          type: array
+          description: >-
+            This configuration is a fallback and applies only if none of the
+            entries in offeredDocumentsPerTag can be applied
+          items:
+            $ref: '#/components/schemas/OfferedDocument'
+      required:
+        - offeredDocumentsPerTag
+        - offeredDocumentsByDefault
     InventoryArticle:
       type: object
       properties:
