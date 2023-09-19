@@ -4767,348 +4767,6 @@ paths:
         - Listings
       operationId: deleteFacilityListingPartialStock
       summary: Delete partial stocks of a listings of a facility with the given ID
-  /api/facilities/{facilityId}/storagelocations:
-    get:
-      parameters:
-        - description: ID of facility from whom you want to get the storage locations
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: all entities after given Id
-          in: query
-          name: startAfterId
-          required: false
-          schema:
-            type: string
-        - description: number of entities to show
-          in: query
-          name: size
-          required: false
-          schema:
-            default: 25
-            type: integer
-        - description: limit result to storage locations with scannable code
-          in: query
-          name: scannableCode
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/StorageLocation'
-                type: array
-          description: >-
-            Facility was found & you are allowed to get the storage locations.
-            The result is in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility not found
-      tags:
-        - StorageLocations
-      description: ''
-      operationId: getFacilityStorageLocations
-      summary: Get the storage locations of this facility
-    post:
-      parameters:
-        - description: ID of facility from whom you want to create the storage location
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StorageLocation'
-          description: The storage location was successfully created.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility not found
-      tags:
-        - StorageLocations
-      description: Creates a new storage location in this facility.
-      operationId: postFacilityStorageLocations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StorageLocationForCreation'
-        description: Patch set
-        required: true
-      summary: Create a new storage location
-  /api/facilities/{facilityId}/storagelocations/{storageLocationId}:
-    get:
-      parameters:
-        - description: ID of facility from whom you want to get the storage locations
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: the ID of the storageLocation
-          in: path
-          name: storageLocationId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/StorageLocation'
-                type: array
-          description: >-
-            Facility was found & you are allowed to get the storage locations.
-            The result is in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility not found
-      tags:
-        - StorageLocations
-      description: ''
-      operationId: getFacilityStorageLocation
-      summary: Get the storage location of this facility
-    delete:
-      parameters:
-        - description: ID of facility from whom you want to delete the storage location
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: ID of the storageLocation you want to delete
-          in: path
-          name: storageLocationId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Storage location was found & you were allowed to delete it.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility or storage location not found
-      tags:
-        - StorageLocations
-      description: ''
-      operationId: deleteFacilityStorageLocation
-      summary: Delete a storage location of a facility with the given ID
-    put:
-      parameters:
-        - description: ID of facility from whom you want to put the storage locations
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: the ID of the storageLocation
-          in: path
-          name: storageLocationId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StorageLocation'
-          description: Storage location was found & you were allowed to update it.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility or Storage Location not found
-      tags:
-        - StorageLocations
-      description: >-
-        Replaces the current storage locations of this Facility with the
-        provided in the body.
-      operationId: putFacilityStorageLocation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StorageLocationForReplacement'
-        description: Patch set
-        required: true
-      summary: Replace the storage locations of a Facility
-    patch:
-      parameters:
-        - description: ID of facility you want to patch the storage locations
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: the ID of the storageLocation
-          in: path
-          name: storageLocationId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StorageLocation'
-          description: Storage location was found & you were allowed to update it.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility or Storage location not found
-      tags:
-        - StorageLocations
-      description: >
-        Adds new storage locations, updates existing ones and keeps the
-        previously present ones in the database.
-
-
-        1. If a storage location exists in the patch action but not in the
-        database it is added.
-
-        2. If a storage location exists both in the patch action and in the
-        database it is updated and the contents merged.
-
-        3. If a storage location exists only in the database, it is left
-        untouched.
-      operationId: patchFacilityStorageLocation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StorageLocationPatchActions'
-        description: Patch set
-        required: true
-      summary: Patches the storage locations of a facility with the given ID
   /api/facilities/{facilityId}/zones:
     get:
       parameters:
@@ -12673,6 +12331,348 @@ paths:
         description: Desired Tag Configuration for Pickjobs
         required: true
       summary: Change the tag configuration for Pickjobs
+  /api/facilities/{facilityId}/storagelocations:
+    get:
+      parameters:
+        - description: ID of facility from whom you want to get the storage locations
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: limit result to storage locations with scannable code
+          in: query
+          name: scannableCode
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/StorageLocation'
+                type: array
+          description: >-
+            Facility was found & you are allowed to get the storage locations.
+            The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      tags:
+        - StorageLocations
+      description: ''
+      operationId: getFacilityStorageLocations
+      summary: Get the storage locations of this facility
+    post:
+      parameters:
+        - description: ID of facility from whom you want to create the storage location
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageLocation'
+          description: The storage location was successfully created.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      tags:
+        - StorageLocations
+      description: Creates a new storage location in this facility.
+      operationId: postFacilityStorageLocations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageLocationForCreation'
+        description: Patch set
+        required: true
+      summary: Create a new storage location
+  /api/facilities/{facilityId}/storagelocations/{storageLocationId}:
+    get:
+      parameters:
+        - description: ID of facility from whom you want to get the storage locations
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: the ID of the storageLocation
+          in: path
+          name: storageLocationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/StorageLocation'
+                type: array
+          description: >-
+            Facility was found & you are allowed to get the storage locations.
+            The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      tags:
+        - StorageLocations
+      description: ''
+      operationId: getFacilityStorageLocation
+      summary: Get the storage location of this facility
+    delete:
+      parameters:
+        - description: ID of facility from whom you want to delete the storage location
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: ID of the storageLocation you want to delete
+          in: path
+          name: storageLocationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Storage location was found & you were allowed to delete it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility or storage location not found
+      tags:
+        - StorageLocations
+      description: ''
+      operationId: deleteFacilityStorageLocation
+      summary: Delete a storage location of a facility with the given ID
+    put:
+      parameters:
+        - description: ID of facility from whom you want to put the storage locations
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: the ID of the storageLocation
+          in: path
+          name: storageLocationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageLocation'
+          description: Storage location was found & you were allowed to update it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility or Storage Location not found
+      tags:
+        - StorageLocations
+      description: >-
+        Replaces the current storage locations of this Facility with the
+        provided in the body.
+      operationId: putFacilityStorageLocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageLocationForReplacement'
+        description: Patch set
+        required: true
+      summary: Replace the storage locations of a Facility
+    patch:
+      parameters:
+        - description: ID of facility you want to patch the storage locations
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: the ID of the storageLocation
+          in: path
+          name: storageLocationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageLocation'
+          description: Storage location was found & you were allowed to update it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility or Storage location not found
+      tags:
+        - StorageLocations
+      description: >
+        Adds new storage locations, updates existing ones and keeps the
+        previously present ones in the database.
+
+
+        1. If a storage location exists in the patch action but not in the
+        database it is added.
+
+        2. If a storage location exists both in the patch action and in the
+        database it is updated and the contents merged.
+
+        3. If a storage location exists only in the database, it is left
+        untouched.
+      operationId: patchFacilityStorageLocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageLocationPatchActions'
+        description: Patch set
+        required: true
+      summary: Patches the storage locations of a facility with the given ID
   /api/articles:
     get:
       operationId: getArticles
@@ -24643,249 +24643,6 @@ components:
       type: object
       xml:
         name: PartialStocksForReplacement
-    StorageLocationForCreation:
-      properties:
-        name:
-          description: The name of this storage location
-          type: string
-        tenantLocationId:
-          description: The internal tenant id for this location
-          type: string
-        type:
-          $ref: '#/components/schemas/StorageLocationType'
-        traits:
-          description: >-
-            The traits of this storage location, includes both local config and
-            and defaults. Do not use to write to traits, use traitConfig
-            instead.
-          type: array
-          items:
-            $ref: '#/components/schemas/StorageLocationTrait'
-        traitConfig:
-          $ref: '#/components/schemas/StorageLocationTraitConfig'
-        scannableCodes:
-          description: Barcodes representing this storage location
-          type: array
-          maxItems: 5
-          items:
-            type: string
-        runningSequences:
-          description: The Sequence item/s of this location
-          type: array
-          maxItems: 10
-          items:
-            $ref: '#/components/schemas/StorageLocationSequenceItem'
-        zoneRef:
-          description: The id of the Zone to which this storage location belongs
-          example: Esb20gpHBL94X5NdMp3C
-          type: string
-        zoneName:
-          description: The name of the Zone to which this storage location belongs
-          type: string
-        information:
-          description: A free text information about this storage location, max length 1024
-          type: string
-          maxLength: 1024
-      required:
-        - name
-        - runningSequences
-        - scannableCodes
-        - type
-      type: object
-      xml:
-        name: StorageLocationForCreation
-    StorageLocationForReplacement:
-      allOf:
-        - $ref: '#/components/schemas/StorageLocationForCreation'
-      properties:
-        version:
-          example: 42
-          format: int64
-          type: integer
-      required:
-        - version
-      type: object
-      xml:
-        name: StorageLocationForReplacement
-    StorageLocation:
-      allOf:
-        - $ref: '#/components/schemas/StorageLocationForReplacement'
-        - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        id:
-          description: The id of this storage location
-          type: string
-        facilityRef:
-          description: The id of the facility reference.
-          example: Esb20gpHBL94X5NdMp3C
-          type: string
-        zoneName:
-          description: >-
-            Deprecated! This field will not be filled in newly created storage
-            locations. Resolve the zone name separately via the
-            facilities/{id}/zones endpoint. The name of the Zone to which this
-            storage location belongs
-          type: string
-          deprecated: true
-        traits:
-          description: The traits of this storage location
-          type: array
-          items:
-            $ref: '#/components/schemas/StorageLocationTrait'
-        traitConfig:
-          $ref: '#/components/schemas/StorageLocationTraitConfig'
-        schemaVersion:
-          type: number
-      required:
-        - id
-        - facilityRef
-        - traits
-      type: object
-      xml:
-        name: StorageLocation
-    StorageLocationTraitConfig:
-      description: The configuration of the traits of this storage location
-      type: array
-      items:
-        type: object
-        properties:
-          trait:
-            $ref: '#/components/schemas/StorageLocationTrait'
-          enabled:
-            type: boolean
-        required:
-          - trait
-          - enabled
-    StorageLocationType:
-      description: |-
-        Describes the kind of a storage location:
-          * `SINGLE_STORAGE`- it is only allowed to connect one partial stock to such a storage location
-          * `BULK_STORAGE`- more than one partial stock and its quantities can be linked to such an storage location
-      enum:
-        - SINGLE_STORAGE
-        - BULK_STORAGE
-      type: string
-      xml:
-        name: StorageLocationType
-    StorageLocationTrait:
-      type: string
-      description: |-
-        Describes what kind of actions this stock is available for
-          * `PICKABLE`- The stock is available for picking
-          * `ACCESSIBLE`- The stock is available for stock movements (stowing, inbound, etc)
-          * `KEEP_ON_ZERO`- The stock will not be deleted when emptied
-      enum:
-        - PICKABLE
-        - ACCESSIBLE
-        - KEEP_ON_ZERO
-      xml:
-        name: StorageLocationTrait
-    StorageLocationSequenceType:
-      description: |-
-        Describes the type of a storage location sequence type
-          * `PICKING_SEQUENCE`- The sequence in wich the storage locations are picked.
-          * `RESTOW_SEQUENCE`- The sequence in wich the storage locations are restowed.
-      enum:
-        - PICKING_SEQUENCE
-        - RESTOW_SEQUENCE
-      type: string
-      xml:
-        name: StorageLocationType
-    StorageLocationSequenceItem:
-      properties:
-        type:
-          $ref: '#/components/schemas/StorageLocationSequenceType'
-        previousStorageLocationRef:
-          description: The previous storage from which to pick up after this one
-          type: string
-        nextStorageLocationRef:
-          description: The next storage from which to pick up after this one
-          type: string
-        score:
-          description: Running sequence score - read-only
-          type: number
-      required:
-        - type
-      type: object
-      xml:
-        name: StorageLocationSequenceItem
-    ModifyStorageLocationAction:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use value 'ModifyStorageLocation', because you want to modify a
-                storage location
-              enum:
-                - ModifyStorageLocation
-              type: string
-            name:
-              description: The name of this storage location
-              type: string
-            tenantLocationId:
-              description: The internal tenant id for this location
-              type: string
-            type:
-              $ref: '#/components/schemas/StorageLocationType'
-            traits:
-              deprecated: true
-              description: >-
-                The traits of this storage location. Do not use this to write
-                traits, use traitConfig instead.
-              type: array
-              items:
-                $ref: '#/components/schemas/StorageLocationTrait'
-            traitConfig:
-              $ref: '#/components/schemas/StorageLocationTraitConfig'
-            scannableCodes:
-              description: Barcodes representing this storage location
-              type: array
-              maxItems: 5
-              items:
-                type: string
-            runningSequences:
-              description: The Sequence item/s of this location
-              type: array
-              maxItems: 10
-              items:
-                $ref: '#/components/schemas/StorageLocationSequenceItem'
-            zoneRef:
-              description: The id of the Zone to which this storage location belongs.
-              example: Esb20gpHBL94X5NdMp3C
-              type: string
-            information:
-              description: >-
-                A free text information about this storage location, max length
-                1024
-              type: string
-              maxLength: 1024
-          required:
-            - action
-          type: object
-      xml:
-        name: ModifyStorageLocationAction
-    StorageLocationPatchActions:
-      properties:
-        actions:
-          items:
-            $ref: '#/components/schemas/ModifyStorageLocationAction'
-          minItems: 1
-          type: array
-        version:
-          description: >-
-            The version of the facility where we want to patch the storage
-            locations to be used in optimistic locking mechanisms.
-          example: 42
-          format: int64
-          type: integer
-      required:
-        - version
-        - actions
-      type: object
-      xml:
-        name: StorageLocationPatchActions
     ZoneForCreation:
       properties:
         name:
@@ -26278,6 +26035,249 @@ components:
       required:
         - offeredDocumentsPerTag
         - offeredDocumentsByDefault
+    StorageLocationForCreation:
+      properties:
+        name:
+          description: The name of this storage location
+          type: string
+        tenantLocationId:
+          description: The internal tenant id for this location
+          type: string
+        type:
+          $ref: '#/components/schemas/StorageLocationType'
+        traits:
+          description: >-
+            The traits of this storage location, includes both local config and
+            and defaults. Do not use to write to traits, use traitConfig
+            instead.
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageLocationTrait'
+        traitConfig:
+          $ref: '#/components/schemas/StorageLocationTraitConfig'
+        scannableCodes:
+          description: Barcodes representing this storage location
+          type: array
+          maxItems: 5
+          items:
+            type: string
+        runningSequences:
+          description: The Sequence item/s of this location
+          type: array
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/StorageLocationSequenceItem'
+        zoneRef:
+          description: The id of the Zone to which this storage location belongs
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+        zoneName:
+          description: The name of the Zone to which this storage location belongs
+          type: string
+        information:
+          description: A free text information about this storage location, max length 1024
+          type: string
+          maxLength: 1024
+      required:
+        - name
+        - runningSequences
+        - scannableCodes
+        - type
+      type: object
+      xml:
+        name: StorageLocationForCreation
+    StorageLocationForReplacement:
+      allOf:
+        - $ref: '#/components/schemas/StorageLocationForCreation'
+      properties:
+        version:
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+      type: object
+      xml:
+        name: StorageLocationForReplacement
+    StorageLocation:
+      allOf:
+        - $ref: '#/components/schemas/StorageLocationForReplacement'
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          description: The id of this storage location
+          type: string
+        facilityRef:
+          description: The id of the facility reference.
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+        zoneName:
+          description: >-
+            Deprecated! This field will not be filled in newly created storage
+            locations. Resolve the zone name separately via the
+            facilities/{id}/zones endpoint. The name of the Zone to which this
+            storage location belongs
+          type: string
+          deprecated: true
+        traits:
+          description: The traits of this storage location
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageLocationTrait'
+        traitConfig:
+          $ref: '#/components/schemas/StorageLocationTraitConfig'
+        schemaVersion:
+          type: number
+      required:
+        - id
+        - facilityRef
+        - traits
+      type: object
+      xml:
+        name: StorageLocation
+    StorageLocationTraitConfig:
+      description: The configuration of the traits of this storage location
+      type: array
+      items:
+        type: object
+        properties:
+          trait:
+            $ref: '#/components/schemas/StorageLocationTrait'
+          enabled:
+            type: boolean
+        required:
+          - trait
+          - enabled
+    StorageLocationType:
+      description: |-
+        Describes the kind of a storage location:
+          * `SINGLE_STORAGE`- it is only allowed to connect one partial stock to such a storage location
+          * `BULK_STORAGE`- more than one partial stock and its quantities can be linked to such an storage location
+      enum:
+        - SINGLE_STORAGE
+        - BULK_STORAGE
+      type: string
+      xml:
+        name: StorageLocationType
+    StorageLocationTrait:
+      type: string
+      description: |-
+        Describes what kind of actions this stock is available for
+          * `PICKABLE`- The stock is available for picking
+          * `ACCESSIBLE`- The stock is available for stock movements (stowing, inbound, etc)
+          * `KEEP_ON_ZERO`- The stock will not be deleted when emptied
+      enum:
+        - PICKABLE
+        - ACCESSIBLE
+        - KEEP_ON_ZERO
+      xml:
+        name: StorageLocationTrait
+    StorageLocationSequenceType:
+      description: |-
+        Describes the type of a storage location sequence type
+          * `PICKING_SEQUENCE`- The sequence in wich the storage locations are picked.
+          * `RESTOW_SEQUENCE`- The sequence in wich the storage locations are restowed.
+      enum:
+        - PICKING_SEQUENCE
+        - RESTOW_SEQUENCE
+      type: string
+      xml:
+        name: StorageLocationType
+    StorageLocationSequenceItem:
+      properties:
+        type:
+          $ref: '#/components/schemas/StorageLocationSequenceType'
+        previousStorageLocationRef:
+          description: The previous storage from which to pick up after this one
+          type: string
+        nextStorageLocationRef:
+          description: The next storage from which to pick up after this one
+          type: string
+        score:
+          description: Running sequence score - read-only
+          type: number
+      required:
+        - type
+      type: object
+      xml:
+        name: StorageLocationSequenceItem
+    ModifyStorageLocationAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value 'ModifyStorageLocation', because you want to modify a
+                storage location
+              enum:
+                - ModifyStorageLocation
+              type: string
+            name:
+              description: The name of this storage location
+              type: string
+            tenantLocationId:
+              description: The internal tenant id for this location
+              type: string
+            type:
+              $ref: '#/components/schemas/StorageLocationType'
+            traits:
+              deprecated: true
+              description: >-
+                The traits of this storage location. Do not use this to write
+                traits, use traitConfig instead.
+              type: array
+              items:
+                $ref: '#/components/schemas/StorageLocationTrait'
+            traitConfig:
+              $ref: '#/components/schemas/StorageLocationTraitConfig'
+            scannableCodes:
+              description: Barcodes representing this storage location
+              type: array
+              maxItems: 5
+              items:
+                type: string
+            runningSequences:
+              description: The Sequence item/s of this location
+              type: array
+              maxItems: 10
+              items:
+                $ref: '#/components/schemas/StorageLocationSequenceItem'
+            zoneRef:
+              description: The id of the Zone to which this storage location belongs.
+              example: Esb20gpHBL94X5NdMp3C
+              type: string
+            information:
+              description: >-
+                A free text information about this storage location, max length
+                1024
+              type: string
+              maxLength: 1024
+          required:
+            - action
+          type: object
+      xml:
+        name: ModifyStorageLocationAction
+    StorageLocationPatchActions:
+      properties:
+        actions:
+          items:
+            $ref: '#/components/schemas/ModifyStorageLocationAction'
+          minItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the facility where we want to patch the storage
+            locations to be used in optimistic locking mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: StorageLocationPatchActions
     InventoryArticle:
       type: object
       properties:
