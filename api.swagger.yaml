@@ -14106,11 +14106,6 @@ paths:
           in: query
           schema:
             type: string
-        - name: locationRef
-          required: false
-          in: query
-          schema:
-            type: string
         - name: size
           required: false
           in: query
@@ -14131,6 +14126,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StockPaginatedResult'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+    put:
+      operationId: upsertStocks
+      summary: Update and create many stocks at once
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StocksForUpsert'
+      responses:
+        '200':
+          description: Stock upsert result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockUpsertOperationResult'
         '401':
           description: Your user is not allowed to operate against this API instance
           content:
@@ -14257,6 +14296,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Stock'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Inventory
+  /api/stocks/actions:
+    post:
+      operationId: performStocksActions
+      summary: Perform stocks actions
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disapear also without warning. Thus it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          documentation under
+          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockAction'
+      responses:
+        '200':
+          description: Stock action result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockActionResult'
         '401':
           description: Your user is not allowed to operate against this API instance
           content:
@@ -27460,6 +27542,132 @@ components:
       required:
         - total
         - stocks
+    StockDeleteByLocations:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+            - DELETE_BY_LOCATIONS
+        locationRefs:
+          maxItems: 500
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - locationRefs
+    StockDeleteByProducts:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+            - DELETE_BY_PRODUCTS
+        facilityRef:
+          type: string
+        tenantArticleIds:
+          maxItems: 500
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - facilityRef
+        - tenantArticleIds
+    StockDeleteByIds:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+            - DELETE_BY_IDS
+        ids:
+          maxItems: 500
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - ids
+    StockAction:
+      type: object
+      properties:
+        actions:
+          type: array
+          maxItems: 10
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/StockDeleteByLocations'
+              - $ref: '#/components/schemas/StockDeleteByProducts'
+              - $ref: '#/components/schemas/StockDeleteByIds'
+      required:
+        - actions
+    StockDeleteActionResult:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+      required:
+        - ids
+    StockActionResult:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+            - DELETE_BY_LOCATIONS
+            - DELETE_BY_PRODUCTS
+            - DELETE_BY_IDS
+        result:
+          oneOf:
+            - $ref: '#/components/schemas/StockDeleteActionResult'
+          allOf:
+            - $ref: '#/components/schemas/StockDeleteActionResult'
+      required:
+        - name
+        - result
+    StockForUpsertUpdate:
+      type: object
+      properties:
+        value:
+          type: number
+          minimum: 0
+        locationRef:
+          type: string
+          nullable: true
+        id:
+          type: string
+      required:
+        - value
+        - id
+    StocksForUpsert:
+      type: object
+      properties:
+        stocks:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/StockForCreation'
+              - $ref: '#/components/schemas/StockForUpsertUpdate'
+          maxItems: 500
+      required:
+        - stocks
+    StockUpsertOperationResult:
+      type: object
+      properties:
+        stock:
+          $ref: '#/components/schemas/Stock'
+        status:
+          type: string
+          enum:
+            - UPDATED
+            - CREATED
+      required:
+        - stock
+        - status
     SafetyStock:
       type: object
       properties:
