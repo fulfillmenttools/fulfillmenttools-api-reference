@@ -21542,6 +21542,25 @@ components:
         - domainEntityProcessStatus
         - domainRef
       type: object
+    LastDomainEntityStatusItem:
+      description: >-
+        An object holding the last DomainStatus of a given entity and its
+        corresponding domain.
+      properties:
+        domain:
+          description: The domain of the entity that caused the status change.
+          $ref: '#/components/schemas/DomainType'
+        status:
+          description: The status of the entity.
+          $ref: '#/components/schemas/DomainStatus'
+        entityId:
+          description: The entity id
+          type: string
+      required:
+        - domain
+        - status
+        - entityId
+      type: object
     Process:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -21618,7 +21637,11 @@ components:
           type: array
         status:
           description: Overall status of the process.
-          $ref: '#/components/schemas/DomainStatus'
+          $ref: '#/components/schemas/ProcessStatus'
+          default: CREATED
+        domsStatus:
+          description: Overall status of the process.
+          $ref: '#/components/schemas/ProcessStatus'
           default: CREATED
         operativeStatus:
           description: Overall status of the process
@@ -21629,6 +21652,11 @@ components:
           description: Overview of the different domain adherent status of the process.
           additionalProperties:
             $ref: '#/components/schemas/DomainStatus'
+        lastDomainEntityStatuses:
+          type: array
+          description: The last domain statuses of each domain
+          items:
+            $ref: '#/components/schemas/LastDomainEntityStatusItem'
         packJobRefs:
           description: References of the Packjobs connected to this process (if present).
           items:
