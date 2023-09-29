@@ -11696,52 +11696,6 @@ paths:
         description: Packing Container object
         required: true
       summary: Add a new packing container
-  /api/health:
-    get:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HealthResult'
-          description: Result of all tested dependencies for their health status
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Manual reroute configuration not found
-      tags:
-        - Health
-      description: >-
-        <img
-        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-        </center> <br> This part of the API is currently under development. That
-        means that this endpoint, model, etc. can contain breaking changes and /
-        or might not be available at all times in your API instance. It could
-        disappear also without warning. Thus it currently does not fall under
-        our SLA regulations. For details on this topic please check our
-        documentation under
-        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
-      operationId: healthCheck
-      summary: Do a health check
   /api/tags:
     get:
       parameters:
@@ -12377,6 +12331,52 @@ paths:
         description: Desired Tag Configuration for Pickjobs
         required: true
       summary: Change the tag configuration for Pickjobs
+  /api/health:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResult'
+          description: Result of all tested dependencies for their health status
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Manual reroute configuration not found
+      tags:
+        - Health
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: healthCheck
+      summary: Do a health check
   /api/facilities/{facilityId}/storagelocations:
     get:
       parameters:
@@ -25856,36 +25856,6 @@ components:
       type: string
       xml:
         name: ToolkitPredicateConnector
-    HealthResult:
-      properties:
-        status:
-          $ref: '#/components/schemas/HealthStatus'
-        dependencies:
-          items:
-            $ref: '#/components/schemas/HealthDependencyStatus'
-          type: array
-          minItems: 1
-      type: object
-      required:
-        - status
-        - dependencies
-    HealthDependencyStatus:
-      properties:
-        name:
-          example: database
-          description: Name of the component that is checked to be healthy
-          type: string
-        status:
-          $ref: '#/components/schemas/HealthStatus'
-      type: object
-      required:
-        - name
-        - status
-    HealthStatus:
-      enum:
-        - UP
-        - DOWN
-      type: string
     RestowedItems:
       properties:
         restowedItems:
@@ -26479,6 +26449,36 @@ components:
       type: object
       xml:
         name: StorageLocationPatchActions
+    HealthResult:
+      properties:
+        status:
+          $ref: '#/components/schemas/HealthStatus'
+        dependencies:
+          items:
+            $ref: '#/components/schemas/HealthDependencyStatus'
+          type: array
+          minItems: 1
+      type: object
+      required:
+        - status
+        - dependencies
+    HealthDependencyStatus:
+      properties:
+        name:
+          example: database
+          description: Name of the component that is checked to be healthy
+          type: string
+        status:
+          $ref: '#/components/schemas/HealthStatus'
+      type: object
+      required:
+        - name
+        - status
+    HealthStatus:
+      enum:
+        - UP
+        - DOWN
+      type: string
     InventoryArticle:
       type: object
       properties:
