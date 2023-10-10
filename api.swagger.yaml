@@ -4767,275 +4767,6 @@ paths:
         - Listings
       operationId: deleteFacilityListingPartialStock
       summary: Delete partial stocks of a listings of a facility with the given ID
-  /api/facilities/{facilityId}/zones:
-    get:
-      parameters:
-        - description: ID of facility from whom you want to get the zones
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: all entities after given Id
-          in: query
-          name: startAfterId
-          required: false
-          schema:
-            type: string
-        - description: number of entities to show
-          in: query
-          name: size
-          required: false
-          schema:
-            default: 25
-            type: integer
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Zone'
-                type: array
-          description: >-
-            Facility was found & you are allowed to get the zones. The result is
-            in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility not found
-      tags:
-        - Zones
-      description: ''
-      operationId: getFacilityZones
-      summary: Get the zones of this facility
-    post:
-      parameters:
-        - description: ID of facility from whom you want to create the zone
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Zone'
-          description: The zone was successfully created.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Zone not found
-      tags:
-        - Zones
-      description: Creates a new zone in this facility.
-      operationId: postFacilityZone
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ZoneForCreation'
-        description: The zone to be created
-        required: true
-      summary: Create a zone
-  /api/facilities/{facilityId}/zones/{zoneId}:
-    get:
-      parameters:
-        - description: ID of facility from whom you want to get the zones
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: the ID of the zone
-          in: path
-          name: zoneId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Zone'
-                type: array
-          description: >-
-            Zone was found & you are allowed to get it. The result is in the
-            body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility not found
-      tags:
-        - Zones
-      description: ''
-      operationId: getFacilityZone
-      summary: Get the zone of this facility
-    delete:
-      parameters:
-        - description: ID of facility from whom you want to delete the zone
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: ID of the zone you want to delete
-          in: path
-          name: zoneId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Zone was found & you were allowed to delete it.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility or storage location not found
-      tags:
-        - Zones
-      description: ''
-      operationId: deleteFacilityZone
-      summary: Delete a zone of a facility with the given ID
-    put:
-      parameters:
-        - description: ID of facility from whom you want to put the zone
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: the ID of the zone
-          in: path
-          name: zoneId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Zone'
-          description: Zone was found & you are allowed to update it.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Error'
-          description: Facility not found
-      tags:
-        - Zones
-      description: >-
-        Replaces the current zone of this Facility with the provided in the
-        body.
-      operationId: putFacilityZone
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ZoneForReplacement'
-        description: Patch set
-        required: true
-      summary: Replace the zones of a Facility
   /api/facilities/validation/postalcode:
     post:
       responses:
@@ -12892,21 +12623,281 @@ paths:
         description: Patch set
         required: true
       summary: Patches the storage locations of a facility with the given ID
+  /api/facilities/{facilityId}/zones:
+    get:
+      parameters:
+        - description: ID of facility from whom you want to get the zones
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Zone'
+                type: array
+          description: >-
+            Facility was found & you are allowed to get the zones. The result is
+            in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      tags:
+        - Zones
+      description: ''
+      operationId: getFacilityZones
+      summary: Get the zones of this facility
+    post:
+      parameters:
+        - description: ID of facility from whom you want to create the zone
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+          description: The zone was successfully created.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Zone not found
+      tags:
+        - Zones
+      description: Creates a new zone in this facility.
+      operationId: postFacilityZone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneForCreation'
+        description: The zone to be created
+        required: true
+      summary: Create a zone
+  /api/facilities/{facilityId}/zones/{zoneId}:
+    get:
+      parameters:
+        - description: ID of facility from whom you want to get the zones
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: the ID of the zone
+          in: path
+          name: zoneId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Zone'
+                type: array
+          description: >-
+            Zone was found & you are allowed to get it. The result is in the
+            body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      tags:
+        - Zones
+      description: ''
+      operationId: getFacilityZone
+      summary: Get the zone of this facility
+    delete:
+      parameters:
+        - description: ID of facility from whom you want to delete the zone
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: ID of the zone you want to delete
+          in: path
+          name: zoneId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Zone was found & you were allowed to delete it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility or storage location not found
+      tags:
+        - Zones
+      description: ''
+      operationId: deleteFacilityZone
+      summary: Delete a zone of a facility with the given ID
+    put:
+      parameters:
+        - description: ID of facility from whom you want to put the zone
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: the ID of the zone
+          in: path
+          name: zoneId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Zone'
+          description: Zone was found & you are allowed to update it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Facility not found
+      tags:
+        - Zones
+      description: >-
+        Replaces the current zone of this Facility with the provided in the
+        body.
+      operationId: putFacilityZone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneForReplacement'
+        description: Patch set
+        required: true
+      summary: Replace the zones of a Facility
   /api/articles:
     get:
       operationId: getArticles
       summary: Search articles tenant-wide based on title or tenantArticleId
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disapear also without warning. Thus it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          documentation under
-          https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      deprecated: true
+      description: DEPRECATED
       parameters:
         - name: size
           required: false
@@ -24989,53 +24980,6 @@ components:
       type: object
       xml:
         name: PartialStocksForReplacement
-    ZoneForCreation:
-      properties:
-        name:
-          description: The name of this zone
-          type: string
-        score:
-          description: The score of this zone
-          type: number
-      required:
-        - name
-        - score
-      type: object
-      xml:
-        name: ZoneForCreation
-    ZoneForReplacement:
-      allOf:
-        - $ref: '#/components/schemas/ZoneForCreation'
-      properties:
-        version:
-          example: 42
-          format: int64
-          type: integer
-      required:
-        - version
-      type: object
-      xml:
-        name: ZoneForReplacement
-    Zone:
-      allOf:
-        - $ref: '#/components/schemas/ZoneForReplacement'
-        - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        id:
-          description: The id of this zone
-          type: string
-        facilityRef:
-          description: >-
-            The id of the facility reference. The given ID has to be present in
-            the system.
-          example: Esb20gpHBL94X5NdMp3C
-          type: string
-      required:
-        - id
-        - facilityRef
-      type: object
-      xml:
-        name: Zone
     Tag:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -26636,6 +26580,53 @@ components:
       type: object
       xml:
         name: StorageLocationPatchActions
+    ZoneForCreation:
+      properties:
+        name:
+          description: The name of this zone
+          type: string
+        score:
+          description: The score of this zone
+          type: number
+      required:
+        - name
+        - score
+      type: object
+      xml:
+        name: ZoneForCreation
+    ZoneForReplacement:
+      allOf:
+        - $ref: '#/components/schemas/ZoneForCreation'
+      properties:
+        version:
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+      type: object
+      xml:
+        name: ZoneForReplacement
+    Zone:
+      allOf:
+        - $ref: '#/components/schemas/ZoneForReplacement'
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          description: The id of this zone
+          type: string
+        facilityRef:
+          description: >-
+            The id of the facility reference. The given ID has to be present in
+            the system.
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+      required:
+        - id
+        - facilityRef
+      type: object
+      xml:
+        name: Zone
     HealthResult:
       properties:
         status:
@@ -26757,139 +26748,6 @@ components:
         - upperBounds
         - period
         - point
-    InboundReceipt:
-      type: object
-      properties:
-        asnRef:
-          type: string
-        receivedDate:
-          format: date-time
-          type: string
-        receivedItems:
-          maxItems: 200
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundReceiptLineItem'
-        comments:
-          maxItems: 20
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundReceiptComment'
-        id:
-          type: string
-      required:
-        - receivedDate
-        - receivedItems
-        - comments
-        - id
-    InboundDeliveryReceivedPayload:
-      type: object
-      properties:
-        inboundProcessRef:
-          type: string
-        tenantInboundProcessRef:
-          type: string
-        facilityRef:
-          type: string
-        status:
-          type: string
-          enum:
-            - OPEN
-            - PARTIAL_DELIVERY
-            - ON_HOLD
-            - CLOSED
-        receipt:
-          $ref: '#/components/schemas/InboundReceipt'
-      required:
-        - inboundProcessRef
-        - facilityRef
-        - status
-        - receipt
-    InboundDeliveryFinishedPayload:
-      type: object
-      properties:
-        inboundProcessRef:
-          type: string
-        tenantInboundProcessRef:
-          type: string
-        facilityRef:
-          type: string
-        status:
-          type: string
-          enum:
-            - OPEN
-            - PARTIAL_DELIVERY
-            - ON_HOLD
-            - CLOSED
-        receipts:
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundReceipt'
-      required:
-        - inboundProcessRef
-        - facilityRef
-        - status
-        - receipts
-    InboundDeliveryOnHoldPayload:
-      type: object
-      properties:
-        inboundProcessRef:
-          type: string
-        tenantInboundProcessRef:
-          type: string
-        facilityRef:
-          type: string
-        status:
-          type: string
-          enum:
-            - OPEN
-            - PARTIAL_DELIVERY
-            - ON_HOLD
-            - CLOSED
-      required:
-        - inboundProcessRef
-        - facilityRef
-        - status
-    InventoryFacilityStockShapeByTrait:
-      type: object
-      properties:
-        PICKABLE:
-          type: number
-        ACCESSIBLE:
-          type: number
-      required:
-        - PICKABLE
-        - ACCESSIBLE
-    InventoryFacilityStockShape:
-      type: object
-      properties:
-        facilityRef:
-          type: string
-        tenantArticleId:
-          type: string
-        totalAmount:
-          type: number
-        reserved:
-          type: number
-        safetyStock:
-          type: number
-        available:
-          type: number
-        byTrait:
-          $ref: '#/components/schemas/InventoryFacilityStockShapeByTrait'
-        changeReason:
-          type: string
-          enum:
-            - UNKNOWN
-      required:
-        - facilityRef
-        - tenantArticleId
-        - totalAmount
-        - reserved
-        - safetyStock
-        - available
-        - byTrait
-        - changeReason
     RequestedDateASAP:
       type: object
       properties:
@@ -26935,6 +26793,193 @@ components:
       required:
         - tenantArticleId
         - quantity
+    InboundProcessPurchaseOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        orderDate:
+          type: string
+          format: date-time
+        requestedDate:
+          oneOf:
+            - $ref: '#/components/schemas/RequestedDateASAP'
+            - $ref: '#/components/schemas/RequestedDateTimePoint'
+        requestedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundLineItem'
+        status:
+          type: string
+          enum:
+            - OPEN
+        cancelled:
+          type: boolean
+        supplier:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplier'
+      required:
+        - id
+        - created
+        - lastModified
+        - orderDate
+        - requestedDate
+        - requestedItems
+        - status
+        - cancelled
+    InboundReceipt:
+      type: object
+      properties:
+        asnRef:
+          type: string
+        receivedDate:
+          format: date-time
+          type: string
+        receivedItems:
+          maxItems: 200
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptLineItem'
+        comments:
+          maxItems: 20
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptComment'
+        id:
+          type: string
+      required:
+        - receivedDate
+        - receivedItems
+        - comments
+        - id
+    InboundDeliveryReceivedPayload:
+      type: object
+      properties:
+        inboundProcessRef:
+          type: string
+        tenantInboundProcessRef:
+          type: string
+        purchaseOrder:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrder'
+        facilityRef:
+          type: string
+        status:
+          type: string
+          enum:
+            - OPEN
+            - PARTIAL_DELIVERY
+            - ON_HOLD
+            - CLOSED
+        onHold:
+          type: boolean
+        receipt:
+          $ref: '#/components/schemas/InboundReceipt'
+      required:
+        - inboundProcessRef
+        - facilityRef
+        - status
+        - onHold
+        - receipt
+    InboundDeliveryFinishedPayload:
+      type: object
+      properties:
+        inboundProcessRef:
+          type: string
+        tenantInboundProcessRef:
+          type: string
+        purchaseOrder:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrder'
+        facilityRef:
+          type: string
+        status:
+          type: string
+          enum:
+            - OPEN
+            - PARTIAL_DELIVERY
+            - ON_HOLD
+            - CLOSED
+        onHold:
+          type: boolean
+        receipts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceipt'
+      required:
+        - inboundProcessRef
+        - facilityRef
+        - status
+        - onHold
+        - receipts
+    InboundDeliveryOnHoldPayload:
+      type: object
+      properties:
+        inboundProcessRef:
+          type: string
+        tenantInboundProcessRef:
+          type: string
+        purchaseOrder:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrder'
+        facilityRef:
+          type: string
+        status:
+          type: string
+          enum:
+            - OPEN
+            - PARTIAL_DELIVERY
+            - ON_HOLD
+            - CLOSED
+        onHold:
+          type: boolean
+      required:
+        - inboundProcessRef
+        - facilityRef
+        - status
+        - onHold
+    InventoryFacilityStockShapeByTrait:
+      type: object
+      properties:
+        PICKABLE:
+          type: number
+        ACCESSIBLE:
+          type: number
+      required:
+        - PICKABLE
+        - ACCESSIBLE
+    InventoryFacilityStockShape:
+      type: object
+      properties:
+        facilityRef:
+          type: string
+        tenantArticleId:
+          type: string
+        totalAmount:
+          type: number
+        reserved:
+          type: number
+        safetyStock:
+          type: number
+        available:
+          type: number
+        byTrait:
+          $ref: '#/components/schemas/InventoryFacilityStockShapeByTrait'
+        changeReason:
+          type: string
+          enum:
+            - UNKNOWN
+      required:
+        - facilityRef
+        - tenantArticleId
+        - totalAmount
+        - reserved
+        - safetyStock
+        - available
+        - byTrait
+        - changeReason
     InboundProcessPurchaseOrderSupplier:
       type: object
       properties:
@@ -27124,6 +27169,8 @@ components:
           type: array
           items:
             type: string
+        anonymized:
+          type: boolean
       required:
         - id
         - version
@@ -27135,6 +27182,7 @@ components:
         - inboundDate
         - origin
         - scannableCodes
+        - anonymized
     InboundProcessPaginatedResult:
       type: object
       properties:
@@ -27148,45 +27196,6 @@ components:
       required:
         - total
         - inboundProcesses
-    InboundProcessPurchaseOrder:
-      type: object
-      properties:
-        id:
-          type: string
-        created:
-          format: date-time
-          type: string
-        lastModified:
-          format: date-time
-          type: string
-        orderDate:
-          type: string
-          format: date-time
-        requestedDate:
-          oneOf:
-            - $ref: '#/components/schemas/RequestedDateASAP'
-            - $ref: '#/components/schemas/RequestedDateTimePoint'
-        requestedItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/InboundLineItem'
-        status:
-          type: string
-          enum:
-            - OPEN
-        cancelled:
-          type: boolean
-        supplier:
-          $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplier'
-      required:
-        - id
-        - created
-        - lastModified
-        - orderDate
-        - requestedDate
-        - requestedItems
-        - status
-        - cancelled
     InboundReceiptComment:
       type: object
       properties:
@@ -27268,6 +27277,8 @@ components:
           type: array
           items:
             type: string
+        anonymized:
+          type: boolean
         purchaseOrder:
           $ref: '#/components/schemas/InboundProcessPurchaseOrder'
         receipts:
@@ -27285,6 +27296,7 @@ components:
         - inboundDate
         - origin
         - scannableCodes
+        - anonymized
         - receipts
     InboundReceiptForCreation:
       type: object
