@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d8d904e0-aae7-4293-947d-9a0ca447700f",
+		"_postman_id": "04784b24-89ba-4bda-a175-10dad1049242",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://fulfillmenttools.github.io/fulfillmenttools-api-reference/\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -2365,10 +2365,90 @@
 					"name": "Remote Configuration",
 					"item": [
 						{
+							"name": "Remote Configuration Scopes",
+							"item": [
+								{
+									"name": "Add new Scope to Remote Configuration",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"remoteConfigurationVersion\": 5,\n  \"facilityRefs\": [\n    \"5462a9c7-5d9b-4401-8fc0-f9ee1e50c6cf\"\n  ],\n  \"userRefs\": [\n    \"7965be5a-372d-4132-b791-da628bbfd6af\"\n  ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/remoteconfig/:remoteConfigId/scopes",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"remoteconfig",
+												":remoteConfigId",
+												"scopes"
+											],
+											"variable": [
+												{
+													"key": ":remoteConfigId",
+													"value": "PUT-IN-YOUR-ID"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Remove Scope from Remote Configuration",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/remoteconfig/:remoteConfigId/scopes/:scopeId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"remoteconfig",
+												":remoteConfigId",
+												"scopes",
+												":scopeId"
+											],
+											"variable": [
+												{
+													"key": ":remoteConfigId",
+													"value": "PUT-IN-YOUR-ID"
+												},
+												{
+													"key": ":scopeId",
+													"value": "PUT-IN-YOUR-ID"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Create New Remote Configuration",
 							"request": {
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groups\": [\n    \"BACKOFFICE\",\n    \"FULFILLMENT\",\n    \"INVENTORY\"\n  ],\n  \"key\": \"SOME_KEY\",\n  \"scopes\": [\n    {\n      \"facilityRefs\": [\n        \"5462a9c7-5d9b-4401-8fc0-f9ee1e50c6cf\"\n      ],\n      \"userRefs\": [\n        \"7965be5a-372d-4132-b791-da628bbfd6af\"\n      ]\n    }\n  ],\n  \"value\": \"Some String Value\",\n  \"valueType\": \"STRING\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
 									"raw": "{{host}}/api/remoteconfig",
 									"host": [
@@ -2378,14 +2458,6 @@
 										"api",
 										"remoteconfig"
 									]
-								},
-								"body": {
-									"mode": "raw","raw": "{\n  \"groups\": [\n    \"BACKOFFICE\",\n    \"FULFILLMENT\",\n    \"INVENTORY\"\n  ],\n  \"key\": \"SOME_KEY\",\n  \"scopes\": [\n    {\n      \"facilityRefs\": [\n        \"5462a9c7-5d9b-4401-8fc0-f9ee1e50c6cf\"\n      ],\n      \"userRefs\": [\n        \"7965be5a-372d-4132-b791-da628bbfd6af\"\n      ]\n    }\n  ],\n  \"value\": \"Some String Value\",\n  \"valueType\": \"STRING\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
 								}
 							},
 							"response": []
@@ -2454,82 +2526,9 @@
 											"value": "PUT-IN-YOUR-ID"
 										}
 									]
-								},
-								"response": []
-							}
-						},
-						{
-							"name": "Remote Configuration Scopes",
-							"item": [
-
-								{
-									"name": "Add new Scope to Remote Configuration",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"url": {
-											"raw": "{{host}}/api/remoteconfig/:remoteConfigId/scopes",
-											"host": [
-												"{{host}}"
-											],
-											"path": [
-												"api",
-												"remoteconfig",
-												":remoteConfigId",
-												"scopes"
-											],
-											"variable": [
-												{
-													"key": ":remoteConfigId",
-													"value": "PUT-IN-YOUR-ID"
-												}
-											]
-										},
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"remoteConfigurationVersion\": 5,\n  \"facilityRefs\": [\n    \"5462a9c7-5d9b-4401-8fc0-f9ee1e50c6cf\"\n  ],\n  \"userRefs\": [\n    \"7965be5a-372d-4132-b791-da628bbfd6af\"\n  ]\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										}
-									},
-									"response": []
-								},
-
-								{
-									"name": "Remove Scope from Remote Configuration",
-									"request": {
-										"method": "DELETE",
-										"header": [],
-										"url": {
-											"raw": "{{host}}/api/remoteconfig/:remoteConfigId/scopes/:scopeId",
-											"host": [
-												"{{host}}"
-											],
-											"path": [
-												"api",
-												"remoteconfig",
-												":remoteConfigId",
-												"scopes",
-												":scopeId"
-											],
-											"variable": [
-												{
-													"key": ":remoteConfigId",
-													"value": "PUT-IN-YOUR-ID"
-												},
-												{
-													"key": ":scopeId",
-													"value": "PUT-IN-YOUR-ID"
-												}
-											]
-										}
-									},
-									"response": []
 								}
-							]
+							},
+							"response": []
 						}
 					]
 				}
@@ -9975,13 +9974,13 @@
 							"response": []
 						},
 						{
-							"name": "Update/Create CustomService",
+							"name": "Create CustomService",
 							"request": {
-								"method": "PUT",
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"id\": \"string\",\n  \"version\": 1,\n  \"status\": \"ENABLED\",\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"nameLocalized\": { \n        \"de_DE\": \"name\",\n        \"en_US\": \"name\"\n    },\n  \"descriptionLocalized\":{\n        \"de_DE\": \"Beschreibung der Armbandverlängerung.\",\n        \"en_US\": \"Description of bracelet extension.\"\n    },\n  \"executionTimeInMin\": 0,\n  \"itemsReturnable\": true,\n  \"itemsRequired\": \"OPTIONAL\",\n  \"additionalInformation\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"nameLocalized\":{ \n        \"de_DE\": \"name\",\n        \"en_US\": \"name\"\n    },\n      \"descriptionLocalized\": {\n        \"de_DE\": \"Beschreibung der Armbandverlängerung.\",\n        \"en_US\": \"Description of bracelet extension.\"\n    },\n      \"value\": \"string\",\n      \"minValue\": 1,\n      \"maxValue\": 0,\n      \"valueType\": \"NUMBER\"\n    }\n  ]\n}",
+									"raw": "{\n  \"status\": \"ENABLED\",\n  \"nameLocalized\": {\n    \"de_DE\": \"Wert_1\",\n    \"en_US\": \"Value_1\"\n  },\n  \"descriptionLocalized\": {\n    \"de_DE\": \"Wert\",\n    \"en_US\": \"Value\"\n  },\n  \"executionTimeInMin\":1000,\n  \"itemsReturnable\": true,\n  \"itemsRequired\": \"OPTIONAL\",\n  \"additionalInformation\": [\n    {\n      \"nameLocalized\": {\n    \"de_DE\": \"Wert\",\n    \"en_US\": \"Value\"\n  },\n      \"descriptionLocalized\": {\n    \"de_DE\": \"Wert\",\n    \"en_US\": \"Value\"\n  },\n      \"value\": \"test\"\n    }\n  ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -9996,6 +9995,167 @@
 									"path": [
 										"api",
 										"customservices"
+									],
+									"query": [
+										{
+											"key": "customserviceId",
+											"value": "PUT-YOUR-CUSTOMER-SERVICE-ID",
+											"disabled": true
+										},
+										{
+											"key": "additionalInformationId",
+											"value": "PUT-YOUR-ADDITIONAL-INFORMATION-ID",
+											"disabled": true
+										}
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Listings/putFacilityListing"
+							},
+							"response": []
+						},
+						{
+							"name": "Update CustomService",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"actions\": [\n    {\n      \"action\": \"ModifyCustomService\",\n      \"status\": \"ENABLED\",\n      \"nameLocalized\": {\n    \"de_DE\": \"Wert\",\n    \"en_US\": \"Value\"\n  },\n      \"descriptionLocalized\": {\n    \"de_DE\": \"Wert\",\n    \"en_US\": \"Value\"\n  ,\n      \"executionTimeInMin\": 0,\n      \"itemsReturnable\": true,\n      \"itemsRequired\": \"OPTIONAL\"\n    }\n  ],\n  \"version\": 42\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/customservices?customserviceId=PUT-YOUR-CUSTOMER-SERVICE-ID",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"customservices"
+									],
+									"query": [
+										{
+											"key": "customserviceId",
+											"value": "PUT-YOUR-CUSTOMER-SERVICE-ID"
+										}
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Listings/putFacilityListing"
+							},
+							"response": []
+						},
+						{
+							"name": "Update CustomService AdditionalInformation",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nameLocalized\":{\n    \"de_DE\": \"Wert\",\n    \"en_US\": \"Value\"\n  ,\n  \"descriptionLocalized\":{\n    \"de_DE\": \"Wert\",\n    \"en_US\": \"Value\"\n  ,\n  \"value\": \"string\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/customservices?customserviceId=PUT-YOUR-CUSTOMER-SERVICE-ID&additionalInformationId=PUT-YOUR-ADDITIONAL-INFORMATION-ID",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"customservices"
+									],
+									"query": [
+										{
+											"key": "customserviceId",
+											"value": "PUT-YOUR-CUSTOMER-SERVICE-ID"
+										},
+										{
+											"key": "additionalInformationId",
+											"value": "PUT-YOUR-ADDITIONAL-INFORMATION-ID"
+										}
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Listings/putFacilityListing"
+							},
+							"response": []
+						},
+						{
+							"name": "Create CustomService AdditionalInformation",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nameLocalized\": {\n    \"de_DE\": \"Wert\",\n    \"en_US\": \"Value\"\n  ,\n  \"descriptionLocalized\":{\n    \"de_DE\": \"Wert\",\n    \"en_US\": \"Value\"\n  ,\n  \"value\": \"string\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/customservices?customserviceId=PUT-YOUR-CUSTOMER-SERVICE-ID",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"customservices"
+									],
+									"query": [
+										{
+											"key": "customserviceId",
+											"value": "PUT-YOUR-CUSTOMER-SERVICE-ID"
+										},
+										{
+											"key": "",
+											"value": "PUT-YOUR-ADDITIONAL-INFORMATION-ID",
+											"disabled": true
+										}
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Listings/putFacilityListing"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete CustomService AdditionalInformation",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/customservices?customserviceId=PUT-YOUR-CUSTOMER-SERVICE-ID&additionalInformationId=PUT-YOUR-ADDITIONAL-INFORMATION-ID",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"customservices"
+									],
+									"query": [
+										{
+											"key": "customserviceId",
+											"value": "PUT-YOUR-CUSTOMER-SERVICE-ID"
+										},
+										{
+											"key": "additionalInformationId",
+											"value": "PUT-YOUR-ADDITIONAL-INFORMATION-ID"
+										}
 									]
 								},
 								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Listings/putFacilityListing"
