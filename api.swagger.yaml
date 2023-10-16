@@ -12892,6 +12892,438 @@ paths:
         description: Patch set
         required: true
       summary: Replace the zones of a Facility
+  /api/customservices/{customServiceId}:
+    patch:
+      parameters:
+        - description: ID of custom service you want to patch
+          in: path
+          name: customServiceId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: >-
+            custom service was found & patch-set has been applied. The patched
+            custom service is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: custom service not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: custom service version conflict
+      tags:
+        - CustomServices
+      description: ''
+      operationId: patchCustomService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomServicePatchActions'
+        description: Patch set
+        required: true
+      summary: Patches a custom service with the given ID
+    get:
+      parameters:
+        - description: ID of custom service you want to get
+          in: path
+          name: customServiceId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: Custom service config could be found in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      tags:
+        - CustomServices
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getCustomService
+      summary: Get requested Custom service
+  /api/customservices/{customserviceId}/additionalinformation:
+    post:
+      parameters:
+        - description: ID of custom service you want to create service job for
+          in: path
+          name: customserviceId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: The custom service was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: The custom service was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - CustomServices
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: createCustomServiceAdditionalInformation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdditionalInformationForCreation'
+        description: Desired custom service to create
+        required: true
+      summary: Create a custom service additional information
+  /api/customservices/{customserviceId}/additionalinformation/{additionalInformationId}:
+    delete:
+      parameters:
+        - description: ID of custom service
+          in: path
+          name: customserviceId
+          required: true
+          schema:
+            type: string
+        - description: ID of additional information you want to delete
+          in: path
+          name: additionalInformationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: The custom service was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: The custom service was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - CustomServices
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: deleteAdditionalInfo
+      summary: Delete a custom service
+    put:
+      parameters:
+        - description: ID of custom service
+          in: path
+          name: customserviceId
+          required: true
+          schema:
+            type: string
+        - description: ID of additional information you want to put
+          in: path
+          name: additionalInformationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: The custom service was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: The custom service was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - CustomServices
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: updateCustomServiceAdditionalInformation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdditionalInformationForCreation'
+        description: Desired custom service to create
+        required: true
+      summary: Update a custom service additional information
+  /api/customservices:
+    get:
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrippedCustomServices'
+          description: Custom service config could be found in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Entity not found
+      tags:
+        - CustomServices
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getCustomServices
+      summary: Get Custom services
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: The custom service was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomService'
+          description: The custom service was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Error'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - CustomServices
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: createCustomService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomServiceForCreation'
+        description: Desired custom service to create
+        required: true
+      summary: Create a custom service
   /api/articles:
     get:
       operationId: getArticles
@@ -15449,6 +15881,7 @@ components:
             - AddLineItemToPackingContainer
             - RemoveLineItemFromPackingContainer
             - UpdateLineItemOnPackingContainer
+            - ModifyCustomService
           example: <Use the corresponding action, see documentation>
           type: string
       required:
@@ -26642,6 +27075,205 @@ components:
       type: object
       xml:
         name: Zone
+    CustomServiceForCreation:
+      properties:
+        status:
+          $ref: '#/components/schemas/CustomServiceStatus'
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        executionTimeInMin:
+          type: integer
+        itemsReturnable:
+          type: boolean
+        itemsRequired:
+          $ref: '#/components/schemas/ItemsRequiredEnum'
+        additionalInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdditionalInformationForCreation'
+      type: object
+      required:
+        - nameLocalized
+        - itemsRequired
+        - status
+    CustomService:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/CustomServiceForCreation'
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/CustomServiceStatus'
+        name:
+          type: string
+        description:
+          type: string
+        additionalInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdditionalInformation'
+      type: object
+      required:
+        - id
+    StrippedCustomServices:
+      properties:
+        customServices:
+          items:
+            $ref: '#/components/schemas/CustomService'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
+    ItemsRequiredEnum:
+      type: string
+      enum:
+        - OPTIONAL
+        - MANDATORY
+        - NONE
+    CustomServiceStatus:
+      type: string
+      enum:
+        - ENABLED
+        - DISABLED
+    ServiceJobStatus:
+      type: string
+      enum:
+        - OPEN
+        - IN_PROGRESS
+        - FINISHED
+        - CANCELLED
+        - WAITING_FOR_INPUT
+    AdditionalInformationForCreation:
+      type: object
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        value:
+          type: string
+      required:
+        - nameLocalized
+        - value
+    AdditionalInformation:
+      allOf:
+        - $ref: '#/components/schemas/AdditionalInformationForCreation'
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+    ServiceJobLineItems:
+      type: object
+      properties:
+        quantity:
+          type: integer
+        scannableCodes:
+          items:
+            description: Codes, that identify the article
+            type: string
+          type: array
+        article:
+          $ref: '#/components/schemas/ServiceJobLineItemArticle'
+    ServiceJobLineItemArticle:
+      allOf:
+        - $ref: '#/components/schemas/AbstractArticle'
+        - properties:
+            attributes:
+              items:
+                $ref: '#/components/schemas/OrderArticleAttributeItem'
+              type: array
+          type: object
+      xml:
+        name: ServiceLineItemArticle
+    CustomServicePatchActions:
+      properties:
+        actions:
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/ModifyCustomServiceAction'
+          minItems: 1
+          type: array
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+        - actions
+      type: object
+      xml:
+        name: CustomServicePatchActions
+    ModifyCustomServiceAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value 'ModifyCustomService', because you want to modify a
+                custom service
+              enum:
+                - ModifyCustomService
+              type: string
+            status:
+              $ref: '#/components/schemas/CustomServiceStatus'
+            nameLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            descriptionLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            executionTimeInMin:
+              type: integer
+            itemsReturnable:
+              type: boolean
+            itemsRequired:
+              $ref: '#/components/schemas/ItemsRequiredEnum'
+          required:
+            - action
+          type: object
+      xml:
+        name: ModifyCustomServiceAction
+    ServiceJob:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      additionalProperties: false
+      required:
+        - status
+        - id
+        - customServiceRef
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/ServiceJobStatus'
+        customServiceRef:
+          type: string
+        additionalInformation:
+          type: array
+          items:
+            properties:
+              additionalInformationRef:
+                type: string
+              value:
+                type: string
+        lineItems:
+          type: array
+          items:
+            minLength: 1
+            $ref: '#/components/schemas/ServiceJobLineItems'
     HealthResult:
       properties:
         status:
