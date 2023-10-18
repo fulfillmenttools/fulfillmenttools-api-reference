@@ -18532,25 +18532,29 @@ components:
         - days
       type: object
     GdprConfiguration:
+      additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
         retentionTime:
-          default: 30
           description: Number of days after that anonymization is triggered.
           example: 30
           minimum: 1
           type: number
         deletionTimeAfterRetention:
-          default: 30
           description: Number of days since anonymization until deletion is triggered
           example: 30
           minimum: 1
           type: number
+        version:
+          example: 42
+          format: int64
+          type: integer
         id:
           type: string
       required:
         - retentionTime
+        - version
       type: object
     GlobalRoutingConfiguration:
       description: Global configuration for routing
