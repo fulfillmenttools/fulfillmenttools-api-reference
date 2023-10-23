@@ -12235,6 +12235,340 @@ paths:
         description: Desired Tag Configuration for Pickjobs
         required: true
       summary: Change the tag configuration for Pickjobs
+  /api/remoteconfig:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoteConfigurationForCreation'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteConfiguration'
+          description: Created entity in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Configurations
+      operationId: createRemoteConfiguration
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      summary: Create a new remote configuration
+    get:
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: facility to filter to
+          in: query
+          name: facilityId
+          required: false
+          schema:
+            type: string
+        - description: groups to filter to
+          in: query
+          name: groups
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - description: userId to filter to
+          in: query
+          name: userId
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteConfiguration'
+          description: Central RemoteConfiguration
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Configurations
+      operationId: getAllRemoteConfigurations
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      summary: Get all remote configurations
+  /api/remoteconfig/{id}:
+    get:
+      parameters:
+        - description: Reference to the remote config you want to get
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteConfiguration'
+          description: Central RemoteConfiguration
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Configurations
+      operationId: getRemoteConfiguration
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      summary: Get a single remote configuration
+    delete:
+      parameters:
+        - description: Reference to the remote config you want to delete
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully Deleted
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Configurations
+      operationId: deleteRemoteConfiguration
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      summary: Delete a single remote configuration
+  /api/remoteconfig/{id}/scopes:
+    post:
+      parameters:
+        - description: Reference to the remote config you want to change
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddRemoteConfigurationScopeParameter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteConfiguration'
+          description: Updated RemoteConfiguration in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Configurations
+      operationId: addRemoteConfigurationScope
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      summary: add a new scope to a remote configuration
+  /api/remoteconfig/{id}/scopes/{scopeId}:
+    delete:
+      parameters:
+        - description: Reference to the remote config you want to alter
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - description: Reference to the remote config scope you want to delete
+          in: path
+          name: scopeId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteConfiguration'
+          description: Successfully Deleted
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Configurations
+      operationId: deleteScopeFromRemoteConfiguration
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      summary: Delete a scope from a given remote configuration
   /api/health:
     get:
       responses:
@@ -27034,6 +27368,137 @@ components:
       type: object
       xml:
         name: StorageLocationPatchActions
+    RemoteConfigurationForCreation:
+      additionalProperties: false
+      properties:
+        key:
+          type: string
+          example: PICKING_SHOW_NEW_SCAN_VIEW
+          description: unique business key of this entity
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+        valueType:
+          $ref: '#/components/schemas/RemoteConfigurationValueType'
+        value:
+          oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - type: object
+        groups:
+          type: array
+          items:
+            example: INVENTORY
+            type: string
+          minItems: 1
+      required:
+        - key
+        - value
+        - valueType
+        - groups
+      type: object
+    RemoteConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          example: LGMl2DuvPnfPoSHhYFOm
+          description: auto generated unique identifier
+        key:
+          type: string
+          example: PICKING_SHOW_NEW_SCAN_VIEW
+          description: unique business key of this entity
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RemoteConfigurationScope'
+        valueType:
+          $ref: '#/components/schemas/RemoteConfigurationValueType'
+        value:
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+            - type: object
+            - type: integer
+        groups:
+          type: array
+          items:
+            example: INVENTORY
+            type: string
+          minItems: 1
+        flattenScopeIds:
+          description: >-
+            generated flatten unique ids of all scope sub elements (userRef,
+            facilityRef)
+          type: array
+          items:
+            example:
+              - INVENTORY
+              - 67151fc3-3ce1-400e-8b23-23c29e0cde90
+            type: string
+      required:
+        - id
+        - key
+        - version
+        - value
+        - valueType
+        - groups
+        - flattenScopeIds
+      type: object
+    RemoteConfigurationScopeForCreation:
+      additionalProperties: false
+      properties:
+        facilityRefs:
+          type: array
+          items:
+            description: Reference of a Facility
+            example: 928f3730-bc48-4d85-b83f-3fd86b776178
+            type: string
+        userRefs:
+          type: array
+          items:
+            description: Reference of a user
+            example: 928f3730-bc48-4d85-b83f-3fd86b776178
+            type: string
+      type: object
+    AddRemoteConfigurationScopeParameter:
+      additionalProperties: false
+      properties:
+        scope:
+          $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+        remoteConfigVersion:
+          type: number
+          minimum: 0
+      required:
+        - scope
+        - remoteConfigVersion
+      type: object
+    RemoteConfigurationScope:
+      allOf:
+        - $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          example: LGMl2DuvPnfPoSHhYFOm
+          description: auto generated unique identifier
+      required:
+        - id
+      type: object
+    RemoteConfigurationValueType:
+      enum:
+        - BOOLEAN
+        - STRING
+        - JSON
+        - NUMBER
+        - INT
+      type: string
     ZoneForCreation:
       properties:
         name:
