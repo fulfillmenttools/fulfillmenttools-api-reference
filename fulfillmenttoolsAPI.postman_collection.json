@@ -10586,10 +10586,16 @@
 											"disabled": true
 										},
 										{
-											"key": "scannableCodes",
+											"key": "itemReturnJobScannableCodes",
 											"value": "",
 											"disabled": true,
 											"description": "filter for scannable codes of the item return job"
+										},
+										{
+											"key": "itemReturnScannableCodes",
+											"value": "",
+											"disabled": true,
+											"description": "filter for scannable codes of the item return"
 										}
 									],
 									"path": [
@@ -10645,7 +10651,7 @@
 								},
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"processRef\": \"ADD-PROCESS-OR-REMOVE\",\n  \"facilityRefs\": [\n    \"ADD-FACILITY-ID\"\n  ],\n  \"status\": \"OPEN\",\n  \"tenantReceiptId\": \"OptionalTenantReceiptId\",\n  \"consumerAddresses\": [\n    {\n      \"companyName\": \"Company\",\n      \"firstName\": \"Jane\",\n      \"lastName\": \"Doe\",\n      \"city\": \"Cologne\",\n      \"country\": \"DE\",\n      \"houseNumber\": \"10\",\n      \"postalCode\": \"50667\",\n      \"street\": \"Some Str.\",\n      \"salutation\": \"Ms\",\n      \"email\": \"some@mail.com\",\n      \"addressType\": \"POSTAL_ADDRESS\"\n    }\n  ],\n  \"scannableCodes\": [\n    \"SomeCode\",\n    \"SecondCode\"\n  ],\n  \"returnableLineItems\": [\n    {\n      \"article\": {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"title\": \"SomeTitel\",\n        \"weight\": 12.50,\n        \"imageUrl\": \"SomeUrl\",\n        \"customAttributes\": {\n          \"not\": \"validated\",\n          \"free\": \"jsonBlob\"\n        }\n      },\n      \"delivered\": 5,\n      \"scannableCodes\": [\n        \"SomeCode\",\n        \"SecondCode\"\n      ]\n    }\n  ]\n}",
+									"raw": "{\n  \"processRef\": \"ADD-PROCESS-OR-REMOVE\",\n  \"originFacilityRefs\": [\n    \"ADD-FACILITY-ID\"\n  ],\n  \"status\": \"OPEN\",\n  \"tenantReceiptId\": \"OptionalTenantReceiptId\",\n  \"consumerAddresses\": [\n    {\n      \"companyName\": \"Company\",\n      \"firstName\": \"Jane\",\n      \"lastName\": \"Doe\",\n      \"city\": \"Cologne\",\n      \"country\": \"DE\",\n      \"houseNumber\": \"10\",\n      \"postalCode\": \"50667\",\n      \"street\": \"Some Str.\",\n      \"salutation\": \"Ms\",\n      \"email\": \"some@mail.com\",\n      \"addressType\": \"POSTAL_ADDRESS\"\n    }\n  ],\n  \"scannableCodes\": [\n    \"SomeCode\",\n    \"SecondCode\"\n  ],\n  \"returnableLineItems\": [\n    {\n      \"article\": {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"title\": \"SomeTitel\",\n        \"weight\": 12.50,\n        \"imageUrl\": \"SomeUrl\",\n        \"customAttributes\": {\n          \"not\": \"validated\",\n          \"free\": \"jsonBlob\"\n        }\n      },\n      \"delivered\": 5,\n      \"scannableCodes\": [\n        \"LineItemCode1\", \n        \"LineItemCode2\"\n      ]\n    }\n  ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -10824,7 +10830,7 @@
 								},
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"returnedLineItems\": [\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"returnedQuantity\": 3,\n      \"scannedCodes\": [\n        \"SomeCode\", \"SomeOtherCode\"\n      ]\n    }\n  ]\n}",
+									"raw": "{\n  \"returnFacilityRef\": \"SOME-FACILITY-REF\",\n  \"tenantReceiptId\": \"SOME-ID\",\n  \"status\": \"OPEN\",\n  \"scannableCodes\": [\n    \"ScannableCodeItemReturn1\", \"ScannableCodeItemReturn2\"\n  ],\n  \"returnedLineItems\": [\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"returnedQuantity\": 3,\n      \"scannedCodes\": [\n        \"LineItemCode1\", \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"name\": \"Wrong Size\"\n        }  \n      ]\n    }\n  ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -10832,7 +10838,51 @@
 									}
 								}
 							}
-						}
+						},
+						{
+							"name": "Item Return Actions",
+							"request": {
+								"description": "Call actions for a given item return",
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId/actions",
+									"host": [
+										"{{host}}"
+									],
+									"variable": [
+										{
+											"key": "itemReturnJobId",
+											"value": "PUT-IN-YOUR-ID",
+											"description": "Id of the item return job"
+										},
+										{
+											"key": "itemReturnId",
+											"value": "PUT-IN-YOUR-ID",
+											"description": "Id of the item return"
+										}
+									],
+									"path": [
+										"api",
+										"itemreturnjobs",
+										":itemReturnJobId",
+										"itemreturns",
+										":itemReturnId",
+										"actions"
+									]
+								},
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"STATUS_CHANGE\",\n  \"version\": 2,\n  \"status\": \"FINISHED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
+							},
+							"response": []
+						}						
 					]
 				},
 				{
