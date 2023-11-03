@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b41a8f41-335c-4ff1-981e-c5f863bf9fd8",
+		"_postman_id": "b2881ded-66c5-46f0-a8a9-f3fa4d259a73",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://fulfillmenttools.github.io/fulfillmenttools-api-reference/\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -10315,6 +10315,18 @@
 										":facilityId",
 										"customservices"
 									],
+									"query": [
+										{
+											"key": "startAfterId",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "25",
+											"disabled": true
+										}
+									],
 									"variable": [
 										{
 											"key": "facilityId",
@@ -10357,13 +10369,93 @@
 							"response": []
 						},
 						{
-							"name": "Update/Create FacilityCustomServiceConnection",
+							"name": "Update FacilityCustomServiceConnection",
 							"request": {
-								"method": "PUT",
+								"method": "PATCH",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"id\": \"string\",\n  \"status\": \"ACTIVE\"\n}",
+									"raw": "{\n  \"status\": \"ACTIVE\",\n  \"executionTimeInMin\": 0,\n  \"version\": 42\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/facilities/:facilityId/customservices/:customserviceRef",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"facilities",
+										":facilityId",
+										"customservices",
+										":customserviceRef"
+									],
+									"variable": [
+										{
+											"key": "facilityId",
+											"value": null
+										},
+										{
+											"key": "customserviceRef",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create FacilityCustomServiceConnection",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"executionTimeInMin\": 0,\n  \"status\": \"ACTIVE\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/facilities/:facilityId/customservices/:customserviceRef",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"facilities",
+										":facilityId",
+										"customservices",
+										":customserviceRef"
+									],
+									"variable": [
+										{
+											"key": "facilityId",
+											"value": null
+										},
+										{
+											"key": "customserviceRef",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete FacilityCustomServiceConnection",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -10663,39 +10755,82 @@
 						},
 						{
 							"name": "Item Return Job Actions",
-							"request": {
-								"description": "Call actions for a given item return job",
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/actions",
-									"host": [
-										"{{host}}"
-									],
-									"variable": [
-										{
-											"key": "itemReturnJobId",
-											"value": "PUT-IN-YOUR-ID",
-											"description": "Id of the item return job"
+							"item": [
+								{
+									"name": "Change Item Return Job Status",
+									"request": {
+										"description": "Call Action to change the status of a given item return job",
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"variable": [
+												{
+													"key": "itemReturnJobId",
+													"value": "PUT-IN-YOUR-ID",
+													"description": "Id of the item return job"
+												}
+											],
+											"path": [
+												"api",
+												"itemreturnjobs",
+												":itemReturnJobId",
+												"actions"
+											]
+										},
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"STATUS_CHANGE\",\n  \"version\": 2,\n  \"status\": \"FINISHED\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
 										}
-									],
-									"path": [
-										"api",
-										"itemreturnjobs",
-										":itemReturnJobId"
-									]
+									},
+									"response": []
 								},
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"name\": \"STATUS_CHANGE\",\n  \"version\": 2,\n  \"status\": \"FINISHED\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								}
-							},
-							"response": []
+                                {
+                                    "name": "Add Item Return to Item Return Job",
+                                    "request": {
+                                        "description": "Call actions to add a new item return to a given item return job",
+                                        "method": "POST",
+                                        "header": [],
+                                        "url": {
+                                            "raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/actions",
+                                            "host": [
+                                              "{{host}}"
+                                            ],
+                                            "variable": [
+                                               {
+                                                 "key": "itemReturnJobId",
+                                                 "value": "PUT-IN-YOUR-ID",
+                                                 "description": "Id of the item return job"
+                                               }
+                                            ],
+                                            "path": [
+                                               "api",
+                                               "itemreturnjobs",
+                                               ":itemReturnJobId",
+    							 	           "actions"
+                                           ]
+                                        },
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"name\": \"ADD_ITEM_RETURN\",\n  \"version\": 2,\n  \"itemReturn\": {\n    \"returnFacilityRef\": \"SOME-FACILITY-REF\",\n    \"tenantReceiptId\": \"SOME-ID\",\n    \"status\": \"OPEN\",\n    \"scannableCodes\": [\n      \"ScannableCodeItemReturn1\",\n      \"ScannableCodeItemReturn2\"\n    ],\n    \"returnedLineItems\": [\n      {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"returnedQuantity\": 3,\n        \"scannedCodes\": [\n          \"LineItemCode1\",\n          \"LineItemCode2\"\n        ],\n        \"reasons\": [\n          {\n            \"name\": \"Wrong Size\"\n          }\n        ]\n      }\n    ]\n  }\n}\n\n",
+                                            "options": {
+                                               "raw": {
+                                                 "language": "json"
+                                               }
+                                            }
+                                    }
+                                },
+                                "response": []
+                              }                              
+							]
 						}
 					]
 				},
@@ -10768,120 +10903,141 @@
 							"response": []
 						},
 						{
-							"name": "Delete Item Return",
-							"request": {
-								"method": "DELETE",
-								"description": "Remove an Item Return from an item return job",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId",
-									"host": [
-										"{{host}}"
-									],
-									"variable": [
-										{
-											"key": "itemReturnJobId",
-											"value": "PUT-IN-YOUR-ID",
-											"description": "Item return job id to get delete the item return from",
-											"disabled": false
-										},
-										{
-											"key": "itemReturnId",
-											"value": "PUT-IN-YOUR-ID",
-											"description": "Item return id to be deleted",
-											"disabled": false
-										}
-									],
-									"path": [
-										"api",
-										"itemreturnjobs",
-										":itemReturnJobId",
-										"itemreturns",
-										":itemReturnId"
-									]
-								}
-							}
-						},
-						{
-							"name": "Add Item Return",
-							"request": {
-								"method": "POST",
-								"description": "Add a new Item Return to an item return job",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns",
-									"host": [
-										"{{host}}"
-									],
-									"variable": [
-										{
-											"key": "itemReturnJobId",
-											"value": "PUT-IN-YOUR-ID",
-											"description": "Item return job id to get the item returns for",
-											"disabled": false
-										}
-									],
-									"path": [
-										"api",
-										"itemreturnjobs",
-										":itemReturnJobId",
-										"itemreturns"
-									]
-								},
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"returnFacilityRef\": \"SOME-FACILITY-REF\",\n  \"tenantReceiptId\": \"SOME-ID\",\n  \"status\": \"OPEN\",\n  \"scannableCodes\": [\n    \"ScannableCodeItemReturn1\", \"ScannableCodeItemReturn2\"\n  ],\n  \"returnedLineItems\": [\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"returnedQuantity\": 3,\n      \"scannedCodes\": [\n        \"LineItemCode1\", \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"name\": \"Wrong Size\"\n        }  \n      ]\n    }\n  ]\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								}
-							}
-						},
-						{
 							"name": "Item Return Actions",
-							"request": {
-								"description": "Call actions for a given item return",
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId/actions",
-									"host": [
-										"{{host}}"
-									],
-									"variable": [
-										{
-											"key": "itemReturnJobId",
-											"value": "PUT-IN-YOUR-ID",
-											"description": "Id of the item return job"
+							"item": [
+								{		
+									"name": "Change Item Return Status Actions",
+									"request": {
+										"description": "Call actions to change the status of a given item return",
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"variable": [
+												{
+													"key": "itemReturnJobId",
+													"value": "PUT-IN-YOUR-ID",
+													"description": "Id of the item return job"
+												},
+												{
+													"key": "itemReturnId",
+													"value": "PUT-IN-YOUR-ID",
+													"description": "Id of the item return"
+												}
+											],
+											"path": [
+												"api",
+												"itemreturnjobs",
+												":itemReturnJobId",
+												"itemreturns",
+												":itemReturnId",
+												"actions"
+											]
 										},
-										{
-											"key": "itemReturnId",
-											"value": "PUT-IN-YOUR-ID",
-											"description": "Id of the item return"
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"STATUS_CHANGE\",\n  \"itemReturnJobVersion\": 2,\n  \"status\": \"FINISHED\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
 										}
-									],
-									"path": [
-										"api",
-										"itemreturnjobs",
-										":itemReturnJobId",
-										"itemreturns",
-										":itemReturnId",
-										"actions"
-									]
+									},
+									"response": []
 								},
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"name\": \"STATUS_CHANGE\",\n  \"version\": 2,\n  \"status\": \"FINISHED\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+								{
+									"name": "Delete Item Return Actions",
+									"request": {
+										"description": "Call actions to delete a given item return on a given item return job",
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"variable": [
+												{
+													"key": "itemReturnJobId",
+													"value": "PUT-IN-YOUR-ID",
+													"description": "Id of the item return job"
+												},
+												{
+													"key": "itemReturnId",
+													"value": "PUT-IN-YOUR-ID",
+													"description": "Id of the item return"
+												}
+											],
+											"path": [
+												"api",
+												"itemreturnjobs",
+												":itemReturnJobId",
+												"itemreturns",
+												":itemReturnId",
+												"actions"
+											]
+										},
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"DELETE_ITEM_RETURN\",\n  \"itemReturnJobVersion\": 2\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
 										}
-									}
+									},
+									"response": []
+								},
+								{
+									"name": "Replace Item Return Line Items Actions",
+									"request": {
+										"description": "Call actions to replace all line items on a given item return on a given item return job",
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"variable": [
+												{
+													"key": "itemReturnJobId",
+													"value": "PUT-IN-YOUR-ID",
+													"description": "Id of the item return job"
+												},
+												{
+													"key": "itemReturnId",
+													"value": "PUT-IN-YOUR-ID",
+													"description": "Id of the item return"
+												}
+											],
+											"path": [
+												"api",
+												"itemreturnjobs",
+												":itemReturnJobId",
+												"itemreturns",
+												":itemReturnId",
+												"actions"
+											]
+										},
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"REPLACE_RETURNED_LINE_ITEMS\",\n  \"itemReturnJobVersion\": 2,\n  \"returnedLineItems\": [\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"returnedQuantity\": 2,\n      \"scannedCodes\": [\n        \"LineItemCode1\",\n        \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"name\": \"Wrong Size\"\n        }\n      ]\n    }\n  ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						}						
 					]
 				},
