@@ -28576,16 +28576,46 @@ components:
       required:
         - version
         - enableStorageLocationOverview
+    OutboundTagFilter:
+      type: object
+      properties:
+        allowedValues:
+          type: array
+          items:
+            type: string
+        tagId:
+          type: string
+      required:
+        - allowedValues
+        - tagId
+    OutboundClearTrigger:
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+            - pick-job-closed_event-v1
+            - handoverjob-handed-over_event-v1
+        tagFilter:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutboundTagFilter'
+      required:
+        - event
     OutboundStockConfiguration:
       type: object
       properties:
         trackOutboundStock:
           type: boolean
-        outboundLocationRef:
+        locationRef:
           type: string
+        clearTrigger:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutboundClearTrigger'
       required:
         - trackOutboundStock
-        - outboundLocationRef
+        - locationRef
     InventoryFacilityConfigurationForPatch:
       type: object
       properties:
