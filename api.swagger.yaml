@@ -21605,6 +21605,7 @@ components:
         - DONE
         - FAILED
         - CANCELED
+        - OBSOLETE
       type: string
     PickJob:
       allOf:
@@ -21796,6 +21797,7 @@ components:
         - RESTOWED
         - EXPIRED
         - CANCELED
+        - OBSOLETE
       type: string
       xml:
         name: PickJobStatus
@@ -22012,6 +22014,7 @@ components:
         - $ref: '#/components/schemas/PickJobAbortActionParameter'
         - $ref: '#/components/schemas/PickJobRestartActionParameter'
         - $ref: '#/components/schemas/PickJobResetActionParameter'
+        - $ref: '#/components/schemas/PickJobObsoleteActionParameter'
     PickJobAbortActionParameter:
       additionalProperties: false
       properties:
@@ -22043,6 +22046,22 @@ components:
     PickJobRestartActionEnum:
       enum:
         - RESTART
+      type: string
+    PickJobObsoleteActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobObsoleteActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    PickJobObsoleteActionEnum:
+      enum:
+        - OBSOLETE
       type: string
     PickJobResetActionParameter:
       additionalProperties: false
@@ -23880,6 +23899,7 @@ components:
         - CONFIRMED
         - COMPLETED
         - CANCELED
+        - OBSOLETE
       type: string
     Status:
       additionalProperties: false
