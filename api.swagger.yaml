@@ -2027,115 +2027,6 @@ paths:
         description: Desired default picking times configuration to create/update
         required: true
       summary: Change the tenant wide default picking times configuration
-  /api/configurations/return:
-    get:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReturnConfiguration'
-          description: Return config found.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Entity not found
-      tags:
-        - Configurations
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-        /></center> <br> <i>This part of the API is currently under development.
-        That means that this endpoint, model, etc. can contain breaking changes
-        and / or might not be available at all times in your API instance. It
-        could disappear also without warning. Thus it currently does not fall
-        under our SLA regulations. For details on this topic please check our <a
-        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
-      operationId: getReturnConfiguration
-      summary: Get the current configuration for returns
-    put:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReturnConfiguration'
-          description: The return configuration was successfully updated.
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReturnConfiguration'
-          description: The return configuration was successfully created.
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '409':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Entity version conflict
-      tags:
-        - Configurations
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-        /></center> <br> <i>This part of the API is currently under development.
-        That means that this endpoint, model, etc. can contain breaking changes
-        and / or might not be available at all times in your API instance. It
-        could disappear also without warning. Thus it currently does not fall
-        under our SLA regulations. For details on this topic please check our <a
-        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
-      operationId: putReturnConfiguration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReturnConfiguration'
-        description: Desired return configuration to create/update
-        required: true
-      summary: Change the tenant wide return configuration
   /api/configurations/returnnote:
     get:
       responses:
@@ -8441,8 +8332,9 @@ paths:
             endpoint
       tags:
         - Returns
+      deprecated: true
       description: >-
-        <center><img
+        Will be replaced in the future with the new /itemreturnjob. <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
         /></center> <br> <i>This part of the API is currently under development.
         That means that this endpoint, model, etc. can contain breaking changes
@@ -8502,8 +8394,9 @@ paths:
           description: User not found
       tags:
         - Returns
+      deprecated: true
       description: >-
-        <center><img
+        Will be replaced in the future with the new /itemreturnjob. <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
         /></center> <br> <i>This part of the API is currently under development.
         That means that this endpoint, model, etc. can contain breaking changes
@@ -12396,6 +12289,563 @@ paths:
         documentation under
         https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
       summary: Delete a scope from a given remote configuration
+  /api/configurations/return:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnConfiguration'
+          description: Return config found.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Configurations
+        - Item Return Job
+        - Item Return
+        - Return
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disappear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
+      operationId: getReturnConfiguration
+      summary: Get the current configuration for returns
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnConfiguration'
+          description: The return configuration was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnConfiguration'
+          description: The return configuration was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity version conflict
+      tags:
+        - Configurations
+        - Item Return Job
+        - Item Return
+        - Return
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+        /></center> <br> <i>This part of the API is currently under development.
+        That means that this endpoint, model, etc. can contain breaking changes
+        and / or might not be available at all times in your API instance. It
+        could disappear also without warning. Thus it currently does not fall
+        under our SLA regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
+      operationId: upsertReturnConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnConfiguration'
+        description: Desired return configuration to create/update
+        required: true
+      summary: Change the tenant wide return configuration
+  /api/itemreturnjobs/{itemReturnJobId}/itemreturns:
+    get:
+      parameters:
+        - description: item return job to read the item return for
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ItemReturn'
+          description: Get all item returns for a given item return job
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Item Return Job
+        - Item Return
+        - Return
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getItemReturns
+      summary: Get item returns
+  /api/itemreturnjobs/{itemReturnJobId}/itemreturns/{itemReturnId}:
+    get:
+      parameters:
+        - description: item return job to read the item return for
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+        - description: id of the item return you want to read
+          in: path
+          name: itemReturnId
+          required: true
+          schema:
+            type: string
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReturn'
+          description: Get a specific item return
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Return
+        - Item Return Job
+        - Item Return
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getItemReturn
+      summary: Get item return by id
+  /api/itemreturnjobs:
+    get:
+      parameters:
+        - description: facility too filter the results
+          in: query
+          name: facilityId
+          required: false
+          schema:
+            type: string
+        - description: scannableCodes of the item return job too filter the results
+          in: query
+          name: itemReturnJobScannableCodes
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - description: scannableCodes of the item return too filter the results
+          in: query
+          name: itemReturnScannableCodes
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ItemReturnJob'
+          description: All Item Return Jobs matching the given parameters
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Return
+        - Item Return Job
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getItemReturnJobs
+      summary: Get all Item Return Jobs
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemReturnJobForCreation'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReturnJob'
+          description: Created entity
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Return
+        - Item Return Job
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: createItemReturnJob
+      summary: Creates a new ItemReturnJob
+  /api/itemreturnjobs/{itemReturnJobId}:
+    get:
+      parameters:
+        - description: id of the item return job
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReturnJob'
+          description: Returns Item Return Job with the provided id
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Return
+        - Item Return Job
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: getItemReturnJob
+      summary: Get Item Return Job by id
+  /api/itemreturnjobs/{itemReturnJobId}/actions:
+    post:
+      parameters:
+        - description: id of the Item Return Job
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemReturnJobActionsParameter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReturnJob'
+          description: Updated entity
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Return
+        - Item Return Job
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: updateItemReturnJob
+      summary: Updates a new ItemReturnJob
+  /api/itemreturnjobs/{itemReturnJobId}/itemreturns/{itemReturnId}/actions:
+    post:
+      parameters:
+        - description: id of the Item Return Job
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+        - description: id of the Item Return
+          in: path
+          name: itemReturnId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemReturnActionsParameter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReturnJob'
+          description: Updated entity
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Return
+        - Item Return Job
+      description: >-
+        <img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+        </center> <br> This part of the API is currently under development. That
+        means that this endpoint, model, etc. can contain breaking changes and /
+        or might not be available at all times in your API instance. It could
+        disappear also without warning. Thus it currently does not fall under
+        our SLA regulations. For details on this topic please check our
+        documentation under
+        https://fulfillmenttools.github.io/fulfillmenttools-api-reference</i>
+      operationId: itemReturnActions
+      summary: Actions for a ItemReturn
   /api/health:
     get:
       responses:
@@ -22552,6 +23002,13 @@ components:
           items:
             type: string
           type: array
+        itemReturnJobsRef:
+          description: >-
+            References to the Item Return Job connected to this process (if
+            present).
+          items:
+            type: string
+          type: array
         shipmentRefs:
           description: References to the Shipments connected to this process (if present).
           items:
@@ -22922,12 +23379,28 @@ components:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
         active:
+          deprecated: true
           default: true
-          description: Enable or disable returns
+          description: >-
+            Enable or disable legacy returns. Use returnTypeConfiguration
+            instead
           type: boolean
+        returnTypeConfiguration:
+          $ref: '#/components/schemas/ReturnTypeConfiguration'
       required:
         - active
       type: object
+    ReturnTypeConfiguration:
+      properties:
+        type:
+          $ref: '#/components/schemas/ReturnConfigurationType'
+      required:
+        - type
+    ReturnConfigurationType:
+      type: string
+      enum:
+        - RETURN
+        - ITEM_RETURN
     ReturnItemArticle:
       allOf:
         - $ref: '#/components/schemas/AbstractArticle'
@@ -27051,6 +27524,355 @@ components:
       required:
         - offeredDocumentsPerTag
         - offeredDocumentsByDefault
+    ItemReturnJob:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        processRef:
+          type: string
+        originFacilityRefs:
+          items:
+            type: string
+          type: array
+        status:
+          $ref: '#/components/schemas/ItemReturnJobStatus'
+        tenantReceiptId:
+          type: string
+        consumerAddresses:
+          items:
+            $ref: '#/components/schemas/ConsumerAddress'
+          type: array
+        scannableCodes:
+          items:
+            type: string
+          type: array
+        returnableLineItems:
+          items:
+            $ref: '#/components/schemas/ItemReturnJobLineItem'
+          type: array
+          minItems: 1
+        itemReturns:
+          items:
+            $ref: '#/components/schemas/ItemReturn'
+          type: array
+          minItems: 0
+        anonymized:
+          description: Indicates if gdpr related data was anonymized
+          example: false
+          type: boolean
+      type: object
+      required:
+        - id
+        - processRef
+        - originFacilityRefs
+        - status
+        - consumerAddresses
+        - returnableLineItems
+        - scannableCodes
+        - itemReturns
+    ItemReturnJobForCreation:
+      additionalProperties: false
+      properties:
+        processRef:
+          type: string
+        originFacilityRefs:
+          items:
+            type: string
+          type: array
+        status:
+          $ref: '#/components/schemas/ItemReturnJobStatus'
+        tenantReceiptId:
+          type: string
+        consumerAddresses:
+          items:
+            $ref: '#/components/schemas/ConsumerAddress'
+          type: array
+        scannableCodes:
+          items:
+            type: string
+          type: array
+        returnableLineItems:
+          items:
+            $ref: '#/components/schemas/ItemReturnJobLineItemForCreation'
+          type: array
+          minItems: 1
+      type: object
+      required:
+        - originFacilityRefs
+        - status
+        - consumerAddresses
+        - returnableLineItems
+        - scannableCodes
+    ItemReturnJobStatus:
+      type: string
+      enum:
+        - OPEN
+        - FINISHED
+    ItemReturnJobLineItem:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/ItemReturnJobLineItemForCreation'
+      properties:
+        id:
+          type: string
+      required:
+        - id
+        - article
+        - delivered
+    ItemReturnJobLineItemForCreation:
+      additionalProperties: false
+      properties:
+        article:
+          $ref: '#/components/schemas/AbstractArticle'
+        delivered:
+          type: number
+          minimum: 1
+        scannableCodes:
+          items:
+            type: string
+          type: array
+      required:
+        - article
+        - delivered
+        - scannableCodes
+    ItemReturn:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          example: '2020-02-03T08:45:51.525Z'
+          format: date-time
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
+        returnFacilityRef:
+          type: string
+        status:
+          $ref: '#/components/schemas/ItemReturnStatus'
+        tenantReceiptId:
+          type: string
+        scannableCodes:
+          items:
+            type: string
+          type: array
+        returnedLineItems:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ItemReturnLineItem'
+      required:
+        - id
+        - created
+        - lastModified
+        - status
+        - returnedLineItems
+        - returnFacilityRef
+        - scannableCodes
+    ItemReturnStatus:
+      enum:
+        - OPEN
+        - IN_PROGRESS
+        - FINISHED
+      type: string
+    ItemReturnLineItem:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/ItemReturnLineItemForCreation'
+      properties:
+        id:
+          type: string
+          example: a69006ba-7100-4b4d-a610-1ca28016a4eb
+        itemReturnJobLineItemRef:
+          type: string
+          example: a69006ba-7100-4b4d-a610-1ca28016a4eb
+        scannedCodes:
+          items:
+            type: string
+          type: array
+        reasons:
+          items:
+            $ref: '#/components/schemas/ItemReturnLineItemReasons'
+          type: array
+          minItems: 1
+      required:
+        - id
+        - itemReturnJobLineItemRef
+        - tenantArticleId
+        - returnedQuantity
+        - scannedCodes
+        - reasons
+    ItemReturnLineItemReasons:
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    ItemReturnForCreation:
+      additionalProperties: false
+      properties:
+        status:
+          $ref: '#/components/schemas/ItemReturnStatus'
+        returnFacilityRef:
+          type: string
+        tenantReceiptId:
+          type: string
+        scannableCodes:
+          items:
+            type: string
+          type: array
+        returnedLineItems:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ItemReturnLineItemForCreation'
+      required:
+        - returnedLineItems
+        - status
+        - returnFacilityRef
+        - scannableCodes
+    ItemReturnLineItemForCreation:
+      additionalProperties: false
+      properties:
+        tenantArticleId:
+          type: string
+          example: a69006ba-7100-4b4d-a610-1ca28016a4eb
+        returnedQuantity:
+          type: number
+          example: 5
+          minimum: 1
+        scannedCodes:
+          type: array
+          items:
+            type: string
+            minItems: 1
+        reasons:
+          items:
+            $ref: '#/components/schemas/ItemReturnLineItemReasons'
+          minItems: 1
+          type: array
+      required:
+        - tenantArticleId
+        - returnedQuantity
+        - scannedCodes
+        - reasons
+    ItemReturnJobActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/ItemReturnJobStatusChangeActionParameter'
+        - $ref: '#/components/schemas/AddItemReturnActionParameter'
+    ItemReturnJobStatusChangeActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ItemReturnJobStatusChangeAction'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        status:
+          $ref: '#/components/schemas/ItemReturnJobStatus'
+      required:
+        - name
+        - version
+        - status
+    ItemReturnJobStatusChangeAction:
+      enum:
+        - STATUS_CHANGE
+      type: string
+    AddItemReturnActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/AddItemReturnAction'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        itemReturn:
+          $ref: '#/components/schemas/ItemReturnForCreation'
+      required:
+        - name
+        - version
+        - itemReturn
+    AddItemReturnAction:
+      enum:
+        - ADD_ITEM_RETURN
+      type: string
+    ItemReturnActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/ItemReturnStatusChangeActionParameter'
+        - $ref: >-
+            #/components/schemas/ItemReturnReplaceReturnedLineItemsActionParameter
+        - $ref: '#/components/schemas/DeleteItemReturnActionParameter'
+    ItemReturnStatusChangeActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ItemReturnStatusChangeAction'
+        itemReturnJobVersion:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        status:
+          $ref: '#/components/schemas/ItemReturnStatus'
+      required:
+        - name
+        - itemReturnJobVersion
+        - status
+    ItemReturnStatusChangeAction:
+      enum:
+        - STATUS_CHANGE
+      type: string
+    ItemReturnReplaceReturnedLineItemsActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ItemReturnReplaceReturnedLineItemsAction'
+        itemReturnJobVersion:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        returnedLineItems:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ItemReturnLineItemForCreation'
+      required:
+        - name
+        - itemReturnJobVersion
+        - returnedLineItems
+    ItemReturnReplaceReturnedLineItemsAction:
+      enum:
+        - REPLACE_RETURNED_LINE_ITEMS
+      type: string
+    DeleteItemReturnActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/DeleteItemReturnAction'
+        itemReturnJobVersion:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - itemReturnJobVersion
+    DeleteItemReturnAction:
+      enum:
+        - DELETE_ITEM_RETURN
+      type: string
     StorageLocationForCreation:
       properties:
         name:
