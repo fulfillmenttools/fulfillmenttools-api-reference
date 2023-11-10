@@ -20651,9 +20651,11 @@ components:
             status:
               $ref: '#/components/schemas/ParcelStatus'
               description: The state of the parcel we want to change.
+            result:
+              $ref: '#/components/schemas/ParcelResult'
+              description: The result of the parcel
           required:
             - action
-            - status
           type: object
       xml:
         name: ModifyParcelAction
@@ -21885,58 +21887,7 @@ components:
             returnAddress:
               $ref: '#/components/schemas/FacilityAddress'
             result:
-              description: >-
-                Within this object you can find the result of the request after
-                it has been processed (status = DONE or FAILED)
-              properties:
-                carrierTrackingNumber:
-                  example: '84168117830018'
-                  type: string
-                labelUrl:
-                  description: >-
-                    The URL where you can download the label relative to the
-                    path of this resource
-                  example: '%%HOST%%/api/parcels/{parcelId}/labels/84168117830018.pdf'
-                  type: string
-                proxyId:
-                  description: The ID of the corresponding job at the CEP proxy (if used)
-                  example: 3a186c51d4281acbecf5ed38805b1db92a9d668b
-                  type: string
-                returnLabelId:
-                  description: The original return label id
-                  example: 3a186c51d4281acbecf5ed38805b1db92a9d668b
-                  type: string
-                returnLabelUrl:
-                  description: The original return label URL
-                  example: someCepProvider.com/pathToReturnLabel.pdf
-                  type: string
-                customsDocumentId:
-                  description: The customs document id
-                  example: 3a186c51d4281acbecf5ed38805b1db92a9d668b
-                  type: string
-                customsDocumentUrl:
-                  description: The original customs document URL
-                  example: someCepProvider.com/pathToReturnLabel.pdf
-                  type: string
-                sendLabelUrl:
-                  description: The original send label URL
-                  example: someCepProvider.com/pathToSendLabel.pdf
-                  type: string
-                summary:
-                  description: >-
-                    Summary of the result of the request in a human readable
-                    form.
-                  example: Package label was successfully requested at DHL.
-                  type: string
-                trackingStatus:
-                  $ref: '#/components/schemas/TrackingStatus'
-                trackingUrl:
-                  description: The URL to track this parcel
-                  example: http://track.io/3a186c51d4
-                  type: string
-              required:
-                - summary
-              type: object
+              $ref: '#/components/schemas/ParcelResult'
             sender:
               $ref: '#/components/schemas/FacilityAddress'
             shipmentRef:
@@ -27175,6 +27126,57 @@ components:
       type: string
       xml:
         name: ToolkitPredicateConnector
+    ParcelResult:
+      description: >-
+        Within this object you can find the result of the request after it has
+        been processed (status = DONE or FAILED)
+      properties:
+        carrierTrackingNumber:
+          example: '84168117830018'
+          type: string
+        labelUrl:
+          description: >-
+            The URL where you can download the label relative to the path of
+            this resource
+          example: '%%HOST%%/api/parcels/{parcelId}/labels/84168117830018.pdf'
+          type: string
+        proxyId:
+          description: The ID of the corresponding job at the CEP proxy (if used)
+          example: 3a186c51d4281acbecf5ed38805b1db92a9d668b
+          type: string
+        returnLabelId:
+          description: The original return label id
+          example: 3a186c51d4281acbecf5ed38805b1db92a9d668b
+          type: string
+        returnLabelUrl:
+          description: The original return label URL
+          example: someCepProvider.com/pathToReturnLabel.pdf
+          type: string
+        customsDocumentId:
+          description: The customs document id
+          example: 3a186c51d4281acbecf5ed38805b1db92a9d668b
+          type: string
+        customsDocumentUrl:
+          description: The original customs document URL
+          example: someCepProvider.com/pathToReturnLabel.pdf
+          type: string
+        sendLabelUrl:
+          description: The original send label URL
+          example: someCepProvider.com/pathToSendLabel.pdf
+          type: string
+        summary:
+          description: Summary of the result of the request in a human readable form.
+          example: Package label was successfully requested at DHL.
+          type: string
+        trackingStatus:
+          $ref: '#/components/schemas/TrackingStatus'
+        trackingUrl:
+          description: The URL to track this parcel
+          example: http://track.io/3a186c51d4
+          type: string
+      required:
+        - summary
+      type: object
     RestowedItems:
       properties:
         restowedItems:
