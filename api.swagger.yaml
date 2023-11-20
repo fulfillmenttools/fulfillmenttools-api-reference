@@ -15771,7 +15771,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/StockForUpdate'
+              oneOf:
+                - $ref: '#/components/schemas/StockForUpdate'
+                - type: object
+                  properties:
+                    value:
+                      type: integer
+                      minimum: 0
+                      format: int32
+                    locationRef:
+                      type: string
+                      nullable: true
+                  required:
+                    - value
+                  not:
+                    required:
+                      - version
       responses:
         '200':
           description: Stock
@@ -30083,6 +30098,8 @@ components:
           type: number
         id:
           type: string
+        version:
+          type: number
         facilityRef:
           type: string
         tenantArticleId:
@@ -30129,6 +30146,7 @@ components:
         - facilityWideReserved
         - available
         - id
+        - version
         - facilityRef
         - tenantArticleId
         - created
@@ -30147,8 +30165,11 @@ components:
         locationRef:
           type: string
           nullable: true
+        version:
+          type: number
       required:
         - value
+        - version
     StockPaginatedResult:
       type: object
       properties:
@@ -30261,9 +30282,12 @@ components:
           nullable: true
         id:
           type: string
+        version:
+          type: number
       required:
         - value
         - id
+        - version
     StocksForUpsert:
       type: object
       properties:
@@ -30273,6 +30297,23 @@ components:
             oneOf:
               - $ref: '#/components/schemas/StockForCreation'
               - $ref: '#/components/schemas/StockForUpsertUpdate'
+              - type: object
+                properties:
+                  value:
+                    type: integer
+                    minimum: 0
+                    format: int32
+                  locationRef:
+                    type: string
+                    nullable: true
+                  id:
+                    type: string
+                required:
+                  - id
+                  - value
+                not:
+                  required:
+                    - version
           maxItems: 500
       required:
         - stocks
