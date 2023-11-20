@@ -2506,7 +2506,7 @@ paths:
         under our SLA regulations. For details on this topic please check our <a
         href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i>
       operationId: getManualRerouteConfiguration
-      summary: Get a tenant manual reroute config
+      summary: Get a tenant manual order reroute config
     put:
       responses:
         '200':
@@ -2514,7 +2514,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManualRerouteConfiguration'
-          description: Manual reroute configuration was written successfully
+          description: Manual order reroute configuration was written successfully
         '401':
           content:
             application/json:
@@ -2556,7 +2556,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ManualRerouteConfiguration'
         required: true
-      summary: Update manual reroute configuration of a tenant
+      summary: Update manual order reroute configuration of a tenant
   /api/configurations/stock:
     get:
       responses:
@@ -23583,6 +23583,7 @@ components:
         - shipFromStoreReroute
       type: object
     ManualRerouteConfiguration:
+      description: Allows order reroute to be triggered manually via api.
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
@@ -24412,7 +24413,7 @@ components:
           type: boolean
         allowManualReroute:
           default: false
-          description: Allows reroute to be triggered manually via api.
+          description: Allows pickjob reroute to be triggered manually via api.
           type: boolean
         facilityWideRerouteOnShortPick:
           default: false
