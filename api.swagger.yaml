@@ -17399,6 +17399,7 @@ components:
     DecisionLog:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+      description: '@deprecated'
       properties:
         finalizeRun:
           description: The iteration through the finalizer process
@@ -17505,6 +17506,488 @@ components:
       required:
         - pickingTimes
       type: object
+    DecisionLogV2:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          type: string
+        facilityDecisions:
+          items:
+            $ref: '#/components/schemas/FacilityDecision'
+          type: array
+        orderSplitDecision:
+          $ref: '#/components/schemas/OrderSplitDecision'
+        statistics:
+          $ref: '#/components/schemas/RoutingStatistics'
+        results:
+          $ref: '#/components/schemas/RoutingResults'
+        routingPlanRef:
+          type: string
+      required:
+        - id
+        - routingPlanRef
+        - facilityDecisions
+        - statistics
+        - results
+        - created
+        - lastModified
+        - version
+      type: object
+      xml:
+        name: DecisionLogV2
+    DecisionLogFacilityInfo:
+      properties:
+        name:
+          type: string
+        facilityRef:
+          type: string
+      required:
+        - name
+        - facilityRef
+    RoutingResults:
+      properties:
+        assignedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignmentItem'
+        bestRatedFacility:
+          $ref: '#/components/schemas/DecisionLogFacilityInfo'
+        bestAvailableFacility:
+          $ref: '#/components/schemas/DecisionLogFacilityInfo'
+        bestReassignmentFacility:
+          $ref: '#/components/schemas/DecisionLogFacilityInfo'
+        routingPlanStatus:
+          $ref: '#/components/schemas/RoutingPlanStatus'
+      required:
+        - assignedItems
+    RoutingStatistics:
+      properties:
+        fenceStatistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/FenceStatistic'
+        ratingStatistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatingStatistic'
+        durationMs:
+          type: number
+      required:
+        - fenceStatistics
+        - ratingStatistics
+        - lineItemFenceStatistics
+    FenceStatistic:
+      properties:
+        name:
+          type: string
+        rejectedAmount:
+          type: number
+        passedAmount:
+          type: number
+        passedPercentage:
+          type: number
+        durationMs:
+          description: Duration in Milliseconds
+          type: number
+      required:
+        - name
+        - rejectedAmount
+        - passedAmount
+        - passedPercentage
+        - durationMs
+    RatingStatistic:
+      properties:
+        name:
+          type: string
+        maxScore:
+          type: number
+        minScore:
+          type: number
+        maxPenalty:
+          type: number
+        durationMs:
+          description: Duration in Milliseconds
+          type: number
+      required:
+        - name
+        - maxScore
+        - minScore
+        - maxPenalty
+        - durationMs
+    SplitResultType:
+      enum:
+        - SPLIT
+        - DO_NOT_SPLIT
+        - DO_NOT_SPLIT_USE_BEST_RATED
+        - DO_NOT_SPLIT_BECAUSE_AVAILABILITY_USE_BEST_RATED
+        - DO_NOT_SPLIT_USE_BEST_AVAILABLE
+        - REASSIGN_TO_PARENT
+        - REASSIGN_TO_PARENT_COMPLETELY
+        - FAIL
+        - INVALID_SPLIT
+        - PARK_IN_WAITING_ROOM
+    OrderSplitDecision:
+      properties:
+        split:
+          $ref: '#/components/schemas/SplitInformation'
+        reassignment:
+          $ref: '#/components/schemas/ReassignmentInformation'
+        splitType:
+          $ref: '#/components/schemas/SplitResultType'
+      required:
+        - splitType
+    ReassignmentInformation:
+      properties:
+        sourceFacility:
+          $ref: '#/components/schemas/DecisionLogFacilityInfo'
+        reassignedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignmentItem'
+      required:
+        - sourceFacility
+        - reassignedItems
+    AssignmentItem:
+      properties:
+        tenantArticleId:
+          type: string
+        articleTitle:
+          type: string
+        quantity:
+          type: number
+      required:
+        - tenantArticleId
+        - quantity
+    SplitInformation:
+      properties:
+        targetFacility:
+          $ref: '#/components/schemas/DecisionLogFacilityInfo'
+        targetRoutingPlanRef:
+          type: string
+        splitCount:
+          type: number
+        splittedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignmentItem'
+      required:
+        - splitCount
+        - targetRoutingPlanRef
+        - splittedItems
+    FacilityDecision:
+      properties:
+        facility:
+          $ref: '#/components/schemas/DecisionLogFacilityInfo'
+        orderFences:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderFenceDecision'
+        orderLineItemFences:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineItemFenceDecisions'
+        orderRatings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderRatingDecision'
+        availabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailabilityDuringRouting'
+        totalPenalty:
+          type: number
+        rank:
+          type: number
+        isBestRated:
+          type: boolean
+        isBestAvailable:
+          type: boolean
+        isBestReassignmentCandidate:
+          type: boolean
+      required:
+        - facility
+        - orderFences
+        - orderLineItemFences
+        - orderRatings
+        - orderLineItemRatings
+        - availabilities
+    OrderRatingDecision:
+      type: object
+      properties:
+        name:
+          type: string
+        score:
+          type: number
+        normalizedScore:
+          type: number
+        maxPenalty:
+          type: number
+        details:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/ToolkitDecisionDetail'
+              - $ref: '#/components/schemas/ToolkitComparisonDecisionDetail'
+      required:
+        - name
+        - score
+        - normalizedScore
+        - maxPenalty
+    AvailabilityDuringRouting:
+      properties:
+        tenantArticleId:
+          type: string
+        articleTitle:
+          type: string
+        requestedQuantity:
+          type: number
+        stockInformation:
+          $ref: '#/components/schemas/AvailabilityDuringRoutingStock'
+        rerouteInformation:
+          $ref: '#/components/schemas/AvailabilityDuringRerouteStock'
+        stockInformationPostRerouteAdjustment:
+          $ref: '#/components/schemas/AvailabilityDuringRoutingStock'
+      required:
+        - tenantArticleId
+        - requestedQuantity
+        - stockInformation
+    AvailabilityDuringRerouteStock:
+      properties:
+        rerouteReason:
+          $ref: '#/components/schemas/RerouteReason'
+        pickedQuantity:
+          type: number
+    AvailabilityDuringRoutingStock:
+      properties:
+        stock:
+          type: number
+        stockConsideringOfflineStock:
+          type: number
+        reserved:
+          type: number
+        available:
+          type: number
+      required:
+        - available
+        - reserved
+        - stock
+        - stockConsideringOfflineStock
+    OrderFenceDecision:
+      type: object
+      properties:
+        name:
+          type: string
+        decision:
+          $ref: '#/components/schemas/FenceResultStatus'
+        details:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/OrderFenceDecisionDetail'
+              - $ref: '#/components/schemas/ToolkitDecisionDetail'
+              - $ref: '#/components/schemas/ToolkitComparisonDecisionDetail'
+      required:
+        - name
+        - decision
+        - details
+    BaseDecisionDetail:
+      properties:
+        decisionType:
+          $ref: '#/components/schemas/DecisionType'
+      required:
+        - decisionType
+    DecisionType:
+      enum:
+        - FENCE
+        - TOOLKIT
+        - TOOLKITCOMPARISON
+        - RATING
+    ToolkitPredicateDecisionDetail:
+      properties:
+        originalValue:
+          type: array
+          items:
+            type: string
+        transformedValue:
+          type: array
+          items:
+            type: string
+        evaluationResult:
+          type: boolean
+        predicate:
+          $ref: '#/components/schemas/ToolkitPredicate'
+      required:
+        - originalValue
+        - transformedValue
+        - evaluationResult
+        - predicate
+    ToolkitPredicatesDecisionDetail:
+      properties:
+        connector:
+          $ref: '#/components/schemas/ToolkitPredicateConnector'
+        predicates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolkitPredicateDecisionDetail'
+      required:
+        - connector
+        - predicates
+    ToolkitComparisonDecisionDetail:
+      allOf:
+        - $ref: '#/components/schemas/BaseDecisionDetail'
+      properties:
+        predicates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolKitComparisonDetails'
+        predicateConnector:
+          $ref: '#/components/schemas/ToolkitPredicateConnector'
+        description:
+          type: string
+        explanation:
+          $ref: >-
+            #/components/schemas/ToolkitRuleComparePropertiesOperatorResultExplanation
+      required:
+        - predicates
+        - result
+        - predicateConnector
+        - description
+    ToolKitComparisonDetails:
+      properties:
+        leftPart:
+          $ref: '#/components/schemas/ToolKitComparisonPart'
+        rightPart:
+          $ref: '#/components/schemas/ToolKitComparisonPart'
+        evaluationResult:
+          type: boolean
+        predicate:
+          $ref: '#/components/schemas/ToolkitComparisonPredicate'
+      required:
+        - leftPart
+        - rightPart
+        - evaluationResult
+        - predicate
+    ToolKitComparisonPart:
+      properties:
+        originalValue:
+          type: array
+          items:
+            type: string
+        transformedValue:
+          type: array
+          items:
+            type: string
+      required:
+        - originalValue
+        - transformedValue
+    ToolkitDecisionDetail:
+      allOf:
+        - $ref: '#/components/schemas/BaseDecisionDetail'
+      properties:
+        leftSideEvaluation:
+          type: boolean
+        leftPredicatesDetail:
+          $ref: '#/components/schemas/ToolkitPredicatesDecisionDetail'
+        rightSideEvaluation:
+          type: boolean
+        rightPredicatesDetail:
+          $ref: '#/components/schemas/ToolkitPredicatesDecisionDetail'
+        comparisonOperator:
+          $ref: '#/components/schemas/ToolkitRuleComparisonOperatorType'
+        description:
+          type: string
+        explanation:
+          $ref: '#/components/schemas/ToolkitRuleOperatorResultExplanation'
+      required:
+        - decisionType
+        - result
+        - leftSideEvaluation
+        - description
+    ToolkitRuleOperatorResultExplanation:
+      enum:
+        - SKIPPED
+        - BOTH_CONDITIONS_MET
+        - ONLY_FIRST_CONDITION_MET
+        - ONLY_SECOND_CONDITION_MET
+        - SKIPPED_BECAUSE_OF_ERROR
+    ToolkitRuleComparePropertiesOperatorResultExplanation:
+      enum:
+        - ALL_PREDICATES_MET
+        - NOT_ALL_PREDICATES_MET
+        - SKIPPED_BECAUSE_OF_ERROR
+    OrderFenceDecisionDetail:
+      allOf:
+        - $ref: '#/components/schemas/BaseDecisionDetail'
+      properties:
+        contextReference:
+          $ref: '#/components/schemas/ContextReference'
+        expectedValue:
+          type: string
+        actualValue:
+          type: string
+        reactiveErrorReason:
+          $ref: '#/components/schemas/ReactiveErrorReason'
+      required:
+        - expectedValue
+        - facilityValue
+        - decisionType
+    ContextReference:
+      properties:
+        reference:
+          type: string
+        routingDecisionContext:
+          $ref: '#/components/schemas/RoutingDecisionContext'
+      required:
+        - reference
+        - routingDecisionContext
+    RoutingDecisionContext:
+      enum:
+        - LISTING
+        - CARRIER
+    FenceResultStatus:
+      enum:
+        - FAILED
+        - PASSED
+        - REACTIVE_PASSING_POSSIBLE
+    ReactiveErrorReason:
+      enum:
+        - BACKORDER_LISTING
+        - PREORDER_LISTING
+    OrderLineItemFenceDecisions:
+      properties:
+        name:
+          type: string
+        orderLineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineItemFenceDecision'
+      required:
+        - name
+        - orderLineItems
+    OrderLineItemFenceDecision:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        articleTitle:
+          type: string
+        decision:
+          $ref: '#/components/schemas/FenceResultStatus'
+        details:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/OrderFenceDecisionDetail'
+              - $ref: '#/components/schemas/ToolkitDecisionDetail'
+              - $ref: '#/components/schemas/ToolkitComparisonDecisionDetail'
+        reactiveErrorReason:
+          $ref: '#/components/schemas/ReactiveErrorReason'
+      required:
+        - tenantArticleId
+        - articleTitle
+        - decision
+        - details
     DeliveryAddress:
       properties:
         city:
@@ -17808,7 +18291,7 @@ components:
         - INVENTORY
       type: string
     PreferredCarrier:
-      description: Names of the preferred carriers to handle out the order
+      description: Keys of the preferred carriers to handle out the order
       type: string
     PreferredCarrierWithProduct:
       additionalProperties: false
