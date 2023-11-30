@@ -29610,6 +29610,47 @@ components:
       required:
         - PICKABLE
         - ACCESSIBLE
+    InventoryFacilityStockDeltaShape:
+      type: object
+      properties:
+        totalAmount:
+          type: number
+        reserved:
+          type: number
+        safetyStock:
+          type: number
+        available:
+          type: number
+        byTrait:
+          $ref: '#/components/schemas/InventoryFacilityStockShapeByTrait'
+        availableToPromise:
+          type: number
+        readyToPick:
+          type: number
+        availableForPicking:
+          type: number
+      required:
+        - totalAmount
+        - reserved
+        - safetyStock
+        - available
+        - byTrait
+        - availableToPromise
+        - readyToPick
+        - availableForPicking
+    InventoryFacilityStockStaleReason:
+      type: object
+      properties:
+        timestamp:
+          format: date-time
+          type: string
+        reasons:
+          type: array
+          items:
+            type: string
+      required:
+        - timestamp
+        - reasons
     InventoryFacilityStockShape:
       type: object
       properties:
@@ -29637,6 +29678,12 @@ components:
           type: number
         availableForPicking:
           type: number
+        delta:
+          $ref: '#/components/schemas/InventoryFacilityStockDeltaShape'
+        staleReasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryFacilityStockStaleReason'
       required:
         - facilityRef
         - tenantArticleId
@@ -29649,6 +29696,8 @@ components:
         - availableToPromise
         - readyToPick
         - availableForPicking
+        - delta
+        - staleReasons
     InboundProcessPurchaseOrderSupplier:
       type: object
       properties:
