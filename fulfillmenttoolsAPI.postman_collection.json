@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "7d299ba1-f0f6-4fac-b72c-8c3defef6514",
+		"_postman_id": "f477316c-3b48-46fe-b709-889dad532113",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://fulfillmenttools.github.io/fulfillmenttools-api-reference/\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "16829062"
+		"_exporter_id": "30481973"
 	},
 	"item": [
 		{
@@ -2724,6 +2724,389 @@
 						}
 					],
 					"description": "Validate a given postal code according to the given country"
+				},
+				{
+					"name": "Notification Center Configuration",
+					"item": [
+						{
+							"name": "Global",
+							"item": [
+								{
+									"name": "Upsert Global Notification Center Configuration",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"channels\": [\n        {\n            \"enabled\": true,\n            \"events\": [\n                \"ROUTING_PLAN_NOT_ROUTABLE\"\n            ],\n            \"type\": \"EMAIL\",\n            \"language\": \"de_DE\",\n            \"receiver\": [\n                \"hello@fulfillmenttools.com\"\n            ]\n        }\n    ],\n    \"enabled\": true,\n    \"version\":1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/configurations/notificationcenter",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"notificationcenter"
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putRoutingConfiguraton"
+									},
+									"response": []
+								},
+								{
+									"name": "Global Notification Center Configuration - Add Channel Action",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"ADD_CHANNEL\",\n    \"version\": \"PUT-IN-THE-CONFIG-VERSION\",\n    \"channel\": {\n        \"type\": \"EMAIL\",\n        \"enabled\": true,\n        \"language\": \"de_DE\",\n        \"events\": [\n            \"ROUTING_PLAN_NOT_ROUTABLE\"\n        ],\n        \"receiver\": [\n            \"hello@fulfillmenttools.com\"\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/configurations/notificationcenter/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"notificationcenter",
+												"actions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Global Notification Center Configuration - Delete Channels Action",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n          \"name\": \"DELETE_CHANNELS_BY_IDS\",\n          \"version\": 1,\n          \"ids\": [\"PUT-IN-YOUR-CHANNEL-IDS\"]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/configurations/notificationcenter/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"notificationcenter",
+												"actions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Global Notification Center Configuration - Update Channel Action",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"channel\": {\n        \"id\": \"PUT-IN-YOUR-CHANNEL-ID\",\n        \"type\": \"EMAIL\",\n        \"enabled\": false,\n        \"language\": \"en_US\",\n        \"events\": [\n            \"ROUTING_PLAN_NOT_ROUTABLE\"\n        ],\n        \"receiver\": [\n            \"hello@fulfillmenttools.com\"\n        ]\n    },\n    \"name\": \"UPDATE_CHANNEL\",\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/configurations/notificationcenter/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"notificationcenter",
+												"actions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Global Notification Center Configuration",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/configurations/notificationcenter",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"notificationcenter"
+											],
+											"query": [
+												{
+													"key": "startAfterId",
+													"value": null,
+													"description": "All entities after given Id",
+													"disabled": true
+												},
+												{
+													"key": "size",
+													"value": null,
+													"description": "Number of facilities to show (default 25)",
+													"disabled": true
+												},
+												{
+													"key": "groups",
+													"value": null,
+													"description": "Filter for this list of groups",
+													"disabled": true
+												},
+												{
+													"key": "facilityId",
+													"value": null,
+													"description": "Filter for this facility id",
+													"disabled": true
+												},
+												{
+													"key": "userId",
+													"value": null,
+													"description": "Filter for this user id",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Facility",
+							"item": [
+								{
+									"name": "Upsert Facility Notification Center Configuration",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"channels\": [\n        {\n            \"enabled\": true,\n            \"events\": [\n                \"ROUTING_PLAN_NOT_ROUTABLE\"\n            ],\n            \"type\": \"EMAIL\",\n            \"language\": \"de_DE\",\n            \"receiver\": [\n                \"hello@fulfillmenttools.com\"\n            ]\n        }\n    ],\n    \"version\": 1,\n    \"enabled\": true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityRef/configurations/notificationcenter",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityRef",
+												"configurations",
+												"notificationcenter"
+											],
+											"variable": [
+												{
+													"key": "facilityRef",
+													"value": ""
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putRoutingConfiguraton"
+									},
+									"response": []
+								},
+								{
+									"name": "Facility Notification Center Configuration - Add Channel Action",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"ADD_CHANNEL\",\n    \"version\": 1,\n    \"channel\": {\n        \"type\": \"EMAIL\",\n        \"enabled\": true,\n        \"language\": \"de_DE\",\n        \"events\": [\n            \"ROUTING_PLAN_NOT_ROUTABLE\"\n        ],\n        \"receiver\": [\n            \"hello@fulfillmenttools.com\"\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityRef/configurations/notificationcenter/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityRef",
+												"configurations",
+												"notificationcenter",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "facilityRef",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Facility Notification Center Configuration - Delete Channels Action",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n          \"name\": \"DELETE_CHANNELS_BY_IDS\",\n          \"version\": 1,\n          \"ids\": [\"d92706a8-2589-440d-8c5e-0dc75a5cb8b5\"]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityRef/configurations/notificationcenter/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityRef",
+												"configurations",
+												"notificationcenter",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "facilityRef",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Facility Notification Center Configuration - Update Channel Action",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"channel\": {\n        \"id\": \"12345\",\n        \"type\": \"EMAIL\",\n        \"enabled\": false,\n        \"language\": \"en_US\",\n        \"events\": [\n            \"ROUTING_PLAN_NOT_ROUTABLE\"\n        ],\n        \"receiver\": [\n            \"helloNeu2@fulfillmenttools.com\"\n        ]\n    },\n    \"name\": \"UPDATE_CHANNEL\",\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityRef/configurations/notificationcenter/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityRef",
+												"configurations",
+												"notificationcenter",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "facilityRef",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Facility Notification Center Configuration",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/facilities/5ck8TcSGdq3idSvs4n3CHL/configurations/notificationcenter",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												"5ck8TcSGdq3idSvs4n3CHL",
+												"configurations",
+												"notificationcenter"
+											],
+											"query": [
+												{
+													"key": "startAfterId",
+													"value": null,
+													"description": "All entities after given Id",
+													"disabled": true
+												},
+												{
+													"key": "size",
+													"value": null,
+													"description": "Number of facilities to show (default 25)",
+													"disabled": true
+												},
+												{
+													"key": "groups",
+													"value": null,
+													"description": "Filter for this list of groups",
+													"disabled": true
+												},
+												{
+													"key": "facilityId",
+													"value": null,
+													"description": "Filter for this facility id",
+													"disabled": true
+												},
+												{
+													"key": "userId",
+													"value": null,
+													"description": "Filter for this user id",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
 				}
 			]
 		},
@@ -4876,7 +5259,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"value\": 10,\n    \"locationRef\": null\n}",
+									"raw": "{\n    \"value\": 10,\n    \"locationRef\": null,\n    \"version\": 1\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -5011,7 +5394,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"stocks\": [\n        {\n            \"facilityRef\": \"FACILITY_REF\",\n            \"tenantArticleId\": \"will-be-created\",\n            \"value\": 100,\n            \"properties\": {\n                \"batchNo\": \"9890\"\n            },\n            \"receiptDate\": \"2021-08-30T11:18:14.214Z\"\n        }, \n        {\n            \"id\": \"STOCK_ID\",\n            \"value\": 111,\n            \"locationRef\": \"LOCATION_REF\"\n        }\n    ]\n}",
+									"raw": "{\n    \"stocks\": [\n        {\n            \"facilityRef\": \"FACILITY_REF\",\n            \"tenantArticleId\": \"will-be-created\",\n            \"value\": 100,\n            \"properties\": {\n                \"batchNo\": \"9890\"\n            },\n            \"receiptDate\": \"2021-08-30T11:18:14.214Z\"\n        }, \n        {\n            \"id\": \"STOCK_ID\",\n            \"value\": 111,\n            \"locationRef\": \"LOCATION_REF\",\n            \"version\": 1\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
