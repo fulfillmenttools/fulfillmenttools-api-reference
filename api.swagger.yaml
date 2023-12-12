@@ -6715,6 +6715,41 @@ paths:
   /api/pickjobs:
     get:
       parameters:
+        - description: >-
+            Search term you want to get the corresponding pickjobs. Search will
+            be performed on multiple fields, like tenantOrderId, consumerName,
+            tenantArticleId and more
+          in: query
+          name: searchTerm
+          required: false
+          schema:
+            type: string
+        - description: Reference to the carrier you want to get the corresponding pickjobs
+          explode: false
+          in: query
+          name: carrierKeys
+          required: false
+          schema:
+            items:
+              type: string
+              maxItems: 100
+            type: array
+        - description: >-
+            Reference to the orderDate you want to get the corresponding
+            pickjobs
+          in: query
+          name: startOrderDate
+          required: false
+          schema:
+            type: string
+        - description: >-
+            Reference to the orderDate you want to get the corresponding
+            pickjobs
+          in: query
+          name: endOrderDate
+          required: false
+          schema:
+            type: string
         - description: Reference to the order you want to get the corresponding pickjobs
           in: query
           name: orderRef
@@ -6792,14 +6827,6 @@ paths:
           required: false
           schema:
             type: boolean
-        - description: >-
-            Reference to the username of the editor to get the corresponding
-            pickjobs
-          in: query
-          name: username
-          required: false
-          schema:
-            type: string
         - description: all entities after given Id
           in: query
           name: startAfterId
@@ -8671,12 +8698,79 @@ paths:
           required: false
           schema:
             type: string
+        - description: >-
+            This query can be used to find shipments belonging to the referenced
+            facility
+          in: query
+          name: facilityRef
+          required: false
+          schema:
+            type: string
+        - description: This query can be used to find shipments for a referenced carrier
+          in: query
+          name: carrierRef
+          required: false
+          schema:
+            type: string
+        - description: Find shipments with one the the given carriers
+          explode: false
+          in: query
+          name: carrierKeys
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - description: Find shipments in one of the given status
+          explode: false
+          in: query
+          name: status
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - description: Find shipments with parcels in one of the given status
+          explode: false
+          in: query
+          name: parcelStatus
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - description: Start date range for shipments
+          in: query
+          name: startTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: End date range for shipments
+          in: query
+          name: endTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
         - description: Parameter to filter anonymized shipments
           in: query
           name: anonymized
           required: false
           schema:
             type: boolean
+        - description: >-
+            Fulltext search in shipment's tenantOrderId, shortId,
+            parcels.carrierTrackingNumber, lineItems.article.tenantArticleId,
+            lineItems.article.title, invoiceAddress, targetAddress and
+            customerName
+          in: query
+          name: searchTerm
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -14884,6 +14978,112 @@ paths:
           in: path
           schema:
             type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Receipt'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Inbound
+    put:
+      operationId: putReceipt
+      summary: Put receipt to id
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: receiptId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboundReceiptForUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Receipt'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Inbound
+    patch:
+      operationId: patchReceipt
+      summary: Patch receipt to id
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: receiptId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboundReceiptForPatch'
       responses:
         '200':
           description: ''
@@ -24925,6 +25125,17 @@ components:
       description: STATUS_TARGET_TIME_LAST_MODIFIED_DATE is depricated
       enum:
         - STATUS_TARGET_TIME_ORDER_DATE
+    ShipmentWithSearchPath:
+      allOf:
+        - $ref: '#/components/schemas/Shipment'
+        - properties:
+            searchPaths:
+              items:
+                type: string
+              type: array
+              minItems: 0
+          additionalProperties: false
+          type: object
     Shipment:
       allOf:
         - $ref: '#/components/schemas/ShipmentForCreation'
@@ -24942,6 +25153,9 @@ components:
                 this shipment
               example: false
               type: boolean
+            carrierKey:
+              type: string
+              example: DPD
             id:
               description: >-
                 The id of this Shipment. It is generated during creation
@@ -25477,6 +25691,9 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/ParcelStatus'
+        carrierTrackingNumber:
+          example: '84168117830018'
+          type: string
       required:
         - parcelRef
         - carrierRef
@@ -25497,6 +25714,14 @@ components:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
         - properties:
+            searchPaths:
+              items:
+                type: string
+              type: array
+              minItems: 0
+            carrierKey:
+              type: string
+              example: DPD
             facilityRef:
               description: >-
                 The id of the facility reference. The given ID has to be present
@@ -25587,7 +25812,7 @@ components:
       properties:
         shipments:
           items:
-            $ref: '#/components/schemas/Shipment'
+            $ref: '#/components/schemas/ShipmentWithSearchPath'
           type: array
         total:
           description: Total number of found entities for this query
@@ -29620,6 +29845,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - FINISHED
         id:
           type: string
       required:
@@ -30144,6 +30374,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - FINISHED
       required:
         - receivedDate
         - receivedItems
@@ -30295,6 +30530,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - FINISHED
         facilityRef:
           type: string
       required:
@@ -30320,6 +30560,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - FINISHED
         id:
           type: string
         inboundProcessRef:
@@ -30341,6 +30586,63 @@ components:
         - version
         - created
         - lastModified
+    InboundReceiptForUpdate:
+      type: object
+      properties:
+        asnRef:
+          type: string
+        receivedDate:
+          format: date-time
+          type: string
+        receivedItems:
+          maxItems: 200
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptLineItem'
+        comments:
+          maxItems: 20
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptComment'
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - FINISHED
+        version:
+          type: number
+      required:
+        - receivedDate
+        - receivedItems
+        - comments
+        - version
+    InboundReceiptForPatch:
+      type: object
+      properties:
+        asnRef:
+          type: string
+        comments:
+          maxItems: 20
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptComment'
+        receivedDate:
+          format: date-time
+          type: string
+        receivedItems:
+          maxItems: 200
+          type: array
+          items:
+            $ref: '#/components/schemas/InboundReceiptLineItem'
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - FINISHED
+        version:
+          type: number
+      required:
+        - version
     InventoryConfigurationForPatch:
       type: object
       properties:
