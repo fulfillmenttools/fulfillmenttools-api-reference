@@ -1,11 +1,10 @@
 {
 	"info": {
-		"_postman_id": "6b74375b-a127-4166-8fbd-e79e488341c9",
+		"_postman_id": "6b1a6f22-348b-4575-ae52-a25789718a99",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://fulfillmenttools.github.io/fulfillmenttools-api-reference/\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11673215",
-		"_collection_link": "https://cloudy-firefly-771136.postman.co/workspace/FFtApiPostman~3412b37c-b9c1-4e97-8878-de4006ba46bb/collection/11673215-6b74375b-a127-4166-8fbd-e79e488341c9?action=share&source=collection_link&creator=11673215"
+		"_exporter_id": "30481973"
 	},
 	"item": [
 		{
@@ -2791,13 +2790,13 @@
 									"response": []
 								},
 								{
-									"name": "Global Notification Center Configuration - Delete Channels Action",
+									"name": "Global Notification Center Configuration - Delete Channel",
 									"request": {
-										"method": "POST",
+										"method": "DELETE",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n          \"name\": \"DELETE_CHANNELS_BY_IDS\",\n          \"version\": 1,\n          \"ids\": [\"PUT-IN-YOUR-CHANNEL-IDS\"]\n}",
+											"raw": "",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -2805,7 +2804,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{host}}/api/configurations/notificationcenter/actions",
+											"raw": "{{host}}/api/configurations/notificationcenter/channels/:channelId?version=1",
 											"host": [
 												"{{host}}"
 											],
@@ -2813,7 +2812,20 @@
 												"api",
 												"configurations",
 												"notificationcenter",
-												"actions"
+												"channels",
+												":channelId"
+											],
+											"query": [
+												{
+													"key": "version",
+													"value": "1"
+												}
+											],
+											"variable": [
+												{
+													"key": "channelId",
+													"value": ""
+												}
 											]
 										}
 									},
@@ -2979,13 +2991,13 @@
 									"response": []
 								},
 								{
-									"name": "Facility Notification Center Configuration - Delete Channels Action",
+									"name": "Facility Notification Center Configuration - Delete Channel",
 									"request": {
-										"method": "POST",
+										"method": "DELETE",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n          \"name\": \"DELETE_CHANNELS_BY_IDS\",\n          \"version\": 1,\n          \"ids\": [\"PUT-IN-YOUR-CHANNEL-IDS\"]\n}",
+											"raw": "",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -2993,7 +3005,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{host}}/api/facilities/:facilityRef/configurations/notificationcenter/actions",
+											"raw": "{{host}}/api/facilities/:facilityRef/configurations/notificationcenter/channels/:channelId?version=1",
 											"host": [
 												"{{host}}"
 											],
@@ -3003,11 +3015,22 @@
 												":facilityRef",
 												"configurations",
 												"notificationcenter",
-												"actions"
+												"channels",
+												":channelId"
+											],
+											"query": [
+												{
+													"key": "version",
+													"value": "1"
+												}
 											],
 											"variable": [
 												{
 													"key": "facilityRef",
+													"value": ""
+												},
+												{
+													"key": "channelId",
 													"value": ""
 												}
 											]
@@ -5714,7 +5737,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"tenantInboundProcessId\": \"{{$randomUUID}}\",\n    \"facilityRef\": \"345dcac2-da21-4cbe-b60e-48e6f5917652\",\n    \"purchaseOrder\": {\n        \"orderDate\": \"2023-03-21T08:16:07.000Z\",\n        \"requestedDate\": {\n            \"type\": \"ASAP\",\n            \"value\": \"2023-03-21T08:16:07.000Z\"\n        },\n        \"requestedItems\": [\n            {\n                \"quantity\": {\n                    \"value\": 10,\n                    \"unit\": \"g\"\n                },\n                \"tenantArticleId\": \"apples-01\"\n            }\n        ]\n    },\n    \"receipts\": [\n        {\n            \"receivedDate\": \"2023-06-16T07:42:54.646Z\",\n            \"receivedItems\": [\n                {\n                    \"tenantArticleId\": \"apples-01\",\n                    \"acceptedQuantity\": {\n                        \"value\": 1,\n                        \"unit\": \"kg\"\n                    },\n                    \"rejectedQuantity\": {\n                        \"value\": 0,\n                        \"unit\": \"kg\"\n                    },\n                    \"comments\": [\n                        {\n                            \"userRef\": \"inbound-user-01\",\n                            \"content\": \"Apples have brown spots\"\n                        }\n                    ],\n                    \"stockProperties\": {\n                        \"keyA\": \"valueA\",\n                        \"keyB\": \"valueB\"\n                    }\n                },\n                {\n                    \"tenantArticleId\": \"oranges-01\",\n                    \"acceptedQuantity\": {\n                        \"value\": 1,\n                        \"unit\": \"kg\"\n                    },\n                    \"rejectedQuantity\": {\n                        \"value\": 0,\n                        \"unit\": \"kg\"\n                    },\n                    \"comments\": []\n                }\n            ],\n            \"comments\": [\n                {\n                    \"userRef\": \"inbound-user-01\",\n                    \"content\": \"Some produce is not A grade, see comments\"\n                }\n            ]\n        }\n    ]\n}",
+									"raw": "{\n    \"tenantInboundProcessId\": \"{{$randomUUID}}\",\n    \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n    \"scannableCodes\": [\"3.14159\"],\n    \"purchaseOrder\": {\n        \"orderDate\": \"2023-03-21T08:16:07.000Z\",\n        \"requestedDate\": {\n            \"type\": \"ASAP\",\n            \"value\": \"2023-03-21T08:16:07.000Z\"\n        },\n        \"requestedItems\": [\n            {\n                \"quantity\": {\n                    \"value\": 10,\n                    \"unit\": \"g\"\n                },\n                \"tenantArticleId\": \"apples-01\"\n            }\n        ]\n    },\n    \"receipts\": [\n        {\n            \"receivedDate\": \"2023-06-16T07:42:54.646Z\",\n            \"receivedItems\": [\n                {\n                    \"tenantArticleId\": \"apples-01\",\n                    \"acceptedQuantity\": {\n                        \"value\": 1,\n                        \"unit\": \"kg\"\n                    },\n                    \"rejectedQuantity\": {\n                        \"value\": 0,\n                        \"unit\": \"kg\"\n                    },\n                    \"comments\": [\n                        {\n                            \"userRef\": \"inbound-user-01\",\n                            \"content\": \"Apples have brown spots\"\n                        }\n                    ],\n                    \"stockProperties\": {\n                        \"keyA\": \"valueA\",\n                        \"keyB\": \"valueB\"\n                    }\n                },\n                {\n                    \"tenantArticleId\": \"oranges-01\",\n                    \"acceptedQuantity\": {\n                        \"value\": 1,\n                        \"unit\": \"kg\"\n                    },\n                    \"rejectedQuantity\": {\n                        \"value\": 0,\n                        \"unit\": \"kg\"\n                    },\n                    \"comments\": []\n                }\n            ],\n            \"comments\": [\n                {\n                    \"userRef\": \"inbound-user-01\",\n                    \"content\": \"Some produce is not A grade, see comments\"\n                }\n            ]\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
