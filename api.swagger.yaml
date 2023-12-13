@@ -30725,7 +30725,6 @@ components:
       type: object
       properties:
         storageLocation:
-          type: object
           $ref: '#/components/schemas/StorageLocation'
         stockCount:
           type: number
@@ -31730,6 +31729,157 @@ components:
         version:
           type: number
       required:
+        - version
+    EmailReceiver:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        language:
+          $ref: '#/components/schemas/SupportedLocale'
+      required:
+        - email
+        - language
+    EmailNotificationChannel:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - EMAIL
+        enabled:
+          type: boolean
+        events:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+              - ROUTING_PLAN_NOT_ROUTABLE
+              - PICK_JOB_CREATED
+        receiver:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailReceiver'
+      required:
+        - id
+        - type
+        - enabled
+        - events
+        - receiver
+    NotificationCenterConfig:
+      type: object
+      properties:
+        version:
+          type: number
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        enabled:
+          type: boolean
+        channels:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/EmailNotificationChannel'
+      required:
+        - version
+        - created
+        - lastModified
+        - enabled
+        - channels
+    NotificationCenterConfigForUpdate:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        channels:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/EmailNotificationChannelForCreation'
+        version:
+          type: number
+      required:
+        - enabled
+        - channels
+        - version
+    NotificationCenterConfigForCreation:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        channels:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/EmailNotificationChannelForCreation'
+      required:
+        - enabled
+        - channels
+    EmailNotificationChannelForCreation:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        events:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+              - ROUTING_PLAN_NOT_ROUTABLE
+              - PICK_JOB_CREATED
+        receiver:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailReceiver'
+        type:
+          type: string
+      required:
+        - enabled
+        - events
+        - receiver
+        - type
+    AddChannelAction:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+            - ADD_CHANNEL
+        channel:
+          oneOf:
+            - $ref: '#/components/schemas/EmailNotificationChannelForCreation'
+        version:
+          type: number
+      required:
+        - name
+        - channel
+        - version
+    UpdateChannelByIdAction:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+            - UPDATE_CHANNEL
+        channel:
+          oneOf:
+            - $ref: '#/components/schemas/EmailNotificationChannel'
+        version:
+          type: number
+      required:
+        - name
+        - channel
         - version
 tags:
   - description: >-
