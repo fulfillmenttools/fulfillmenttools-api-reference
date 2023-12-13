@@ -7004,7 +7004,9 @@ paths:
             endpoint
       tags:
         - Core - Document Sets
-      operationId: getDocumentSet
+      operationId: getDocumentSetDeprecated
+      summary: Simple query interface to find documents
+      deprecated: true
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -7013,8 +7015,7 @@ paths:
           and / or might not be available at all times in your API instance. It
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
-      summary: Simple query interface to find documents
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />Deprecated, use /api/documentsets/{documentSetRef} instead
   /api/documentSet/{documentSetRef}/documents:
     post:
       parameters:
@@ -7062,8 +7063,252 @@ paths:
           description: Entity not found
       tags:
         - Core - Document Sets
-      operationId: addDocument
+      operationId: addDocumentDeprecated
+      deprecated: true
+      description: Deprecated, use /api/documentsets/{documentSetRef}/documents instead
   /api/documentSet/{documentSetRef}/documents/{documentRef}:
+    patch:
+      parameters:
+        - description: Reference to the documentSet you want to update
+          in: path
+          name: documentSetRef
+          required: true
+          schema:
+            type: string
+        - description: Reference to the single document you want to update
+          in: path
+          name: documentRef
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrintableDocumentForUpdate'
+        description: PartialDocument
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintableDocument'
+          description: Document was found. The results are in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Core - Document Sets
+      operationId: updateDocumentDeprecated
+      summary: Simple query interface to find documents
+      deprecated: true
+      description: >-
+        Deprecated, use
+        /api/documentsets/{documentSetRef}/documents/{documentRef} instead
+  /api/documentSet/{documentSetRef}/documents/{documentRef}/file:
+    get:
+      parameters:
+        - description: Reference to the documentSet you want to download a file from
+          in: path
+          name: documentSetRef
+          required: true
+          schema:
+            type: string
+        - description: Reference to the single document you want to download
+          in: path
+          name: documentRef
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The document as a stream
+      tags:
+        - Core - Document Sets
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: downloadDocumentDeprecated
+      summary: Download a document
+    put:
+      parameters:
+        - description: Reference to the documentSet you want to update
+          in: path
+          name: documentSetRef
+          required: true
+          schema:
+            type: string
+        - description: Reference to the single document you want to update
+          in: path
+          name: documentRef
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalDocumentContentForUpdate'
+        description: Document Content with id and version
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintableDocument'
+          description: Changed Document
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Core - Document Sets
+      operationId: addContentToDocumentDeprecated
+      deprecated: true
+      description: >-
+        Deprecated, use
+        /api/documentsets/{documentSetRef}/documents/{documentRef}/file instead
+  /api/documentsets/{documentSetRef}:
+    get:
+      parameters:
+        - description: Reference to the entity you want to get
+          in: path
+          name: documentSetRef
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentSet'
+          description: Documents were found. The results are in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Document Sets
+      operationId: getDocumentSet
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      summary: Simple query interface to find documents
+  /api/documentsets/{documentSetRef}/documents:
+    post:
+      parameters:
+        - description: Reference to the documentSet you want to add a file to
+          in: path
+          name: documentSetRef
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalPrintableDocumentForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintableDocument'
+          description: Document was found. The results are in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Core - Document Sets
+      operationId: addDocument
+  /api/documentsets/{documentSetRef}/documents/{documentRef}:
     patch:
       parameters:
         - description: Reference to the documentSet you want to update
@@ -7119,7 +7364,7 @@ paths:
         - Core - Document Sets
       operationId: updateDocument
       summary: Simple query interface to find documents
-  /api/documentSet/{documentSetRef}/documents/{documentRef}/file:
+  /api/documentsets/{documentSetRef}/documents/{documentRef}/file:
     get:
       parameters:
         - description: Reference to the documentSet you want to download a file from
