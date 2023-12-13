@@ -13509,7 +13509,6 @@ paths:
           description: custom service version conflict
       tags:
         - Core - Custom Services
-      description: ''
       operationId: patchCustomService
       requestBody:
         content:
@@ -13519,6 +13518,16 @@ paths:
         description: Patch set
         required: true
       summary: Patches a custom service with the given ID
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
     get:
       parameters:
         - description: ID of custom service you want to get
@@ -13571,12 +13580,12 @@ paths:
           </i><br /><br />
       operationId: getCustomService
       summary: Get requested Custom service
-  /api/customservices/{customserviceId}/additionalinformation:
+  /api/customservices/{customServiceId}/additionalinformation:
     post:
       parameters:
         - description: ID of custom service you want to create service job for
           in: path
-          name: customserviceId
+          name: customServiceId
           required: true
           schema:
             type: string
@@ -13637,12 +13646,12 @@ paths:
         description: Desired custom service to create
         required: true
       summary: Create a custom service additional information
-  /api/customservices/{customserviceId}/additionalinformation/{additionalInformationId}:
+  /api/customservices/{customServiceId}/additionalinformation/{additionalInformationId}:
     delete:
       parameters:
         - description: ID of custom service
           in: path
-          name: customserviceId
+          name: customServiceId
           required: true
           schema:
             type: string
@@ -13706,7 +13715,7 @@ paths:
       parameters:
         - description: ID of custom service
           in: path
-          name: customserviceId
+          name: customServiceId
           required: true
           schema:
             type: string
@@ -13957,7 +13966,7 @@ paths:
           </i><br /><br />
       operationId: getFacilityCustomServiceConnections
       summary: Get requested Custom service connection for a facility
-  /api/facilities/{facilityId}/customservices/{customserviceRef}:
+  /api/facilities/{facilityId}/customservices/{customServiceId}:
     get:
       parameters:
         - description: ID of facility
@@ -13966,9 +13975,9 @@ paths:
           required: true
           schema:
             type: string
-        - description: Ref of custom service
+        - description: ID of the custom service
           in: path
-          name: customserviceRef
+          name: customServiceId
           required: true
           schema:
             type: string
@@ -14024,9 +14033,9 @@ paths:
           required: true
           schema:
             type: string
-        - description: Ref of custom service
+        - description: ID of the custom service
           in: path
-          name: customserviceRef
+          name: customServiceId
           required: true
           schema:
             type: string
@@ -14089,9 +14098,9 @@ paths:
           required: true
           schema:
             type: string
-        - description: Ref of custom service
+        - description: ID of the custom service
           in: path
-          name: customserviceRef
+          name: customServiceId
           required: true
           schema:
             type: string
@@ -14142,7 +14151,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FacilityCustomServiceConnectionForCreate'
+              $ref: '#/components/schemas/FacilityCustomServiceConnectionForCreation'
         description: Desired custom service connection to create/update
         required: true
       summary: Create a facility custom service connection
@@ -14154,9 +14163,9 @@ paths:
           required: true
           schema:
             type: string
-        - description: Ref of custom service
+        - description: ID of the custom service
           in: path
-          name: customserviceRef
+          name: customServiceId
           required: true
           schema:
             type: string
@@ -14200,6 +14209,240 @@ paths:
           </i><br /><br />
       operationId: deleteFacilityCustomServiceConnection
       summary: Delete a facility custom service connection
+  /api/servicejobs:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrippedServiceJobs'
+          description: Service Jobs could be found in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - ServiceJobs
+      operationId: getServiceJobs
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: Reference of the facility you want to filter for
+          in: query
+          name: facilityRef
+          required: false
+          schema:
+            type: string
+        - description: >-
+            Reference to the statuses you want to get the corresponding service
+            job
+          in: query
+          name: status
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Get Service Jobs
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceJob'
+          description: The service job was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - ServiceJobs
+      operationId: createServiceJob
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceJobForCreation'
+        description: Desired service job to create
+        required: true
+      summary: Create a service job
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+  /api/servicejobs/{serviceJobId}:
+    get:
+      parameters:
+        - description: ID of service job you want to get
+          in: path
+          name: serviceJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceJob'
+          description: Service Job could be found in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - ServiceJobs
+      operationId: getServiceJob
+      summary: Get requested service job
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+  /api/servicejobs/{serviceJobId}/actions:
+    post:
+      parameters:
+        - description: ID of service job you want to update
+          in: path
+          name: serviceJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceJob'
+          description: The service job was successfully updated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - ServiceJobs
+      operationId: updateServiceJob
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceJobActionsParameter'
+        description: Desired change to a service job
+        required: true
+      summary: Update a service job
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
   /api/articles:
     get:
       operationId: getArticles
@@ -23994,6 +24237,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DomainStatusHistoryItem'
+        serviceJobRefs:
+          description: >-
+            References to the Service Jobs connected to this process (if
+            present).
+          items:
+            type: string
+          type: array
       required:
         - gdprCleanupDate
         - id
@@ -29365,6 +29615,7 @@ components:
           $ref: '#/components/schemas/LocaleString'
         executionTimeInMin:
           type: integer
+          example: 120
         itemsReturnable:
           type: boolean
         itemsRequired:
@@ -29427,7 +29678,7 @@ components:
         - FINISHED
         - CANCELLED
         - WAITING_FOR_INPUT
-    ValueType:
+    AdditionalInformationValueType:
       type: string
       enum:
         - STRING
@@ -29443,7 +29694,7 @@ components:
         descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
         valueType:
-          $ref: '#/components/schemas/ValueType'
+          $ref: '#/components/schemas/AdditionalInformationValueType'
         isMandatory:
           type: boolean
       required:
@@ -29462,29 +29713,6 @@ components:
           type: string
       required:
         - id
-    ServiceJobLineItems:
-      type: object
-      properties:
-        quantity:
-          type: integer
-        scannableCodes:
-          items:
-            description: Codes, that identify the article
-            type: string
-          type: array
-        article:
-          $ref: '#/components/schemas/ServiceJobLineItemArticle'
-    ServiceJobLineItemArticle:
-      allOf:
-        - $ref: '#/components/schemas/AbstractArticle'
-        - properties:
-            attributes:
-              items:
-                $ref: '#/components/schemas/OrderArticleAttributeItem'
-              type: array
-          type: object
-      xml:
-        name: ServiceLineItemArticle
     CustomServicePatchActions:
       properties:
         actions:
@@ -29526,8 +29754,13 @@ components:
               $ref: '#/components/schemas/LocaleString'
             executionTimeInMin:
               type: integer
+              description: Time in minutes the custom service takes to be executed
+              example: 100
             itemsReturnable:
               type: boolean
+              description: >-
+                Indicates if the items of the custom service are returnable
+                after the custom service has been executed
             itemsRequired:
               $ref: '#/components/schemas/ItemsRequiredEnum'
           required:
@@ -29535,34 +29768,195 @@ components:
           type: object
       xml:
         name: ModifyCustomServiceAction
+    ServiceJobLineItemForCreation:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: Quantity of the items
+          example: 12
+          minimum: 1
+        scannableCodes:
+          items:
+            type: string
+            description: Codes, that identify the article
+            example: '4012345678901'
+          type: array
+        article:
+          $ref: '#/components/schemas/ServiceJobLineItemArticle'
+      required:
+        - quantity
+        - article
+    ServiceJobLineItem:
+      allOf:
+        - $ref: '#/components/schemas/ServiceJobLineItemForCreation'
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    ServiceJobLineItemArticle:
+      allOf:
+        - $ref: '#/components/schemas/AbstractArticle'
+        - properties:
+            attributes:
+              items:
+                $ref: '#/components/schemas/ArticleAttributeItem'
+              type: array
+          type: object
+          required:
+            - title
+            - tenantArticleId
+      xml:
+        name: ServiceLineItemArticle
     ServiceJob:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       additionalProperties: false
-      required:
-        - status
-        - id
-        - customServiceRef
       properties:
         id:
           type: string
+        name:
+          type: string
+        description:
+          type: string
+        lineItems:
+          type: array
+          minLength: 1
+          items:
+            $ref: '#/components/schemas/ServiceJobLineItem'
+        processRef:
+          type: string
+        facilityRef:
+          type: string
         status:
           $ref: '#/components/schemas/ServiceJobStatus'
-        customServiceRef:
-          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        executionTimeInMin:
+          type: integer
+        itemsReturnable:
+          type: boolean
+        itemsRequired:
+          $ref: '#/components/schemas/ItemsRequiredEnum'
         additionalInformation:
           type: array
           items:
-            properties:
-              additionalInformationRef:
-                type: string
-              value:
-                type: string
+            $ref: '#/components/schemas/AdditionalInformation'
+      required:
+        - id
+        - lineItems
+        - processRef
+        - status
+        - nameLocalized
+        - itemsRequired
+        - facilityRef
+    ServiceJobForCreation:
+      properties:
+        customServiceRef:
+          type: string
+          description: ID of the custom service, the Service Job should reference.
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        processRef:
+          type: string
+          description: ID of the process, the Service Job belongs to.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        facilityRef:
+          type: string
+          description: ID of the facility, the Service Job is executed in.
+          example: ba095e30-879f-11ee-b9d1-0242ac120002
         lineItems:
           type: array
           items:
-            minLength: 1
-            $ref: '#/components/schemas/ServiceJobLineItems'
+            $ref: '#/components/schemas/ServiceJobLineItemForCreation'
+      required:
+        - customServiceRef
+        - facilityRef
+    StrippedServiceJobs:
+      properties:
+        serviceJobs:
+          items:
+            $ref: '#/components/schemas/ServiceJob'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
+    ServiceJobInProgressActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobInProgressActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    ServiceJobInProgressActionEnum:
+      enum:
+        - StartServiceJob
+      type: string
+    ServiceJobFinishedActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobFinishedActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    ServiceJobFinishedActionEnum:
+      enum:
+        - FinishServiceJob
+      type: string
+    ServiceJobCancelledActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobCancelledActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    ServiceJobCancelledActionEnum:
+      enum:
+        - CancelServiceJob
+      type: string
+    ServiceJobWaitingForInputActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobWaitingForInputActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    ServiceJobWaitingForInputActionEnum:
+      enum:
+        - HoldServiceJob
+      type: string
+    ServiceJobActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/ServiceJobInProgressActionParameter'
+        - $ref: '#/components/schemas/ServiceJobFinishedActionParameter'
+        - $ref: '#/components/schemas/ServiceJobCancelledActionParameter'
+        - $ref: '#/components/schemas/ServiceJobWaitingForInputActionParameter'
     FacilityCustomServiceConnectionStatus:
       type: string
       enum:
@@ -29595,6 +29989,8 @@ components:
           $ref: '#/components/schemas/FacilityCustomServiceConnectionStatus'
         executionTimeInMin:
           type: integer
+          description: Time in minutes the custom service takes to be executed
+          example: 100
         version:
           description: Version of the documentSet you want to update a document of
           example: 42
@@ -29602,11 +29998,13 @@ components:
           type: integer
       required:
         - version
-    FacilityCustomServiceConnectionForCreate:
+    FacilityCustomServiceConnectionForCreation:
       additionalProperties: false
       properties:
         executionTimeInMin:
           type: integer
+          description: Time in minutes the custom service takes to be executed
+          example: 100
         status:
           $ref: '#/components/schemas/FacilityCustomServiceConnectionStatus'
       required:
