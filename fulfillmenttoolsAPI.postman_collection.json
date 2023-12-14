@@ -1783,6 +1783,26 @@
 									"response": []
 								},
 								{
+									"name": "Get Parcel Tag Configuration",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/configurations/tags/parcel",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"tags",
+												"parcel"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Set Order Tag Configuration",
 									"request": {
 										"method": "PUT",
@@ -1893,6 +1913,35 @@
 												"configurations",
 												"tags",
 												"handoverjob"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Set Parcel Tag Configuration",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"alternativeReturnAddressConfiguration\": {\n    \"alternativeReturnAddressPerTag\": [\n      {\n        \"tagRef\": \"SOME_VALID_TAG_REF\",\n        \"matchingValues\": [\n          \"EXISTING_VALUE\",\n          \"ANOTHER_EXISTING_VALUE\"\n        ],\n        \"useAlternativeAddressForReturn\": true\n      }\n    ]\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/configurations/tags/parcel",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"tags",
+												"parcel"
 											]
 										}
 									},
@@ -11210,7 +11259,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"name\": \"ADD_ITEM_RETURN\",\n  \"version\": 2,\n  \"itemReturn\": {\n    \"returnFacilityRef\": \"SOME-FACILITY-REF\",\n    \"tenantReceiptId\": \"SOME-ID\",\n    \"status\": \"OPEN\",\n    \"scannableCodes\": [\n      \"ScannableCodeItemReturn1\",\n      \"ScannableCodeItemReturn2\"\n    ],\n    \"returnedElements\": [\n      {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"scannedCodes\": [\n          \"LineItemCode1\",\n          \"LineItemCode2\"\n        ],\n        \"status\": \"OPEN\",\n        \"reasons\": [\n          {\n            \"name\": \"Wrong Size\"\n          }\n        ]\n      },\n      {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"scannedCodes\": [\n          \"LineItemCode1\",\n          \"LineItemCode2\"\n        ],\n        \"status\": \"OPEN\",\n        \"reasons\": [\n          {\n            \"name\": \"Wrong Size\"\n          }\n        ]\n      }\n    ]\n  }\n}\n\n",
+											"raw": "{\n  \"name\": \"ADD_ITEM_RETURN\",\n  \"version\": 2,\n  \"itemReturn\": {\n    \"returnFacilityRef\": \"SOME-FACILITY-REF\",\n    \"tenantReceiptId\": \"SOME-ID\",\n    \"status\": \"OPEN\",\n    \"scannableCodes\": [\n      \"ScannableCodeItemReturn1\",\n      \"ScannableCodeItemReturn2\"\n    ],\n    \"returnedLineItems\": [\n      {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"scannedCodes\": [\n          \"LineItemCode1\",\n          \"LineItemCode2\"\n        ],\n        \"status\": \"OPEN\",\n        \"reasons\": [\n          {\n            \"name\": \"Wrong Size\"\n          }\n        ]\n      },\n      {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"scannedCodes\": [\n          \"LineItemCode1\",\n          \"LineItemCode2\"\n        ],\n        \"status\": \"OPEN\",\n        \"reasons\": [\n          {\n            \"name\": \"Wrong Size\"\n          }\n        ]\n      }\n    ]\n  }\n}\n\n",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -11451,7 +11500,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"name\": \"REPLACE_RETURNED_LINE_ITEMS\",\n  \"itemReturnJobVersion\": 2,\n  \"returnedElements\": [\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"status\": \"OPEN\",\n      \"scannedCodes\": [\n        \"LineItemCode1\",\n        \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"name\": \"Wrong Size\"\n        }\n      ]\n    },\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"status\": \"OPEN\",\n      \"scannedCodes\": [\n        \"LineItemCode1\",\n        \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"name\": \"Wrong Size\"\n        }\n      ]\n    }\n  ]\n}",
+											"raw": "{\n  \"name\": \"REPLACE_RETURNED_LINE_ITEMS\",\n  \"itemReturnJobVersion\": 2,\n  \"returnedLineItems\": [\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"status\": \"OPEN\",\n      \"scannedCodes\": [\n        \"LineItemCode1\",\n        \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"name\": \"Wrong Size\"\n        }\n      ]\n    },\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"status\": \"OPEN\",\n      \"scannedCodes\": [\n        \"LineItemCode1\",\n        \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"name\": \"Wrong Size\"\n        }\n      ]\n    }\n  ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
