@@ -29164,7 +29164,6 @@ components:
         - status
         - consumerAddresses
         - returnableLineItems
-        - scannableCodes
         - itemReturns
     ItemReturnJobForCreation:
       additionalProperties: false
@@ -29198,11 +29197,11 @@ components:
         - status
         - consumerAddresses
         - returnableLineItems
-        - scannableCodes
     ItemReturnJobStatus:
       type: string
       enum:
         - OPEN
+        - IN_PROGRESS
         - FINISHED
     ItemReturnJobLineItem:
       additionalProperties: false
@@ -29230,7 +29229,6 @@ components:
       required:
         - article
         - delivered
-        - scannableCodes
     ItemReturn:
       additionalProperties: false
       properties:
@@ -29272,7 +29270,6 @@ components:
         - status
         - returnedLineItems
         - returnFacilityRef
-        - scannableCodes
     ItemReturnStatus:
       enum:
         - OPEN
@@ -29287,26 +29284,18 @@ components:
         id:
           type: string
           example: a69006ba-7100-4b4d-a610-1ca28016a4eb
-        itemReturnJobLineItemRef:
-          type: string
-          example: a69006ba-7100-4b4d-a610-1ca28016a4eb
-        scannedCodes:
+        itemReturnJobLineItemRefs:
           items:
+            example: a69006ba-7100-4b4d-a610-1ca28016a4eb
             type: string
           type: array
-        reasons:
-          items:
-            $ref: '#/components/schemas/ItemReturnLineItemReasons'
-          type: array
-          minItems: 1
       required:
         - id
-        - itemReturnJobLineItemRef
+        - status
+        - itemReturnJobLineItemRefs
         - tenantArticleId
-        - returnedQuantity
-        - scannedCodes
         - reasons
-    ItemReturnLineItemReasons:
+    ItemReturnLineItemReason:
       additionalProperties: false
       properties:
         name:
@@ -29335,32 +29324,35 @@ components:
         - returnedLineItems
         - status
         - returnFacilityRef
-        - scannableCodes
     ItemReturnLineItemForCreation:
       additionalProperties: false
       properties:
         tenantArticleId:
           type: string
           example: a69006ba-7100-4b4d-a610-1ca28016a4eb
-        returnedQuantity:
-          type: number
-          example: 5
-          minimum: 1
         scannedCodes:
           type: array
           items:
             type: string
-            minItems: 1
+        status:
+          $ref: '#/components/schemas/ItemReturnLineItemStatus'
         reasons:
           items:
-            $ref: '#/components/schemas/ItemReturnLineItemReasons'
+            $ref: '#/components/schemas/ItemReturnLineItemReason'
           minItems: 1
           type: array
       required:
         - tenantArticleId
-        - returnedQuantity
-        - scannedCodes
         - reasons
+        - status
+    ItemReturnLineItemStatus:
+      enum:
+        - OPEN
+        - IN_PROGRESS
+        - WAITING_FOR_INPUT
+        - REJECTED
+        - ACCEPTED
+      type: string
     ItemReturnJobActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/ItemReturnJobStatusChangeActionParameter'
