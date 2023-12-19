@@ -10305,7 +10305,13 @@ paths:
           required: false
           schema:
             type: string
-        - description: Reference to the facility you want to get the corresponding packjobs
+        - description: Term by which to search through the fields
+          in: query
+          name: searchTerm
+          required: false
+          schema:
+            type: string
+        - description: Reference to the channel you want to get the corresponding packjobs
           in: query
           name: channel
           required: false
@@ -10328,6 +10334,22 @@ paths:
           required: false
           schema:
             type: string
+        - description: Start date range for pack jobs
+          in: query
+          name: startTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: End date range for pack jobs
+          in: query
+          name: endTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
       responses:
         '200':
           content:
@@ -27196,6 +27218,9 @@ components:
             - COLLECT
             - SHIPPING
           type: string
+        shortId:
+          description: The short identifier of the shipment.
+          type: string
       required:
         - facilityRef
         - lineItems
@@ -27295,6 +27320,9 @@ components:
                 cannot be used within fulfillment processes, but it could be
                 useful to have the informations carried here.
               type: object
+            shortId:
+              description: The short identifier of the shipment.
+              type: string
           required:
             - id
             - facilityRef
@@ -27441,11 +27469,23 @@ components:
           type: object
       xml:
         name: PackLineItemArticle
+    PackJobWithSearchPath:
+      allOf:
+        - $ref: '#/components/schemas/PackJob'
+        - additionalProperties: false
+      properties:
+        searchPaths:
+          items:
+            type: string
+          type: array
+          minItems: 0
+      xml:
+        name: PackJobWithPath
     PackJobs:
       properties:
         packJobs:
           items:
-            $ref: '#/components/schemas/PackJob'
+            $ref: '#/components/schemas/PackJobWithSearchPath'
           type: array
         total:
           description: Total number of found entities for this query
