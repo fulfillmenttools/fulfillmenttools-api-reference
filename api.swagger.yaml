@@ -30478,9 +30478,7 @@ components:
           type: string
           format: date-time
         requestedDate:
-          oneOf:
-            - $ref: '#/components/schemas/RequestedDateASAP'
-            - $ref: '#/components/schemas/RequestedDateTimePoint'
+          $ref: '#/components/schemas/RequestedDate'
         requestedItems:
           type: array
           items:
@@ -30713,6 +30711,20 @@ components:
         - availableForPicking
         - delta
         - staleReasons
+    RequestedDate:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ASAP
+            - TIME_POINT
+        value:
+          format: date-time
+          type: string
+      required:
+        - type
+        - value
     InboundProcessPurchaseOrderSupplier:
       type: object
       properties:
@@ -30733,9 +30745,7 @@ components:
           type: string
           format: date-time
         requestedDate:
-          oneOf:
-            - $ref: '#/components/schemas/RequestedDateASAP'
-            - $ref: '#/components/schemas/RequestedDateTimePoint'
+          $ref: '#/components/schemas/RequestedDate'
         requestedItems:
           type: array
           items:
@@ -31159,9 +31169,7 @@ components:
             - ON_HOLD
             - CLOSED
         expectedDate:
-          oneOf:
-            - $ref: '#/components/schemas/RequestedDateASAP'
-            - $ref: '#/components/schemas/RequestedDateTimePoint'
+          $ref: '#/components/schemas/RequestedDate'
         items:
           $ref: '#/components/schemas/InboundLineItem'
         origin:
@@ -31436,9 +31444,7 @@ components:
       type: object
       properties:
         expectedDate:
-          oneOf:
-            - $ref: '#/components/schemas/RequestedDateASAP'
-            - $ref: '#/components/schemas/RequestedDateTimePoint'
+          $ref: '#/components/schemas/RequestedDate'
         quantity:
           $ref: '#/components/schemas/Quantity'
       required:
