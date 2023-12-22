@@ -27453,9 +27453,32 @@ components:
           description: unique identifier for a countryServiceMapping
           example: bc5b581a-8f65-45b0-9f81-6e0d4babbcb2
           type: string
+        source:
+          $ref: '#/components/schemas/RegionInformation'
+        destinations:
+          description: The destination regions this mapping should be applied to.
+          items:
+            $ref: '#/components/schemas/RegionInformation'
+          minItems: 1
+          type: array
         sourceCountry:
-          $ref: '#/components/schemas/CountryCode'
+          deprecated: true
+          type: string
+          minLength: 2
+          maxLength: 2
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated Use source instead.
+          example: DE
         destinationCountries:
+          deprecated: true
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated Use destination instead.
           items:
             $ref: '#/components/schemas/CountryCode'
           minItems: 1
@@ -27475,8 +27498,8 @@ components:
           example: EXPRESS
       required:
         - id
-        - sourceCountry
-        - destinationCountries
+        - source
+        - destinations
     CarrierCountryServiceMappingForCreation:
       type: object
       additionalProperties: false
@@ -27488,9 +27511,32 @@ components:
           example: 42
           format: int64
           type: integer
+        source:
+          $ref: '#/components/schemas/RegionInformation'
+        destinations:
+          description: The destination regions this mapping should be applied to.
+          items:
+            $ref: '#/components/schemas/RegionInformation'
+          minItems: 1
+          type: array
         sourceCountry:
-          $ref: '#/components/schemas/CountryCode'
+          deprecated: true
+          type: string
+          minLength: 2
+          maxLength: 2
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated Use source instead.
+          example: DE
         destinationCountries:
+          deprecated: true
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated Use destination instead.
           items:
             $ref: '#/components/schemas/CountryCode'
           minItems: 1
@@ -27510,8 +27556,8 @@ components:
           example: EXPRESS
       required:
         - carrierConfigurationVersion
-        - sourceCountry
-        - destinationCountries
+        - source
+        - destinations
     CarrierCountryServiceMappingForUpdate:
       type: object
       additionalProperties: false
@@ -27523,9 +27569,32 @@ components:
           example: 42
           format: int64
           type: integer
+        source:
+          $ref: '#/components/schemas/RegionInformation'
+        destinations:
+          description: The destination regions this mapping should be applied to.
+          items:
+            $ref: '#/components/schemas/RegionInformation'
+          minItems: 1
+          type: array
         sourceCountry:
-          $ref: '#/components/schemas/CountryCode'
+          deprecated: true
+          type: string
+          minLength: 2
+          maxLength: 2
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated Use source instead.
+          example: DE
         destinationCountries:
+          deprecated: true
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated Use destination instead.
           items:
             $ref: '#/components/schemas/CountryCode'
           minItems: 1
@@ -27583,6 +27652,17 @@ components:
         descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
       type: object
+    RegionInformation:
+      type: object
+      properties:
+        countryCode:
+          $ref: '#/components/schemas/CountryCode'
+        postalCodes:
+          type: array
+          items:
+            type: string
+      required:
+        - countryCode
     CountryCode:
       type: string
       minLength: 2
