@@ -4634,6 +4634,159 @@
 							]
 						}
 					]
+				},
+				{
+					"name": "Reroute Descriptions",
+					"item": [
+						{
+							"name": "REST",
+							"item": [
+								{
+									"name": "Get RerouteDescriptions",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/reroutedescriptions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"reroutedescriptions"
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Shipments/getAllShipments"
+									},
+									"response": []
+								},
+								{
+									"name": "Get RerouteDescription By ID",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/reroutedescription/:rerouteDescriptionId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"reroutedescription",
+												":rerouteDescriptionId"
+											],
+											"variable": [
+												{
+													"key": "rerouteDescriptionId",
+													"value": "REROUTE-DESCRIPTION-ID"
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Shipments/getAllShipments"
+									},
+									"response": []
+								},
+								{
+									"name": "Add new RerouteDescription",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"reason\": \"The fulfiller does not like to work today.\",\n    \"reasonLocalized\": { \"DE\": \"Der Fulfiller möchte heute nicht arbeiten\"}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/reroutedescription",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"reroutedescription"
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Shipments/getAllShipments"
+									},
+									"response": []
+								},
+								{
+									"name": "Update RerouteDescription",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"reason\": \"The fulfiller does not like to work at all.\",\n    \"reasonLocalized\": { \"DE\": \"Der Fulfiller möchte nicht arbeiten\"},\n    \"id\": \"REROUTE-DESCRIPTION-ID\",\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/reroutedescription/:rerouteDescriptionId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"reroutedescription",
+												":rerouteDescriptionId"
+											],
+											"variable": [
+												{
+													"key": "rerouteDescriptionId",
+													"value": "REROUTE-DESCRIPTION-ID"
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Shipments/getAllShipments"
+									},
+									"response": []
+								},
+								{
+									"name": "Update RerouteDescription Copy",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/reroutedescription/:rerouteDescriptionId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"reroutedescription",
+												":rerouteDescriptionId"
+											],
+											"variable": [
+												{
+													"key": "rerouteDescriptionId",
+													"value": "REROUTE-DESCRIPTION-ID"
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Shipments/getAllShipments"
+									},
+									"response": []
+								}
+							]
+						}
+					]
 				}
 			]
 		},
@@ -4830,6 +4983,44 @@
 										{
 											"key": "processId",
 											"value": "PUT-IN-YOUR-PROCESS-ID"
+										}
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Process/getProcessByID"
+							},
+							"response": []
+						},
+						{
+							"name": "Reroute Process By ID",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/processes/:processId/reroute?version=0",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"processes",
+										":processId",
+										"reroute"
+									],
+									"query": [
+										{
+											"key": "version",
+											"value": "0"
+										},
+										{
+											"key": "rerouteDescriptionId",
+											"value": "REROUTE-DESCRIPTION-ID",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "processId",
+											"value": "PROCESS-ID"
 										}
 									]
 								},
@@ -5065,7 +5256,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"version\": 1,\n    \"actions\": [\n        {\n            \"action\": \"AddTagsToProcess\",\n            \"tags\": [\n                {\n                    \"id\": \"string\",\n                    \"value\": \"string\"\n                }\n            ]\n        },\n        {\n            \"action\": \"AssignFacilityToProcess\",\n            \"facilityRef\": \"string\"\n        }\n    ]\n}",
+									"raw": "{\n    \"version\": 1,\n    \"actions\": [\n        {\n            \"action\": \"AddTagsToProcess\",\n            \"tags\": [\n                {\n                    \"id\": \"string\",\n                    \"value\": \"string\"\n                }\n            ]\n        },\n        {\n            \"action\": \"AssignFacilityToProcess\",\n            \"facilityRef\": \"string\",\n            \"rerouteDescriptionId\": \"REROUTE-DESCRIPTION-ID\"\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -12245,7 +12436,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"carrierConfigurationVersion\": 6,\n  \"destinationCountries\": [\n    \"NO\"\n  ],\n  \"sourceCountry\": \"DE\",\n  \"product\": \"V53WPAK\",\n  \"mandatoryShippingAttributes\": [\n    {\n      \"referencedField\": \"dimensions.weight\",\n      \"dataType\": \"Number\"\n    }\n  ],\n  \"mandatoryShippingItemAttributes\": [\n    {\n      \"referencedField\": \"parcelItemValue.value\",\n      \"dataType\": \"Number\"\n    }\n  ]\n}",
+											"raw": "{\n    \"carrierConfigurationVersion\": 6,\n    \"destinations\": [\n        {\n            \"countryCode\": \"NO\",\n            \"postalCodes\": [\n                \"1299\",\n                \"3074\"\n            ]\n        },\n        {\n            \"countryCode\": \"SW\"\n        }\n    ],\n    \"source\": {\n        \"countryCode\": \"DE\",\n        \"postalCode\": \"50733\"\n    },\n    \"product\": \"V53WPAK\",\n    \"mandatoryShippingAttributes\": [\n        {\n            \"referencedField\": \"dimensions.weight\",\n            \"dataType\": \"Number\"\n        }\n    ],\n    \"mandatoryShippingItemAttributes\": [\n        {\n            \"referencedField\": \"parcelItemValue.value\",\n            \"dataType\": \"Number\"\n        }\n    ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -12315,7 +12506,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"carrierConfigurationVersion\": 7,\n  \"destinationCountries\": [\n    \"NO\", \"SW\"\n  ],\n  \"sourceCountry\": \"DE\",\n  \"product\": \"V53WPAK\",\n  \"mandatoryShippingAttributes\": [\n    {\n      \"referencedField\": \"dimensions.weight\",\n      \"dataType\": \"Number\"\n    }\n  ],\n  \"mandatoryShippingItemAttributes\": [\n    {\n      \"referencedField\": \"parcelItemValue.value\",\n      \"dataType\": \"Number\"\n    }\n  ]\n}",
+											"raw": "{\n  \"carrierConfigurationVersion\": 7,\n   \"destinations\": [\n        {\n            \"countryCode\": \"NO\",\n            \"postalCodes\": [\n                \"1299\",\n                \"3074\"\n            ]\n        },\n        {\n            \"countryCode\": \"SW\"\n        }\n    ],\n    \"source\": {\n        \"countryCode\": \"DE\"\n    },\n  \"product\": \"V53WPAK\",\n  \"mandatoryShippingAttributes\": [\n    {\n      \"referencedField\": \"dimensions.weight\",\n      \"dataType\": \"Number\"\n    }\n  ],\n  \"mandatoryShippingItemAttributes\": [\n    {\n      \"referencedField\": \"parcelItemValue.value\",\n      \"dataType\": \"Number\"\n    }\n  ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
