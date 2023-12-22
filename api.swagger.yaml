@@ -16112,6 +16112,91 @@ paths:
                 $ref: '#/components/schemas/ApiError'
       tags:
         - Inventory Management - Stocks
+  /api/inboundprocesses/attachments:
+    post:
+      operationId: createAttachment
+      summary: Creates an attachment
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboundAttachmentForCreation'
+      responses:
+        '201':
+          description: Created attachment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InboundAttachment'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Inbound
+  /api/inboundprocesses/attachments/{attachmentId}/signedurl:
+    get:
+      operationId: getSignedAttachmentUrl
+      summary: Retrieves a signed url for an attachment
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: attachmentId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Signed url
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Inbound
   /api/stocks/summaries:
     get:
       operationId: getStockSummaries
@@ -31771,6 +31856,38 @@ components:
       required:
         - storageLocation
         - stockCount
+    InboundAttachmentForCreation:
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: File name of attachment
+        content:
+          type: string
+          description: Base64 encoded attachment file
+        inboundProcessRef:
+          type: string
+      required:
+        - fileName
+        - content
+    InboundAttachment:
+      type: object
+      properties:
+        id:
+          type: string
+        inboundProcessRef:
+          type: string
+        version:
+          type: number
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+      required:
+        - id
+        - version
     StockSummaryArticle:
       type: object
       properties:
