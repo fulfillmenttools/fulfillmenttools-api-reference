@@ -27496,6 +27496,10 @@ components:
         product:
           type: string
           example: EXPRESS
+        carrierProductCategory:
+          $ref: '#/components/schemas/CarrierProductCategory'
+        transitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
       required:
         - id
         - source
@@ -27506,8 +27510,8 @@ components:
       properties:
         carrierConfigurationVersion:
           description: >-
-            The version of the document to be used in optimistic locking
-            mechanisms.
+            The version of the carrier configuration to be used in optimistic
+            locking mechanisms.
           example: 42
           format: int64
           type: integer
@@ -27554,6 +27558,10 @@ components:
         product:
           type: string
           example: EXPRESS
+        carrierProductCategory:
+          $ref: '#/components/schemas/CarrierProductCategory'
+        transitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
       required:
         - carrierConfigurationVersion
         - source
@@ -27612,8 +27620,35 @@ components:
         product:
           type: string
           example: EXPRESS
+        carrierProductCategory:
+          $ref: '#/components/schemas/CarrierProductCategory'
+        transitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
       required:
         - carrierConfigurationVersion
+    CarrierProductCategory:
+      type: string
+      enum:
+        - STANDARD
+        - EXPRESS
+        - VALUE
+        - FORWARDING
+    CarrierTransitTime:
+      type: object
+      properties:
+        minTransitDays:
+          description: Minimum days a carrier needs for transit
+          example: 1
+          type: integer
+          minimum: 0
+        maxTransitDays:
+          description: Maximum days a carrier needs for transit
+          example: 3
+          type: integer
+          minimum: 0
+      required:
+        - maxTransitDays
+        - minTransitDays
     MandatoryShippingItemAttribute:
       properties:
         referencedField:
