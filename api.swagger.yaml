@@ -30833,6 +30833,7 @@ components:
       required:
         - status
     StrippedFacilityCustomServiceConnections:
+      additionalProperties: false
       properties:
         facilityCustomServiceConnections:
           items:
@@ -30843,6 +30844,48 @@ components:
           example: 42
           type: integer
       type: object
+    ServiceRun:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/ServiceRunForCreation'
+      properties:
+        id:
+          example: 9a14e183-ff86-4b6e-a2dc-eb4c7e312ab1
+          type: string
+      required:
+        - id
+        - serviceJobLink
+    ServiceRunForCreation:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        serviceJobLink:
+          $ref: '#/components/schemas/ServiceJobLink'
+      required:
+        - serviceJobLink
+    ServiceJobLink:
+      additionalProperties: false
+      properties:
+        serviceJobRef:
+          type: string
+          example: 0ed803c2-fa20-48d9-9c1b-0d243937a9ad
+        previousServiceJobRefs:
+          items:
+            type: string
+            example: 9f197dbf-c724-469b-90f1-dc94f20b2825
+          type: array
+          maxItems: 1
+          minItems: 0
+        nextServiceJobLinks:
+          items:
+            $ref: '#/components/schemas/ServiceJobLink'
+          type: array
+          minItems: 0
+      required:
+        - serviceJobRef
+        - previousServiceJobRefs
+        - nextServiceJobLinks
     HealthResult:
       properties:
         status:
