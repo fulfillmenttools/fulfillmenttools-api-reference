@@ -21082,6 +21082,9 @@ components:
             documentsRef:
               description: Reference to the documents collection from this entity
               type: string
+            carrierKey:
+              description: Key of the carrier that is used for this entity
+              type: string
       required:
         - id
         - status
@@ -21182,6 +21185,13 @@ components:
             $ref: '#/components/schemas/Sticker'
         cancelReason:
           $ref: '#/components/schemas/HandoverJobCancelReason'
+        invoiceAddress:
+          $ref: '#/components/schemas/ConsumerAddress'
+        recipientAddress:
+          $ref: '#/components/schemas/ConsumerAddress'
+        fullIdentifier:
+          type: string
+          description: An information to identify the recipient
       required:
         - facilityRef
         - targetTime
@@ -26521,6 +26531,13 @@ components:
                 this order.
               example: R456728546
               type: string
+            searchPaths:
+              description: This is the search term that was used to find the handover job
+              example: R456728546
+              type: array
+              items:
+                type: string
+              minItems: 0
           required:
             - id
             - status
