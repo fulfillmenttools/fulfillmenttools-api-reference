@@ -1058,6 +1058,104 @@ paths:
         description: Desired PackJobTagConfiguration
         required: true
       summary: Change the tag configuration for packjobs
+  /api/configurations/tags/parcel:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelTagConfiguration'
+          description: tag config is in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Shipments
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getParcelTagConfiguration
+      summary: Read tag configuration for parcels
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelTagConfiguration'
+          description: The tag configuration was successfully updated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Shipments
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: putParcelTagConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelTagConfigurationForUpsert'
+        description: Desired Tag Configuration for Parcels
+        required: true
+      summary: Change the tag configuration for Parcels
   /api/configurations/tags/handoverjob:
     get:
       responses:
@@ -19789,6 +19887,52 @@ components:
       properties:
         stickerConfiguration:
           $ref: '#/components/schemas/StickerConfiguration'
+    ParcelTagConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        alternativeReturnAddressConfiguration:
+          $ref: '#/components/schemas/AlternativeReturnAddressConfiguration'
+      required:
+        - alternativeReturnAddressConfiguration
+      additionalProperties: false
+    ParcelTagConfigurationForUpsert:
+      properties:
+        version:
+          type: number
+          example: 0
+        alternativeReturnAddressConfiguration:
+          $ref: '#/components/schemas/AlternativeReturnAddressConfiguration'
+      required:
+        - alternativeReturnAddressConfiguration
+      additionalProperties: false
+    AlternativeReturnAddressConfiguration:
+      additionalProperties: false
+      properties:
+        alternativeReturnAddressPerTag:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/AlternativeReturnAddressPerTag'
+      required:
+        - alternativeReturnAddressPerTag
+    AlternativeReturnAddressPerTag:
+      properties:
+        tagRef:
+          type: string
+          description: needs to be an existing tag id
+        matchingValues:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        alternativeReturnAddress:
+          $ref: '#/components/schemas/FacilityAddress'
+      required:
+        - tagRef
+        - matchingValues
+        - alternativeReturnAddress
+      additionalProperties: false
     PackJobCreationPerTag:
       properties:
         tagRef:
@@ -26198,6 +26342,10 @@ components:
           type: string
         paymentInformation:
           $ref: '#/components/schemas/PaymentInformation'
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
       required:
         - facilityRef
         - targetTime
@@ -26251,6 +26399,10 @@ components:
           format: int64
           minimum: 1
           type: integer
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
         scannableCodes:
           items:
             description: Codes, that identify the article
