@@ -11530,7 +11530,7 @@ paths:
       description: ''
       operationId: getPackJobDeliveryNote
       summary: Get a deliverynote for the pack job with the given ID
-  /api/packjobs/{packJobId}/containers/{containerId}:
+  /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}:
     get:
       parameters:
         - description: >-
@@ -11546,9 +11546,9 @@ paths:
           required: true
           schema:
             type: string
-        - description: ID of the packing container you want to get
+        - description: ID of the target container you want to get
           in: path
-          name: containerId
+          name: targetcontainerId
           required: true
           schema:
             type: string
@@ -11586,9 +11586,18 @@ paths:
           description: Entity not found
       tags:
         - Fulfillment Operations - Packing
-      description: ''
-      operationId: getPackingContainer
-      summary: Get a packing container with the given ID on given packJob
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getTargetcontainer
+      summary: Get a packing target container with the given ID on given packJob
     patch:
       parameters:
         - description: ID of corresponding packJob you want to patch
@@ -11599,7 +11608,153 @@ paths:
             type: string
         - description: ID of container you want to patch
           in: path
-          name: containerId
+          name: targetcontainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainer'
+          description: >-
+            Container was found & patch-set has been applied. The patched entity
+            is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity version conflict
+      tags:
+        - Fulfillment Operations - Packing
+      operationId: patchTargetcontainer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingContainerPatchActions'
+        description: Patch set
+        required: true
+      summary: Patches a packing container with the given ID
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+    post:
+      parameters:
+        - description: ID of the pack job you want to get
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: ID of the container you want to add new line item to it
+          in: path
+          name: targetcontainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackingContainer'
+          description: The packing container was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Packing
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: addTargetcontainer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackingContainerLineItemForCreation'
+        description: Packing Container line item object
+        required: true
+      summary: Add a new packing container line item
+  /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}/lineitems/{lineItemId}:
+    patch:
+      parameters:
+        - description: ID of corresponding packJob you want to patch
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: ID of container you want to patch
+          in: path
+          name: targetcontainerId
+          required: true
+          schema:
+            type: string
+        - description: ID of line item you want to patch
+          in: path
+          name: lineItemId
           required: true
           schema:
             type: string
@@ -11653,136 +11808,8 @@ paths:
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />Deprecated - please use /api/packjobs/{packJobId}/containers/{containerId}/{lineItemId}
-      operationId: patchPackingContainer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PackingContainerPatchActions'
-        description: Patch set
-        required: true
-      summary: Patches a packing container with the given ID
-    post:
-      parameters:
-        - description: ID of the pack job you want to get
-          in: path
-          name: packJobId
-          required: true
-          schema:
-            type: string
-        - description: ID of the container you want to add new line item to it
-          in: path
-          name: containerId
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PackingContainer'
-          description: The packing container was successfully created.
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      tags:
-        - Fulfillment Operations - Packing
-      description: ''
-      operationId: addPackingContainerLineItem
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PackingContainerLineItemForCreation'
-        description: Packing Container line item object
-        required: true
-      summary: Add a new packing container line item
-  /api/packjobs/{packJobId}/containers/{containerId}/item/{lineItemId}:
-    patch:
-      parameters:
-        - description: ID of corresponding packJob you want to patch
-          in: path
-          name: packJobId
-          required: true
-          schema:
-            type: string
-        - description: ID of container you want to patch
-          in: path
-          name: containerId
-          required: true
-          schema:
-            type: string
-        - description: ID of line item you want to patch
-          in: path
-          name: lineItemId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PackingContainer'
-          description: >-
-            Container was found & patch-set has been applied. The patched entity
-            is in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Entity not found
-        '409':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Entity version conflict
-      tags:
-        - Fulfillment Operations - Packing
-      description: Patch line item of a packing container
-      operationId: patchPackingContainerLineItem
+          </i><br /><br />Patch line item of a packing container
+      operationId: patchTargetContainerLineItem
       requestBody:
         content:
           application/json:
@@ -11801,7 +11828,7 @@ paths:
             type: string
         - description: ID of container you want to patch
           in: path
-          name: containerId
+          name: targetcontainerId
           required: true
           schema:
             type: string
@@ -11839,10 +11866,19 @@ paths:
           description: Facility not found
       tags:
         - Fulfillment Operations - Packing
-      description: ''
-      operationId: deleteLineItemContainer
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: deleteLineItemTargetContainers
       summary: deletes a lineItem of a packing container with the given ID
-  /api/packjobs/{packJobId}/containers:
+  /api/packjobs/{packJobId}/targetcontainers:
     get:
       parameters:
         - description: ID of the pack job you want to get
@@ -11886,8 +11922,17 @@ paths:
           description: Entity not found
       tags:
         - Fulfillment Operations - Packing
-      description: ''
-      operationId: getAllPackingContainerForPackJob
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getAllTargetcontainers
       summary: Get all packing container on given packJob
     post:
       parameters:
@@ -11929,8 +11974,17 @@ paths:
             endpoint
       tags:
         - Fulfillment Operations - Packing
-      description: ''
-      operationId: addPackingContainer
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: addTargetContainers
       requestBody:
         content:
           application/json:
@@ -16639,15 +16693,7 @@ paths:
       operationId: createStock
       summary: Create stock
       deprecated: false
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-          /></center> <br /> <i>This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      description: ''
       parameters: []
       requestBody:
         required: true
@@ -16749,16 +16795,15 @@ paths:
       operationId: upsertStocks
       summary: Update and create many stocks at once
       deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
           That means that this endpoint, model, etc. can contain breaking changes
           and / or might not be available at all times in your API instance. It
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
       parameters: []
       requestBody:
         required: true
@@ -16794,15 +16839,7 @@ paths:
       operationId: updateStock
       summary: Update stock
       deprecated: false
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-          /></center> <br /> <i>This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      description: ''
       parameters:
         - name: stockId
           required: true
@@ -16855,15 +16892,7 @@ paths:
       operationId: deleteStock
       summary: Delete stock
       deprecated: false
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-          /></center> <br /> <i>This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      description: ''
       parameters:
         - name: stockId
           required: true
@@ -16891,15 +16920,7 @@ paths:
       operationId: getStock
       summary: Get stock
       deprecated: false
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-          /></center> <br /> <i>This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      description: ''
       parameters:
         - name: stockId
           required: true
@@ -16932,16 +16953,15 @@ paths:
       operationId: performStocksActions
       summary: Perform stocks actions
       deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
           That means that this endpoint, model, etc. can contain breaking changes
           and / or might not be available at all times in your API instance. It
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
       parameters: []
       requestBody:
         required: true
