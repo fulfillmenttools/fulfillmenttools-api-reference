@@ -14931,7 +14931,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - ServiceJobs
+        - Fulfillment Operations - Custom Services
       operationId: getServiceJobs
       parameters:
         - description: all entities after given Id
@@ -15006,7 +15006,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - ServiceJobs
+        - Fulfillment Operations - Custom Services
       operationId: createServiceJob
       requestBody:
         content:
@@ -15066,7 +15066,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Entity not found
       tags:
-        - ServiceJobs
+        - Fulfillment Operations - Custom Services
       operationId: getServiceJob
       summary: Get requested service job
       description: |-
@@ -15119,7 +15119,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - ServiceJobs
+        - Fulfillment Operations - Custom Services
       operationId: updateServiceJob
       requestBody:
         content:
@@ -15129,6 +15129,172 @@ paths:
         description: Desired change to a service job
         required: true
       summary: Update a service job
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+  /api/serviceruns:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceRunPaginatedResult'
+          description: Service Runs could be found in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Custom Services
+      operationId: getServiceRuns
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: facilities to filter to
+          in: query
+          name: facilityIds
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      summary: Get Service Runs
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceRun'
+          description: The service run was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Custom Services
+      operationId: createServiceRun
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRunForCreation'
+        description: Desired service run to create
+        required: true
+      summary: Create a service run
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+  /api/serviceruns/{serviceRunId}:
+    get:
+      parameters:
+        - description: ID of service run you want to get
+          in: path
+          name: serviceRunId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceRun'
+          description: Service Run could be found in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Custom Services
+      operationId: getServiceRun
+      summary: Get requested service run
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -30970,7 +31136,7 @@ components:
     ServiceRun:
       additionalProperties: false
       allOf:
-        - $ref: '#/components/schemas/ServiceRunForCreation'
+        - $ref: '#/components/schemas/VersionedResource'
       properties:
         id:
           example: 9a14e183-ff86-4b6e-a2dc-eb4c7e312ab1
@@ -30981,10 +31147,20 @@ components:
             part of the same process
           example: 9a14e183-ff86-4b6e-a2dc-eb4c7e312ab1
           type: string
+        facilityRefs:
+          description: Collection of all FacilityRefs from the includes service jobs
+          items:
+            type: string
+            example: cdb1dfc4-8361-4ba9-b3c2-33a6f2fc8d05
+          type: array
+          minItems: 1
+        serviceJobLink:
+          $ref: '#/components/schemas/ServiceJobLink'
       required:
         - id
         - serviceJobLink
         - processRef
+        - facilityRefs
     ServiceRunStatus:
       type: string
       enum:
@@ -30993,14 +31169,12 @@ components:
         - CANCELLED
     ServiceRunForCreation:
       additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
       properties:
         serviceJobLink:
-          $ref: '#/components/schemas/ServiceJobLink'
+          $ref: '#/components/schemas/ServiceJobLinkForCreation'
       required:
         - serviceJobLink
-    ServiceJobLink:
+    ServiceJobLinkForCreation:
       additionalProperties: false
       properties:
         serviceJobRef:
@@ -31015,13 +31189,39 @@ components:
           minItems: 0
         nextServiceJobLinks:
           items:
-            $ref: '#/components/schemas/ServiceJobLink'
+            $ref: '#/components/schemas/ServiceJobLinkForCreation'
           type: array
           minItems: 0
       required:
         - serviceJobRef
         - previousServiceJobRefs
         - nextServiceJobLinks
+    ServiceJobLink:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/ServiceJobLinkForCreation'
+      properties:
+        facilityRef:
+          type: string
+      required:
+        - serviceJobRef
+        - previousServiceJobRefs
+        - nextServiceJobLinks
+        - facilityRef
+    ServiceRunPaginatedResult:
+      additionalProperties: false
+      type: object
+      properties:
+        total:
+          type: object
+          minimum: 0
+        serviceRuns:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceRun'
+      required:
+        - total
+        - serviceRuns
     HealthResult:
       properties:
         status:
