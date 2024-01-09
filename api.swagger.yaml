@@ -8237,6 +8237,41 @@ paths:
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
       operationId: getAllProcesses
       summary: Return all processes
+  /api/processes/retrynotroutable:
+    post:
+      responses:
+        '204':
+          description: >-
+            The retry for all not routable proceses has been succesfully
+            triggered
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The retry task can not be triggered due to a conflicting operation
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Processes
+      description: ''
+      operationId: triggerRetryNotRoutable
+      summary: triggers the retry of not routable plans
   /api/processes/{processId}:
     patch:
       parameters:
