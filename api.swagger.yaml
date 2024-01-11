@@ -17558,12 +17558,11 @@ paths:
           in: path
           schema:
             type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TransitionForRemove'
+        - name: flowTemplateVersion
+          required: true
+          in: query
+          schema:
+            type: number
       responses:
         '200':
           description: FlowTemplates transition successfully deleted
@@ -17571,6 +17570,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FlowTemplate'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Fulfillment Operations - Flows
+  /api/flowtemplatemappings/supportedmappings:
+    get:
+      operationId: getFlowTemplateSupportedMappings
+      summary: get supported mappings for flow templates
+      parameters: []
+      responses:
+        '200':
+          description: Found Supported Flow Mappings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportedFlowSourceTargetMappings'
         '400':
           description: Bad request
           content:
@@ -33373,13 +33410,15 @@ components:
         - flowTemplateVersion
         - source
         - targets
-    TransitionForRemove:
+    SupportedFlowSourceTargetMappings:
       type: object
       properties:
-        flowTemplateVersion:
-          type: number
+        mappings:
+          type: array
+          items:
+            type: string
       required:
-        - flowTemplateVersion
+        - mappings
     FlowInstance:
       type: object
       properties:
