@@ -4887,7 +4887,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Available to Promise
+        - DOMS - Checkout Options
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -4945,7 +4945,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Available to Promise
+        - DOMS - Checkout Options
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -5001,7 +5001,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Available to Promise
+        - DOMS - Checkout Options
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -16481,16 +16481,7 @@ paths:
       operationId: getStockSummaries
       summary: Get the accumulated Stock for each Article
       deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+      description: ''
       parameters:
         - name: size
           required: false
@@ -31270,9 +31261,22 @@ components:
         - nextServiceJobLinks
     ServiceJobLink:
       additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/ServiceJobLinkForCreation'
       properties:
+        serviceJobRef:
+          type: string
+          example: 0ed803c2-fa20-48d9-9c1b-0d243937a9ad
+        previousServiceJobRefs:
+          items:
+            type: string
+            example: 9f197dbf-c724-469b-90f1-dc94f20b2825
+          type: array
+          maxItems: 1
+          minItems: 0
+        nextServiceJobLinks:
+          items:
+            $ref: '#/components/schemas/ServiceJobLink'
+          type: array
+          minItems: 0
         facilityRef:
           type: string
       required:
@@ -33619,7 +33623,7 @@ tags:
   - description: >-
       Endpoints used by shops to get the current available pickup stores and
       available service levels like Same-Day delivery.
-    name: DOMS - Available to Promise
+    name: DOMS - Checkout Options
   - description: Endpoints to Create, Update and Read pickjobs.
     name: Fulfillment Operations - Picking
   - description: Endpoints to manipulate Restow Items.
