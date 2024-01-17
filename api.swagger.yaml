@@ -25412,6 +25412,98 @@ components:
           maxItems: 10
           type: array
       type: object
+    OidcProviders:
+      properties:
+        providers:
+          items:
+            $ref: '#/components/schemas/StrippedOidcProvider'
+          type: array
+        total:
+          type: number
+      required:
+        - providers
+        - total
+    OidcProviderForUpdate:
+      allOf:
+        - $ref: '#/components/schemas/OidcProviderForCreation'
+    OidcProviderForCreation:
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 15
+        status:
+          $ref: '#/components/schemas/OidcProviderStatus'
+        issuer:
+          type: string
+        clientId:
+          type: string
+        customParameters:
+          type: array
+          items:
+            minItems: 0
+            maxItems: 3
+            type: object
+            properties:
+              key:
+                type: string
+              value:
+                type: string
+            required:
+              - key
+              - value
+        clientSecret:
+          type: string
+      required:
+        - clientSecret
+        - name
+        - status
+        - issuer
+        - clientId
+        - customParameters
+    OidcProviderCustomParameter:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+      required:
+        - key
+        - value
+    StrippedOidcProvider:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          minLength: 3
+          maxLength: 15
+        status:
+          $ref: '#/components/schemas/OidcProviderStatus'
+        issuer:
+          type: string
+        clientId:
+          type: string
+        customParameters:
+          items:
+            $ref: '#/components/schemas/OidcProviderCustomParameter'
+          minItems: 0
+          maxItems: 3
+          type: array
+      required:
+        - id
+        - name
+        - status
+        - issuer
+        - clientId
+        - customParameters
+    OidcProviderStatus:
+      description: Status of Provider
+      enum:
+        - ACTIVE
+        - INACTIVE
+      type: string
     RerouteShortPickConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -33676,3 +33768,5 @@ tags:
     name: Infrastructure - Features
   - description: Endpoints to get health status about the fulfillmenttools platform.
     name: Infrastructure - Health
+  - description: Endpoints to configure external IDPs.
+    name: Infrastructure - OIDC Configuration
