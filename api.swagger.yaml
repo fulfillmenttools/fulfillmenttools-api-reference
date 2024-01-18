@@ -15174,15 +15174,15 @@ paths:
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
-  /api/serviceruns:
+  /api/linkedservicejobs:
     get:
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceRunPaginatedResult'
-          description: Service Runs could be found in response body.
+                $ref: '#/components/schemas/LinkedServiceJobPaginatedResult'
+          description: LinkedServiceJobs could be found in response body.
         '401':
           content:
             application/json:
@@ -15201,7 +15201,7 @@ paths:
             endpoint
       tags:
         - Fulfillment Operations - Custom Services
-      operationId: getServiceRuns
+      operationId: getLinkedServiceJobs
       parameters:
         - description: all entities after given Id
           in: query
@@ -15224,7 +15224,7 @@ paths:
             type: array
             items:
               type: string
-      summary: Get Service Runs
+      summary: Get LinkedServiceJobs
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -15241,8 +15241,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceRun'
-          description: The service run was successfully created.
+                $ref: '#/components/schemas/LinkedServiceJob'
+          description: The LinkedServiceJob was successfully created.
         '400':
           content:
             application/json:
@@ -15268,15 +15268,15 @@ paths:
             endpoint
       tags:
         - Fulfillment Operations - Custom Services
-      operationId: createServiceRun
+      operationId: createLinkedServiceJob
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ServiceRunForCreation'
-        description: Desired service run to create
+              $ref: '#/components/schemas/LinkedServiceJobForCreation'
+        description: Desired LinkedServiceJob to create
         required: true
-      summary: Create a service run
+      summary: Create a LinkedServiceJob
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -15287,12 +15287,12 @@ paths:
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
-  /api/serviceruns/{serviceRunId}:
+  /api/linkedservicejobs/{linkedServiceJobId}:
     get:
       parameters:
-        - description: ID of service run you want to get
+        - description: ID of LinkedServiceJob you want to get
           in: path
-          name: serviceRunId
+          name: linkedServiceJobId
           required: true
           schema:
             type: string
@@ -15301,8 +15301,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceRun'
-          description: Service Run could be found in response body.
+                $ref: '#/components/schemas/LinkedServiceJob'
+          description: LinkedServiceJob could be found in response body.
         '401':
           content:
             application/json:
@@ -15328,8 +15328,8 @@ paths:
           description: Entity not found
       tags:
         - Fulfillment Operations - Custom Services
-      operationId: getServiceRun
-      summary: Get requested service run
+      operationId: getLinkedServiceJob
+      summary: Get requested LinkedServiceJob
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -31288,7 +31288,7 @@ components:
           example: 42
           type: integer
       type: object
-    ServiceRun:
+    LinkedServiceJob:
       additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -31316,13 +31316,13 @@ components:
         - serviceJobLink
         - processRef
         - facilityRefs
-    ServiceRunStatus:
+    LinkedServiceJobStatus:
       type: string
       enum:
         - OPEN
         - FINISHED
         - CANCELLED
-    ServiceRunForCreation:
+    LinkedServiceJobForCreation:
       additionalProperties: false
       properties:
         serviceJobLink:
@@ -31376,20 +31376,20 @@ components:
         - previousServiceJobRefs
         - nextServiceJobLinks
         - facilityRef
-    ServiceRunPaginatedResult:
+    LinkedServiceJobPaginatedResult:
       additionalProperties: false
       type: object
       properties:
         total:
           type: object
           minimum: 0
-        serviceRuns:
+        linkedServiceJobs:
           type: array
           items:
-            $ref: '#/components/schemas/ServiceRun'
+            $ref: '#/components/schemas/LinkedServiceJob'
       required:
         - total
-        - serviceRuns
+        - linkedServiceJobs
     HealthResult:
       properties:
         status:
