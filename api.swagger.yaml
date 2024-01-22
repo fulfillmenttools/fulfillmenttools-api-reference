@@ -13264,6 +13264,12 @@ paths:
             type: array
             items:
               type: string
+        - description: Term by which to search through the fields
+          in: query
+          name: searchTerm
+          required: false
+          schema:
+            type: string
         - description: entity to start after
           in: query
           name: startAfterId
@@ -30133,7 +30139,7 @@ components:
           type: array
         status:
           $ref: '#/components/schemas/ItemReturnJobStatus'
-        tenantReceiptId:
+        tenantOrderId:
           type: string
         consumerAddresses:
           items:
@@ -30143,6 +30149,12 @@ components:
           items:
             type: string
           type: array
+        shortId:
+          description: >-
+            A short identifier that helps assigning a item return job to a
+            customer. This is automatically created during creation.
+          example: AS12
+          type: string
         returnableLineItems:
           items:
             $ref: '#/components/schemas/ItemReturnJobLineItem'
@@ -30166,6 +30178,16 @@ components:
         - consumerAddresses
         - returnableLineItems
         - itemReturns
+    ItemReturnJobWithSearchPaths:
+      allOf:
+        - $ref: '#/components/schemas/ItemReturnJob'
+      additionalProperties: false
+      properties:
+        searchPaths:
+          items:
+            type: string
+          type: array
+      type: object
     ItemReturnJobForCreation:
       additionalProperties: false
       properties:
@@ -30177,7 +30199,7 @@ components:
           type: array
         status:
           $ref: '#/components/schemas/ItemReturnJobStatus'
-        tenantReceiptId:
+        tenantOrderId:
           type: string
         consumerAddresses:
           items:
@@ -30187,6 +30209,12 @@ components:
           items:
             type: string
           type: array
+        shortId:
+          description: >-
+            A short identifier that helps assigning a item return job to a
+            customer. This is automatically created during creation.
+          example: AS12
+          type: string
         returnableLineItems:
           items:
             $ref: '#/components/schemas/ItemReturnJobLineItemForCreation'
@@ -30198,6 +30226,17 @@ components:
         - status
         - consumerAddresses
         - returnableLineItems
+    ItemReturnJobs:
+      properties:
+        itemReturnJobsWithSearchPaths:
+          items:
+            $ref: '#/components/schemas/ItemReturnJobWithSearchPaths'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
     ItemReturnJobStatus:
       type: string
       enum:
@@ -30253,7 +30292,7 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/ItemReturnStatus'
-        tenantReceiptId:
+        tenantOrderId:
           type: string
         scannableCodes:
           items:
@@ -30266,8 +30305,6 @@ components:
             $ref: '#/components/schemas/ItemReturnLineItem'
       required:
         - id
-        - created
-        - lastModified
         - status
         - returnedLineItems
         - returnFacilityRef
@@ -30310,7 +30347,7 @@ components:
           $ref: '#/components/schemas/ItemReturnStatus'
         returnFacilityRef:
           type: string
-        tenantReceiptId:
+        tenantOrderId:
           type: string
         scannableCodes:
           items:
