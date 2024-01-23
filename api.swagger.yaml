@@ -31029,6 +31029,18 @@ components:
           type: string
       required:
         - id
+    ServiceJobAdditionalInformation:
+      allOf:
+        - $ref: '#/components/schemas/AdditionalInformation'
+      type: object
+      properties:
+        value:
+          anyOf:
+            - type: string
+            - type: number
+            - type: boolean
+          description: Value of the additional information
+          example: some value
     CustomServicePatchActions:
       properties:
         actions:
@@ -31103,6 +31115,22 @@ components:
       required:
         - quantity
         - article
+    ServiceJobAdditionalInformationForCreation:
+      type: object
+      properties:
+        additionalInformationRef:
+          type: string
+          description: ID of the additional information
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        value:
+          anyOf:
+            - type: string
+            - type: number
+            - type: boolean
+          description: Value of the additional information
+          example: some value
+      required:
+        - additionalInformationRef
     ServiceJobLineItem:
       allOf:
         - $ref: '#/components/schemas/ServiceJobLineItemForCreation'
@@ -31162,7 +31190,13 @@ components:
         additionalInformation:
           type: array
           items:
-            $ref: '#/components/schemas/AdditionalInformation'
+            $ref: '#/components/schemas/ServiceJobAdditionalInformation'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the service job. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
       required:
         - id
         - lineItems
@@ -31189,6 +31223,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ServiceJobLineItemForCreation'
+        additionalInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceJobAdditionalInformationForCreation'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the service job. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
       required:
         - customServiceRef
         - facilityRef
