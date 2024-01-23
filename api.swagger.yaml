@@ -27672,6 +27672,8 @@ components:
             username:
               example: aschneider
               type: string
+            authenticationProviderType:
+              $ref: '#/components/schemas/AuthenticationProviderType'
             assignedFacilities:
               items:
                 $ref: '#/components/schemas/UserAssignedFacility'
@@ -27685,6 +27687,11 @@ components:
           type: object
       xml:
         name: User
+    AuthenticationProviderType:
+      enum:
+        - EMAIL_PASSWORD
+        - OIDC
+      type: string
     UserForCreation:
       properties:
         firstname:
@@ -30613,8 +30620,8 @@ components:
     StorageLocationType:
       description: |-
         Describes the kind of a storage location:
-          * `SINGLE_STORAGE`- it is only allowed to connect one partial stock to such a storage location
-          * `BULK_STORAGE`- more than one partial stock and its quantities can be linked to such an storage location
+          * `SINGLE_STORAGE`- it is only allowed to store stock with the same tenantArticleId here
+          * `BULK_STORAGE`- stocks belonging to different tenantArticleIds can be stored here
       enum:
         - SINGLE_STORAGE
         - BULK_STORAGE
