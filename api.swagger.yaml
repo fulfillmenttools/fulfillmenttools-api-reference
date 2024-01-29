@@ -8956,7 +8956,7 @@ paths:
         description: Patch set
         required: true
       summary: Patches a routing plan with the given ID
-  /api/routingplans/{routingplanId}/decisionlogs/{decisionlogId}:
+  /api/routingplans/{routingplanId}/decisionlog/{routingRun}:
     get:
       parameters:
         - description: ID of the routing plan you want to get it's decision log
@@ -8967,10 +8967,10 @@ paths:
             type: string
         - description: ID of the decision log you want to get
           in: path
-          name: decisionlogId
+          name: routingRun
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           content:
@@ -18726,99 +18726,13 @@ components:
         - shipFromStore
         - clickAndCollect
       type: object
-    DecisionLog:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-      description: '@deprecated'
-      properties:
-        finalizeRun:
-          description: The iteration through the finalizer process
-          example: 5
-          minimum: 0
-          type: number
-        id:
-          type: string
-        prioritizationDecisions:
-          items:
-            $ref: '#/components/schemas/DecisionLogEntry'
-          type: array
-        routingDecisions:
-          items:
-            $ref: '#/components/schemas/RoutingDecision'
-          type: array
-        routingPlanRef:
-          type: string
-        routingDuration:
-          type: number
-      required:
-        - id
-        - routingPlanRef
-        - finalizeRun
-        - created
-        - lastModified
-        - version
-        - routingDecisions
-        - prioritizationDecisions
-      type: object
-      xml:
-        name: DecisionLog
-    DecisionLogEntry:
-      properties:
-        created:
-          description: The date this rule was executed and the log has been written.
-          example: '2020-02-03T08:45:50.525Z'
-          format: date-time
-          type: string
-        details:
-          description: Rule specific payload describing the made decision
-          type: object
-        message:
-          description: A descriptive text of the rule execution result.
-          example: Geo distancing ranking executed successfully
-          type: string
-        ruleActive:
-          description: state of the rule
-          type: boolean
-        ruleDuration:
-          type: number
-          description: execution time of this rule in milliseconds
-        ruleConfig:
-          description: Rule config at the time of execution
-          type: object
-        ruleName:
-          description: The name of the executed rule.
-          example: Geo distancing rating
-          type: string
-        ruleType:
-          $ref: '#/components/schemas/DecisionLogEntryRuleType'
-      required:
-        - created
-        - ruleName
-        - ruleType
-        - details
-        - ruleConfig
-        - ruleActive
-      type: object
-    DecisionLogEntryRuleType:
-      description: The rule type of a decision log entry
-      enum:
-        - PRIORITIZATION
-        - FENCE
-        - RATING
-        - ORDERSPLIT
-      type: string
-      xml:
-        name: DecisionLogEntryRuleType
     DecisionLogRef:
       properties:
-        finalizeRun:
-          description: The iteration through the finalizer process
-          example: 5
-          minimum: 0
+        routingRun:
           type: number
         url:
           description: A reference to the finalizer decision log
-          example: /api/routingplans/{routingPlanId}/decisionlogs/{decisionLogId}
+          example: /api/routingplans/{routingPlanId}/decisionlogs/{routingRun}
           type: string
       required:
         - url
@@ -18836,7 +18750,7 @@ components:
       required:
         - pickingTimes
       type: object
-    DecisionLogV2:
+    DecisionLog:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
@@ -18868,7 +18782,7 @@ components:
         - version
       type: object
       xml:
-        name: DecisionLogV2
+        name: DecisionLog
     DecisionLogFacilityInfo:
       properties:
         name:
@@ -26078,21 +25992,6 @@ components:
       type: object
       xml:
         name: RoutingConfigurationsPatchActions
-    RoutingDecision:
-      properties:
-        decisionLogs:
-          items:
-            $ref: '#/components/schemas/DecisionLogEntry'
-          type: array
-        routingRun:
-          description: The iteration through the router process
-          example: 5
-          minimum: 0
-          type: number
-      required:
-        - routingRun
-        - decisionLogs
-      type: object
     RerouteDescriptionForCreation:
       properties:
         reason:
