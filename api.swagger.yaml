@@ -1923,6 +1923,253 @@ paths:
         description: Desired order routing configuration to create/update
         required: true
       summary: Change the tenant wide order routing configuration
+  /api/configurations/oidcproviders:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OidcProviders'
+          description: existing oidc providers.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Infrastructure - OIDC Configuration
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Get the available OIDC providers.
+      operationId: getOidcProviders
+      summary: Get the available OIDC providers.
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OidcProviderForCreation'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrippedOidcProvider'
+          description: Provider was updated successfully
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Infrastructure - OIDC Configuration
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Create an OIDC provider.
+      operationId: createOidcProvider
+      summary: Create an OIDC provider.
+  /api/configurations/oidcproviders/{oidcProviderId}:
+    get:
+      parameters:
+        - description: ID of OIDC provider you want to get.
+          in: path
+          name: oidcProviderId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrippedOidcProvider'
+          description: Provider was found
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Infrastructure - OIDC Configuration
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getOidcProvider
+      summary: Get OIDC provider by id.
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OidcProviderForUpdate'
+      parameters:
+        - description: ID of OIDC provider you want to update.
+          in: path
+          name: oidcProviderId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OidcProviderForUpdate'
+          description: Provider was updated successfully
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Infrastructure - OIDC Configuration
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Update an OIDC Provider.
+      operationId: updateOidcProvider
+      summary: Update an OIDC Provider.
+    delete:
+      parameters:
+        - description: ID of the OIDC provider you want to delete.
+          in: path
+          name: oidcProviderId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OIDC Provider was found & you were allowed to delete it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: OIDC Provider not found
+      tags:
+        - Infrastructure - OIDC Configuration
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Delete an OIDC Provider.
+      operationId: deleteOidcProvider
+      summary: Delete an OIDC Provider.
   /api/configurations/pickingtimes:
     get:
       responses:
@@ -25460,6 +25707,16 @@ components:
     OidcProviderForUpdate:
       allOf:
         - $ref: '#/components/schemas/OidcProviderForCreation'
+      properties:
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
     OidcProviderForCreation:
       properties:
         name:
@@ -25475,19 +25732,15 @@ components:
         customParameters:
           type: array
           items:
-            minItems: 0
-            maxItems: 3
-            type: object
-            properties:
-              key:
-                type: string
-              value:
-                type: string
-            required:
-              - key
-              - value
+            $ref: '#/components/schemas/OidcProviderCustomParameter'
+          minItems: 0
+          maxItems: 3
         clientSecret:
           type: string
+        assignedGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedGroup'
       required:
         - clientSecret
         - name
@@ -25495,6 +25748,7 @@ components:
         - issuer
         - clientId
         - customParameters
+        - assignedGroups
     OidcProviderCustomParameter:
       type: object
       properties:
@@ -25506,6 +25760,8 @@ components:
         - key
         - value
     StrippedOidcProvider:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
       properties:
         id:
           type: string
@@ -25525,6 +25781,10 @@ components:
           minItems: 0
           maxItems: 3
           type: array
+        assignedGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedGroup'
       required:
         - id
         - name
@@ -25532,12 +25792,27 @@ components:
         - issuer
         - clientId
         - customParameters
+        - assignedGroups
     OidcProviderStatus:
       description: Status of Provider
       enum:
         - ACTIVE
         - INACTIVE
       type: string
+    AssignedGroup:
+      type: object
+      properties:
+        group:
+          type: string
+          minLength: 1
+        facilityRefs:
+          type: array
+          minItems: 1
+          items:
+            type: string
+      required:
+        - group
+        - facilityRefs
     RerouteShortPickConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
