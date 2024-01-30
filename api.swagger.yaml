@@ -6810,6 +6810,106 @@ paths:
       description: ''
       operationId: getLabelForParcel
       summary: Get a label for the parcel with the given ID
+  /api/parcels/{parcelId}/deliverynote:
+    get:
+      parameters:
+        - description: ID of parcel you want to retrieve deliveryNote for
+          in: path
+          name: parcelId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized values for the delivery note. If not provided
+            the default locale is used. For example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                $ref: '#/components/schemas/DeliveryNote'
+          description: Get delivery note as pdf.
+        '401':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Parcel not found
+      tags:
+        - Fulfillment Operations - Shipments
+      operationId: getParcelDeliveryNote
+      summary: Get deliveryNote for a parcel
+  /api/parcels/{parcelId}/returnnote:
+    get:
+      parameters:
+        - description: ID of parcel you want to retrieve returnNote for
+          in: path
+          name: parcelId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized values for the returnNote. If not provided the
+            default locale is used. For example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                $ref: '#/components/schemas/ReturnNote'
+          description: Get delivery note as pdf.
+        '401':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Parcel not found
+      tags:
+        - Fulfillment Operations - Shipments
+      operationId: getParcelReturnNote
+      summary: Get returnNote for a parcel
   /api/pickjobs:
     get:
       parameters:
@@ -8956,7 +9056,7 @@ paths:
         description: Patch set
         required: true
       summary: Patches a routing plan with the given ID
-  /api/routingplans/{routingplanId}/decisionlog/{routingRun}:
+  /api/routingplans/{routingplanId}/decisionlogs/{routingRun}:
     get:
       parameters:
         - description: ID of the routing plan you want to get it's decision log
