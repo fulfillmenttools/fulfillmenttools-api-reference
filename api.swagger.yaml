@@ -6776,6 +6776,47 @@ paths:
       description: ''
       operationId: getOrder
       summary: Get a order with the given ID
+  /api/orders/{orderId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderActionsParameter'
+      parameters:
+        - description: Reference to the order you want to call the action for
+          in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: Updated Order in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Orders
+      operationId: orderAction
+      summary: Call a single action on a given order
   /api/orders/{orderId}/cancel:
     post:
       parameters:
@@ -6819,7 +6860,7 @@ paths:
         - DOMS - Orders
       description: ''
       operationId: cancelOrder
-      summary: Cancell an order with the given ID
+      summary: Cancel an order with the given ID
   /api/parcels:
     get:
       parameters:
@@ -8548,6 +8589,12 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/SortDirection'
+        - description: Locked status for the query
+          in: query
+          name: locked
+          required: false
+          schema:
+            type: boolean
       responses:
         '200':
           content:
@@ -18363,6 +18410,7 @@ components:
             - RemoveLineItemFromPackingContainer
             - UpdateLineItemOnPackingContainer
             - ModifyCustomService
+            - UnlockOrder
           example: <Use the corresponding action, see documentation>
           type: string
       required:
@@ -23939,6 +23987,34 @@ components:
       required:
         - quantity
         - tenantArticleRef
+    OrderActionsParameter:
+      oneOf:
+        - $ref: '#/components/schemas/OrderUnlockActionParameter'
+    AbstractOrderActionsParameter:
+      additionalProperties: false
+      discriminator:
+        propertyName: name
+      properties:
+        name:
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    OrderUnlockActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractOrderActionsParameter'
+      properties:
+        name:
+          enum:
+            - UNLOCK
+          type: string
+      required:
+        - name
+        - version
     CustomServiceReference:
       additionalProperties: false
       properties:
@@ -24077,6 +24153,10 @@ components:
           example: '2020-02-03T08:45:50.525Z'
           format: date-time
           type: string
+        statusReasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderStatusReason'
       required:
         - orderDate
         - orderLineItems
@@ -24084,6 +24164,16 @@ components:
       type: object
       xml:
         name: Order
+    OrderStatusReason:
+      properties:
+        reason:
+          description: The reason for setting this order status
+          type: string
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+      required:
+        - reason
+        - status
     OrderInformation:
       properties:
         orderDate:
@@ -26664,6 +26754,7 @@ components:
         - WAITING
         - OBSOLETE
         - CANCELED
+        - LOCKED
       type: string
       xml:
         name: ReturnItemStatus
@@ -31113,6 +31204,17 @@ components:
         - valueType
         - groups
         - flattenScopeIds
+      type: object
+    RemoteConfigurations:
+      properties:
+        remoteConfigurations:
+          items:
+            $ref: '#/components/schemas/RemoteConfiguration'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
       type: object
     RemoteConfigurationScopeForCreation:
       additionalProperties: false
