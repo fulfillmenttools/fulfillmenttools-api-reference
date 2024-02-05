@@ -6858,9 +6858,14 @@ paths:
           description: Entity not found
       tags:
         - DOMS - Orders
-      description: ''
       operationId: cancelOrder
       summary: Cancel an order with the given ID
+      deprecated: true
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+        <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+        /><br />Deprecated: Use /actions with "CANCEL" instead.
   /api/parcels:
     get:
       parameters:
@@ -23990,6 +23995,7 @@ components:
     OrderActionsParameter:
       oneOf:
         - $ref: '#/components/schemas/OrderUnlockActionParameter'
+        - $ref: '#/components/schemas/OrderCancelActionParameter'
     AbstractOrderActionsParameter:
       additionalProperties: false
       discriminator:
@@ -24011,6 +24017,17 @@ components:
         name:
           enum:
             - UNLOCK
+          type: string
+      required:
+        - name
+        - version
+    OrderCancelActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractOrderActionsParameter'
+      properties:
+        name:
+          enum:
+            - CANCEL
           type: string
       required:
         - name
