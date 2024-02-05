@@ -26644,6 +26644,8 @@ components:
           type: number
         status:
           $ref: '#/components/schemas/RoutingPlanStatus'
+        consolidatedStatus:
+          $ref: '#/components/schemas/ConsolidatedRoutingPlanStatus'
         targetAddress:
           $ref: '#/components/schemas/TargetAddress'
         targetAddressesByDeliveryEvent:
@@ -26679,6 +26681,7 @@ components:
         - orderRef
         - priority
         - status
+        - consolidatedStatus
         - decisionLogs
         - routingRun
         - finalizeRun
@@ -26775,7 +26778,37 @@ components:
         - LOCKED
       type: string
       xml:
-        name: ReturnItemStatus
+        name: RoutingPlanStatus
+    ConsolidatedRoutingPlanStatus:
+      description: |-
+        This status consolidates many of the RoutingPlanStatus and offers
+        a more detailes explanation of what happened to the routing plan.
+      enum:
+        - ROUTED
+        - PROCESS_MANUAL_REROUTED_THEN_NEW_RP_ROUTED
+        - ROUTING_PLAN_REROUTED_THEN_ROUTED_TO_SAME_FACILITY
+        - ROUTING_PLAN_CREATED_THEN_ROUTING
+        - ROUTING_PLAN_CREATED_THEN_PLANNED
+        - ROUTING_PLAN_REROUTED_THEN_FAILED
+        - FACILITY_MANUALLY_ASSIGNED_TO_PICKJOB_THEN_NEW_RP_ROUTED
+        - FACILITY_MANUALLY_ASSIGNED_TO_PROCESS_THEN_NEW_RP_ROUTED
+        - STOCK_UPDATE_RECEIVED_THEN_REACTIVATED
+        - PICKJOB_REJECTED_THEN_REROUTED
+        - ROUTING_TIME_TRIGGERED_THEN_REROUTED
+        - ROUTING_PLAN_SHORTPICKED_THEN_REROUTED
+        - ROUTINGPLAN_SHORTPICKED_THEN_SPLIT
+        - ROUTING_PLAN_ROUTED_THEN_SPLIT
+        - OBSOLETE
+        - UNKNOWN
+        - RETRYABLE
+        - FAILED_REROUTE
+        - CANCELLED
+        - UNROUTABLE
+        - WAITING
+        - WAITING_AND_SPLIT
+      type: string
+      xml:
+        name: RealRoutingPlanStatus
     RoutingPlans:
       properties:
         routingPlans:
