@@ -28094,7 +28094,19 @@ components:
               example: aschneider
               type: string
             authenticationProviderType:
-              $ref: '#/components/schemas/AuthenticationProviderType'
+              deprecated: true
+              enum:
+                - EMAIL_PASSWORD
+                - OIDC
+              type: string
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated use authenticationProvider
+                instead.
+            authenticationProvider:
+              $ref: '#/components/schemas/AuthenticationProvider'
             assignedFacilities:
               items:
                 $ref: '#/components/schemas/UserAssignedFacility'
@@ -28105,6 +28117,7 @@ components:
             - firstname
             - lastname
             - locale
+            - authenticationProvider
           type: object
       xml:
         name: User
@@ -28113,6 +28126,18 @@ components:
         - EMAIL_PASSWORD
         - OIDC
       type: string
+    AuthenticationProvider:
+      properties:
+        type:
+          $ref: '#/components/schemas/AuthenticationProviderType'
+        id:
+          example: LGMl2DuvPnfPoSHhYFOm
+          type: string
+      required:
+        - type
+      type: object
+      xml:
+        name: AuthenticationProvider
     UserForCreation:
       properties:
         firstname:
