@@ -30711,7 +30711,7 @@ components:
       additionalProperties: false
       properties:
         article:
-          $ref: '#/components/schemas/AbstractArticle'
+          $ref: '#/components/schemas/ItemReturnJobLineItemArticle'
         delivered:
           type: number
           minimum: 1
@@ -30722,6 +30722,17 @@ components:
       required:
         - article
         - delivered
+    ItemReturnJobLineItemArticle:
+      allOf:
+        - $ref: '#/components/schemas/AbstractArticle'
+        - properties:
+            attributes:
+              items:
+                $ref: '#/components/schemas/ArticleAttributeItem'
+              type: array
+          type: object
+      xml:
+        name: PickLineItemArticle
     ItemReturn:
       additionalProperties: false
       properties:
