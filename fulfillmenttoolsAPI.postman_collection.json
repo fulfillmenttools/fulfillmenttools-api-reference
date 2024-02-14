@@ -4259,6 +4259,36 @@
 									"response": []
 								},
 								{
+									"name": "Create Toolkit Fence with array operators",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"entity1\": \"ORDER\",\n    \"entity2\": \"FACILITY\",\n    \"active\": true,\n    \"name\": \"(Toolkit v2 Fence) Grossbestellungen nur aus WAREHOUSE\",\n    \"nameLocalized\": {\n        \"de_DE\": \"Grossbestellungen nur aus Warehouses\",\n        \"en_UK\": \"Bulk orders from warehouses only\"\n    },\n    \"description\": \"If an order contains a line item with quantity >= 10 or the article title contains the term MEGA PACK it will be treated as a bulk order and handled by warehouses\",\n    \"order\":1,\n    \"rule\": {\n        \"operator\": \"EQUALS\",\n        \"leftPart\": {\n            \"predicateConnector\": \"OR\",\n            \"predicates\": [\n                {\n                    \"entityOperator\": \"ANY_VALUE_GREATER_EQUALS\",\n                    \"expectedValue\": 10,\n                    \"propertyPath\": \"$.orderLineItems[*].quantity\"\n                },\n                {\n                    \"entityOperator\": \"ANY_VALUE_CONTAINS\",\n                    \"expectedValue\": \"MEGA PACK\",\n                    \"propertyPath\": \"$.orderLineItems[*].article.title\"\n                }\n            ]\n        },\n        \"rightPart\": {\n            \"predicateConnector\": \"AND\",\n            \"predicates\": [\n                {\n                    \"entityOperator\": \"VALUE_EQUALS\",\n                    \"expectedValue\": \"WAREHOUSE\",\n                    \"propertyPath\": \"$.tenantFacilityId\",\n                    \"transformation\": \"SUBSTRING\",\n                    \"transformationArgs\": [\n                        0,\n                        9\n                    ]\n                }\n            ]\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/configurations/routing/toolkit/fences",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"routing",
+												"toolkit",
+												"fences"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Create Toolkit Comparison Fence",
 									"request": {
 										"method": "POST",
