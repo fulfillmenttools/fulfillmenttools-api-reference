@@ -15745,6 +15745,136 @@ paths:
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
+  /api/linkedservicejobs/{linkedServiceJobId}/servicejoblinks:
+    post:
+      parameters:
+        - description: ID of LinkedServiceJob you want to alter
+          in: path
+          name: linkedServiceJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedServiceJob'
+          description: The ServiceJobLink was successfully added to the LinkedServiceJob.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Custom Services
+      operationId: addServiceJobLink
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceJobLinkForAdding'
+        description: Desired ServiceJobLink to add
+        required: true
+      summary: Add a ServiceJobLink to an LinkedServiceJob on root level
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+  /api/linkedservicejobs/{linkedServiceJobId}/servicejoblinks/{serviceJobLinkId}:
+    post:
+      parameters:
+        - description: ID of LinkedServiceJob you want to alter
+          in: path
+          name: linkedServiceJobId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            ID of ServiceJobLink you want to add the new ServiceJobLink
+            underneath
+          in: path
+          name: serviceJobLinkId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedServiceJob'
+          description: >-
+            The ServiceJobLink was successfully added nested inside the
+            LinkedServiceJob.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Custom Services
+      operationId: addNestedServiceJobLink
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceJobLinkForAdding'
+        description: Desired ServiceJobLink to add
+        required: true
+      summary: Add a ServiceJobLink to an ServiceJobLInk inside the LinkedServiceJob
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
   /api/articles:
     get:
       operationId: getArticles
@@ -31889,33 +32019,45 @@ components:
             part of the same process
           example: 9a14e183-ff86-4b6e-a2dc-eb4c7e312ab1
           type: string
-        facilityRefs:
-          description: Collection of all FacilityRefs from the includes service jobs
+        facilityRef:
+          description: Id linked Facility from the includes service jobs
+          type: string
+          example: cdb1dfc4-8361-4ba9-b3c2-33a6f2fc8d05
+        includedServiceJobLinkIds:
+          description: searchable field of all included service job links
           items:
             type: string
             example: cdb1dfc4-8361-4ba9-b3c2-33a6f2fc8d05
           type: array
           minItems: 1
-        serviceJobLink:
-          $ref: '#/components/schemas/ServiceJobLink'
+        serviceJobLinks:
+          items:
+            $ref: '#/components/schemas/ServiceJobLink'
+          type: array
+          minItems: 1
       required:
         - id
-        - serviceJobLink
+        - serviceJobLinks
         - processRef
-        - facilityRefs
+        - facilityRef
+        - includedServiceJobLinkIds
     LinkedServiceJobStatus:
       type: string
       enum:
         - OPEN
         - FINISHED
         - CANCELLED
+        - OBSOLETE
     LinkedServiceJobForCreation:
       additionalProperties: false
       properties:
-        serviceJobLink:
-          $ref: '#/components/schemas/ServiceJobLinkForCreation'
+        serviceJobLinks:
+          items:
+            $ref: '#/components/schemas/ServiceJobLinkForCreation'
+          type: array
+          minItems: 1
       required:
-        - serviceJobLink
+        - serviceJobLinks
     ServiceJobLinkForCreation:
       additionalProperties: false
       properties:
@@ -31938,13 +32080,32 @@ components:
         - serviceJobRef
         - previousServiceJobRefs
         - nextServiceJobLinks
-    ServiceJobLink:
+    ServiceJobLinkForAdding:
       additionalProperties: false
       properties:
         serviceJobRef:
           type: string
           example: 0ed803c2-fa20-48d9-9c1b-0d243937a9ad
+      required:
+        - serviceJobRef
+    ServiceJobLink:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          example: 0ed803c2-fa20-48d9-9c1b-0d243937a9ad
+        serviceJobRef:
+          type: string
+          example: 0ed803c2-fa20-48d9-9c1b-0d243937a9ad
         previousServiceJobRefs:
+          items:
+            type: string
+            example: 9f197dbf-c724-469b-90f1-dc94f20b2825
+          type: array
+          maxItems: 1
+          minItems: 0
+        previousServiceJobLinkRefs:
+          description: id of the created previous service job links
           items:
             type: string
             example: 9f197dbf-c724-469b-90f1-dc94f20b2825
@@ -31956,13 +32117,12 @@ components:
             $ref: '#/components/schemas/ServiceJobLink'
           type: array
           minItems: 0
-        facilityRef:
-          type: string
       required:
+        - id
         - serviceJobRef
         - previousServiceJobRefs
+        - previousServiceJobLinkRefs
         - nextServiceJobLinks
-        - facilityRef
     LinkedServiceJobPaginatedResult:
       additionalProperties: false
       type: object
