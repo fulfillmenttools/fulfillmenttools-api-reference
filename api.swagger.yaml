@@ -9001,6 +9001,74 @@ paths:
       operationId: readDocumentMetaInProcess
       summary: Read meta information about document on this process
   /api/returns:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnJobs'
+          description: Return Jobs that were found in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Returns
+      operationId: getReturnJobs
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show (max 500 per request)
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: Reference to the facility you want to filter for
+          in: query
+          name: facilityRef
+          required: false
+          schema:
+            type: string
+        - description: >-
+            Reference to the status you want to get the corresponding return
+            jobs to
+          in: query
+          name: status
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Get Return Jobs
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
     post:
       responses:
         '201':
@@ -26885,6 +26953,19 @@ components:
       required:
         - returnLines
       type: object
+    ReturnJobs:
+      properties:
+        returnJobs:
+          items:
+            $ref: '#/components/schemas/ReturnJob'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      required:
+        - returnJobs
+        - total
     ReturnLine:
       properties:
         article:
