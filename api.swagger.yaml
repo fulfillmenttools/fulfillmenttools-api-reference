@@ -34405,19 +34405,50 @@ components:
       required:
         - name
         - ids
+    MoveStockToLocationOptions:
+      type: object
+      properties:
+        deleteFromStockIfZero:
+          type: boolean
+    StockMoveToLocation:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+            - MOVE_TO_LOCATION
+        fromStockId:
+          type: string
+        toLocationRef:
+          type: string
+        amount:
+          type: number
+        options:
+          $ref: '#/components/schemas/MoveStockToLocationOptions'
+      required:
+        - name
+        - fromStockId
+        - toLocationRef
+        - amount
     StockAction:
       type: object
       properties:
         actions:
           type: array
+          deprecated: true
+          description: Deprecated. Use 'action' with a single action input instead.
           maxItems: 10
           items:
             oneOf:
               - $ref: '#/components/schemas/StockDeleteByLocations'
               - $ref: '#/components/schemas/StockDeleteByProducts'
               - $ref: '#/components/schemas/StockDeleteByIds'
-      required:
-        - actions
+        action:
+          oneOf:
+            - $ref: '#/components/schemas/StockDeleteByLocations'
+            - $ref: '#/components/schemas/StockDeleteByProducts'
+            - $ref: '#/components/schemas/StockDeleteByIds'
+            - $ref: '#/components/schemas/StockMoveToLocation'
     StockDeleteActionResult:
       type: object
       properties:
@@ -34427,6 +34458,15 @@ components:
             type: string
       required:
         - ids
+    StockMoveToLocationActionResult:
+      type: object
+      properties:
+        fromStock:
+          $ref: '#/components/schemas/Stock'
+        toStock:
+          $ref: '#/components/schemas/Stock'
+      required:
+        - toStock
     StockActionResult:
       type: object
       properties:
@@ -34436,11 +34476,11 @@ components:
             - DELETE_BY_LOCATIONS
             - DELETE_BY_PRODUCTS
             - DELETE_BY_IDS
+            - MOVE_TO_LOCATION
         result:
           oneOf:
             - $ref: '#/components/schemas/StockDeleteActionResult'
-          allOf:
-            - $ref: '#/components/schemas/StockDeleteActionResult'
+            - $ref: '#/components/schemas/StockMoveToLocationActionResult'
       required:
         - name
         - result
