@@ -13466,7 +13466,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnConfiguration'
+                $ref: '#/components/schemas/LocalizedReturnConfiguration'
           description: Return config found.
         '401':
           content:
@@ -13510,13 +13510,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnConfiguration'
+                $ref: '#/components/schemas/LocalizedReturnConfiguration'
           description: The return configuration was successfully updated.
         '201':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnConfiguration'
+                $ref: '#/components/schemas/LocalizedReturnConfiguration'
           description: The return configuration was successfully created.
         '400':
           content:
@@ -26859,9 +26859,54 @@ components:
           type: boolean
         returnTypeConfiguration:
           $ref: '#/components/schemas/ReturnTypeConfiguration'
+        availableItemConditions:
+          items:
+            $ref: '#/components/schemas/AvailableItemCondition'
       required:
         - active
       type: object
+    AvailableItemCondition:
+      additionalProperties: false
+      properties:
+        conditionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+          example:
+            de_DE: Beschädigt
+            en_US: Damaged
+    LocalizedReturnConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        active:
+          deprecated: true
+          default: true
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />Enable or disable legacy returns. Use
+            returnTypeConfiguration instead
+          type: boolean
+        returnTypeConfiguration:
+          $ref: '#/components/schemas/ReturnTypeConfiguration'
+        availableItemConditions:
+          items:
+            $ref: '#/components/schemas/LocalizedAvailableItemCondition'
+      required:
+        - active
+      type: object
+    LocalizedAvailableItemCondition:
+      additionalProperties: false
+      properties:
+        condition:
+          type: string
+          example: Damaged
+          description: translated conditionsLocalized
+        conditionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+          example:
+            de_DE: Beschädigt
+            en_US: Damaged
     ReturnTypeConfiguration:
       properties:
         type:
@@ -31665,6 +31710,9 @@ components:
         id:
           type: string
           example: a69006ba-7100-4b4d-a610-1ca28016a4eb
+        itemCondition:
+          type: string
+          example: Damaged
         itemReturnJobLineItemRefs:
           items:
             example: a69006ba-7100-4b4d-a610-1ca28016a4eb
@@ -31708,6 +31756,15 @@ components:
     ItemReturnLineItemForCreation:
       additionalProperties: false
       properties:
+        itemConditionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+          example:
+            de_DE: Bschädigt
+            en_US: Damaged
+        itemConditionComment:
+          type: string
+          minLength: 1
+          example: Upper corner damaged
         tenantArticleId:
           type: string
           example: a69006ba-7100-4b4d-a610-1ca28016a4eb
