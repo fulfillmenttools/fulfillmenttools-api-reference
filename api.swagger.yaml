@@ -15432,7 +15432,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StrippedServiceJobs'
+                $ref: '#/components/schemas/ServiceJobs'
           description: Service Jobs could be found in response body.
         '401':
           content:
@@ -15480,9 +15480,9 @@ paths:
           name: status
           required: false
           schema:
+            type: array
             items:
               type: string
-            type: array
       summary: Get Service Jobs
       description: |-
         <i><center>
@@ -32660,17 +32660,45 @@ components:
       required:
         - customServiceRef
         - facilityRef
-    StrippedServiceJobs:
+    ServiceJobWithSearchPaths:
+      allOf:
+        - $ref: '#/components/schemas/ServiceJob'
+      additionalProperties: false
+      properties:
+        searchPaths:
+          type: array
+          items:
+            type: string
+      required:
+        - searchPaths
+    ServiceJobs:
       properties:
         serviceJobs:
           items:
-            $ref: '#/components/schemas/ServiceJob'
+            $ref: '#/components/schemas/ServiceJobWithSearchPaths'
           type: array
         total:
           description: Total number of found entities for this query
           example: 42
           type: integer
       type: object
+    ServiceJobOrderBy:
+      description: Attribute to order service job by
+      enum:
+        - TARGET_TIME_ASC
+        - TARGET_TIME_DESC
+        - LAST_MODIFIED_ASC
+        - LAST_MODIFIED_DESC
+      type: string
+      xml:
+        name: ServiceJobOrderBy
+    ServiceJobFilterChannel:
+      enum:
+        - COLLECT
+        - SHIPPING
+      type: string
+      xml:
+        name: ServiceJobFilterChannel
     ServiceJobInProgressActionParameter:
       additionalProperties: false
       properties:
