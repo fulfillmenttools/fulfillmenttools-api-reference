@@ -25162,6 +25162,9 @@ components:
             $ref: '#/components/schemas/CustomServiceReference'
         geoFence:
           $ref: '#/components/schemas/GeoFence'
+        filterDuplicates:
+          type: boolean
+          default: true
       required:
         - orderLineItems
         - deliveryPreferences
@@ -25175,8 +25178,6 @@ components:
           type: string
         available:
           type: number
-        isPreOrderable:
-          type: boolean
         preOrderReleaseDate:
           format: date-time
           type: string
@@ -25185,7 +25186,6 @@ components:
       required:
         - tenantArticleId
         - available
-        - isPreOrderable
         - isBackOrderable
       type: object
       xml:
@@ -25215,13 +25215,15 @@ components:
           $ref: '#/components/schemas/CarrierProductCategory'
         transitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        estimatedDeliveryTime:
+          type: string
+          format: date-time
         deliveryCosts:
           items:
             $ref: '#/components/schemas/DeliveryCost'
           type: array
       required:
         - carrierProductCategory
-        - estimatedDeliveryTime
         - deliveryCosts
       type: object
       xml:
@@ -25280,6 +25282,8 @@ components:
           items:
             $ref: '#/components/schemas/ClosingDay'
           type: array
+        pickingTimes:
+          $ref: '#/components/schemas/PickingTimes'
         availabilities:
           items:
             $ref: '#/components/schemas/CheckoutOptionsAvailability'
@@ -25296,6 +25300,7 @@ components:
         - name
         - address
         - closingDays
+        - pickingTimes
         - availabilities
         - customServices
         - targetTime
