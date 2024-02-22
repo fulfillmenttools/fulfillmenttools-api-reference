@@ -27169,6 +27169,9 @@ components:
         availableItemConditions:
           items:
             $ref: '#/components/schemas/AvailableItemCondition'
+        availableReturnReasons:
+          items:
+            $ref: '#/components/schemas/AvailableReturnReason'
       required:
         - active
       type: object
@@ -27180,6 +27183,13 @@ components:
           example:
             de_DE: Beschädigt
             en_US: Damaged
+    AvailableReturnReason:
+      additionalProperties: false
+      properties:
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      required:
+        - reasonLocalized
     LocalizedReturnConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -27199,6 +27209,9 @@ components:
         availableItemConditions:
           items:
             $ref: '#/components/schemas/LocalizedAvailableItemCondition'
+        availableReturnReasons:
+          items:
+            $ref: '#/components/schemas/LocalizedAvailableReturnReason'
       required:
         - active
       type: object
@@ -27214,6 +27227,21 @@ components:
           example:
             de_DE: Beschädigt
             en_US: Damaged
+      required:
+        - conditionLocalized
+        - condition
+    LocalizedAvailableReturnReason:
+      allOf:
+        - $ref: '#/components/schemas/AvailableReturnReason'
+      additionalProperties: false
+      properties:
+        reason:
+          type: string
+          example: Damaged
+          description: translated reasonLocalized
+      required:
+        - reasonLocalized
+        - reason
     ReturnTypeConfiguration:
       properties:
         type:
