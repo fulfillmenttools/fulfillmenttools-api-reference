@@ -170,6 +170,96 @@ paths:
         description: Carrier object
         required: true
       summary: Add a new carrier as a CEP partner
+  /api/promises/checkoutoptions:
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ResponseForCNCCheckoutOptions'
+                  - $ref: '#/components/schemas/ResponseForSFSCheckoutOptions'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - CheckoutOptions
+      description: ''
+      operationId: postCheckoutOptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutOptionsInput'
+        description: The CheckoutOptionsInput
+        required: true
+      summary: Evaluate a checkout options input against the DOMS
+  /api/promises/deliverypromise:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: The order promise was created URL of the order promse.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Promises
+      description: ''
+      operationId: postPromise
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderForCreation'
+        description: Order object supplied by your shop instance
+        required: true
+      summary: Add a new order for future fulfillment
   /api/carriers/{carrierId}:
     get:
       parameters:
@@ -19871,6 +19961,36 @@ components:
         addressType:
           $ref: '#/components/schemas/AddressType'
       type: object
+    CheckoutOptionsConsumerAddress:
+      properties:
+        city:
+          example: Langenfeld
+          pattern: ^.+$
+          type: string
+        country:
+          description: A two-digit country code as per ISO 3166-1 alpha-2
+          example: DE
+          pattern: ^[A-Z]{2}$
+          type: string
+        province:
+          example: NRW
+          pattern: ^.+$
+          type: string
+        houseNumber:
+          example: 42a
+          pattern: ^.+$
+          type: string
+        postalCode:
+          example: '40764'
+          pattern: ^.+$
+          type: string
+        street:
+          example: Hauptstr.
+          pattern: ^.+$
+          type: string
+      type: object
+      required:
+        - country
     Coordinates:
       description: >-
         Coordinates of the WGS84 geodetic reference system in Mercator
@@ -25019,6 +25139,193 @@ components:
       type: object
       xml:
         name: Order
+    CheckoutOptionsInput:
+      additionalProperties: false
+      properties:
+        consumerAddress:
+          $ref: '#/components/schemas/CheckoutOptionsConsumerAddress'
+        deliveryPreferences:
+          $ref: '#/components/schemas/DeliveryPreferences'
+        orderLineItems:
+          items:
+            $ref: '#/components/schemas/OrderLineItemForCreation'
+          type: array
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        customServices:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/CustomServiceReference'
+        geoFence:
+          $ref: '#/components/schemas/GeoFence'
+      required:
+        - orderLineItems
+        - deliveryPreferences
+      type: object
+      xml:
+        name: CheckoutOptionsInput
+    CheckoutOptionsAvailability:
+      additionalProperties: false
+      properties:
+        tenantArticleId:
+          type: string
+        available:
+          type: number
+        isPreOrderable:
+          type: boolean
+        preOrderReleaseDate:
+          format: date-time
+          type: string
+        isBackOrderable:
+          type: boolean
+      required:
+        - tenantArticleId
+        - available
+        - isPreOrderable
+        - isBackOrderable
+      type: object
+      xml:
+        name: CheckoutOptionsAvailability
+    CheckoutOptionsCarrier:
+      additionalProperties: false
+      properties:
+        carrierKey:
+          type: string
+        carrierName:
+          type: string
+        products:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsDeliveryOptions'
+          type: array
+      required:
+        - carrierKey
+        - carrierName
+        - products
+      type: object
+      xml:
+        name: CheckoutOptionsCarrier
+    CheckoutOptionsDeliveryOptions:
+      additionalProperties: false
+      properties:
+        carrierProductCategory:
+          $ref: '#/components/schemas/CarrierProductCategory'
+        transitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        deliveryCosts:
+          items:
+            $ref: '#/components/schemas/DeliveryCost'
+          type: array
+      required:
+        - carrierProductCategory
+        - estimatedDeliveryTime
+        - deliveryCosts
+      type: object
+      xml:
+        name: CheckoutOptionsDeliveryOptions
+    CheckoutOptionsCustomServices:
+      additionalProperties: false
+      properties:
+        customServiceRef:
+          type: string
+        name:
+          type: string
+      required:
+        - customServiceRef
+        - name
+      type: object
+      xml:
+        name: CheckoutOptionsCustomServices
+    CheckoutOptionsFacilityForSFS:
+      additionalProperties: false
+      properties:
+        facilityRef:
+          type: string
+        name:
+          type: string
+        availabilities:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsAvailability'
+          type: array
+        deliveryOptions:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsCarrier'
+          type: array
+        customServices:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsCustomServices'
+          type: array
+      required:
+        - facilityRef
+        - name
+        - availabilities
+        - deliveryOptions
+        - customServices
+      type: object
+      xml:
+        name: CheckoutOptionsFacilityForSFS
+    CheckoutOptionsFacilityForCNC:
+      additionalProperties: false
+      properties:
+        facilityRef:
+          type: string
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/FacilityAddress'
+        closingDays:
+          items:
+            $ref: '#/components/schemas/ClosingDay'
+          type: array
+        availabilities:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsAvailability'
+          type: array
+        customServices:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsCustomServices'
+          type: array
+        targetTime:
+          format: date-time
+          type: string
+      required:
+        - facilityRef
+        - name
+        - address
+        - closingDays
+        - availabilities
+        - customServices
+        - targetTime
+      type: object
+      xml:
+        name: CheckoutOptionsFacilityForCNC
+    ResponseForSFSCheckoutOptions:
+      additionalProperties: false
+      properties:
+        facilities:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsFacilityForSFS'
+          type: array
+      required:
+        - facilities
+      type: object
+      xml:
+        name: ResponseForSFSCheckoutOptions
+    ResponseForCNCCheckoutOptions:
+      additionalProperties: false
+      properties:
+        facilities:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsFacilityForCNC'
+          type: array
+      required:
+        - facilities
+      type: object
+      xml:
+        name: ResponseForCNCCheckoutOptions
     OrderStatusReason:
       properties:
         reason:
