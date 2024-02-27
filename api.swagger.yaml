@@ -15756,7 +15756,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LinkedServiceJobPaginatedResult'
+                $ref: '#/components/schemas/LinkedServiceJobsPaginatedResult'
           description: LinkedServiceJobs could be found in response body.
         '401':
           content:
@@ -15816,8 +15816,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LinkedServiceJob'
-          description: The LinkedServiceJob was successfully created.
+                $ref: '#/components/schemas/LinkedServiceJobs'
+          description: The LinkedServiceJobs was successfully created.
         '400':
           content:
             application/json:
@@ -15843,15 +15843,15 @@ paths:
             endpoint
       tags:
         - Fulfillment Operations - Custom Services
-      operationId: createLinkedServiceJob
+      operationId: createLinkedServiceJobs
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LinkedServiceJobForCreation'
-        description: Desired LinkedServiceJob to create
+              $ref: '#/components/schemas/LinkedServiceJobsForCreation'
+        description: Desired LinkedServiceJobs to create
         required: true
-      summary: Create a LinkedServiceJob
+      summary: Create a LinkedServiceJobs
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -15862,12 +15862,12 @@ paths:
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
-  /api/linkedservicejobs/{linkedServiceJobId}:
+  /api/linkedservicejobs/{linkedServiceJobsId}:
     get:
       parameters:
-        - description: ID of LinkedServiceJob you want to get
+        - description: ID of LinkedServiceJobs you want to get
           in: path
-          name: linkedServiceJobId
+          name: linkedServiceJobsId
           required: true
           schema:
             type: string
@@ -15876,8 +15876,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LinkedServiceJob'
-          description: LinkedServiceJob could be found in response body.
+                $ref: '#/components/schemas/LinkedServiceJobs'
+          description: LinkedServiceJobs could be found in response body.
         '401':
           content:
             application/json:
@@ -15903,8 +15903,8 @@ paths:
           description: Entity not found
       tags:
         - Fulfillment Operations - Custom Services
-      operationId: getLinkedServiceJob
-      summary: Get requested LinkedServiceJob
+      operationId: getLinkedServiceJobsById
+      summary: Get requested LinkedServiceJobs
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -15915,12 +15915,12 @@ paths:
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
-  /api/linkedservicejobs/{linkedServiceJobId}/servicejoblinks:
+  /api/linkedservicejobs/{linkedServiceJobsId}/servicejoblinks:
     post:
       parameters:
-        - description: ID of LinkedServiceJob you want to alter
+        - description: ID of LinkedServiceJobs you want to alter
           in: path
-          name: linkedServiceJobId
+          name: linkedServiceJobsId
           required: true
           schema:
             type: string
@@ -15929,8 +15929,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LinkedServiceJob'
-          description: The ServiceJobLink was successfully added to the LinkedServiceJob.
+                $ref: '#/components/schemas/LinkedServiceJobs'
+          description: The ServiceJobLink was successfully added to the LinkedServiceJobs.
         '400':
           content:
             application/json:
@@ -15964,7 +15964,7 @@ paths:
               $ref: '#/components/schemas/ServiceJobLinkForAdding'
         description: Desired ServiceJobLink to add
         required: true
-      summary: Add a ServiceJobLink to an LinkedServiceJob on root level
+      summary: Add a ServiceJobLink to an LinkedServiceJobs on root level
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -15975,12 +15975,12 @@ paths:
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
-  /api/linkedservicejobs/{linkedServiceJobId}/servicejoblinks/{serviceJobLinkId}:
+  /api/linkedservicejobs/{linkedServiceJobsId}/servicejoblinks/{serviceJobLinkId}:
     post:
       parameters:
-        - description: ID of LinkedServiceJob you want to alter
+        - description: ID of LinkedServiceJobs you want to alter
           in: path
-          name: linkedServiceJobId
+          name: linkedServiceJobsId
           required: true
           schema:
             type: string
@@ -15997,10 +15997,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LinkedServiceJob'
+                $ref: '#/components/schemas/LinkedServiceJobs'
           description: >-
             The ServiceJobLink was successfully added nested inside the
-            LinkedServiceJob.
+            LinkedServiceJobs.
         '400':
           content:
             application/json:
@@ -16034,7 +16034,7 @@ paths:
               $ref: '#/components/schemas/ServiceJobLinkForAdding'
         description: Desired ServiceJobLink to add
         required: true
-      summary: Add a ServiceJobLink to an ServiceJobLInk inside the LinkedServiceJob
+      summary: Add a ServiceJobLink to an ServiceJobLInk inside the LinkedServiceJobs
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -33173,7 +33173,7 @@ components:
           example: 42
           type: integer
       type: object
-    LinkedServiceJob:
+    LinkedServiceJobs:
       additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -33209,14 +33209,14 @@ components:
         - processRef
         - facilityRef
         - includedServiceJobLinkIds
-    LinkedServiceJobStatus:
+    LinkedServiceJobsStatus:
       type: string
       enum:
         - OPEN
         - FINISHED
         - CANCELLED
         - OBSOLETE
-    LinkedServiceJobForCreation:
+    LinkedServiceJobsForCreation:
       additionalProperties: false
       properties:
         serviceJobLinks:
@@ -33291,7 +33291,7 @@ components:
         - previousServiceJobRefs
         - previousServiceJobLinkRefs
         - nextServiceJobLinks
-    LinkedServiceJobPaginatedResult:
+    LinkedServiceJobsPaginatedResult:
       additionalProperties: false
       type: object
       properties:
@@ -33301,7 +33301,7 @@ components:
         linkedServiceJobs:
           type: array
           items:
-            $ref: '#/components/schemas/LinkedServiceJob'
+            $ref: '#/components/schemas/LinkedServiceJobs'
       required:
         - total
         - linkedServiceJobs
