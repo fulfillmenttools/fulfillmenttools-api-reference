@@ -22588,8 +22588,8 @@ components:
       properties:
         article:
           $ref: '#/components/schemas/HandoverLineItemArticle'
-        picked:
-          description: The amount of articles that were picked for this pickline.
+        handedOverQuantity:
+          description: The amount of articles that were picked for this handover line item.
           example: 20
           format: int64
           minimum: 0
@@ -22624,7 +22624,7 @@ components:
       required:
         - quantity
         - article
-        - picked
+        - handedOverQuantity
       type: object
     HandoverLineItemArticle:
       allOf:
@@ -25643,10 +25643,6 @@ components:
         - value
     ParcelItem:
       properties:
-        tenantArticleId:
-          description: Customer article id of the given item
-          example: 221e13f7-b823-4914-99f5-8c39d63eee49
-          type: string
         quantity:
           type: integer
           minimum: 1
@@ -25667,7 +25663,24 @@ components:
           $ref: '#/components/schemas/ParcelItemValue'
         countryOfManufacture:
           type: string
+        article:
+          $ref: '#/components/schemas/ParcelItemArticle'
+      required:
+        - quantity
       type: object
+      xml:
+        name: ParcelItem
+    ParcelItemArticle:
+      allOf:
+        - $ref: '#/components/schemas/AbstractArticle'
+        - properties:
+            attributes:
+              items:
+                $ref: '#/components/schemas/ArticleAttributeItem'
+              type: array
+          type: object
+      xml:
+        name: ParcelItemArticle
     ParcelItemValue:
       properties:
         value:
@@ -29814,6 +29827,7 @@ components:
             - parcelItemValue.currency
             - countryOfManufacture
             - tenantArticleId
+          description: 'Deprecated: quantity, this field is now mandatory in the item'
         dataType:
           type: string
           enum:
