@@ -18690,7 +18690,7 @@ paths:
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
-  /api/configurations/notificationcenter:
+  /api/configurations/notifications:
     get:
       operationId: getNotificationCenterConfig
       summary: Returns the notification center configuration.
@@ -18800,7 +18800,125 @@ paths:
                 $ref: '#/components/schemas/ApiError'
       tags:
         - Core - Notification Center
-  /api/facilities/{facilityRef}/configurations/notificationcenter:
+  /api/configurations/notifications/channels/{channelId}:
+    delete:
+      operationId: deleteNotificationCenterConfigChannel
+      summary: Deletes a notification center config channel.
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: channelId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: version
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Notification center config channel was successfully deleted.
+        '400':
+          description: Invalid input. See response for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: A version conflict occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Core - Notification Center
+  /api/configurations/notifications/actions:
+    post:
+      operationId: executeNotificationCenterConfigAction
+      summary: Executes an action to manipulate the notification center configuration.
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/AddChannelAction'
+                - $ref: '#/components/schemas/UpdateChannelByIdAction'
+      responses:
+        '200':
+          description: Notification center configuration action was successfully executed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationCenterConfig'
+        '400':
+          description: Invalid input. See response for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: A version conflict occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Core - Notification Center
+  /api/facilities/{facilityRef}/configurations/notifications:
     get:
       operationId: getNotificationCenterFacilityConfig
       summary: Returns the notification center facility configuration.
@@ -18930,68 +19048,7 @@ paths:
                 $ref: '#/components/schemas/ApiError'
       tags:
         - Core - Notification Center
-  /api/configurations/notificationcenter/channels/{channelId}:
-    delete:
-      operationId: deleteNotificationCenterConfigChannel
-      summary: Deletes a notification center config channel.
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      parameters:
-        - name: channelId
-          required: true
-          in: path
-          schema:
-            type: string
-        - name: version
-          required: true
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          description: Notification center config channel was successfully deleted.
-        '400':
-          description: Invalid input. See response for details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '404':
-          description: The requested entity was not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '409':
-          description: A version conflict occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      tags:
-        - Core - Notification Center
-  /api/facilities/{facilityRef}/configurations/notificationcenter/channels/{channelId}:
+  /api/facilities/{facilityRef}/configurations/notifications/channels/{channelId}:
     delete:
       operationId: deleteNotificationCenterFacilityConfigChannel
       summary: Deletes a notification center facility config channel.
@@ -19059,64 +19116,7 @@ paths:
                 $ref: '#/components/schemas/ApiError'
       tags:
         - Core - Notification Center
-  /api/configurations/notificationcenter/actions:
-    post:
-      operationId: executeNotificationCenterConfigAction
-      summary: Executes an action to manipulate the notification center configuration.
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              oneOf:
-                - $ref: '#/components/schemas/AddChannelAction'
-                - $ref: '#/components/schemas/UpdateChannelByIdAction'
-      responses:
-        '200':
-          description: Notification center configuration action was successfully executed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NotificationCenterConfig'
-        '400':
-          description: Invalid input. See response for details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Your user is not allowed to operate against this API instance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Your user, although recognized, is not authorized to use this
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '409':
-          description: A version conflict occurred.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      tags:
-        - Core - Notification Center
-  /api/facilities/{facilityRef}/configurations/notificationcenter/actions:
+  /api/facilities/{facilityRef}/configurations/notifications/actions:
     post:
       operationId: executeNotificationCenterFacilityConfigAction
       summary: >-
@@ -35578,32 +35578,35 @@ components:
     EmailNotificationChannel:
       type: object
       properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-            - EMAIL
         enabled:
           type: boolean
         events:
           type: array
           uniqueItems: true
+          description: |-
+            Supported events for triggering external notifications: 
+                  - PICK_JOB_CREATED: Available for facility scoped config
+                  - ROUTING_PLAN_NOT_ROUTABLE: Available for facility scoped and tenant wide config
+              
           items:
             type: string
             enum:
-              - ROUTING_PLAN_NOT_ROUTABLE
               - PICK_JOB_CREATED
+              - ROUTING_PLAN_NOT_ROUTABLE
+        type:
+          type: string
+        id:
+          type: string
         receiver:
           uniqueItems: true
           type: array
           items:
             $ref: '#/components/schemas/EmailReceiver'
       required:
-        - id
-        - type
         - enabled
         - events
+        - type
+        - id
         - receiver
     NotificationCenterConfig:
       type: object
@@ -35616,8 +35619,6 @@ components:
         lastModified:
           format: date-time
           type: string
-        enabled:
-          type: boolean
         channels:
           type: array
           items:
@@ -35627,13 +35628,10 @@ components:
         - version
         - created
         - lastModified
-        - enabled
         - channels
     NotificationCenterConfigForUpdate:
       type: object
       properties:
-        enabled:
-          type: boolean
         channels:
           type: array
           items:
@@ -35642,21 +35640,17 @@ components:
         version:
           type: number
       required:
-        - enabled
         - channels
         - version
     NotificationCenterConfigForCreation:
       type: object
       properties:
-        enabled:
-          type: boolean
         channels:
           type: array
           items:
             oneOf:
               - $ref: '#/components/schemas/EmailNotificationChannelForCreation'
       required:
-        - enabled
         - channels
     EmailNotificationChannelForCreation:
       type: object
@@ -35666,23 +35660,28 @@ components:
         events:
           type: array
           uniqueItems: true
+          description: |-
+            Supported events for triggering external notifications: 
+                  - PICK_JOB_CREATED: Available for facility scoped config
+                  - ROUTING_PLAN_NOT_ROUTABLE: Available for facility scoped and tenant wide config
+              
           items:
             type: string
             enum:
-              - ROUTING_PLAN_NOT_ROUTABLE
               - PICK_JOB_CREATED
+              - ROUTING_PLAN_NOT_ROUTABLE
+        type:
+          type: string
         receiver:
           uniqueItems: true
           type: array
           items:
             $ref: '#/components/schemas/EmailReceiver'
-        type:
-          type: string
       required:
         - enabled
         - events
-        - receiver
         - type
+        - receiver
     AddChannelAction:
       type: object
       properties:
