@@ -19200,6 +19200,802 @@ paths:
                 $ref: '#/components/schemas/ApiError'
       tags:
         - Core - Notification Center
+  /api/availabilitychannels:
+    post:
+      operationId: createAvailabilityChannel
+      summary: Create a new Availability Channel
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilityChannelForCreation'
+      responses:
+        '200':
+          description: The created Availability Channel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityChannel'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+    get:
+      operationId: getAvailabilityChannels
+      summary: Get all Availability Channels
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: searchTerm
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: searchTermExact
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: strategy
+          required: false
+          in: query
+          schema:
+            enum:
+              - REGULAR
+              - IRON_RESERVE
+              - RESTRICT
+            type: string
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Available Availability Channels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityChannelPaginatedResult'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+  /api/availabilitychannels/{channelId}:
+    put:
+      operationId: replaceAvailabilityChannel
+      summary: Replace an existing Availability Channel
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: channelId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilityChannelForReplacement'
+      responses:
+        '200':
+          description: The replaced Availability Channel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityChannel'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+    get:
+      operationId: getAvailabilityChannelById
+      summary: Get an Availability Channel by its id
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: channelId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The Availability Channel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityChannel'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+    delete:
+      operationId: deleteAvailabilityChannel
+      summary: Delete an existing Availability Channel
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: channelId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The deleted Availability Channel
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+  /api/availabilitychannels/{channelId}/allocations:
+    get:
+      operationId: getAllocationsUnderChannel
+      summary: Get Allocations under Channel
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: channelId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: searchTerm
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: searchTermExact
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Available Allocations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityAllocationPaginatedResult'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+    post:
+      operationId: createAllocationUnderChannel
+      summary: Create a new Allocation under Channel
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: channelId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/AvailabilityAllocationForCreationUnderChannel
+      responses:
+        '200':
+          description: The created Allocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityAllocation'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+  /api/availabilitychannels/{channelId}/allocations/{allocationId}:
+    put:
+      operationId: replaceAllocationUnderChannel
+      summary: Replace an existing Allocation under a channel
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: channelId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: allocationId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilityAllocationForReplacement'
+      responses:
+        '200':
+          description: The replaced Allocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityAllocation'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+    get:
+      operationId: getAllocationUnderChannelById
+      summary: Get an Allocation under a Channel by its id
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: channelId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: allocationId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The Allocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityAllocation'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+    delete:
+      operationId: deleteAllocationUnderChannel
+      summary: Delete an existing Allocation under Channel
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: allocationId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: channelId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+  /api/availabilityallocations:
+    post:
+      operationId: createAvailabilityAllocation
+      summary: Create a new Allocation
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilityAllocationForCreation'
+      responses:
+        '200':
+          description: The created Allocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityAllocation'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+    get:
+      operationId: getAvailabilityAllocations
+      summary: Get all Allocations
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: size
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: number
+        - name: startAfterId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: searchTerm
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: searchTermExact
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: channelRef
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Available Allocations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityAllocationPaginatedResult'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+  /api/availabilityallocations/{allocationId}:
+    put:
+      operationId: replaceAvailabilityAllocation
+      summary: Replace an existing Allocation
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: allocationId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilityAllocationForReplacement'
+      responses:
+        '200':
+          description: The replaced Allocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityAllocation'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+    get:
+      operationId: getAvailabilityAllocationById
+      summary: Get a single Allocation
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: allocationId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The Allocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityAllocation'
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
+    delete:
+      operationId: deleteAvailablityAllocation
+      summary: Delete a single Allocation
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: allocationId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Result of the bulk operations
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: The requested entity was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Channel Availability
   /graphql:
     get:
       responses:
@@ -35726,6 +36522,198 @@ components:
         - name
         - channel
         - version
+    AvailabilityChannelForCreation:
+      type: object
+      properties:
+        name:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - REGULAR
+            - IRON_RESERVE
+            - RESTRICT
+      required:
+        - name
+        - strategy
+    AvailabilityChannel:
+      type: object
+      properties:
+        name:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - REGULAR
+            - IRON_RESERVE
+            - RESTRICT
+        version:
+          type: number
+        id:
+          type: string
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+      required:
+        - name
+        - strategy
+        - version
+        - id
+        - created
+        - lastModified
+    AvailabilityChannelPaginatedResult:
+      type: object
+      properties:
+        total:
+          type: number
+          minimum: 0
+        channels:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailabilityChannel'
+      required:
+        - total
+        - channels
+    AvailabilityChannelForReplacement:
+      type: object
+      properties:
+        name:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - REGULAR
+            - IRON_RESERVE
+            - RESTRICT
+        version:
+          type: number
+      required:
+        - name
+        - strategy
+        - version
+    AvailabilityAllocationPaginatedResult:
+      type: object
+      properties:
+        total:
+          type: number
+          minimum: 0
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailabilityChannel'
+      required:
+        - total
+        - allocations
+    AvailabilityAllocationPeriod:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+    AvailabilityAllocationForCreationUnderChannel:
+      type: object
+      properties:
+        tenantArticleIds:
+          maxItems: 1
+          type: array
+          items:
+            type: string
+        facilityRef:
+          type: string
+        initialStockQuantity:
+          type: number
+        active:
+          type: boolean
+        activePeriod:
+          $ref: '#/components/schemas/AvailabilityAllocationPeriod'
+      required:
+        - tenantArticleIds
+        - facilityRef
+        - initialStockQuantity
+        - active
+    AvailabilityAllocation:
+      type: object
+      properties:
+        tenantArticleIds:
+          maxItems: 1
+          type: array
+          items:
+            type: string
+        facilityRef:
+          type: string
+        initialStockQuantity:
+          type: number
+        active:
+          type: boolean
+        activePeriod:
+          $ref: '#/components/schemas/AvailabilityAllocationPeriod'
+        channelRef:
+          type: string
+        id:
+          type: string
+        version:
+          type: number
+        created:
+          format: date-time
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+      required:
+        - tenantArticleIds
+        - facilityRef
+        - initialStockQuantity
+        - active
+        - channelRef
+        - id
+        - version
+        - created
+        - lastModified
+    AvailabilityAllocationForReplacement:
+      type: object
+      properties:
+        version:
+          type: number
+        active:
+          type: boolean
+        activePeriod:
+          $ref: '#/components/schemas/AvailabilityAllocationPeriod'
+        initialStockQuantity:
+          type: number
+      required:
+        - version
+        - active
+        - initialStockQuantity
+    AvailabilityAllocationForCreation:
+      type: object
+      properties:
+        tenantArticleIds:
+          maxItems: 1
+          type: array
+          items:
+            type: string
+        facilityRef:
+          type: string
+        initialStockQuantity:
+          type: number
+        active:
+          type: boolean
+        activePeriod:
+          $ref: '#/components/schemas/AvailabilityAllocationPeriod'
+        channelRef:
+          type: string
+      required:
+        - tenantArticleIds
+        - facilityRef
+        - initialStockQuantity
+        - active
+        - channelRef
 tags:
   - description: >-
       Everything your customer ordered in your shop, so everything he or she
