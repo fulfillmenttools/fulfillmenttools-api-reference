@@ -1113,7 +1113,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"tenantLocationId\": \"{{$randomUUID}}\",\n    \"name\": \"{{$randomUUID}}\",\n    \"type\": \"SINGLE_STORAGE\",\n    \"runningSequences\": [],\n    \"scannableCodes\": [],\n    \"traitConfig\": [\n        {\n            \"trait\": \"PICKABLE\",\n            \"enabled\": false\n        },\n        {\n            \"trait\": \"KEEP_ON_ZERO\",\n            \"enabled\": true\n        }\n    ]\n}",
+											"raw": "{\n    \"tenantLocationId\": \"{{$randomUUID}}\",\n    \"name\": \"short\",\n    \"type\": \"SINGLE_STORAGE\",\n    \"runningSequences\": [],\n    \"scannableCodes\": [],\n    \"traitConfig\": [\n        {\n            \"trait\": \"PICKABLE\",\n            \"enabled\": false\n        },\n        {\n            \"trait\": \"KEEP_ON_ZERO\",\n            \"enabled\": true\n        }\n    ],\n    \"customAttributes\": {\n        \"key1\": \"value1\",\n        \"key2\": 123,\n        \"key3\": [1, \"2\", [3]],\n        \"key4\": {\n            \"nested\": \"yes!\"\n        }\n    }\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1149,7 +1149,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"version\": 1,\n    \"tenantLocationId\": \"S4\",\n    \"name\": \"S4\",\n    \"type\": \"SINGLE_STORAGE\",\n    \"runningSequences\": [],\n    \"scannableCodes\": [],\n    \"zoneRef\": \"ID-OF-THE-ZONE-THE-SL-BELONGS-TO\",\n    \"traitConfig\": [\n        {\n            \"trait\": \"PICKABLE\",\n            \"enabled\": false\n        },\n        {\n            \"trait\": \"KEEP_ON_ZERO\",\n            \"enabled\": true\n        }\n    ]\n}",
+											"raw": "{\n    \"version\": 1,\n    \"tenantLocationId\": \"S4\",\n    \"name\": \"S4\",\n    \"type\": \"SINGLE_STORAGE\",\n    \"runningSequences\": [],\n    \"scannableCodes\": [],\n    \"zoneRef\": \"ID-OF-THE-ZONE-THE-SL-BELONGS-TO\",\n    \"traitConfig\": [\n        {\n            \"trait\": \"PICKABLE\",\n            \"enabled\": false\n        },\n        {\n            \"trait\": \"KEEP_ON_ZERO\",\n            \"enabled\": true\n        }\n    ],\n    \"customAttributes\": {\n        \"key1\": \"value1\",\n        \"key2\": 123,\n        \"key3\": [\n            1,\n            \"2\",\n            [\n                3\n            ]\n        ],\n        \"key4\": {\n            \"nested\": true\n        }\n    }\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1190,7 +1190,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"actions\": [\n        {\n            \"action\": \"ModifyStorageLocation\",\n            \"tenantLocationId\": \"newTenantLocationId\",\n            \"type\": \"BULK_STORAGE\",\n            \"traitConfig\": [\n                {\n                    \"trait\": \"PICKABLE\",\n                    \"enabled\": false\n                },\n                {\n                    \"trait\": \"KEEP_ON_ZERO\",\n                    \"enabled\": true\n                }\n            ]\n        }\n    ],\n    \"version\": 1\n}",
+											"raw": "{\n    \"actions\": [\n        {\n            \"action\": \"ModifyStorageLocation\",\n            \"tenantLocationId\": \"newTenantLocationId\",\n            \"type\": \"BULK_STORAGE\",\n            \"traitConfig\": [\n                {\n                    \"trait\": \"PICKABLE\",\n                    \"enabled\": false\n                },\n                {\n                    \"trait\": \"KEEP_ON_ZERO\",\n                    \"enabled\": true\n                }\n            ],\n            \"customAttributes\": {\n                \"replacesTheMap\": true\n            }\n        }\n    ],\n    \"version\": 1\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -4945,6 +4945,60 @@
 									"response": []
 								}
 							]
+						},
+						{
+							"name": "Order Promises",
+							"item": [
+								{
+									"name": "Get Order Promises Configuration",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/configurations/promises",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"promises"
+											]
+										},
+										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getCapacityPlanningTimeframeConfiguration](https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getCapacityPlanningTimeframeConfiguration)"
+									},
+									"response": []
+								},
+								{
+									"name": "Update Order Promises Configuration",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"version\": 1,\n    \"invalidAfterTime\": \"PT30M\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/configurations/promises",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"promises"
+											]
+										},
+										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration](https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration)"
+									},
+									"response": []
+								}
+							]
 						}
 					]
 				},
@@ -6164,7 +6218,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/api/stocks/summaries",
+									"raw": "{{host}}/api/stocks/summaries?facilityRefs=facility1&facilityRefs=facility2&facilityRefs=facility3",
 									"host": [
 										"{{host}}"
 									],
@@ -6203,6 +6257,18 @@
 											"value": "true",
 											"description": "true or false, if true, the stock summary will not be refreshed before responding and therefore may include stale data.",
 											"disabled": true
+										},
+										{
+											"key": "facilityRefs",
+											"value": "facility1"
+										},
+										{
+											"key": "facilityRefs",
+											"value": "facility2"
+										},
+										{
+											"key": "facilityRefs",
+											"value": "facility3"
 										}
 									]
 								}
@@ -6388,6 +6454,36 @@
 											"key": "facilityRef",
 											"value": "",
 											"description": "FACILITY_REF1",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "CLOSED",
+											"description": "OPEN, CLOSED, PARTIAL_DELIVERY, ON_HOLD",
+											"disabled": true
+										},
+										{
+											"key": "searchTerm",
+											"value": "",
+											"description": "searchableValue",
+											"disabled": true
+										},
+										{
+											"key": "searchTermExact",
+											"value": "",
+											"description": "searchableValue",
+											"disabled": true
+										},
+										{
+											"key": "purchaseOrder_cancelled",
+											"value": "false",
+											"description": "boolean",
+											"disabled": true
+										},
+										{
+											"key": "receipt_status",
+											"value": "FINISHED",
+											"description": "IN_PROGRESS, FINISHED",
 											"disabled": true
 										},
 										{
@@ -6851,7 +6947,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n    \"receivedDate\": \"2023-06-16T07:44:14.944Z\",\n    \"receivedItems\": [\n        {\n            \"tenantArticleId\": \"apples-01\",\n            \"acceptedQuantity\": {\n                \"value\": 1,\n                \"unit\": \"kg\"\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0,\n                \"unit\": \"kg\"\n            },\n            \"comments\": [\n                {\n                    \"userRef\": \"inbound-user-01\",\n                    \"content\": \"Apples have brown spots\"\n                }\n            ],\n            \"stockProperties\": {\n                \"keyA\": \"valueA\",\n                \"keyB\": \"valueB\"\n            }\n        },\n        {\n            \"tenantArticleId\": \"2020249\",\n            \"acceptedQuantity\": {\n                \"value\": 16,\n                \"unit\": \"UNIT\"\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0,\n                \"unit\": \"UNIT\"\n            },\n            \"comments\": []\n        }\n    ],\n    \"comments\": [\n        {\n            \"userRef\": \"inbound-user-01\",\n            \"content\": \"Some produce is not A grade, see comments\"\n        }\n    ]\n}",
+									"raw": "{\n    \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n    \"receivedDate\": \"2023-06-16T07:44:14.944Z\",\n    \"status\": \"IN_PROGRESS\",\n    \"receivedItems\": [\n        {\n            \"tenantArticleId\": \"apples-01\",\n            \"acceptedQuantity\": {\n                \"value\": 1,\n                \"unit\": \"kg\"\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0,\n                \"unit\": \"kg\"\n            },\n            \"comments\": [\n                {\n                    \"userRef\": \"inbound-user-01\",\n                    \"content\": \"Apples have brown spots\"\n                }\n            ],\n            \"stockProperties\": {\n                \"keyA\": \"valueA\",\n                \"keyB\": \"valueB\"\n            }\n        },\n        {\n            \"tenantArticleId\": \"2020249\",\n            \"acceptedQuantity\": {\n                \"value\": 16,\n                \"unit\": \"UNIT\"\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0,\n                \"unit\": \"UNIT\"\n            },\n            \"comments\": []\n        }\n    ],\n    \"comments\": [\n        {\n            \"userRef\": \"inbound-user-01\",\n            \"content\": \"Some produce is not A grade, see comments\"\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -7029,6 +7125,74 @@
 									"body": "[\n  {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"requestVersion\": \"<long>\",\n    \"version\": \"<long>\"\n  },\n  {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"requestVersion\": \"<long>\",\n    \"version\": \"<long>\"\n  }\n]"
 								}
 							]
+						},
+						{
+							"name": "Update Receipt",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"version\": 3,\n    \"receivedDate\": \"2023-06-16T07:44:14.944Z\",\n    \"status\": \"IN_PROGRESS\",\n    \"receivedItems\": [\n        {\n            \"tenantArticleId\": \"apples-01\",\n            \"acceptedQuantity\": {\n                \"value\": 1,\n                \"unit\": \"kg\"\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0,\n                \"unit\": \"kg\"\n            },\n            \"comments\": [\n                {\n                    \"userRef\": \"inbound-user-01\",\n                    \"content\": \"Apples have brown spots\"\n                }\n            ],\n            \"stockProperties\": {\n                \"keyA\": \"valueA\",\n                \"keyB\": \"valueB\"\n            }\n        },\n        {\n            \"tenantArticleId\": \"2020249\",\n            \"acceptedQuantity\": {\n                \"value\": 16,\n                \"unit\": \"UNIT\"\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0,\n                \"unit\": \"UNIT\"\n            },\n            \"comments\": []\n        }\n    ],\n    \"comments\": [\n        {\n            \"userRef\": \"inbound-user-01\",\n            \"content\": \"Some produce is not A grade, see comments\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/receipts/:receiptId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"receipts",
+										":receiptId"
+									],
+									"variable": [
+										{
+											"key": "receiptId",
+											"value": "YOUR-RECEIPT-ID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Replace Receipt",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"version\": 4,\n    \"receivedDate\": \"2023-06-16T07:44:14.944Z\",\n    \"status\": \"IN_PROGRESS\",\n    \"receivedItems\": [\n        {\n            \"tenantArticleId\": \"apples-01\",\n            \"acceptedQuantity\": {\n                \"value\": 1,\n                \"unit\": \"kg\"\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0,\n                \"unit\": \"kg\"\n            },\n            \"comments\": [\n                {\n                    \"userRef\": \"inbound-user-01\",\n                    \"content\": \"Apples have brown spots\"\n                }\n            ],\n            \"stockProperties\": {\n                \"keyA\": \"valueA\",\n                \"keyB\": \"valueB\"\n            }\n        },\n        {\n            \"tenantArticleId\": \"2020249\",\n            \"acceptedQuantity\": {\n                \"value\": 16,\n                \"unit\": \"UNIT\"\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0,\n                \"unit\": \"UNIT\"\n            },\n            \"comments\": []\n        }\n    ],\n    \"comments\": [\n        {\n            \"userRef\": \"inbound-user-01\",\n            \"content\": \"Some produce is not A grade, see comments\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/receipts/:receiptId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"receipts",
+										":receiptId"
+									],
+									"variable": [
+										{
+											"key": "receiptId",
+											"value": "YOUR-RECEIPT-ID"
+										}
+									]
+								}
+							},
+							"response": []
 						},
 						{
 							"name": "Get receipt by id",
