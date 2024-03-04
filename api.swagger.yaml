@@ -16444,13 +16444,6 @@ paths:
           in: query
           schema:
             type: string
-        - name: facilityRef
-          required: false
-          in: query
-          schema:
-            type: array
-            items:
-              type: string
         - name: sort
           required: false
           in: query
@@ -16463,6 +16456,86 @@ paths:
               - REQUESTED_DATE_DESC
               - LAST_MODIFIED_DESC
             type: string
+        - name: facilityRef
+          required: false
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: status
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - OPEN
+                - PARTIAL_DELIVERY
+                - ON_HOLD
+                - CLOSED
+        - name: searchTerm
+          required: false
+          in: query
+          description: >
+            Matches partial values; The queries terms and therefore the result
+            set of the query can change in the future:
+
+            - tenantInboundProcessId
+
+            - scannableCodes
+
+            - receipts.receivedItems.tenantArticleId
+
+            - purchaseOrder.requestedItems.tenantArticleId
+
+            - purchaseOrder.supplier.name
+
+            - values of related listings
+              - listing.title
+              - listing.scannableCodes
+          schema:
+            type: string
+        - name: searchTermExact
+          required: false
+          in: query
+          description: >
+            Only matches complete values; The queries terms and therefore the
+            result set of the query can change in the future:
+
+            - tenantInboundProcessId
+
+            - scannableCodes
+
+            - receipts.receivedItems.tenantArticleId
+
+            - purchaseOrder.requestedItems.tenantArticleId
+
+            - purchaseOrder.supplier.name
+
+            - values of related listings
+              - listing.title
+              - listing.scannableCodes
+          schema:
+            type: string
+        - name: purchaseOrder_cancelled
+          required: false
+          in: query
+          schema:
+            type: boolean
+        - name: receipt_status
+          required: false
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - IN_PROGRESS
+                - FINISHED
       responses:
         '200':
           description: Paginated result containing the matching Inbound Process entities
@@ -34257,12 +34330,21 @@ components:
           type: string
           example: cdb1dfc4-8361-4ba9-b3c2-33a6f2fc8d05
         includedServiceJobLinkIds:
-          description: searchable field of all included service job links
+          description: searchable field of all included service job link ids
           items:
             type: string
             example: cdb1dfc4-8361-4ba9-b3c2-33a6f2fc8d05
           type: array
           minItems: 1
+        includedServiceJobRefs:
+          description: searchable field of all included service job ids
+          items:
+            type: string
+            example: cdb1dfc4-8361-4ba9-b3c2-33a6f2fc8d05
+          type: array
+          minItems: 1
+        status:
+          $ref: '#/components/schemas/LinkedServiceJobsStatus'
         serviceJobLinks:
           items:
             $ref: '#/components/schemas/ServiceJobLink'
@@ -34274,10 +34356,13 @@ components:
         - processRef
         - facilityRef
         - includedServiceJobLinkIds
+        - includedServiceJobRefs
+        - status
     LinkedServiceJobsStatus:
       type: string
       enum:
         - OPEN
+        - IN_PROGRESS
         - FINISHED
         - CANCELLED
         - OBSOLETE
