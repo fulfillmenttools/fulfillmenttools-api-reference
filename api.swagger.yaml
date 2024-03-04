@@ -7553,6 +7553,12 @@ paths:
               type: string
               maxItems: 100
             type: array
+        - description: Reference to the user ID you want to get the corresponding pickjobs
+          in: query
+          name: modifiedByUsername
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -26646,11 +26652,31 @@ components:
         - CANCELED
         - OBSOLETE
       type: string
+    UserModificationHistory:
+      additionalProperties: false
+      type: object
+      required:
+        - modificationDate
+        - username
+      properties:
+        userId:
+          description: ID of the user who commited this modification
+          type: string
+        username:
+          description: Username of the user who commited this modification
+          type: string
+        modificationDate:
+          format: date-time
+          type: string
     PickJob:
       allOf:
         - $ref: '#/components/schemas/PickJobForCreation'
         - $ref: '#/components/schemas/VersionedResource'
         - properties:
+            usersModificationHistory:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserModificationHistory'
             anonymized:
               description: Indicates if gdpr related data was anonymized
               example: false
@@ -30461,6 +30487,8 @@ components:
         - LAST_MODIFIED_ASC
         - ORDER_DATE_DESC
         - ORDER_DATE_ASC
+        - LAST_MODIFIED_BY_USER_DESC
+        - LAST_MODIFIED_BY_USER_ASC
       type: string
       xml:
         name: PickJobOrderBy
