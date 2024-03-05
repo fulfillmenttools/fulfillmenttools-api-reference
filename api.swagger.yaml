@@ -858,6 +858,105 @@ paths:
               $ref: '#/components/schemas/CutoffTimeConfiguration'
         required: true
       summary: Update cutoff time configuration of a tenant
+  /api/configurations/tenant:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantConfiguration'
+          description: >-
+            Tenant configuration was found & you were allowed to access it. The
+            result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Tenant configuration not found
+      tags:
+        - Core - Configuration
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getTenantConfiguration
+      summary: Get a tenant config
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantConfiguration'
+          description: Tenant configuration was written successfully
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Tenant configuration not found
+      tags:
+        - Core - Configuration
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Upsert tenant configuration
+      operationId: putTenantConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantConfigurationForUpsert'
+        required: true
+      summary: Update tenant configuration of a tenant
   /api/configurations/deliverynote:
     get:
       responses:
@@ -10931,7 +11030,6 @@ paths:
           description: Unknown clientName
       tags:
         - Core - User Management
-      description: ''
       operationId: putBranding
       requestBody:
         content:
@@ -10941,6 +11039,11 @@ paths:
         description: Branding object
         required: true
       summary: 'Sets the branding '
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+        <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+        /><br />Deprecated, will be replaced by /api/configurations/tenant
   /api/users/sign/transloadit/{templateId}:
     get:
       parameters:
@@ -10978,7 +11081,11 @@ paths:
             endpoint
       tags:
         - Core - User Management
-      description: ''
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+        <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+        /><br />Deprecated, image upload is no longer supported
       operationId: signTransloaditRequest
       summary: Sign an upload request for a given template
   /api/users/{userId}:
@@ -21126,6 +21233,29 @@ components:
         - hour
         - minute
       type: object
+    TenantConfiguration:
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        clearName:
+          type: string
+      required:
+        - clearName
+    TenantConfigurationForUpsert:
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        clearName:
+          type: string
+        version:
+          type: number
+      required:
+        - clearName
+        - version
     CutoffTimeConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
