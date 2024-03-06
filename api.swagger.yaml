@@ -34949,6 +34949,31 @@ components:
         - facilityRef
         - status
         - onHold
+    InboundDeliveryReleasedPayload:
+      type: object
+      properties:
+        inboundProcessRef:
+          type: string
+        tenantInboundProcessRef:
+          type: string
+        purchaseOrder:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrder'
+        facilityRef:
+          type: string
+        status:
+          type: string
+          enum:
+            - OPEN
+            - PARTIAL_DELIVERY
+            - ON_HOLD
+            - CLOSED
+        onHold:
+          type: boolean
+      required:
+        - inboundProcessRef
+        - facilityRef
+        - status
+        - onHold
     InventoryFacilityStockShapeByTrait:
       type: object
       properties:
@@ -36427,6 +36452,15 @@ components:
       properties:
         payload:
           $ref: '#/components/schemas/InboundDeliveryReceivedPayload'
+      required:
+        - payload
+      type: object
+    InboundDeliveryReleasedWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/InboundDeliveryReleasedPayload'
       required:
         - payload
       type: object
