@@ -16271,6 +16271,142 @@ paths:
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
+  /api/operativeprocesses:
+    get:
+      parameters:
+        - description: facility to filter the results
+          in: query
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+            maximum: 500
+            minimum: 1
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/OperativeProcess'
+          description: All operative processes matching the given parameters
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Operative Process
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getOperativeProcesses
+      summary: Get all operativeProcesses
+  /api/operativeprocesses/{operativeProcessId}:
+    get:
+      parameters:
+        - description: id of the operativeProcess you want to retrieve
+          in: path
+          name: operativeProcessId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeProcess'
+          description: Found operativeProcess by given ID
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Operative Process
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getOperativeProcessById
+      summary: Get operativeProcess by ID
   /api/articles:
     get:
       operationId: getArticles
@@ -33562,6 +33698,77 @@ components:
       enum:
         - DELETE_ITEM_RETURN
       type: string
+    OperativeProcess:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        processRef:
+          type: string
+          description: Reference to the overall process
+        facilityRef:
+          type: string
+          description: Reference to the facility this operative process is handled in
+        flatEntityRefs:
+          items:
+            type: string
+          description: >-
+            References to all operational entities belonging to this operative
+            process
+        entityChildren:
+          items:
+            $ref: '#/components/schemas/OperativeEntity'
+          description: Tree structure of entities belonging to this operative process
+      type: object
+      required:
+        - id
+        - processRef
+        - facilityRef
+    OperativeProcessForCreation:
+      additionalProperties: false
+      properties:
+        processRef:
+          type: string
+          description: Reference to the overall process
+        facilityRef:
+          type: string
+          description: Reference to the facility this operative process is handled in
+        entityChildren:
+          items:
+            $ref: '#/components/schemas/OperativeEntity'
+          description: Tree structure of entities belonging to this operative process
+      type: object
+      required:
+        - processRef
+        - facilityRef
+    OperativeEntity:
+      additionalProperties: false
+      properties:
+        entityRef:
+          type: string
+          description: Reference to the full entity
+        entityType:
+          $ref: '#/components/schemas/OperativeEntityType'
+        entityChildren:
+          items:
+            $ref: '#/components/schemas/OperativeEntity'
+          description: Tree structure of entities belonging to this entity
+      required:
+        - entityRef
+        - entityType
+    OperativeEntityType:
+      type: string
+      enum:
+        - PICKJOB
+        - PACKJOB
+        - SHIPMENT
+        - HANDOVERJOB
+        - PARCEL
+        - SERVICEJOB
+        - RESTOWITEM
+        - ITEMRETURNJOB
     StorageLocationForCreation:
       properties:
         name:
