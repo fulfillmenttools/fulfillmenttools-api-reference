@@ -28899,7 +28899,8 @@ components:
         returnReasonExplanation:
           $ref: '#/components/schemas/LocaleString'
         reasons:
-          description: Possible return reasons
+          deprecated: true
+          description: Deprecated - use ReturnConfiguration.availableReturnReasons instead
           items:
             $ref: '#/components/schemas/LocaleString'
           type: array
@@ -28974,7 +28975,8 @@ components:
         returnReasonExplanation:
           $ref: '#/components/schemas/LocaleString'
         reasons:
-          description: Possible return reasons
+          deprecated: true
+          description: Deprecated - use ReturnConfiguration.availableReturnReasons instead
           items:
             $ref: '#/components/schemas/LocaleString'
           type: array
@@ -33550,6 +33552,11 @@ components:
             example: a69006ba-7100-4b4d-a610-1ca28016a4eb
             type: string
           type: array
+        reasons:
+          items:
+            $ref: '#/components/schemas/ItemReturnLineItemReason'
+          minItems: 1
+          type: array
       required:
         - id
         - status
@@ -33559,10 +33566,17 @@ components:
     ItemReturnLineItemReason:
       additionalProperties: false
       properties:
-        name:
+        reason:
+          description: Translated reasonLocalized
           type: string
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        comment:
+          type: string
+          minLength: 1
+          example: Upper corner damaged
       required:
-        - name
+        - reasonLocalized
     ItemReturnForCreation:
       additionalProperties: false
       properties:
