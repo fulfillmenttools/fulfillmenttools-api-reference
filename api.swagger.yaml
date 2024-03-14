@@ -170,105 +170,6 @@ paths:
         description: Carrier object
         required: true
       summary: Add a new carrier as a CEP partner
-  /api/promises/checkoutoptions:
-    post:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                anyOf:
-                  - $ref: '#/components/schemas/ResponseForCNCCheckoutOptions'
-                  - $ref: '#/components/schemas/ResponseForSFSCheckoutOptions'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      tags:
-        - DOMS - CheckoutOptions
-      description: ''
-      operationId: postCheckoutOptions
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CheckoutOptionsInput'
-        description: The CheckoutOptionsInput
-        required: true
-      summary: Evaluate a checkout options input against the DOMS
-  /api/promises/deliverypromise:
-    post:
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-          description: The order promise was created URL of the order promse.
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      tags:
-        - DOMS - Promises
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      operationId: postDeliveryPromise
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrderForCreation'
-        description: Order object supplied by your shop instance
-        required: true
-      summary: Add a new order for future fulfillment
   /api/carriers/{carrierId}:
     get:
       parameters:
@@ -3025,16 +2926,7 @@ paths:
           description: Promises configuration not found
       tags:
         - DOMS - Orders
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+      description: ''
       operationId: getPromisesConfiguration
       summary: Get a tenant promises config
     put:
@@ -3070,16 +2962,7 @@ paths:
             endpoint
       tags:
         - DOMS - Orders
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+      description: ''
       operationId: putPromisesConfiguration
       requestBody:
         content:
@@ -5554,6 +5437,114 @@ paths:
       summary: >-
         Provides information which kind of fulfillment is possible under given
         circumstances.
+  /api/promises/checkoutoptions:
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ResponseForCNCCheckoutOptions'
+                  - $ref: '#/components/schemas/ResponseForSFSCheckoutOptions'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Orders
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: postCheckoutOptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutOptionsInput'
+        description: The CheckoutOptionsInput
+        required: true
+      summary: Evaluate a checkout options input against the DOMS
+  /api/promises/deliverypromise:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForDeliveryPromise'
+          description: The order promise was created URL of the order promse.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Orders
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: postDeliveryPromise
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderForCreation'
+        description: Order object supplied by your shop instance
+        required: true
+      summary: Add a new order for future fulfillment
   /api/pickruns:
     post:
       responses:
@@ -26583,7 +26574,7 @@ components:
       type: object
       xml:
         name: CheckoutOptionsAvailability
-    CheckoutOptionsCarrier:
+    PromiseCarrier:
       additionalProperties: false
       properties:
         carrierKey:
@@ -26592,16 +26583,19 @@ components:
           type: string
         products:
           items:
-            $ref: '#/components/schemas/CheckoutOptionsDeliveryOptions'
+            $ref: '#/components/schemas/PromiseDeliveryOptions'
           type: array
+        deliveryPromiseValidUntil:
+          type: string
+          format: date-time
       required:
         - carrierKey
         - carrierName
         - products
       type: object
       xml:
-        name: CheckoutOptionsCarrier
-    CheckoutOptionsDeliveryOptions:
+        name: PromiseCarrier
+    PromiseDeliveryOptions:
       additionalProperties: false
       properties:
         carrierProductCategory:
@@ -26609,8 +26603,7 @@ components:
         transitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         estimatedDeliveryTime:
-          type: string
-          format: date-time
+          $ref: '#/components/schemas/EstimatedDeliveryTime'
         deliveryCosts:
           items:
             $ref: '#/components/schemas/DeliveryCost'
@@ -26620,7 +26613,7 @@ components:
         - deliveryCosts
       type: object
       xml:
-        name: CheckoutOptionsDeliveryOptions
+        name: PromiseDeliveryOptions
     CheckoutOptionsCustomServices:
       additionalProperties: false
       properties:
@@ -26647,7 +26640,7 @@ components:
           type: array
         deliveryOptions:
           items:
-            $ref: '#/components/schemas/CheckoutOptionsCarrier'
+            $ref: '#/components/schemas/PromiseCarrier'
           type: array
         customServices:
           items:
@@ -26724,6 +26717,111 @@ components:
       type: object
       xml:
         name: ResponseForCNCCheckoutOptions
+    DeliveryPromiseLineItem:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        title:
+          type: string
+        quantity:
+          type: number
+        available:
+          type: number
+        outOfStockBehaviour:
+          enum:
+            - BACKORDER
+          type: string
+        availabilityTimeframe:
+          $ref: '#/components/schemas/AvailabilityTimeframe'
+    DeliveryPromiseShipment:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/BasicDeliveryPromiseShipment'
+      properties:
+        carriers:
+          items:
+            $ref: '#/components/schemas/PromiseCarrier'
+          type: array
+      required:
+        - carriers
+      type: object
+      xml:
+        name: DeliveryPromiseShipment
+    BasicDeliveryPromiseShipmentFacility:
+      additionalProperties: false
+      properties:
+        facilityRef:
+          type: string
+        facilityName:
+          type: string
+      required:
+        - facilityName
+        - facilityRef
+    BasicDeliveryPromiseShipment:
+      additionalProperties: false
+      properties:
+        lineItems:
+          items:
+            $ref: '#/components/schemas/DeliveryPromiseLineItem'
+          type: array
+        facility:
+          $ref: '#/components/schemas/BasicDeliveryPromiseShipmentFacility'
+      required:
+        - lineItems
+        - facility
+      type: object
+      xml:
+        name: DeliveryPromiseShipment
+    DeliveryPromiseCollect:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/BasicDeliveryPromiseShipment'
+      properties:
+        targetTime:
+          format: date-time
+          type: string
+      required:
+        - targetTime
+      type: object
+      xml:
+        name: DeliveryPromiseCollect
+    ResponseForDeliveryPromise:
+      additionalProperties: false
+      properties:
+        orderRef:
+          type: string
+        orderVersion:
+          type: number
+        promisesOptions:
+          $ref: '#/components/schemas/OrderPromisesOptions'
+        collect:
+          $ref: '#/components/schemas/DeliveryPromiseCollect'
+        shipToCustomer:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryPromiseShipment'
+        shipToStore:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryPromiseShipment'
+        backOrdered:
+          $ref: '#/components/schemas/Backordered'
+      required:
+        - orderRef
+        - orderVersion
+      type: object
+      xml:
+        name: ResponseForDeliveryPromise
+    Backordered:
+      type: object
+      properties:
+        lineItems:
+          items:
+            $ref: '#/components/schemas/DeliveryPromiseLineItem'
+          type: array
+      required:
+        - lineItems
     OrderStatusReason:
       properties:
         reason:
@@ -29468,6 +29566,7 @@ components:
         - OBSOLETE
         - CANCELED
         - LOCKED
+        - PROMISED
       type: string
       xml:
         name: RoutingPlanStatus
@@ -31295,6 +31394,22 @@ components:
       required:
         - maxTransitDays
         - minTransitDays
+    EstimatedDeliveryTime:
+      type: object
+      properties:
+        minDeliveryDays:
+          description: Minimum total delivery time in days
+          example: 1
+          type: integer
+          minimum: 0
+        maxDeliveryDays:
+          description: Maximum total delivery time in days
+          example: 3
+          type: integer
+          minimum: 0
+      required:
+        - maxDeliveryDays
+        - minDeliveryDays
     MandatoryShippingItemAttribute:
       properties:
         referencedField:
