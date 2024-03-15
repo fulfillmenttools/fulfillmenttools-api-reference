@@ -29431,6 +29431,8 @@ components:
           type: string
         parentRoutingPlanRef:
           type: string
+        childRoutingPlanRef:
+          type: string
         pickJobRef:
           description: The id of the pickjob that has been created from the routing plan.
           example: Esb20gpHBL94X5NdMp3C
@@ -29465,6 +29467,7 @@ components:
             - REROUTE
             - ORDERSPLIT_ON_SHORTPICK
             - MANUAL_ASSIGNMENT
+            - PROCESS_MANUALASSIGNMENT
             - REACTIVATION
           type: string
         splitCount:
@@ -29477,6 +29480,14 @@ components:
           type: number
         status:
           $ref: '#/components/schemas/RoutingPlanStatus'
+        statusHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingPlanStatus'
+        statusReasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingPlanStatusReason'
         consolidatedStatus:
           $ref: '#/components/schemas/ConsolidatedRoutingPlanStatus'
         targetAddress:
@@ -29519,6 +29530,24 @@ components:
         - routingRun
         - finalizeRun
       type: object
+    RoutingPlanStatusReason:
+      anyOf:
+        - $ref: '#/components/schemas/RoutingPlanObsoleteStatusReason'
+    RoutingPlanObsoleteStatusReason:
+      properties:
+        reason:
+          type: string
+          enum:
+            - REROUTE_AFTER_SHORTPICK
+            - MANUALLY_REROUTED
+            - MANUALLY_ASSIGNED
+        status:
+          type: string
+          enum:
+            - OBSOLETE
+      required:
+        - reason
+        - status
     DeliveryEventTargetAddress:
       type: object
       properties:
@@ -29619,27 +29648,43 @@ components:
         a more detailes explanation of what happened to the routing plan.
       enum:
         - ROUTED
-        - PROCESS_MANUAL_REROUTED_THEN_NEW_RP_ROUTED
+        - PROCESS_MANUAL_REROUTED_THEN_ROUTED
+        - PROCESS_MANUAL_REROUTED_THEN_NOT_ROUTABLE
+        - PROCESS_MANUAL_REROUTED_THEN_REROUTED_AND_SPLIT
         - ROUTING_PLAN_REROUTED_THEN_ROUTED_TO_SAME_FACILITY
+        - ROUTING_PLAN_SHORTPICKED_THEN_ROUTED_TO_SAME_FACILITY
         - ROUTING_PLAN_CREATED_THEN_ROUTING
         - ROUTING_PLAN_CREATED_THEN_PLANNED
         - ROUTING_PLAN_REROUTED_THEN_FAILED
-        - FACILITY_MANUALLY_ASSIGNED_TO_PICKJOB_THEN_NEW_RP_ROUTED
-        - FACILITY_MANUALLY_ASSIGNED_TO_PROCESS_THEN_NEW_RP_ROUTED
+        - FACILITY_MANUALLY_ASSIGNED_TO_PICKJOB_THEN_ROUTED
+        - FACILITY_MANUALLY_ASSIGNED_TO_PROCESS_THEN_ROUTED
         - STOCK_UPDATE_RECEIVED_THEN_REACTIVATED
-        - PICKJOB_REJECTED_THEN_REROUTED
-        - ROUTING_TIME_TRIGGERED_THEN_REROUTED
+        - ROUTING_PLAN_REROUTE_TIMETRIGGERED_THEN_REROUTED
+        - ROUTING_PLAN_REROUTE_TIMETRIGGERED_THEN_REROUTED_AND_SPLIT
         - ROUTING_PLAN_SHORTPICKED_THEN_REROUTED
         - ROUTINGPLAN_SHORTPICKED_THEN_SPLIT
-        - ROUTING_PLAN_ROUTED_THEN_SPLIT
+        - ROUTING_PLAN_SHORTPICKED_THEN_REROUTED_AND_SPLIT
+        - ROUTING_PLAN_REROUTE_STOCK_ZERO_THEN_REROUTED
+        - ROUTING_PLAN_REROUTE_STOCK_ZERO_THEN_REROUTED_AND_SPLIT
+        - ROUTING_PLAN_REROUTE_STOCK_ZERO_THEN_REROUTED_TO_SAME_FACILITY
+        - PICKJOB_REJECTED_THEN_REROUTED
+        - PICKJOB_REJECTED_THEN_NOT_ROUTABLE
+        - PICKJOB_REJECTED_THEN_ROUTED_AND_SPLIT
+        - ROUTED_AND_SPLIT
         - OBSOLETE
+        - OBSOLETE_WAS_ROUTED
+        - OBSOLETE_WAS_SHORTPICKED
         - UNKNOWN
         - RETRYABLE
         - FAILED_REROUTE
-        - CANCELLED
-        - UNROUTABLE
+        - CANCELED
+        - NOT_ROUTABLE
         - WAITING
         - WAITING_AND_SPLIT
+        - WAITING_THEN_ROUTED
+        - WAITING_THEN_ROUTED_AND_SPLIT
+        - WAITING_THEN_NOT_ROUTABLE
+        - WAITING_THEN_WAITING_AND_SPLIT
       type: string
       xml:
         name: RealRoutingPlanStatus
