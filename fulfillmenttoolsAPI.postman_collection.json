@@ -659,7 +659,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"version\": 1,\n    \"actions\": [\n        {\n            \"action\": \"ModifyListing\",\n            \"price\": 19.99,\n            \"status\": \"INACTIVE\"\n        }\n    ]\n}\n",
+											"raw": "{\n    \"version\": 1,\n    \"actions\": [\n        {\n            \"action\": \"ModifyListing\",\n            \"price\": 19.99,\n            \"status\": \"INACTIVE\",\n            \"currency\": \"USD\"\n        }\n    ]\n}\n",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -700,7 +700,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"listings\": [\n        {\n            \"tenantArticleId\": \"2020249-XS\",\n            \"price\": 19.95,\n            \"version\": 7,\n            \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n            \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/240eadd8-8f50-479d-b0d8-74412bd4a9f9.jpg\",\n            \"scannableCodes\": [\"738502847562\", \"2020249-XS\"],\n            \"attributes\": [\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 100,\n                    \"key\": \"%%subtitle%%\",\n                    \"value\": \"Neu!\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 200,\n                    \"key\": \"Mitgliederpreis\",\n                    \"value\": \"17,96 EUR\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 300,\n                    \"key\": \"Schnitt\",\n                    \"value\": \"Frauen\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 400,\n                    \"key\": \"Material\",\n                    \"value\": \"100% Baumwolle\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 500,\n                    \"key\": \"Artikelnummer\",\n                    \"value\": \"2020249\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 600,\n                    \"key\": \"Größe\",\n                    \"value\": \"S\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 700,\n                    \"key\": \"Beschreibung\",\n                    \"value\": \"Rotes T-Shirt mit weißen Streifen an den Ärmeln, Blockdruck mit Schriftzug auf der Brust\"\n                }\n            ],\n            \"measurementUnitKey\": \"UNIT\",\n            \"legal\": {\n                \"hsCode\": \"some-id\"\n            }\n        }\n    ]\n}\n",
+											"raw": "{\n    \"listings\": [\n        {\n            \"tenantArticleId\": \"2020249-XS\",\n            \"price\": 19.95,\n            \"currency\": \"USD\",\n            \"version\": 7,\n            \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n            \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/240eadd8-8f50-479d-b0d8-74412bd4a9f9.jpg\",\n            \"scannableCodes\": [\"738502847562\", \"2020249-XS\"],\n            \"attributes\": [\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 100,\n                    \"key\": \"%%subtitle%%\",\n                    \"value\": \"Neu!\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 200,\n                    \"key\": \"Mitgliederpreis\",\n                    \"value\": \"17,96 EUR\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 300,\n                    \"key\": \"Schnitt\",\n                    \"value\": \"Frauen\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 400,\n                    \"key\": \"Material\",\n                    \"value\": \"100% Baumwolle\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 500,\n                    \"key\": \"Artikelnummer\",\n                    \"value\": \"2020249\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 600,\n                    \"key\": \"Größe\",\n                    \"value\": \"S\"\n                },\n                {\n                    \"category\": \"descriptive\",\n                    \"priority\": 700,\n                    \"key\": \"Beschreibung\",\n                    \"value\": \"Rotes T-Shirt mit weißen Streifen an den Ärmeln, Blockdruck mit Schriftzug auf der Brust\"\n                }\n            ],\n            \"measurementUnitKey\": \"UNIT\",\n            \"legal\": {\n                \"hsCode\": \"some-id\"\n            }\n        }\n    ]\n}\n",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -6630,6 +6630,41 @@
 									"path": [
 										"api",
 										"inboundprocesses"
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/PickJobs/addPickJob"
+							},
+							"response": []
+						},
+						{
+							"name": "Patch Inbound Process",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"scannableCodes\": [\"3.14159\"],\n    \"onHold\": false,\n    \"customAttributes\": {\n        \"myAttribute\": \"myValue\"\n    },\n    \"version\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/inboundprocesses/:inboundProcessId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"inboundprocesses",
+										":inboundProcessId"
+									],
+									"variable": [
+										{
+											"key": "inboundProcessId",
+											"value": "62ca9bd7-8675-453a-a411-5be853d162f5"
+										}
 									]
 								},
 								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/PickJobs/addPickJob"
