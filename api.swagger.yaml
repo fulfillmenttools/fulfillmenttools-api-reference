@@ -16881,6 +16881,49 @@ paths:
                 $ref: '#/components/schemas/ApiError'
       tags:
         - Inventory Management - Inbound
+    patch:
+      operationId: Patch InboundProcess
+      summary: Patch an Inbound Process by ID
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      parameters:
+        - name: inboundProcessId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboundProcessForPatch'
+      responses:
+        '200':
+          description: Inbound Process successfully patched
+        '401':
+          description: Your user is not allowed to operate against this API instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Your user, although recognized, is not authorized to use this
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      tags:
+        - Inventory Management - Inbound
   /api/inboundprocesses/{inboundProcessId}/purchaseorder:
     put:
       operationId: upsertInboundProcessPurchaseOrder
@@ -36133,6 +36176,26 @@ components:
             attach custom data from your systems to fulfillmenttools entities.
       required:
         - facilityRef
+    InboundProcessForPatch:
+      type: object
+      properties:
+        onHold:
+          type: boolean
+        scannableCodes:
+          type: array
+          items:
+            type: string
+        customAttributes:
+          type: object
+          nullable: true
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+        version:
+          type: number
+      required:
+        - version
     InboundProcessPurchaseOrderForUpsert:
       type: object
       properties:
