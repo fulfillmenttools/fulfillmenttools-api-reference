@@ -2604,6 +2604,217 @@
 						}
 					]
 				},
+				{ 
+					"name":  "Expiry",
+					"item": [
+						{
+							"name": "Expiry Configuration",
+							"item": [
+
+								{
+									"name": "Upsert Expiry Configuration",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"version\": 0,\n  \"provisioningTimeOffsetInMinutes\": 300\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/configurations/expiry",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"expiry"
+											]
+										}
+										
+									}
+								},
+								{
+									"name": "Read Expiry Configuration",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/configurations/expiry",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"expiry"
+											]
+										}										
+									}
+								}
+								
+							]
+						},
+						{
+							"name": "Expiry Entity",
+							"item": [
+
+								{
+									"name": "Read All Expiry Entities",
+									"request": {
+										"method": "GET",
+										"description": "Return all entities with respecting possible filters and pagination",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/expiries",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"expiries"
+											],
+											"query": [
+												{
+													"key": "size",
+													"value": "",
+													"description": "Number of entities to show (default 25). Max 500",
+													"disabled": true
+												},
+												{
+													"key": "startAfterId",
+													"value": "",
+													"description": "All entities after given Id",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "",
+													"description": "Filter for the given status",
+													"disabled": true
+												},
+												{
+													"key": "processRef",
+													"value": "",
+													"description": "Filter for a given process ref. This will return a single entity if found",
+													"disabled": true
+												},
+												{
+													"key": "startDate",
+													"value": "2023-06-06T12%3A00%3A00.000000Z",
+													"description": "Filter for entities with a expiry date equals or higher the given value",
+													"disabled": true
+												},
+												{
+													"key": "endDate",
+													"value": "2023-06-06T12%3A00%3A00.000000Z",
+													"description": "Filter for entities with a expiry date equals or lower the given value",
+													"disabled": true
+												}
+											]
+										}
+									}
+								},
+								{
+
+									"name": "Read Expiry Entity",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/expiries/:expiryEntityId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"expiries",
+												":expiryEntityId"
+											],
+											"variable": [
+												{
+													"key": "expiryEntityId",
+													"value": "PUT-IN-YOUR-ID",
+													"description": "Id of the entity"
+												}
+											]
+										},
+										"description": "Get Expiry Entity by id"
+									}
+								},
+								{
+
+									"name": "Create Expiry Entity",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"processRef\": \"ADD_VALID_PROCESS_HERE\",\n  \"provisioningTime\": \"2038-06-06T12:00:00.000000Z\",\n  \"status\": \"ACTIVE\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/expiries",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"expiries"
+											]
+										},
+										"description": "Call Action to change the status of a given item return job"
+									}
+								},
+								{
+
+									"name": "Update Expiry Entity",
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"version\": 1,\n  \"provisioningTime\": \"2038-06-06T12:00:00.000000Z\",\n  \"status\": \"ACTIVE\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/expiries/:expiryEntityId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"expiries",
+												":expiryEntityId"
+											],
+											"variable": [
+												{
+													"key": "expiryEntityId",
+													"value": "PUT-IN-YOUR-ID",
+													"description": "Id of the expiry entity"
+												}
+											]
+										},
+										"description": "Update existing expiry entity. This will trigger the recalculation of the expiry time"
+									}
+								}
+							]
+						}
+					]					
+				},
 				{
 					"name": "Locale",
 					"item": [
@@ -7221,6 +7432,39 @@
 									"body": "[\n  {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"requestVersion\": \"<long>\",\n    \"version\": \"<long>\"\n  },\n  {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"requestVersion\": \"<long>\",\n    \"version\": \"<long>\"\n  }\n]"
 								}
 							]
+						},
+						{
+							"name": "Delete Receipt",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/receipts/:receiptId?version=7",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"receipts",
+										":receiptId"
+									],
+									"query": [
+										{
+											"key": "version",
+											"value": "7",
+											"description": "Inbound Process Version"
+										}
+									],
+									"variable": [
+										{
+											"key": "receiptId",
+											"value": "",
+											"description": "YOUR_RECEIPT_ID"
+										}
+									]
+								}
+							},
+							"response": []
 						},
 						{
 							"name": "Update Receipt",
