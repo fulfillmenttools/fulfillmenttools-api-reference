@@ -34867,6 +34867,18 @@ components:
           example: '2020-02-03T09:45:51.525Z'
           format: date-time
           type: string
+        customServiceRef:
+          type: string
+          description: Id of the customService this ServiceJob was created from.
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        linkedServiceJobsRef:
+          type: string
+          description: ID of the Linked Service Job, the Service Job should reference.
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        tenantOrderId:
+          description: ID of the tenant order, the linked service jobs are part of
+          type: string
+          example: ocff-order-100
       required:
         - id
         - lineItems
@@ -34876,19 +34888,20 @@ components:
         - itemsRequired
         - facilityRef
         - targetTime
+        - customServiceRef
     ServiceJobForCreation:
       properties:
         customServiceRef:
           type: string
-          description: ID of the custom service, the Service Job should reference.
+          description: ID of the Custom Service, the Service Job should reference.
           example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
         processRef:
           type: string
-          description: ID of the process, the Service Job belongs to.
+          description: ID of the Process, the Service Job belongs to.
           example: 550e8400-e29b-41d4-a716-446655440000
         facilityRef:
           type: string
-          description: ID of the facility, the Service Job is executed in.
+          description: ID of the Facility, the Service Job is executed in.
           example: ba095e30-879f-11ee-b9d1-0242ac120002
         lineItems:
           type: array
@@ -34909,6 +34922,14 @@ components:
           example: '2020-02-03T09:45:51.525Z'
           format: date-time
           type: string
+        tenantOrderId:
+          description: ID of the tenant order, the linked service jobs are part of
+          type: string
+          example: ocff-order-100
+        serviceJobLinkRef:
+          type: string
+          description: ID of the Service Job Link, the Service Job should reference.
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
       required:
         - customServiceRef
         - facilityRef
@@ -35128,6 +35149,10 @@ components:
             $ref: '#/components/schemas/ServiceJobLink'
           type: array
           minItems: 1
+        tenantOrderId:
+          description: ID of the tenant order, the linked service jobs are part of
+          type: string
+          example: ocff-order-100
       required:
         - id
         - serviceJobLinks
@@ -35153,6 +35178,10 @@ components:
             $ref: '#/components/schemas/ServiceJobLinkForCreation'
           type: array
           minItems: 1
+        tenantOrderId:
+          description: ID of the tenant order, the linked service jobs are part of
+          type: string
+          example: ocff-order-100
       required:
         - serviceJobLinks
     ServiceJobLinkForCreation:
