@@ -14432,6 +14432,230 @@ paths:
         description: Desired configuration to create/update
         required: true
       summary: Change the tenant wide configuration
+  /api/expiries:
+    get:
+      parameters:
+        - description: Status to filter the results
+          in: query
+          name: status
+          required: false
+          schema:
+            $ref: '#/components/schemas/ExpiryEntityStatus'
+        - description: ProcessRef to filter the results
+          in: query
+          name: processRef
+          required: false
+          schema:
+            type: string
+        - description: >-
+            StartDate to filter the results. Expiry Date of results is after or
+            equals the given value
+          in: query
+          name: startDate
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: '2020-02-03T08:45:51.525Z'
+        - description: >-
+            EndDate to filter the results. Expiry Date of results is before or
+            equals the given value
+          in: query
+          name: endDate
+          required: false
+          schema:
+            type: string
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExpiryEntity'
+          description: found entities in the result.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Expiries
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getExpiries
+      summary: Get expiries by filter parameter
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpiryEntityForCreation'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpiryEntity'
+          description: created entity in the result.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Expiries
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: createExpiry
+      summary: Create Expiry
+  /api/expiries/{expiryId}:
+    get:
+      parameters:
+        - description: id for the searched entity
+          in: path
+          name: expiryId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpiryEntity'
+          description: found entity in the result.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Expiries
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getExpiry
+      summary: Get Expiry by Id
+    patch:
+      parameters:
+        - description: id of the entity to be changed
+          in: path
+          name: expiryId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpiryEntityForUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpiryEntity'
+          description: changed entity in the result.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Expiries
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: updateExpiry
+      summary: Update Expiry
   /api/health:
     get:
       responses:
@@ -34137,6 +34361,121 @@ components:
         - SERVICEJOB
         - RESTOWITEM
         - ITEMRETURNJOB
+    ExpiryEntity:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Generated identifier of this entity
+          example: 611c860f-3f00-4b01-9f4c-64cdee38a30e
+        version:
+          type: integer
+          format: int64
+          example: 42
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+        created:
+          type: string
+          format: date-time
+          example: '2020-02-03T08:45:51.525Z'
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+        lastModified:
+          type: string
+          format: date-time
+          example: '2020-02-03T09:45:51.525Z'
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+        processRef:
+          type: string
+          example: c4e5fb70-a893-4ffa-b7b0-e042cda6fb9f
+          description: Reference to the Process of this Entity
+        provisioningTime:
+          type: string
+          format: date-time
+          example: '2020-02-03T08:45:51.525Z'
+          description: >-
+            Planned time where this entity should be provided or handed over to
+            the customer
+        expiryTime:
+          type: string
+          format: date-time
+          example: '2020-02-03T08:45:51.525Z'
+          description: Time where the connected process expires, if not fulfilled
+        status:
+          $ref: '#/components/schemas/ExpiryEntityStatus'
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - processRef
+        - provisioningTime
+        - expiryTime
+        - status
+    ExpiryEntityForCreation:
+      additionalProperties: false
+      properties:
+        processRef:
+          type: string
+          example: c4e5fb70-a893-4ffa-b7b0-e042cda6fb9f
+          description: >-
+            Reference to the Process for which this expiry entity will be
+            created
+        provisioningTime:
+          type: string
+          format: date-time
+          example: '2020-02-03T08:45:51.525Z'
+          description: >-
+            Planned time where this entity should be provided or handed over to
+            the customer
+        status:
+          $ref: '#/components/schemas/ExpiryEntityStatus'
+      required:
+        - processRef
+        - provisioningTime
+        - status
+    ExpiryEntityForUpdate:
+      additionalProperties: false
+      properties:
+        version:
+          type: integer
+          description: version of the entity you want to alter
+        provisioningTime:
+          type: string
+          format: date-time
+          example: '2020-02-03T08:45:51.525Z'
+          description: >-
+            Planned time where this entity should be provided or handed over to
+            the customer
+        status:
+          $ref: '#/components/schemas/ExpiryEntityStatus'
+      required:
+        - version
+    ExpiryEntityFilter:
+      additionalProperties: false
+      properties:
+        processRef:
+          type: string
+          description: process of the entity you want to load
+        status:
+          $ref: '#/components/schemas/ExpiryEntityStatus'
+        startDate:
+          format: date-time
+          example: '2020-02-03T08:45:51.525Z'
+          description: start date range for expiryTime
+        endDate:
+          format: date-time
+          example: '2020-02-03T08:45:51.525Z'
+          description: end date range for expiryTime
+    ExpiryEntityStatus:
+      enum:
+        - ACTIVE
+        - INACTIVE
+      type: string
     StorageLocationForCreation:
       properties:
         name:
