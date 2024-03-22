@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "f840fe56-ba99-482d-9200-1eea068b7f25",
+		"_postman_id": "7d299ba1-f0f6-4fac-b72c-8c3defef6514",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16829062"
 	},
 	"item": [
 		{
@@ -384,7 +385,8 @@
 										"exec": [
 											""
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -393,7 +395,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"firstname\": \"Hans\",\n    \"lastname\": \"Pötsch\",\n    \"username\": \"hpoetsch\",\n    \"password\": \"8Fj3dOSI43KD3!\",\n    \"roles\": [\n        {\n            \"name\": \"FULFILLER\",\n            \"facilities\": [\n                \"9whevyDNfn9Qi3vjQmyCJH\"\n            ]\n        }\n    ]\n}\n",
+									"raw": "{\n    \"firstname\": \"Hans\",\n    \"lastname\": \"Pötsch\",\n    \"username\": \"hpoetsch\",\n    \"password\": \"8Fj3dOSI43KD3!\",\n    \"roles\": [\n        {\n            \"name\": \"FULFILLER\",\n            \"facilities\": [\n                \"7394a94367bc810c87fe\"\n            ],\n            \"assignedFacilities\": [\n                {\n                    \"facilityRef\": \"7394a94367bc810c87fe\",\n                    \"assignedZones\": [\n                        {\n                            \"zoneRef\": \"1328d57477d9304dad63\"\n                        }\n                    ]\n                }\n            ]\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -421,7 +423,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"version\": 1,\n    \"actions\": [\n        {\n            \"action\": \"ModifyUser\",\n            \"password\": \"8Fj3dOSI43KD3!\",\n            \"firstname\": \"Lars\",\n            \"lastname\": \"Lehnhoff\",\n            \"roles\": [\n                {\n                    \"name\": \"SUPERVISOR\",\n                    \"facilities\": [\n                        \"9whevyDNfn9Qi3vjQmyCJH\"\n                    ]\n                }\n            ]\n        }\n    ]\n}",
+									"raw": "{\n    \"version\": 1,\n    \"actions\": [\n        {\n            \"action\": \"ModifyUser\",\n            \"password\": \"8Fj3dOSI43KD3!\",\n            \"firstname\": \"Lars\",\n            \"lastname\": \"Lehnhoff\",\n            \"roles\": [\n                {\n                    \"name\": \"SUPERVISOR\",\n                    \"facilities\": [\n                        \"9whevyDNfn9Qi3vjQmyCJH\"\n                    ]\n                }\n            ],\n            \"assignedFacilities\": [\n                {\n                    \"facilityRef\": \"7394a94367bc810c87fe\",\n                    \"assignedZones\": [\n                        {\n                            \"zoneRef\": \"1328d57477d9304dad63\"\n                        }\n                    ]\n                }\n            ]\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -570,6 +572,98 @@
 									]
 								},
 								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Users/getUser"
+							},
+							"response": []
+						},
+						{
+							"name": "Add AssignedFacility",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"facilityRef\": \"0T1vKaEar0nuG58CxzA5\",\n    \"assignedZones\": [\n        {\n            \"zoneRef\": \"LGMl2DuvPnfPoSHhYFOm\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/users/:userId/assignedFacilities",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"users",
+										":userId",
+										"assignedFacilities"
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": "USER-ID"
+										}
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Users/createUser"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete AssignedFacility Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/users/:userId/assignedFacilities/:assignedFacilityId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"users",
+										":userId",
+										"assignedFacilities",
+										":assignedFacilityId"
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": "USER-ID"
+										},
+										{
+											"key": "assignedFacilityId",
+											"value": "ASSIGNED-FACILTY-ID"
+										}
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Users/createUser"
 							},
 							"response": []
 						}
@@ -13380,7 +13474,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"status\": \"ACTIVE\",\n    \"name\": \"DHL_V2\",\n    \"deliveryAreas\": [\n        {\n            \"country\": \"DE\",\n            \"postalCode\": \"40764\"\n        }\n    ],\n    \"cutoffTime\": {\n        \"hour\": 16,\n        \"minute\": 30\n    },\n    \"credentials\": {\n        \"key\": \"DHL_V2\",\n        \"billingNumber\": \"123456\",\n        \"retoureBillingNumber\": \"optional123345\",\n        \"dhlBusinessPassword\": \"gkpw\",\n        \"dhlBusinessUsername\": \"gkusername\"\n    },\n    \"parcelLabelClassifications\": [\n        {\n            \"nameLocalized\": {\n                \"en_US\": \"Parcel S\",\n                \"de_DE\": \"Paket S\"\n            },\n            \"dimensions\": {\n                \"weight\": 1000,\n                \"length\": 30,\n                \"height\": 8,\n                \"width\": 15\n            }\n        }\n    ],\n    \"tags\": [\n        {\n            \"id\": \"TagId\",\n            \"value\": \"TagValue\"\n        }\n    ]\n}",
+									"raw": "{\n    \"status\": \"ACTIVE\",\n    \"name\": \"DHL_V2\",\n    \"deliveryAreas\": [\n        {\n            \"country\": \"DE\",\n            \"postalCode\": \"40764\"\n        }\n    ],\n    \"cutoffTime\": {\n        \"hour\": 16,\n        \"minute\": 30\n    },\n    \"credentials\": {\n        \"key\": \"DHL_V2\",\n        \"billingNumber\": \"123456\",\n        \"retoureBillingNumber\": \"optional123345\",\n        \"dhlBusinessPassword\": \"gkpw\",\n        \"dhlBusinessUsername\": \"gkusername\"\n    },\n    \"parcelLabelClassifications\": [\n        {\n            \"nameLocalized\": {\n                \"en_US\": \"Parcel S\",\n                \"de_DE\": \"Paket S\"\n            },\n            \"dimensions\": {\n                \"weight\": 1000,\n                \"length\": 30,\n                \"height\": 8,\n                \"width\": 15\n            }\n        }\n    ],\n    \"tags\": [\n        {\n            \"id\": \"TagId\",\n            \"value\": \"TagValue\"\n        }\n    ],\n    \"validDeliveryTargets\": [\n        \"SHIP_TO_STORE\",\n        \"SHIP_TO_CUSTOMER\"\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -13428,7 +13522,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"status\": \"ACTIVE\",\n    \"name\": \"DPD_CH\",\n    \"cutoffTime\": {\n        \"hour\": 16,\n        \"minute\": 30\n    },\n    \"credentials\": {\n        \"delisId\": \"KD9990046\",\n        \"password\": \"Ce]3nmHU8n\",\n        \"key\": \"DPD_CH\"\n    },\n    \"tags\": [\n        {\n            \"id\": \"TagId\",\n            \"value\": \"TagValue\"\n        }\n    ]\n}",
+									"raw": "{\n    \"status\": \"ACTIVE\",\n    \"name\": \"DPD_CH\",\n    \"cutoffTime\": {\n        \"hour\": 16,\n        \"minute\": 30\n    },\n    \"credentials\": {\n        \"delisId\": \"KD9990046\",\n        \"password\": \"Ce]3nmHU8n\",\n        \"key\": \"DPD_CH\"\n    },\n    \"tags\": [\n        {\n            \"id\": \"TagId\",\n            \"value\": \"TagValue\"\n        }\n    ],\n    \"validDeliveryTargets\": [\n        \"SHIP_TO_STORE\",\n        \"SHIP_TO_CUSTOMER\"\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -13476,7 +13570,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"version\": 1,\n    \"status\": \"ACTIVE\",\n    \"name\": \"DHL_V2\",\n    \"deliveryAreas\": [\n        {\n            \"country\": \"DE\",\n            \"postalCode\": \"40764\"\n        }\n    ],\n    \"cutoffTime\": {\n        \"hour\": 16,\n        \"minute\": 30\n    },\n    \"credentials\": {\n        \"key\": \"DHL_V2\",\n        \"billingNumber\": \"123456\",\n        \"retoureBillingNumber\": \"optional123345\",\n        \"dhlBusinessPassword\": \"gkpw\",\n        \"dhlBusinessUsername\": \"gkusername\"\n    },\n    \"dimensions\": {\n        \"weight\": 1000,\n        \"length\": 30,\n        \"height\": 8,\n        \"width\": 15\n    },\n    \"tags\": [\n        {\n            \"id\": \"TagId\",\n            \"value\": \"TagValue\"\n        }\n    ]\n}\n",
+									"raw": "{\n    \"version\": 1,\n    \"status\": \"ACTIVE\",\n    \"name\": \"DHL_V2\",\n    \"deliveryAreas\": [\n        {\n            \"country\": \"DE\",\n            \"postalCode\": \"40764\"\n        }\n    ],\n    \"cutoffTime\": {\n        \"hour\": 16,\n        \"minute\": 30\n    },\n    \"credentials\": {\n        \"key\": \"DHL_V2\",\n        \"billingNumber\": \"123456\",\n        \"retoureBillingNumber\": \"optional123345\",\n        \"dhlBusinessPassword\": \"gkpw\",\n        \"dhlBusinessUsername\": \"gkusername\"\n    },\n    \"dimensions\": {\n        \"weight\": 1000,\n        \"length\": 30,\n        \"height\": 8,\n        \"width\": 15\n    },\n    \"tags\": [\n        {\n            \"id\": \"TagId\",\n            \"value\": \"TagValue\"\n        }\n    ],\n   \"validDeliveryTargets\": [\n        \"SHIP_TO_STORE\",\n        \"SHIP_TO_CUSTOMER\"\n    ]\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -13524,7 +13618,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"version\": 1,\n    \"status\": \"ACTIVE\",\n    \"name\": \"PostNL\",\n    \"credentials\": {\n        \"key\": \"POSTNL\",\n        \"apiKey\": \"yourApiKey\"\n    },\n    \"configuration\": {\n        \"key\": \"POSTNL\",\n        \"customerId\": \"cId\",\n        \"customerCode\": \"cCode\"\n    }\n}\n",
+									"raw": "{\n    \"version\": 1,\n    \"status\": \"ACTIVE\",\n    \"name\": \"PostNL\",\n    \"credentials\": {\n        \"key\": \"POSTNL\",\n        \"apiKey\": \"yourApiKey\"\n    },\n    \"configuration\": {\n        \"key\": \"POSTNL\",\n        \"customerId\": \"cId\",\n        \"customerCode\": \"cCode\"\n    },\n   \"validDeliveryTargets\": [\n        \"SHIP_TO_STORE\",\n        \"SHIP_TO_CUSTOMER\"\n    ]\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -13572,7 +13666,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"version\": 1,\n    \"status\": \"ACTIVE\",\n    \"name\": \"DPD_CH\",\n    \"cutoffTime\": {\n        \"hour\": 16,\n        \"minute\": 30\n    },\n    \"credentials\": {\n        \"delisId\": \"KD9990046\",\n        \"password\": \"Ce]3nmHU8n\",\n        \"key\": \"DPD_CH\"\n    },\n    \"dimensions\": {\n        \"weight\": 1000,\n        \"length\": 30,\n        \"height\": 8,\n        \"width\": 15\n    },\n    \"tags\": [\n        {\n            \"id\": \"TagId\",\n            \"value\": \"TagValue\"\n        }\n    ]\n}",
+									"raw": "{\n    \"version\": 1,\n    \"status\": \"ACTIVE\",\n    \"name\": \"DPD_CH\",\n    \"cutoffTime\": {\n        \"hour\": 16,\n        \"minute\": 30\n    },\n    \"credentials\": {\n        \"delisId\": \"KD9990046\",\n        \"password\": \"Ce]3nmHU8n\",\n        \"key\": \"DPD_CH\"\n    },\n    \"dimensions\": {\n        \"weight\": 1000,\n        \"length\": 30,\n        \"height\": 8,\n        \"width\": 15\n    },\n    \"tags\": [\n        {\n            \"id\": \"TagId\",\n            \"value\": \"TagValue\"\n        }\n    ],\n   \"validDeliveryTargets\": [\n        \"SHIP_TO_STORE\",\n        \"SHIP_TO_CUSTOMER\"\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
