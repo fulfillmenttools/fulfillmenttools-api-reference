@@ -3179,6 +3179,40 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Update Remote Configuration",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groups\": [\n    \"BACKOFFICE\",\n    \"FULFILLMENT\",\n    \"INVENTORY\"\n  ],\n  \"key\": \"SOME_KEY\",\n  \"scopes\": [\n    {\n      \"facilityRefs\": [\n        \"5462a9c7-5d9b-4401-8fc0-f9ee1e50c6cf\"\n      ],\n      \"userRefs\": [\n        \"7965be5a-372d-4132-b791-da628bbfd6af\"\n      ]\n    }\n  ],\n  \"value\": \"Some String Value\",\n  \"valueType\": \"STRING\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/remoteconfig/:remoteConfigId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"remoteconfig",
+										":remoteConfigId"
+									],
+									"variable": [
+										{
+											"key": ":remoteConfigId",
+											"value": "PUT-IN-YOUR-ID"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -14076,7 +14110,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"key\": \"DHL_V2\",\n    \"name\": \"DHL_V2\",\n    \"status\": \"ACTIVE\",\n    \"defaultParcelWeightInGram\": 1000,\n    \"credentials\": {\n        \"key\": \"DHL_V2\",\n        \"apiKey\": \"myApiKey\",\n        \"fallback\": {\n            \"key\": \"DHL_V2\",\n            \"billingNumber\": \"123456\",\n            \"retoureBillingNumber\": \"optional123345\",\n            \"dhlBusinessPassword\": \"gkpw\",\n            \"dhlBusinessUsername\": \"gkusername\"\n        }\n    },\n    \"parcelLabelClassifications\": [\n        {\n            \"nameLocalized\": {\n                \"en_US\": \"Parcel 2 kg\",\n                \"de_DE\": \"Paket 2 kg\"\n            },\n            \"dimensions\": {\n                \"weight\": 2000,\n                \"length\": 60,\n                \"height\": 15,\n                \"width\": 30\n            },\n            \"name\": \"Paket 2 kg\"\n        },\n        {\n            \"nameLocalized\": {\n                \"en_US\": \"Parcel 5 kg\",\n                \"de_DE\": \"Paket 5 kg\"\n            },\n            \"dimensions\": {\n                \"weight\": 5000,\n                \"length\": 120,\n                \"height\": 60,\n                \"width\": 60\n            },\n            \"name\": \"Paket 5 kg\"\n        },\n        {\n            \"nameLocalized\": {\n                \"en_US\": \"Parcel 10 kg\",\n                \"de_DE\": \"Paket 10 kg\"\n            },\n            \"dimensions\": {\n                \"weight\": 10000,\n                \"length\": 120,\n                \"height\": 60,\n                \"width\": 60\n            },\n            \"name\": \"Paket 10 kg\"\n        },\n        {\n            \"nameLocalized\": {\n                \"en_US\": \"Parcel 31,5 kg\",\n                \"de_DE\": \"Paket 31,5 kg\"\n            },\n            \"dimensions\": {\n                \"weight\": 31500,\n                \"length\": 120,\n                \"height\": 60,\n                \"width\": 60\n            },\n            \"name\": \"Paket 31,5 kg\"\n        }\n    ]\n}",
+											"raw": "{\n  \"key\": \"DHL_V2\",\n  \"name\": \"DHL_V2\",\n  \"status\": \"ACTIVE\",\n  \"defaultParcelWeightInGram\": 1000,\n  \"credentials\": {\n    \"key\": \"DHL_V2\",\n    \"apiKey\": \"myApiKey\",\n    \"fallback\": {\n      \"key\": \"DHL_V2\",\n      \"billingNumber\": \"123456\",\n      \"retoureBillingNumber\": \"optional123345\",\n      \"dhlBusinessPassword\": \"gkpw\",\n      \"dhlBusinessUsername\": \"gkusername\"\n    }\n  },\n  \"parcelLabelClassifications\": [\n    {\n      \"nameLocalized\": {\n        \"en_US\": \"Parcel 2 kg\",\n        \"de_DE\": \"Paket 2 kg\"\n      },\n      \"dimensions\": {\n        \"weight\": 2000,\n        \"length\": 60,\n        \"height\": 15,\n        \"width\": 30\n      }\n    },\n    {\n      \"nameLocalized\": {\n        \"en_US\": \"Parcel 5 kg\",\n        \"de_DE\": \"Paket 5 kg\"\n      },\n      \"dimensions\": {\n        \"weight\": 5000,\n        \"length\": 120,\n        \"height\": 60,\n        \"width\": 60\n      }\n    },\n    {\n      \"nameLocalized\": {\n        \"en_US\": \"Parcel 10 kg\",\n        \"de_DE\": \"Paket 10 kg\"\n      },\n      \"dimensions\": {\n        \"weight\": 10000,\n        \"length\": 120,\n        \"height\": 60,\n        \"width\": 60\n      }\n    },\n    {\n      \"nameLocalized\": {\n        \"en_US\": \"Parcel 31,5 kg\",\n        \"de_DE\": \"Paket 31,5 kg\"\n      },\n      \"dimensions\": {\n        \"weight\": 31500,\n        \"length\": 120,\n        \"height\": 60,\n        \"width\": 60\n      }\n    },\n    {\n      \"nameLocalized\": {\n        \"en_US\": \"Bulky Goods\",\n        \"de_DE\": \"Sperrgut\"\n      },\n      \"dimensions\": {\n        \"weight\": 31500,\n        \"length\": 121,\n        \"height\": 61,\n        \"width\": 61\n      },\n      \"services\": {\n        \"bulkyGoods\": true\n      }\n    }\n  ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
