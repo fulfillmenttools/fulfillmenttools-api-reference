@@ -26722,8 +26722,9 @@ components:
       oneOf:
         - $ref: '#/components/schemas/OrderUnlockActionParameter'
         - $ref: '#/components/schemas/OrderCancelActionParameter'
+        - $ref: '#/components/schemas/OrderConsumerAddressChangeActionParameter'
+        - $ref: '#/components/schemas/OrderConsumerAddressesReplaceActionParameter'
     AbstractOrderActionsParameter:
-      additionalProperties: false
       discriminator:
         propertyName: name
       properties:
@@ -26758,6 +26759,39 @@ components:
       required:
         - name
         - version
+    OrderConsumerAddressChangeActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractOrderActionsParameter'
+      properties:
+        name:
+          enum:
+            - CHANGE_CONSUMER_ADDRESS
+          type: string
+        consumerAddress:
+          $ref: '#/components/schemas/ConsumerAddress'
+        addressType:
+          $ref: '#/components/schemas/AddressType'
+      required:
+        - name
+        - version
+        - consumerAddress
+        - addressType
+    OrderConsumerAddressesReplaceActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractOrderActionsParameter'
+      properties:
+        name:
+          enum:
+            - REPLACE_CONSUMER_ADDRESSES
+          type: string
+        consumerAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsumerAddress'
+      required:
+        - name
+        - version
+        - consumerAddresses
     CustomServiceReference:
       additionalProperties: false
       properties:
