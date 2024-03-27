@@ -35308,6 +35308,13 @@ components:
           description: ID of the tenant order, the linked service jobs are part of
           type: string
           example: ocff-order-100
+        inheritedLineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InheritedServiceJobLineItem'
+          description: >-
+            Line items that are inherited from a preceding service job in a
+            linked service job
       required:
         - id
         - lineItems
@@ -35581,10 +35588,6 @@ components:
             $ref: '#/components/schemas/ServiceJobLink'
           type: array
           minItems: 1
-        tenantOrderId:
-          description: ID of the tenant order, the linked service jobs are part of
-          type: string
-          example: ocff-order-100
       required:
         - id
         - serviceJobLinks
@@ -35610,10 +35613,6 @@ components:
             $ref: '#/components/schemas/ServiceJobLinkForCreation'
           type: array
           minItems: 1
-        tenantOrderId:
-          description: ID of the tenant order, the linked service jobs are part of
-          type: string
-          example: ocff-order-100
       required:
         - serviceJobLinks
     ServiceJobLinkForCreation:
@@ -35681,6 +35680,31 @@ components:
         - previousServiceJobRefs
         - previousServiceJobLinkRefs
         - nextServiceJobLinks
+    InheritedServiceJobLineItem:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        quantity:
+          type: integer
+          description: Quantity of the items
+          example: 12
+          minimum: 1
+        scannableCodes:
+          items:
+            type: string
+            description: Codes, that identify the article
+            example: '4012345678901'
+          type: array
+        article:
+          $ref: '#/components/schemas/ServiceJobLineItemArticle'
+        serviceJobRef:
+          type: string
+      required:
+        - id
+        - quantity
+        - article
+        - serviceJobRef
     LinkedServiceJobsPaginatedResult:
       additionalProperties: false
       type: object
