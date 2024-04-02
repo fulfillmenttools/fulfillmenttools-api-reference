@@ -13654,6 +13654,112 @@ paths:
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
       summary: Delete a single remote configuration
+    patch:
+      parameters:
+        - description: Reference to the remote config you want to change
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoteConfigurationForUpdate'
+      responses:
+        '200':
+          description: Successfully Changed
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Core - Remote Configuration
+      operationId: updateRemoteConfiguration
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      summary: Update a single remote configuration
+    put:
+      parameters:
+        - description: Reference to the remote config you want to change
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoteConfigurationForPut'
+      responses:
+        '200':
+          description: Successfully Changed
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Core - Remote Configuration
+      operationId: putRemoteConfiguration
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      summary: Override a single remote configuration
   /api/remoteconfigs/{id}/scopes:
     post:
       parameters:
@@ -34928,6 +35034,63 @@ components:
         - valueType
         - groups
         - flattenScopeIds
+      type: object
+    RemoteConfigurationForUpdate:
+      additionalProperties: false
+      properties:
+        version:
+          type: integer
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+        valueType:
+          $ref: '#/components/schemas/RemoteConfigurationValueType'
+        value:
+          oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - type: object
+        groups:
+          type: array
+          items:
+            example: INVENTORY
+            type: string
+          minItems: 1
+      required:
+        - version
+      type: object
+    RemoteConfigurationForPut:
+      additionalProperties: false
+      properties:
+        version:
+          type: integer
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+        valueType:
+          $ref: '#/components/schemas/RemoteConfigurationValueType'
+        value:
+          oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - type: object
+        groups:
+          type: array
+          items:
+            example: INVENTORY
+            type: string
+          minItems: 1
+      required:
+        - version
+        - value
+        - valueType
+        - groups
       type: object
     RemoteConfigurations:
       properties:
