@@ -26729,6 +26729,8 @@ components:
       oneOf:
         - $ref: '#/components/schemas/OrderUnlockActionParameter'
         - $ref: '#/components/schemas/OrderCancelActionParameter'
+        - $ref: '#/components/schemas/PromiseConfirmActionParameter'
+        - $ref: '#/components/schemas/PromiseExtendActionParameter'
         - $ref: '#/components/schemas/OrderConsumerAddressChangeActionParameter'
         - $ref: '#/components/schemas/OrderConsumerAddressesReplaceActionParameter'
     AbstractOrderActionsParameter:
@@ -26799,6 +26801,28 @@ components:
         - name
         - version
         - consumerAddresses
+    PromiseConfirmActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractOrderActionsParameter'
+      properties:
+        name:
+          enum:
+            - CONFIRM_PROMISE
+          type: string
+      required:
+        - name
+        - version
+    PromiseExtendActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractOrderActionsParameter'
+      properties:
+        name:
+          enum:
+            - EXTEND_PROMISE
+          type: string
+      required:
+        - name
+        - version
     CustomServiceReference:
       additionalProperties: false
       properties:
@@ -27447,6 +27471,7 @@ components:
         - CANCELLED
         - PROMISED
         - LOCKED
+        - OBSOLETE
       type: string
     ParcelDimensions:
       properties:
