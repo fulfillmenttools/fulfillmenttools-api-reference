@@ -8263,6 +8263,59 @@ paths:
         - Fulfillment Operations - Picking
       operationId: pickJobAction
       summary: Call a single action on a given pickJob
+  /api/pickjobs/{pickJobId}/picklineitems/{pickLineItemId}/availablesubstitutes:
+    get:
+      parameters:
+        - description: Reference to the pick job you to get the available substitutes for
+          in: path
+          name: pickJobId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Reference to the pickLineItem you to get the available substitutes
+            for
+          in: path
+          name: pickLineItemId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResolvedSubstitutes'
+          description: Available substitutes for given pickLineItem
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Picking
+      operationId: queryPickLineItemsSubstitutes
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
   /api/pickjobs/{pickJobId}/loadunits:
     get:
       parameters:
@@ -31266,6 +31319,20 @@ components:
       type: object
       xml:
         name: SubstitutesForUpsert
+    ResolvedSubstitutes:
+      properties:
+        substitutes:
+          items:
+            $ref: '#/components/schemas/Substitute'
+          type: array
+        tenantArticleId:
+          type: string
+      required:
+        - substitutes
+        - tenantArticleId
+      type: object
+      xml:
+        name: ResolvedSubstitutes
     PackingConfigurations:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -37452,11 +37519,14 @@ components:
     StockSummaryExpectedStock:
       type: object
       properties:
+        expectedStockRef:
+          type: string
         expectedDate:
           $ref: '#/components/schemas/RequestedDate'
         quantity:
           $ref: '#/components/schemas/Quantity'
       required:
+        - expectedStockRef
         - expectedDate
         - quantity
     ByTrait:
@@ -37529,6 +37599,75 @@ components:
       required:
         - total
         - stockSummaries
+    FacilityStockDistribution:
+      type: object
+      properties:
+        reserved:
+          type: number
+          minimum: 0
+        totalAmount:
+          type: number
+          minimum: 0
+        available:
+          type: number
+          minimum: 0
+        safetyStock:
+          type: number
+          minimum: 0
+        expectedStocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockSummaryExpectedStock'
+        byTrait:
+          $ref: '#/components/schemas/ByTrait'
+        availableForPicking:
+          type: number
+        availableToPromise:
+          type: number
+        readyToPick:
+          type: number
+        facilityId:
+          type: string
+        facilityName:
+          type: string
+        facilityServiceTypes:
+          type: array
+          items:
+            type: string
+            $ref: '#/components/schemas/FacilityServiceType'
+        facilityStatus:
+          $ref: '#/components/schemas/FacilityStatus'
+        price:
+          type: number
+          nullable: true
+      required:
+        - reserved
+        - totalAmount
+        - available
+        - safetyStock
+        - expectedStocks
+        - byTrait
+        - availableForPicking
+        - availableToPromise
+        - readyToPick
+        - facilityId
+        - facilityName
+        - price
+    StockDistribution:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        summary:
+          $ref: '#/components/schemas/StockSummaryDetails'
+        facilityStocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityStockDistribution'
+      required:
+        - tenantArticleId
+        - summary
+        - facilityStocks
     FacilityStock:
       type: object
       properties:
@@ -37551,21 +37690,6 @@ components:
         - tenantArticleId
         - facilityRef
         - id
-    StockDistribution:
-      type: object
-      properties:
-        tenantArticleId:
-          type: string
-        summary:
-          $ref: '#/components/schemas/StockSummaryDetails'
-        facilityStocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/FacilityStock'
-      required:
-        - tenantArticleId
-        - summary
-        - facilityStocks
     FacilityStockBulkOperation:
       type: object
       properties:
