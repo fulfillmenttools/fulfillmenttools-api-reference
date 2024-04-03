@@ -21358,6 +21358,7 @@ components:
         - disabled
       type: string
     ParcelLabelClassificationForCreation:
+      additionalProperties: false
       properties:
         nameLocalized:
           description: Localized name for parcel label classification
@@ -21366,6 +21367,8 @@ components:
             en_US: S-Parcel
             ru_RU: S-пакет
           $ref: '#/components/schemas/LocaleString'
+        services:
+          $ref: '#/components/schemas/ParcelLabelClassificationServices'
         dimensions:
           $ref: '#/components/schemas/ParcelDimensions'
       required:
@@ -21373,6 +21376,7 @@ components:
         - dimensions
       type: object
     ParcelLabelClassification:
+      additionalProperties: false
       properties:
         name:
           description: Name of the parcel label classification
@@ -21385,11 +21389,20 @@ components:
             en_US: S-Parcel
             ru_RU: S-пакет
           $ref: '#/components/schemas/LocaleString'
+        services:
+          $ref: '#/components/schemas/ParcelLabelClassificationServices'
         dimensions:
           $ref: '#/components/schemas/ParcelDimensions'
       required:
         - nameLocalized
         - dimensions
+      type: object
+    ParcelLabelClassificationServices:
+      additionalProperties: false
+      properties:
+        bulkyGoods:
+          type: boolean
+          default: false
       type: object
     Carrier:
       allOf:
@@ -27598,6 +27611,11 @@ components:
           example: 25
           type: number
       type: object
+    ParcelServices:
+      additionalProperties: false
+      properties:
+        bulkyGoods:
+          type: boolean
     Parcel:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -27616,6 +27634,8 @@ components:
               example: EXPRESS
             dimensions:
               $ref: '#/components/schemas/ParcelDimensions'
+            services:
+              $ref: '#/components/schemas/ParcelServices'
             id:
               description: >-
                 The id of this parcel. It is generated during creation
@@ -27680,6 +27700,8 @@ components:
           example: EXPRESS
         dimensions:
           $ref: '#/components/schemas/ParcelDimensions'
+        services:
+          $ref: '#/components/schemas/ParcelServices'
         loadUnitRefs:
           description: Reference to array of load unit Refs
           items:
