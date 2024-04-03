@@ -4139,6 +4139,47 @@ paths:
         description: Patch set
         required: true
       summary: Patches a facility with the given ID
+  /api/facilities/{facilityId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityActionsParameter'
+      parameters:
+        - description: Reference to the facility you want to call the action for
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Facility'
+          description: Updated Facility in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Facilities
+      operationId: facilityAction
+      summary: Call a single action on a given facility
   /api/facilities/{facilityId}/carriers:
     get:
       parameters:
@@ -23515,12 +23556,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/FacilityAddressForCreation'
         - properties:
-            resolvedCoordinates:
-              $ref: '#/components/schemas/Coordinates'
-              description: >-
-                The resolved location of this facility - optional read-only
-                property that is filled when the facility is first used in
-                routing calculations
             resolvedTimeZone:
               $ref: '#/components/schemas/TimeZone'
               description: >-
@@ -23553,6 +23588,13 @@ components:
                   - value
                 type: object
               type: array
+            resolvedCoordinates:
+              $ref: '#/components/schemas/Coordinates'
+              description: >-
+                The coordinates correspond to the address of this facility. If
+                the coordinates are not provided during the creation or updating
+                of the facility, they are automatically resolved by the backend
+                system
           required:
             - companyName
           type: object
@@ -25614,6 +25656,8 @@ components:
           example: Hauptstr.
           pattern: ^.+$
           type: string
+        resolvedCoordinates:
+          $ref: '#/components/schemas/Coordinates'
       type: object
     ModifyCarrierAction:
       allOf:
@@ -25928,6 +25972,48 @@ components:
           type: object
       xml:
         name: ModifyFacilityAction
+    AbstractFacilityActionsParameter:
+      discriminator:
+        propertyName: name
+      properties:
+        name:
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    UpdateFacilityCoordinatesActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityActionsParameter'
+      properties:
+        name:
+          enum:
+            - UPDATE_FACILITY_COORDINATES
+          type: string
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+      required:
+        - name
+        - coordinates
+        - version
+    RemoveFacilityCoordinatesActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityActionsParameter'
+      properties:
+        name:
+          enum:
+            - REMOVE_FACILITY_COORDINATES
+          type: string
+      required:
+        - name
+        - version
+    FacilityActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/RemoveFacilityCoordinatesActionParameter'
+        - $ref: '#/components/schemas/UpdateFacilityCoordinatesActionParameter'
     ModifyFacilityAddress:
       allOf:
         - $ref: '#/components/schemas/ModifyAddress'
