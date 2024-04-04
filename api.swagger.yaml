@@ -4595,8 +4595,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/StrippedListings'
           description: >-
-            Facility was found & you were allowed to access it. The result is in
-            the body.
+            Facility was found & you were allowed to access it. The results are
+            in the body.
         '401':
           content:
             application/json:
@@ -4627,7 +4627,7 @@ paths:
       summary: Get a facility with the given ID
     put:
       parameters:
-        - description: ID of facility you want to get its listing
+        - description: ID of facility you want to put listings to
           in: path
           name: facilityId
           required: true
@@ -4635,7 +4635,15 @@ paths:
             type: string
       responses:
         '200':
-          description: Facility listing was found & you were allowed to access it.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListingBulkOperationResult'
+          description: >-
+            Facility listing was found & you were allowed to access it. The
+            result is in the body.
         '401':
           content:
             application/json:
@@ -4661,7 +4669,9 @@ paths:
           description: Facility listing not found
       tags:
         - Core - Listings
-      description: ''
+      description: >-
+        Bulk PUT for Listings. Please note: This endpoint has legacy behaviour,
+        i.e. all PUTs fail if a single PUT fails.
       operationId: putFacilityListing
       requestBody:
         content:
@@ -31019,6 +31029,22 @@ components:
           example: 42
           type: integer
       type: object
+    ListingBulkOperationResult:
+      type: object
+      properties:
+        listing:
+          $ref: '#/components/schemas/Listing'
+        status:
+          $ref: '#/components/schemas/BulkOperationResultStatus'
+      required:
+        - listing
+        - status
+    BulkOperationResultStatus:
+      type: string
+      enum:
+        - UPDATED
+        - CREATED
+        - FAILED
     StrippedOrder:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
