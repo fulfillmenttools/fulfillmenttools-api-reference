@@ -9530,6 +9530,32 @@
 									"response": []
 								},
 								{
+									"name": "Get Delivery Note for PickJob",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/pickjobs/:pickJobId/deliverynote",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"pickjobs",
+												":pickJobId",
+												"deliverynote"
+											],
+											"variable": [
+												{
+													"key": "pickJobId",
+													"value": "PUT-IN-YOUR-PICKJOB-ID"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Get Document handling for pickjob",
 									"request": {
 										"method": "GET",
@@ -10709,7 +10735,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{host}}/api/packjobs/PUT-IN-YOUR-PACK-JOB-ID/deliverynote",
+											"raw": "{{host}}/api/packjobs/:packJobId/deliverynote",
 											"host": [
 												"{{host}}"
 											],
@@ -10718,6 +10744,12 @@
 												"packjobs",
 												"PUT-IN-YOUR-PACK-JOB-ID",
 												"deliverynote"
+											],
+											"variable": [
+												{
+													"key": "packJobId",
+													"value": "PUT-IN-YOUR-PACKJOB-ID"
+												}
 											]
 										}
 									},
@@ -11978,15 +12010,21 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{host}}/api/shipments/PUT-IN-YOUR-SHIPMENT-ID/deliverynote",
+											"raw": "{{host}}/api/shipments/:shipmentId/deliverynote",
 											"host": [
 												"{{host}}"
 											],
 											"path": [
 												"api",
 												"shipments",
-												"PUT-IN-YOUR-SHIPMENT-ID",
+												":shipmentId",
 												"deliverynote"
+											],
+											"variable": [
+												{
+													"key": "parcelId",
+													"value": "PUT-IN-YOUR-PARCEL-ID"
+												}
 											]
 										}
 									},
@@ -12165,15 +12203,21 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{host}}/api/packjobs/PUT-IN-YOUR-PARcEL-JOB-ID/returnnote",
+											"raw": "{{host}}/api/parcels/:parcelId/returnnote",
 											"host": [
 												"{{host}}"
 											],
 											"path": [
 												"api",
-												"packjobs",
-												"PUT-IN-YOUR-PARcEL-JOB-ID",
+												"parcels",
+												":parcelId",
 												"returnnote"
+											],
+											"variable": [
+												{
+													"key": "parcelId",
+													"value": "PUT-IN-YOUR-PARCEL-ID"
+												}
 											]
 										}
 									},
@@ -12185,15 +12229,21 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{host}}/api/packjobs/PUT-IN-YOUR-PARCEL-JOB-ID/deliverynote",
+											"raw": "{{host}}/api/parcels/:parcelId/deliverynote",
 											"host": [
 												"{{host}}"
 											],
 											"path": [
 												"api",
-												"packjobs",
-												"PUT-IN-YOUR-PARCEL-JOB-ID",
+												"parcels",
+												":parcelId",
 												"deliverynote"
+											],
+											"variable": [
+												{
+													"key": "shipmentId",
+													"value": "PUT-IN-YOUR-SHIPMENT-ID"
+												}
 											]
 										}
 									},
@@ -13484,6 +13534,39 @@
 											"value": "ADD_operativeProcessId",
 											"description": "Reference of the operative process you want to filter for"
 										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delivery Note",
+					"item": [
+						{
+							"name": "Get DeliveryNote",
+							"request": {
+								"method": "POST",
+								"header": [],
+
+								  "body": {
+									"mode": "raw",
+									"raw": "{\n  \"companyAddress\": {\n    \"name\": \"Company Address\",\n    \"street\": \"Company Street\",\n    \"houseNumber\": \"1\",\n    \"postalCode\": \"10000\",\n    \"city\": \"Company City\",\n    \"country\": \"Germany\"\n  },\n  \"deliveryAddress\": {\n    \"companyName\": \"Single Delivery Address\",\n    \"firstName\": \"Single\",\n    \"lastName\": \"Single\",\n    \"street\": \"Single Str\",\n    \"houseNumber\": \"2\",\n    \"postalCode\": \"20000\",\n    \"city\": \"Single City\"\n  },\n  \"deliveryAddresses\": [\n    {\n      \"companyName\": \"Invoice Address\",\n      \"firstName\": \"Invoice\",\n      \"lastName\": \"Invoice\",\n      \"street\": \"Invoice Str\",\n      \"houseNumber\": \"3\",\n      \"postalCode\": \"30000\",\n      \"city\": \"Invoice City\",\n      \"addressType\": \"INVOICE_ADDRESS\"\n    },\n    {\n      \"companyName\": \"Postal Address\",\n      \"firstName\": \"Postal\",\n      \"lastName\": \"Postal\",\n      \"street\": \"Postal Str\",\n      \"houseNumber\": \"5\",\n      \"postalCode\": \"50000\",\n      \"city\": \"Postal City\",\n      \"addressType\": \"POSTAL_ADDRESS\"\n    }\n  ],\n  \"items\": [\n    {\n      \"title\": \"Item Title\",\n      \"quantity\": \"12\",\n      \"id\": \"tenantArticleId\",\n      \"substitutes\": \"Title of Substitute Item\"\n    }\n  ],\n  \"orderInformation\": {\n    \"orderNumber\": \"OrderNumber\",\n    \"orderDate\": \"2024-01-01T12:00:00.000000Z\"\n  }\n\n}",
+									"options": {
+									  "raw": {
+										"language": "json"
+									  }
+									}
+								  },
+								"url": {
+									"raw": "{{host}}/api/deliverynotes",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"deliverynotes"
 									]
 								}
 							},
