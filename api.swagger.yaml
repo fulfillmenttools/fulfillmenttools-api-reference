@@ -27668,7 +27668,10 @@ components:
             - loadUnitRefs
           type: object
     ParcelForCreation:
+      additionalProperties: false
       properties:
+        status:
+          $ref: '#/components/schemas/ParcelStatus'
         carrierProduct:
           description: Desired product of given carrier to choose when ordering a label
           type: string
@@ -27707,6 +27710,11 @@ components:
             given under paymentInformation.currency
           type: number
           example: 12.5
+        result:
+          description: >-
+            Possibility to add data from carrier while creating a parcel. Parcel
+            must be in a final status to add this field.
+          $ref: '#/components/schemas/ParcelResult'
       type: object
     ParcelPostalCharge:
       properties:
@@ -35650,6 +35658,30 @@ components:
       required:
         - name
         - version
+    ServiceJobObsoleteActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobObsoleteActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    ServiceJobOpenActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobOpenActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
     ServiceJobInProgressActionEnum:
       enum:
         - StartServiceJob
@@ -35669,6 +35701,14 @@ components:
     ServiceJobFinishedActionEnum:
       enum:
         - FinishServiceJob
+      type: string
+    ServiceJobOpenActionEnum:
+      enum:
+        - OpenServiceJob
+      type: string
+    ServiceJobObsoleteActionEnum:
+      enum:
+        - ObsoleteServiceJob
       type: string
     ServiceJobCancelledActionParameter:
       additionalProperties: false
@@ -35708,6 +35748,8 @@ components:
         - $ref: '#/components/schemas/ServiceJobFinishedActionParameter'
         - $ref: '#/components/schemas/ServiceJobCancelledActionParameter'
         - $ref: '#/components/schemas/ServiceJobWaitingForInputActionParameter'
+        - $ref: '#/components/schemas/ServiceJobObsoleteActionParameter'
+        - $ref: '#/components/schemas/ServiceJobOpenActionParameter'
     FacilityCustomServiceConnectionStatus:
       type: string
       enum:
