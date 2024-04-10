@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "dd18aa4d-a2e2-426e-827d-0a01cac2802e",
+		"_postman_id": "f389df71-7fb0-4cce-8944-a65193a17c35",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -13759,7 +13759,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"name\": \"STATUS_CHANGE\",\n  \"version\": 2,\n  \"status\": \"FINISHED\"\n}",
+											"raw": "{\n  \"name\": \"StartItemReturnJob\",\n  \"version\": 2\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -13786,43 +13786,6 @@
 											]
 										},
 										"description": "Call Action to change the status of a given item return job"
-									},
-									"response": []
-								},
-								{
-									"name": "Add Item Return to Item Return Job",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"name\": \"ADD_ITEM_RETURN\",\n  \"version\": 2,\n  \"itemReturn\": {\n    \"returnFacilityRef\": \"SOME-FACILITY-REF\",\n    \"tenantOrderId\": \"SOME-ID\",\n    \"status\": \"OPEN\",\n    \"scannableCodes\": [\n      \"ScannableCodeItemReturn1\",\n      \"ScannableCodeItemReturn2\"\n    ],\n    \"returnedLineItems\": [\n      {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"scannedCodes\": [\n          \"LineItemCode1\",\n          \"LineItemCode2\"\n        ],\n        \"status\": \"OPEN\",\n        \"reasons\": [\n          {\n            \"reasonLocalized\" : {\n              \"de_DE\": \"Wrong Size\"\n            },\n            \"comment\": \"Just a Comment\"\n          }\n        ]\n      },\n      {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"scannedCodes\": [\n          \"LineItemCode1\",\n          \"LineItemCode2\"\n        ],\n        \"status\": \"OPEN\",\n        \"reasons\": [\n          {\n            \"reasonLocalized\" : {\n              \"de_DE\": \"Wrong Size\"\n            },\n            \"comment\": \"Just a Comment\"\n          }\n        ]\n      }\n    ]\n  }\n}\n\n",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/actions",
-											"host": [
-												"{{host}}"
-											],
-											"path": [
-												"api",
-												"itemreturnjobs",
-												":itemReturnJobId",
-												"actions"
-											],
-											"variable": [
-												{
-													"key": "itemReturnJobId",
-													"value": "PUT-IN-YOUR-ID",
-													"description": "Id of the item return job"
-												}
-											]
-										},
-										"description": "Call actions to add a new item return to a given item return job"
 									},
 									"response": []
 								}
@@ -13951,6 +13914,43 @@
 								"description": "Create a new Item Return Job"
 							},
 							"response": []
+						},
+						{
+							"name": "Add Item Return to Item Return Job",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"itemReturnJobVersion\": 2,\n  \"itemReturnForCreation\": {\n    \"returnFacilityRef\": \"SOME-FACILITY-REF\",\n    \"tenantOrderId\": \"SOME-ID\",\n    \"status\": \"OPEN\",\n    \"scannableCodes\": [\n      \"ScannableCodeItemReturn1\",\n      \"ScannableCodeItemReturn2\"\n    ],\n    \"returnedLineItems\": [\n      {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"scannedCodes\": [\n          \"LineItemCode1\",\n          \"LineItemCode2\"\n        ],\n        \"status\": \"OPEN\",\n        \"reasons\": [\n          {\n            \"reasonLocalized\" : {\n              \"de_DE\": \"Wrong Size\"\n            },\n            \"comment\": \"Just a Comment\"\n          }\n        ]\n      },\n      {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"scannedCodes\": [\n          \"LineItemCode1\",\n          \"LineItemCode2\"\n        ],\n        \"status\": \"OPEN\",\n        \"reasons\": [\n          {\n            \"reasonLocalized\" : {\n              \"de_DE\": \"Wrong Size\"\n            },\n            \"comment\": \"Just a Comment\"\n          }\n        ]\n      }\n    ]\n  }\n}\n\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"itemreturnjobs",
+										":itemReturnJobId",
+										"itemreturns"
+									],
+									"variable": [
+										{
+											"key": "itemReturnJobId",
+											"value": "PUT-IN-YOUR-ID",
+											"description": "Id of the item return job"
+										}
+									]
+								},
+								"description": "Call actions to add a new item return to a given item return job"
+							},
+							"response": []
 						}
 					]
 				},
@@ -13967,7 +13967,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"name\": \"STATUS_CHANGE\",\n  \"itemReturnJobVersion\": 2,\n  \"status\": \"FINISHED\"\n}",
+											"raw": "{\n  \"name\": \"StartItemReturn\",\n  \"itemReturnJobVersion\": 2,\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -14001,94 +14001,6 @@
 											]
 										},
 										"description": "Call actions to change the status of a given item return"
-									},
-									"response": []
-								},
-								{
-									"name": "Delete Item Return Actions",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"name\": \"DELETE_ITEM_RETURN\",\n  \"itemReturnJobVersion\": 2\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId/actions",
-											"host": [
-												"{{host}}"
-											],
-											"path": [
-												"api",
-												"itemreturnjobs",
-												":itemReturnJobId",
-												"itemreturns",
-												":itemReturnId",
-												"actions"
-											],
-											"variable": [
-												{
-													"key": "itemReturnJobId",
-													"value": "PUT-IN-YOUR-ID",
-													"description": "Id of the item return job"
-												},
-												{
-													"key": "itemReturnId",
-													"value": "PUT-IN-YOUR-ID",
-													"description": "Id of the item return"
-												}
-											]
-										},
-										"description": "Call actions to delete a given item return on a given item return job"
-									},
-									"response": []
-								},
-								{
-									"name": "Replace Item Return Line Items Actions",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"name\": \"REPLACE_RETURNED_LINE_ITEMS\",\n  \"itemReturnJobVersion\": 2,\n  \"returnedLineItems\": [\n    {\n      \"itemConditionLocalized\" : { \"de_DE\": \"gefällt nicht\", \"en_US\": \"do not like\"},\n      \"itemConditionComment\" : \"right upper corner damaged\",\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"status\": \"OPEN\",\n      \"scannedCodes\": [\n        \"LineItemCode1\",\n        \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"reasonLocalized\": {\n            \"reason\": \"Wrong Size\",\n            \"comment\": \"Comment\"\n          }\n        }\n      ]\n    },\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"status\": \"OPEN\",\n      \"scannedCodes\": [\n        \"LineItemCode1\",\n        \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"reasonLocalized\": {\n            \"reason\": \"Wrong Size\",\n            \"comment\": \"Comment\"\n          }\n        }\n      ]\n    }\n  ]\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId/actions",
-											"host": [
-												"{{host}}"
-											],
-											"path": [
-												"api",
-												"itemreturnjobs",
-												":itemReturnJobId",
-												"itemreturns",
-												":itemReturnId",
-												"actions"
-											],
-											"variable": [
-												{
-													"key": "itemReturnJobId",
-													"value": "PUT-IN-YOUR-ID",
-													"description": "Id of the item return job"
-												},
-												{
-													"key": "itemReturnId",
-													"value": "PUT-IN-YOUR-ID",
-													"description": "Id of the item return"
-												}
-											]
-										},
-										"description": "Call actions to replace all line items on a given item return on a given item return job"
 									},
 									"response": []
 								}
@@ -14151,6 +14063,100 @@
 										}
 									]
 								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Item Return Actions",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId?itemReturnJobVersion=PUT-IN-VERSION",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"itemreturnjobs",
+										":itemReturnJobId",
+										"itemreturns",
+										":itemReturnId"
+									],
+									"query": [
+										{
+											"key": "itemReturnJobVersion",
+											"value": "PUT-IN-VERSION",
+											"description": "version of the item return job"
+										}
+									],
+									"variable": [
+										{
+											"key": "itemReturnJobId",
+											"value": "PUT-IN-YOUR-ID",
+											"description": "Id of the item return job"
+										},
+										{
+											"key": "itemReturnId",
+											"value": "PUT-IN-YOUR-ID",
+											"description": "Id of the item return"
+										}
+									]
+								},
+								"description": "Call actions to delete a given item return on a given item return job"
+							},
+							"response": []
+						},
+						{
+							"name": "Replace Item Return Line Items Actions",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"itemReturnJobVersion\": 2,\n  \"returnedLineItems\": [\n    {\n      \"itemConditionLocalized\" : { \"de_DE\": \"gefällt nicht\", \"en_US\": \"do not like\"},\n      \"itemConditionComment\" : \"right upper corner damaged\",\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"status\": \"OPEN\",\n      \"scannedCodes\": [\n        \"LineItemCode1\",\n        \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"reasonLocalized\": {\n            \"en_EN\": \"Wrong Size\",\n            \"de_DE\": \"Falsche Größe\"\n          },\n          \"comment\": \"Comment\"\n        }\n      ]\n    },\n    {\n      \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n      \"status\": \"OPEN\",\n      \"scannedCodes\": [\n        \"LineItemCode1\",\n        \"LineItemCode2\"\n      ],\n      \"reasons\": [\n        {\n          \"reasonLocalized\": {\n            \"en_EN\": \"Wrong Size\",\n            \"de_DE\": \"Falsche Größe\"\n          },\n          \"comment\": \"Comment\"\n        }\n      ]\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/itemreturns/:itemReturnId/returnedLineItems",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"itemreturnjobs",
+										":itemReturnJobId",
+										"itemreturns",
+										":itemReturnId",
+										"returnedLineItems"
+									],
+									"variable": [
+										{
+											"key": "itemReturnJobId",
+											"value": "PUT-IN-YOUR-ID",
+											"description": "Id of the item return job"
+										},
+										{
+											"key": "itemReturnId",
+											"value": "PUT-IN-YOUR-ID",
+											"description": "Id of the item return"
+										}
+									]
+								},
+								"description": "Call actions to replace all line items on a given item return on a given item return job"
 							},
 							"response": []
 						}
