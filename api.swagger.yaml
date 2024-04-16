@@ -23254,6 +23254,7 @@ components:
           type: integer
       type: object
     Fence:
+      additionalProperties: false
       properties:
         active:
           type: boolean
@@ -26188,6 +26189,11 @@ components:
                 Id of the global process related to this entity. For example
                 used for starting the GDPR process and others.
               type: string
+            customServices:
+              type: array
+              minItems: 1
+              items:
+                $ref: '#/components/schemas/CustomServiceReference'
             schemaVersion:
               type: number
           required:
@@ -26319,14 +26325,11 @@ components:
         - name
         - version
     CustomServiceReference:
-      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/CustomServiceReferenceForCreation'
       properties:
-        customServiceDefinition:
-          $ref: '#/components/schemas/CustomServiceDefinition'
-        articleItems:
-          items:
-            $ref: '#/components/schemas/ArticleItem'
-          type: array
+        id:
+          type: string
         customServiceItems:
           items:
             $ref: '#/components/schemas/CustomServiceItem'
@@ -26336,7 +26339,8 @@ components:
         - customServiceDefinition
         - articleItems
         - customServiceItems
-    CustomServiceItem:
+        - id
+    CustomServiceReferenceForCreation:
       additionalProperties: false
       properties:
         customServiceDefinition:
@@ -26347,7 +26351,41 @@ components:
           type: array
         customServiceItems:
           items:
+            $ref: '#/components/schemas/CustomServiceItemForCreation'
+          type: array
+      type: object
+      required:
+        - customServiceDefinition
+        - articleItems
+        - customServiceItems
+    CustomServiceItem:
+      allOf:
+        - $ref: '#/components/schemas/CustomServiceItemForCreation'
+      properties:
+        id:
+          type: string
+        customServiceItems:
+          items:
             $ref: '#/components/schemas/CustomServiceItem'
+          type: array
+      type: object
+      required:
+        - id
+        - customServiceItems
+        - articleItems
+        - customServiceDefinition
+    CustomServiceItemForCreation:
+      additionalProperties: false
+      properties:
+        customServiceDefinition:
+          $ref: '#/components/schemas/CustomServiceDefinition'
+        articleItems:
+          items:
+            $ref: '#/components/schemas/ArticleItem'
+          type: array
+        customServiceItems:
+          items:
+            $ref: '#/components/schemas/CustomServiceItemForCreation'
           type: array
       type: object
       required:
@@ -26361,6 +26399,9 @@ components:
             A reference to the custom service to be applied to the orderline
             items
           type: string
+        isBundled:
+          description: if true all articles below this service are intrpreted as a bundle
+          type: boolean
         additionalInformation:
           items:
             properties:
@@ -26448,7 +26489,7 @@ components:
           type: array
           minItems: 1
           items:
-            $ref: '#/components/schemas/CustomServiceReference'
+            $ref: '#/components/schemas/CustomServiceReferenceForCreation'
         paymentInfo:
           $ref: '#/components/schemas/OrderPaymentInfo'
         provisioningTime:
@@ -26934,6 +26975,7 @@ components:
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      additionalProperties: false
       properties:
         active:
           default: false
@@ -28414,6 +28456,7 @@ components:
         - file
       type: object
     Rating:
+      additionalProperties: false
       description: >-
         A rating is used to rate a set of possible facilities against each other
         during routing of orders.
@@ -29693,6 +29736,7 @@ components:
           type: integer
       type: object
     RoutingRule:
+      additionalProperties: false
       properties:
         fences:
           items:
