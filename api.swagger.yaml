@@ -13973,6 +13973,57 @@ paths:
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
       operationId: getItemReturns
       summary: Get item returns
+    post:
+      parameters:
+        - description: Id of the item return job to create the item return for
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddItemReturnToItemReturnJob'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReturnJob'
+          description: ItemReturnJob containing the newly created item return
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Returns
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Create a new item return for an item return job
+      operationId: createItemReturn
+      summary: Creates a new ItemReturn
   /api/itemreturnjobs/{itemReturnJobId}/itemreturns/{itemReturnId}:
     get:
       parameters:
@@ -14045,6 +14096,145 @@ paths:
           </i><br /><br />
       operationId: getItemReturn
       summary: Get item return by id
+    delete:
+      parameters:
+        - description: id of the item return job to delete the item return for
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+        - description: id of the item return you want to delete
+          in: path
+          name: itemReturnId
+          required: true
+          schema:
+            type: string
+        - description: version of the item return job to delete the item return for
+          in: query
+          name: itemReturnJobVersion
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReturn'
+          description: >-
+            item return was found and successfully deleted. Updated item return
+            job is returned.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Returns
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Delete an item return from an item return job
+      operationId: deleteItemReturn
+      summary: Delete an item return from an item return job
+  /api/itemreturnjobs/{itemReturnJobId}/itemreturns/{itemReturnId}/returnedLineItems:
+    put:
+      parameters:
+        - description: id of the item return job the item return belongs to
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+        - description: id of the item return the returned line items belong to
+          in: path
+          name: itemReturnId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplaceReturnedLineItems'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReturnJob'
+          description: >-
+            The returned line items were successfully updated. Updated item
+            return job is returned.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity version conflict
+      tags:
+        - Fulfillment Operations - Returns
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Replace returned line items of an item return of an item return job.
+      operationId: replaceReturnedLineItems
+      summary: replace returned line items
   /api/itemreturnjobs:
     get:
       parameters:
@@ -33642,14 +33832,23 @@ components:
         - returnedLineItems
         - status
         - returnFacilityRef
+    AddItemReturnToItemReturnJob:
+      additionalProperties: false
+      properties:
+        itemReturnForCreation:
+          $ref: '#/components/schemas/ItemReturnForCreation'
+        itemReturnJobVersion:
+          description: Version of the itemReturnJob the itemReturn gets added to
+          minimum: 0
+          type: integer
+      required:
+        - itemReturnForCreation
+        - itemReturnJobVersion
     ItemReturnLineItemForCreation:
       additionalProperties: false
       properties:
         itemConditionLocalized:
           $ref: '#/components/schemas/LocaleString'
-          example:
-            de_DE: Bschädigt
-            en_US: Damaged
         itemConditionComment:
           type: string
           minLength: 1
@@ -33672,86 +33871,9 @@ components:
         - tenantArticleId
         - reasons
         - status
-    ItemReturnLineItemStatus:
-      enum:
-        - OPEN
-        - IN_PROGRESS
-        - WAITING_FOR_INPUT
-        - REJECTED
-        - ACCEPTED
-      type: string
-    ItemReturnJobActionsParameter:
-      anyOf:
-        - $ref: '#/components/schemas/ItemReturnJobStatusChangeActionParameter'
-        - $ref: '#/components/schemas/AddItemReturnActionParameter'
-    ItemReturnJobStatusChangeActionParameter:
+    ReplaceReturnedLineItems:
       additionalProperties: false
       properties:
-        name:
-          $ref: '#/components/schemas/ItemReturnJobStatusChangeAction'
-        version:
-          description: Version of the entity to be changed
-          minimum: 0
-          type: integer
-        status:
-          $ref: '#/components/schemas/ItemReturnJobStatus'
-      required:
-        - name
-        - version
-        - status
-    ItemReturnJobStatusChangeAction:
-      enum:
-        - STATUS_CHANGE
-      type: string
-    AddItemReturnActionParameter:
-      additionalProperties: false
-      properties:
-        name:
-          $ref: '#/components/schemas/AddItemReturnAction'
-        version:
-          description: Version of the entity to be changed
-          minimum: 0
-          type: integer
-        itemReturn:
-          $ref: '#/components/schemas/ItemReturnForCreation'
-      required:
-        - name
-        - version
-        - itemReturn
-    AddItemReturnAction:
-      enum:
-        - ADD_ITEM_RETURN
-      type: string
-    ItemReturnActionsParameter:
-      anyOf:
-        - $ref: '#/components/schemas/ItemReturnStatusChangeActionParameter'
-        - $ref: >-
-            #/components/schemas/ItemReturnReplaceReturnedLineItemsActionParameter
-        - $ref: '#/components/schemas/DeleteItemReturnActionParameter'
-    ItemReturnStatusChangeActionParameter:
-      additionalProperties: false
-      properties:
-        name:
-          $ref: '#/components/schemas/ItemReturnStatusChangeAction'
-        itemReturnJobVersion:
-          description: Version of the entity to be changed
-          minimum: 0
-          type: integer
-        status:
-          $ref: '#/components/schemas/ItemReturnStatus'
-      required:
-        - name
-        - itemReturnJobVersion
-        - status
-    ItemReturnStatusChangeAction:
-      enum:
-        - STATUS_CHANGE
-      type: string
-    ItemReturnReplaceReturnedLineItemsActionParameter:
-      additionalProperties: false
-      properties:
-        name:
-          $ref: '#/components/schemas/ItemReturnReplaceReturnedLineItemsAction'
         itemReturnJobVersion:
           description: Version of the entity to be changed
           minimum: 0
@@ -33762,18 +33884,81 @@ components:
           items:
             $ref: '#/components/schemas/ItemReturnLineItemForCreation'
       required:
-        - name
         - itemReturnJobVersion
         - returnedLineItems
-    ItemReturnReplaceReturnedLineItemsAction:
+    ItemReturnLineItemStatus:
       enum:
-        - REPLACE_RETURNED_LINE_ITEMS
+        - OPEN
+        - IN_PROGRESS
+        - WAITING_FOR_INPUT
+        - REJECTED
+        - ACCEPTED
       type: string
-    DeleteItemReturnActionParameter:
+    ItemReturnJobActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/StartItemReturnJobActionParameter'
+        - $ref: '#/components/schemas/FinishItemReturnJobActionParameter'
+        - $ref: '#/components/schemas/RestartItemReturnJobActionParameter'
+    StartItemReturnJobActionParameter:
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/DeleteItemReturnAction'
+          $ref: '#/components/schemas/StartItemReturnJobActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    StartItemReturnJobActionEnum:
+      enum:
+        - StartItemReturnJob
+      type: string
+    FinishItemReturnJobActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/FinishItemReturnJobActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    FinishItemReturnJobActionEnum:
+      enum:
+        - FinishItemReturnJob
+      type: string
+    RestartItemReturnJobActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/RestartItemReturnJobActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    RestartItemReturnJobActionEnum:
+      enum:
+        - RestartItemReturnJob
+      type: string
+    ItemReturnActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/AnnounceItemReturnActionParameter'
+        - $ref: '#/components/schemas/OpenItemReturnActionParameter'
+        - $ref: '#/components/schemas/StartItemReturnActionParameter'
+        - $ref: '#/components/schemas/PauseItemReturnActionParameter'
+        - $ref: '#/components/schemas/FinishItemReturnActionParameter'
+    AnnounceItemReturnActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/AnnounceItemReturnActionEnum'
         itemReturnJobVersion:
           description: Version of the entity to be changed
           minimum: 0
@@ -33781,9 +33966,73 @@ components:
       required:
         - name
         - itemReturnJobVersion
-    DeleteItemReturnAction:
+    AnnounceItemReturnActionEnum:
       enum:
-        - DELETE_ITEM_RETURN
+        - AnnounceItemReturn
+      type: string
+    OpenItemReturnActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/OpenItemReturnActionEnum'
+        itemReturnJobVersion:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - itemReturnJobVersion
+    OpenItemReturnActionEnum:
+      enum:
+        - OpenItemReturn
+      type: string
+    StartItemReturnActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/StartItemReturnActionEnum'
+        itemReturnJobVersion:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - itemReturnJobVersion
+    StartItemReturnActionEnum:
+      enum:
+        - StartItemReturn
+      type: string
+    PauseItemReturnActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PauseItemReturnActionEnum'
+        itemReturnJobVersion:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - itemReturnJobVersion
+    PauseItemReturnActionEnum:
+      enum:
+        - PauseItemReturn
+      type: string
+    FinishItemReturnActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/FinishItemReturnActionEnum'
+        itemReturnJobVersion:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - itemReturnJobVersion
+    FinishItemReturnActionEnum:
+      enum:
+        - FinishItemReturn
       type: string
     OperativeProcess:
       allOf:
