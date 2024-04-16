@@ -27308,9 +27308,28 @@ components:
               items:
                 $ref: '#/components/schemas/OrderArticleAttributeItem'
               type: array
+            prices:
+              items:
+                $ref: '#/components/schemas/ArticlePrice'
+              type: array
           type: object
       xml:
         name: PickLineItemArticle
+    ArticlePrice:
+      additionalProperties: false
+      type: object
+      properties:
+        pricePerUnit:
+          type: number
+          example: 9.99
+          description: Price value for a given currency per unit
+          minimum: 0
+        currency:
+          description: The currency of the price as an ISO 4217 code.
+          example: EUR
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/CurrencyCode'
     PickingPatchActions:
       properties:
         actions:
