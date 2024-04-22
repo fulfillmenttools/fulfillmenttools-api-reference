@@ -22062,8 +22062,18 @@ components:
         carrierProduct:
           type: string
           example: WORLDWIDE
+        carrierServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarrierServices'
       required:
         - carrierKey
+    CarrierServices:
+      example: SIGNATURE
+      description: Services which should be booked from carrier
+      enum:
+        - SIGNATURE
+      type: string
     DHLV2CarrierCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractCarrierCredentials'
@@ -27034,6 +27044,8 @@ components:
       properties:
         bulkyGoods:
           type: boolean
+        signature:
+          type: boolean
     Parcel:
       additionalProperties: false
       allOf:
@@ -28059,6 +28071,10 @@ components:
                     label
                   type: string
                   example: EXPRESS
+                carrierServices:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CarrierServices'
                 identifier:
                   description: >-
                     Includes information on how to identify Ship from Store
@@ -29895,6 +29911,10 @@ components:
           description: Desired product of given carrier to choose when ordering a label
           type: string
           example: EXPRESS
+        carrierServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarrierServices'
         customAttributes:
           description: >-
             Attributes that can be added to the shipment. These attributes
