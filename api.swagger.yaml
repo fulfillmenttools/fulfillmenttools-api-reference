@@ -18278,6 +18278,19 @@ paths:
             type: array
             items:
               type: string
+        - name: channelRefs
+          required: false
+          in: query
+          explode: true
+          description: >-
+            The channels to included under "channelAdjusted" in the stock
+            summary. Provide up to 50 channelRefs, specify "UNALLOCATED for
+            unallocated stock."
+          schema:
+            maxItems: 50
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: >-
@@ -18369,6 +18382,19 @@ paths:
             type: array
             items:
               type: string
+        - name: channelRefs
+          required: false
+          in: query
+          explode: true
+          description: >-
+            The channels to included under "channelAdjusted" in the stock
+            summary. Provide up to 50 channelRefs, specify "UNALLOCATED for
+            unallocated stock."
+          schema:
+            maxItems: 50
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: >-
@@ -18447,8 +18473,21 @@ paths:
         - name: facilityIds
           required: false
           in: query
-          explode: false
+          explode: true
           schema:
+            type: array
+            items:
+              type: string
+        - name: channelRefs
+          required: false
+          in: query
+          explode: true
+          description: >-
+            The channels to included under "channelAdjusted" in each summary and
+            facility stock. Provide up to 50 channelRefs, specify "UNALLOCATED
+            for unallocated stock."
+          schema:
+            maxItems: 50
             type: array
             items:
               type: string
@@ -37107,6 +37146,19 @@ components:
       required:
         - PICKABLE
         - ACCESSIBLE
+    ChannelStockAvailability:
+      type: object
+      properties:
+        channelRef:
+          type: string
+        availableForPicking:
+          type: number
+        availableOnStock:
+          type: number
+      required:
+        - channelRef
+        - availableForPicking
+        - availableOnStock
     StockSummaryDetails:
       type: object
       properties:
@@ -37156,6 +37208,10 @@ components:
           type: number
         stockOnHand:
           type: number
+        channelAdjusted:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelStockAvailability'
       required:
         - reserved
         - totalAmount
@@ -37171,11 +37227,19 @@ components:
     StockSummary:
       type: object
       properties:
+        includedFacilityRefs:
+          description: >-
+            ALPHA Status!. The facilityRefs that are included in the stock
+            summary.
+          type: array
+          items:
+            type: string
         article:
           $ref: '#/components/schemas/StockSummaryArticle'
         details:
           $ref: '#/components/schemas/StockSummaryDetails'
       required:
+        - includedFacilityRefs
         - article
         - details
     StockSummaries:
@@ -37240,6 +37304,10 @@ components:
           type: number
         stockOnHand:
           type: number
+        channelAdjusted:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChannelStockAvailability'
         facilityId:
           type: string
         facilityName:
