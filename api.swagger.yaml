@@ -16342,6 +16342,37 @@ paths:
             type: array
             items:
               type: string
+        - description: Type of channel you want to filter for
+          in: query
+          name: channel
+          required: false
+          schema:
+            $ref: '#/components/schemas/ServiceJobFilterChannel'
+        - description: Start target date range for service jobs
+          in: query
+          name: startTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: End target date range for service jobs
+          in: query
+          name: endTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: >-
+            Search term you want to get the corresponding service jobs. Search
+            will be performed on multiple fields, like tenantOrderId,
+            consumerName, tenantArticleId and more
+          in: query
+          name: searchTerm
+          required: false
+          schema:
+            type: string
       summary: Get Service Jobs
       description: |-
         <i><center>
@@ -16568,6 +16599,53 @@ paths:
             type: array
             items:
               type: string
+        - description: >-
+            Reference to the statuses you want to get the corresponding linked
+            service jobs
+          in: query
+          name: status
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - description: sort order
+          in: query
+          name: orderBy
+          required: false
+          schema:
+            $ref: '#/components/schemas/LinkedServiceJobsOrderBy'
+        - description: type of channel you want to filter for
+          in: query
+          name: channel
+          required: false
+          schema:
+            $ref: '#/components/schemas/LinkedServiceJobsFilterChannel'
+        - description: Start target date range for linked service jobs
+          in: query
+          name: startTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: End target date range for linked service jobs
+          in: query
+          name: endTargetTime
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: >-
+            Search term you want to get the corresponding linked service jobs.
+            Search will be performed on multiple fields, like tenantOrderId,
+            consumerName, tenantArticleId and more
+          in: query
+          name: searchTerm
+          required: false
+          schema:
+            type: string
       summary: Get LinkedServiceJobs
       description: |-
         <i><center>
@@ -35580,6 +35658,17 @@ components:
         - quantity
         - article
         - serviceJobRef
+    LinkedServiceJobsWithSearchPaths:
+      allOf:
+        - $ref: '#/components/schemas/LinkedServiceJobs'
+      additionalProperties: false
+      properties:
+        searchPaths:
+          type: array
+          items:
+            type: string
+      required:
+        - searchPaths
     LinkedServiceJobsPaginatedResult:
       additionalProperties: false
       type: object
@@ -35590,10 +35679,27 @@ components:
         linkedServiceJobs:
           type: array
           items:
-            $ref: '#/components/schemas/LinkedServiceJobs'
+            $ref: '#/components/schemas/LinkedServiceJobsWithSearchPaths'
       required:
         - total
         - linkedServiceJobs
+    LinkedServiceJobsOrderBy:
+      description: Attribute to order linked service jobs by
+      enum:
+        - LAST_MODIFIED_ASC
+        - LAST_MODIFIED_DESC
+        - TARGET_TIME_ASC
+        - TARGET_TIME_DESC
+      type: string
+      xml:
+        name: LinkedServiceJobsOrderBy
+    LinkedServiceJobsFilterChannel:
+      enum:
+        - COLLECT
+        - SHIPPING
+      type: string
+      xml:
+        name: LinkedServiceJobsFilterChannel
     HealthResult:
       properties:
         status:
