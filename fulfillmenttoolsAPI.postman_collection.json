@@ -8707,7 +8707,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"name\": \"Amazon DE\",\n    \"strategy\": \"IRON_RESERVE\"\n}",
+											"raw": "{\n    \"name\": \"Sales_Channel_1\",\n    \"strategy\": \"REGULAR\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -8715,9 +8715,9 @@
 											}
 										},
 										"url": {
-											"raw": "{{baseUrl}}/api/availabilitychannels",
+											"raw": "{{host}}/api/availabilitychannels",
 											"host": [
-												"{{baseUrl}}"
+												"{{host}}"
 											],
 											"path": [
 												"api",
@@ -8733,9 +8733,9 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{baseUrl}}/api/availabilitychannels/:channelId",
+											"raw": "{{host}}/api/availabilitychannels/:channelId",
 											"host": [
-												"{{baseUrl}}"
+												"{{host}}"
 											],
 											"path": [
 												"api",
@@ -8759,9 +8759,9 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{baseUrl}}/api/availabilitychannels?searchTerm=amazon",
+											"raw": "{{host}}/api/availabilitychannels",
 											"host": [
-												"{{baseUrl}}"
+												"{{host}}"
 											],
 											"path": [
 												"api",
@@ -8770,7 +8770,8 @@
 											"query": [
 												{
 													"key": "searchTerm",
-													"value": "amazon"
+													"value": "Sales",
+													"disabled": true
 												},
 												{
 													"key": "searchTermExact",
@@ -8794,7 +8795,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"name\": \"Amazon DE/AT\",\n    \"strategy\": \"RESTRICT\",\n    \"version\": 1\n}",
+											"raw": "{\n    \"name\": \"Sales_Channel_1\",\n    \"strategy\": \"IRON_RESERVE\",\n    \"version\": 1\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -8802,9 +8803,9 @@
 											}
 										},
 										"url": {
-											"raw": "{{baseUrl}}/api/availabilitychannels/:channelId",
+											"raw": "{{host}}/api/availabilitychannels/:channelId",
 											"host": [
-												"{{baseUrl}}"
+												"{{host}}"
 											],
 											"path": [
 												"api",
@@ -8828,9 +8829,9 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{baseUrl}}/api/availabilitychannels/:channelId",
+											"raw": "{{host}}/api/availabilitychannels/:channelId",
 											"host": [
-												"{{baseUrl}}"
+												"{{host}}"
 											],
 											"path": [
 												"api",
@@ -8851,16 +8852,16 @@
 							]
 						},
 						{
-							"name": "Allocation",
+							"name": "Group",
 							"item": [
 								{
-									"name": "Create Allocation",
+									"name": "Create Group for Channel",
 									"request": {
 										"method": "POST",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"channelRef\": \"\",\n    \"tenantArticleIds\": [\"apple-und-ein-ei\"],\n    \"facilityRef\": \"6c81ff0b-407d-4912-9fb6-00bf5dd68972\",\n    \"initialStockQuantity\": 1234,\n    \"active\": true,\n    \"activePeriod\": {\n        \"start\": \"2024-02-28T00:00:00.000Z\",\n        \"end\": \"2024-03-28T00:00:00.000Z\"\n    }\n}",
+											"raw": "{\n    \"active\": true,\n    \"activePeriod\": {\n        \"start\": \"2024-05-01T00:00:00Z\",\n        \"end\": \"2024-05-31T00:00:00Z\"\n    },\n    \"tenantArticleIds\": [\"article-id-1\"]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -8868,141 +8869,19 @@
 											}
 										},
 										"url": {
-											"raw": "{{baseUrl}}/api/availabilityallocations",
+											"raw": "{{host}}/api/availabilitychannels/:availabilityChannelId/groups",
 											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"availabilityallocations"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Get Allocations",
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/api/availabilityallocations?searchTerm=apple",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"availabilityallocations"
-											],
-											"query": [
-												{
-													"key": "channelRef",
-													"value": "",
-													"disabled": true
-												},
-												{
-													"key": "searchTerm",
-													"value": "apple"
-												},
-												{
-													"key": "searchTermExact",
-													"value": "apple",
-													"disabled": true
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Replace Allocation",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"initialStockQuantity\": 999,\n    \"active\": false,\n    \"activePeriod\": {\n        \"start\": \"2025-02-28T00:00:00.000Z\",\n        \"end\": \"2025-03-28T00:00:00.000Z\"\n    },\n    \"version\": 1\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/api/availabilityallocations/:allocationId",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"availabilityallocations",
-												":allocationId"
-											],
-											"variable": [
-												{
-													"key": "allocationId",
-													"value": "",
-													"description": "YOUR_ALLOC_ID"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Delete Allocation",
-									"request": {
-										"method": "DELETE",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/api/availabilityallocations/:allocationId",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"availabilityallocations",
-												":allocationId"
-											],
-											"variable": [
-												{
-													"key": "allocationId",
-													"value": "",
-													"description": "YOUR_ALLOC_ID"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Create Allocation for Channel",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"tenantArticleIds\": [\"apple-und-ein-ei\"],\n    \"facilityRef\": \"6c81ff0b-407d-4912-9fb6-00bf5dd68972\",\n    \"initialStockQuantity\": 1234,\n    \"active\": true,\n    \"activePeriod\": {\n        \"start\": \"2024-02-28T00:00:00.000Z\",\n        \"end\": \"2024-03-28T00:00:00.000Z\"\n    }\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/api/availabilitychannels/:channelId/allocations",
-											"host": [
-												"{{baseUrl}}"
+												"{{host}}"
 											],
 											"path": [
 												"api",
 												"availabilitychannels",
-												":channelId",
-												"allocations"
+												":availabilityChannelId",
+												"groups"
 											],
 											"variable": [
 												{
-													"key": "channelId",
+													"key": "availabilityChannelId",
 													"value": ""
 												}
 											]
@@ -9011,40 +8890,13 @@
 									"response": []
 								},
 								{
-									"name": "Get Allocations for Channel",
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/api/availabilitychannels/:channelId/allocations",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"availabilitychannels",
-												":channelId",
-												"allocations"
-											],
-											"variable": [
-												{
-													"key": "channelId",
-													"value": "",
-													"description": "YOUR_CHANNEL_ID"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Replace Allocation for Channel",
+									"name": "Replace Group for Channel",
 									"request": {
 										"method": "PUT",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"initialStockQuantity\": 4567,\n    \"active\": false,\n    \"activePeriod\": {\n        \"start\": \"2025-02-28T00:00:00.000Z\",\n        \"end\": \"2025-03-28T00:00:00.000Z\"\n    },\n    \"version\": 1\n}",
+											"raw": "{\n    \"active\": false,\n    \"activePeriod\": {\n        \"start\": \"2024-06-01T00:00:00.000Z\",\n        \"end\": \"2024-06-30T00:00:00.000Z\"\n    },\n    \"version\": 1\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9052,22 +8904,233 @@
 											}
 										},
 										"url": {
-											"raw": "{{baseUrl}}/api/availabilitychannels/:channelId/allocations/:allocationId",
+											"raw": "{{host}}/api/availabilitychannels/:availabilityChannelId/groups/:groupId",
 											"host": [
-												"{{baseUrl}}"
+												"{{host}}"
 											],
 											"path": [
 												"api",
 												"availabilitychannels",
-												":channelId",
+												":availabilityChannelId",
+												"groups",
+												":groupId"
+											],
+											"variable": [
+												{
+													"key": "availabilityChannelId",
+													"value": ""
+												},
+												{
+													"key": "groupId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Group for Channel",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/availabilitychannels/:availabilityChannelId/groups/:groupId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"availabilitychannels",
+												":availabilityChannelId",
+												"groups",
+												":groupId"
+											],
+											"variable": [
+												{
+													"key": "availabilityChannelId",
+													"value": ""
+												},
+												{
+													"key": "groupId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Groups for Channel",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/availabilitychannels/:availabilityChannelId/groups",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"availabilitychannels",
+												":availabilityChannelId",
+												"groups"
+											],
+											"variable": [
+												{
+													"key": "availabilityChannelId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Group for Channel",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/availabilitychannels/:availabilityChannelId/groups/:groupId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"availabilitychannels",
+												":availabilityChannelId",
+												"groups",
+												":groupId"
+											],
+											"variable": [
+												{
+													"key": "availabilityChannelId",
+													"value": ""
+												},
+												{
+													"key": "groupId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Allocation",
+							"item": [
+								{
+									"name": "Create Allocation for Group",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"facilityRef\": \"0bce005c-cada-4528-a51a-b50e896c3b08\",\n    \"initialStockQuantity\": 1234\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/availabilitychannels/:availabilityChannelId/groups/:groupId/allocations",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"availabilitychannels",
+												":availabilityChannelId",
+												"groups",
+												":groupId",
+												"allocations"
+											],
+											"variable": [
+												{
+													"key": "availabilityChannelId",
+													"value": ""
+												},
+												{
+													"key": "groupId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Allocations for Group",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/availabilitychannels/:availabilityChannelId/groups/:groupId/allocations",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"availabilitychannels",
+												":availabilityChannelId",
+												"groups",
+												":groupId",
+												"allocations"
+											],
+											"variable": [
+												{
+													"key": "availabilityChannelId",
+													"value": ""
+												},
+												{
+													"key": "groupId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Replace Allocation for Group",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"initialStockQuantity\": 1000,\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/availabilitychannels/:availabilityChannelId/groups/:groupId/allocations/:allocationId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"availabilitychannels",
+												":availabilityChannelId",
+												"groups",
+												":groupId",
 												"allocations",
 												":allocationId"
 											],
 											"variable": [
 												{
-													"key": "channelId",
-													"value": "",
-													"description": "YOUR_CHANNEL_ID"
+													"key": "availabilityChannelId",
+													"value": ""
+												},
+												{
+													"key": "groupId",
+													"value": ""
 												},
 												{
 													"key": "allocationId",
@@ -9080,27 +9143,32 @@
 									"response": []
 								},
 								{
-									"name": "Delete Allocation for Channel",
+									"name": "Delete Allocation for Group",
 									"request": {
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{baseUrl}}/api/availabilitychannels/:channelId/allocations/:allocationId",
+											"raw": "{{host}}/api/availabilitychannels/:availabilityChannelId/groups/:groupId/allocations/:allocationId",
 											"host": [
-												"{{baseUrl}}"
+												"{{host}}"
 											],
 											"path": [
 												"api",
 												"availabilitychannels",
-												":channelId",
+												":availabilityChannelId",
+												"groups",
+												":groupId",
 												"allocations",
 												":allocationId"
 											],
 											"variable": [
 												{
-													"key": "channelId",
-													"value": "",
-													"description": "YOUR_CHANNEL_ID"
+													"key": "availabilityChannelId",
+													"value": ""
+												},
+												{
+													"key": "groupId",
+													"value": ""
 												},
 												{
 													"key": "allocationId",
