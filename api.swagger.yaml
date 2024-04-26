@@ -1069,6 +1069,106 @@ paths:
         description: create/update packing central configuration
         required: true
       summary: Change the tenant wide packing central configuration
+  /api/configurations/handover:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandoverConfiguration'
+          description: >-
+            Handover configuration was found & you were allowed to access it.
+            The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Handover
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getHandoverConfiguration
+      summary: Read handover configuration
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandoverConfiguration'
+          description: The handover configuration was successfully updated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Handover
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: putHandoverConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandoverConfiguration'
+        description: Desired HandoverConfiguration
+        required: true
+      summary: Change the handover configuration
   /api/configurations/tags/packjob:
     get:
       responses:
@@ -24243,6 +24343,27 @@ components:
         - CONSUMER_REJECTS
         - ORDER_CANCELED
       type: string
+    HandoverConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        availableRefusedReasons:
+          items:
+            $ref: '#/components/schemas/AvailableRefusedReason'
+      required:
+        - availableRefusedReasons
+      type: object
+    AvailableRefusedReason:
+      additionalProperties: false
+      properties:
+        refusedReasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        refusedReason:
+          description: translated refusedReason selected from refusedReasonLocalized
+          example: Broken Item
+          type: string
+      required:
+        - refusedReasonLocalized
     ItemsFulfillabilityConstraintType:
       allOf:
         - $ref: '#/components/schemas/AbstractFulfillabilityConstraintType'
