@@ -27486,6 +27486,8 @@ components:
               $ref: '#/components/schemas/ParcelStatus'
             paymentInformation:
               $ref: '#/components/schemas/PaymentInformation'
+            pickUpInformation:
+              $ref: '#/components/schemas/ParcelPickUpInformation'
             productValue:
               description: >-
                 Monetary value of all goods in this parcel. Needed for sending
@@ -27539,6 +27541,8 @@ components:
           $ref: '#/components/schemas/FacilityAddress'
         paymentInformation:
           $ref: '#/components/schemas/PaymentInformation'
+        pickUpInformation:
+          $ref: '#/components/schemas/ParcelPickUpInformation'
         productValue:
           description: >-
             Monetary value of all goods in this parcel. Needed for sending cross
@@ -27552,6 +27556,20 @@ components:
             must be in a final status to add this field.
           $ref: '#/components/schemas/ParcelResult'
       type: object
+    ParcelPickUpInformation:
+      additionalProperties: false
+      properties:
+        startTime:
+          description: needs to be before end time
+          format: date-time
+          type: string
+        endTime:
+          description: needs to be after start time
+          format: date-time
+          type: string
+      required:
+        - startTime
+        - endTime
     ParcelPostalCharge:
       properties:
         value:
@@ -31983,6 +32001,7 @@ components:
           enum:
             - Number
             - String
+            - Date
         description:
           type: string
         descriptionLocalized:
@@ -31995,11 +32014,14 @@ components:
           enum:
             - dimensions.weight
             - productValue
+            - pickUpInformation.startTime
+            - pickUpInformation.endTime
         dataType:
           type: string
           enum:
             - Number
             - String
+            - Date
         description:
           type: string
         descriptionLocalized:
