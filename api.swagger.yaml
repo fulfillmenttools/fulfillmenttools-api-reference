@@ -24603,6 +24603,8 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/StockPropertyDefinition'
+        stockAvailableUntil:
+          $ref: '#/components/schemas/AvailableUntilDefinition'
         legal:
           $ref: '#/components/schemas/ListingLegal'
         customAttributes:
@@ -24652,6 +24654,31 @@ components:
         - inputType
         - required
       type: object
+    AvailableUntilDefinition:
+      properties:
+        calculationBase:
+          $ref: '#/components/schemas/AvailableUntilCalculationBase'
+        modifier:
+          description: >-
+            Moves the calculated date by the given period, defined in ISO-8601
+            duration notation. Use negative values to move the date backwards.
+            Example: "-P30D" places the "availableUntil" value 30 days before
+            the calculated date.
+          type: string
+          pattern: ^-?P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$
+      required:
+        - calculationBase
+    AvailableUntilCalculationBase:
+      description: >-
+        The base for the calculation of the available until date. If it can't be
+        resolved into a valid date (i.e. missing expiry value), an undefined
+        "availableUntil" is the result
+      enum:
+        - EXPIRY
+        - NOW
+      type: string
+      xml:
+        name: AvailableUntilCalculationBase
     AvailabilityTimeframe:
       properties:
         start:
@@ -25988,6 +26015,8 @@ components:
               nullable: true
               additionalProperties:
                 $ref: '#/components/schemas/StockPropertyDefinition'
+            stockAvailableUntil:
+              $ref: '#/components/schemas/AvailableUntilDefinition'
             legal:
               $ref: '#/components/schemas/ListingLegal'
             customAttributes:
