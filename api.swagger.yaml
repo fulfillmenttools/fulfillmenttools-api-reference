@@ -4826,6 +4826,13 @@ paths:
           required: true
           schema:
             type: string
+        - description: >-
+            Provide the localized names and descriptions for the listing. If not
+            provided the default locale is used., for example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -17113,6 +17120,12 @@ paths:
           schema:
             minLength: 1
             type: string
+        - name: locale
+          required: false
+          in: query
+          schema:
+            type: string
+            $ref: '#/components/schemas/SupportedLocale'
       responses:
         '200':
           description: >-
@@ -24439,6 +24452,11 @@ components:
     ListingAttributeItem:
       allOf:
         - $ref: '#/components/schemas/ArticleAttributeItem'
+      properties:
+        keyLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        valueLocalized:
+          $ref: '#/components/schemas/LocaleString'
     BrandForCreation:
       properties:
         name:
@@ -24556,6 +24574,8 @@ components:
           description: a title describing the article
           example: Adidas Superstar
           type: string
+        titleLocalized:
+          $ref: '#/components/schemas/LocaleString'
         partialStocks:
           type: array
           deprecated: true
@@ -25990,6 +26010,8 @@ components:
               description: a title describing the article
               example: Adidas Superstar
               type: string
+            titleLocalized:
+              $ref: '#/components/schemas/LocaleString'
             tags:
               type: array
               minItems: 0
@@ -36280,13 +36302,15 @@ components:
         attributes:
           type: array
           items:
-            $ref: '#/components/schemas/ArticleAttributeItem'
+            $ref: '#/components/schemas/ListingAttributeItem'
         imageUrl:
           type: string
         tenantArticleId:
           type: string
         title:
           type: string
+        titleLocalized:
+          $ref: '#/components/schemas/LocaleString'
       required:
         - imageUrl
         - tenantArticleId
