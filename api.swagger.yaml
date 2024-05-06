@@ -20696,6 +20696,7 @@ components:
             - ModifyPickLineItem
             - ModifyPickRunLineItem
             - ModifyPackJob
+            - PausePackJob
             - ModifyPackLineItem
             - ModifyFacility
             - ModifyListing
@@ -32266,6 +32267,7 @@ components:
         - CLOSED
         - OBSOLETE
         - CANCELED
+        - PAUSED
       type: string
       xml:
         name: PackJobStatus
@@ -32371,6 +32373,25 @@ components:
       type: object
       xml:
         name: PackLineItem
+    PackLineItemForUpdate:
+      properties:
+        id:
+          type: string
+          description: references the id of the packLineItem of a packJob
+        packed:
+          description: >-
+            The amount of articles that were packed for this packline. Can't be
+            more than picked before.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+        - id
+        - packed
+      type: object
+      xml:
+        name: PackLineItemForUpdate
     PackLineItemArticle:
       allOf:
         - $ref: '#/components/schemas/AbstractArticle'
@@ -32412,6 +32433,7 @@ components:
             anyOf:
               - $ref: '#/components/schemas/ModifyPackJobAction'
               - $ref: '#/components/schemas/ModifyPackLineItemAction'
+              - $ref: '#/components/schemas/PausePackJobAction'
           minItems: 1
           type: array
         version:
@@ -32444,6 +32466,25 @@ components:
           type: object
       xml:
         name: ModifyPackJobAction
+    PausePackJobAction:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: Use value 'PausePackJob', because you want to pause a packjob
+              enum:
+                - PausePackJob
+              type: string
+            packLineItemsUpdate:
+              items:
+                $ref: '#/components/schemas/PackLineItemForUpdate'
+              type: array
+          required:
+            - action
+          type: object
+      xml:
+        name: PausePackJobAction
     ModifyPackLineItemAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
