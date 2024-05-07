@@ -12446,7 +12446,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PackingContainer'
+                $ref: '#/components/schemas/PackingTargetContainer'
           description: >-
             Entity was found & you were allowed to access it. The result is in
             the body.
@@ -12506,7 +12506,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PackingContainer'
+                $ref: '#/components/schemas/PackingTargetContainer'
           description: >-
             Container was found & patch-set has been applied. The patched entity
             is in the body.
@@ -12547,7 +12547,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PackingContainerPatchActions'
+              $ref: '#/components/schemas/PackingTargetContainerPatchActions'
         description: Patch set
         required: true
       summary: Patches a packing container with the given ID
@@ -12580,7 +12580,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PackingContainer'
+                $ref: '#/components/schemas/PackingTargetContainer'
           description: The packing container was successfully created.
         '400':
           content:
@@ -12622,7 +12622,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PackingContainerLineItemForCreation'
+              $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
         description: Packing Container line item object
         required: true
       summary: Add a new packing container line item
@@ -12652,7 +12652,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PackingContainer'
+                $ref: '#/components/schemas/PackingTargetContainer'
           description: >-
             Container was found & patch-set has been applied. The patched entity
             is in the body.
@@ -12703,7 +12703,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PackingContainerActionsParameter'
+              $ref: '#/components/schemas/PackingTargetContainerActionsParameter'
         description: Patch set
         required: true
       summary: Patches a packing container with the given ID
@@ -12782,7 +12782,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/PackingContainer'
+                  $ref: '#/components/schemas/PackingTargetContainer'
           description: >-
             Entity was found & you were allowed to access it. The result is in
             the body.
@@ -12836,7 +12836,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PackingContainer'
+                $ref: '#/components/schemas/PackingTargetContainer'
           description: The packing container was successfully created.
         '400':
           content:
@@ -12878,7 +12878,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PackingContainerForCreation'
+              $ref: '#/components/schemas/PackingTargetContainerForCreation'
         description: Packing Container object
         required: true
       summary: Add a new packing container
@@ -20741,11 +20741,11 @@ components:
             - ModifyStorageLocation
             - ModifyPackingContainerType
             - ModifyPackingContainerTypeIcon
-            - ReplaceCodesInPackingContainer
+            - ReplaceCodesInPackingTargetContainer
             - ReplaceLoadUnitLineItems
-            - AddLineItemToPackingContainer
-            - RemoveLineItemFromPackingContainer
-            - UpdateLineItemOnPackingContainer
+            - AddLineItemToPackingTargetContainer
+            - RemoveLineItemFromPackingTargetContainer
+            - UpdateLineItemOnPackingTargetContainer
             - ModifyCustomService
             - UnlockOrder
           example: <Use the corresponding action, see documentation>
@@ -28226,15 +28226,16 @@ components:
       enum:
         - RESET
       type: string
-    PackingContainerActionsParameter:
+    PackingTargetContainerActionsParameter:
       anyOf:
-        - $ref: '#/components/schemas/UpdatePackingContainerLineItemAction'
-        - $ref: '#/components/schemas/ReplacePackingContainerLineItemCodesAction'
-    UpdatePackingContainerLineItemAction:
+        - $ref: '#/components/schemas/UpdatePackingTargetContainerLineItemAction'
+        - $ref: >-
+            #/components/schemas/ReplacePackingTargetContainerLineItemCodesAction
+    UpdatePackingTargetContainerLineItemAction:
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/UpdatePackingContainerLineItemEnum'
+          $ref: '#/components/schemas/UpdatePackingTargetContainerLineItemEnum'
         version:
           description: Version of the entity to be changed
           minimum: 0
@@ -28243,26 +28244,26 @@ components:
           additionalProperties: false
           properties:
             lineItem:
-              $ref: '#/components/schemas/PackingContainerLineItem'
+              $ref: '#/components/schemas/PackingTargetContainerLineItem'
           required:
             - lineItem
       required:
         - version
         - payload
         - name
-    UpdatePackingContainerLineItemEnum:
+    UpdatePackingTargetContainerLineItemEnum:
       enum:
         - UpdateLineItem
       type: string
-    ReplacePackingContainerLineItemCodesEnum:
+    ReplacePackingTargetContainerLineItemCodesEnum:
       enum:
         - ReplaceLineItemCodes
       type: string
-    ReplacePackingContainerLineItemCodesAction:
+    ReplacePackingTargetContainerLineItemCodesAction:
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/ReplacePackingContainerLineItemCodesEnum'
+          $ref: '#/components/schemas/ReplacePackingTargetContainerLineItemCodesEnum'
         version:
           description: Version of the entity to be changed
           minimum: 0
@@ -32916,10 +32917,10 @@ components:
           type: object
       xml:
         name: AssignFacilityToProcessAction
-    PackingContainer:
+    PackingTargetContainer:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
-        - $ref: '#/components/schemas/PackingContainerForCreation'
+        - $ref: '#/components/schemas/PackingTargetContainerForCreation'
       properties:
         description:
           type: string
@@ -32950,7 +32951,7 @@ components:
           $ref: '#/components/schemas/LocaleString'
         lineItems:
           items:
-            $ref: '#/components/schemas/PackingContainerLineItem'
+            $ref: '#/components/schemas/PackingTargetContainerLineItem'
       required:
         - id
         - nameLocalized
@@ -32959,7 +32960,7 @@ components:
         - packJobRef
         - lineItems
       type: object
-    PackingContainerForCreation:
+    PackingTargetContainerForCreation:
       properties:
         codes:
           items:
@@ -32969,7 +32970,7 @@ components:
           type: array
         lineItems:
           items:
-            $ref: '#/components/schemas/PackingContainerLineItemForCreation'
+            $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
         packingContainerTypeRef:
           type: string
       required:
@@ -33007,15 +33008,18 @@ components:
         - POSTAL_ADDRESS
         - PARCEL_LOCKER
         - INVOICE_ADDRESS
-    PackingContainerPatchActions:
+    PackingTargetContainerPatchActions:
       properties:
         actions:
           items:
             anyOf:
-              - $ref: '#/components/schemas/ReplaceCodesInPackingContainerAction'
-              - $ref: '#/components/schemas/AddLineItemToPackingContainerAction'
-              - $ref: '#/components/schemas/RemoveLineItemFromPackingContainerAction'
-              - $ref: '#/components/schemas/UpdateLineItemOnPackingContainerAction'
+              - $ref: >-
+                  #/components/schemas/ReplaceCodesInPackingTargetContainerAction
+              - $ref: '#/components/schemas/AddLineItemToPackingTargetContainerAction'
+              - $ref: >-
+                  #/components/schemas/RemoveLineItemFromPackingTargetContainerAction
+              - $ref: >-
+                  #/components/schemas/UpdateLineItemOnPackingTargetContainerAction
           minItems: 1
           type: array
         version:
@@ -33030,18 +33034,18 @@ components:
         - actions
       type: object
       xml:
-        name: PackingContainerPatchActions
-    ReplaceCodesInPackingContainerAction:
+        name: PackingTargetContainerPatchActions
+    ReplaceCodesInPackingTargetContainerAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
               description: >-
-                Use ReplaceCodesInPackingContainer to add a code to an existing
-                packing container
+                Use ReplaceCodesInPackingTargetContainer to add a code to an
+                existing packing container
               enum:
-                - ReplaceCodesInPackingContainer
+                - ReplaceCodesInPackingTargetContainer
               type: string
             codes:
               items:
@@ -33053,38 +33057,38 @@ components:
             - action
           type: object
       xml:
-        name: ReplaceCodesInPackingContainer
-    AddLineItemToPackingContainerAction:
+        name: ReplaceCodesInPackingTargetContainer
+    AddLineItemToPackingTargetContainerAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
               description: >-
-                Use AddLineItemToPackingContainer to add a line item to an
+                Use AddLineItemToPackingTargetContainer to add a line item to an
                 existing packing container
               enum:
-                - AddLineItemToPackingContainer
+                - AddLineItemToPackingTargetContainer
               type: string
             lineItem:
-              $ref: '#/components/schemas/PackingContainerLineItemForCreation'
+              $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
           required:
             - action
             - lineItem
           type: object
       xml:
-        name: AddLineItemToPackingContainer
-    RemoveLineItemFromPackingContainerAction:
+        name: AddLineItemToPackingTargetContainer
+    RemoveLineItemFromPackingTargetContainerAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
               description: >-
-                Use RemoveLineItemFromPackingContainer to remove a line item
-                from an existing packing container
+                Use RemoveLineItemFromPackingTargetContainer to remove a line
+                item from an existing packing container
               enum:
-                - RemoveLineItemFromPackingContainer
+                - RemoveLineItemFromPackingTargetContainer
               type: string
             lineItemRef:
               description: Id of the PackLineItem you want to remove.
@@ -33094,30 +33098,30 @@ components:
             - lineItemRef
           type: object
       xml:
-        name: RemoveLineItemFromPackingContainer
-    UpdateLineItemOnPackingContainerAction:
+        name: RemoveLineItemFromPackingTargetContainer
+    UpdateLineItemOnPackingTargetContainerAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
               description: >-
-                Use UpdateLineItemOnPackingContainer to change a line item on an
-                existing packing container
+                Use UpdateLineItemOnPackingTargetContainer to change a line item
+                on an existing packing container
               enum:
-                - UpdateLineItemOnPackingContainer
+                - UpdateLineItemOnPackingTargetContainer
               type: string
             lineItem:
-              $ref: '#/components/schemas/PackingContainerLineItem'
+              $ref: '#/components/schemas/PackingTargetContainerLineItem'
           required:
             - action
             - lineItem
           type: object
       xml:
-        name: UpdateLineItemOnPackingContainer
-    PackingContainerLineItem:
+        name: UpdateLineItemOnPackingTargetContainer
+    PackingTargetContainerLineItem:
       allOf:
-        - $ref: '#/components/schemas/PackingContainerLineItemForCreation'
+        - $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
       properties:
         id:
           description: >-
@@ -33128,10 +33132,12 @@ components:
           type: string
       required:
         - id
-    PackingContainerLineItemForCreation:
+        - article
+        - quantity
+    PackingTargetContainerLineItemForCreation:
       properties:
         article:
-          $ref: '#/components/schemas/PackingContainerLineItemArticle'
+          $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
         customAttributes:
           description: >-
             Attributes that can be added to the line item. These attributes
@@ -33153,18 +33159,21 @@ components:
             description: Codes, that identify the article
             type: string
           type: array
-    PackingContainerLineItemArticle:
+      required:
+        - article
+        - quantity
+    PackingTargetContainerLineItemArticle:
       allOf:
         - $ref: '#/components/schemas/AbstractArticle'
         - properties:
             attributes:
               items:
-                $ref: '#/components/schemas/PackingContainerAttributeItem'
+                $ref: '#/components/schemas/PackingTargetContainerAttributeItem'
               type: array
           type: object
       xml:
-        name: PackingContainerLineItemArticle
-    PackingContainerAttributeItem:
+        name: PackingTargetContainerLineItemArticle
+    PackingTargetContainerAttributeItem:
       allOf:
         - $ref: '#/components/schemas/ArticleAttributeItem'
     PackingContainerType:
