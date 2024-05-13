@@ -24134,17 +24134,17 @@ components:
       properties:
         article:
           $ref: '#/components/schemas/HandoverLineItemArticle'
-        handedOverQuantity:
-          description: The amount of articles that were picked for this handover line item.
-          example: 20
-          format: int64
-          minimum: 0
-          type: integer
         quantity:
-          description: quantity of the specific article that has been ordered
+          description: quantity of the specific item that has been provided for handover
           example: 21
           format: int64
           minimum: 1
+          type: integer
+        handedOverQuantity:
+          description: quantity of the specific item that has been handed over
+          example: 20
+          format: int64
+          minimum: 0
           type: integer
         substituteLineItems:
           description: >-
@@ -24157,7 +24157,7 @@ components:
               under our SLA regulations. For details on this topic please check our
               <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
           items:
-            $ref: '#/components/schemas/SubstituteLineItem'
+            $ref: '#/components/schemas/HandoverSubstituteLineItem'
           type: array
         tags:
           items:
@@ -24183,6 +24183,29 @@ components:
           type: object
       xml:
         name: HandoverLineItemArticle
+    HandoverSubstituteLineItem:
+      allOf:
+        - $ref: '#/components/schemas/SubstituteLineItem'
+        - properties:
+            quantity:
+              description: >-
+                quantity of the specific item to substitute the original line
+                item that has been provided for handover
+              example: 21
+              format: int64
+              minimum: 1
+              type: integer
+            handedOverQuantity:
+              description: >-
+                quantity of the specific item to substitute the original line
+                item that has been handed over
+              example: 20
+              format: int64
+              minimum: 0
+              type: integer
+      required:
+        - quantity
+        - article
     Handoverjob:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
