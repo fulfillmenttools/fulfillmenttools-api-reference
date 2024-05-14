@@ -30021,6 +30021,10 @@ components:
           items:
             $ref: '#/components/schemas/RoutingPlanLineItem'
           type: array
+        transfers:
+          items:
+            $ref: '#/components/schemas/Transfer'
+          type: array
         expectedLineItems:
           items:
             $ref: '#/components/schemas/ExpectedLineItem'
@@ -30134,6 +30138,18 @@ components:
         - finalizeRun
         - processId
       type: object
+    Transfer:
+      properties:
+        transferId:
+          type: string
+        transferType:
+          type: string
+          enum:
+            - SENDER
+            - RECEIVER
+      required:
+        - transferId
+        - transferType
     RoutingPlanStatusReason:
       anyOf:
         - $ref: '#/components/schemas/RoutingPlanObsoleteStatusReason'
