@@ -30021,6 +30021,10 @@ components:
           items:
             $ref: '#/components/schemas/RoutingPlanLineItem'
           type: array
+        expectedLineItems:
+          items:
+            $ref: '#/components/schemas/ExpectedLineItem'
+          type: array
         orderRef:
           description: >-
             The id of the order that lead to the creation of this pickjob. Can
@@ -30161,6 +30165,14 @@ components:
         - facilityRef
         - targetAddress
         - deliveryEvent
+    ExpectedLineItem:
+      allOf:
+        - $ref: '#/components/schemas/OrderLineItem'
+      properties:
+        facilityRef:
+          type: string
+      required:
+        - facilityRef
     RoutingPlanLineItem:
       allOf:
         - $ref: '#/components/schemas/OrderLineItem'
