@@ -12816,6 +12816,287 @@ paths:
           </i><br /><br />
       operationId: updateExpiry
       summary: Update Expiry
+  /api/externalactions:
+    get:
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: Filter by the given group or groups
+          explode: true
+          in: query
+          name: groups
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - description: Filter by the given processRef
+          in: query
+          name: processRef
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ExternalAction'
+                type: array
+          description: Returning the list of external actions available.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: External action not found
+      tags:
+        - Core - Processes - External Actions
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />Returns a list with all external actions.
+      operationId: getExternalActions
+      summary: Get the external actions related to a process
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalAction'
+          description: The external action was successfully created.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: External action not found
+      tags:
+        - Core - Processes - External Actions
+      description: Creates a new external action for a process.
+      operationId: postExternalAction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalActionForCreation'
+        description: The external action to be created
+        required: true
+      summary: Create an external action
+  /api/externalactions/{externalActionId}:
+    get:
+      parameters:
+        - description: Id of the external action you want to get
+          in: path
+          name: externalActionId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ExternalAction'
+                type: array
+          description: >-
+            External action was found & you are allowed to get it. The result is
+            in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: External action not found
+      tags:
+        - Core - Processes - External Actions
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />Returns an external action with the given id if found.
+      operationId: getExternalAction
+      summary: Get an external action
+    delete:
+      parameters:
+        - description: ID of the external action that you want delete
+          in: path
+          name: externalActionId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: External action was found & you were allowed to delete it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: External action not found
+      tags:
+        - Core - Processes - External Actions
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: deleteExternalAction
+      summary: Delete an external action with the given id.
+    put:
+      parameters:
+        - description: ID of the external action that you want update
+          in: path
+          name: externalActionId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ExternalAction'
+          description: External action was found & you are allowed to update it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Facility not found
+      tags:
+        - Core - Processes - External Actions
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />Replaces the external action with the provided in the body.
+      operationId: putExternalAction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalActionForReplacement'
+        description: Updates an external action
+        required: true
+      summary: Replace an external action
   /api/health:
     get:
       responses:
@@ -26750,6 +27031,13 @@ components:
           items:
             type: string
           type: array
+        externalActionRefs:
+          description: >-
+            References to the external actions connected to this process (if
+            any).
+          items:
+            type: string
+          type: array
       required:
         - gdprCleanupDate
         - id
@@ -32097,6 +32385,114 @@ components:
         - NUMBER
         - INT
       type: string
+    ExternalActionType:
+      type: string
+      description: The type of an external action
+      enum:
+        - BLANK_LINK
+    ExternalActionDefinition:
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/ExternalActionType'
+        url:
+          type: string
+      required:
+        - type
+        - url
+      type: object
+      xml:
+        name: ExternalActionDefinition
+    ExternalActionForCreation:
+      additionalProperties: false
+      properties:
+        processRef:
+          description: Id of the global process related to this entity.
+          type: string
+        nameLocalized:
+          description: The name of this external action localized
+          example: '{ en_US: ''SomeName'' }'
+          $ref: '#/components/schemas/LocaleString'
+        groups:
+          items:
+            description: User-defined text strings for grouping external actions
+            type: string
+          type: array
+        action:
+          $ref: '#/components/schemas/ExternalActionDefinition'
+      required:
+        - processRef
+        - nameLocalized
+        - groups
+        - action
+      type: object
+      xml:
+        name: ExternalActionForCreation
+    ExternalActionForReplacement:
+      additionalProperties: false
+      properties:
+        version:
+          example: 42
+          format: int64
+          type: integer
+        nameLocalized:
+          description: The name of this external action localized
+          example: '{ en_US: ''SomeName'' }'
+          $ref: '#/components/schemas/LocaleString'
+        groups:
+          items:
+            description: User-defined text strings for grouping external actions
+            type: string
+          type: array
+        action:
+          $ref: '#/components/schemas/ExternalActionDefinition'
+      required:
+        - version
+        - nameLocalized
+        - groups
+        - action
+      type: object
+      xml:
+        name: ExternalActionForReplacement
+    ExternalAction:
+      allOf:
+        - $ref: '#/components/schemas/ExternalActionForReplacement'
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          description: >-
+            The id of this external action. It is generated during creation
+            automatically and suits as the primary identifier of the described
+            entity.
+          example: LGMl2DuvPnfPoSHhYFOm
+          type: string
+        processRef:
+          description: Id of the global process related to this entity.
+          type: string
+        name:
+          description: The name of this external action.
+          type: string
+      required:
+        - id
+        - name
+      type: object
+      xml:
+        name: ExternalAction
+    ExternalActions:
+      additionalProperties: false
+      properties:
+        externalActions:
+          items:
+            $ref: '#/components/schemas/ExternalAction'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
+      required:
+        - externalActions
+        - total
     ZoneForCreation:
       properties:
         name:
