@@ -32598,6 +32598,72 @@ components:
       required:
         - externalActions
         - total
+    AbstractReasonForCreation:
+      properties:
+        reason:
+          description: Text explaining the reason for a supported action.
+          example: Rerouted because of an issue in the Facility.
+          type: string
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      required:
+        - reason
+        - reasonLocalized
+      type: object
+      xml:
+        name: AbstractReasonForCreation
+    AbstractReasonForModification:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReasonForCreation'
+      properties:
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+      type: object
+      xml:
+        name: AbstractReasonForModification
+    AbstractReason:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReasonForCreation'
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          description: The id of the Reason
+          type: string
+        action:
+          description: The action this reason can be attached to.
+          type: string
+      required:
+        - id
+        - action
+      type: object
+      xml:
+        name: AbstractReason
+    AbstractReasons:
+      properties:
+        reasons:
+          items:
+            $ref: '#/components/schemas/AbstractReason'
+          type: array
+        hasNextPage:
+          description: True if there are more results after the current page
+          type: boolean
+        total:
+          description: Total number of found entities for this query
+          type: integer
+      required:
+        - reasons
+        - hasNextPage
+        - total
+      type: object
+      xml:
+        name: AbstractReasons
     ZoneForCreation:
       properties:
         name:
