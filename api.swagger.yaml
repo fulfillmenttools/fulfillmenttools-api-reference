@@ -22285,6 +22285,11 @@ components:
               format: int64
               minimum: 0
               type: integer
+            pickedAt:
+              description: Date when the line has been picked.
+              example: '2024-02-03T08:45:51.525Z'
+              format: date-time
+              type: string
             status:
               $ref: '#/components/schemas/PickLineItemStatus'
             substituteLineItems:
@@ -25443,6 +25448,11 @@ components:
               format: int64
               minimum: 0
               type: integer
+            pickedAt:
+              description: Date when the line has been picked.
+              example: '2024-02-03T08:45:51.525Z'
+              format: date-time
+              type: string
             customAttributes:
               description: >-
                 Attributes that can be added to the pick ine item. These
@@ -26420,6 +26430,7 @@ components:
         - $ref: '#/components/schemas/PickJobRestartActionParameter'
         - $ref: '#/components/schemas/PickJobResetActionParameter'
         - $ref: '#/components/schemas/PickJobObsoleteActionParameter'
+        - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
     PickJobAbortActionParameter:
       additionalProperties: false
       properties:
@@ -26464,6 +26475,88 @@ components:
       required:
         - name
         - version
+    ModifyPickLineItemsActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ModifyPickJobLineItemsActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        pickJobLineItemUpdates:
+          items:
+            $ref: '#/components/schemas/PickLineItemUpdate'
+          minItems: 1
+      required:
+        - name
+        - version
+        - pickJobLineItemUpdates
+    PickLineItemUpdate:
+      properties:
+        id:
+          description: >-
+            The id of this lineItem. It is generated during creation
+            automatically and suits as the primary identifier of the described
+            entity.
+          example: climk4dcQFiPdA5ULuhS
+          type: string
+        picked:
+          description: The amount of articles that were picked for this pickline.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+        pickedAt:
+          description: >-
+            Date when the line has been picked. example:
+            '2024-02-03T08:45:51.525Z' format: date-time type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the pick ine item. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        stockEmptied:
+          example: true
+          type: boolean
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+            type: array
+        partialStockLocations:
+          items:
+            $ref: '#/components/schemas/PickJobLineItemPartialStockLocationForUpdate'
+        scannedCodes:
+          description: Scanned Codes of the given picked line item
+          items:
+            $ref: '#/components/schemas/PickLineItemScannedCode'
+          minItems: 0
+        status:
+          $ref: '#/components/schemas/PickLineItemStatus'
+        secondaryPicked:
+          type: integer
+        substituteLineItems:
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+              /></center> <br /> <i>This part of the API is currently under development.
+              That means that this endpoint, model, etc. can contain breaking changes
+              and / or might not be available at all times in your API instance. It
+              could disappear also without warning. Thus, it currently does not fall
+              under our SLA regulations. For details on this topic please check our
+              <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+          items:
+            $ref: '#/components/schemas/SubstituteLineItemForCreation'
+          type: array
+      required:
+        - id
+      type: object
+      additionalProperties: false
+    ModifyPickJobLineItemsActionEnum:
+      enum:
+        - MODIFY_PICK_JOB_LINE_ITEMS
+      type: string
     PickJobObsoleteActionEnum:
       enum:
         - OBSOLETE
@@ -28667,6 +28760,11 @@ components:
             lowest number is the most preferrable substitute.
           minimum: 0
           type: number
+        pickedAt:
+          description: Date when the line has been picked.
+          example: '2024-02-03T08:45:51.525Z'
+          format: date-time
+          type: string
         quantity:
           description: >-
             quantity of the specific article that has been picked to substitute
@@ -28710,6 +28808,11 @@ components:
           type: integer
         tenantArticleId:
           description: TenantArticleId of the substitute article
+          type: string
+        pickedAt:
+          description: Date when the line has been picked.
+          example: '2024-02-03T08:45:51.525Z'
+          format: date-time
           type: string
       required:
         - quantity
