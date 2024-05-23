@@ -15321,6 +15321,289 @@ paths:
           </i><br /><br />
       operationId: getOperativeProcessById
       summary: Get operativeProcess by ID
+  /api/cancelationreasons:
+    get:
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelationReasons'
+          description: >-
+            Cancelation reasons were found & you were allowed to access them.
+            The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: User not found
+      tags:
+        - DOMS - Cancelation reasons
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getCancelationReasons
+      summary: Get a list with all cancelation reasons
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelationReason'
+          description: >-
+            The cancelation reason has been successfully created. The Location
+            header includes the URL of the document.
+        '303':
+          description: >-
+            The RerouteDescription already exists. The Location header contains
+            the URL of the document.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Cancelation reasons
+      operationId: postCancelationReason
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelationReasonForCreation'
+        description: Cancelation reason
+        required: true
+      summary: Post a new cancelation reason
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+  /api/cancelationreasons/{cancelationReasonId}:
+    get:
+      parameters:
+        - description: Id of the cancelation reason you wish to retrieve
+          in: path
+          name: cancelationReasonId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelationReason'
+          description: >-
+            Cancelation reason was found & you were allowed to access it. The
+            result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: User not found
+      tags:
+        - DOMS - Cancelation reasons
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: getCancelationReasonById
+      summary: Get a cancelation reason with the given id
+    put:
+      parameters:
+        - description: ID of the cancelation reason you intend to modify
+          in: path
+          name: cancelationReasonId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelationReasonForModification'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelationReason'
+          description: >-
+            Cancelation reason was found & you were allowed to access it. The
+            result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Cancelation reason not found
+      tags:
+        - DOMS - Cancelation reasons
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: putCancelationReason
+      summary: Update a reroute description
+    delete:
+      parameters:
+        - description: ID of the cancelation reason you intend to delete
+          in: path
+          name: cancelationReasonId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            The cancelation reason was found, and you have been granted
+            permission to delete it.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Cancelation reason not found
+      tags:
+        - DOMS - Cancelation reasons
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: deleteCancelationReason
+      summary: Delete a cancelation reason
   /api/configurations/routing/toolkit/fences:
     get:
       parameters:
@@ -16741,6 +17024,14 @@ paths:
       tags:
         - DOMS - Orders
       operationId: cancelOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                cancelationReasonId:
+                  description: ID of the cancelation reason
+                  type: string
       summary: Cancel an order with the given ID
       deprecated: true
       description: >-
@@ -32819,6 +33110,7 @@ components:
         - externalActions
         - total
     AbstractReasonForCreation:
+      additionalProperties: false
       properties:
         reason:
           description: Text explaining the reason for a supported action.
@@ -32833,9 +33125,14 @@ components:
       xml:
         name: AbstractReasonForCreation
     AbstractReasonForModification:
-      allOf:
-        - $ref: '#/components/schemas/AbstractReasonForCreation'
+      additionalProperties: false
       properties:
+        reason:
+          description: Text explaining the reason for a supported action.
+          example: Rerouted because of an issue in the Facility.
+          type: string
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -32845,6 +33142,8 @@ components:
           type: integer
       required:
         - version
+        - reason
+        - reasonLocalized
       type: object
       xml:
         name: AbstractReasonForModification
@@ -34056,6 +34355,8 @@ components:
         - $ref: '#/components/schemas/OrderForCreation'
         - $ref: '#/components/schemas/VersionedResource'
         - properties:
+            cancelationReason:
+              $ref: '#/components/schemas/CancelationReason'
             anonymized:
               description: Indicates if gdpr related data was anonymized
               example: false
@@ -37117,6 +37418,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/AbstractOrderActionsParameter'
       properties:
+        cancelationReasonId:
+          description: ID of the cancelation reason
+          type: string
         name:
           enum:
             - CANCEL
@@ -37265,6 +37569,44 @@ components:
           default: 1440
           minimum: 5
           description: The amount of minutes after which an automated reroute is executed
+    CancelationReasonForCreation:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReasonForCreation'
+      type: object
+      xml:
+        name: CancelationReasonForCreation
+    CancelationReason:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReason'
+      properties:
+        action:
+          enum:
+            - CANCELATION
+          type: string
+      required:
+        - action
+      type: object
+      xml:
+        name: CancelationReason
+    CancelationReasons:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReasons'
+      properties:
+        reasons:
+          items:
+            $ref: '#/components/schemas/CancelationReason'
+          type: array
+      required:
+        - reasons
+      type: object
+      xml:
+        name: CancelationReasons
+    CancelationReasonForModification:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReasonForModification'
+      type: object
+      xml:
+        name: CancelationReasonForModification
     InventoryArticle:
       type: object
       properties:
