@@ -12535,6 +12535,83 @@ paths:
           </i><br /><br />
       operationId: itemReturnActions
       summary: Actions for a ItemReturn
+  /api/itemreturnjobs/{itemReturnJobId}/itemreturns/{itemReturnId}/returnedLineItems/{returnedLineItemId}:
+    patch:
+      parameters:
+        - description: id of the Item Return Job
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+        - description: id of the Item Return
+          in: path
+          name: itemReturnId
+          required: true
+          schema:
+            type: string
+        - description: id of the returnedLineItem
+          in: path
+          name: returnedLineItemId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemReturnLineItemForUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReturnJob'
+          description: Updated ItemReturn
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Returns
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: updateItemReturnLineItem
+      summary: Patch for a ItemReturn LineItem
   /api/configurations/expiry:
     get:
       responses:
@@ -31724,6 +31801,18 @@ components:
         - tenantArticleId
         - reasons
         - status
+    ItemReturnLineItemForUpdate:
+      additionalProperties: false
+      properties:
+        status:
+          $ref: '#/components/schemas/ItemReturnLineItemStatus'
+        itemReturnJobVersion:
+          type: number
+          example: 42
+          description: version of the overlying itemReturnJob
+      required:
+        - status
+        - itemReturnJobVersion
     ReplaceReturnedLineItems:
       additionalProperties: false
       properties:
