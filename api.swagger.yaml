@@ -34964,6 +34964,18 @@ components:
           example: 42
           type: integer
       type: object
+    RoutingPlanHistory:
+      properties:
+        status:
+          $ref: '#/components/schemas/RoutingPlanStatus'
+        created:
+          description: Information about the time, when a routing plan status is set
+          example: '2024-05-12T08:45:50.525Z'
+          format: date-time
+          type: string
+      required:
+        - status
+        - created
     DecisionLog:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -36800,9 +36812,20 @@ components:
         status:
           $ref: '#/components/schemas/RoutingPlanStatus'
         statusHistory:
+          deprecated: true
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated
+             For more detailed information, use the History field. Saves all status changes when creating or updating a routing plan
           type: array
           items:
             $ref: '#/components/schemas/RoutingPlanStatus'
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingPlanHistory'
         statusReasons:
           type: array
           items:
