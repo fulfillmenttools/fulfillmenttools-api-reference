@@ -11827,6 +11827,15 @@ paths:
   /api/itemreturns:
     get:
       parameters:
+        - description: >-
+            Search term you want to get the corresponding item returns. Search
+            will be performed on multiple fields, including return id, tenant
+            order id, customer name, tenant article ids, artile titles
+          in: query
+          name: searchTerm
+          required: false
+          schema:
+            type: string
         - description: facilities to filter the results
           in: query
           name: facilityRefs
@@ -11838,6 +11847,16 @@ paths:
         - description: ItemReturnStatus of an included ItemReturn to filter the results
           in: query
           name: itemReturnStatus
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - description: >-
+            ItemReturnLineItemStatus of an included itemReturnLineItem to filter
+            the results
+          in: query
+          name: itemReturnLineItemStatus
           required: false
           schema:
             type: array
@@ -31917,6 +31936,7 @@ components:
           items:
             type: string
           type: array
+          minItems: 0
       type: object
     ItemReturnJobForCreation:
       additionalProperties: false
@@ -32128,6 +32148,17 @@ components:
         - returnedLineItems
         - status
         - returnFacilityRef
+    ItemReturnsWithSearchPaths:
+      allOf:
+        - $ref: '#/components/schemas/ItemReturn'
+      additionalProperties: false
+      properties:
+        searchPaths:
+          type: array
+          items:
+            type: string
+      required:
+        - searchPaths
     AddItemReturnToItemReturnJob:
       additionalProperties: false
       properties:
@@ -32206,7 +32237,7 @@ components:
       properties:
         itemReturns:
           items:
-            $ref: '#/components/schemas/ItemReturn'
+            $ref: '#/components/schemas/ItemReturnsWithSearchPaths'
           type: array
         totalCount:
           description: Total number of found entities for this query
