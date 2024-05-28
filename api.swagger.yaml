@@ -36826,20 +36826,6 @@ components:
       type: object
       xml:
         name: DecisionLogRef
-    RerouteDescriptionForCreation:
-      properties:
-        reason:
-          description: Text explaining the reason for rerouting an order.
-          example: Rerouted because of an issue in the Facility.
-          type: string
-        reasonLocalized:
-          $ref: '#/components/schemas/LocaleString'
-      required:
-        - reason
-        - reasonLocalized
-      type: object
-      xml:
-        name: RerouteDescriptionForCreation
     RoutingConfiguration:
       additionalProperties: false
       description: >-
@@ -36987,54 +36973,6 @@ components:
       type: object
       xml:
         name: RoutingConfigurationsPatchActions
-    RerouteDescriptionForModification:
-      allOf:
-        - $ref: '#/components/schemas/RerouteDescriptionForCreation'
-      properties:
-        version:
-          description: >-
-            The version of the document to be used in optimistic locking
-            mechanisms.
-          example: 42
-          format: int64
-          type: integer
-      required:
-        - version
-      type: object
-      xml:
-        name: RerouteDescriptionForModification
-    RerouteDescription:
-      allOf:
-        - $ref: '#/components/schemas/RerouteDescriptionForModification'
-        - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        id:
-          description: The id of the RerouteReasonDescription
-          example: LGMl2DuvPnfPoSHhYFOm
-          type: string
-      required:
-        - id
-      type: object
-      xml:
-        name: RerouteDescription
-    RerouteDescriptions:
-      properties:
-        rerouteDescriptions:
-          items:
-            $ref: '#/components/schemas/RerouteDescription'
-          type: array
-        hasNextPage:
-          description: True if there are more results after the current page
-          type: boolean
-        total:
-          description: Total number of found entities for this query
-          example: 42
-          type: integer
-      type: object
-      required:
-        - rerouteDescriptions
-        - total
-        - hasNextPage
     SupplyingFacilityConfiguration:
       properties:
         facilityRef:
@@ -37612,6 +37550,47 @@ components:
       type: object
       xml:
         name: CancelationReasonForModification
+    RerouteDescriptionForCreation:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReasonForCreation'
+      type: object
+      xml:
+        name: RerouteDescriptionForCreation
+    RerouteDescriptionForModification:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReasonForModification'
+      type: object
+      xml:
+        name: RerouteDescriptionForModification
+    RerouteDescription:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReason'
+      properties:
+        action:
+          enum:
+            - REROUTE
+          type: string
+      required:
+        - action
+      type: object
+      xml:
+        name: RerouteDescription
+    RerouteDescriptions:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReasons'
+      properties:
+        rerouteDescriptions:
+          items:
+            $ref: '#/components/schemas/RerouteDescription'
+          type: array
+        reasons:
+          items:
+            $ref: '#/components/schemas/RerouteDescription'
+          type: array
+      required:
+        - reasons
+        - rerouteDescriptions
+      type: object
     InventoryArticle:
       type: object
       properties:
