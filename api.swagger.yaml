@@ -33381,6 +33381,7 @@ components:
         - BOOLEAN
         - NUMBER
         - NOVALUE
+        - INPUT_MULTILINE_STRING
     AdditionalInformationForCreation:
       additionalProperties: false
       type: object
@@ -33496,6 +33497,22 @@ components:
         - quantity
         - article
     ServiceJobAdditionalInformationForCreation:
+      type: object
+      properties:
+        additionalInformationRef:
+          type: string
+          description: ID of the additional information
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        value:
+          anyOf:
+            - type: string
+            - type: number
+            - type: boolean
+          description: Value of the additional information
+          example: some value
+      required:
+        - additionalInformationRef
+    ServiceJobAdditionalInformationForUpdate:
       type: object
       properties:
         additionalInformationRef:
@@ -33714,6 +33731,10 @@ components:
           description: Version of the entity to be changed
           minimum: 0
           type: integer
+        additionalInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceJobAdditionalInformationForUpdate'
       required:
         - name
         - version
@@ -33738,13 +33759,13 @@ components:
           description: Version of the entity to be changed
           minimum: 0
           type: integer
+        additionalInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceJobAdditionalInformationForUpdate'
       required:
         - name
         - version
-    ServiceJobInProgressActionEnum:
-      enum:
-        - StartServiceJob
-      type: string
     ServiceJobFinishedActionParameter:
       additionalProperties: false
       properties:
@@ -33754,6 +33775,42 @@ components:
           description: Version of the entity to be changed
           minimum: 0
           type: integer
+        additionalInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceJobAdditionalInformationForUpdate'
+      required:
+        - name
+        - version
+    ServiceJobCancelledActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobCancelledActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        additionalInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceJobAdditionalInformationForUpdate'
+      required:
+        - name
+        - version
+    ServiceJobWaitingForInputActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobWaitingForInputActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        additionalInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceJobAdditionalInformationForUpdate'
       required:
         - name
         - version
@@ -33769,34 +33826,14 @@ components:
       enum:
         - ObsoleteServiceJob
       type: string
-    ServiceJobCancelledActionParameter:
-      additionalProperties: false
-      properties:
-        name:
-          $ref: '#/components/schemas/ServiceJobCancelledActionEnum'
-        version:
-          description: Version of the entity to be changed
-          minimum: 0
-          type: integer
-      required:
-        - name
-        - version
+    ServiceJobInProgressActionEnum:
+      enum:
+        - StartServiceJob
+      type: string
     ServiceJobCancelledActionEnum:
       enum:
         - CancelServiceJob
       type: string
-    ServiceJobWaitingForInputActionParameter:
-      additionalProperties: false
-      properties:
-        name:
-          $ref: '#/components/schemas/ServiceJobWaitingForInputActionEnum'
-        version:
-          description: Version of the entity to be changed
-          minimum: 0
-          type: integer
-      required:
-        - name
-        - version
     ServiceJobWaitingForInputActionEnum:
       enum:
         - HoldServiceJob
