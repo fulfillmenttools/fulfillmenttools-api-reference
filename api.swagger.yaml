@@ -21648,7 +21648,6 @@ components:
           type: string
       required:
         - street
-        - houseNumber
         - city
         - postalCode
         - country
@@ -22122,7 +22121,6 @@ components:
       required:
         - name
         - street
-        - houseNumber
         - postalCode
         - city
         - country
@@ -22279,6 +22277,19 @@ components:
       required:
         - pickingTimes
       type: object
+    DeliveryAddressWithType:
+      allOf:
+        - $ref: '#/components/schemas/DeliveryAddress'
+      properties:
+        addressType:
+          $ref: '#/components/schemas/AddressType'
+      required:
+        - street
+        - houseNumber
+        - postalCode
+        - city
+        - addressType
+      type: object
     DeliveryAddress:
       properties:
         city:
@@ -22311,7 +22322,6 @@ components:
           type: string
       required:
         - street
-        - houseNumber
         - postalCode
         - city
       type: object
@@ -22335,7 +22345,16 @@ components:
         companyAddress:
           $ref: '#/components/schemas/CompanyAddress'
         deliveryAddress:
+          description: use this if no deliveryAddresses are passed.
           $ref: '#/components/schemas/DeliveryAddress'
+        deliveryAddresses:
+          description: >-
+            if this field is filled, the delivery address will be taken from
+            here according to this sorting: PARCEL_LOCKER > POSTAL_ADDRESS >
+            INVOICE_ADDRESS. Each type is only allowed once.
+          items:
+            $ref: '#/components/schemas/DeliveryAddressWithType'
+          type: array
         items:
           items:
             $ref: '#/components/schemas/DeliveryNoteItem'
@@ -22344,7 +22363,6 @@ components:
           $ref: '#/components/schemas/OrderInformation'
       required:
         - orderInformation
-        - deliveryAddress
         - items
       type: object
     DeliveryNoteConfiguration:
@@ -22458,6 +22476,14 @@ components:
           $ref: '#/components/schemas/OrderInformation'
         deliveryAddress:
           $ref: '#/components/schemas/DeliveryAddress'
+        deliveryAddresses:
+          description: >-
+            if this field is filled, the delivery address will be taken from
+            here according to this sorting: INVOICE_ADDRESS > POSTAL_ADDRESS.
+            Each type is only allowed once.
+          items:
+            $ref: '#/components/schemas/DeliveryAddressWithType'
+          type: array
         qrCodeContent:
           type: string
         items:
@@ -26283,6 +26309,8 @@ components:
               type: array
             recipient:
               $ref: '#/components/schemas/ConsumerAddress'
+            invoice:
+              $ref: '#/components/schemas/ConsumerAddress'
             processRef:
               type: string
             operativeProcessRef:
@@ -26355,6 +26383,8 @@ components:
             $ref: '#/components/schemas/ParcelItem'
           type: array
         recipient:
+          $ref: '#/components/schemas/ConsumerAddress'
+        invoice:
           $ref: '#/components/schemas/ConsumerAddress'
         sender:
           $ref: '#/components/schemas/FacilityAddress'
@@ -30285,6 +30315,8 @@ components:
             $ref: '#/components/schemas/TagReference'
         recipient:
           $ref: '#/components/schemas/ConsumerAddress'
+        invoice:
+          $ref: '#/components/schemas/ConsumerAddress'
         deliveryChannel:
           enum:
             - COLLECT
@@ -30371,6 +30403,8 @@ components:
                 $ref: '#/components/schemas/Sticker'
               type: array
             recipient:
+              $ref: '#/components/schemas/ConsumerAddress'
+            invoice:
               $ref: '#/components/schemas/ConsumerAddress'
             tenantOrderId:
               type: string
