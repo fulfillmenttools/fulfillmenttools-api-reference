@@ -27051,7 +27051,7 @@ components:
         stickers:
           items:
             $ref: '#/components/schemas/Sticker'
-          type: array
+            type: array
         partialStockLocations:
           items:
             $ref: '#/components/schemas/PickJobLineItemPartialStockLocationForUpdate'
@@ -32118,6 +32118,7 @@ components:
         - IN_PROGRESS
         - PAUSED
         - FINISHED
+        - WAITING_FOR_INPUT
       type: string
     ItemReturnLineItem:
       additionalProperties: false
@@ -32420,6 +32421,22 @@ components:
     FinishItemReturnActionEnum:
       enum:
         - FinishItemReturn
+      type: string
+    WaitForInputItemReturnActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/WaitForInputItemReturnActionEnum'
+        itemReturnJobVersion:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - itemReturnJobVersion
+    WaitForInputItemReturnActionEnum:
+      enum:
+        - WaitForInputItemReturn
       type: string
     OperativeProcess:
       allOf:
