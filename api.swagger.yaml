@@ -34615,11 +34615,6 @@ components:
             $ref: '#/components/schemas/CustomServiceReferenceForCreation'
         paymentInfo:
           $ref: '#/components/schemas/OrderPaymentInfo'
-        provisioningTime:
-          description: The point in time by which the order is supposed to be provisioned.
-          example: '2020-02-03T08:45:50.525Z'
-          format: date-time
-          type: string
         statusReasons:
           type: array
           items:
@@ -37386,6 +37381,11 @@ components:
           items:
             $ref: '#/components/schemas/SupplyingFacilityConfiguration'
           type: array
+        provisioningTime:
+          description: The point in time by which the order is supposed to be provisioned.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
       required:
         - facilityRef
       type: object
@@ -37407,6 +37407,21 @@ components:
             $ref: '#/components/schemas/CarrierServices'
       required:
         - carrierKey
+    DeliveryReservationMode:
+      enum:
+        - SCHEDULED
+        - ASAP
+    DeliveryReservationPreferences:
+      properties:
+        mode:
+          $ref: '#/components/schemas/DeliveryReservationMode'
+        reservationTime:
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
+      type: object
+      required:
+        - mode
     DeliveryPreferences:
       properties:
         collect:
@@ -37440,6 +37455,10 @@ components:
               type: string
             carrierProductCategory:
               $ref: '#/components/schemas/CarrierProductCategory'
+            desiredDeliveryTime:
+              example: '2020-02-03T09:45:51.525Z'
+              format: date-time
+              type: string
           type: object
         supplyingFacilities:
           description: '@deprecated Use supplyingFacilities under collect'
@@ -37453,6 +37472,8 @@ components:
           example: '2020-02-03T09:45:51.525Z'
           format: date-time
           type: string
+        reservationPreferences:
+          $ref: '#/components/schemas/DeliveryReservationPreferences'
       type: object
     ArticleItem:
       additionalProperties: false
