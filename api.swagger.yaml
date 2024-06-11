@@ -26731,6 +26731,21 @@ components:
       required:
         - pricePerUnit
         - currency
+    ReturnedLineItemRefundPrice:
+      additionalProperties: false
+      properties:
+        value:
+          example: 20.55
+          description: 0.0 till line item price that should be refunded
+          type: number
+        currency:
+          description: The currency of the price as an ISO 4217 code.
+          example: EUR
+          allOf:
+            - $ref: '#/components/schemas/CurrencyCode'
+      required:
+        - value
+        - currency
     PickingPatchActions:
       properties:
         actions:
@@ -31961,6 +31976,26 @@ components:
         - delivered
         - returned
         - returnable
+    ReturnedLineItemRefund:
+      additionalProperties: false
+      description: Either price or percent must be set, not both.
+      properties:
+        status:
+          $ref: '#/components/schemas/ReturnedLineItemRefundStatus'
+        price:
+          $ref: '#/components/schemas/ReturnedLineItemRefundPrice'
+        percent:
+          example: 80.6
+          description: 0.0 - 100.0 amount of the line item price that should be refunded
+          type: number
+      required:
+        - status
+    ReturnedLineItemRefundStatus:
+      enum:
+        - OPEN
+        - IN_PROGRESS
+        - CLOSED
+      type: string
     ItemReturnJobLineItemForCreation:
       additionalProperties: false
       properties:
@@ -32060,6 +32095,8 @@ components:
             $ref: '#/components/schemas/ItemReturnLineItemReason'
           minItems: 1
           type: array
+        refund:
+          $ref: '#/components/schemas/ReturnedLineItemRefund'
       required:
         - id
         - status
@@ -32157,12 +32194,13 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/ItemReturnLineItemStatus'
+        refund:
+          $ref: '#/components/schemas/ReturnedLineItemRefund'
         itemReturnJobVersion:
           type: number
           example: 42
-          description: version of the overlying itemReturnJob
+          description: version of the overlaying itemReturnJob
       required:
-        - status
         - itemReturnJobVersion
     ReplaceReturnedLineItems:
       additionalProperties: false
