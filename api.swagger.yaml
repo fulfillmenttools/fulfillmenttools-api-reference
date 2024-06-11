@@ -22789,6 +22789,8 @@ components:
                   items:
                     $ref: '#/components/schemas/ScanningRuleValue'
                   type: array
+            shortPickReason:
+              $ref: '#/components/schemas/PickLineShortPickReason'
           required:
             - id
             - picked
@@ -22797,18 +22799,6 @@ components:
     PickLineShortPickReason:
       additionalProperties: false
       properties:
-        id:
-          type: string
-        version:
-          description: >-
-            The version of the document to be used in optimistic locking
-            mechanisms.
-          example: 42
-          format: int64
-        active:
-          type: boolean
-          example: true
-          description: Flag to mark a reason as active or inactive
         reason:
           description: translated reasonLocalized according to the given locale
           type: string
@@ -22817,9 +22807,6 @@ components:
           example: '{ en_US: ''SomeName'' }'
           $ref: '#/components/schemas/LocaleString'
       required:
-        - id
-        - version
-        - active
         - reasonLocalized
     PickingScanningConfigurationEnum:
       example: MUST_SCAN_FIRST
@@ -25927,6 +25914,11 @@ components:
               items:
                 $ref: '#/components/schemas/SubstituteLineItemForCreation'
               type: array
+            shortPickReasonLocalized:
+              description: Localized reason
+              example: '{ en_US: ''SomeName'' }'
+              nullable: true
+              $ref: '#/components/schemas/LocaleString'
           required:
             - id
             - action
@@ -27006,6 +26998,12 @@ components:
           items:
             $ref: '#/components/schemas/SubstituteLineItemForCreation'
           type: array
+        shortPickReason:
+          properties:
+            reasonLocalized:
+              description: Localized reason
+              example: '{ en_US: ''SomeName'' }'
+              $ref: '#/components/schemas/LocaleString'
       required:
         - id
       type: object
@@ -32093,7 +32091,6 @@ components:
         reasons:
           items:
             $ref: '#/components/schemas/ItemReturnLineItemReason'
-          minItems: 1
           type: array
         refund:
           $ref: '#/components/schemas/ReturnedLineItemRefund'
@@ -32102,7 +32099,6 @@ components:
         - status
         - itemReturnJobLineItemRefs
         - tenantArticleId
-        - reasons
     ItemReturnLineItemReason:
       additionalProperties: false
       properties:
@@ -32183,11 +32179,9 @@ components:
         reasons:
           items:
             $ref: '#/components/schemas/ItemReturnLineItemReason'
-          minItems: 1
           type: array
       required:
         - tenantArticleId
-        - reasons
         - status
     ItemReturnLineItemForUpdate:
       additionalProperties: false
