@@ -33041,19 +33041,176 @@ components:
       description: The type of an external action
       enum:
         - BLANK_LINK
-    ExternalActionDefinition:
+        - FORM
+    ExternalFormActionDefinition:
       additionalProperties: false
       properties:
         type:
           $ref: '#/components/schemas/ExternalActionType'
-        url:
-          type: string
+        elements:
+          type: array
+          minItems: 1
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/ExternalFormActionElement'
+              - $ref: '#/components/schemas/ExternalFormActionInputElement'
+            discriminator:
+              propertyName: elementType
+              mapping:
+                TEXT_INPUT: '#/components/schemas/ExternalFormActionInputElement'
+                HEADLINE: '#/components/schemas/ExternalFormActionElement'
+                SUBHEADLINE: '#/components/schemas/ExternalFormActionElement'
+                TEXT: '#/components/schemas/ExternalFormActionElement'
+        success:
+          $ref: '#/components/schemas/ExternalFormActionButton'
+        cancel:
+          $ref: '#/components/schemas/ExternalFormActionButton'
       required:
+        - elements
+        - success
         - type
-        - url
       type: object
       xml:
-        name: ExternalActionDefinition
+        name: ExternalFormActionDefinition
+    ExternalFormActionElementType:
+      type: string
+      enum:
+        - TEXT_INPUT
+        - HEADLINE
+        - SUBHEADLINE
+        - TEXT
+    ExternalFormActionInputElement:
+      additionalProperties: false
+      properties:
+        elementId:
+          type: string
+        isMandatory:
+          type: boolean
+        validation:
+          anyOf:
+            - $ref: '#/components/schemas/StringValidation'
+            - $ref: '#/components/schemas/IntegerValidation'
+            - $ref: '#/components/schemas/FloatValidation'
+          discriminator:
+            propertyName: validationType
+            mapping:
+              STRING: '#/components/schemas/StringValidation'
+              FLOAT: '#/components/schemas/FloatValidation'
+              INTEGER: '#/components/schemas/IntegerValidation'
+        style:
+          type: string
+          enum:
+            - BODY
+            - INFO
+            - WARN
+            - ERROR
+        titleLocalized:
+          description: The name of this external action localized
+          example: '{ en_US: ''SomeName'' }'
+          $ref: '#/components/schemas/LocaleString'
+        title:
+          type: string
+        elementType:
+          $ref: '#/components/schemas/ExternalFormActionElementType'
+      required:
+        - elementId
+        - titleLocalized
+        - elementType
+      type: object
+      xml:
+        name: ExternalFormActionInputElement
+    BaseValidation:
+      type: object
+      properties:
+        validationType:
+          type: string
+          enum:
+            - STRING
+            - FLOAT
+            - INTEGER
+      required:
+        - validationType
+    StringValidation:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseValidation'
+      additionalProperties: false
+      properties:
+        minLength:
+          type: number
+        maxLength:
+          type: number
+    IntegerValidation:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseValidation'
+      additionalProperties: false
+      properties:
+        minValue:
+          type: number
+        maxValue:
+          type: number
+    FloatValidation:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseValidation'
+      additionalProperties: false
+      properties:
+        minValue:
+          type: number
+        maxValue:
+          type: number
+    ExternalFormActionElement:
+      properties:
+        style:
+          type: string
+          description: it is only allowed to set a style for elementType TEXT
+          enum:
+            - BODY
+            - INFO
+            - WARN
+            - ERROR
+        titleLocalized:
+          description: The name of this external action localized
+          example: '{ en_US: ''SomeName'' }'
+          $ref: '#/components/schemas/LocaleString'
+        title:
+          type: string
+        elementType:
+          $ref: '#/components/schemas/ExternalFormActionElementType'
+      required:
+        - elementType
+        - titleLocalized
+      type: object
+      xml:
+        name: ExternalFormActionElement
+    ExternalFormActionButton:
+      additionalProperties: false
+      properties:
+        labelLocalized:
+          description: The name of this external action localized
+          example: '{ en_US: ''SomeName'' }'
+          $ref: '#/components/schemas/LocaleString'
+        label:
+          type: string
+      required:
+        - labelLocalized
+      type: object
+      xml:
+        name: ExternalFormActionElement
+    ExternalLinkActionDefinition:
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/ExternalActionType'
+        linkUrl:
+          type: string
+      required:
+        - linkUrl
+        - type
+      type: object
+      xml:
+        name: ExternalLinkActionDefinition
     ExternalActionForCreation:
       additionalProperties: false
       properties:
@@ -33070,7 +33227,14 @@ components:
             type: string
           type: array
         action:
-          $ref: '#/components/schemas/ExternalActionDefinition'
+          oneOf:
+            - $ref: '#/components/schemas/ExternalFormActionDefinition'
+            - $ref: '#/components/schemas/ExternalLinkActionDefinition'
+          discriminator:
+            propertyName: type
+            mapping:
+              BLANK_LINK: '#/components/schemas/ExternalLinkActionDefinition'
+              FORM: '#/components/schemas/ExternalFormActionDefinition'
       required:
         - processRef
         - nameLocalized
@@ -33096,7 +33260,14 @@ components:
             type: string
           type: array
         action:
-          $ref: '#/components/schemas/ExternalActionDefinition'
+          oneOf:
+            - $ref: '#/components/schemas/ExternalFormActionDefinition'
+            - $ref: '#/components/schemas/ExternalLinkActionDefinition'
+          discriminator:
+            propertyName: type
+            mapping:
+              BLANK_LINK: '#/components/schemas/ExternalLinkActionDefinition'
+              FORM: '#/components/schemas/ExternalFormActionDefinition'
       required:
         - version
         - nameLocalized
