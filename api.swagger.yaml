@@ -3055,228 +3055,6 @@ paths:
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
       operationId: getFacilityCeps
       summary: Get the available CEPs for a facility
-  /api/facilities/{facilityId}/carriers/{carrierRef}:
-    get:
-      parameters:
-        - description: ID of facility you want to get listing
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: >-
-            The ID that describes the connection of this facility to the
-            referenced carrier
-          in: path
-          name: carrierRef
-          required: true
-          schema:
-            type: string
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FacilityCarrierConnection'
-          description: >-
-            Carrier to facility connections was found & you were allowed to
-            access it. The result is in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            There is no connection to a carrier with this facility referenced by
-            the provided facilityCarrierConnectionId
-      tags:
-        - Core - Facilities
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-          /></center> <br /> <i>This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
-      operationId: getFacilityCarrier
-      summary: Get the details for a carrier related to the facility with the given ID
-    post:
-      parameters:
-        - description: ID of facility you want to get
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: The referenced carrier ID
-          in: path
-          name: carrierRef
-          required: true
-          schema:
-            type: string
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FacilityCarrierConnection'
-          description: Creation was successful.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            There is no connection to a carrier with this facility referenced by
-            the provided facilityCarrierConnectionId.
-      tags:
-        - Core - Facilities
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-          /></center> <br /> <i>This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
-      operationId: createCarrierToFacility
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FacilityCarrierConnectionForCreation'
-        description: Representation that describes the facility
-        required: true
-      summary: >-
-        Create a connection of a configured carrier to the facility with given
-        ID
-    put:
-      parameters:
-        - description: ID of facility you want to get
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: The referenced carrier ID
-          in: path
-          name: carrierRef
-          required: true
-          schema:
-            type: string
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FacilityCarrierConnection'
-          description: Modification was successful.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            There is no connection to a carrier with this facility referenced by
-            the provided facilityCarrierConnectionId.
-      tags:
-        - Core - Facilities
-      description: >-
-        <center><img
-        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
-          /></center> <br /> <i>This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
-      operationId: connectCarrierToFacility
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FacilityCarrierConnectionForModification'
-        description: Representation that describes the facility
-        required: true
-      summary: 'Connect a configured carrier to the facility with given ID '
   /api/facilities/{facilityId}/configurations/stock:
     get:
       parameters:
@@ -13272,6 +13050,228 @@ paths:
         description: Updates an external action
         required: true
       summary: Replace an external action
+  /api/facilities/{facilityId}/carriers/{carrierRef}:
+    get:
+      parameters:
+        - description: ID of facility you want to get listing
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            The ID that describes the connection of this facility to the
+            referenced carrier
+          in: path
+          name: carrierRef
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label
+            classifications. If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityCarrierConnection'
+          description: >-
+            Carrier to facility connections was found & you were allowed to
+            access it. The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            There is no connection to a carrier with this facility referenced by
+            the provided facilityCarrierConnectionId
+      tags:
+        - Core - Facilities
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: getFacilityCarrier
+      summary: Get the details for a carrier related to the facility with the given ID
+    post:
+      parameters:
+        - description: ID of facility you want to get
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: The referenced carrier ID
+          in: path
+          name: carrierRef
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label
+            classifications. If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityCarrierConnection'
+          description: Creation was successful.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            There is no connection to a carrier with this facility referenced by
+            the provided facilityCarrierConnectionId.
+      tags:
+        - Core - Facilities
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: createCarrierToFacility
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityCarrierConnectionForCreation'
+        description: Representation that describes the facility
+        required: true
+      summary: >-
+        Create a connection of a configured carrier to the facility with given
+        ID
+    put:
+      parameters:
+        - description: ID of facility you want to get
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: The referenced carrier ID
+          in: path
+          name: carrierRef
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label
+            classifications. If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityCarrierConnection'
+          description: Modification was successful.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            There is no connection to a carrier with this facility referenced by
+            the provided facilityCarrierConnectionId.
+      tags:
+        - Core - Facilities
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: connectCarrierToFacility
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityCarrierConnectionForModification'
+        description: Representation that describes the facility
+        required: true
+      summary: 'Connect a configured carrier to the facility with given ID '
   /api/health:
     get:
       responses:
@@ -21460,19 +21460,6 @@ components:
       type: object
       xml:
         name: AbstractCarrierCredentials
-    AbstractFacilityCarrierConfiguration:
-      discriminator:
-        propertyName: key
-      properties:
-        key:
-          type: string
-        serviceUrl:
-          type: string
-      required:
-        - key
-      type: object
-      xml:
-        name: AbstractFacilityCarrierConfiguration
     AbstractModificationAction:
       discriminator:
         propertyName: action
@@ -23040,101 +23027,6 @@ components:
           type: object
       xml:
         name: DpdChCarrierCredentials
-    DhlV2FacilityCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-      properties:
-        alternativeReturnAddress:
-          $ref: '#/components/schemas/FacilityAddress'
-        trackAndTraceUrl:
-          type: string
-      xml:
-        name: DhlV2FacilityCarrierConfiguration
-    VceFacilityCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-      properties:
-        alternativeReturnAddress:
-          $ref: '#/components/schemas/FacilityAddress'
-        trackAndTraceUrl:
-          type: string
-      xml:
-        name: VceFacilityCarrierConfiguration
-    AngelFacilityCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            pickupLocationId:
-              description: The id of the Pickup Location
-              type: string
-              pattern: ^[A-z0-9-]{15}$
-          type: object
-      xml:
-        name: AngelFacilityCarrierConfiguration
-    PostNLFacilityCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            customerId:
-              type: string
-            customerCode:
-              type: string
-            trackAndTraceUrl:
-              type: string
-          type: object
-          required:
-            - customerId
-            - customerCode
-      xml:
-        name: PostNLFacilityCarrierConfiguration
-    GlsFacilityCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            contactId:
-              type: string
-              pattern: ^[A-z0-9-]{15}$
-            returnContactId:
-              type: string
-              pattern: ^[A-z0-9-]{15}$
-            trackAndTraceUrl:
-              type: string
-            trackAndTraceWsdlUrl:
-              type: string
-          type: object
-      xml:
-        name: GlsFacilityCarrierConfiguration
-    DpdChFacilityCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            depot:
-              type: string
-            trackAndTraceUrl:
-              type: string
-          type: object
-      xml:
-        name: DpdChFacilityCarrierConfiguration
-    BringFacilityCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            trackAndTraceUrl:
-              type: string
-            webhookFftHost:
-              type: string
-          type: object
-      xml:
-        name: BringFacilityCarrierConfiguration
-    FedExFacilityCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            trackAndTraceUrl:
-              type: string
-          type: object
-      xml:
-        name: FedExFacilityCarrierConfiguration
     AngelCarrierCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractCarrierCredentials'
@@ -23321,170 +23213,6 @@ components:
       type: object
       xml:
         name: PostalCodeValidation
-    FacilityCarrierConnection:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        carrierRef:
-          description: ID that references the configured carrier.
-          type: string
-        deliveryType:
-          $ref: '#/components/schemas/CarrierDeliveryType'
-        key:
-          type: string
-        configuration:
-          description: Facility specific configuration for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/GlsFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/AngelFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
-        credentials:
-          description: Facility specific credentials for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/DHLV2BusinessCredentials'
-            - $ref: '#/components/schemas/DpdChCarrierCredentials'
-            - $ref: '#/components/schemas/PostNLCarrierCredentials'
-            - $ref: '#/components/schemas/VceCarrierCredentials'
-        cutoffTime:
-          $ref: '#/components/schemas/CutoffTime'
-        deliveryAreas:
-          items:
-            $ref: '#/components/schemas/DeliveryArea'
-          type: array
-        name:
-          description: >-
-            This is the well known name for a supported CEP partner. Can be
-            adapted to the clients needs.
-          example: DHL Köln
-          type: string
-        status:
-          $ref: '#/components/schemas/CarrierStatus'
-        parcelLabelClassifications:
-          items:
-            $ref: '#/components/schemas/ParcelLabelClassification'
-          type: array
-        tags:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/TagReference'
-        validDeliveryTargets:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/DeliveryTarget'
-      required:
-        - carrierRef
-        - key
-        - status
-      type: object
-    FacilityCarrierConnectionForCreation:
-      additionalProperties: false
-      properties:
-        credentials:
-          description: Facility specific credentials for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/DHLV2BusinessCredentials'
-            - $ref: '#/components/schemas/DpdChCarrierCredentials'
-            - $ref: '#/components/schemas/PostNLCarrierCredentials'
-        configuration:
-          description: Facility specific configuration for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/GlsFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/AngelFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
-        cutoffTime:
-          $ref: '#/components/schemas/CutoffTime'
-        deliveryAreas:
-          items:
-            $ref: '#/components/schemas/DeliveryArea'
-          type: array
-        name:
-          description: >-
-            This is the well known name for a supported CEP partner. Can be
-            adapted to the clients needs.
-          example: DHL Köln
-          type: string
-        status:
-          $ref: '#/components/schemas/CarrierStatus'
-        parcelLabelClassifications:
-          items:
-            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
-          type: array
-        tags:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/TagReference'
-        validDeliveryTargets:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/DeliveryTarget'
-      type: object
-    FacilityCarrierConnectionForModification:
-      additionalProperties: false
-      properties:
-        credentials:
-          description: Facility specific credentials for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/DHLV2BusinessCredentials'
-            - $ref: '#/components/schemas/DpdChCarrierCredentials'
-            - $ref: '#/components/schemas/PostNLCarrierCredentials'
-            - $ref: '#/components/schemas/VceCarrierCredentials'
-        configuration:
-          description: Facility specific configuration for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/GlsFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/AngelFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
-        cutoffTime:
-          $ref: '#/components/schemas/CutoffTime'
-        deliveryAreas:
-          items:
-            $ref: '#/components/schemas/DeliveryArea'
-          type: array
-        name:
-          description: >-
-            This is the well known name for a supported CEP partner. Can be
-            adapted to the clients needs.
-          example: DHL Köln
-          type: string
-        status:
-          $ref: '#/components/schemas/CarrierStatus'
-        parcelLabelClassifications:
-          items:
-            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
-          type: array
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagReference'
-        version:
-          type: number
-        validDeliveryTargets:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/DeliveryTarget'
-      required:
-        - version
-      type: object
     DeliveryTarget:
       type: string
       description: The destination for a delivery
@@ -33395,6 +33123,278 @@ components:
       type: object
       xml:
         name: AbstractReasons
+    FacilityCarrierConnection:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        carrierRef:
+          description: ID that references the configured carrier.
+          type: string
+        deliveryType:
+          $ref: '#/components/schemas/CarrierDeliveryType'
+        key:
+          type: string
+        configuration:
+          description: Facility specific configuration for this carrier
+          anyOf:
+            - $ref: '#/components/schemas/GlsFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/AngelFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
+        credentials:
+          description: Facility specific credentials for this carrier
+          anyOf:
+            - $ref: '#/components/schemas/DHLV2BusinessCredentials'
+            - $ref: '#/components/schemas/DpdChCarrierCredentials'
+            - $ref: '#/components/schemas/PostNLCarrierCredentials'
+            - $ref: '#/components/schemas/VceCarrierCredentials'
+        cutoffTime:
+          $ref: '#/components/schemas/CutoffTime'
+        deliveryAreas:
+          items:
+            $ref: '#/components/schemas/DeliveryArea'
+          type: array
+        name:
+          description: >-
+            This is the well known name for a supported CEP partner. Can be
+            adapted to the clients needs.
+          example: DHL Köln
+          type: string
+        status:
+          $ref: '#/components/schemas/CarrierStatus'
+        parcelLabelClassifications:
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassification'
+          type: array
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        validDeliveryTargets:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/DeliveryTarget'
+      required:
+        - carrierRef
+        - key
+        - status
+      type: object
+    FacilityCarrierConnectionForCreation:
+      additionalProperties: false
+      properties:
+        credentials:
+          description: Facility specific credentials for this carrier
+          anyOf:
+            - $ref: '#/components/schemas/DHLV2BusinessCredentials'
+            - $ref: '#/components/schemas/DpdChCarrierCredentials'
+            - $ref: '#/components/schemas/PostNLCarrierCredentials'
+        configuration:
+          description: Facility specific configuration for this carrier
+          anyOf:
+            - $ref: '#/components/schemas/GlsFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/AngelFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
+        cutoffTime:
+          $ref: '#/components/schemas/CutoffTime'
+        deliveryAreas:
+          items:
+            $ref: '#/components/schemas/DeliveryArea'
+          type: array
+        name:
+          description: >-
+            This is the well known name for a supported CEP partner. Can be
+            adapted to the clients needs.
+          example: DHL Köln
+          type: string
+        status:
+          $ref: '#/components/schemas/CarrierStatus'
+        parcelLabelClassifications:
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
+          type: array
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        validDeliveryTargets:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/DeliveryTarget'
+      type: object
+    FacilityCarrierConnectionForModification:
+      additionalProperties: false
+      properties:
+        credentials:
+          description: Facility specific credentials for this carrier
+          anyOf:
+            - $ref: '#/components/schemas/DHLV2BusinessCredentials'
+            - $ref: '#/components/schemas/DpdChCarrierCredentials'
+            - $ref: '#/components/schemas/PostNLCarrierCredentials'
+            - $ref: '#/components/schemas/VceCarrierCredentials'
+        configuration:
+          description: Facility specific configuration for this carrier
+          anyOf:
+            - $ref: '#/components/schemas/GlsFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/AngelFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
+        cutoffTime:
+          $ref: '#/components/schemas/CutoffTime'
+        deliveryAreas:
+          items:
+            $ref: '#/components/schemas/DeliveryArea'
+          type: array
+        name:
+          description: >-
+            This is the well known name for a supported CEP partner. Can be
+            adapted to the clients needs.
+          example: DHL Köln
+          type: string
+        status:
+          $ref: '#/components/schemas/CarrierStatus'
+        parcelLabelClassifications:
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
+          type: array
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagReference'
+        version:
+          type: number
+        validDeliveryTargets:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/DeliveryTarget'
+      required:
+        - version
+      type: object
+    AbstractFacilityCarrierConfiguration:
+      discriminator:
+        propertyName: key
+      properties:
+        key:
+          type: string
+        serviceUrl:
+          type: string
+      required:
+        - key
+      type: object
+      xml:
+        name: AbstractFacilityCarrierConfiguration
+    DhlV2FacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+      properties:
+        alternativeReturnAddress:
+          $ref: '#/components/schemas/FacilityAddress'
+        trackAndTraceUrl:
+          type: string
+      xml:
+        name: DhlV2FacilityCarrierConfiguration
+    VceFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+      properties:
+        alternativeReturnAddress:
+          $ref: '#/components/schemas/FacilityAddress'
+        trackAndTraceUrl:
+          type: string
+      xml:
+        name: VceFacilityCarrierConfiguration
+    AngelFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            pickupLocationId:
+              description: The id of the Pickup Location
+              type: string
+              pattern: ^[A-z0-9-]{15}$
+          type: object
+      xml:
+        name: AngelFacilityCarrierConfiguration
+    PostNLFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            customerId:
+              type: string
+            customerCode:
+              type: string
+            trackAndTraceUrl:
+              type: string
+          type: object
+          required:
+            - customerId
+            - customerCode
+      xml:
+        name: PostNLFacilityCarrierConfiguration
+    GlsFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            contactId:
+              type: string
+              pattern: ^[A-z0-9-]{15}$
+            returnContactId:
+              type: string
+              pattern: ^[A-z0-9-]{15}$
+            trackAndTraceUrl:
+              type: string
+            trackAndTraceWsdlUrl:
+              type: string
+          type: object
+      xml:
+        name: GlsFacilityCarrierConfiguration
+    DpdChFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            depot:
+              type: string
+            trackAndTraceUrl:
+              type: string
+          type: object
+      xml:
+        name: DpdChFacilityCarrierConfiguration
+    BringFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            trackAndTraceUrl:
+              type: string
+            webhookFftHost:
+              type: string
+          type: object
+      xml:
+        name: BringFacilityCarrierConfiguration
+    FedExFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            trackAndTraceUrl:
+              type: string
+          type: object
+      xml:
+        name: FedExFacilityCarrierConfiguration
     ZoneForCreation:
       properties:
         name:
