@@ -13050,6 +13050,125 @@ paths:
         description: Updates an external action
         required: true
       summary: Replace an external action
+  /api/externalactions/{externalActionId}/logs:
+    post:
+      parameters:
+        - description: ID of the external action you want to create the log for
+          in: path
+          name: externalActionId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalActionLog'
+          description: The log for the external action was successfully created.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: External action not found
+      tags:
+        - Core - Processes - External Actions Logs
+      description: Creates a new external action log.
+      operationId: postExternalActionLog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalActionLogForCreation'
+        description: The external action log to be created
+        required: true
+      summary: Creates a log for an external action
+    get:
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: Id of the external action you want to get the logs from
+          in: path
+          name: externalActionId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ExternalActionLogs'
+                type: array
+          description: >-
+            Logs were found & you are allowed to get it. The result is in the
+            body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: External action logs not found
+      tags:
+        - Core - Processes - External Actions Logs
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />Returns the logs related with the given external action.
+      operationId: getExternalActionLogs
+      summary: Get the logs for an external action
   /api/facilities/{facilityId}/carriers/{carrierRef}:
     get:
       parameters:
@@ -32946,7 +33065,6 @@ components:
       xml:
         name: ExternalLinkActionDefinition
     ExternalActionForCreation:
-      additionalProperties: false
       properties:
         processRef:
           description: Id of the global process related to this entity.
@@ -32978,7 +33096,6 @@ components:
       xml:
         name: ExternalActionForCreation
     ExternalActionForReplacement:
-      additionalProperties: false
       properties:
         version:
           example: 42
@@ -33031,6 +33148,7 @@ components:
       required:
         - id
         - name
+        - processRef
       type: object
       xml:
         name: ExternalAction
@@ -33049,6 +33167,96 @@ components:
       required:
         - externalActions
         - total
+    ExternalActionLogs:
+      additionalProperties: false
+      properties:
+        externalActionLogs:
+          items:
+            $ref: '#/components/schemas/ExternalActionLog'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
+      required:
+        - externalActionLogs
+        - total
+    ExternalFormActionLogPayloadElement:
+      properties:
+        elementId:
+          type: string
+        value:
+          type: string
+      required:
+        - elementId
+        - value
+      type: object
+      xml:
+        name: ExternalFormActionLogPayloadElement
+    ExternalLinkActionLogPayload:
+      properties:
+        linkOpenedAt:
+          description: The date when this link was opened.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+      required:
+        - linkOpenedAt
+      type: object
+      xml:
+        name: ExternalLinkActionLogPayload
+    ExternalFormActionLogPayload:
+      properties:
+        elements:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ExternalFormActionLogPayloadElement'
+      required:
+        - elements
+      type: object
+      xml:
+        name: ExternalFormActionLogPayload
+    ExternalActionLogForCreation:
+      properties:
+        requiresAnonymization:
+          type: boolean
+        actionPayload:
+          oneOf:
+            - $ref: '#/components/schemas/ExternalLinkActionLogPayload'
+            - $ref: '#/components/schemas/ExternalFormActionLogPayload'
+      required:
+        - requiresAnonymization
+        - actionPayload
+      type: object
+      xml:
+        name: ExternalActionLogForCreation
+    ExternalActionLog:
+      allOf:
+        - $ref: '#/components/schemas/ExternalActionLogForCreation'
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        externalActionRef:
+          description: Id of the refered external action.
+          type: string
+        editor:
+          $ref: '#/components/schemas/Editor'
+        created:
+          description: The date this action has been executed
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+      required:
+        - id
+        - externalActionRef
+        - editor
+        - created
+      type: object
+      xml:
+        name: ExternalActionLog
     AbstractReasonForCreation:
       additionalProperties: false
       properties:
