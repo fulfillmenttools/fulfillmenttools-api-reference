@@ -26164,9 +26164,6 @@ components:
           type: number
           example: 12.5
         result:
-          description: >-
-            Possibility to add data from carrier while creating a parcel. Parcel
-            must be in a final status to add this field.
           $ref: '#/components/schemas/ParcelResult'
         transfers:
           type: array
@@ -26263,6 +26260,7 @@ components:
         - FAILED
         - CANCELED
         - OBSOLETE
+        - WAITING_FOR_INPUT
       type: string
     UserModificationHistory:
       additionalProperties: false
@@ -26452,6 +26450,20 @@ components:
           example: EUR
           type: string
       type: object
+    ProductInformation:
+      properties:
+        productName:
+          description: The name of the product used by the carrier
+          example: Express
+          type: string
+        mandatoryShippingAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MandatoryShippingAttribute'
+        mandatoryShippingItemAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MandatoryShippingItemAttribute'
     PickJobStatusUnprotected:
       description: >-
         The status of a pickjob. These are the status that are still allowed to
