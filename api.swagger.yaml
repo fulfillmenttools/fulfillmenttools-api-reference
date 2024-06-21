@@ -31380,6 +31380,19 @@ components:
       required:
         - summary
       type: object
+    WeekDay:
+      description: A weekday
+      enum:
+        - MONDAY
+        - TUESDAY
+        - WEDNESDAY
+        - THURSDAY
+        - FRIDAY
+        - SATURDAY
+        - SUNDAY
+      type: string
+      xml:
+        name: WeekDay
     RestowedItems:
       properties:
         restowedItems:
@@ -33378,10 +33391,76 @@ components:
       type: object
       xml:
         name: AbstractReasons
+    CarrierCutoffConfiguration:
+      properties:
+        time:
+          type: string
+          pattern: ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$
+          example: '12:00'
+        capacity:
+          type: number
+      type: object
+      required:
+        - time
+      xml:
+        name: CarrierCutoffTimes
+    CarrierCutoffTimesWeekDay:
+      properties:
+        day:
+          $ref: '#/components/schemas/WeekDay'
+        cutoffConfigurations:
+          items:
+            $ref: '#/components/schemas/CarrierCutoffConfiguration'
+          type: array
+      type: object
+      required:
+        - day
+        - cutoffConfigurations
+      xml:
+        name: CarrierCutoffTimesWeekDay
+    CarrierCutoffTimesOverwrite:
+      properties:
+        date:
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2020-02-03'
+        cutoffConfigurations:
+          items:
+            $ref: '#/components/schemas/CarrierCutoffConfiguration'
+          type: array
+      type: object
+      required:
+        - date
+        - cutoffConfigurations
+      xml:
+        name: CarrierCutoffTimes
+    CarrierCutoffTimes:
+      properties:
+        weekdays:
+          items:
+            $ref: '#/components/schemas/CarrierCutoffTimesWeekDay'
+          type: array
+        overwrites:
+          items:
+            $ref: '#/components/schemas/CarrierCutoffTimesOverwrite'
+          type: array
+      type: object
+      required:
+        - weekdays
+        - overwrites
+      xml:
+        name: CarrierCutoffTimes
     FacilityCarrierConnection:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
+        id:
+          example: fsfdsf87fsd
+          type: string
+        facilityRef:
+          description: The id of the facility reference.
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
         carrierRef:
           description: ID that references the configured carrier.
           type: string
@@ -33408,7 +33487,10 @@ components:
             - $ref: '#/components/schemas/PostNLCarrierCredentials'
             - $ref: '#/components/schemas/VceCarrierCredentials'
         cutoffTime:
+          description: '@deprecated'
           $ref: '#/components/schemas/CutoffTime'
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
         deliveryAreas:
           items:
             $ref: '#/components/schemas/DeliveryArea'
@@ -33436,9 +33518,12 @@ components:
           items:
             $ref: '#/components/schemas/DeliveryTarget'
       required:
+        - id
+        - facilityRef
         - carrierRef
         - key
         - status
+        - cutoffTimes
       type: object
     FacilityCarrierConnectionForCreation:
       additionalProperties: false
@@ -33449,6 +33534,7 @@ components:
             - $ref: '#/components/schemas/DHLV2BusinessCredentials'
             - $ref: '#/components/schemas/DpdChCarrierCredentials'
             - $ref: '#/components/schemas/PostNLCarrierCredentials'
+            - $ref: '#/components/schemas/VceCarrierCredentials'
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
@@ -33461,7 +33547,11 @@ components:
             - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
         cutoffTime:
+          deprecated: true
+          description: Deprecated in favor of cutoffTimes
           $ref: '#/components/schemas/CutoffTime'
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
         deliveryAreas:
           items:
             $ref: '#/components/schemas/DeliveryArea'
@@ -33511,7 +33601,11 @@ components:
             - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
         cutoffTime:
+          deprecated: true
+          description: Deprecated in favor of cutoffTimes
           $ref: '#/components/schemas/CutoffTime'
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
         deliveryAreas:
           items:
             $ref: '#/components/schemas/DeliveryArea'
