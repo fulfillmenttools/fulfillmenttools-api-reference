@@ -163,6 +163,54 @@ paths:
         deadline: 60
         disable_auth: true
         path_translation: APPEND_PATH_TO_ADDRESS
+  /api/promises/checkoutoptions/delivery/timepoint:
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePointResponse'
+          description: >-
+            
+            The request could be evaluated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this endpoint
+      tags:
+        - "DOMS - Checkout Options"
+      operationId: checkoutoptionDeliveryTimepoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePointRequest'
+        required: true
+      summary: This endpoint is to be used to get information about the possible delivery of items
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
   /api/promises/checkoutoptions:
     post:
       responses:
@@ -806,6 +854,56 @@ components:
           $ref: '#/components/schemas/CheckoutOptionsDeliveryPreferences'
       required:
         - basket
+    CheckoutOptionsDeliveryTimePointRequest:
+      properties:
+        desiredDeliveryDate:
+          type: string
+          example: '2024-06-03T00:00:00.000Z'
+          format: date-time
+          description: 'The desired delivery date. (timestamp of the request)'
+
+        tenantArticleIds:
+          type: array
+          items:
+            type: string
+            description: The tenant articleIds for which the check is performed. The provided items are considered individually.
+            example: 'DE-ZGT-4711'
+          minLength: 1
+          maxLength: 50
+
+        facilities:
+          description: 'Pair of facilityRef and latestPickingStart values'
+          type: array
+          minLength: 1
+          maxLength: 5
+          items:
+            $ref: '#/components/schemas/FacilityRefLatestPickingStartPair'
+      required:
+        - facilities
+        - tenantArticleIds
+        - desiredDeliveryDate
+    CheckoutOptionsDeliveryTimePointResponse:
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePointResponseItem'
+      required:
+        - items
+    CheckoutOptionsDeliveryTimePointResponseItem:
+      properties:
+        tenantArticleId:
+          type: string
+          example: 'DE-ZGT-4711'
+        available:
+          type: number
+          example: 4
+        facilityRef:
+          type: string
+      required:
+        - tenantArticleId
+        - available
+        - facilityRef
     CheckoutOptionsDeliveryPreferences:
       properties:
         serviceLevel:
@@ -1725,6 +1823,18 @@ components:
       type: object
       xml:
         name: OrderPromisesOptions
+
+    FacilityRefLatestPickingStartPair:
+      properties:
+        facilityRef:
+          type: string
+        latestPickingStart:
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
+      required:
+        - tenantArticleId
+        - latestPickingStart
 x-google-endpoints:
   - allowCors: true
     name: 'https://ocff-blume2000-prd.api.fulfillmenttools.com'
