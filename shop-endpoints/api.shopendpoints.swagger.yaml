@@ -1,0 +1,1729 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: api@fulfillmenttools.com
+    name: fulfillmenttools
+    url: 'https://fulfillmenttools.com/'
+  description: This is the fulfillmenttools API documentation. Visit https://docs.fulfillmenttools.com/ for first steps.
+  termsOfService: 'http://swagger.io/terms/'
+  title: fulfillmenttools - simplifying retail complexity
+  version: 'VERSIONLESS'
+servers:
+  - url: 'https://ocff-blume2000-prd.api.fulfillmenttools.com'
+paths:
+  /api/orders:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: >-
+            The order was successfully created. The Location header contains the
+            URL of the order.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - 'DOMS - Orders'
+      description: ''
+      operationId: addOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderForCreation'
+        description: Order object supplied by your shop instance
+        required: true
+      summary: Add a new order for future fulfillment
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+  /api/promises/checkoutoptions/delivery/earliest:
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutOptionsDeliveryEarliestResponse'
+          description: >-
+            
+            The request could be evaluated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            
+            Your user, although recognized, is not authorized to use this
+            
+            endpoint
+      tags:
+        - "DOMS - Checkout Options"
+      description: 'The list of items depicts the items you would like to get information about their earliest possbile delivery. The provided list of tenant article ids are considered individual (as if not in a basket together, but seperately ordered). Additionally you can add information about the address these items should be delivered to to further refine the response. '
+      operationId: checkoutoptionDeliveryEarliest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutOptionsDeliveryEarliestRequest'
+        required: true
+      summary: 'This endpoint is to be used to get information about the earliest possible delivery of items.'
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+  /api/promises/checkoutoptions/delivery/timeperiod:
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePeriodResponse'
+          description: >-
+            
+            The request could be evaluated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this endpoint
+      tags:
+        - "DOMS - Checkout Options"
+      operationId: checkoutoptionDeliveryTimePeriod
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePeriodRequest'
+        required: true
+      summary: This endpoint is to be used to get information about the possible delivery of items
+      description: 'The basket attribute depicts the items you would like to get details about their possbile delivery. All the provided tenantArticleIds within the basket are considered together (as if they are in the same basket/order). Additionally you can add information about the address these items should be delivered to to further refine the quality of the response.'
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+  /api/promises/checkoutoptions:
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ResponseForCNCCheckoutOptions'
+                  - $ref: '#/components/schemas/ResponseForSFSCheckoutOptions'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - 'DOMS - Checkout Options'
+      description: ''
+      x-fft-api-lifecycle: alpha
+      operationId: postCheckoutOptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutOptionsInput'
+        description: The CheckoutOptionsInput
+        required: true
+      summary: Evaluate a checkout options input against the DOMS
+      x-google-backend:
+        address: 'ocff-service://http'
+        deadline: 60
+        disable_auth: true
+        path_translation: APPEND_PATH_TO_ADDRESS
+components:
+  schemas:
+    DeliveryReservationMode:
+      enum:
+        - SCHEDULED
+        - ASAP
+        - ALAP
+    VersionedResource:
+      properties:
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          example: '2020-02-03T08:45:51.525Z'
+          format: date-time
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+      type: object
+    ApiError:
+      items:
+        $ref: '#/components/schemas/ErrorInner'
+      type: array
+      xml:
+        name: ApiError
+    ErrorInner:
+      properties:
+        description:
+          example: 'Missing attributes were name, address, items'
+          type: string
+        requestVersion:
+          description: The version provided within an invalid request.
+          example: 41
+          format: int64
+          type: integer
+        summary:
+          example: One or more mandatory attributes were not provided.
+          type: string
+        version:
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - summary
+      type: object
+    CheckoutOptionsDeliveryEarliestResponse:
+      properties:
+        checkoutOptions:
+          type: array
+          description: 'The results of the corresponding request containing information, if present, on when the items can supposingly be delivered earliest. Please note: When it was not possible to calculate the delivery information for a requested tenantArticleId there is no entry here.'
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsDeliveryEarliestResponseItem'
+      required:
+        - checkoutOptions
+    CheckoutOptionsInput:
+      additionalProperties: false
+      properties:
+        consumerAddress:
+          $ref: '#/components/schemas/CheckoutOptionsConsumerAddress'
+        deliveryPreferences:
+          $ref: '#/components/schemas/DeliveryPreferences'
+        orderLineItems:
+          items:
+            $ref: '#/components/schemas/OrderLineItemForCreation'
+          type: array
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        customServices:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/CustomServiceReference'
+        geoFence:
+          $ref: '#/components/schemas/GeoFence'
+        filterDuplicates:
+          type: boolean
+          default: true
+      required:
+        - orderLineItems
+        - deliveryPreferences
+      type: object
+      xml:
+        name: CheckoutOptionsInput
+    ResponseForSFSCheckoutOptions:
+      additionalProperties: false
+      properties:
+        facilities:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsFacilityForSFS'
+          type: array
+      required:
+        - facilities
+      type: object
+      xml:
+        name: ResponseForSFSCheckoutOptions
+    CheckoutOptionsCustomServices:
+      additionalProperties: false
+      properties:
+        customServiceRef:
+          type: string
+        name:
+          type: string
+      required:
+        - customServiceRef
+        - name
+      type: object
+      xml:
+        name: CheckoutOptionsCustomServices
+    CheckoutOptionsAvailability:
+      additionalProperties: false
+      properties:
+        tenantArticleId:
+          type: string
+        available:
+          type: number
+        preOrderReleaseDate:
+          format: date-time
+          type: string
+        isBackOrderable:
+          type: boolean
+      required:
+        - tenantArticleId
+        - available
+        - isBackOrderable
+      type: object
+      xml:
+        name: CheckoutOptionsAvailability
+
+    PromiseCarrier:
+      additionalProperties: false
+      properties:
+        carrierKey:
+          type: string
+        carrierName:
+          type: string
+        products:
+          items:
+            $ref: '#/components/schemas/PromiseDeliveryOptions'
+          type: array
+        deliveryPromiseValidUntil:
+          type: string
+          format: date-time
+      required:
+        - carrierKey
+        - carrierName
+        - products
+      type: object
+      xml:
+        name: PromiseCarrier
+    CarrierTransitTime:
+      type: object
+      properties:
+        minTransitDays:
+          description: Minimum days a carrier needs for transit
+          example: 1
+          type: integer
+          minimum: 0
+        maxTransitDays:
+          description: Maximum days a carrier needs for transit
+          example: 3
+          type: integer
+          minimum: 0
+      required:
+        - maxTransitDays
+        - minTransitDays
+    EstimatedDeliveryTime:
+      type: object
+      properties:
+        minDeliveryDays:
+          description: Minimum total delivery time in days
+          example: 1
+          type: integer
+          minimum: 0
+        maxDeliveryDays:
+          description: Maximum total delivery time in days
+          example: 3
+          type: integer
+          minimum: 0
+      required:
+        - maxDeliveryDays
+        - minDeliveryDays
+    PromiseDeliveryOptions:
+      additionalProperties: false
+      properties:
+        carrierProductCategory:
+          $ref: '#/components/schemas/CarrierProductCategory'
+        transitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        estimatedDeliveryTime:
+          $ref: '#/components/schemas/EstimatedDeliveryTime'
+        deliveryCosts:
+          items:
+            $ref: '#/components/schemas/DeliveryCost'
+          type: array
+      required:
+        - carrierProductCategory
+        - deliveryCosts
+      type: object
+      xml:
+        name: PromiseDeliveryOptions
+    DeliveryCost:
+      type: object
+      additionalProperties: false
+      properties:
+        cost:
+          type: number
+          example: 10.99
+          description: "The cost of sending with a carrier"
+        currency:
+          type: string
+          example: "EUR"
+          description: "currency as 3 letter iso code"
+          pattern: ^[A-Z]{3}$
+      required:
+        - cost
+        - currency
+    CheckoutOptionsFacilityForSFS:
+      additionalProperties: false
+      properties:
+        facilityRef:
+          type: string
+        name:
+          type: string
+        availabilities:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsAvailability'
+          type: array
+        deliveryOptions:
+          items:
+            $ref: '#/components/schemas/PromiseCarrier'
+          type: array
+        customServices:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsCustomServices'
+          type: array
+        latestPickingStart:
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
+      required:
+        - facilityRef
+        - name
+        - availabilities
+        - deliveryOptions
+        - customServices
+      type: object
+      xml:
+        name: CheckoutOptionsFacilityForSFS
+    GeoFence:
+      description: >-
+        Center (described with lon and lat attributes) and a circular
+        geofence (described as radius around the center)
+      properties:
+        lat:
+          description: 'The latitude of the center, provided as decimal coordinate'
+          example: 50.968713
+          type: number
+        lon:
+          description: 'The longitude of the center, provided as decimal coordinate'
+          example: 7.011375
+          type: number
+        radius:
+          description: 'Radius around the center in kilometers (km, max. 100)'
+          minimum: 1
+          type: number
+      required:
+        - lat
+        - lon
+        - radius
+      type: object
+    ResponseForCNCCheckoutOptions:
+      additionalProperties: false
+      properties:
+        facilities:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsFacilityForCNC'
+          type: array
+      required:
+        - facilities
+      type: object
+      xml:
+        name: ResponseForCNCCheckoutOptions
+    FacilityAddress:
+      allOf:
+        - $ref: '#/components/schemas/FacilityAddressForCreation'
+        - properties:
+            resolvedTimeZone:
+              $ref: '#/components/schemas/TimeZone'
+          type: object
+      type: object
+
+    FacilityAddressForCreation:
+      allOf:
+        - $ref: '#/components/schemas/Address'
+        - properties:
+            companyName:
+              example: Speedy Boxales Ltd.
+              type: string
+            emailAddresses:
+              items:
+                properties:
+                  recipient:
+                    description: >-
+                      Human readable information who is the recipient for emails
+                      sent to this address.
+                    example: >-
+                      'Mailinglist reaching all the employees', 'Marc Fulton,
+                      Manager', etc.
+                    type: string
+                  value:
+                    type: string
+                required:
+                  - value
+                type: object
+              type: array
+            resolvedCoordinates:
+              $ref: '#/components/schemas/Coordinates'
+          required:
+            - companyName
+          type: object
+      type: object
+    ClosingDay:
+      description: At this day the facility is closed and does not do picking
+      properties:
+        date:
+          description: The day at which the Facility is closed
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
+        reason:
+          description: The reason why the Facility is closed on this day
+          type: string
+        recurrence:
+          enum:
+            - YEARLY
+            - NONRECURRING
+          type: string
+      required:
+        - reason
+        - date
+        - recurrence
+      type: object
+    CheckoutOptionsFacilityForCNC:
+      additionalProperties: false
+      properties:
+        facilityRef:
+          type: string
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/FacilityAddress'
+        closingDays:
+          items:
+            $ref: '#/components/schemas/ClosingDay'
+          type: array
+        pickingTimes:
+          $ref: '#/components/schemas/PickingTimes'
+        availabilities:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsAvailability'
+          type: array
+        customServices:
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsCustomServices'
+          type: array
+        targetTime:
+          format: date-time
+          type: string
+      required:
+        - facilityRef
+        - name
+        - address
+        - closingDays
+        - pickingTimes
+        - availabilities
+        - customServices
+        - targetTime
+      type: object
+      xml:
+        name: CheckoutOptionsFacilityForCNC
+    TimeRange:
+      properties:
+        end:
+          $ref: '#/components/schemas/TimeStamp'
+        start:
+          $ref: '#/components/schemas/TimeStamp'
+        capacity:
+          type: number
+          minimum: 0
+      required:
+        - start
+        - end
+      type: object
+    TimeStamp:
+      properties:
+        hour:
+          maximum: 23
+          minimum: 0
+          type: number
+        minute:
+          maximum: 59
+          minimum: 0
+          type: number
+      required:
+        - hour
+        - minute
+      type: object
+    TimeZone:
+      description: Timezone for information retrieved e.g. by the Google Maps API
+      properties:
+        offsetInSeconds:
+          description: offset in seconds to standard time
+          example: 28800
+          type: number
+        timeZoneId:
+          description: official id of the timezone
+          example: America/Los_Angeles
+          type: string
+        timeZoneName:
+          description: descriptive name of the timezone
+          example: Pacific Standard Time
+          type: string
+      required:
+        - timeZoneId
+        - timeZoneName
+        - offsetInSeconds
+      type: object
+    PickingTimes:
+      description: There must be no overlaps for time ranges on a day
+      properties:
+        friday:
+          items:
+            $ref: '#/components/schemas/TimeRange'
+          type: array
+        monday:
+          items:
+            $ref: '#/components/schemas/TimeRange'
+          type: array
+        saturday:
+          items:
+            $ref: '#/components/schemas/TimeRange'
+          type: array
+        sunday:
+          items:
+            $ref: '#/components/schemas/TimeRange'
+          type: array
+        thursday:
+          items:
+            $ref: '#/components/schemas/TimeRange'
+          type: array
+        tuesday:
+          items:
+            $ref: '#/components/schemas/TimeRange'
+          type: array
+        wednesday:
+          items:
+            $ref: '#/components/schemas/TimeRange'
+          type: array
+      type: object
+    CheckoutOptionsDeliveryEarliestResponseItem:
+      properties:
+        tenantArticleId:
+          type: string
+          example: 'DE-ZGT-4711'
+        earliestPredictedDeliveryDate:
+          type: string
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+        availableCarriers:
+          description: 'List of available carriers.'
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier'
+      required:
+        - tenantArticleId
+        - predictedDeliveryDate
+    CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier:
+      properties:
+        name:
+          type: string
+          example: 'DHL'
+        nonDeliveryDays:
+          type: array
+          items:
+            type: string
+            example: "NW"
+    CheckoutOptionsDeliveryEarliestRequest:
+      properties:
+        earliestDeliveryDate:
+          description: 'The date from which to search for the earliest potential delivery date. Defaults to "now" (timestamp of the request)'
+          example: '2024-06-01T00:00:00.000Z'
+          default: 'now'
+          format: date-time
+          type: string
+        tenantArticleIds:
+          type: array
+          items:
+            type: string
+            description: The tenant articleIds for which the check is performed. The provided items are considered individually.
+            example: 'DE-ZGT-4711'
+            minLength: 1
+            maxLength: 50
+        consumerAddress:
+          $ref: '#/components/schemas/CheckoutOptionsConsumerAddress'
+      required:
+        - tenantArticleIds
+    CheckoutOptionsConsumerAddress:
+      properties:
+        country:
+          description: A two-digit country code as per ISO 3166-1 alpha-2
+          example: 'DE'
+          pattern: ^[A-Z]{2}$
+          type: string
+        postalCode:
+          example: '40764'
+          pattern: ^.+$
+          type: string
+      type: object
+      required:
+        - country
+    CheckoutOptionsDeliveryTimePeriodResponse:
+      properties:
+        checkoutOptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePeriodResponseItem'
+      required:
+        - checkoutOptions
+    CheckoutOptionsDeliveryTimePeriodResponseItem:
+      properties:
+        overallStatus:
+          type: string
+          enum:
+            - ALL
+            - PARTIAL
+            - NONE
+        date:
+          type: string
+          example: '2020-02-03T00:00:00.000Z'
+          format: date-time
+        availableCarriers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier'
+      required:
+        - date
+        - overallStatus
+    CheckoutOptionsDeliveryTimePeriodRequest:
+      properties:
+        startDate:
+          type: string
+          example: '2024-06-03T00:00:00.000Z'
+          format: date-time
+          description: 'The start of the evaluated time period. Defaults to "now" (timestamp of the request)'
+          default: 'now'
+        endDate:
+          type: string
+          example: '2024-07-013T00:00:00.000Z'
+          format: date-time
+          description: 'The end of the evaluated time period. Default is the start date + 60 days. Please note that the maximum time period can not exceed 60 days.'
+        basket:
+          description: 'Items, that are considered to be delivered together.'
+          type: array
+          minLength: 1
+          maxLength: 50
+          items:
+            $ref: '#/components/schemas/BasketItem'
+        consumerAddress:
+          $ref: '#/components/schemas/CheckoutOptionsConsumerAddress'
+        deliveryPreferences:
+          $ref: '#/components/schemas/CheckoutOptionsDeliveryPreferences'
+      required:
+        - basket
+    CheckoutOptionsDeliveryPreferences:
+      properties:
+        serviceLevel:
+          description: >-
+            DELIVERY: The parcel will reach the recipient according to the cycle time of the carrier, typically 1-3 days when shipping nationaly.
+            
+            EXPRESS: The parcel will reach the recipient using an express service level.
+          enum:
+            - DELIVERY
+            - EXPRESS
+          type: string
+        preferredCarriers:
+          type: array
+          example: "DPD"
+        preferredCarriersWithProduct:
+          $ref: '#/components/schemas/CheckoutOptionsDeliveryPreferencesPreferredCarriersWithProduct'
+    CheckoutOptionsDeliveryPreferencesPreferredCarriersWithProduct:
+      properties:
+        carrierKey:
+          type: string
+          example: "DPD"
+        carrierProduct:
+          type: string
+          example: "WORLDWIDE"
+        carrierServices:
+          type: array
+          items:
+            type: string
+            example: "SIGNATURE"
+        carrierProductCategory:
+          type: string
+          example: "STANDARD"
+    BasketItem:
+      properties:
+        tenantArticleId:
+          type: string
+          example: 'DE-ZGT-4711'
+        quantity:
+          type: number
+          example: 4
+      required:
+        - tenantArticleId
+        - quantity
+    LocaleString:
+      type: object
+      additionalProperties:
+        type: string
+      description: Provides Localized values. The key is the locale, the value is the
+        translation. See
+        https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/localization#fallback-language-mechanism
+      example:
+        de_DE: Wert
+        en_US: Value
+        ru_RU: значение
+    AbstractReasonForCreation:
+      additionalProperties: false
+      properties:
+        reason:
+          description: Text explaining the reason for a supported action.
+          example: Rerouted because of an issue in the Facility.
+          type: string
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      required:
+        - reason
+        - reasonLocalized
+      type: object
+      xml:
+        name: AbstractReasonForCreation
+    AbstractReason:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReasonForCreation'
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          description: The id of the Reason
+          type: string
+        action:
+          description: The action this reason can be attached to.
+          type: string
+      required:
+        - id
+        - action
+      type: object
+      xml:
+        name: AbstractReason
+    CancelationReason:
+      allOf:
+        - $ref: '#/components/schemas/AbstractReason'
+      properties:
+        action:
+          enum:
+            - CANCELATION
+          type: string
+      required:
+        - action
+      type: object
+      xml:
+        name: CancelationReason
+    CustomServiceReference:
+      allOf:
+        - $ref: '#/components/schemas/CustomServiceReferenceForCreation'
+      properties:
+        id:
+          type: string
+        customServiceItems:
+          items:
+            $ref: '#/components/schemas/CustomServiceItem'
+          type: array
+      type: object
+      required:
+        - customServiceDefinition
+        - articleItems
+        - customServiceItems
+        - id
+    CustomServiceDefinition:
+      properties:
+        customServiceRef:
+          description: A reference to the custom service to be applied to the orderline items
+          type: string
+        isBundled:
+          description: if true all articles below this service are intrpreted as a bundle
+          type: boolean
+        additionalInformation:
+          items:
+            properties:
+              additionalInformationRef:
+                description: A reference to the specific additional information of the custom service
+                type: string
+              value:
+                description: The value of the additional information
+                anyOf:
+                  - type: string
+                  - type: integer
+                  - type: number
+                  - type: boolean
+            type: object
+            required:
+              - additionalInformationRef
+          description: Additional information necessary to fulfil the custom service
+          type: array
+      type: object
+      required:
+        - customServiceRef
+    ArticleItem:
+      additionalProperties: false
+      properties:
+        tenantArticleRef:
+          type: string
+        quantity:
+          minimum: 1
+          type: number
+      type: object
+      required:
+        - quantity
+        - tenantArticleRef
+    CustomServiceItemForCreation:
+      additionalProperties: false
+      properties:
+        customServiceDefinition:
+          $ref: '#/components/schemas/CustomServiceDefinition'
+        articleItems:
+          items:
+            $ref: '#/components/schemas/ArticleItem'
+          type: array
+        customServiceItems:
+          items:
+            $ref: '#/components/schemas/CustomServiceItemForCreation'
+          type: array
+      type: object
+      required:
+        - customServiceItems
+        - articleItems
+        - customServiceDefinition
+    CustomServiceItem:
+      allOf:
+        - $ref: '#/components/schemas/CustomServiceItemForCreation'
+      properties:
+        id:
+          type: string
+        customServiceItems:
+          items:
+            $ref: '#/components/schemas/CustomServiceItem'
+          type: array
+      type: object
+      required:
+        - id
+        - customServiceItems
+        - articleItems
+        - customServiceDefinition
+    CustomServiceReferenceForCreation:
+      additionalProperties: false
+      properties:
+        customServiceDefinition:
+          $ref: '#/components/schemas/CustomServiceDefinition'
+        articleItems:
+          items:
+            $ref: '#/components/schemas/ArticleItem'
+          type: array
+        customServiceItems:
+          items:
+            $ref: '#/components/schemas/CustomServiceItemForCreation'
+          type: array
+      type: object
+      required:
+        - customServiceDefinition
+        - articleItems
+        - customServiceItems
+    Order:
+      allOf:
+        - $ref: '#/components/schemas/OrderForCreation'
+        - $ref: '#/components/schemas/VersionedResource'
+        - properties:
+            cancelationReason:
+              $ref: '#/components/schemas/CancelationReason'
+            anonymized:
+              description: Indicates if gdpr related data was anonymized
+              example: false
+              type: boolean
+            id:
+              description: >-
+                The id of this order. It is generated during creation
+                automatically and suits as the primary identifier of the
+                described entity.
+              example: LGMl2DuvPnfPoSHhYFOm
+              type: string
+            orderLineItems:
+              items:
+                $ref: '#/components/schemas/OrderLineItem'
+              type: array
+            processId:
+              description: >-
+                Id of the global process related to this entity. For example
+                used for starting the GDPR process and others.
+              type: string
+            customServices:
+              type: array
+              minItems: 1
+              items:
+                $ref: '#/components/schemas/CustomServiceReference'
+            schemaVersion:
+              type: number
+            status:
+              $ref: '#/components/schemas/OrderStatus'
+          required:
+            - id
+            - status
+            - orderLineItems
+            - processId
+          type: object
+      xml:
+        name: Order
+    OrderStatus:
+      description: The state of the order. Initially it is OPEN.
+      enum:
+        - OPEN
+        - CANCELLED
+        - PROMISED
+        - LOCKED
+        - OBSOLETE
+      type: string
+    OrderLineItem:
+      allOf:
+        - $ref: '#/components/schemas/OrderLineItemForCreation'
+        - properties:
+            id:
+              description: >-
+                The id of this orderline. It is generated during creation
+                automatically by the API and suits as the primary identifier of
+                the described line.
+              example: LGMl2DuvPnfPoSHhYFOm
+              type: string
+          required:
+            - id
+          type: object
+    AbstractArticle:
+      type: object
+      properties:
+        customAttributes:
+          type: object
+          nullable: true
+          description: Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+        imageUrl:
+          type: string
+          description: A web link to a picture of this article. Please make sure that no
+            authentication is required to fetch the image!
+        tenantArticleId:
+          type: string
+          description: This is a reference to an article number
+          example: "4711"
+        title:
+          type: string
+          description: The title of the product
+          example: Cologne Water
+        titleLocalized:
+          description: The translations for the title of the product
+          allOf:
+            - $ref: "#/components/schemas/LocaleString"
+        weight:
+          type: number
+          description: weight value is in gram
+          minimum: 0
+      required:
+        - tenantArticleId
+        - title
+    OrderLineItemArticle:
+      allOf:
+        - $ref: '#/components/schemas/AbstractArticle'
+        - properties:
+            attributes:
+              items:
+                $ref: '#/components/schemas/OrderArticleAttributeItem'
+              type: array
+          type: object
+      xml:
+        name: OrderLineItemArticle
+    MeasurementValidation:
+      properties:
+        shortPickSoftTolerancePercentage:
+          description: Allowed soft short pick deviation tolerance.
+          example: 10.0
+          minimum: 0
+          maximum: 100
+          type: number
+        shortPickHardTolerancePercentage:
+          description: Allowed hard short pick deviation tolerance.
+          example: 15.0
+          minimum: 0
+          maximum: 100
+          type: number
+        overPickSoftTolerancePercentage:
+          description: Allowed soft over pick deviation tolerance.
+          example: 15.0
+          minimum: 0
+          type: number
+        overPickHardTolerancePercentage:
+          description: Allowed hard over pick deviation tolerance.
+          example: 20.0
+          minimum: 0
+          type: number
+    ArticleAttributeItem:
+      type: object
+      properties:
+        category:
+          type: string
+          enum:
+            - descriptive
+            - miscellaneous
+            - pickingSequence
+          description: |-
+            This category is used by OCFF to customize implemented processes.
+            Categorized attributes are used by various processes and tools
+            throughout our platform. For a complete list of possible categories
+            and the correct use of those please refer to the documentation.
+            Default value: miscellaneous
+        key:
+          type: string
+          description: |-
+            Providing the key %%subtitle%% (see example) here will cause the
+            value to appear for example in the App directly under the title.
+            With all other attributes also the key will be displayed in the
+             clients.
+          example: "%%subtitle%%"
+          minLength: 1
+        keyLocalized:
+          description: The translations for the key of the attribute. This can be only
+            filled with a descriptive category. Excluding for %%subtitle%%
+          allOf:
+            - $ref: "#/components/schemas/LocaleString"
+        priority:
+          type: integer
+          description: |-
+            This value gives the priority in the respective attribute category.
+            The lower the value the higher is the priority, e.g. priority 1 is
+            higher than priority 10. Attributes that have the highest priority
+            might be selected for display in different articles of OCFF. Default
+            Value is 1001. For details please contact the product owners.
+          example: 100
+          format: int64
+          minimum: 1
+          maximum: 1000
+        value:
+          type: string
+          example: 585er Gold
+          minLength: 1
+        valueLocalized:
+          description: The translations for the key of the attribute. This can be only
+            filled with a descriptive category
+          allOf:
+            - $ref: "#/components/schemas/LocaleString"
+      required:
+        - key
+        - value
+    SubstituteAttributeItem:
+      allOf:
+        - $ref: '#/components/schemas/ArticleAttributeItem'
+    Substitute:
+      properties:
+        attributes:
+          items:
+            $ref: '#/components/schemas/SubstituteAttributeItem'
+          type: array
+        imageUrl:
+          type: string
+        priority:
+          description: >-
+            This field allows you to rank substitutes against each other. The
+            lowest number is the most preferrable substitute.
+          minimum: 0
+          type: number
+        scannableCodes:
+          items:
+            description: 'Strings, that identify the substitute article'
+            type: string
+          type: array
+        tenantArticleId:
+          type: string
+        title:
+          type: string
+      required:
+        - title
+        - tenantArticleId
+      type: object
+      xml:
+        name: Substitute
+    OrderLineItemForCreation:
+      additionalProperties: false
+      properties:
+        article:
+          $ref: '#/components/schemas/OrderLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the orderline. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        quantity:
+          description: quantity of the specific article that has been ordered
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        secondaryMeasurementUnitKey:
+          description: Secondary identifier for items unit of measurement.
+          example: liter
+          type: string
+        secondaryQuantity:
+          description: Secondary quantity of the specific article that has been ordered
+          example: 21
+          format: int64
+          minimum: 0
+          type: integer
+        scannableCodes:
+          items:
+            description: 'Codes, that identify the article'
+            type: string
+          type: array
+        measurementValidation:
+          $ref: '#/components/schemas/MeasurementValidation'
+        shopPrice:
+          description: price per piece of this line item
+          example: 1200
+          type: number
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        allowedSubstitutes:
+          items:
+            $ref: '#/components/schemas/Substitute'
+          type: array
+          description: 'Array of allowed substitutes for given orderLineItem. If an empty array is provided, no substitute is allowed for this orderLineItem. If allowedSubstitutes is not provided, this configured substitutes on listing level will be available'
+      required:
+        - article
+        - quantity
+      type: object
+    TagReference:
+      required:
+        - 'value'
+        - 'id'
+      properties:
+        value:
+          type: string
+        id:
+          type: string
+    OrderArticleAttributeItem:
+      allOf:
+        - $ref: '#/components/schemas/ArticleAttributeItem'
+    AddressType:
+      description: >-
+        Type of this address, used e.g. for communication with the carrier. Use POSTAL_ADDRESS for the address where the
+        order should be shipped to, INVOICE_ADDRESS for the address where the invoice is sent to and PARCEL_LOCKER if a
+        parcel locker is used for this order.
+      type: 'string'
+      enum:
+        - POSTAL_ADDRESS
+        - PARCEL_LOCKER
+        - INVOICE_ADDRESS
+    OrderPaymentInfo:
+      properties:
+        currency:
+          description: The currency in which the consumer paid with
+          example: 'EUR'
+          type: string
+      type: object
+    Address:
+      properties:
+        additionalAddressInfo:
+          example: 'to care of: Mrs. Müller'
+          type: string
+        city:
+          example: Langenfeld
+          pattern: ^.+$
+          type: string
+        country:
+          description: A two-digit country code as per ISO 3166-1 alpha-2
+          example: DE
+          pattern: ^[A-Z]{2}$
+          type: string
+        province:
+          example: "NRW"
+          pattern: ^.+$
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the address. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
+          type: object
+        houseNumber:
+          example: 42a
+          pattern: ^.+$
+          type: string
+        phoneNumbers:
+          items:
+            properties:
+              customAttributes:
+                description: >-
+                  Attributes that can be added to the phonenumber. These
+                  attributes cannot be used within fulfillment processes, but it
+                  could be useful to have the informations carried here.
+                type: object
+              label:
+                description: >-
+                  Can be used to give a description for the number, like
+                  "private", "business number", etc.
+                type: string
+              type:
+                enum:
+                  - MOBILE
+                  - PHONE
+                type: string
+              value:
+                description: The number itself. We do not enforce any format (yet).
+                type: string
+            required:
+              - value
+              - type
+            type: object
+          type: array
+        postalCode:
+          example: '40764'
+          pattern: ^.+$
+          type: string
+        street:
+          example: Hauptstr.
+          pattern: ^.+$
+          type: string
+      required:
+        - street
+        - city
+        - postalCode
+        - country
+      type: object
+    ConsumerAddress:
+      allOf:
+        - $ref: '#/components/schemas/Address'
+      properties:
+        companyName:
+          example: Speedy Boxales Ltd.
+          type: string
+        firstName:
+          example: Maxine
+          type: string
+        lastName:
+          example: Muller
+          type: string
+        salutation:
+          example: Frau
+          type: string
+        email:
+          type: string
+          minLength: 1
+          format: email
+          example: "test@try.de"
+        addressType:
+          $ref: '#/components/schemas/AddressType'
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+      type: object
+    Coordinates:
+      description: >-
+        Coordinates of the WGS84 geodetic reference system in Mercator
+        projection, as used e.g. by the Google Maps API
+      properties:
+        lat:
+          description: Latitude value
+          example: 50.937531
+          type: number
+        lon:
+          description: Longitude value
+          example: 6.960279
+          type: number
+      required:
+        - lat
+        - lon
+      type: object
+    PreselectedFacility:
+      properties:
+        facilityRef:
+          description: Reference to the facility which is supposed to fulfill the order
+          type: string
+      required:
+        - facilityRef
+      type: object
+    DeliveryReservationPreferences:
+      properties:
+        mode:
+          $ref: '#/components/schemas/DeliveryReservationMode'
+        reservationTime:
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
+      type: object
+      required:
+        - mode
+    DeliveryTarget:
+      type: string
+      description: The destination for a delivery
+      enum:
+        - SHIP_TO_STORE
+        - SHIP_TO_CUSTOMER
+    DeliveryEvent:
+      properties:
+        deliveryTarget:
+          $ref: '#/components/schemas/DeliveryTarget'
+        deliveryTrigger:
+          enum:
+            - DEFAULT
+          type: string
+      required:
+        - deliveryTarget
+        - deliveryTrigger
+    SupplyingFacilityConfiguration:
+      properties:
+        facilityRef:
+          type: string
+        deliveryEvents:
+          items:
+            $ref: '#/components/schemas/DeliveryEvent'
+          type: array
+      required:
+        - facilityRef
+        - deliveryEvents
+    CollectDelivery:
+      properties:
+        facilityRef:
+          description: >-
+            Reference to the facility where the consumer expects to collect the
+            items
+          type: string
+        paid:
+          default: false
+          description: Indicates if the order is already paid.
+          type: boolean
+        supplyingFacilities:
+          description: >-
+            DEPRECATED
+          items:
+            description: Reference of a Facility
+            example: 928f3730-bc48-4d85-b83f-3fd86b776178
+            type: string
+          type: array
+        supplyingFacilitiesConfigurations:
+          description: >-
+            References of facility that could supply contents of the order to
+            another facility with specific configuration of its usage
+          items:
+            $ref: '#/components/schemas/SupplyingFacilityConfiguration'
+          type: array
+        provisioningTime:
+          description: The point in time by which the order is supposed to be provisioned.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+      required:
+        - facilityRef
+      type: object
+
+    PreferredCarrier:
+      description: Keys of the preferred carriers to handle out the order
+      type: string
+
+    PreferredCarrierWithProduct:
+      additionalProperties: false
+      properties:
+        carrierKey:
+          type: string
+          example: 'DPD'
+        carrierProduct:
+          type: string
+          example: 'WORLDWIDE'
+        carrierServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarrierServices'
+      required:
+        - carrierKey
+    CarrierServices:
+      example: SIGNATURE
+      description: Services which should be booked from carrier
+      enum:
+        - SIGNATURE
+      type: string
+    DeliveryPreferences:
+      properties:
+        collect:
+          items:
+            $ref: '#/components/schemas/CollectDelivery'
+          maxItems: 1
+          type: array
+        shipping:
+          properties:
+            preferredCarriers:
+              items:
+                $ref: '#/components/schemas/PreferredCarrier'
+              type: array
+            preferredCarriersWithProduct:
+              items:
+                $ref: '#/components/schemas/PreferredCarrierWithProduct'
+              type: array
+            preselectedFacilities:
+              items:
+                $ref: '#/components/schemas/PreselectedFacility'
+              type: array
+            serviceLevel:
+              description: >-
+                DELIVERY: The parcel will reach the recipient according to the cycle time of the carrier, typically 1-3 days when shipping nationaly.
+                SAMEDAY: The parcel will reach the recipient the same day when ordering.
+              enum:
+                - DELIVERY
+                - SAMEDAY
+              type: string
+            carrierProductCategory:
+              $ref: '#/components/schemas/CarrierProductCategory'
+            desiredDeliveryTime:
+              example: '2020-02-03T09:45:51.525Z'
+              format: date-time
+              type: string
+          type: object
+        supplyingFacilities:
+          description: '@deprecated Use supplyingFacilities under collect'
+          items:
+            description: Reference of a Facility
+            example: 928f3730-bc48-4d85-b83f-3fd86b776178
+            type: string
+          type: array
+        targetTime:
+          description: At which time the result is expected.
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
+        reservationPreferences:
+          $ref: '#/components/schemas/DeliveryReservationPreferences'
+      type: object
+    CarrierProductCategory:
+      type: string
+      enum:
+        - STANDARD
+        - EXPRESS
+        - VALUE
+        - FORWARDING
+    OrderForCreation:
+      additionalProperties: false
+      properties:
+        consumer:
+          properties:
+            addresses:
+              items:
+                $ref: '#/components/schemas/ConsumerAddress'
+              type: array
+            customAttributes:
+              description: >-
+                Attributes that can be added to the consumer. These attributes
+                cannot be used within fulfillment processes, but it could be
+                useful to have the informations carried here.
+              type: object
+            email:
+              description: The email address of the consumer.
+              example: max@speedyboxales.com
+              format: email
+              type: string
+          required:
+            - addresses
+          type: object
+        customAttributes:
+          description: >-
+            Attributes that can be added to the order. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
+          type: object
+        deliveryPreferences:
+          $ref: '#/components/schemas/DeliveryPreferences'
+        orderDate:
+          description: The date this order was created at the supplying system.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        orderLineItems:
+          items:
+            $ref: '#/components/schemas/OrderLineItemForCreation'
+          type: array
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        stickers:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Sticker'
+        tenantOrderId:
+          description: >-
+            Field can be used as a reference number in foreign systems, for
+            example as a reference to the source system's identifier for this
+            order.
+          example: R456728546
+          type: string
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        customServices:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/CustomServiceReferenceForCreation'
+        paymentInfo:
+          $ref: '#/components/schemas/OrderPaymentInfo'
+        statusReasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderStatusReason'
+        promisesOptions:
+          $ref: '#/components/schemas/OrderPromisesOptions'
+      required:
+        - orderDate
+        - orderLineItems
+        - consumer
+      type: object
+      xml:
+        name: Order
+    OrderStatusReason:
+      properties:
+        reason:
+          description: The reason for setting this order status
+          type: string
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+      required:
+        - reason
+        - status
+    Sticker:
+      additionalProperties: false
+      properties:
+        key:
+          type: string
+          description: unique identifier
+          example: LGMl2DuvPnfPoSHhYFOm
+        priority:
+          description: priority of the given sticker
+          example: 100
+          format: int64
+          maximum: 10000
+          minimum: 1
+          type: integer
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        name:
+          description: Translated display name
+          type: string
+          example: 'SomeName'
+        color:
+          type: string
+          description: optional color coding for the sticker
+          example: '#19b6b5'
+      required:
+        - key
+        - nameLocalized
+        - priority
+    OrderPromisesOptions:
+      additionalProperties: false
+      required:
+        - validUntil
+      properties:
+        validUntil:
+          description: The date the promised order will become invalid and is cancelled automatically, when not transformed into an actual order.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+      type: object
+      xml:
+        name: OrderPromisesOptions
+x-google-endpoints:
+  - allowCors: true
+    name: 'https://ocff-blume2000-prd.api.fulfillmenttools.com'
