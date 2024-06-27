@@ -1,11 +1,10 @@
 {
 	"info": {
-		"_postman_id": "6a1212b3-cdcf-450d-9f92-8a34f2fffe1c",
+		"_postman_id": "fc37439a-0d94-40c5-a9fb-007315c9d436",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11673215",
-		"_collection_link": "https://cloudy-firefly-771136.postman.co/workspace/Postman-Git~3dd9cb75-6fcc-4f61-9b74-68272a3026fa/collection/11673215-6a1212b3-cdcf-450d-9f92-8a34f2fffe1c?action=share&source=collection_link&creator=11673215"
+		"_exporter_id": "13217745"
 	},
 	"item": [
 		{
@@ -16934,6 +16933,114 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Headless Usage",
+					"item": [
+						{
+							"name": "Needed Data in Order",
+							"item": [
+								{
+									"name": "Supply Order containing needed values",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"orderDate\": \"2023-03-11T08:16:07.000Z\",\n    \"consumer\": {\n        \"email\":\"costanza@no-email.com\",\n        \"addresses\": [\n            {\n                \"salutation\": \"Mr.\",\n                \"firstName\": \"George\",\n                \"lastName\": \"Costanza\",\n                \"street\": \"W. 90th Street\",\n                \"houseNumber\": \"321\",\n                \"postalCode\": \"NY 10024\",\n                \"city\": \"New York\",\n                \"province\":\"New York\",\n                \"country\": \"US\",\n                \"phoneNumber\": \"555-5170\",\n                \"addressType\": \"POSTAL_ADDRESS\"\n            }\n        ]\n    },\n    \"tenantOrderId\": \"FC-4711-2361\",\n    \"orderLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"2010681\",\n                \"title\": \"Steppjacke \\\"Mühlenbach\\\"\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/9fcb7e42-7c84-4ab0-999a-869efe077e0a.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"hsCode\",\n                        \"value\": \"42031010\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"5000\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"insurance\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"6000\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"dimensions\",\n                        \"key\": \"weight\",\n                        \"value\": \"500\",\n                        \"type\":\"NUMBER\"\n                    }\n                ]\n            },\n            \"quantity\": 20,\n            \"scannableCodes\": [\n                \"2010681\"\n            ]\n        },\n        {\n            \"article\": {\n                \"tenantArticleId\": \"5020064\",\n                \"title\": \"Wandtattoo Stadion\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/343f4569-66bb-4b0c-aa2b-20011a51b620.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"hsCode\",\n                        \"value\": \"49111010\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"1500\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"insurance\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"1500\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"dimensions\",\n                        \"key\": \"weight\",\n                        \"value\": \"100\",\n                        \"type\":\"NUMBER\"\n                    }\n                ]\n            },\n            \"quantity\": 100,\n            \"scannableCodes\": [\n                \"5020064\"\n            ]\n        }\n    ],\n    \"paymentInfo\": {\n        \"currency\": \"EUR\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/orders",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"orders"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"description": "Using this approach all the data, that is order specific (e.h. HS Codes, value and currency for customs), is encoded in the order. To learn details please see [https://docs.fulfillmenttools.com](https://docs.fulfillmenttools.com)"
+						},
+						{
+							"name": "Leveraging Listings",
+							"item": [
+								{
+									"name": "Store needed information in listings",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"listings\": [\n        {\n            \"tenantArticleId\": \"5020064\",\n            \"title\":\"Wandtattoo Stadion\",\n            \"attributes\": [\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"hsCode\",\n                        \"value\": \"49111010\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"1500\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"insurance\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"1500\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"dimensions\",\n                        \"key\": \"weight\",\n                        \"value\": \"100\",\n                        \"type\":\"NUMBER\"\n                    }\n                ]\n        },\n        {\n            \"tenantArticleId\": \"2010681\",\n            \"title\":\"Steppjacke \\\"Mühlenbach\\\"\",\n            \"attributes\": [\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"hsCode\",\n                        \"value\": \"42031010\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"5000\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"insurance\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"6000\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"dimensions\",\n                        \"key\": \"weight\",\n                        \"value\": \"500\",\n                        \"type\":\"NUMBER\"\n                    }\n                ]\n        }\n    ]\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/listings",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"listings"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": "PUT-IN-YOUR-FACILITY-ID"
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Listings/putFacilityListing"
+									},
+									"response": []
+								},
+								{
+									"name": "Supply Order - values will be taken from listing",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"orderDate\": \"2023-03-11T08:16:07.000Z\",\n    \"consumer\": {\n        \"email\":\"costanza@no-email.com\",\n        \"addresses\": [\n            {\n                \"salutation\": \"Mr.\",\n                \"firstName\": \"George\",\n                \"lastName\": \"Costanza\",\n                \"street\": \"W. 90th Street\",\n                \"houseNumber\": \"321\",\n                \"postalCode\": \"NY 10024\",\n                \"city\": \"New York\",\n                \"province\":\"New York\",\n                \"country\": \"US\",\n                \"phoneNumber\": \"555-5170\",\n                \"addressType\": \"POSTAL_ADDRESS\"\n            }\n        ]\n    },\n    \"tenantOrderId\": \"FC-4711-2361\",\n    \"orderLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"2010681\",\n                \"title\": \"Steppjacke \\\"Mühlenbach\\\"\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/9fcb7e42-7c84-4ab0-999a-869efe077e0a.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"hsCode\",\n                        \"value\": \"42031010\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"5000\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"insurance\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"6000\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"dimensions\",\n                        \"key\": \"weight\",\n                        \"value\": \"500\",\n                        \"type\":\"NUMBER\"\n                    }\n                ]\n            },\n            \"quantity\": 20,\n            \"scannableCodes\": [\n                \"2010681\"\n            ]\n        },\n        {\n            \"article\": {\n                \"tenantArticleId\": \"5020064\",\n                \"title\": \"Wandtattoo Stadion\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/343f4569-66bb-4b0c-aa2b-20011a51b620.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"hsCode\",\n                        \"value\": \"49111010\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"1500\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"insurance\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"1500\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"dimensions\",\n                        \"key\": \"weight\",\n                        \"value\": \"100\",\n                        \"type\":\"NUMBER\"\n                    }\n                ]\n            },\n            \"quantity\": 100,\n            \"scannableCodes\": [\n                \"5020064\"\n            ]\n        }\n    ],\n    \"paymentInfo\": {\n        \"currency\": \"EUR\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/orders",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"orders"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"description": "Using this approach the needed data, which is order specific (e.h. HS Codes, value and currency for customs), is being held in the correspoding listing. To learn details please see [https://docs.fulfillmenttools.com](https://docs.fulfillmenttools.com)"
+						}
+					],
+					"description": "Carrier Administration & Operation (creation & the sending of parcels) can be done headless. To learn details please see https://docs.fulfillmenttools.com"
 				}
 			],
 			"description": "You can find the API Documentation of carriers here: https://fulfillmenttools.github.io/api-reference-ui/#/Carriers"
