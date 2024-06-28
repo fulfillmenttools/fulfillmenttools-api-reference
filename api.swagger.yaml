@@ -22809,6 +22809,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OfferedStickersByTag'
+    ExpectedPickLineItemForCreation:
+      allOf:
+        - $ref: '#/components/schemas/PickLineItemForCreation'
+      properties:
+        transferId:
+          type: string
+      required:
+        - transferId
     PickLineItemForCreation:
       properties:
         article:
@@ -22957,6 +22965,20 @@ components:
             - id
             - picked
             - status
+          type: object
+    ExpectedPickLineItem:
+      allOf:
+        - $ref: '#/components/schemas/ExpectedPickLineItemForCreation'
+        - properties:
+            id:
+              description: >-
+                The id of this lineItem. It is generated during creation
+                automatically and suits as the primary identifier of the
+                described entity.
+              example: climk4dcQFiPdA5ULuhS
+              type: string
+          required:
+            - id
           type: object
     PickLineShortPickReason:
       additionalProperties: false
@@ -26370,6 +26392,10 @@ components:
               items:
                 $ref: '#/components/schemas/PickLineItem'
               type: array
+            expectedPickLineItems:
+              items:
+                $ref: '#/components/schemas/ExpectedPickLineItem'
+              type: array
             shortId:
               description: >-
                 A short identifier that helps assigning a pickJob to a customer.
@@ -26444,7 +26470,12 @@ components:
         pickLineItems:
           items:
             $ref: '#/components/schemas/PickLineItemForCreation'
-          minItems: 1
+          minItems: 0
+          type: array
+        expectedPickLineItems:
+          items:
+            $ref: '#/components/schemas/ExpectedPickLineItemForCreation'
+          minItems: 0
           type: array
         paymentInformation:
           $ref: '#/components/schemas/PaymentInformation'
@@ -26541,6 +26572,7 @@ components:
         - REJECTED
         - RESTOWED
         - EXPIRED
+        - WAITING_FOR_INPUT
       type: string
       xml:
         name: PickJobStatusUnprotected
@@ -26558,6 +26590,7 @@ components:
         - EXPIRED
         - CANCELED
         - OBSOLETE
+        - WAITING_FOR_INPUT
       type: string
       xml:
         name: PickJobStatus
