@@ -16359,6 +16359,62 @@ paths:
         description: The CheckoutOptionsInput
         required: true
       summary: Evaluate a checkout options input against the DOMS
+  /api/promises/checkoutoptions/delivery/timepoint:
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePointResponse'
+          description: |-
+
+            The request could be evaluated.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Checkout Options
+      operationId: checkoutOptionsTimepoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePointRequest'
+        required: true
+      summary: >-
+        This endpoint is to be used to get information about the possible
+        delivery of items
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
   /api/orders:
     get:
       parameters:
@@ -38331,6 +38387,67 @@ components:
         - reasons
         - rerouteDescriptions
       type: object
+    CheckoutOptionsDeliveryTimePointRequest:
+      properties:
+        desiredDeliveryDate:
+          type: string
+          example: '2024-06-03T00:00:00.000Z'
+          format: date-time
+          description: The desired delivery date. (timestamp of the request)
+        tenantArticleIds:
+          type: array
+          items:
+            type: string
+            description: >-
+              The tenant articleIds for which the check is performed. The
+              provided items are considered individually.
+            example: DE-ZGT-4711
+          minLength: 1
+          maxLength: 50
+        facilities:
+          description: Pair of facilityRef and latestPickingStart values
+          type: array
+          minLength: 1
+          maxLength: 5
+          items:
+            $ref: '#/components/schemas/FacilityRefLatestPickingStartPair'
+      required:
+        - facilities
+        - tenantArticleIds
+        - desiredDeliveryDate
+    CheckoutOptionsDeliveryTimePointResponse:
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePointResponseItem'
+      required:
+        - items
+    CheckoutOptionsDeliveryTimePointResponseItem:
+      properties:
+        tenantArticleId:
+          type: string
+          example: DE-ZGT-4711
+        available:
+          type: number
+          example: 4
+        facilityRef:
+          type: string
+      required:
+        - tenantArticleId
+        - available
+        - facilityRef
+    FacilityRefLatestPickingStartPair:
+      properties:
+        facilityRef:
+          type: string
+        latestPickingStart:
+          example: '2020-02-03T09:45:51.525Z'
+          format: date-time
+          type: string
+      required:
+        - facilityRef
+        - latestPickingStart
     InventoryArticle:
       type: object
       properties:
