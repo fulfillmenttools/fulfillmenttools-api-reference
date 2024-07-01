@@ -22159,6 +22159,65 @@ components:
       type: object
       xml:
         name: ShipmentPatchActions
+    NonDeliveryDaysPerCountryAndProvince:
+      type: object
+      additionalProperties: false
+      properties:
+        country:
+          type: string
+        nonDeliveryDays:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonDeliveryDays'
+        recurringNonDeliveryWeekdays:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeekDay'
+        nonDeliveryDaysPerProvince:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerProvince'
+      required:
+        - country
+        - nonDeliveryDays
+        - recurringNonDeliveryWeekdays
+        - nonDeliveryDaysPerProvince
+    NonDeliveryDaysPerProvince:
+      type: object
+      additionalProperties: false
+      properties:
+        province:
+          type: string
+        nonDeliveryDays:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonDeliveryDays'
+        recurringNonDeliveryWeekdays:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeekDay'
+      required:
+        - province
+        - nonDeliveryDays
+        - recurringNonDeliveryWeekdays
+    NonDeliveryDays:
+      type: object
+      additionalProperties: false
+      properties:
+        nonDeliveryType:
+          $ref: '#/components/schemas/NonDeliveryType'
+          default: SINGLE
+        nonDeliveryDay:
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+      required:
+        - nonDeliveryDay
+    NonDeliveryType:
+      type: string
+      enum:
+        - SINGLE
+        - RECURRING
     SortDirection:
       enum:
         - ASCENDING
@@ -29982,6 +30041,10 @@ components:
           example: max@speedyboxales.com
           format: email
           minLength: 1
+        nonDeliveryDaysPerCountryAndProvince:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
         countryServiceMappings:
           items:
             $ref: '#/components/schemas/CarrierCountryServiceMapping'
