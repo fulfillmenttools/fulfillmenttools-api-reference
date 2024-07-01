@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "8f8a8f3c-b36c-4fff-a1dc-3be7ef43030d",
+		"_postman_id": "98a21f4d-4580-440e-b271-2a673e5c3d33",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "22852714"
+		"_exporter_id": "22612271"
 	},
 	"item": [
 		{
@@ -3941,13 +3941,73 @@
 									"name": "CheckoutOptionsRequest",
 									"item": [
 										{
+											"name": "CheckoutOptions Earliest",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"earliestDeliveryDate\": \"2024-06-25T00:00:00.000Z\",\n  \"tenantArticleIds\": [\n    \"article-id-1\", \"article-id-1\", \"article-id-3\"\n  ],\n  \"consumerAddress\": {\n    \"country\": \"DE\"\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/promises/checkoutoptions/delivery/earliest",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"promises",
+														"checkoutoptions",
+														"delivery",
+														"earliest"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "CheckoutOptions TimePeriod",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"startDate\": \"2024-06-25T00:00:00.000Z\",\n  \"endDate\": \"2024-07-07T00:00:00.000Z\",\n  \"basket\": [\n    {\n      \"tenantArticleId\": \"tenantArticleId-1\",\n      \"quantity\": 1\n    }\n  ],\n  \"consumerAddress\": {\n    \"country\": \"DE\"\n  },\n  \"deliveryPreferences\": {\n    \"serviceLevel\": \"DELIVERY\",\n    \"preferredCarriers\": [\"DHL\"]\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/promises/checkoutoptions/delivery/timeperiod",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"promises",
+														"checkoutoptions",
+														"delivery",
+														"timeperiod"
+													]
+												}
+											},
+											"response": []
+										},
+										{
 											"name": "CheckoutOptions SFS",
 											"request": {
 												"method": "POST",
 												"header": [],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n    \"consumerAddress\": {\n        \"city\": \"Berlin\",\n        \"country\": \"DE\",\n        \"province\": \"Berlin-Brandenburg\",\n        \"houseNumber\": \"11\",\n        \"postalCode\": \"12233\",\n        \"street\": \"Berlinerstrasse\"\n    },\n    \"deliveryPreferences\": {\n        \"shipping\": {\n            \"preferredCarriers\": [ \"GLS\"],\n            \"preferredCarriersWithProduct\": [\n                    {\n                        \"carrierKey\": \"GLS\",\n                        \"carrierProduct\": \"EXPRESS\"\n                    }\n            ],\n            \"preselectedFacilities\": [\n                {\n                    \"facilityRef\": \"someFacilityRef\"\n                }\n            ],\n            \"serviceLevel\": \"DELIVERY\",\n            \"carrierProductCategory\": \"EXPRESS\"\n        }\n    },\n    \"orderLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"2020249\",\n                \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/240eadd8-8f50-479d-b0d8-74412bd4a9f9.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"miscellaneous\",\n                        \"key\": \"BRAND\",\n                        \"value\": \"Adidas\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 100,\n                        \"key\": \"%%subtitle%%\",\n                        \"value\": \"Neu!\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 200,\n                        \"key\": \"Mitgliederpreis\",\n                        \"value\": \"17,96 EUR\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 300,\n                        \"key\": \"Schnitt\",\n                        \"value\": \"Frauen\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 400,\n                        \"key\": \"Material\",\n                        \"value\": \"100% Baumwolle\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 500,\n                        \"key\": \"Artikelnummer\",\n                        \"value\": \"2020249\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 600,\n                        \"key\": \"Größe\",\n                        \"value\": \"S\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 700,\n                        \"key\": \"Beschreibung\",\n                        \"value\": \"Rotes T-Shirt mit weißen Streifen an den Ärmeln, Blockdruck mit Schriftzug auf der Brust\"\n                    }\n                ]\n            },\n            \"quantity\": 1,\n            \"scannableCodes\": [\n                \"2020249\"\n            ]\n        },\n        {\n            \"article\": {\n                \"tenantArticleId\": \"2010681\",\n                \"title\": \"Steppjacke \\\"Mühlenbach\\\"\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/9fcb7e42-7c84-4ab0-999a-869efe077e0a.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 100,\n                        \"key\": \"%%subtitle%%\",\n                        \"value\": \"Neu!\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 200,\n                        \"key\": \"Größe\",\n                        \"value\": \"L\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 300,\n                        \"key\": \"Oberstoff\",\n                        \"value\": \"100% Polyester\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 400,\n                        \"key\": \"Futter\",\n                        \"value\": \"100% Polyester\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 500,\n                        \"key\": \"Füllung\",\n                        \"value\": \"100% Polyester\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 600,\n                        \"key\": \"Beschreibung\",\n                        \"value\": \"Dreifarbige Steppjacke mit verstaubarer Kapuze, Zwei Eingriffstaschen, Gesticktes Logo auf der Brust\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 700,\n                        \"key\": \"Artikelnummer\",\n                        \"value\": \"2010681\"\n                    }\n                ]\n            },\n            \"quantity\": 1,\n            \"scannableCodes\": [\n                \"2010681\"\n            ]\n        },\n        {\n            \"article\": {\n                \"tenantArticleId\": \"5020064\",\n                \"title\": \"Wandtattoo Stadion\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/343f4569-66bb-4b0c-aa2b-20011a51b620.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 100,\n                        \"key\": \"Maße\",\n                        \"value\": \"70 x 50 cm\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 200,\n                        \"key\": \"Beschreibung\",\n                        \"value\": \"Wandtattoo in Ziegelwand-Optik, Mit tollem Blick aufs Stadion\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 300,\n                        \"key\": \"Anwendung\",\n                        \"value\": \"Für die Beklebung sollte die Fläche staub- und fetfrei sein. Bringen Sie den Aufkleber in Position und reiben Sie diese gleichmäßig mit der flachen Hand an den Untergrund, um sie zu fixieren. Jede Stelle nochmals gest andrücken. Fertig! Für auftretende Schäden nach der Verklebung auf dem Untergrund etc. ist eine Haftung ausgeschlossen.\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 400,\n                        \"key\": \"Artikelnummer\",\n                        \"value\": \"5020064\"\n                    }\n                ]\n            },\n            \"quantity\": 2,\n            \"scannableCodes\": [\n                \"5020064\"\n            ]\n        }\n    ],\n    \"tags\": [\n        {\n            \"value\": \"allowed\",\n            \"id\": \"substitutes\"\n        }\n    ],\n    \"customServices\": [\n        {\n            \"customServiceDefinition\": {\n                \"customServiceRef\": \"CUSTOM_SERVICE_REF_A\",\n                \"additionalInformation\": [\n                    {\n                        \"additionalInformationRef\": \"ADDITIONAL_INFO_REF_OF_CUSTOM_SERVICE_A\",\n                        \"value\": 100\n                    }\n                ]\n            },\n            \"articleItems\": [\n                {\n                    \"tenantArticleRef\": \"5020064\",\n                    \"quantity\": 2\n                }\n            ],\n            \"customServiceItems\": [\n                {\n                    \"customServiceDefinition\": {\n                        \"customServiceRef\": \"CUSTOM_SERVICE_REF_B\",\n                        \"additionalInformation\": [\n                            {\n                                \"additionalInformationRef\": \"ADDITIONAL_INFO_REF_OF_CUSTOM_SERVICE_B\",\n                                \"value\": 100\n                            }\n                        ]\n                    },\n                    \"articleItems\": [\n                        {\n                            \"tenantArticleRef\": \"5020064\",\n                            \"quantity\": 1\n                        }\n                    ],\n                    \"customServiceItems\": []\n                }\n            ]\n        }\n    ]\n}",
+													"raw": "{\n  \"consumerAddress\": {\n    \"country\": \"DE\"\n  },\n  \"deliveryPreferences\": {\n    \"shipping\": {\n      \"preferredCarriers\": [\n        \"DHL\"\n      ],\n      \"serviceLevel\": \"DELIVERY\",\n      \"desiredDeliveryTime\": \"2024-02-03T00:00:00.000Z\"\n    },\n    \"reservationPreferences\": {\n      \"mode\": \"ALAP\"\n    }\n  },\n  \"orderLineItems\": [\n    {\n      \"article\": {\n        \"tenantArticleId\": \"4711\",\n        \"title\": \"Pink Blossom\"\n      },\n      \"quantity\": 1\n    }\n  ]\n}",
 													"options": {
 														"raw": {
 															"language": "json"
@@ -3963,36 +4023,6 @@
 														"api",
 														"promises",
 														"checkoutoptions"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "CheckoutOptions TimePoint",
-											"request": {
-												"method": "POST",
-												"header": [],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"desiredDeliveryDate\": \"2024-02-03T00:00:00.000Z\",\n  \"tenantArticleIds\": [\n    \"geschenk1\", \"geschenk2\", \"geschenk3\", \"grußkarte1\", \"grußkarte2\"\n  ],\n  \"facilities\": [\n    {\n      \"facilityRef\": \"lager-id-1\",\n      \"latestPickingStart\": \"2024-02-02T13:00:00.000Z\"\n    },\n    {\n      \"facilityRef\": \"lager-id-2\",\n      \"latestPickingStart\": \"2024-02-02T08:00:00.000Z\"\n    }\n  ]\n}",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{host}}/api/promises/checkoutoptions/delivery/timepoint",
-													"host": [
-														"{{host}}"
-													],
-													"path": [
-														"api",
-														"promises",
-														"checkoutoptions",
-														"delivery",
-														"timepoint"
 													]
 												}
 											},
@@ -4021,6 +4051,36 @@
 														"api",
 														"promises",
 														"checkoutoptions"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "CheckoutOptions TimePoint",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"desiredDeliveryDate\": \"2024-02-03T00:00:00.000Z\",\n  \"tenantArticleIds\": [\n    \"tenantArticleId-1\", \"tenantArticleId-2\", \"tenantArticleId-3\", \"tenantArticleId-4\", \"tenantArticleId-5\"\n  ],\n  \"facilities\": [\n    {\n      \"facilityRef\": \"lager-id-1\",\n      \"latestPickingStart\": \"2024-02-02T13:00:00.000Z\"\n    },\n    {\n      \"facilityRef\": \"lager-id-2\",\n      \"latestPickingStart\": \"2024-02-02T08:00:00.000Z\"\n    }\n  ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/promises/checkoutoptions/delivery/timepoint",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"promises",
+														"checkoutoptions",
+														"delivery",
+														"timepoint"
 													]
 												}
 											},
