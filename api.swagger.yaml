@@ -30156,8 +30156,16 @@ components:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
         countryServiceMappings:
+          description: >-
+            Deprecated - manual country service mapping is deprecated, please
+            use the predefined staticCountryServiceMappings if available to see
+            which fields are needed
           items:
             $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          type: array
+        staticCountryServiceMappings:
+          items:
+            $ref: '#/components/schemas/StaticCarrierCountryServiceMapping'
           type: array
         serviceUrl:
           type: string
@@ -30181,42 +30189,16 @@ components:
       required:
         - cost
         - currency
-    CarrierCountryServiceMapping:
+    StaticCarrierCountryServiceMapping:
       type: object
       additionalProperties: false
       properties:
-        id:
-          description: unique identifier for a countryServiceMapping
-          example: bc5b581a-8f65-45b0-9f81-6e0d4babbcb2
-          type: string
         source:
           $ref: '#/components/schemas/RegionInformation'
         destinations:
           description: The destination regions this mapping should be applied to.
           items:
             $ref: '#/components/schemas/RegionInformation'
-          minItems: 1
-          type: array
-        sourceCountry:
-          deprecated: true
-          type: string
-          minLength: 2
-          maxLength: 2
-          description: >-
-            <center><img
-            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
-            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
-            /><br />@deprecated Use source instead.
-          example: DE
-        destinationCountries:
-          deprecated: true
-          description: >-
-            <center><img
-            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
-            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
-            /><br />@deprecated Use destination instead.
-          items:
-            $ref: '#/components/schemas/CountryCode'
           minItems: 1
           type: array
         mandatoryShippingAttributes:
@@ -30242,9 +30224,40 @@ components:
           type: array
           maxItems: 1
       required:
-        - id
         - source
         - destinations
+    CarrierCountryServiceMapping:
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/StaticCarrierCountryServiceMapping'
+        - properties:
+            id:
+              description: unique identifier for a countryServiceMapping
+              example: bc5b581a-8f65-45b0-9f81-6e0d4babbcb2
+              type: string
+            sourceCountry:
+              type: string
+              minLength: 2
+              maxLength: 2
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />Deprecated - Use source instead.
+              example: DE
+            destinationCountries:
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />Deprecated - Use destination instead.
+              items:
+                $ref: '#/components/schemas/CountryCode'
+              minItems: 1
+              type: array
+      required:
+        - id
     CarrierCountryServiceMappingForCreation:
       type: object
       additionalProperties: false
