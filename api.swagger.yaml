@@ -41356,6 +41356,37 @@ components:
         - payload
         - pickJobRef
       type: object
+    ExternalActionExecutedWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/ExternalActionExecutedWebHookEventPayload'
+      required:
+        - payload
+      type: object
+    ExternalActionExecutedWebHookEventPayload:
+      properties:
+        logId:
+          type: string
+        externalActionRef:
+          type: string
+        type:
+          $ref: '#/components/schemas/ExternalActionType'
+        editor:
+          $ref: '#/components/schemas/Editor'
+        actionPayload:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/ExternalLinkActionLogPayload'
+            - $ref: '#/components/schemas/ExternalFormActionLogPayload'
+      required:
+        - logId
+        - externalActionRef
+        - type
+        - editor
+        - actionPayload
+      type: object
     PickjobPickingCommencedWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
