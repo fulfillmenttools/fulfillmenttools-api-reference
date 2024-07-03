@@ -8172,6 +8172,72 @@ paths:
       description: ''
       operationId: status
       summary: A public status endpoint that renders general availability information
+  /api/itemreturnjobs/{itemReturnJobId}/itemreturns/{itemReturnId}/parcels:
+    post:
+      parameters:
+        - description: itemReturnJobId
+          in: path
+          name: itemReturnJobId
+          required: true
+          schema:
+            type: string
+        - description: id of the itemReturn to create a parcel for
+          in: path
+          name: itemReturnId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelForCreation'
+        description: Payload of the parcel you want to create
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+          description: Create a parcel for an itemReturn
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Returns
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: createItemReturnParcel
+      summary: Create a parcel for an itemReturn
   /api/subscriptions:
     get:
       parameters:
@@ -26437,6 +26503,8 @@ components:
               $ref: '#/components/schemas/ConsumerAddress'
             processRef:
               type: string
+            facilityRef:
+              type: string
             operativeProcessRef:
               type: string
             items:
@@ -26477,7 +26545,6 @@ components:
             - id
             - status
             - carrierRef
-            - shipmentRef
             - processRef
             - sender
             - recipient
@@ -26492,6 +26559,11 @@ components:
           description: Desired product of given carrier to choose when ordering a label
           type: string
           example: EXPRESS
+        carrierRef:
+          description: >-
+            references the carrier to be used for sending. Can not be set when
+            creating a parcel for an existing shipment.
+          type: string
         customAttributes:
           description: >-
             Attributes that can be added to the parcel. These attributes cannot
@@ -32360,6 +32432,12 @@ components:
           items:
             type: string
           type: array
+        parcelRefs:
+          type: array
+          items:
+            type: string
+            description: references the parcel
+            example: 672f3f72-b5d3-47c7-941c-9af5348e3cd7
         returnedLineItems:
           type: array
           minItems: 1
