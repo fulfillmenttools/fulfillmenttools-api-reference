@@ -30247,12 +30247,41 @@ components:
           items:
             $ref: '#/components/schemas/StaticCarrierCountryServiceMapping'
           type: array
+        thresholdPriceValue:
+          $ref: '#/components/schemas/ThresholdPriceValue'
         serviceUrl:
           type: string
       required:
         - returnLabel
         - carrierRef
       type: object
+    ThresholdPriceValue:
+      additionalProperties: false
+      type: object
+      properties:
+        priority:
+          type: integer
+          minimum: 1
+        priceRange:
+          $ref: '#/components/schemas/PriceRange'
+      required:
+        - priority
+        - priceRange
+    PriceRange:
+      additionalProperties: false
+      type: object
+      properties:
+        from:
+          type: number
+          example: 12.99
+          minimum: 0
+        to:
+          type: number
+          example: 2500
+          minimum: 1
+      required:
+        - from
+        - to
     DeliveryCost:
       type: object
       additionalProperties: false
@@ -34125,6 +34154,8 @@ components:
           type: string
         serviceUrl:
           type: string
+        thresholdPriceValue:
+          $ref: '#/components/schemas/ThresholdPriceValue'
       required:
         - key
       type: object
