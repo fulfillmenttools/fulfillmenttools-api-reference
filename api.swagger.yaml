@@ -25673,19 +25673,27 @@ components:
               type: string
             status:
               $ref: '#/components/schemas/ParcelStatus'
-              description: The state of the parcel we want to change.
             result:
               $ref: '#/components/schemas/ParcelResult'
-              description: The result of the parcel
             customAttributes:
               type: object
+            dimensions:
+              $ref: '#/components/schemas/ParcelDimensions'
+            productValue:
+              nullable: true
+              description: >-
+                Monetary value of all goods in this parcel. Needed for sending
+                cross border packages (customs) To be interpreted as money in
+                the currency given under paymentInformation.currency
+              type: number
+              example: 12.5
+            pickUpInformation:
+              $ref: '#/components/schemas/ParcelPickUpInformation'
+            services:
+              $ref: '#/components/schemas/ParcelServices'
             carrierProduct:
               nullable: true
               type: string
-              description: Only changable on status OPEN or FAILED of the existing Parcel
-            services:
-              nullable: true
-              $ref: '#/components/schemas/ParcelServices'
               description: Only changable on status OPEN or FAILED of the existing Parcel
           required:
             - action
@@ -26431,6 +26439,8 @@ components:
         - OBSOLETE
       type: string
     ParcelDimensions:
+      additionalProperties: false
+      nullable: true
       properties:
         height:
           description: The height of the package (in cm)
@@ -26451,6 +26461,7 @@ components:
       type: object
     ParcelServices:
       additionalProperties: false
+      nullable: true
       properties:
         bulkyGoods:
           type: boolean
@@ -26589,7 +26600,7 @@ components:
           type: array
         items:
           items:
-            $ref: '#/components/schemas/ParcelItem'
+            $ref: '#/components/schemas/ParcelItemForCreation'
           type: array
         recipient:
           $ref: '#/components/schemas/ConsumerAddress'
@@ -26618,34 +26629,7 @@ components:
           items:
             $ref: '#/components/schemas/OperativeTransfer'
       type: object
-    ParcelPickUpInformation:
-      additionalProperties: false
-      properties:
-        startTime:
-          description: needs to be before end time
-          format: date-time
-          type: string
-        endTime:
-          description: needs to be after start time
-          format: date-time
-          type: string
-      required:
-        - startTime
-        - endTime
-    ParcelPostalCharge:
-      properties:
-        value:
-          type: number
-          description: Monetary Value in the given currency
-          example: 15.5
-        currency:
-          type: string
-          description: Currency of the given value
-          example: EUR
-      required:
-        - currency
-        - value
-    ParcelItem:
+    ParcelItemForCreation:
       properties:
         quantity:
           type: integer
@@ -26673,6 +26657,90 @@ components:
         - quantity
       type: object
       xml:
+        name: ParcelItemForCreation
+    ParcelItemForUpdate:
+      additionalProperties: false
+      properties:
+        id:
+          description: >-
+            The id of this parcelItem. It is generated during creation
+            automatically and suits as the primary identifier of the described
+            entity.
+          example: ae3ba67c-a42c-4816-96ac-16231e49640c
+          type: string
+        parcelItemValue:
+          $ref: '#/components/schemas/ParcelItemValue'
+        weightInGram:
+          type: integer
+          nullable: true
+          description: Weight of a single item in gram
+          example: 10000
+      required:
+        - id
+      type: object
+    ParcelPickUpInformation:
+      additionalProperties: false
+      nullable: true
+      properties:
+        startTime:
+          description: needs to be before end time
+          format: date-time
+          type: string
+        endTime:
+          description: needs to be after start time
+          format: date-time
+          type: string
+      required:
+        - startTime
+        - endTime
+      xml:
+        name: ParcelItemForCreation
+    ParcelPostalCharge:
+      properties:
+        value:
+          type: number
+          description: Monetary Value in the given currency
+          example: 15.5
+        currency:
+          type: string
+          description: Currency of the given value
+          example: EUR
+      required:
+        - currency
+        - value
+    ParcelItem:
+      properties:
+        id:
+          description: The id of this parcelItem.
+          example: ae3ba67c-a42c-4816-96ac-16231e49640c
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+          description: amount of the given items
+          example: 5
+        hsCode:
+          type: string
+          maxLength: 50
+        description:
+          description: Description of the given item/items
+          example: Item Description
+          type: string
+        weightInGram:
+          type: integer
+          description: Weight of a single item in gram
+          example: 10000
+        parcelItemValue:
+          $ref: '#/components/schemas/ParcelItemValue'
+        countryOfManufacture:
+          type: string
+        article:
+          $ref: '#/components/schemas/ParcelItemArticle'
+      required:
+        - id
+        - quantity
+      type: object
+      xml:
         name: ParcelItem
     ParcelItemArticle:
       allOf:
@@ -26686,6 +26754,7 @@ components:
       xml:
         name: ParcelItemArticle
     ParcelItemValue:
+      nullable: true
       properties:
         value:
           type: number
