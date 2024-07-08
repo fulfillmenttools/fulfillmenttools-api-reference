@@ -23990,7 +23990,20 @@ components:
         - version
       type: object
     HandoverLineItem:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/HandoverLineItemForCreation'
       properties:
+        id:
+          type: string
+      required:
+        - id
+    HandoverLineItemForCreation:
+      properties:
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefusedItem'
         article:
           $ref: '#/components/schemas/HandoverLineItemArticle'
         quantity:
@@ -24062,6 +24075,12 @@ components:
               format: int64
               minimum: 0
               type: integer
+            id:
+              type: string
+            refused:
+              type: array
+              items:
+                $ref: '#/components/schemas/RefusedItem'
       required:
         - quantity
         - article
@@ -24070,6 +24089,9 @@ components:
         - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/HandoverjobForCreation'
         - properties:
+            handoverJobLineItems:
+              items:
+                $ref: '#/components/schemas/HandoverLineItem'
             anonymized:
               description: Indicates if gdpr related data was anonymized
               example: false
@@ -24126,7 +24148,7 @@ components:
           type: string
         handoverJobLineItems:
           items:
-            $ref: '#/components/schemas/HandoverLineItem'
+            $ref: '#/components/schemas/HandoverLineItemForCreation'
           type: array
         loadUnitRefs:
           description: Reference to array of load unit Refs
@@ -27579,6 +27601,7 @@ components:
     HandoverJobActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/HandoverJobCancelActionParameter'
+        - $ref: '#/components/schemas/HandoverJobLineItemUpdateActionParameter'
     HandoverJobCancelActionParameter:
       additionalProperties: false
       properties:
@@ -27599,9 +27622,76 @@ components:
         - name
         - version
         - payload
+    HandoverJobLineItemUpdateActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/HandoverJobLineItemUpdateActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        lineItem:
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+            refused:
+              items:
+                $ref: '#/components/schemas/RefusedItemForUpdate'
+            substituteItems:
+              type: array
+              items:
+                $ref: '#/components/schemas/HandoverSubstituteLineItemForUpdate'
+          required:
+            - id
+      required:
+        - name
+        - version
+        - lineItem
+    RefusedItem:
+      properties:
+        quantity:
+          type: integer
+          minimum: 0
+        reason:
+          type: string
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        comment:
+          type: string
+      required:
+        - quantity
+        - reasonLocalized
+    RefusedItemForUpdate:
+      properties:
+        quantity:
+          type: integer
+          minimum: 0
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        comment:
+          type: string
+      required:
+        - quantity
+        - reasonLocalized
+    HandoverSubstituteLineItemForUpdate:
+      properties:
+        id:
+          type: string
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefusedItemForUpdate'
+      required:
+        - id
     HandoverJobCancelActionEnum:
       enum:
         - CANCEL
+      type: string
+    HandoverJobLineItemUpdateActionEnum:
+      enum:
+        - UPDATE_LINEITEM
       type: string
     ModifyPickRunLineItemAction:
       allOf:
@@ -29640,6 +29730,12 @@ components:
         - $ref: '#/components/schemas/ArticleAttributeItem'
     SubstituteLineItem:
       properties:
+        id:
+          type: string
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefusedItem'
         article:
           $ref: '#/components/schemas/SubstituteLineItemArticle'
         priority:
