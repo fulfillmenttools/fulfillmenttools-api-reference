@@ -667,6 +667,103 @@ paths:
       description: ''
       operationId: deleteCarrierCountryServiceMapping
       summary: Delete a carrierCountryServiceMapping for carrier with given ID
+  /api/configurations/transittime:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransitTimeConfiguration'
+          description: >-
+            Transit time configuration was found & you were allowed to access
+            it. The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Cutoff time configuration not found
+      tags:
+        - Last Mile Integration - Carriers
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: getTransitTimeConfiguration
+      summary: Get a tenant wide transit time time config
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransitTimeConfiguration'
+          description: Transit time configuration was written successfully
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Transit time configuration not found
+      tags:
+        - Last Mile Integration - Carriers
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: putTransitTimeConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransitTimeConfigurationForUpsert'
+        required: true
+      summary: Update transit time configuration of a tenant
   /api/configurations/cutofftime:
     get:
       responses:
@@ -22607,6 +22704,33 @@ components:
       required:
         - clearName
         - version
+    TransitTimeConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        calculationStrategy:
+          type: string
+          enum:
+            - EARLIEST
+            - LATEST
+        id:
+          type: string
+      required:
+        - id
+        - calculationStrategy
+      type: object
+    TransitTimeConfigurationForUpsert:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        calculationStrategy:
+          type: string
+          enum:
+            - EARLIEST
+            - LATEST
+      required:
+        - calculationStrategy
+      type: object
     CutoffTimeConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
