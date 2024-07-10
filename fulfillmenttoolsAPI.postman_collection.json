@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "a4dc0f84-3094-43f2-943c-eb5397b755b7",
+		"_postman_id": "5b4fda3d-b244-45eb-ad36-40cfd7aaa152",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "13217745"
+		"_exporter_id": "19028498"
 	},
 	"item": [
 		{
@@ -7022,12 +7022,12 @@
 									"query": [
 										{
 											"key": "startAfterId",
-											"value": null,
+											"value": "",
 											"disabled": true
 										},
 										{
 											"key": "size",
-											"value": null,
+											"value": "",
 											"disabled": true
 										}
 									],
@@ -14151,37 +14151,37 @@
 										},
 										{
 											"key": "status",
-											"value": null,
+											"value": "",
 											"description": "OPEN, CLOSED, FINISHED, CANCELLED, OBSOLETE",
 											"disabled": true
 										},
 										{
 											"key": "orderBy",
-											"value": null,
+											"value": "",
 											"description": "LAST_MODIFIED_ASC, LAST_MODIFIED_DESC, TARGET_TIME_ASC, TARGET_TIME_DESC",
 											"disabled": true
 										},
 										{
 											"key": "startTargetTime",
-											"value": null,
+											"value": "",
 											"description": "URL encoded: e.g. 2020-02-03T08%3A45%3A50.525Z",
 											"disabled": true
 										},
 										{
 											"key": "endTargetTime",
-											"value": null,
+											"value": "",
 											"description": "URL encoded: e.g. 2020-02-03T08%3A45%3A50.525Z",
 											"disabled": true
 										},
 										{
 											"key": "channel",
-											"value": null,
+											"value": "",
 											"description": "COLLECT, SHIPPING",
 											"disabled": true
 										},
 										{
 											"key": "searchTerm",
-											"value": null,
+											"value": "",
 											"description": "search in: serviceJobNames, tenantOrderId, consumerName, tenantArticleIds, articleTitles, invoiceAddress, shippingAddress, scannableCodes",
 											"disabled": true
 										}
@@ -14928,13 +14928,13 @@
 										},
 										{
 											"key": "searchTerm",
-											"value": null,
+											"value": "",
 											"description": "Search will be performed on multiple fields, including return id, tenant order id, customer name, tenant article ids, artile titles",
 											"disabled": true
 										},
 										{
 											"key": "itemReturnLineItemStatus",
-											"value": null,
+											"value": "",
 											"description": "OPEN, IN_PROGRESS, WAITING_FOR_INPUT, REJECTED, ACCEPTED",
 											"disabled": true
 										},
@@ -16891,6 +16891,47 @@
 							]
 						},
 						{
+							"name": "NonDeliveryDays",
+							"item": [
+								{
+									"name": "Upsert Carrier Configuration",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"alternativeReturnAddress\": {\n        \"city\": \"Hamburg\",\n        \"houseNumber\": \"1\",\n        \"postalCode\": \"12345\",\n        \"street\": \"Hamburger Str.\",\n        \"country\": \"DE\",\n        \"companyName\": \"SenderInc\"\n    },\n    \"carrierRef\": \"PUT-IN-YOUR-DHL-CARRIER-REF\",\n    \"returnLabel\": true,\n    \"version\": 1,\n    \"serviceUrl\": \"https://api-sandbox.dhl.com/parcel/de/shipping\",\n    \"trackAndTraceUrl\": \"https://api-test.dhl.com/track/shipments\",\n    \"nonDeliveryDaysPerCountryAndProvince\": [\n      {\n        \"country\": \"DE\",\n        \"recurringNonDeliveryWeekdays\": [\n                \"MONDAY\"\n            ],\n            \"nonDeliveryDays\": [\n              {\n                \"nonDeliveryType\": \"RECURRING\",\n                \"nonDeliveryDay\": \"2024-01-01\"\n              }\n            ],\n        \"nonDeliveryDaysPerProvince\": [\n          {\n            \"province\": \"DE-BY\",\n            \"recurringNonDeliveryWeekdays\": [\n                \"MONDAY\"\n            ],\n            \"nonDeliveryDays\": [\n              {\n                \"nonDeliveryType\": \"RECURRING\",\n                \"nonDeliveryDay\": \"2024-01-01\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/carriers/:carrierId/configuration",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"carriers",
+												":carrierId",
+												"configuration"
+											],
+											"variable": [
+												{
+													"key": "carrierId",
+													"value": ""
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putRoutingConfiguraton"
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Get Carrier By ID",
 							"request": {
 								"method": "GET",
@@ -17482,6 +17523,60 @@
 						}
 					],
 					"description": "Carrier Administration & Operation (creation & the sending of parcels) can be done headless. To learn details please see https://docs.fulfillmenttools.com"
+				},
+				{
+					"name": "Transit Times",
+					"item": [
+						{
+							"name": "Get Transit Time Configuration",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/configurations/transittime",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"configurations",
+										"transittime"
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Transit Time Time Configuration",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"calculationStrategy\": \"LATEST\",\n      \"version\" :0\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/configurations/transittime",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"configurations",
+										"transittime"
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putRoutingConfiguraton"
+							},
+							"response": []
+						}
+					]
 				}
 			],
 			"description": "You can find the API Documentation of carriers here: https://fulfillmenttools.github.io/api-reference-ui/#/Carriers"
