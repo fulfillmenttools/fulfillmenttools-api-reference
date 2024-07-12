@@ -27945,10 +27945,12 @@ components:
               properties:
                 carrierKey:
                   type: string
+                carrierProductCategory:
+                  $ref: '#/components/schemas/CarrierProductCategory'
                 carrierProduct:
                   description: >-
                     Desired product of given carrier to choose when ordering a
-                    label
+                    label, this is specific to a carrier
                   type: string
                   example: EXPRESS
                 carrierServices:
@@ -30624,6 +30626,11 @@ components:
             type: string
             example: EXPRESS
           description: Array of products for the given mapping
+        carrierServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarrierServices'
+          description: Services which can be provided by the carrier
         carrierProductCategory:
           $ref: '#/components/schemas/CarrierProductCategory'
         transitTime:
@@ -30808,6 +30815,9 @@ components:
       required:
         - carrierConfigurationVersion
     CarrierProductCategory:
+      description: >-
+        Desired product class to choose when ordering a label, this is not a
+        carrier specific value
       type: string
       enum:
         - STANDARD
@@ -35684,6 +35694,7 @@ components:
             - insurance
             - shop
             - dimensions
+            - carrierService
           description: |-
             This category is used by OCFF to customize implemented processes.
             Categorized attributes are used by various processes and tools
