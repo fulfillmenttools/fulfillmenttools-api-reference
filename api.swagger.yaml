@@ -33795,6 +33795,7 @@ components:
       enum:
         - BLANK_LINK
         - FORM
+        - COMMENT
     ExternalFormActionDefinition:
       additionalProperties: false
       properties:
@@ -33964,6 +33965,19 @@ components:
       type: object
       xml:
         name: ExternalLinkActionDefinition
+    ExternalCommentActionDefinition:
+      description: >-
+        This action provides a possibility to set comments. It also enables a
+        possibility to save action results for other actions.
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/ExternalActionType'
+      required:
+        - type
+      type: object
+      xml:
+        name: ExternalCommentActionDefinition
     ExternalActionForCreation:
       properties:
         processRef:
@@ -33982,6 +33996,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ExternalFormActionDefinition'
             - $ref: '#/components/schemas/ExternalLinkActionDefinition'
+            - $ref: '#/components/schemas/ExternalCommentActionDefinition'
           discriminator:
             propertyName: type
             mapping:
@@ -34014,6 +34029,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ExternalFormActionDefinition'
             - $ref: '#/components/schemas/ExternalLinkActionDefinition'
+            - $ref: '#/components/schemas/ExternalCommentActionDefinition'
           discriminator:
             propertyName: type
             mapping:
@@ -34118,6 +34134,27 @@ components:
       type: object
       xml:
         name: ExternalFormActionLogPayload
+    ExternalCommentActionLogPayload:
+      description: >-
+        This action payload provides a possibility to set comments. It also
+        enables a possibility to save action results for other actions.
+      additionalProperties: false
+      properties:
+        comment:
+          description: The actual comment.
+          type: string
+          minLength: 1
+        externalActionRef:
+          description: >-
+            An existing external action id you want to link with. The action
+            have to be in the same process.
+          type: string
+          minLength: 1
+      required:
+        - comment
+      type: object
+      xml:
+        name: ExternalCommentActionLogPayload
     ExternalActionLogForCreation:
       properties:
         requiresAnonymization:
@@ -34126,6 +34163,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ExternalLinkActionLogPayload'
             - $ref: '#/components/schemas/ExternalFormActionLogPayload'
+            - $ref: '#/components/schemas/ExternalCommentActionLogPayload'
       required:
         - requiresAnonymization
         - actionPayload
