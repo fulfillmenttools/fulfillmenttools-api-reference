@@ -16908,6 +16908,53 @@ paths:
         - DOMS - Orders
       operationId: orderAction
       summary: Call a single action on a given order
+  /api/orders/{orderId}/orderlineitems/{orderLineItemId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderLineItemActionsParameter'
+      parameters:
+        - description: Reference to the order you want to call the action for
+          in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+        - description: Reference to the order line item you want to call the action for
+          in: path
+          name: orderLineItemId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: Updated Order in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Orders
+      operationId: orderLineItemAction
+      summary: Call a single action on a given order and line item
   /api/routing/commands/reroute:
     post:
       responses:
@@ -39175,6 +39222,22 @@ components:
       required:
         - name
         - version
+    OrderLineItemActionsParameter:
+      oneOf:
+        - $ref: '#/components/schemas/OrderLineItemCustomAttributesChangeParameter'
+    AbstractOrderLineItemActionsParameter:
+      discriminator:
+        propertyName: name
+      properties:
+        name:
+          type: string
+        version:
+          description: Version of the order to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
     OrderUnlockActionParameter:
       allOf:
         - $ref: '#/components/schemas/AbstractOrderActionsParameter'
@@ -39233,6 +39296,24 @@ components:
         - name
         - version
         - consumerAddresses
+    OrderLineItemCustomAttributesChangeParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractOrderLineItemActionsParameter'
+      properties:
+        name:
+          enum:
+            - CHANGE_CUSTOM_ATTRIBUTES
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the orderline. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+      required:
+        - name
+        - version
+        - customAttributes
     PromiseConfirmActionParameter:
       allOf:
         - $ref: '#/components/schemas/AbstractOrderActionsParameter'
