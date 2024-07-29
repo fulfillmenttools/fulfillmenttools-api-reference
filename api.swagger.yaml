@@ -26875,19 +26875,33 @@ components:
           description: amount of the given items
           example: 5
         hsCode:
+          deprecated: true
+          description: Deprecated - use article.attribute.hsCode instead
           type: string
           maxLength: 50
         description:
-          description: Description of the given item/items
+          deprecated: true
+          description: >-
+            Description - article.title will be used instead - of the given
+            item/items
           example: Item Description
           type: string
         weightInGram:
+          deprecated: true
           type: integer
-          description: Weight of a single item in gram
+          description: >-
+            Deprecated - use article.attribute.weightPerUnit instead - Weight of
+            a single item in gram
           example: 10000
         parcelItemValue:
+          deprecated: true
+          description: >-
+            Deprecated - use article.attribute.pricePerUnit and
+            article.attribute.currency instead
           $ref: '#/components/schemas/ParcelItemValue'
         countryOfManufacture:
+          deprecated: true
+          description: Deprecated - use article.attribute.countryOfManufacture instead
           type: string
         article:
           $ref: '#/components/schemas/ParcelItemArticle'
@@ -27140,6 +27154,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MandatoryShippingAttribute'
+        mandatoryShippingArticleAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MandatoryShippingArticleAttribute'
         mandatoryShippingItemAttributes:
           type: array
           items:
@@ -30616,12 +30634,19 @@ components:
             $ref: '#/components/schemas/RegionInformation'
           minItems: 1
           type: array
+        mandatoryShippingArticleAttributes:
+          items:
+            $ref: '#/components/schemas/MandatoryShippingArticleAttribute'
+          type: array
+          minItems: 0
         mandatoryShippingAttributes:
           items:
             $ref: '#/components/schemas/MandatoryShippingAttribute'
           type: array
           minItems: 0
         mandatoryShippingItemAttributes:
+          deprecated: true
+          description: Deprecated - use mandatoryShippingArticleAttributes instead
           items:
             $ref: '#/components/schemas/MandatoryShippingItemAttribute'
           type: array
@@ -30737,6 +30762,11 @@ components:
             $ref: '#/components/schemas/MandatoryShippingItemAttribute'
           type: array
           minItems: 0
+        mandatoryShippingArticleAttributes:
+          items:
+            $ref: '#/components/schemas/MandatoryShippingArticleAttribute'
+          type: array
+          minItems: 0
         products:
           type: array
           items:
@@ -30807,6 +30837,11 @@ components:
             $ref: '#/components/schemas/MandatoryShippingItemAttribute'
           type: array
           minItems: 0
+        mandatoryShippingArticleAttributes:
+          items:
+            $ref: '#/components/schemas/MandatoryShippingArticleAttribute'
+          type: array
+          minItems: 0
         products:
           type: array
           items:
@@ -30852,6 +30887,7 @@ components:
         - maxTransitDays
         - minTransitDays
     MandatoryShippingItemAttribute:
+      additionalProperties: false
       properties:
         referencedField:
           type: string
@@ -30863,7 +30899,15 @@ components:
             - parcelItemValue.currency
             - countryOfManufacture
             - tenantArticleId
-          description: 'Deprecated: quantity, this field is now mandatory in the item'
+          description: |-
+            Deprecated:
+              - description: article.title will be used instead
+              - weightInGram: use MandatoryShippingArticleAttribute.attributes.weightPerUnit
+              - quantity, this field is now mandatory in the item
+              - parcelItemValue.value: use MandatoryShippingArticleAttribute.attributes.pricePerUnit
+              - parcelItemValue.currency: use MandatoryShippingArticleAttribute.attributes.currency
+              - countryOfManufacture: use MandatoryShippingArticleAttribute.attributes.countryOfManufacture
+              - tenantArticleId: mandatory on line item article
         dataType:
           type: string
           enum:
@@ -30875,7 +30919,46 @@ components:
         descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
       type: object
+    MandatoryShippingArticleAttribute:
+      additionalProperties: false
+      properties:
+        referencedField:
+          $ref: >-
+            #/components/schemas/MandatoryShippingArticleAttributeReferencedField
+        dataType:
+          $ref: '#/components/schemas/MandatoryShippingArticleAttributeDataType'
+        category:
+          $ref: '#/components/schemas/MandatoryShippingArticleAttributeCategory'
+        description:
+          type: string
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      type: object
+      required:
+        - referencedField
+        - dataType
+        - category
+        - descriptionLocalized
+    MandatoryShippingArticleAttributeReferencedField:
+      enum:
+        - attributes.weightPerUnit
+        - attributes.hsCode
+        - attributes.currency
+        - attributes.valuePerUnit
+        - attributes.countryOfManufacture
+      type: string
+    MandatoryShippingArticleAttributeCategory:
+      enum:
+        - customs
+        - dimensions
+      type: string
+    MandatoryShippingArticleAttributeDataType:
+      enum:
+        - NUMBER
+        - STRING
+      type: string
     MandatoryShippingAttribute:
+      additionalProperties: false
       properties:
         referencedField:
           type: string
@@ -30884,6 +30967,13 @@ components:
             - productValue
             - pickUpInformation.startTime
             - pickUpInformation.endTime
+          description: >-
+            - dimensions.weight: will be calculated from
+            MandatoryShippingArticleAttribute.attributes.weightPerUnit if items
+            with weightPerUnit is set on all items - productValue: will be
+            calculated from
+            MandatoryShippingArticleAttribute.attributes.pricePerUnit if items
+            with pricePerUnit is set on all items
         dataType:
           type: string
           enum:
