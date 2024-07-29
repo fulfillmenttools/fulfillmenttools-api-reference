@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "0454ee12-59b8-4553-8eb2-44d28c490b09",
+		"_postman_id": "9f22ef5f-a76d-4a5d-baee-f88ef241f6fb",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5030076"
 	},
 	"item": [
 		{
@@ -149,13 +150,13 @@
 					]
 				},
 				{
-					"name": "Request new Auth Token",
+					"name": "Request Auth Token",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"if(pm.response.code < 300) {",
+									"if (pm.response.code < 300) {",
 									"    console.log(\"Login Successful, Access Tokens retrieved.\");",
 									"    console.log(\" Setting JWT Auth Token...\");",
 									"    pm.environment.set(\"authToken\", pm.response.json().idToken);",
@@ -166,11 +167,11 @@
 									"    var code = \"NONE\";",
 									"    var message = \"NONE\";",
 									"",
-									"    if(jsonErrorResponse.code != null) {",
+									"    if (jsonErrorResponse.code != null) {",
 									"        code = jsonErrorResponse.code;",
 									"    }",
 									"",
-									"    if(jsonErrorResponse.message != null) {",
+									"    if (jsonErrorResponse.message != null) {",
 									"        message = jsonErrorResponse.message;",
 									"    }",
 									"",
@@ -178,47 +179,18 @@
 									"}",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"var escapedPwd = pm.environment.get('firebaseUserPassword');",
-									"if (!escapedPwd) {",
-									"    escapedPwd = pm.environment.get('password');",
-									"}",
-									"",
-									"escapedPwd = escapedPwd.replace(/\\\\/g, '\\\\\\\\');",
-									"escapedPwd = escapedPwd.replace(/\\'/g, '\\\\\\'');",
-									"escapedPwd = escapedPwd.replace(/\\\"/g, '\\\\\\\"');",
-									"escapedPwd = escapedPwd.replace(/\\`/g, '\\\\\\`');",
-									"pm.variables.set('firebaseUserPasswordEscaped', escapedPwd);",
-									"pm.variables.set('passwordEscaped', escapedPwd);",
-									"",
-									"var login = pm.environment.get('firebaseUserEmail');",
-									"if (!login) {",
-									"    login = pm.environment.get('login');",
-									"}",
-									"pm.environment.set('login',login);",
-									"",
-									"var host = pm.environment.get('firebaseBaseUrl');",
-									"if (!host) {",
-									"    host = pm.environment.get('host');",
-									"}",
-									"pm.environment.set('host',host);",
-									"",
-									"var apiKey = pm.variables.get(\"apiKey\");",
-									"if(!apiKey || apiKey.length == 0){",
-									"    //Coping with legacy",
-									"    apiKey = pm.variables.get(\"firebaseWebApiKey\")",
-									"    if(apiKey){",
-									"        pm.variables.set(\"apiKey\", apiKey)",
-									"    }",
-									"}"
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -230,10 +202,15 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"{{login}}\",\n    \"password\": \"{{passwordEscaped}}\",\n    \"returnSecureToken\": true\n}\n"
+							"raw": "{\n    \"email\": \"{{vault:{{projectId}}-user}}\",\n    \"password\": \"{{vault:{{projectId}}-password}}\",\n    \"returnSecureToken\": true\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={{apiKey}}",
+							"raw": "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={{vault:{{projectId}}-api-key}}",
 							"protocol": "https",
 							"host": [
 								"identitytoolkit",
@@ -247,7 +224,7 @@
 							"query": [
 								{
 									"key": "key",
-									"value": "{{apiKey}}"
+									"value": "{{vault:{{projectId}}-api-key}}"
 								}
 							]
 						}
@@ -261,7 +238,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"if(pm.response.code < 300) {",
+									"if (pm.response.code < 300) {",
 									"    console.log(\"Refresh of Auth Token successful.\");",
 									"    console.log(\" Setting JWT Auth Token...\");",
 									"    pm.environment.set(\"authToken\", pm.response.json().id_token);",
@@ -272,11 +249,11 @@
 									"    var code = \"NONE\";",
 									"    var message = \"NONE\";",
 									"",
-									"    if(jsonErrorResponse.code != null) {",
+									"    if (jsonErrorResponse.code != null) {",
 									"        code = jsonErrorResponse.code;",
 									"    }",
 									"",
-									"    if(jsonErrorResponse.message != null) {",
+									"    if (jsonErrorResponse.message != null) {",
 									"        message = jsonErrorResponse.message;",
 									"    }",
 									"",
@@ -284,6 +261,14 @@
 									"}",
 									""
 								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
 								"type": "text/javascript"
 							}
 						}
@@ -295,7 +280,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "https://securetoken.googleapis.com/v1/token?grant_type=refresh_token&refresh_token={{refreshToken}}&key={{apiKey}}",
+							"raw": "https://securetoken.googleapis.com/v1/token?grant_type=refresh_token&refresh_token={{refreshToken}}&key={{vault:{{projectId}}-api-key}}",
 							"protocol": "https",
 							"host": [
 								"securetoken",
@@ -317,7 +302,7 @@
 								},
 								{
 									"key": "key",
-									"value": "{{apiKey}}"
+									"value": "{{vault:{{projectId}}-api-key}}"
 								}
 							]
 						}
