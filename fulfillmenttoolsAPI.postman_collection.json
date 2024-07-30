@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "77eeb400-0318-40f9-b59a-0861d206f6fa",
+		"_postman_id": "c536f08a-c0e4-4850-bb4d-ae2a0d54d71c",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -4616,6 +4616,82 @@
 										{
 											"key": "orderId",
 											"value": "ORDER-ID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Force-cancel Order",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"FORCE_CANCEL\",\n    \"version\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/orders/:orderId/actions",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										":orderId",
+										"actions"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": "ORDER-ID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change OrderLineItem CustomAttributes",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"CHANGE_CUSTOM_ATTRIBUTES\",\n    \"version\": 1,\n    \"customAttributes\": {\n        \"attribute1\":\"value\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/orders/:orderId/orderlineitems/:orderLineItemId/actions",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										":orderId",
+										"orderlineitems",
+										":orderLineItemId",
+										"actions"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": "ORDER-ID"
+										},
+										{
+											"key": "orderLineItemId",
+											"value": "LINE-ITEM-ID"
 										}
 									]
 								}
@@ -13115,7 +13191,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"version\": 1,\n  \"name\": \"CANCEL\",\n  \"payload\": {\n    \"handoverJobCancelReason\": \"CONSUMER_NO_SHOW\"\n  }\n}",
+											"raw": "{\n  \"version\": 1,\n  \"name\": \"CANCEL\",\n  \"payload\": {\n    \"handoverJobCancelReason\": \"CONSUMER_NO_SHOW\"\n  }\n}\n\n//{\n//  \"version\": 1,\n//  \"name\": \"FINISH_HANDOVER_JOB\",\n//  \"lineItems\": [\n//    {\n//        \"id\": \"HANDOVER-JOB-LINE-ITEM-ID\",\n//        \"handedOverQuantity\": 100,\n//        \"substituteLineItems\": [\n//            {\n//                \"id\": \"HANDOVER-JOB-SUBSTITUTE-LINE-ITEM-ID\",\n//                \"handedOverQuantity\": 100,\n//                \"refused\": [\n//                    {\n//                        \"quantity\": 42,\n//                        \"reasonLocalized\": {\n//                            \"de_DE\": \"kaputt\",\n//                            \"en_EN\": \"broken\"\n//                        },\n//                        \"comment\": \"not visible part was broken\"\n//                    }\n//                ]\n//            }\n//        ],\n//        \"refused\": []\n//    }\n//  ]\n//}",
 											"options": {
 												"raw": {
 													"language": "json"
