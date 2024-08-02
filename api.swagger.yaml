@@ -10175,6 +10175,118 @@ paths:
       description: ''
       operationId: getPackJobDeliveryNote
       summary: Get a deliverynote for the pack job with the given ID
+  /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}/returnnote:
+    get:
+      parameters:
+        - description: ID of the pack job for which you want to get a deliverynote
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: ID of the PackingTargetContainer
+          in: path
+          name: targetcontainerId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized values for the return note. If not provided
+            the default locale is used. For example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: {}
+          description: Returns a return note for the PackingTargetContainer.
+        '401':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/pdf:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Packing
+      description: ''
+      operationId: getReturnNotesForPackingTargetContainer
+      summary: Get the return note for the packingTargetContainer with the given ID
+  /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}/deliverynote:
+    get:
+      parameters:
+        - description: ID of the pack job for which you want to get a deliverynote
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            ID of the packingTargetContainer for which you want to get a
+            deliverynote
+          in: path
+          name: targetcontainerId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized values for the delivery note. If not provided
+            the default locale is used. For example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: {}
+          description: The deliverynote for the given packingTargetContainer
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Packing
+      description: ''
+      operationId: getPackingTargetContainerDeliveryNote
+      summary: Get a deliverynote for the packingTargetContainer with the given ID
   /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}:
     get:
       parameters:
@@ -28461,6 +28573,7 @@ components:
         - PICKJOB
         - HANDOVERJOB
         - PARCEL
+        - PACKING_TARGET_CONTAINER
       type: string
     DocumentType:
       enum:
@@ -31956,6 +32069,9 @@ components:
         - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/PackingTargetContainerForCreation'
       properties:
+        documentsRef:
+          description: Reference to the documents collection from this entity
+          type: string
         description:
           type: string
         descriptionLocalized:
@@ -31988,6 +32104,10 @@ components:
         lineItems:
           items:
             $ref: '#/components/schemas/PackingTargetContainerLineItem'
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
       required:
         - id
         - nameLocalized
