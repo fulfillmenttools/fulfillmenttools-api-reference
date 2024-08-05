@@ -37594,6 +37594,9 @@ components:
           type: boolean
         isBestReassignmentCandidate:
           type: boolean
+        latestPickingStart:
+          type: string
+          format: date-time
       required:
         - facility
         - orderFences
@@ -39244,6 +39247,8 @@ components:
           minItems: 1
           items:
             $ref: '#/components/schemas/CustomServiceReference'
+        latestPickingStart:
+          $ref: '#/components/schemas/LatestPickingStart'
         provisioningTime:
           description: The point in time by which the order is supposed to be provisioned.
           example: '2020-02-03T08:45:50.525Z'
@@ -39264,6 +39269,23 @@ components:
         - finalizeRun
         - processId
       type: object
+    LatestPickingStart:
+      type: object
+      properties:
+        latestPickingStartDate:
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        targetTime:
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        carrierRef:
+          type: string
+      required:
+        - carrierRef
+        - latestPickingStartDate
+        - targetTime
     Transfer:
       properties:
         transferId:
