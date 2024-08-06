@@ -28005,6 +28005,7 @@ components:
       anyOf:
         - $ref: '#/components/schemas/HandoverJobCancelActionParameter'
         - $ref: '#/components/schemas/HandoverJobLineItemUpdateActionParameter'
+        - $ref: '#/components/schemas/FinishHandoverJobActionParameter'
     HandoverJobCancelActionParameter:
       additionalProperties: false
       properties:
@@ -28052,6 +28053,24 @@ components:
         - name
         - version
         - lineItem
+    FinishHandoverJobActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/FinishHandoverJobActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        lineItems:
+          additionalProperties: false
+          type: array
+          items:
+            $ref: '#/components/schemas/FinishHandoverJobLineItem'
+      required:
+        - name
+        - version
+        - lineItems
     RefusedItem:
       properties:
         quantity:
@@ -28065,7 +28084,6 @@ components:
           type: string
       required:
         - quantity
-        - reasonLocalized
     RefusedItemForUpdate:
       properties:
         quantity:
@@ -28077,7 +28095,6 @@ components:
           type: string
       required:
         - quantity
-        - reasonLocalized
     HandoverSubstituteLineItemForUpdate:
       properties:
         id:
@@ -28088,6 +28105,38 @@ components:
             $ref: '#/components/schemas/RefusedItemForUpdate'
       required:
         - id
+    FinishHandoverJobLineItem:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        handedOverQuantity:
+          type: number
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefusedItemForUpdate'
+        substituteLineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinishHandoverJobSubstituteLineItem'
+      required:
+        - id
+        - handedOverQuantity
+    FinishHandoverJobSubstituteLineItem:
+      properties:
+        id:
+          type: string
+        handedOverQuantity:
+          minimum: 0
+          type: integer
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefusedItemForUpdate'
+      required:
+        - id
+        - handedOverQuantity
     HandoverJobCancelActionEnum:
       enum:
         - CANCEL
@@ -28095,6 +28144,10 @@ components:
     HandoverJobLineItemUpdateActionEnum:
       enum:
         - UPDATE_LINEITEM
+      type: string
+    FinishHandoverJobActionEnum:
+      enum:
+        - FINISH_HANDOVER_JOB
       type: string
     ModifyPickRunLineItemAction:
       allOf:
