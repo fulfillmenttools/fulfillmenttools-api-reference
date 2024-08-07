@@ -11,52 +11,6 @@ info:
   title: fulfillmenttools - simplifying retail complexity
   version: VERSIONLESS
 paths:
-  /api/artifacts/{platform}:
-    get:
-      parameters:
-        - description: Platform for which to list artifacts
-          in: path
-          name: platform
-          required: true
-          schema:
-            enum:
-              - android
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArtifactMetadataItems'
-          description: All available artifacts for the selected platform
-        '400':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: The given platform is invalid
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      tags:
-        - Infrastructure - Artifacts
-      description: ''
-      operationId: getArtifacts
-      summary: Provides metadata for currently available artifacts for a platform
   /api/carriers:
     get:
       parameters:
@@ -13147,7 +13101,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: External action not found
       tags:
-        - Core - Processes - External Actions
+        - Core - External Actions
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -13191,7 +13145,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: External action not found
       tags:
-        - Core - Processes - External Actions
+        - Core - External Actions
       description: Creates a new external action for a process.
       operationId: postExternalAction
       requestBody:
@@ -13246,7 +13200,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: External action not found
       tags:
-        - Core - Processes - External Actions
+        - Core - External Actions
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -13293,7 +13247,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: External action not found
       tags:
-        - Core - Processes - External Actions
+        - Core - External Actions
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -13345,7 +13299,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Facility not found
       tags:
-        - Core - Processes - External Actions
+        - Core - External Actions
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -13404,7 +13358,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: External action not found
       tags:
-        - Core - Processes - External Actions Logs
+        - Core - External Actions
       description: Creates a new external action log.
       operationId: postExternalActionLog
       requestBody:
@@ -13471,7 +13425,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: External action logs not found
       tags:
-        - Core - Processes - External Actions Logs
+        - Core - External Actions
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -15842,9 +15796,9 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: User not found
+          description: Cancelation reason not found
       tags:
-        - DOMS - Cancelation reasons
+        - DOMS - Orders
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -15895,7 +15849,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Cancelation reasons
+        - DOMS - Orders
       operationId: postCancelationReason
       requestBody:
         content:
@@ -15955,9 +15909,9 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: User not found
+          description: Cancelation reason not found
       tags:
-        - DOMS - Cancelation reasons
+        - DOMS - Orders
       description: >-
         <center><img
         src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
@@ -16015,7 +15969,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Cancelation reason not found
       tags:
-        - DOMS - Cancelation reasons
+        - DOMS - Orders
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -16027,7 +15981,7 @@ paths:
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
           </i><br /><br />
       operationId: putCancelationReason
-      summary: Update a reroute description
+      summary: Update a cancelation reason
     delete:
       parameters:
         - description: ID of the cancelation reason you intend to delete
@@ -16065,7 +16019,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Cancelation reason not found
       tags:
-        - DOMS - Cancelation reasons
+        - DOMS - Orders
       description: |-
         <i><center>
           <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
@@ -42897,8 +42851,12 @@ tags:
       Endpoints used by shops to get the current available pickup stores and
       available service levels like Same-Day delivery.
     name: DOMS - Checkout Options
+  - description: Get operative processes.
+    name: Fulfillment Operations - Operative Process
   - description: Endpoints to Create, Update and Read pickjobs.
     name: Fulfillment Operations - Picking
+  - description: Endpoints to Create, Update and Read Custom Service Jobs.
+    name: Fulfillment Operations - Custom Services
   - description: Endpoints to manipulate Restow Items.
     name: Fulfillment Operations - Restow
   - description: Endpoints to Create, Update and Read packjobs.
@@ -42915,14 +42873,26 @@ tags:
     name: Last Mile Integration - Carriers
   - description: Endpoints to Create, Update and Read Inbound Processes.
     name: Inventory Management - Inbound
+  - description: Endpoints to Configure and get Channel Availability.
+    name: Inventory Management - Channel Availability
   - description: Endpoints to Create, Update and Read Stocks.
     name: Inventory Management - Stocks
   - description: Endpoints to Read and configure Processes.
     name: Core - Processes
+  - description: >-
+      Endpoints to attach external actions to processes and append logs to
+      external actions.
+    name: Core - External Actions
+  - description: >-
+      Endpoints to Read and Modifiy Expires, e.g. by extending the
+      provisioningTime.
+    name: Core - Expiries
   - description: Endpoints to Create, Update and Read Document Sets.
     name: Core - Document Sets
   - description: Endpoints to Create, Update and Read Custom Services.
     name: Core - Custom Services
+  - description: Endpoints to Configure Notifications on FFT events.
+    name: Core - Notification Center
   - description: Endpoints to Create, Update and Read facilities.
     name: Core - Facilities
   - description: Endpoints to Create, Update and Read Facility Listings.
