@@ -36585,6 +36585,11 @@ components:
           type: string
         isBackOrderable:
           type: boolean
+        latestPickingStart:
+          format: date-time
+          type: string
+        carrier:
+          $ref: '#/components/schemas/CheckoutOptionsAvailabilityCarrier'
       required:
         - tenantArticleId
         - available
@@ -36592,9 +36597,23 @@ components:
       type: object
       xml:
         name: CheckoutOptionsAvailability
+    CheckoutOptionsAvailabilityCarrier:
+      additionalProperties: false
+      properties:
+        carrierRef:
+          type: string
+        carrierProductCategory:
+          $ref: '#/components/schemas/CarrierProductCategory'
+      required:
+        - carrierRef
+      type: object
+      xml:
+        name: CheckoutOptionsAvailabilityCarrier
     PromiseCarrier:
       additionalProperties: false
       properties:
+        carrierRef:
+          type: string
         carrierKey:
           type: string
         carrierName:
@@ -36606,11 +36625,8 @@ components:
         deliveryPromiseValidUntil:
           type: string
           format: date-time
-        latestPickingStart:
-          example: '2020-02-03T09:45:51.525Z'
-          format: date-time
-          type: string
       required:
+        - carrierRef
         - carrierKey
         - carrierName
         - products
