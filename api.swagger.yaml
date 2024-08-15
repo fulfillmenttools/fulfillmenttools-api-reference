@@ -39563,7 +39563,7 @@ components:
         - version
     OrderLineItemActionsParameter:
       oneOf:
-        - $ref: '#/components/schemas/OrderLineItemCustomAttributesChangeParameter'
+        - $ref: '#/components/schemas/OrderLineItemCustomAttributesUpdateParameter'
     AbstractOrderLineItemActionsParameter:
       discriminator:
         propertyName: name
@@ -39646,19 +39646,20 @@ components:
         - name
         - version
         - consumerAddresses
-    OrderLineItemCustomAttributesChangeParameter:
+    OrderLineItemCustomAttributesUpdateParameter:
       allOf:
         - $ref: '#/components/schemas/AbstractOrderLineItemActionsParameter'
       properties:
         name:
           enum:
-            - CHANGE_CUSTOM_ATTRIBUTES
+            - UPDATE_CUSTOM_ATTRIBUTES
           type: string
         customAttributes:
           description: >-
             Attributes that can be added to the orderline. These attributes
             cannot be used within fulfillment processes, but it could be useful
-            to have the informations carried here.
+            to have the informations carried here. If no customAttributes exist
+            yet, they will be created for this line item.
           type: object
       required:
         - name
