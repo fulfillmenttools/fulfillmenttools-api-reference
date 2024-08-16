@@ -39773,6 +39773,13 @@ components:
           default: 1440
           minimum: 5
           description: The amount of minutes after which an automated reroute is executed
+        leadTimeBeforeTimeTriggeredReroute:
+          type: number
+          example: '480'
+          description: >-
+            How many minutes before a time triggered reroute a notification
+            should be sent. Should be smaller than rerouteAfterMinutes
+          minimum: 1
     CancelationReasonForCreation:
       allOf:
         - $ref: '#/components/schemas/AbstractReasonForCreation'
@@ -39865,7 +39872,7 @@ components:
           default: now
         endDate:
           type: string
-          example: 2024-07-013T00:00:00.000Z
+          example: '2024-07-13T00:00:00.000Z'
           format: date-time
           description: >-
             The end of the evaluated time period. Default is the start date + 60
@@ -42514,6 +42521,7 @@ components:
             type: string
             enum:
               - PICK_JOB_CREATED
+              - UPCOMING_TIME_TRIGGERED_REROUTE
               - ROUTING_PLAN_NOT_ROUTABLE
               - ROUTING_PLAN_WAITING
         type:
@@ -42593,6 +42601,7 @@ components:
             type: string
             enum:
               - PICK_JOB_CREATED
+              - UPCOMING_TIME_TRIGGERED_REROUTE
               - ROUTING_PLAN_NOT_ROUTABLE
               - ROUTING_PLAN_WAITING
         type:
