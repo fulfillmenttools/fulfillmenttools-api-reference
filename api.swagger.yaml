@@ -42349,6 +42349,54 @@ components:
         - payload
         - pickJobRef
       type: object
+    UpcomingTimeTriggeredRerouteWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/UpcomingTimeTriggeredRerouteWebHookEventPayload'
+      required:
+        - payload
+      type: object
+    UpcomingTimeTriggeredRerouteWebHookEventPayload:
+      properties:
+        pickJobData:
+          properties:
+            pickJobRef:
+              type: string
+            tenantOrderId:
+              type: string
+            shortId:
+              type: string
+            created:
+              example: '2020-02-03T08:45:51.525Z'
+              format: date-time
+              type: string
+          required:
+            - pickJobRef
+            - tenantOrderId
+            - shortId
+            - created
+        facilityData:
+          properties:
+            name:
+              type: string
+            facilityRef:
+              type: string
+            timeZone:
+              type: string
+          required:
+            - name
+            - facilityRef
+            - timeZone
+        rerouteDate:
+          example: '2020-02-03T08:45:51.525Z'
+          format: date-time
+          type: string
+      required:
+        - pickJobData
+        - facilityData
+        - rerouteDate
     ExternalActionExecutedWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
