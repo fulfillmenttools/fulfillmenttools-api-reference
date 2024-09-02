@@ -15755,6 +15755,279 @@ paths:
           </i><br /><br />
       operationId: getOperativeProcessById
       summary: Get operativeProcess by ID
+  /api/operativecontainertypes/{operativeContainerTypeId}:
+    get:
+      parameters:
+        - description: id of the operativeContainer you want to retrieve
+          in: path
+          name: operativeContainerTypeId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the
+            operativeContainerTypes. If not provided the default locale is
+            used., for example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeContainerType'
+          description: Found operativeContainerType by given ID
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Operative Container
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getOperativeContainerTypeById
+      summary: Get operativeContainerType by ID
+    patch:
+      parameters:
+        - description: id of the operativeContainer you want to update
+          in: path
+          name: operativeContainerTypeId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperativeContainerTypeForUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeContainerType'
+          description: Found operativeContainerType by given ID
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Operative Container
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: updateOperativeContainerTypeById
+      summary: Update operativeContainerType by ID
+  /api/operativecontainertypes:
+    get:
+      parameters:
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+            maximum: 500
+            minimum: 1
+        - description: OperativeType you want to filter by
+          in: query
+          name: operativeType
+          required: false
+          schema:
+            type: string
+        - description: ScannableIdentifier you want to filter by
+          in: query
+          name: scannableIdentifier
+          required: false
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the
+            operativContainerType. If not provided the default locale is used.,
+            for example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeContainerTypesResponse'
+          description: Found operativeProcess by given ID
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Operative Container
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getOperativeContainerTypes
+      summary: Get operativeContainerTypes
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeContainerType'
+          description: Successfully created resource.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Operative Container
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: createOperativeContainerType
+      summary: Create operativeContainerType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperativeContainerTypeForCreation'
+        required: true
   /api/cancelationreasons:
     get:
       parameters:
@@ -33655,6 +33928,193 @@ components:
         - ITEM_RETURN_JOB
         - LINKED_SERVICE_JOBS
         - PACKING_TARGET_CONTAINER
+    OperativeContainerType:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        iconUrl:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        priority:
+          description: >-
+            This value gives the priority of the respective
+            operativeContainerType. The lower the value the higher is the
+            priority, e.g. priority 1 is higher than priority 10. The priority
+            can be used to order packingContainerTypes in the UI.
+          example: 100
+          format: int32
+          maximum: 10000
+          minimum: 1
+          type: integer
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        weightLimitInG:
+          description: 'Maximal weight in gramm(gr) the container can be loaded with. '
+          example: 2500
+          type: number
+          minimum: 1
+        customAttributes:
+          description: >-
+            Attributes that can be added to the operativeContainerType. These
+            attributes cannot be used within fulfillment processes, but it could
+            be useful to have the informations carried here.
+          type: object
+        allowedOperativeTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperativeType'
+        scannableIdentifiers:
+          type: array
+          items:
+            maxItems: 1
+            $ref: '#/components/schemas/ScannableIdentifier'
+      required:
+        - id
+        - version
+        - nameLocalized
+      type: object
+    OperativeContainerTypeForCreation:
+      additionalProperties: false
+      properties:
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        iconUrl:
+          description: ''
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        priority:
+          description: >-
+            This value gives the priority of the respective
+            operativeContainerType. The lower the value the higher is the
+            priority, e.g. priority 1 is higher than priority 10. The priority
+            can be used to order packingContainerTypes in the UI.
+          example: 100
+          format: int32
+          maximum: 10000
+          minimum: 1
+          type: integer
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        weightLimitInG:
+          description: 'Maximal weight in gramm(gr) the container can be loaded with. '
+          example: 2500
+          type: number
+          minimum: 1
+        customAttributes:
+          description: >-
+            Attributes that can be added to the operativeContainerType. These
+            attributes cannot be used within fulfillment processes, but it could
+            be useful to have the informations carried here.
+          type: object
+        allowedOperativeTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperativeType'
+        scannableIdentifiers:
+          type: array
+          items:
+            maxItems: 1
+            $ref: '#/components/schemas/ScannableIdentifier'
+      required:
+        - nameLocalized
+      type: object
+    OperativeContainerTypeForUpdate:
+      additionalProperties: false
+      properties:
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        iconUrl:
+          description: ''
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        priority:
+          description: >-
+            This value gives the priority of the respective
+            operativeContainerType. The lower the value the higher is the
+            priority, e.g. priority 1 is higher than priority 10. The priority
+            can be used to order packingContainerTypes in the UI.
+          example: 100
+          format: int32
+          maximum: 10000
+          minimum: 1
+          type: integer
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        weightLimitInG:
+          description: 'Maximal weight in gramm(gr) the container can be loaded with. '
+          example: 2500
+          type: number
+          minimum: 1
+        customAttributes:
+          description: >-
+            Attributes that can be added to the operativeContainerTypes. These
+            attributes cannot be used within fulfillment processes, but it could
+            be useful to have the informations carried here.
+          type: object
+        allowedOperativeTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperativeType'
+        scannableIdentifiers:
+          type: array
+          items:
+            maxItems: 1
+            $ref: '#/components/schemas/ScannableIdentifier'
+        version:
+          minimum: 1
+          type: integer
+      required:
+        - version
+      type: object
+    ScannableIdentifier:
+      type: object
+      additionalProperties: false
+      properties:
+        identifiers:
+          type: array
+          items:
+            type: string
+            minItems: 1
+            maxItems: 10
+      required:
+        - identifiers
+    OperativeContainerTypes:
+      type: array
+      additionalProperties: false
+      items:
+        $ref: '#/components/schemas/OperativeContainerType'
+    OperativeContainerTypesResponse:
+      additionalProperties: false
+      properties:
+        operativeContainerTypes:
+          items:
+            $ref: '#/components/schemas/OperativeContainerType'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
+    OperativeType:
+      additionalProperties: false
+      type: string
+      enum:
+        - PICKING
+        - PACKING_SOURCE
+        - PACKING_TARGET
+        - HANDOVER
     ExpiryEntity:
       additionalProperties: false
       properties:
