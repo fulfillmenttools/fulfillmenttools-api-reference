@@ -38467,9 +38467,8 @@ components:
           type: boolean
         isBestReassignmentCandidate:
           type: boolean
-        latestPickingStart:
-          type: string
-          format: date-time
+        latestPickingStartInformation:
+          $ref: '#/components/schemas/LatestPickingStartForDecisionLog'
       required:
         - facility
         - orderFences
@@ -38506,12 +38505,18 @@ components:
           type: string
         requestedQuantity:
           type: number
-        stockInformation:
-          $ref: '#/components/schemas/AvailabilityDuringRoutingStock'
+        available:
+          type: number
+        isBackOrderable:
+          type: boolean
+          default: false
+        preOrderDate:
+          format: date-time
+          type: string
         rerouteInformation:
           $ref: '#/components/schemas/AvailabilityDuringRerouteStock'
-        stockInformationPostRerouteAdjustment:
-          $ref: '#/components/schemas/AvailabilityDuringRoutingStock'
+        availablePostRerouteAdjustment:
+          type: number
         bundleInformation:
           type: array
           items:
@@ -38519,7 +38524,8 @@ components:
       required:
         - tenantArticleId
         - requestedQuantity
-        - stockInformation
+        - available
+        - isBackOrderable
     BundleInformation:
       properties:
         customServiceNodeId:
@@ -38535,21 +38541,6 @@ components:
           $ref: '#/components/schemas/RerouteReason'
         pickedQuantity:
           type: number
-    AvailabilityDuringRoutingStock:
-      properties:
-        stock:
-          type: number
-        stockConsideringOfflineStock:
-          type: number
-        reserved:
-          type: number
-        available:
-          type: number
-      required:
-        - available
-        - reserved
-        - stock
-        - stockConsideringOfflineStock
     OrderFenceDecision:
       type: object
       properties:
@@ -40164,6 +40155,19 @@ components:
         - carrierRef
         - latestPickingStartDate
         - targetTime
+    LatestPickingStartForDecisionLog:
+      type: object
+      properties:
+        latestPickingStartDate:
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        targetTime:
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        carrierRef:
+          type: string
     Transfer:
       properties:
         transferId:
