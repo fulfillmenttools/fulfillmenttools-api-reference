@@ -11426,6 +11426,232 @@ paths:
         description: Desired Tag Configuration for Pickjobs
         required: true
       summary: Change the tag configuration for Pickjobs
+  /api/handovercontainers:
+    get:
+      parameters:
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: facilities to filter the results
+          in: query
+          name: facilityRefs
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/StrippedHandoverContainer'
+          description: All HandoverContainer matching the given parameters.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Handover
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Get all Handover Container respecting the given filter
+      operationId: getHandoverContainer
+      summary: Get Handover Container
+      x-badges:
+        - color: red
+          label: ALPHA
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandoverContainerForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/HandoverContainer'
+          description: Created Handover Container.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Handover
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Create new Handover Container
+      operationId: createHandoverContainer
+      summary: Create Handover Container
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/handovercontainers/{handoverContainerId}:
+    get:
+      parameters:
+        - description: id of the handover container
+          in: path
+          name: handoverContainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandoverContainer'
+          description: HandoverContainer matching the given id.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Handover
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Get Handover Container respecting the given id
+      operationId: getHandoverContainerById
+      summary: Get Handover Container by id
+      x-badges:
+        - color: red
+          label: ALPHA
+    delete:
+      parameters:
+        - description: id of the handover container
+          in: path
+          name: handoverContainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: HandoverContainer successfully deleted.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Handover
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Delete Handover Container respecting the given id
+      operationId: deleteHandoverContainerById
+      summary: Delete Handover Container by id
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/remoteconfigs:
     post:
       requestBody:
@@ -36688,6 +36914,181 @@ components:
       type: string
       xml:
         name: LinkedServiceJobsFilterChannel
+    HandoverContainer:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/HandoverContainerForCreation'
+      properties:
+        id:
+          type: string
+        version:
+          type: integer
+          format: int64
+          example: 42
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+        created:
+          type: string
+          format: date-time
+          example: '2020-02-03T08:45:51.525Z'
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+        lastModified:
+          type: string
+          format: date-time
+          example: '2020-02-03T09:45:51.525Z'
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+        description:
+          type: string
+          description: Translated Description from descriptionLocalized
+        name:
+          type: string
+          description: Translated name from nameLocalized
+        facilityRef:
+          description: Linked Facility through reference
+          type: string
+        processRef:
+          description: Linked Process through reference
+          type: string
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/HandoverContainerLineItem'
+      type: object
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - lineItems
+        - facilityRef
+        - processRef
+    HandoverContainerForCreation:
+      additionalProperties: false
+      properties:
+        operativeContainerTypeRef:
+          description: Linked Operative Container Type through reference
+          type: string
+        codes:
+          type: array
+          items:
+            type: string
+        handoverJobRef:
+          description: Linked HandoverJob through reference
+          type: string
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/HandoverContainerLineItemForCreation'
+        customAttributes:
+          type: array
+          items:
+            type: object
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        weightLimitInG:
+          type: integer
+          description: Weight limit in gram for this Container
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        iconUrl:
+          description: URL to icon
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        storageLocationRef:
+          description: Linked StorageLocation through reference
+          type: string
+        stackRef:
+          description: Linked Stack through reference
+          type: string
+      type: object
+      required:
+        - lineItems
+        - handoverJobRef
+        - nameLocalized
+    HandoverContainerLineItem:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        article:
+          $ref: '#/components/schemas/HandoverContainerLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the service job. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        quantity:
+          description: ''
+          type: number
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          type: string
+        scannableCodes:
+          description: Codes, that identify the line item
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - quantity
+        - article
+    HandoverContainerLineItemForCreation:
+      additionalProperties: false
+      properties:
+        article:
+          $ref: '#/components/schemas/HandoverContainerLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the service job. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        quantity:
+          description: Amount per line item
+          type: number
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          type: string
+        scannableCodes:
+          description: Codes, that identify the line item
+          type: array
+          items:
+            type: string
+      required:
+        - quantity
+        - article
+    StrippedHandoverContainer:
+      additionalProperties: false
+      properties:
+        total:
+          description: total number for the given filter
+          type: integer
+        handoverContainer:
+          type: array
+          items:
+            $ref: '#/components/schemas/HandoverContainer'
+      required:
+        - handoverContainer
+        - total
+    HandoverContainerLineItemArticle:
+      allOf:
+        - $ref: '#/components/schemas/AbstractArticle'
+        - properties:
+            attributes:
+              items:
+                $ref: '#/components/schemas/ArticleAttributeItem'
+              type: array
+          type: object
+          required:
+            - title
+            - tenantArticleId
     HealthResult:
       properties:
         status:
