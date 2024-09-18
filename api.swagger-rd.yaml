@@ -37756,6 +37756,14 @@ components:
             information for a requested tenantArticleId there is no entry here.
           items:
             $ref: '#/components/schemas/CheckoutOptionsDeliveryEarliestResponseItem'
+        calculationHints:
+          type: array
+          description: >-
+            Hints generated during the calculation of the earliest delivery
+            date. These are only returned if the includeCalculationHints flag
+            was provided when performing the request.
+          items:
+            type: string
       required:
         - checkoutOptions
     CheckoutOptionsDeliveryEarliestResponseItem:
@@ -37920,6 +37928,7 @@ components:
       xml:
         name: PromiseDeliveryOptions
     CheckoutOptionsDeliveryEarliestRequest:
+      additionalProperties: false
       properties:
         earliestDeliveryDate:
           description: >-
@@ -37940,6 +37949,11 @@ components:
             maxItems: 150
         consumerAddress:
           $ref: '#/components/schemas/CheckoutOptionsConsumerAddress'
+        includeCalculationHints:
+          description: >-
+            Set this flag to true to get additional information about the
+            availability of the requested articles
+          type: boolean
       required:
         - tenantArticleIds
         - consumerAddress
@@ -37949,6 +37963,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CheckoutOptionsDeliveryTimePeriodResponseItem'
+        calculationHints:
+          type: array
+          description: >-
+            Hints generated during the calculation of the earliest delivery
+            date. These are only returned if the includeCalculationHints flag
+            was provided when performing the request.
+          items:
+            type: string
       required:
         - checkoutOptions
     CheckoutOptionsDeliveryTimePeriodResponseItem:
@@ -41094,6 +41116,7 @@ components:
         - rerouteDescriptions
       type: object
     CheckoutOptionsDeliveryTimePeriodRequest:
+      additionalProperties: false
       type: object
       properties:
         startDate:
@@ -41123,10 +41146,16 @@ components:
           $ref: '#/components/schemas/CheckoutOptionsConsumerAddress'
         deliveryPreferences:
           $ref: '#/components/schemas/DeliveryPreferencesShipping'
+        includeCalculationHints:
+          description: >-
+            Set this flag to true to get additional information about the
+            availability of the requested articles
+          type: boolean
       required:
         - basket
         - consumerAddress
     CheckoutOptionsDeliveryTimePointRequest:
+      additionalProperties: false
       properties:
         desiredDeliveryDate:
           type: string
