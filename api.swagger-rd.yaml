@@ -4880,6 +4880,48 @@ paths:
 
         LoadUnit: Partial Patch on this entity.
       deprecated: true
+  /api/loadunits/{loadUnitId}/stack:
+    get:
+      parameters:
+        - in: path
+          name: loadUnitId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stack'
+          description: The found stack for this load unit.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Picking
+      operationId: getStackForLoadUnit
+      summary: Get the stack of this load unit by its ID
   /api/loadunittypes:
     get:
       parameters:
@@ -11649,6 +11691,237 @@ paths:
         /><br />Delete Handover Container respecting the given id
       operationId: deleteHandoverContainerById
       summary: Delete Handover Container by id
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/handovercontainers/{handoverContainerId}/stack:
+    get:
+      parameters:
+        - description: id of the handover container
+          in: path
+          name: handoverContainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stack'
+          description: Stack for the given handoverContainer matching the given id.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Handover
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Get Stack for Handover Container respecting the given id
+      operationId: getStackForHandoverContainer
+      summary: Get Stack for Handover Container
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/stacks:
+    get:
+      parameters:
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: facilities to filter the results
+          in: query
+          name: facilityRefs
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/StacksResponse'
+          description: All Stacks matching the given parameters.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Stacks
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Get all Stacks respecting the given filter
+      operationId: getStacks
+      summary: Get Stacks
+      x-badges:
+        - color: red
+          label: ALPHA
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StackForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Stack'
+          description: Created Stack.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Stacks
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Create new Stack
+      operationId: createStack
+      summary: Create Stack
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/stacks/{stackId}:
+    get:
+      parameters:
+        - description: id of the stack
+          in: path
+          name: stackId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stack'
+          description: Stack matching the given id.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Stacks
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Get Stack respecting the given id
+      operationId: getStackById
+      summary: Get Stack by id
       x-badges:
         - color: red
           label: ALPHA
@@ -25985,6 +26258,59 @@ components:
       required:
         - pickJobRefs
       type: object
+    Stack:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/StackForCreation'
+      properties:
+        id:
+          type: string
+        version:
+          type: integer
+          format: int64
+          example: 42
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+        created:
+          type: string
+          format: date-time
+          example: '2020-02-03T08:45:51.525Z'
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+        lastModified:
+          type: string
+          format: date-time
+          example: '2020-02-03T09:45:51.525Z'
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+      type: object
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - facilityRef
+        - processRef
+    StackForCreation:
+      additionalProperties: false
+      properties:
+        facilityRefs:
+          description: Linked Facilities through reference
+          type: array
+          items:
+            type: string
+        processRefs:
+          description: Linked Processes through reference
+          type: array
+          items:
+            type: string
+      type: object
+      required:
+        - facilityRefs
+        - processRefs
     PickingLoadUnit:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -36966,6 +37292,9 @@ components:
         processRef:
           description: Linked Process through reference
           type: string
+        stackRef:
+          description: Linked stack through reference
+          type: string
         lineItems:
           type: array
           items:
@@ -36979,6 +37308,7 @@ components:
         - lineItems
         - facilityRef
         - processRef
+        - stackRef
     HandoverContainerForCreation:
       additionalProperties: false
       properties:
@@ -37101,6 +37431,19 @@ components:
           required:
             - title
             - tenantArticleId
+    StacksResponse:
+      additionalProperties: false
+      properties:
+        total:
+          description: total number for the given filter
+          type: integer
+        stacks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stack'
+      required:
+        - stacks
+        - total
     HealthResult:
       properties:
         status:
