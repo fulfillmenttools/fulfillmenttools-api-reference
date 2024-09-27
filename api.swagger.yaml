@@ -27830,6 +27830,10 @@ components:
                 the currency given under paymentInformation.currency
               type: number
               example: 12.5
+            productValueCurrency:
+              $ref: '#/components/schemas/ProductValueCurrency'
+            productValueType:
+              $ref: '#/components/schemas/ProductValueType'
             shortId:
               type: string
               example: AA12-1
@@ -27902,6 +27906,10 @@ components:
             given under paymentInformation.currency
           type: number
           example: 12.5
+        productValueCurrency:
+          $ref: '#/components/schemas/ProductValueCurrency'
+        productValueType:
+          $ref: '#/components/schemas/ProductValueType'
         result:
           $ref: '#/components/schemas/ParcelResult'
         transfers:
@@ -27910,6 +27918,28 @@ components:
           items:
             $ref: '#/components/schemas/OperativeTransfer'
       type: object
+    ProductValueCurrency:
+      additionalProperties: false
+      properties:
+        currency:
+          type: string
+          description: Currency of the given value
+          example: EUR
+        decimalPlaces:
+          type: integer
+          description: Number of decimal places for the given currency
+          example: 2
+      required:
+        - currency
+      type: object
+    ProductValueType:
+      additionalProperties: false
+      enum:
+        - INSURANCE
+        - CUSTOMS
+        - SHOP_PRICE
+      type: string
+      example: INSURANCE
     ParcelItemForCreation:
       properties:
         quantity:
@@ -28073,6 +28103,12 @@ components:
           type: string
           description: Currency of the given value
           example: EUR
+        decimalPlaces:
+          type: integer
+          description: Number of decimal places for the given currency
+          example: 2
+        type:
+          $ref: '#/components/schemas/ProductValueType'
       required:
         - value
         - currency
