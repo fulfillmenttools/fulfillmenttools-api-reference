@@ -4954,7 +4954,8 @@ paths:
       tags:
         - Fulfillment Operations - Picking
       operationId: getLoadUnitTypes
-      summary: Get all load unit types
+      summary: Get all load unit types, use operative container types
+      deprecated: true
     post:
       responses:
         '201':
@@ -4995,7 +4996,8 @@ paths:
             schema:
               $ref: '#/components/schemas/LoadUnitTypeForCreation'
         required: true
-      summary: Create new load unit type
+      summary: Create new load unit type, use operative container types
+      deprecated: true
   /api/loadunittypes/{loadUnitTypeId}:
     get:
       parameters:
@@ -5045,7 +5047,8 @@ paths:
       tags:
         - Fulfillment Operations - Picking
       operationId: getLoadUnitTypeByID
-      summary: Get a loadUnitType by its ID
+      summary: Get a loadUnitType by its ID, use operative container types
+      deprecated: true
     patch:
       parameters:
         - in: path
@@ -5093,7 +5096,8 @@ paths:
               $ref: '#/components/schemas/LoadUnitTypePatchActions'
         description: Patch set
         required: true
-      summary: Update load unit type
+      summary: Update load unit type, use operative container types
+      deprecated: true
   /api/loadunittypes/{loadUnitTypeId}/icon:
     put:
       parameters:
@@ -5148,7 +5152,8 @@ paths:
               $ref: '#/components/schemas/NamedFile'
         description: Base64 encoded icon to upload
         required: true
-      summary: Upload icon for load unit type.
+      summary: Upload icon for load unit type, use operative container types
+      deprecated: true
   /api/measurementunits:
     get:
       parameters:
@@ -9506,7 +9511,8 @@ paths:
               $ref: '#/components/schemas/PackingContainerTypeForCreation'
         description: Packing type object
         required: true
-      summary: Add a new packing container type
+      summary: Add a new packing container type, use operative container types
+      deprecated: true
     get:
       parameters:
         - description: >-
@@ -9565,7 +9571,8 @@ paths:
         - Fulfillment Operations - Packing
       description: ''
       operationId: getPackingContainerTypes
-      summary: Get all packing container types
+      summary: Get all packing container types, use operative container types
+      deprecated: true
   /api/packingcontainertypes/{packingContainerTypeId}:
     get:
       parameters:
@@ -9616,7 +9623,8 @@ paths:
         - Fulfillment Operations - Packing
       description: ''
       operationId: getPackingContainerType
-      summary: Get a packing container type by its id
+      summary: Get a packing container type by its id, use operative container types
+      deprecated: true
     patch:
       parameters:
         - description: ID of the packingcontainertype you want to change
@@ -9675,7 +9683,10 @@ paths:
               $ref: '#/components/schemas/PackingContainerTypePatchActions'
         description: Patch set
         required: true
-      summary: Patches a PackingContainerType with the given ID
+      summary: >-
+        Patches a PackingContainerType with the given ID, use operative
+        container types
+      deprecated: true
   /api/pickjobs/{pickJobId}/documenthandling:
     get:
       parameters:
@@ -16530,6 +16541,61 @@ paths:
             schema:
               $ref: '#/components/schemas/OperativeContainerTypeForCreation'
         required: true
+  /api/operativecontainertypes/{operativeContainerTypeId}/icon:
+    put:
+      parameters:
+        - in: path
+          name: operativeContainerTypeId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeContainerType'
+          description: Successfully updated operative container type icon.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeContainerType'
+          description: Successfully created operative container type icon.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Operative Container
+      operationId: uploadOperativeContainerTypeIcon
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NamedFile'
+        description: Base64 encoded icon to upload
+        required: true
+      summary: Upload icon for operative container types
   /api/cancelationreasons:
     get:
       parameters:
@@ -33156,8 +33222,10 @@ components:
             $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
         packingContainerTypeRef:
           type: string
+          description: deprecated - use operativeContainerTypeRef instead
+        operativeContainerTypeRef:
+          type: string
       required:
-        - packingContainerTypeRef
         - codes
       type: object
     ContainerDimensions:
@@ -34664,6 +34732,7 @@ components:
           type: object
         allowedOperativeTypes:
           type: array
+          minItems: 1
           items:
             $ref: '#/components/schemas/OperativeType'
         scannableIdentifiers:
@@ -34675,6 +34744,7 @@ components:
         - id
         - version
         - nameLocalized
+        - allowedOperativeTypes
       type: object
     OperativeContainerTypeForCreation:
       additionalProperties: false
@@ -34714,13 +34784,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OperativeType'
+          minItems: 1
         scannableIdentifiers:
           type: array
           items:
             maxItems: 1
             $ref: '#/components/schemas/ScannableIdentifier'
+        icon:
+          $ref: '#/components/schemas/NamedFile'
       required:
         - nameLocalized
+        - allowedOperativeTypes
       type: object
     OperativeContainerTypeForUpdate:
       additionalProperties: false
