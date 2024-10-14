@@ -27267,6 +27267,12 @@ components:
                 the currency given under paymentInformation.currency
               type: number
               example: 12.5
+            customProductValue:
+              description: >-
+                Set this value if you want to overwrite the calculated product
+                value of the parcel.
+              type: number
+              example: 12.5
             pickUpInformation:
               $ref: '#/components/schemas/ParcelPickUpInformation'
             services:
@@ -28032,6 +28038,12 @@ components:
           description: The width of the package (in cm)
           example: 25
           type: number
+        customWeight:
+          description: >-
+            Set this value if you want to overwrite the calculated weight of the
+            parcel (in g).
+          type: number
+          example: 1700
       type: object
     ParcelServices:
       additionalProperties: false
@@ -28129,7 +28141,16 @@ components:
               description: >-
                 Monetary value of all goods in this parcel. Needed for sending
                 cross border packages (customs) To be interpreted as money in
-                the currency given under paymentInformation.currency
+                the currency given under paymentInformation.currency.  This
+                field uses the smallest denomination, e.g. Euro Cents. So a
+                value of 1250 represents 12,50€.
+              type: number
+              example: 1250
+            customProductValue:
+              description: >-
+                Set this value if you want to overwrite the calculated product
+                value of the parcel. This field uses the smallest denomination,
+                e.g. Euro Cents. So a value of 1250 represents 12,50€.
               type: number
               example: 12.5
             productValueCurrency:
@@ -28205,7 +28226,14 @@ components:
           description: >-
             Monetary value of all goods in this parcel. Needed for sending cross
             border packages (customs) To be interpreted as money in the currency
-            given under paymentInformation.currency
+            given under paymentInformation.currency. This value is calculated
+            from the items in the parcel.
+          type: number
+          example: 12.5
+        customProductValue:
+          description: >-
+            Set this value if you want to overwrite the calculated product value
+            of the parcel.
           type: number
           example: 12.5
         productValueCurrency:
