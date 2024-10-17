@@ -28141,9 +28141,9 @@ components:
               description: >-
                 Monetary value of all goods in this parcel. Needed for sending
                 cross border packages (customs) To be interpreted as money in
-                the currency given under paymentInformation.currency.  This
-                field uses the smallest denomination, e.g. Euro Cents. So a
-                value of 1250 represents 12,50€.
+                the currency given under paymentInformation.currency. This field
+                uses the smallest denomination, e.g. Euro Cents. So a value of
+                1250 represents 12,50€.
               type: number
               example: 1250
             customProductValue:
@@ -28712,6 +28712,8 @@ components:
       properties:
         tenantPartialStockId:
           type: string
+        stockRef:
+          type: string
         picked:
           example: 21
           format: int64
@@ -28742,10 +28744,13 @@ components:
           type: string
       required:
         - tenantPartialStockId
+        - stockRef
       type: object
     PickJobLineItemPartialStockLocationForCreation:
       properties:
         tenantPartialStockId:
+          type: string
+        stockRef:
           type: string
         quantity:
           description: >-
@@ -28772,6 +28777,7 @@ components:
             - $ref: '#/components/schemas/PickingStockProperty'
       required:
         - tenantPartialStockId
+        - stockRef
       type: object
     SubstituteLineItemPartialStockLocation:
       properties:
@@ -29434,6 +29440,14 @@ components:
               type: string
             picked:
               description: The amount of articles that were picked for this pickline.
+              example: 20
+              format: int64
+              minimum: 0
+              type: integer
+            secondaryPicked:
+              description: >-
+                The secondary amount of articles that were picked for this
+                pickline.
               example: 20
               format: int64
               minimum: 0
