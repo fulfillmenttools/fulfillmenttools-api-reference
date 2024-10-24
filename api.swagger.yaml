@@ -34153,6 +34153,12 @@ components:
           description: Indicates if gdpr related data was anonymized
           example: false
           type: boolean
+        customAttributes:
+          description: >-
+            Attributes that can be added to the entity. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the information carried here.
+          type: object
       type: object
       required:
         - id
@@ -34228,6 +34234,7 @@ components:
         - OPEN
         - IN_PROGRESS
         - FINISHED
+        - CANCELED
     ItemReturnJobLineItem:
       additionalProperties: false
       allOf:
@@ -34347,6 +34354,12 @@ components:
           minItems: 1
           items:
             $ref: '#/components/schemas/ItemReturnLineItem'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the entity. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the information carried here.
+          type: object
       required:
         - id
         - status
@@ -34469,6 +34482,12 @@ components:
           items:
             $ref: '#/components/schemas/ItemReturnLineItemReason'
           type: array
+        customAttributes:
+          description: >-
+            Attributes that can be added to the entity. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the information carried here.
+          type: object
       required:
         - tenantArticleId
         - status
@@ -34507,6 +34526,7 @@ components:
         - WAITING_FOR_INPUT
         - REJECTED
         - ACCEPTED
+        - CANCELED
       type: string
     ItemReturns:
       properties:
@@ -40841,6 +40861,16 @@ components:
           type: string
         childRoutingPlanRef:
           type: string
+        predecessorRerouteRoutingPlanRefs:
+          description: Refs of the predecessor routing plans, in the case of a reroute.
+          type: array
+          items:
+            type: string
+        successorRerouteRoutingPlanRefs:
+          description: Refs of the succeeding routing plans, in the case of a reroute.
+          type: array
+          items:
+            type: string
         pickJobRef:
           description: The id of the pickjob that has been created from the routing plan.
           example: Esb20gpHBL94X5NdMp3C
@@ -40951,6 +40981,8 @@ components:
         - routingRun
         - finalizeRun
         - processId
+        - predecessorRerouteRoutingPlanRefs
+        - successorRerouteRoutingPlanRefs
       type: object
     LatestPickingStart:
       type: object
