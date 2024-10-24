@@ -30212,6 +30212,12 @@ components:
         availableReturnReasons:
           items:
             $ref: '#/components/schemas/AvailableReturnReason'
+        allowTriggerRefund:
+          default: false
+          description: >-
+            If true, a refund can be triggered. If false, the endpoints to
+            trigger a refund are disabled.
+          type: boolean
       required:
         - active
       type: object
@@ -30265,6 +30271,12 @@ components:
         availableReturnReasons:
           items:
             $ref: '#/components/schemas/LocalizedAvailableReturnReason'
+        allowTriggerRefund:
+          default: false
+          description: >-
+            If true, a refund can be triggered. If false, the endpoints to
+            trigger a refund are disabled.
+          type: boolean
       required:
         - active
       type: object
@@ -35201,6 +35213,13 @@ components:
           description: >-
             The version of the document to be used in optimistic locking
             mechanisms.
+        processVersion:
+          type: integer
+          format: int64
+          example: 42
+          description: >-
+            the version of the process this expiry entity belongs to, needed for
+            preventing of faulty changes via late messages
         created:
           type: string
           format: date-time
