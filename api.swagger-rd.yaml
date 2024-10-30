@@ -25330,6 +25330,10 @@ components:
                   type: number
               type: object
             retainedOfflineStock:
+              deprecated: true
+              description: >-
+                <i>This endpoint is deprecated and has been replaced.</i><br
+                /><br />Concept depreated. Use safety stock instead.
               properties:
                 active:
                   description: The retained Offline Stock is enabled or disabled.
@@ -27814,13 +27818,17 @@ components:
         name: ModifyPickLineItemAction
     ModifyRetainedOfflineStockAction:
       deprecated: true
+      description: >-
+        <i>This endpoint is deprecated and has been replaced.</i><br /><br
+        />@deprecated Concept depreated. Use safety stock instead.
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
         - properties:
             action:
+              deprecated: true
               description: >-
-                Use value 'ModifyRetainedOfflineStock', if you want to modify
-                the retained offline stocks of a facility
+                <i>This endpoint is deprecated and has been replaced.</i><br
+                /><br />@deprecated Concept depreated. Use safety stock instead.
               enum:
                 - ModifyRetainedOfflineStock
               type: string
@@ -30247,6 +30255,13 @@ components:
             de_DE: Beschädigt
             en_US: Damaged
           $ref: '#/components/schemas/LocaleString'
+        identifier:
+          type: string
+          description: >-
+            Small identifier to be displayed and printed. Allowed values are
+            1-99 and A-Z. Needs to be unique respecting all other reasons. If
+            not set, an ascending will be chosen automatically
+          example: A
       required:
         - reasonLocalized
     LocalizedReturnConfiguration:
@@ -30302,9 +30317,17 @@ components:
           type: string
           example: Damaged
           description: translated reasonLocalized
+        identifier:
+          type: string
+          description: >-
+            Small identifier to be displayed and printed. Allowed values are
+            1-99 and A-Z. Needs to be unique respecting all other reasons. If
+            not set, an ascending will be chosen automatically
+          example: A
       required:
         - reasonLocalized
         - reason
+        - identifier
     ReturnTypeConfiguration:
       properties:
         type:
@@ -30978,8 +31001,12 @@ components:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
         stockModificationEnabled:
+          deprecated: true
           default: true
-          description: Indicates if manual stock modification is allowed
+          description: >-
+            <i>This endpoint is deprecated and has been replaced.</i><br /><br
+            />@deprecated Indicates if manual stock modification is allowed -
+            will be moved to remoteConfig
           example: true
           type: boolean
         id:
