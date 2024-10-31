@@ -42300,6 +42300,9 @@ components:
     InboundProcess:
       properties:
         anonymized:
+          description: >-
+            Indicates the inbound process was anonymized acording to configured
+            GDPR retention time.
           type: boolean
         created:
           format: date-time
@@ -42316,6 +42319,9 @@ components:
         id:
           type: string
         inboundDate:
+          description: >-
+            Aggregated dates from sources which advise incoming stock. Currently
+            that is "purchaseOrder"
           items:
             format: date-time
             type: string
@@ -42324,8 +42330,14 @@ components:
           format: date-time
           type: string
         onHold:
+          description: >-
+            Indicates if the inbound process is on hold and will not be
+            processed further
           type: boolean
         origin:
+          description: >-
+            Aggregated origin data from sources which advise incoming stock.
+            Currently that is just  "purchaseOrder"
           items:
             $ref: '#/components/schemas/InboundProcessOrigin'
           type: array
@@ -42336,6 +42348,9 @@ components:
             $ref: '#/components/schemas/InboundReceipt'
           type: array
         scannableCodes:
+          description: >-
+            scannableCodes such as barcodes that are relevant in the
+            inboundProcess, e.g. , barcode of the delivery note
           items:
             type: string
           type: array
@@ -42351,17 +42366,17 @@ components:
         version:
           type: number
       required:
+        - facilityRef
         - id
         - version
         - created
         - lastModified
-        - facilityRef
-        - status
-        - onHold
         - inboundDate
         - origin
-        - scannableCodes
         - anonymized
+        - status
+        - onHold
+        - scannableCodes
         - receipts
       type: object
     InboundProcessForCreation:
@@ -42374,8 +42389,12 @@ components:
           nullable: true
           type: object
         facilityRef:
+          description: Facility in which the inbound process takes place
           type: string
         onHold:
+          description: >-
+            Indicates if the inbound process is on hold and will not be
+            processed further
           type: boolean
         purchaseOrder:
           $ref: '#/components/schemas/InboundProcessPurchaseOrderForCreation'
@@ -42385,10 +42404,16 @@ components:
           maxItems: 200
           type: array
         scannableCodes:
+          description: >-
+            scannableCodes such as barcodes that are relevant in the
+            inboundProcess, e.g. , barcode of the delivery note
           items:
             type: string
           type: array
         tenantInboundProcessId:
+          description: >-
+            Identifier of the process provided by the tenant system. It is
+            recommended to be unique
           type: string
       required:
         - facilityRef
@@ -42403,8 +42428,14 @@ components:
           nullable: true
           type: object
         onHold:
+          description: >-
+            Indicates if the inbound process is on hold and will not be
+            processed further
           type: boolean
         scannableCodes:
+          description: >-
+            scannableCodes such as barcodes that are relevant in the
+            inboundProcess, e.g. , barcode of the delivery note
           items:
             type: string
           type: array
@@ -42434,6 +42465,9 @@ components:
     InboundProcessPurchaseOrder:
       properties:
         cancelled:
+          description: >-
+            Set the purchaseOrder to 'cancelled'. No further deliveries will be
+            expected. Already received goods are unaffected.
           type: boolean
         created:
           format: date-time
@@ -42451,13 +42485,23 @@ components:
           format: date-time
           type: string
         orderDate:
+          description: >-
+            Time and date at which the order was placed. Note: This does not
+            refer to the creation date of this entity in the system.
           format: date-time
           type: string
         requestedDate:
-          $ref: '#/components/schemas/RequestedDate'
+          allOf:
+            - $ref: '#/components/schemas/InputRequestedDate'
+          description: >-
+            Time and date at which the order is expected to arrive. Use 'ASAP'
+            for deliveries with unknown date, but be aware that some features
+            will not include these orders.
         requestedItems:
+          description: Line items which are expected to be delivered.
           items:
             $ref: '#/components/schemas/InboundLineItem'
+          maxItems: 200
           type: array
         status:
           enum:
@@ -42466,20 +42510,27 @@ components:
         supplier:
           $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplier'
         transfer:
-          $ref: '#/components/schemas/InboundProcessPurchaseOrderTransfer'
+          allOf:
+            - $ref: '#/components/schemas/InboundProcessPurchaseOrderTransfer'
+          description: >-
+            Includes data about transfer between different facilities in the
+            tenant's network.
       required:
-        - id
-        - created
-        - lastModified
         - orderDate
         - requestedDate
         - requestedItems
         - status
         - cancelled
+        - id
+        - created
+        - lastModified
       type: object
     InboundProcessPurchaseOrderForCreation:
       properties:
         cancelled:
+          description: >-
+            Set the purchaseOrder to 'cancelled'. No further deliveries will be
+            expected. Already received goods are unaffected.
           type: boolean
         customAttributes:
           description: >-
@@ -42489,11 +42540,20 @@ components:
           nullable: true
           type: object
         orderDate:
+          description: >-
+            Time and date at which the order was placed. Note: This does not
+            refer to the creation date of this entity in the system.
           format: date-time
           type: string
         requestedDate:
-          $ref: '#/components/schemas/InputRequestedDate'
+          allOf:
+            - $ref: '#/components/schemas/InputRequestedDate'
+          description: >-
+            Time and date at which the order is expected to arrive. Use 'ASAP'
+            for deliveries with unknown date, but be aware that some features
+            will not include these orders.
         requestedItems:
+          description: Line items which are expected to be delivered.
           items:
             $ref: '#/components/schemas/InboundLineItem'
           maxItems: 200
@@ -42512,6 +42572,9 @@ components:
     InboundProcessPurchaseOrderForUpsert:
       properties:
         cancelled:
+          description: >-
+            Set the purchaseOrder to 'cancelled'. No further deliveries will be
+            expected. Already received goods are unaffected.
           type: boolean
         customAttributes:
           description: >-
@@ -42521,11 +42584,20 @@ components:
           nullable: true
           type: object
         orderDate:
+          description: >-
+            Time and date at which the order was placed. Note: This does not
+            refer to the creation date of this entity in the system.
           format: date-time
           type: string
         requestedDate:
-          $ref: '#/components/schemas/InputRequestedDate'
+          allOf:
+            - $ref: '#/components/schemas/InputRequestedDate'
+          description: >-
+            Time and date at which the order is expected to arrive. Use 'ASAP'
+            for deliveries with unknown date, but be aware that some features
+            will not include these orders.
         requestedItems:
+          description: Line items which are expected to be delivered.
           items:
             $ref: '#/components/schemas/InboundLineItem'
           maxItems: 200
@@ -42547,6 +42619,7 @@ components:
     InboundProcessPurchaseOrderSupplier:
       properties:
         name:
+          description: Name of the supplier.
           type: string
       type: object
     InboundProcessPurchaseOrderTransfer:
@@ -43071,6 +43144,9 @@ components:
     PurchaseOrder:
       properties:
         cancelled:
+          description: >-
+            Set the purchaseOrder to 'cancelled'. No further deliveries will be
+            expected. Already received goods are unaffected.
           type: boolean
         created:
           format: date-time
@@ -43092,13 +43168,23 @@ components:
           format: date-time
           type: string
         orderDate:
+          description: >-
+            Time and date at which the order was placed. Note: This does not
+            refer to the creation date of this entity in the system.
           format: date-time
           type: string
         requestedDate:
-          $ref: '#/components/schemas/RequestedDate'
+          allOf:
+            - $ref: '#/components/schemas/InputRequestedDate'
+          description: >-
+            Time and date at which the order is expected to arrive. Use 'ASAP'
+            for deliveries with unknown date, but be aware that some features
+            will not include these orders.
         requestedItems:
+          description: Line items which are expected to be delivered.
           items:
             $ref: '#/components/schemas/InboundLineItem'
+          maxItems: 200
           type: array
         status:
           enum:
@@ -43107,18 +43193,22 @@ components:
         supplier:
           $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplier'
         transfer:
-          $ref: '#/components/schemas/InboundProcessPurchaseOrderTransfer'
+          allOf:
+            - $ref: '#/components/schemas/InboundProcessPurchaseOrderTransfer'
+          description: >-
+            Includes data about transfer between different facilities in the
+            tenant's network.
         version:
           type: number
       required:
-        - id
-        - created
-        - lastModified
         - orderDate
         - requestedDate
         - requestedItems
         - status
         - cancelled
+        - id
+        - created
+        - lastModified
         - version
         - facilityRef
         - inboundProcessRef
@@ -43126,6 +43216,9 @@ components:
     PurchaseOrderForCreation:
       properties:
         cancelled:
+          description: >-
+            Set the purchaseOrder to 'cancelled'. No further deliveries will be
+            expected. Already received goods are unaffected.
           type: boolean
         customAttributes:
           description: >-
@@ -43138,11 +43231,20 @@ components:
           minLength: 1
           type: string
         orderDate:
+          description: >-
+            Time and date at which the order was placed. Note: This does not
+            refer to the creation date of this entity in the system.
           format: date-time
           type: string
         requestedDate:
-          $ref: '#/components/schemas/InputRequestedDate'
+          allOf:
+            - $ref: '#/components/schemas/InputRequestedDate'
+          description: >-
+            Time and date at which the order is expected to arrive. Use 'ASAP'
+            for deliveries with unknown date, but be aware that some features
+            will not include these orders.
         requestedItems:
+          description: Line items which are expected to be delivered.
           items:
             $ref: '#/components/schemas/InboundLineItem'
           maxItems: 200
@@ -43186,6 +43288,9 @@ components:
     PurchaseOrderForUpdate:
       properties:
         cancelled:
+          description: >-
+            Set the purchaseOrder to 'cancelled'. No further deliveries will be
+            expected. Already received goods are unaffected.
           type: boolean
         customAttributes:
           description: >-
@@ -43195,11 +43300,20 @@ components:
           nullable: true
           type: object
         orderDate:
+          description: >-
+            Time and date at which the order was placed. Note: This does not
+            refer to the creation date of this entity in the system.
           format: date-time
           type: string
         requestedDate:
-          $ref: '#/components/schemas/InputRequestedDate'
+          allOf:
+            - $ref: '#/components/schemas/InputRequestedDate'
+          description: >-
+            Time and date at which the order is expected to arrive. Use 'ASAP'
+            for deliveries with unknown date, but be aware that some features
+            will not include these orders.
         requestedItems:
+          description: Line items which are expected to be delivered.
           items:
             $ref: '#/components/schemas/InboundLineItem'
           maxItems: 200
@@ -43228,8 +43342,13 @@ components:
     Quantity:
       properties:
         unit:
+          description: >-
+            The unit of the quantity. In some purchaseOrder and receipt it is
+            validated to match again the measurement unit of the article as
+            provided in the listing, if present.
           type: string
         value:
+          description: The amount, provided in the unit of the quantity.
           format: int32
           minimum: 0
           type: integer
@@ -43956,15 +44075,28 @@ components:
     StrippedInboundProcess:
       properties:
         anonymized:
+          description: >-
+            Indicates the inbound process was anonymized acording to configured
+            GDPR retention time.
           type: boolean
         created:
           format: date-time
           type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
         facilityRef:
           type: string
         id:
           type: string
         inboundDate:
+          description: >-
+            Aggregated dates from sources which advise incoming stock. Currently
+            that is "purchaseOrder"
           items:
             format: date-time
             type: string
@@ -43973,12 +44105,21 @@ components:
           format: date-time
           type: string
         onHold:
+          description: >-
+            Indicates if the inbound process is on hold and will not be
+            processed further
           type: boolean
         origin:
+          description: >-
+            Aggregated origin data from sources which advise incoming stock.
+            Currently that is just  "purchaseOrder"
           items:
             $ref: '#/components/schemas/InboundProcessOrigin'
           type: array
         scannableCodes:
+          description: >-
+            scannableCodes such as barcodes that are relevant in the
+            inboundProcess, e.g. , barcode of the delivery note
           items:
             type: string
           type: array
@@ -43994,17 +44135,17 @@ components:
         version:
           type: number
       required:
+        - facilityRef
         - id
         - version
         - created
         - lastModified
-        - facilityRef
-        - status
-        - onHold
         - inboundDate
         - origin
-        - scannableCodes
         - anonymized
+        - status
+        - onHold
+        - scannableCodes
       type: object
     WebHookEvent:
       properties:
