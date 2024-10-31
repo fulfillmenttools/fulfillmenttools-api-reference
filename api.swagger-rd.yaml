@@ -21826,6 +21826,279 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/stowjobs:
+    get:
+      deprecated: false
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />
+      operationId: getStowJobs
+      parameters:
+        - in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            maximum: 100
+            minimum: 1
+            type: number
+        - in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          required: false
+          schema:
+            enum:
+              - LAST_MODIFIED_ASC
+              - LAST_MODIFIED_DESC
+            type: string
+        - in: query
+          name: facilityRef
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - in: query
+          name: tenantArticleId
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - in: query
+          name: locationRef
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - explode: false
+          in: query
+          name: status
+          required: false
+          schema:
+            items:
+              enum:
+                - OPEN
+                - IN_PROGRESS
+                - CLOSED
+                - CANCELED
+                - PAUSED
+              type: string
+            type: array
+        - in: query
+          name: stockRef
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - in: query
+          name: shortId
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - in: query
+          name: priority
+          required: false
+          schema:
+            items:
+              type: number
+            type: array
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StowJobPaginatedResult'
+          description: Paginated result containing the matching Stow Job entities
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Get multiple Stow Jobs
+      tags:
+        - Inventory Management - Stowing
+      x-badges:
+        - color: red
+          label: ALPHA
+    post:
+      deprecated: false
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />
+      operationId: createStowJob
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StowJobForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StowJob'
+          description: Created Stow Job entity
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            The syntax of the request content was correct, but it was unable to
+            process the contained instructions, possibly due to semantic errors.
+      summary: Create a new Stow Job
+      tags:
+        - Inventory Management - Stowing
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/stowjobs/{stowJobId}:
+    get:
+      deprecated: false
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />
+      operationId: getStowJob
+      parameters:
+        - in: path
+          name: stowJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StowJob'
+          description: Requested Stow Job entity
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get a Stow Job by ID
+      tags:
+        - Inventory Management - Stowing
+      x-badges:
+        - color: red
+          label: ALPHA
+    patch:
+      deprecated: false
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />
+      operationId: Patch StowJob
+      parameters:
+        - in: path
+          name: stowJobId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StowJobForPatch'
+        required: true
+      responses:
+        '200':
+          description: Stow Job successfully patched
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            The syntax of the request content was correct, but it was unable to
+            process the contained instructions, possibly due to semantic errors.
+      summary: Patch a Stow Job by ID
+      tags:
+        - Inventory Management - Stowing
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/configurations/notifications:
     get:
       deprecated: false
@@ -43680,6 +43953,25 @@ components:
         - name
         - result
       type: object
+    StockChangeReasonPair:
+      properties:
+        reason:
+          description: >-
+            Depending on type: 
+
+            * [takeFrom] Reason why item was taken from stock / storage location
+            or why it was booked in 
+
+            * [stowTo] Reason why item was stowed on stock / storage location or
+            why it was booked out
+          type: string
+        reasonCode:
+          description: Can be used to map codes for stock changes used in external systems
+          type: string
+      required:
+        - reason
+        - reasonCode
+      type: object
     StockDeleteActionResult:
       properties:
         ids:
@@ -44039,6 +44331,138 @@ components:
         - storageLocation
         - stockCount
       type: object
+    StowJob:
+      properties:
+        created:
+          description: Creation date of the entity, auto-generated if not provided
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        facilityRef:
+          description: >-
+            Non-human-readable reference to the facility where the stow job is
+            executed
+          type: string
+        id:
+          description: Auto-generated, unique primary identifier of the stow job
+          type: string
+        lastModified:
+          description: Service-generated last modification date of the entity
+          format: date-time
+          type: string
+        priority:
+          description: Priority level of the job
+          type: number
+        shortId:
+          description: Readable identifier for display purposes, not unique.
+          type: string
+        status:
+          description: The status of the stowJob
+          type: string
+        stowLineItems:
+          description: The line items that should be stowed
+          items:
+            $ref: '#/components/schemas/StowLineItem'
+          type: array
+        targetTime:
+          description: >-
+            The time by which the job should be completed. Use for
+            prioritization and scheduling
+          format: date-time
+          type: string
+        version:
+          description: The version of the entity, used for optimistic locking mechanisms
+          type: number
+      required:
+        - facilityRef
+        - status
+        - stowLineItems
+        - id
+        - version
+      type: object
+    StowJobForCreation:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        facilityRef:
+          description: >-
+            Non-human-readable reference to the facility where the stow job is
+            executed
+          type: string
+        priority:
+          description: Priority level of the job
+          type: number
+        shortId:
+          description: Readable identifier for display purposes, not unique.
+          type: string
+        status:
+          description: The status of the stowJob
+          type: string
+        stowLineItems:
+          description: The line items that should be stowed
+          items:
+            $ref: '#/components/schemas/StowLineItemForCreation'
+          type: array
+        targetTime:
+          description: >-
+            The time by which the job should be completed. Use for
+            prioritization and scheduling
+          format: date-time
+          type: string
+      required:
+        - facilityRef
+        - status
+        - stowLineItems
+      type: object
+    StowJobForPatch:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        priority:
+          description: Information for user about which job should be started first
+          type: number
+        targetTime:
+          format: date-time
+          type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms
+          type: number
+      required:
+        - version
+      type: object
+    StowJobPaginatedResult:
+      properties:
+        stowJobs:
+          description: The stow jobs that match the filter criteria
+          items:
+            $ref: '#/components/schemas/StowJob'
+          type: array
+        total:
+          description: The total number of stow jobs that match the filter criteria
+          minimum: 0
+          type: number
+      required:
+        - total
+        - stowJobs
+      type: object
     StowJobStatus:
       description: The status of the stowJob
       enum:
@@ -44050,6 +44474,247 @@ components:
       type: string
       xml:
         name: StowJobStatus
+    StowLineItem:
+      properties:
+        article:
+          $ref: '#/components/schemas/StowLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        id:
+          description: >-
+            The ID of the stowLineItem. It is generated automatically during
+            creation and serves as primary identifier of the entity
+          type: string
+        stowTo:
+          description: Instructions on how and where to stow the item
+          discriminator:
+            mapping:
+              DISCARD: '#/components/schemas/StowLineItemStowToDiscard'
+              STOCK: '#/components/schemas/StowLineItemStowToStock'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/StowLineItemStowToStock'
+            - $ref: '#/components/schemas/StowLineItemStowToDiscard'
+        takeFrom:
+          description: Instructions on how and where to take the item from
+          discriminator:
+            mapping:
+              STOCK: '#/components/schemas/StowLineItemTakeFromStock'
+              UNREGISTERED: '#/components/schemas/StowLineItemTakeFromUnregistered'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/StowLineItemTakeFromStock'
+            - $ref: '#/components/schemas/StowLineItemTakeFromUnregistered'
+      required:
+        - article
+        - stowTo
+        - takeFrom
+        - id
+      type: object
+    StowLineItemArticle:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        imageUrl:
+          description: >-
+            A web link to a picture of this item. Please make sure that no
+            authentication is required to fetch the image!
+          type: string
+        measurementUnitKey:
+          description: Identifier for the item's unit of measurement
+          type: string
+        scannableCodes:
+          description: ScannableCodes such as barcodes related to the item
+          items:
+            type: string
+          type: array
+        tenantArticleId:
+          description: Identifier for a certain product which the StowLineItem refers to
+          type: string
+        title:
+          description: The title of the item
+          type: string
+        titleLocalized:
+          description: The translations for the title of the item
+          type: object
+      required:
+        - tenantArticleId
+      type: object
+    StowLineItemForCreation:
+      properties:
+        article:
+          $ref: '#/components/schemas/StowLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        stowTo:
+          description: Instructions on how and where to stow the item
+          discriminator:
+            mapping:
+              DISCARD: '#/components/schemas/StowLineItemStowToDiscardForCreation'
+              STOCK: '#/components/schemas/StowLineItemStowToStockForCreation'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/StowLineItemStowToStockForCreation'
+            - $ref: '#/components/schemas/StowLineItemStowToDiscardForCreation'
+        takeFrom:
+          description: Instructions on how and where to take the item from
+          discriminator:
+            mapping:
+              STOCK: '#/components/schemas/StowLineItemTakeFromStockForCreation'
+              UNREGISTERED: '#/components/schemas/StowLineItemTakeFromUnregisteredForCreation'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/StowLineItemTakeFromStockForCreation'
+            - $ref: '#/components/schemas/StowLineItemTakeFromUnregisteredForCreation'
+      required:
+        - article
+        - stowTo
+        - takeFrom
+      type: object
+    StowLineItemStowToDiscard:
+      properties:
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        reasons:
+          items:
+            $ref: '#/components/schemas/StockChangeReasonPair'
+          type: array
+        stowed:
+          allOf:
+            - $ref: '#/components/schemas/StowedStowLineItemStowTo'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: >-
+            Type DISCARD defines that the item should be booked out of the
+            system.
+          enum:
+            - DISCARD
+          type: string
+      required:
+        - quantity
+        - reasons
+        - type
+      type: object
+    StowLineItemStowToDiscardForCreation:
+      properties:
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        reasons:
+          items:
+            $ref: '#/components/schemas/StockChangeReasonPair'
+          type: array
+        stowed:
+          allOf:
+            - $ref: '#/components/schemas/StowedStowLineItemStowToForCreation'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: >-
+            Type DISCARD defines that the item should be booked out of the
+            system.
+          enum:
+            - DISCARD
+          type: string
+      required:
+        - quantity
+        - reasons
+        - type
+      type: object
+    StowLineItemStowToStock:
+      properties:
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        reasons:
+          items:
+            $ref: '#/components/schemas/StockChangeReasonPair'
+          type: array
+        scannableCodes:
+          description: ScannableCodes such as barcodes relevant for stowing the item
+          items:
+            type: string
+          type: array
+        stockRef:
+          description: Stock on which the item should be stowed
+          type: string
+        storageLocationRef:
+          description: Storage location on which the item should be stowed.
+          type: string
+        stowed:
+          allOf:
+            - $ref: '#/components/schemas/StowedStowLineItemStowTo'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: Type STOCK defines that items should be stowed on a specific stock
+          enum:
+            - STOCK
+          type: string
+      required:
+        - quantity
+        - reasons
+        - stockRef
+        - type
+      type: object
+    StowLineItemStowToStockForCreation:
+      properties:
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        reasons:
+          items:
+            $ref: '#/components/schemas/StockChangeReasonPair'
+          type: array
+        scannableCodes:
+          description: ScannableCodes such as barcodes relevant for stowing the item
+          items:
+            type: string
+          type: array
+        stockRef:
+          description: Stock on which the item should be stowed
+          type: string
+        stowed:
+          allOf:
+            - $ref: '#/components/schemas/StowedStowLineItemStowToForCreation'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: Type STOCK defines that items should be stowed on a specific stock
+          enum:
+            - STOCK
+          type: string
+      required:
+        - quantity
+        - reasons
+        - stockRef
+        - type
+      type: object
     StowLineItemStowToType:
       description: >-
         Define if items should be stowed on a specific stock or storage
@@ -44058,10 +44723,80 @@ components:
       enum:
         - STOCK
         - DISCARD
-        - LOCATION
       type: string
       xml:
         name: StowLineItemStowToType
+    StowLineItemTakeFromStock:
+      properties:
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        reasons:
+          items:
+            $ref: '#/components/schemas/StockChangeReasonPair'
+          type: array
+        stockRef:
+          description: >-
+            Stock from which the item should be taken. Leave empty for type
+            UNREGISTERED.
+          type: string
+        storageLocationRef:
+          description: Storage location from which the item should be taken.
+          type: string
+        taken:
+          allOf:
+            - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: >-
+            The type STOCK defines that the item should be taken from a specific
+            stock
+          enum:
+            - STOCK
+          type: string
+      required:
+        - quantity
+        - reasons
+        - stockRef
+        - type
+      type: object
+    StowLineItemTakeFromStockForCreation:
+      properties:
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        reasons:
+          items:
+            $ref: '#/components/schemas/StockChangeReasonPair'
+          type: array
+        stockRef:
+          description: >-
+            Stock from which the item should be taken. Leave empty for type
+            UNREGISTERED.
+          type: string
+        taken:
+          allOf:
+            - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: >-
+            The type STOCK defines that the item should be taken from a specific
+            stock
+          enum:
+            - STOCK
+          type: string
+      required:
+        - quantity
+        - reasons
+        - stockRef
+        - type
+      type: object
     StowLineItemTakeFromType:
       description: >-
         Define if items should be taken from specific stock or storage location.
@@ -44072,6 +44807,99 @@ components:
       type: string
       xml:
         name: StowLineItemTakeFromType
+    StowLineItemTakeFromUnregistered:
+      properties:
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        reasons:
+          items:
+            $ref: '#/components/schemas/StockChangeReasonPair'
+          type: array
+        taken:
+          allOf:
+            - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: >-
+            The type UNREGISTERED defines that a new item should be booked into
+            the system.
+          enum:
+            - UNREGISTERED
+          type: string
+      required:
+        - quantity
+        - reasons
+        - type
+      type: object
+    StowLineItemTakeFromUnregisteredForCreation:
+      properties:
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        reasons:
+          items:
+            $ref: '#/components/schemas/StockChangeReasonPair'
+          type: array
+        taken:
+          allOf:
+            - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: >-
+            The type UNREGISTERED defines that a new item should be booked into
+            the system.
+          enum:
+            - UNREGISTERED
+          type: string
+      required:
+        - quantity
+        - reasons
+        - type
+      type: object
+    StowedStowLineItemStowTo:
+      properties:
+        stowedAt:
+          description: Time and date on which the item was stowed
+          format: date-time
+          type: string
+        stowedQuantity:
+          description: Quantity that was stowed
+          type: number
+        stowedStockRef:
+          description: >-
+            Stock on which the item was stowed. If this is left empty, and type
+            is not DISCARD, a new stock will be created
+          type: string
+        stowedStorageLocationRef:
+          description: Storage location on which the item was stowed
+          type: string
+      required:
+        - stowedQuantity
+        - stowedAt
+      type: object
+    StowedStowLineItemStowToForCreation:
+      properties:
+        stowedQuantity:
+          description: Quantity that was stowed
+          type: number
+        stowedStockRef:
+          description: >-
+            Stock on which the item was stowed. If this is left empty, and type
+            is not DISCARD, a new stock will be created
+          type: string
+        stowedStorageLocationRef:
+          description: Storage location on which the item was stowed
+          type: string
+      required:
+        - stowedQuantity
+      type: object
     StrippedInboundProcess:
       properties:
         anonymized:
@@ -44146,6 +44974,25 @@ components:
         - status
         - onHold
         - scannableCodes
+      type: object
+    TakenStowLineItemTakeFrom:
+      properties:
+        takenAt:
+          description: Time and date on which the item was taken
+          format: date-time
+          type: string
+        takenQuantity:
+          description: Quantity that was taken
+          type: number
+        takenStockRef:
+          description: Stock from which the item was taken
+          type: string
+        takenStorageLocationRef:
+          description: Storage location from which the item was taken
+          type: string
+      required:
+        - takenQuantity
+        - takenAt
       type: object
     WebHookEvent:
       properties:
