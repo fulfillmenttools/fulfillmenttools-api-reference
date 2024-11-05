@@ -19752,6 +19752,81 @@ paths:
       summary: Update Inventory Configuration
       tags:
         - Inventory Management - Stocks
+  /api/externalstockchangereasons:
+    get:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getExternalStockChangeReasons
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalStockChangeReasonList'
+          description: List of external stock change reasons
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Get external stock change reasons
+    put:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: setExternalStockChangeReasons
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalStockChangeReasonList'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalStockChangeReasonList'
+          description: The updated list of external stock change reasons
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: set external stock change reasons
   /api/facilities/{facilityId}/configurations/inventory:
     get:
       deprecated: false
@@ -42057,6 +42132,35 @@ components:
         - availableForPicking
         - availableOnStock
       type: object
+    ExternalStockChangeReasonIdentifer:
+      properties:
+        key:
+          description: >-
+            Depending on type: 
+
+            * [takeFrom] Reason why item was taken from stock / storage location
+            or why it was booked in 
+
+            * [stowTo] Reason why item was stowed on stock / storage location or
+            why it was booked out
+          type: string
+      required:
+        - key
+      type: object
+    ExternalStockChangeReasonList:
+      properties:
+        externalStockChangeReasons:
+          description: List of external stock change reasons
+          items:
+            $ref: '#/components/schemas/StockChangeReasonEntry'
+          type: array
+        version:
+          description: Version of the external stock change reason list
+          type: number
+      required:
+        - externalStockChangeReasons
+        - version
+      type: object
     FacilityStock:
       properties:
         available:
@@ -43745,24 +43849,20 @@ components:
         - name
         - result
       type: object
-    StockChangeReasonPair:
+    StockChangeReasonEntry:
       properties:
-        reason:
-          description: >-
-            Depending on type: 
-
-            * [takeFrom] Reason why item was taken from stock / storage location
-            or why it was booked in 
-
-            * [stowTo] Reason why item was stowed on stock / storage location or
-            why it was booked out
+        active:
+          description: Whether the reason is active
+          type: boolean
+        key:
+          description: Identifier of the stock change reason
           type: string
-        reasonCode:
-          description: Can be used to map codes for stock changes used in external systems
-          type: string
+        reasonLocalized:
+          description: Localizations, i.e. names which are to be displayed
+          type: object
       required:
-        - reason
-        - reasonCode
+        - key
+        - reasonLocalized
       type: object
     StockDeleteActionResult:
       properties:
@@ -44385,7 +44485,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/StockChangeReasonPair'
+            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
           type: array
         stowed:
           allOf:
@@ -44413,7 +44513,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/StockChangeReasonPair'
+            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
           type: array
         stowed:
           allOf:
@@ -44441,7 +44541,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/StockChangeReasonPair'
+            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
           type: array
         scannableCodes:
           description: ScannableCodes such as barcodes relevant for stowing the item
@@ -44479,7 +44579,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/StockChangeReasonPair'
+            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
           type: array
         scannableCodes:
           description: ScannableCodes such as barcodes relevant for stowing the item
@@ -44525,7 +44625,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/StockChangeReasonPair'
+            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
           type: array
         stockRef:
           description: >-
@@ -44562,7 +44662,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/StockChangeReasonPair'
+            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
           type: array
         stockRef:
           description: >-
@@ -44606,7 +44706,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/StockChangeReasonPair'
+            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
           type: array
         taken:
           allOf:
@@ -44634,7 +44734,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/StockChangeReasonPair'
+            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
           type: array
         taken:
           allOf:
