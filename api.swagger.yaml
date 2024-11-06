@@ -19764,7 +19764,7 @@ paths:
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+          </i><br /><br />Get external stock change reasons
       operationId: getExternalStockChangeReasons
       parameters: []
       responses:
@@ -19786,7 +19786,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
           description: Your user, although recognized, is not authorized to use this
-      summary: Get external stock change reasons
+      tags:
+        - Inventory Management - Stocks
     put:
       deprecated: false
       description: |-
@@ -19798,7 +19799,7 @@ paths:
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+          </i><br /><br />set external stock change reasons
       operationId: setExternalStockChangeReasons
       parameters: []
       requestBody:
@@ -19826,7 +19827,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
           description: Your user, although recognized, is not authorized to use this
-      summary: set external stock change reasons
+      tags:
+        - Inventory Management - Stocks
   /api/facilities/{facilityId}/configurations/inventory:
     get:
       deprecated: false
@@ -38428,7 +38430,10 @@ components:
                 useful to have the informations carried here.
               type: object
             email:
-              description: The email address of the consumer.
+              deprecated: true
+              description: >
+                @deprecated The email address of the consumer. Use email in
+                addresses array
               example: max@speedyboxales.com
               format: email
               type: string
@@ -42137,7 +42142,7 @@ components:
         - availableForPicking
         - availableOnStock
       type: object
-    ExternalStockChangeReasonIdentifer:
+    ExternalStockChangeReason:
       properties:
         key:
           description: >-
@@ -42149,8 +42154,12 @@ components:
             * [stowTo] Reason why item was stowed on stock / storage location or
             why it was booked out
           type: string
+        reasonLocalized:
+          description: Localizations, i.e. names which are to be displayed
+          type: object
       required:
         - key
+        - reasonLocalized
       type: object
     ExternalStockChangeReasonList:
       properties:
@@ -44490,7 +44499,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
+            $ref: '#/components/schemas/ExternalStockChangeReason'
           type: array
         stowed:
           allOf:
@@ -44518,7 +44527,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
+            $ref: '#/components/schemas/ExternalStockChangeReason'
           type: array
         stowed:
           allOf:
@@ -44546,7 +44555,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
+            $ref: '#/components/schemas/ExternalStockChangeReason'
           type: array
         scannableCodes:
           description: ScannableCodes such as barcodes relevant for stowing the item
@@ -44584,7 +44593,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
+            $ref: '#/components/schemas/ExternalStockChangeReason'
           type: array
         scannableCodes:
           description: ScannableCodes such as barcodes relevant for stowing the item
@@ -44630,7 +44639,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
+            $ref: '#/components/schemas/ExternalStockChangeReason'
           type: array
         stockRef:
           description: >-
@@ -44667,7 +44676,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
+            $ref: '#/components/schemas/ExternalStockChangeReason'
           type: array
         stockRef:
           description: >-
@@ -44711,7 +44720,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
+            $ref: '#/components/schemas/ExternalStockChangeReason'
           type: array
         taken:
           allOf:
@@ -44739,7 +44748,7 @@ components:
           type: number
         reasons:
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReasonIdentifer'
+            $ref: '#/components/schemas/ExternalStockChangeReason'
           type: array
         taken:
           allOf:
