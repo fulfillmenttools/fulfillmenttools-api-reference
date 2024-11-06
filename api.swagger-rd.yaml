@@ -43028,8 +43028,10 @@ components:
     InboundReceipt:
       properties:
         asnRef:
+          description: enables mapping a receipt to one of the ASNs in this inbound process
           type: string
         comments:
+          description: comments regarding the receipt itself
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
           maxItems: 20
@@ -43044,14 +43046,19 @@ components:
         id:
           type: string
         receivedDate:
+          description: date-time of the arrival of the items in the facility
           format: date-time
           type: string
         receivedItems:
+          description: list of item that arrived in the facility
           items:
             $ref: '#/components/schemas/InboundReceiptLineItem'
           maxItems: 200
           type: array
         status:
+          description: >-
+            status of this receipt, only receipts with status 'FINISHED' are
+            booked. IN_PROGRESS can be used to save partial receipts.
           enum:
             - IN_PROGRESS
             - FINISHED
@@ -43065,12 +43072,17 @@ components:
     InboundReceiptComment:
       properties:
         attachments:
+          description: attachments such as photos or documents
           items:
             $ref: '#/components/schemas/InboundAttachmentLink'
           type: array
         content:
+          description: text content of the comment
           type: string
         userRef:
+          description: >-
+            user that added the comment, is anonymized according to specified
+            rules
           type: string
       required:
         - content
@@ -43078,8 +43090,10 @@ components:
     InboundReceiptForCreation:
       properties:
         asnRef:
+          description: enables mapping a receipt to one of the ASNs in this inbound process
           type: string
         comments:
+          description: comments regarding the receipt itself
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
           maxItems: 20
@@ -43092,14 +43106,19 @@ components:
           nullable: true
           type: object
         receivedDate:
+          description: date-time of the arrival of the items in the facility
           format: date-time
           type: string
         receivedItems:
+          description: list of item that arrived in the facility
           items:
             $ref: '#/components/schemas/InboundReceiptLineItem'
           maxItems: 200
           type: array
         status:
+          description: >-
+            status of this receipt, only receipts with status 'FINISHED' are
+            booked. IN_PROGRESS can be used to save partial receipts.
           enum:
             - IN_PROGRESS
             - FINISHED
@@ -43112,8 +43131,10 @@ components:
     InboundReceiptForPatch:
       properties:
         asnRef:
+          description: enables mapping a receipt to one of the ASNs in this inbound process
           type: string
         comments:
+          description: comments regarding the receipt itself
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
           maxItems: 20
@@ -43126,14 +43147,19 @@ components:
           nullable: true
           type: object
         receivedDate:
+          description: date-time of the arrival of the items in the facility
           format: date-time
           type: string
         receivedItems:
+          description: list of item that arrived in the facility
           items:
             $ref: '#/components/schemas/InboundReceiptLineItem'
           maxItems: 200
           type: array
         status:
+          description: >-
+            status of this receipt, only receipts with status 'FINISHED' are
+            booked. IN_PROGRESS can be used to save partial receipts.
           enum:
             - IN_PROGRESS
             - FINISHED
@@ -43146,8 +43172,10 @@ components:
     InboundReceiptForUpdate:
       properties:
         asnRef:
+          description: enables mapping a receipt to one of the ASNs in this inbound process
           type: string
         comments:
+          description: comments regarding the receipt itself
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
           maxItems: 20
@@ -43160,14 +43188,19 @@ components:
           nullable: true
           type: object
         receivedDate:
+          description: date-time of the arrival of the items in the facility
           format: date-time
           type: string
         receivedItems:
+          description: list of item that arrived in the facility
           items:
             $ref: '#/components/schemas/InboundReceiptLineItem'
           maxItems: 200
           type: array
         status:
+          description: >-
+            status of this receipt, only receipts with status 'FINISHED' are
+            booked. IN_PROGRESS can be used to save partial receipts.
           enum:
             - IN_PROGRESS
             - FINISHED
@@ -43235,8 +43268,11 @@ components:
     InboundReceiptLineItem:
       properties:
         acceptedQuantity:
-          $ref: '#/components/schemas/Quantity'
+          allOf:
+            - $ref: '#/components/schemas/Quantity'
+          description: quantity of the stock that was accepted in this receipt
         comments:
+          description: comments regarding the receival of this item
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
           maxItems: 20
@@ -43249,15 +43285,20 @@ components:
           nullable: true
           type: object
         rejectedQuantity:
-          $ref: '#/components/schemas/Quantity'
+          allOf:
+            - $ref: '#/components/schemas/Quantity'
+          description: quantity of the stock that was rejected in this receipt
         stockProperties:
           additionalProperties:
             type: string
           allOf:
             - $ref: '#/components/schemas/StockPropertyPreset'
+          description: stock properties that will be set on the created stock
         storageLocationRef:
+          description: storage location on which stock was placed
           type: string
         tenantArticleId:
+          description: tenantArticleId of the stock that was received
           type: string
       required:
         - tenantArticleId
@@ -43754,8 +43795,10 @@ components:
     Receipt:
       properties:
         asnRef:
+          description: enables mapping a receipt to one of the ASNs in this inbound process
           type: string
         comments:
+          description: comments regarding the receipt itself
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
           maxItems: 20
@@ -43778,14 +43821,19 @@ components:
           format: date-time
           type: string
         receivedDate:
+          description: date-time of the arrival of the items in the facility
           format: date-time
           type: string
         receivedItems:
+          description: list of item that arrived in the facility
           items:
             $ref: '#/components/schemas/InboundReceiptLineItem'
           maxItems: 200
           type: array
         status:
+          description: >-
+            status of this receipt, only receipts with status 'FINISHED' are
+            booked. IN_PROGRESS can be used to save partial receipts.
           enum:
             - IN_PROGRESS
             - FINISHED
@@ -43805,8 +43853,10 @@ components:
     ReceiptForCreation:
       properties:
         asnRef:
+          description: enables mapping a receipt to one of the ASNs in this inbound process
           type: string
         comments:
+          description: comments regarding the receipt itself
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
           maxItems: 20
@@ -43821,14 +43871,19 @@ components:
         facilityRef:
           type: string
         receivedDate:
+          description: date-time of the arrival of the items in the facility
           format: date-time
           type: string
         receivedItems:
+          description: list of item that arrived in the facility
           items:
             $ref: '#/components/schemas/InboundReceiptLineItem'
           maxItems: 200
           type: array
         status:
+          description: >-
+            status of this receipt, only receipts with status 'FINISHED' are
+            booked. IN_PROGRESS can be used to save partial receipts.
           enum:
             - IN_PROGRESS
             - FINISHED
