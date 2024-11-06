@@ -22178,6 +22178,146 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/stowjobs/{stowJobId}/actions:
+    post:
+      deprecated: false
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />
+      operationId: Post StowJob Actions
+      parameters:
+        - in: path
+          name: stowJobId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/StartStowJobAction'
+                - $ref: '#/components/schemas/PauseStowJobAction'
+                - $ref: '#/components/schemas/CancelStowJobAction'
+                - $ref: '#/components/schemas/ReopenStowJobAction'
+                - $ref: '#/components/schemas/CloseStowJobAction'
+        required: true
+      responses:
+        '200':
+          description: Actions successfully performed
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            The syntax of the request content was correct, but it was unable to
+            process the contained instructions, possibly due to semantic errors.
+      summary: Perform actions on a Stow Job
+      tags:
+        - Inventory Management - Stowing
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/stowjobs/{stowJobId}/stowlineitems/{stowLineItemId}/actions:
+    post:
+      deprecated: false
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />
+      operationId: Post StowLineItem Actions
+      parameters:
+        - in: path
+          name: stowJobId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: stowLineItemId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyStowLineItemAction'
+        required: true
+      responses:
+        '200':
+          description: Actions successfully performed
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            The syntax of the request content was correct, but it was unable to
+            process the contained instructions, possibly due to semantic errors.
+      summary: Perform actions on a Stow Line Item
+      tags:
+        - Inventory Management - Stowing
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/configurations/notifications:
     get:
       deprecated: false
@@ -42342,6 +42482,20 @@ components:
         - PICKABLE
         - ACCESSIBLE
       type: object
+    CancelStowJobAction:
+      properties:
+        name:
+          description: The name of the action that should be performed
+          enum:
+            - CANCEL_STOW_JOB
+          type: string
+        version:
+          description: The current version of the stow job that should be modified
+          type: number
+      required:
+        - version
+        - name
+      type: object
     ChannelStockAvailability:
       properties:
         availableForPicking:
@@ -42354,6 +42508,20 @@ components:
         - channelRef
         - availableForPicking
         - availableOnStock
+      type: object
+    CloseStowJobAction:
+      properties:
+        name:
+          description: The name of the action that should be performed
+          enum:
+            - CLOSE_STOW_JOB
+          type: string
+        version:
+          description: The current version of the stow job that should be modified
+          type: number
+      required:
+        - version
+        - name
       type: object
     ExternalStockChangeReason:
       properties:
@@ -43533,6 +43701,23 @@ components:
         - timestamp
         - reasons
       type: object
+    ModifyStowLineItemAction:
+      properties:
+        name:
+          description: The name of the action that should be performed
+          enum:
+            - MODIFY_STOW_LINE_ITEM
+          type: string
+        stowLineItem:
+          $ref: '#/components/schemas/StowLineItemForUpdate'
+        version:
+          description: The current version of the stow job that should be modified
+          type: number
+      required:
+        - version
+        - name
+        - stowLineItem
+      type: object
     MoveStockToLocationOptions:
       properties:
         deleteFromStockIfZero:
@@ -43577,6 +43762,20 @@ components:
       required:
         - allowedValues
         - tagId
+      type: object
+    PauseStowJobAction:
+      properties:
+        name:
+          description: The name of the action that should be performed
+          enum:
+            - PAUSE_STOW_JOB
+          type: string
+        version:
+          description: The current version of the stow job that should be modified
+          type: number
+      required:
+        - version
+        - name
       type: object
     PurchaseOrder:
       properties:
@@ -43894,6 +44093,20 @@ components:
         - comments
         - facilityRef
       type: object
+    ReopenStowJobAction:
+      properties:
+        name:
+          description: The name of the action that should be performed
+          enum:
+            - REOPEN_STOW_JOB
+          type: string
+        version:
+          description: The current version of the stow job that should be modified
+          type: number
+      required:
+        - version
+        - name
+      type: object
     RequestedDate:
       properties:
         type:
@@ -44015,6 +44228,20 @@ components:
       required:
         - total
         - safetyStocks
+      type: object
+    StartStowJobAction:
+      properties:
+        name:
+          description: The name of the action that should be performed
+          enum:
+            - START_STOW_JOB
+          type: string
+        version:
+          description: The current version of the stow job that should be modified
+          type: number
+      required:
+        - version
+        - name
       type: object
     Stock:
       properties:
@@ -44608,6 +44835,18 @@ components:
         - id
         - version
       type: object
+    StowJobActionName:
+      description: The name of the action that should be performed
+      enum:
+        - START_STOW_JOB
+        - PAUSE_STOW_JOB
+        - REOPEN_STOW_JOB
+        - CANCEL_STOW_JOB
+        - CLOSE_STOW_JOB
+        - MODIFY_STOW_LINE_ITEM
+      type: string
+      xml:
+        name: StowJobActionName
     StowJobForCreation:
       properties:
         customAttributes:
@@ -44807,6 +45046,40 @@ components:
         - article
         - stowTo
         - takeFrom
+      type: object
+    StowLineItemForUpdate:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/StowLineItemArticle'
+          description: The article that should be stowed
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        stowTo:
+          description: Instructions on how and where to stow the item
+          discriminator:
+            mapping:
+              DISCARD: '#/components/schemas/StowLineItemStowToDiscardForCreation'
+              STOCK: '#/components/schemas/StowLineItemStowToStockForCreation'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/StowLineItemStowToStockForCreation'
+            - $ref: '#/components/schemas/StowLineItemStowToDiscardForCreation'
+        takeFrom:
+          description: Instructions on how and where to take the item from
+          discriminator:
+            mapping:
+              STOCK: '#/components/schemas/StowLineItemTakeFromStockForCreation'
+              UNREGISTERED: '#/components/schemas/StowLineItemTakeFromUnregisteredForCreation'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/StowLineItemTakeFromStockForCreation'
+            - $ref: '#/components/schemas/StowLineItemTakeFromUnregisteredForCreation'
       type: object
     StowLineItemStowToDiscard:
       properties:
@@ -45104,10 +45377,13 @@ components:
           type: string
       required:
         - stowedQuantity
-        - stowedAt
       type: object
     StowedStowLineItemStowToForCreation:
       properties:
+        stowedAt:
+          description: Time and date on which the item was stowed
+          format: date-time
+          type: string
         stowedQuantity:
           description: Quantity that was stowed
           type: number
@@ -45214,7 +45490,6 @@ components:
           type: string
       required:
         - takenQuantity
-        - takenAt
       type: object
     WebHookEvent:
       properties:
