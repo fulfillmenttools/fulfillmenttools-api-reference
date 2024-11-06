@@ -1,11 +1,10 @@
 {
 	"info": {
-		"_postman_id": "4f9c8692-1587-4870-a120-db4751d159a5",
+		"_postman_id": "a6fbd45f-df5a-403a-b3d2-5388b1bd7722",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11673215",
-		"_collection_link": "https://cloudy-firefly-771136.postman.co/workspace/Postman-Git~3dd9cb75-6fcc-4f61-9b74-68272a3026fa/collection/11673215-4f9c8692-1587-4870-a120-db4751d159a5?action=share&source=collection_link&creator=11673215"
+		"_exporter_id": "30481973"
 	},
 	"item": [
 		{
@@ -4992,6 +4991,19 @@
 							]
 						},
 						{
+							"name": "RoutingPlansGraph",
+							"item": [
+								{
+									"name": "Get RoutingPlansGraph by ProcessRef",
+									"request": {
+										"method": "GET",
+										"header": []
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Patch RoutingPlan By ID",
 							"request": {
 								"method": "PATCH",
@@ -9192,36 +9204,35 @@
 					"name": "Inventory Configuration",
 					"item": [
 						{
-							"name": "Stock",
+							"name": "External Stock Change Reasons",
 							"item": [
 								{
-									"name": "Get Stock",
+									"name": "Get External Stock Change Reasons",
 									"request": {
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{host}}/api/configurations/stock",
+											"raw": "{{host}}/api/externalstockchangereasons",
 											"host": [
 												"{{host}}"
 											],
 											"path": [
 												"api",
-												"configurations",
-												"stock"
+												"externalstockchangereasons"
 											]
 										},
-										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putStockConfiguration"
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stocks/getStockConfiguration"
 									},
 									"response": []
 								},
 								{
-									"name": "Update Stock",
+									"name": "Set External Stock Change Reasons",
 									"request": {
 										"method": "PUT",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"stockModificationEnabled\": true\n}\n",
+											"raw": "{\n    \"externalStockChangeReasons\": [\n        {\n            \"reasonLocalized\": {\n              \"en_US\": \"Recounted\",\n              \"de_DE\": \"Nachgezählt\",\n              \"fr_FR\": \"Recompté\"\n            },\n            \"key\": \"Recounted\"\n        }\n    ],\n    \"version\": 1\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9229,17 +9240,86 @@
 											}
 										},
 										"url": {
-											"raw": "{{host}}/api/configurations/stock",
+											"raw": "{{host}}/api/externalstockchangereasons",
 											"host": [
 												"{{host}}"
 											],
 											"path": [
 												"api",
-												"configurations",
-												"stock"
+												"externalstockchangereasons"
 											]
 										},
-										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putStockConfiguration"
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stocks/setStockConfiguration"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Inventory Facility Configuration",
+							"item": [
+								{
+									"name": "Update Inventory Facility Configuration",
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"version\": 2,\n    \"isMixedStorage\": null,\n    \"outboundStockConfiguration\": {\n        \"trackOutboundStock\": true,\n        \"locationRef\": \"<your location ref>\",\n        \"clearTrigger\": [\n            {\n                \"event\": \"handoverjob-handed-over_event-v1\"\n            },\n            {\n                \"event\": \"pick-job-closed_event-v1\",\n                \"tagFilter\": [\n                    {\n                        \"tagId\": \"order-type\",\n                        \"allowedValues\": [\n                            \"production\"\n                        ]\n                    }\n                ]\n            }\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/configurations/inventory",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"configurations",
+												"inventory"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": "",
+													"description": "PUT-IN-YOUR-FACILITY-ID"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Inventory Facility Configuration",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/configurations/inventory",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"configurations",
+												"inventory"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": "",
+													"description": "PUT-IN-YOUR-FACILITY-ID"
+												}
+											]
+										}
 									},
 									"response": []
 								}
@@ -9290,119 +9370,6 @@
 										"inventory"
 									]
 								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update Inventory Facility Configuration",
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"version\": 2,\n    \"isMixedStorage\": null,\n    \"outboundStockConfiguration\": {\n        \"trackOutboundStock\": true,\n        \"locationRef\": \"<your location ref>\",\n        \"clearTrigger\": [\n            {\n                \"event\": \"handoverjob-handed-over_event-v1\"\n            },\n            {\n                \"event\": \"pick-job-closed_event-v1\",\n                \"tagFilter\": [\n                    {\n                        \"tagId\": \"order-type\",\n                        \"allowedValues\": [\n                            \"production\"\n                        ]\n                    }\n                ]\n            }\n        ]\n    }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/api/facilities/:facilityId/configurations/inventory",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"facilities",
-										":facilityId",
-										"configurations",
-										"inventory"
-									],
-									"variable": [
-										{
-											"key": "facilityId",
-											"value": "",
-											"description": "PUT-IN-YOUR-FACILITY-ID"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Inventory Facility Configuration",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/api/facilities/:facilityId/configurations/inventory",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"facilities",
-										":facilityId",
-										"configurations",
-										"inventory"
-									],
-									"variable": [
-										{
-											"key": "facilityId",
-											"value": "",
-											"description": "PUT-IN-YOUR-FACILITY-ID"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get External Stock Change Reasons",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/api/configurations/stock",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"configurations",
-										"stock"
-									]
-								},
-								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putStockConfiguration"
-							},
-							"response": []
-						},
-						{
-							"name": "Set External Stock Change Reasons",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"externalStockChangeReasons\": [\n        {\n            \"reasonLocalized\": {\n              \"en_US\": \"Recounted\",\n              \"de_DE\": \"Nachgezählt\",\n              \"fr_FR\": \"Recompté\"\n            },\n            \"key\": \"Recounted\"\n        }\n    ],\n    \"version\": 1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/api/externalstockchangereasons",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"externalstockchangereasons"
-									]
-								},
-								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putStockConfiguration"
 							},
 							"response": []
 						}
