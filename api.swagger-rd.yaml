@@ -41727,6 +41727,8 @@ components:
             $ref: '#/components/schemas/CustomServiceReference'
         latestPickingStart:
           $ref: '#/components/schemas/LatestPickingStart'
+        earliestPickingStart:
+          $ref: '#/components/schemas/EarliestPickingStart'
         provisioningTime:
           description: The point in time by which the order is supposed to be provisioned.
           example: '2020-02-03T08:45:50.525Z'
@@ -41749,13 +41751,9 @@ components:
         - predecessorRerouteRoutingPlanRefs
         - successorRerouteRoutingPlanRefs
       type: object
-    LatestPickingStart:
+    PickingStartBase:
       type: object
       properties:
-        latestPickingStartDate:
-          example: '2020-02-03T08:45:50.525Z'
-          format: date-time
-          type: string
         targetTime:
           example: '2020-02-03T08:45:50.525Z'
           format: date-time
@@ -41764,8 +41762,29 @@ components:
           type: string
       required:
         - carrierRef
-        - latestPickingStartDate
         - targetTime
+    LatestPickingStart:
+      allOf:
+        - $ref: '#/components/schemas/PickingStartBase'
+      type: object
+      properties:
+        latestPickingStartDate:
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+      required:
+        - latestPickingStartDate
+    EarliestPickingStart:
+      allOf:
+        - $ref: '#/components/schemas/PickingStartBase'
+      type: object
+      properties:
+        earliestPickingStartDate:
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+      required:
+        - earliestPickingStartDate
     LatestPickingStartForDecisionLog:
       type: object
       properties:
