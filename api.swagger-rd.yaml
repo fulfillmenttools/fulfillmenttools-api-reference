@@ -35446,6 +35446,39 @@ components:
       enum:
         - WaitForInputItemReturn
       type: string
+    RefundTrigger:
+      type: object
+      additionalProperties: false
+      properties:
+        tenantOrderId:
+          type: string
+          description: The tenant order id of the order that should be refunded
+          example: a69006ba-7100-4b4d-a610-1ca28016a4eb
+          minLength: 1
+          maxLength: 256
+        refundedLineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemReturnLineItem'
+          description: The line items that should be refunded
+        itemReturnRef:
+          type: string
+          description: reference to the item return that should be refunded
+          example: a69006ba-7100-4b4d-a610-1ca28016a4eb
+        created:
+          type: string
+          format: date-time
+          description: Date when the refund was triggered
+          example: '2020-02-03T08:45:51.525Z'
+        returnFacilityRef:
+          type: string
+          description: The facility where the return was processed
+          example: a69006ba-7100-4b4d-a610-1ca28016a4eb
+      required:
+        - refundedLineItems
+        - itemReturnRef
+        - created
+        - returnFacilityRef
     OperativeProcess:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
