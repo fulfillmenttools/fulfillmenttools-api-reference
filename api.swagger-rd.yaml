@@ -45053,6 +45053,12 @@ components:
             The ID of the stowLineItem. It is generated automatically during
             creation and serves as primary identifier of the entity
           type: string
+        reasons:
+          description: The reasons for the stow operation
+          items:
+            $ref: '#/components/schemas/ExternalStockChangeReason'
+          maxItems: 10
+          type: array
         stowTo:
           description: Instructions on how and where to stow the item
           discriminator:
@@ -45077,6 +45083,7 @@ components:
         - article
         - stowTo
         - takeFrom
+        - reasons
         - id
       type: object
     StowLineItemArticle:
@@ -45124,6 +45131,12 @@ components:
             attach custom data from your systems to fulfillmenttools entities.
           nullable: true
           type: object
+        reasons:
+          description: The reasons for the stow operation
+          items:
+            $ref: '#/components/schemas/ExternalStockChangeReason'
+          maxItems: 10
+          type: array
         stowTo:
           description: Instructions on how and where to stow the item
           discriminator:
@@ -45148,6 +45161,7 @@ components:
         - article
         - stowTo
         - takeFrom
+        - reasons
       type: object
     StowLineItemForUpdate:
       properties:
@@ -45162,6 +45176,12 @@ components:
             attach custom data from your systems to fulfillmenttools entities.
           nullable: true
           type: object
+        reasons:
+          description: The reasons for the stow operation
+          items:
+            $ref: '#/components/schemas/ExternalStockChangeReason'
+          maxItems: 10
+          type: array
         stowTo:
           description: Instructions on how and where to stow the item
           discriminator:
@@ -45188,10 +45208,6 @@ components:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
-        reasons:
-          items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
-          type: array
         stowed:
           allOf:
             - $ref: '#/components/schemas/StowedStowLineItemStowTo'
@@ -45208,7 +45224,6 @@ components:
           type: string
       required:
         - quantity
-        - reasons
         - type
       type: object
     StowLineItemStowToDiscardForCreation:
@@ -45216,10 +45231,6 @@ components:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
-        reasons:
-          items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
-          type: array
         stowed:
           allOf:
             - $ref: '#/components/schemas/StowedStowLineItemStowToForCreation'
@@ -45236,7 +45247,6 @@ components:
           type: string
       required:
         - quantity
-        - reasons
         - type
       type: object
     StowLineItemStowToStock:
@@ -45244,10 +45254,6 @@ components:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
-        reasons:
-          items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
-          type: array
         scannableCodes:
           description: ScannableCodes such as barcodes relevant for stowing the item
           items:
@@ -45273,7 +45279,6 @@ components:
           type: string
       required:
         - quantity
-        - reasons
         - stockRef
         - type
       type: object
@@ -45282,10 +45287,6 @@ components:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
-        reasons:
-          items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
-          type: array
         scannableCodes:
           description: ScannableCodes such as barcodes relevant for stowing the item
           items:
@@ -45308,7 +45309,6 @@ components:
           type: string
       required:
         - quantity
-        - reasons
         - stockRef
         - type
       type: object
@@ -45328,10 +45328,6 @@ components:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
-        reasons:
-          items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
-          type: array
         stockRef:
           description: >-
             Stock from which the item should be taken. Leave empty for type
@@ -45356,7 +45352,6 @@ components:
           type: string
       required:
         - quantity
-        - reasons
         - stockRef
         - type
       type: object
@@ -45365,10 +45360,6 @@ components:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
-        reasons:
-          items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
-          type: array
         stockRef:
           description: >-
             Stock from which the item should be taken. Leave empty for type
@@ -45390,7 +45381,6 @@ components:
           type: string
       required:
         - quantity
-        - reasons
         - stockRef
         - type
       type: object
@@ -45409,10 +45399,6 @@ components:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
-        reasons:
-          items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
-          type: array
         taken:
           allOf:
             - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
@@ -45429,7 +45415,6 @@ components:
           type: string
       required:
         - quantity
-        - reasons
         - type
       type: object
     StowLineItemTakeFromUnregisteredForCreation:
@@ -45437,10 +45422,6 @@ components:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
-        reasons:
-          items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
-          type: array
         taken:
           allOf:
             - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
@@ -45457,7 +45438,6 @@ components:
           type: string
       required:
         - quantity
-        - reasons
         - type
       type: object
     StowedStowLineItemStowTo:
