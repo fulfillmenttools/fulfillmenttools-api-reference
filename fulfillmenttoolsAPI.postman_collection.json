@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "a6fbd45f-df5a-403a-b3d2-5388b1bd7722",
+		"_postman_id": "7590c8c6-576d-4be1-b502-6badf64ffab2",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30481973"
+		"_exporter_id": "22852714"
 	},
 	"item": [
 		{
@@ -2442,6 +2442,24 @@
 									]
 								},
 								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Subscriptions/deleteSubscription"
+							},
+							"response": []
+						},
+						{
+							"name": "SupportedEvents",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/supportedevents",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"supportedevents"
+									]
+								}
 							},
 							"response": []
 						}
@@ -7477,7 +7495,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"facilityRef\": \"PUT-IN-YOUR-FACILITY-ID\",\n    \"tenantArticleId\": \"PUT-IN-YOUR-TENANT-ARTICLE-ID\",\n    \"value\": 100,\n    \"properties\": {\n        \"batchNo\": \"9890\"\n    },\n    \"receiptDate\": \"2021-08-30T11:18:14.214Z\"\n}"
+									"raw": "{\n    \"facilityRef\": \"PUT-IN-YOUR-FACILITY-ID\",\n    \"tenantArticleId\": \"PUT-IN-YOUR-TENANT-ARTICLE-ID\",\n    \"value\": 100,\n    \"properties\": {\n        \"batchNo\": \"9890\"\n    },\n    \"receiptDate\": \"2024-11-23T11:18:14.214Z\",\n    \"traitConfig\": [{\n        \"trait\": \"ACCESSIBLE\",\n        \"enabled\": false\n    }, {\n        \"trait\": \"PICKABLE\",\n        \"enabled\": false\n    }]\n}"
 								},
 								"url": {
 									"raw": "{{host}}/api/stocks",
@@ -8233,7 +8251,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"receivedDate\": \"2023-06-16T07:46:16.215Z\",\n    \"receivedItems\": [\n        {\n            \"tenantArticleId\": \"apples-01\",\n            \"quantity\": {\n                \"value\": 1,\n                \"unit\": \"kg\"\n            },\n            \"comments\": [\n                {\n                    \"userRef\": \"inbound-user-01\",\n                    \"content\": \"Apples have brown spots\"\n                }\n            ]\n        },\n        {\n            \"tenantArticleId\": \"oranges-01\",\n            \"quantity\": {\n                \"value\": 16\n            },\n            \"comments\": []\n        }\n    ],\n    \"comments\": [\n        {\n            \"userRef\": \"inbound-user-01\",\n            \"content\": \"Some produce is not A grade, see comments\"\n        }\n    ]\n}",
+									"raw": "{\n    \"receivedDate\": \"2023-06-16T07:46:16.215Z\",\n    \"receivedItems\": [\n        {\n            \"tenantArticleId\": \"apples-01\",\n            \"acceptedQuantity\": {\n                \"value\": 1,\n                \"unit\": \"g\"\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0,\n                \"unit\": \"g\"\n            },\n            \"comments\": [\n                {\n                    \"userRef\": \"inbound-user-01\",\n                    \"content\": \"Apples have brown spots\"\n                }\n            ],\n            \"customAttributes\": {\n                \"example2\": \"value2\"\n            }\n        },\n        {\n            \"tenantArticleId\": \"oranges-01\",\n            \"acceptedQuantity\": {\n                \"value\": 16\n            },\n            \"rejectedQuantity\": {\n                \"value\": 0\n            },\n            \"comments\": []\n        }\n    ],\n    \"comments\": [\n        {\n            \"userRef\": \"inbound-user-01\",\n            \"content\": \"Some produce is not A grade, see comments\"\n        }\n    ],\n    \"customAttributes\": {\n        \"example1\": \"value1\"\n    }\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -8255,7 +8273,7 @@
 									"variable": [
 										{
 											"key": "inboundProcessId",
-											"value": "PUT-IN-YOUR-INBOUNDPROCESS-REF"
+											"value": "PUT-IN-YOUR-INBOUNDPROCESS-ID"
 										}
 									]
 								},
@@ -9981,6 +9999,602 @@
 									"response": []
 								}
 							]
+						}
+					]
+				},
+				{
+					"name": "Stow Job",
+					"item": [
+						{
+							"name": "Actions",
+							"item": [
+								{
+									"name": "LineItemActions",
+									"item": [
+										{
+											"name": "Modify Metadata",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"stowLineItem\": {\n        \"customAttributes\": {\n            \"foo\": \"bar\"\n        },\n        \"article\": {\n            \"tenantArticleId\": \"YOUR_TENANT_ARTICLE_ID\",\n            \"imageUrl\": \"string\",\n            \"title\": \"Shirt\",\n            \"titleLocalized\": {\n                \"en_US\": \"Shirt\",\n                \"de_DE\": \"Hemd\"\n            },\n            \"measurementUnitKey\": \"kg\",\n            \"scannableCodes\": [\n                \"123456789\"\n            ]\n        }\n    },\n    \"version\": 1,\n    \"name\": \"MODIFY_STOW_LINE_ITEM\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/stowjobs/:stowJobId/stowlineitems/:stowLineItemId/actions",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"stowjobs",
+														":stowJobId",
+														"stowlineitems",
+														":stowLineItemId",
+														"actions"
+													],
+													"variable": [
+														{
+															"key": "stowJobId",
+															"value": ""
+														},
+														{
+															"key": "stowLineItemId",
+															"value": ""
+														}
+													]
+												},
+												"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowLineItem%20Actions](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowLineItem%20Actions)"
+											},
+											"response": []
+										},
+										{
+											"name": "Modify instructive data",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"stowLineItem\": {\n        \"stowTo\": {\n            \"quantity\": 1,\n            \"stockRef\": \"YOUR_STOCK_REF\",\n            \"reasons\": [],\n            \"scannableCodes\": [\n                \"string\"\n            ],\n            \"type\": \"STOCK\"\n        },\n        \"takeFrom\": {\n            \"quantity\": 1,\n            \"stockRef\": \"YOUR_STOCK_REF\",\n            \"reasons\": [],\n            \"type\": \"STOCK\"\n        }\n    },\n    \"version\": 2,\n    \"name\": \"MODIFY_STOW_LINE_ITEM\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/stowjobs/:stowJobId/stowlineitems/:stowLineItemId/actions",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"stowjobs",
+														":stowJobId",
+														"stowlineitems",
+														":stowLineItemId",
+														"actions"
+													],
+													"variable": [
+														{
+															"key": "stowJobId",
+															"value": ""
+														},
+														{
+															"key": "stowLineItemId",
+															"value": ""
+														}
+													]
+												},
+												"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowLineItem%20Actions](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowLineItem%20Actions)"
+											},
+											"response": []
+										},
+										{
+											"name": "Set operative data",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"name\": \"MODIFY_STOW_LINE_ITEM\",\n    \"version\": 3,\n    \"stowLineItem\": {\n        \"stowTo\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"type\": \"DISCARD\"\n            },\n            \"takeFrom\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"type\": \"UNREGISTERED\"\n            }\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/stowjobs/:stowJobId/stowlineitems/:stowLineItemId/actions",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"stowjobs",
+														":stowJobId",
+														"stowlineitems",
+														":stowLineItemId",
+														"actions"
+													],
+													"variable": [
+														{
+															"key": "stowJobId",
+															"value": "9600ab27-c39e-4e34-8b8f-a51b2c664b2e"
+														},
+														{
+															"key": "stowLineItemId",
+															"value": "e7b2f673-ce44-4eb2-af4e-b4daf2e53262"
+														}
+													]
+												},
+												"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowLineItem%20Actions](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowLineItem%20Actions)"
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "START_STOW_JOB",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"START_STOW_JOB\",\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/stowjobs/:stowJobId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stowjobs",
+												":stowJobId",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "stowJobId",
+													"value": ""
+												}
+											]
+										},
+										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions)"
+									},
+									"response": []
+								},
+								{
+									"name": "PAUSE_STOW_JOB",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"PAUSE_STOW_JOB\",\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/stowjobs/:stowJobId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stowjobs",
+												":stowJobId",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "stowJobId",
+													"value": ""
+												}
+											]
+										},
+										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions)"
+									},
+									"response": []
+								},
+								{
+									"name": "CANCEL_STOW_JOB",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"CANCEL_STOW_JOB\",\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/stowjobs/:stowJobId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stowjobs",
+												":stowJobId",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "stowJobId",
+													"value": ""
+												}
+											]
+										},
+										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions)"
+									},
+									"response": []
+								},
+								{
+									"name": "CLOSE_STOW_JOB",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"CLOSE_STOW_JOB\",\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/stowjobs/:stowJobId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stowjobs",
+												":stowJobId",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "stowJobId",
+													"value": ""
+												}
+											]
+										},
+										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions)"
+									},
+									"response": []
+								},
+								{
+									"name": "REOPEN_STOW_JOB",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"REOPEN_STOW_JOB\",\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/stowjobs/:stowJobId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"stowjobs",
+												":stowJobId",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "stowJobId",
+													"value": ""
+												}
+											]
+										},
+										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowJob%20Actions)"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Stow Jobs",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}api/stowjobs",
+									"host": [
+										"{{host}}api"
+									],
+									"path": [
+										"stowjobs"
+									],
+									"query": [
+										{
+											"key": "startAfterId",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "25",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "facilityRef",
+											"value": "cfe5125c-7023-403a-9faf-15be7df5bc98",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "OPEN",
+											"disabled": true
+										},
+										{
+											"key": "tenantArticleId",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "locationRef",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "stockRef",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "locationRef",
+											"value": "FINISHED",
+											"disabled": true
+										},
+										{
+											"key": "shortId",
+											"value": "string",
+											"disabled": true
+										},
+										{
+											"key": "priority",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								},
+								"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/getStowJobs](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/getStowJobs)"
+							},
+							"response": []
+						},
+						{
+							"name": "Stow Job",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}api/stowjobs/:stowJobId",
+									"host": [
+										"{{host}}api"
+									],
+									"path": [
+										"stowjobs",
+										":stowJobId"
+									],
+									"variable": [
+										{
+											"key": "stowJobId",
+											"value": ""
+										}
+									]
+								},
+								"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/getStowJob](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/getStowJob)"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Stow Job (mixed)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"customAttributes\": {},\n    \"facilityRef\": \"YOUR_FACILITY_REF\",\n    \"status\": \"OPEN\",\n    \"stowLineItems\": [\n        {\n            \"customAttributes\": {\n                \"foo\": \"bar\"\n            },\n            \"article\": {\n                \"tenantArticleId\": \"YOUR_TENANT_ARTICLE_ID\",\n                \"imageUrl\": \"string\",\n                \"title\": \"string\",\n                \"titleLocalized\": {},\n                \"measurementUnitKey\": \"string\",\n                \"scannableCodes\": [\n                    \"string\"\n                ]\n            },\n            \"stowTo\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"scannableCodes\": [\n                    \"string\"\n                ],\n                \"stockRef\": \"YOUR_STOCK_REF\",\n                \"type\": \"STOCK\"\n            },\n            \"takeFrom\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"type\": \"UNREGISTERED\"\n            }\n        },\n        {\n            \"article\": {\n                \"tenantArticleId\": \"YOUR_OTHER_TENANT_ARTICLE_ID\",\n                \"imageUrl\": \"string\",\n                \"title\": \"string\",\n                \"titleLocalized\": {},\n                \"measurementUnitKey\": \"string\",\n                \"scannableCodes\": [\n                    \"string\"\n                ]\n            },\n            \"stowTo\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"scannableCodes\": [\n                    \"string\"\n                ],\n                \"stockRef\": \"YOUR_STOCK_REF\",\n                \"type\": \"STOCK\"\n            },\n            \"takeFrom\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"stockRef\": \"YOUR_STOCK_REF\",\n                \"type\": \"STOCK\"\n            }\n        }\n    ],\n    \"shortId\": \"string\",\n    \"priority\": 4\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/stowjobs",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"stowjobs"
+									]
+								},
+								"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob)"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Stow Job (STOCK to STOCK)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"facilityRef\": \"YOUR_FACILITY_REF\",\n    \"status\": \"OPEN\",\n    \"stowLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"YOUR_OTHER_TENANT_ARTICLE_ID\",\n                \"imageUrl\": \"string\",\n                \"title\": \"string\",\n                \"titleLocalized\": {},\n                \"scannableCodes\": [\n                    \"12345\"\n                ]\n            },\n            \"stowTo\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"scannableCodes\": [\n                    \"string\"\n                ],\n                \"stockRef\": \"YOUR_STOCK_REF\",\n                \"type\": \"STOCK\"\n            },\n            \"takeFrom\": {\n                \"quantity\": 1,\n                \"reasons\": [\n                    {\n                        \"reason\": \"string\",\n                        \"reasonCode\": \"string\"\n                    }\n                ],\n                \"stockRef\": \"YOUR_STOCK_REF\",\n                \"type\": \"STOCK\"\n            }\n        }\n    ],\n    \"shortId\": \"string\",\n    \"priority\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/stowjobs",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"stowjobs"
+									]
+								},
+								"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob)"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Stow Job (STOCK to DISCARD)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"facilityRef\": \"YOUR_FACILITY_REF\",\n    \"status\": \"OPEN\",\n    \"stowLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"YOUR_TENANT_ARTICLE_ID\",\n                \"imageUrl\": \"string\",\n                \"title\": \"Title\",\n                \"titleLocalized\": {\n                    \"en_US\": \"Title\"\n                },\n                \"scannableCodes\": [\n                    \"12345\"\n                ]\n            },\n            \"stowTo\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"type\": \"DISCARD\"\n            },\n            \"takeFrom\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"stockRef\": \"YOUR_STOCK_REF\",\n                \"type\": \"STOCK\"\n            }\n        }\n    ],\n    \"shortId\": \"string\",\n    \"priority\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/stowjobs",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"stowjobs"
+									]
+								},
+								"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob)"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Stow Job (UNREGISTERED to STOCK)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"facilityRef\": \"YOUR_FACILITY_REF\",\n    \"status\": \"OPEN\",\n    \"stowLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"YOUR_OTHER_TENANT_ARTICLE_ID\",\n                \"imageUrl\": \"string\",\n                \"title\": \"Title\",\n                \"titleLocalized\": {\n                    \"en_US\": \"title\"\n                },\n                \"scannableCodes\": [\n                    \"12345\"\n                ]\n            },\n            \"stowTo\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"scannableCodes\": [\n                    \"string\"\n                ],\n                \"stockRef\": \"YOUR_STOCK_REF\",\n                \"type\": \"STOCK\"\n            },\n            \"takeFrom\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"type\": \"UNREGISTERED\"\n            }\n        }\n    ],\n    \"shortId\": \"string\",\n    \"priority\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/stowjobs",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"stowjobs"
+									]
+								},
+								"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob)"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Stow Job (UNREGISTERED to DISCARD)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"facilityRef\": \"YOUR_FACILITY_REF\",\n    \"status\": \"OPEN\",\n    \"stowLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"YOUR_OTHER_TENANT_ARTICLE_ID\",\n                \"imageUrl\": \"string\",\n                \"title\": \"Title\",\n                \"titleLocalized\": {},\n                \"scannableCodes\": [\n                    \"12345\"\n                ]\n            },\n            \"stowTo\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"type\": \"DISCARD\"\n            },\n            \"takeFrom\": {\n                \"quantity\": 1,\n                \"reasons\": [],\n                \"type\": \"UNREGISTERED\"\n            }\n        }\n    ],\n    \"shortId\": \"string\",\n    \"priority\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/stowjobs",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"stowjobs"
+									]
+								},
+								"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/createStowJob)"
+							},
+							"response": []
+						},
+						{
+							"name": "Patch Stow Job",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"priority\": 2,\n\n\n    // Uncomment to update targetTime\n    // \"targetTime\": \"{{$isoTimestamp}}\",\n\n    // Uncomment to update customAttributes\n    // \"customAttributes\": {\n    //     \"foo\": \"bar\"\n    // },\n\n\n    \"version\": 8\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/stowjobs/:stowJobId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"stowjobs",
+										":stowJobId"
+									],
+									"variable": [
+										{
+											"key": "stowJobId",
+											"value": ""
+										}
+									]
+								},
+								"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Patch%20StowJob](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Patch%20StowJob)"
+							},
+							"response": []
 						}
 					]
 				}
