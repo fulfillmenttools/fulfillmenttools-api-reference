@@ -18118,6 +18118,53 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/routingplansgraph:
+    get:
+      parameters:
+        - description: >-
+            Reference to the process you want to get the corresponding routing
+            plans graph.
+          in: query
+          name: processRef
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingPlansGraph'
+          description: >-
+            Routing plans graph was found & you were allowed to access it. The
+            result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found, please look at details.
+      tags:
+        - DOMS - Routing Plans Graph
+      description: ''
+      operationId: getRoutingPlansGraphBaseOnProcessRef
+      summary: Get a routing plans graph regarding to processRef
   /api/routingplans:
     get:
       parameters:
@@ -39755,6 +39802,51 @@ components:
         - ratings
         - fences
       type: object
+    RoutingPlansGraph:
+      additionalProperties: false
+      description: >-
+        A graph representation of the routing plans. The nodes are the routing
+        plans and the edges are the rerouting reasons.
+      properties:
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingPlansGraphNode'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingPlansGraphEdge'
+      required:
+        - nodes
+        - edges
+    RoutingPlansGraphNode:
+      additionalProperties: false
+      properties:
+        routingPlanRef:
+          type: string
+      required:
+        - routingPlanRef
+      type: object
+    RoutingPlansGraphEdge:
+      additionalProperties: false
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+        reason:
+          $ref: '#/components/schemas/RoutingPlansGraphEdgeReason'
+      required:
+        - from
+        - to
+        - reason
+      type: object
+    RoutingPlansGraphEdgeReason:
+      enum:
+        - SPLIT
+        - REROUTE
+        - INTER_FACILITY_TRANSFER
+      type: string
     AbstractRatingConfiguration:
       description: Base Configuration for Ratings. See documentation for Details.
       type: object
