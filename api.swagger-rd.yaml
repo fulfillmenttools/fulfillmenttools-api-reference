@@ -44398,6 +44398,11 @@ components:
             tenantStockId is an optional identifier for the stock in the tenant
             system, only set on stocks synced from listings
           type: string
+        traitConfig:
+          description: defines stocks traits (overrules the storage location traits)
+          items:
+            $ref: '#/components/schemas/StorageLocationTraitConfigInner'
+          type: array
         traits:
           description: >-
             provide information on how storage locations and stocks are to be
@@ -44599,6 +44604,11 @@ components:
         tenantArticleId:
           description: tenantArticleId of the stock
           type: string
+        traitConfig:
+          description: defines stocks traits (overrules the storage location traits)
+          items:
+            $ref: '#/components/schemas/StorageLocationTraitConfigInner'
+          type: array
         value:
           format: int32
           minimum: 0
@@ -44859,6 +44869,18 @@ components:
       required:
         - storageLocation
         - stockCount
+      type: object
+    StorageLocationTraitConfigInner:
+      properties:
+        enabled:
+          description: whether the trait is enabled or not
+          type: boolean
+        trait:
+          description: trait to be configured
+          type: string
+      required:
+        - enabled
+        - trait
       type: object
     StowJob:
       properties:
