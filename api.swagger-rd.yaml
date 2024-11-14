@@ -45152,25 +45152,13 @@ components:
           maxItems: 10
           type: array
         stowTo:
+          allOf:
+            - $ref: '#/components/schemas/StowLineItemStowToForCreation'
           description: Instructions on how and where to stow the item
-          discriminator:
-            mapping:
-              DISCARD: '#/components/schemas/StowLineItemStowToDiscard'
-              STOCK: '#/components/schemas/StowLineItemStowToStock'
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/StowLineItemStowToStock'
-            - $ref: '#/components/schemas/StowLineItemStowToDiscard'
         takeFrom:
+          allOf:
+            - $ref: '#/components/schemas/StowLineItemTakeFromForCreation'
           description: Instructions on how and where to take the item from
-          discriminator:
-            mapping:
-              STOCK: '#/components/schemas/StowLineItemTakeFromStock'
-              UNREGISTERED: '#/components/schemas/StowLineItemTakeFromUnregistered'
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/StowLineItemTakeFromStock'
-            - $ref: '#/components/schemas/StowLineItemTakeFromUnregistered'
       required:
         - article
         - stowTo
@@ -45230,25 +45218,13 @@ components:
           maxItems: 10
           type: array
         stowTo:
+          allOf:
+            - $ref: '#/components/schemas/StowLineItemStowToForCreation'
           description: Instructions on how and where to stow the item
-          discriminator:
-            mapping:
-              DISCARD: '#/components/schemas/StowLineItemStowToDiscardForCreation'
-              STOCK: '#/components/schemas/StowLineItemStowToStockForCreation'
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/StowLineItemStowToStockForCreation'
-            - $ref: '#/components/schemas/StowLineItemStowToDiscardForCreation'
         takeFrom:
+          allOf:
+            - $ref: '#/components/schemas/StowLineItemTakeFromForCreation'
           description: Instructions on how and where to take the item from
-          discriminator:
-            mapping:
-              STOCK: '#/components/schemas/StowLineItemTakeFromStockForCreation'
-              UNREGISTERED: '#/components/schemas/StowLineItemTakeFromUnregisteredForCreation'
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/StowLineItemTakeFromStockForCreation'
-            - $ref: '#/components/schemas/StowLineItemTakeFromUnregisteredForCreation'
       required:
         - article
         - stowTo
@@ -45275,117 +45251,35 @@ components:
           maxItems: 10
           type: array
         stowTo:
+          allOf:
+            - $ref: '#/components/schemas/StowLineItemStowToForCreation'
           description: Instructions on how and where to stow the item
-          discriminator:
-            mapping:
-              DISCARD: '#/components/schemas/StowLineItemStowToDiscardForCreation'
-              STOCK: '#/components/schemas/StowLineItemStowToStockForCreation'
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/StowLineItemStowToStockForCreation'
-            - $ref: '#/components/schemas/StowLineItemStowToDiscardForCreation'
         takeFrom:
+          allOf:
+            - $ref: '#/components/schemas/StowLineItemTakeFromForCreation'
           description: Instructions on how and where to take the item from
-          discriminator:
-            mapping:
-              STOCK: '#/components/schemas/StowLineItemTakeFromStockForCreation'
-              UNREGISTERED: '#/components/schemas/StowLineItemTakeFromUnregisteredForCreation'
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/StowLineItemTakeFromStockForCreation'
-            - $ref: '#/components/schemas/StowLineItemTakeFromUnregisteredForCreation'
       type: object
-    StowLineItemStowToDiscard:
-      properties:
-        quantity:
-          description: Quantity that should be taken / stowed
-          type: number
-        stowed:
-          allOf:
-            - $ref: '#/components/schemas/StowedStowLineItemStowTo'
-          description: >-
-            Operative data holding information about the stowing progress. **As
-            for now stocks will *not* be updated even if the numbers indicate so
-            because the stow job feature is still under development.**
-        type:
-          description: >-
-            Type DISCARD defines that the item should be booked out of the
-            system.
-          enum:
-            - DISCARD
-          type: string
-      required:
-        - quantity
-        - type
-      type: object
-    StowLineItemStowToDiscardForCreation:
-      properties:
-        quantity:
-          description: Quantity that should be taken / stowed
-          type: number
-        stowed:
-          allOf:
-            - $ref: '#/components/schemas/StowedStowLineItemStowToForCreation'
-          description: >-
-            Operative data holding information about the stowing progress. **As
-            for now stocks will *not* be updated even if the numbers indicate so
-            because the stow job feature is still under development.**
-        type:
-          description: >-
-            Type DISCARD defines that the item should be booked out of the
-            system.
-          enum:
-            - DISCARD
-          type: string
-      required:
-        - quantity
-        - type
-      type: object
-    StowLineItemStowToStock:
+    StowLineItemStowTo:
       properties:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
         scannableCodes:
-          description: ScannableCodes such as barcodes relevant for stowing the item
+          description: >-
+            ScannableCodes such as barcodes relevant for taking or stowing the
+            item
           items:
             type: string
           type: array
         stockRef:
-          description: Stock on which the item should be stowed
+          description: >-
+            Stock from which the item should be taken / stowed to. Leave empty
+            for type UNREGISTERED / DISCARD.
           type: string
         storageLocationRef:
-          description: Storage location on which the item should be stowed.
-          type: string
-        stowed:
-          allOf:
-            - $ref: '#/components/schemas/StowedStowLineItemStowTo'
           description: >-
-            Operative data holding information about the stowing progress. **As
-            for now stocks will *not* be updated even if the numbers indicate so
-            because the stow job feature is still under development.**
-        type:
-          description: Type STOCK defines that items should be stowed on a specific stock
-          enum:
-            - STOCK
-          type: string
-      required:
-        - quantity
-        - stockRef
-        - type
-      type: object
-    StowLineItemStowToStockForCreation:
-      properties:
-        quantity:
-          description: Quantity that should be taken / stowed
-          type: number
-        scannableCodes:
-          description: ScannableCodes such as barcodes relevant for stowing the item
-          items:
-            type: string
-          type: array
-        stockRef:
-          description: Stock on which the item should be stowed
+            Storage location from which the item should be taken or to which the
+            item should be stowed
           type: string
         stowed:
           allOf:
@@ -45395,13 +45289,58 @@ components:
             for now stocks will *not* be updated even if the numbers indicate so
             because the stow job feature is still under development.**
         type:
-          description: Type STOCK defines that items should be stowed on a specific stock
+          description: >-
+            Define if items should be stowed on a specific stock or storage
+            location. Use type DISCARD if the item should be booked out of the
+            system
           enum:
             - STOCK
+            - DISCARD
           type: string
       required:
         - quantity
-        - stockRef
+        - type
+      type: object
+    StowLineItemStowToForCreation:
+      properties:
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        scannableCodes:
+          description: >-
+            ScannableCodes such as barcodes relevant for taking or stowing the
+            item
+          items:
+            type: string
+          type: array
+        stockRef:
+          description: >-
+            Stock from which the item should be taken / stowed to. Leave empty
+            for type UNREGISTERED / DISCARD.
+          type: string
+        storageLocationRef:
+          description: >-
+            Storage location from which the item should be taken or to which the
+            item should be stowed
+          type: string
+        stowed:
+          allOf:
+            - $ref: '#/components/schemas/StowedStowLineItemStowToForCreation'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: >-
+            Define if items should be stowed on a specific stock or storage
+            location. Use type DISCARD if the item should be booked out of the
+            system
+          enum:
+            - STOCK
+            - DISCARD
+          type: string
+      required:
+        - quantity
         - type
       type: object
     StowLineItemStowToType:
@@ -45415,65 +45354,88 @@ components:
       type: string
       xml:
         name: StowLineItemStowToType
-    StowLineItemTakeFromStock:
+    StowLineItemTakeFrom:
       properties:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
+        scannableCodes:
+          description: >-
+            ScannableCodes such as barcodes relevant for taking or stowing the
+            item
+          items:
+            type: string
+          type: array
         stockRef:
           description: >-
-            Stock from which the item should be taken. Leave empty for type
-            UNREGISTERED.
+            Stock from which the item should be taken / stowed to. Leave empty
+            for type UNREGISTERED / DISCARD.
           type: string
         storageLocationRef:
-          description: Storage location from which the item should be taken.
+          description: >-
+            Storage location from which the item should be taken or to which the
+            item should be stowed
           type: string
         taken:
           allOf:
-            - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
+            - $ref: '#/components/schemas/TakenStowLineItemTakeFromForCreation'
           description: >-
             Operative data holding information about the stowing progress. **As
             for now stocks will *not* be updated even if the numbers indicate so
             because the stow job feature is still under development.**
         type:
           description: >-
-            The type STOCK defines that the item should be taken from a specific
-            stock
+            Define if items should be taken from specific stock or storage
+            location. Use type UNREGISTERED if a new item should be booked into
+            the system
           enum:
             - STOCK
+            - UNREGISTERED
           type: string
       required:
         - quantity
-        - stockRef
         - type
       type: object
-    StowLineItemTakeFromStockForCreation:
+    StowLineItemTakeFromForCreation:
       properties:
         quantity:
           description: Quantity that should be taken / stowed
           type: number
+        scannableCodes:
+          description: >-
+            ScannableCodes such as barcodes relevant for taking or stowing the
+            item
+          items:
+            type: string
+          type: array
         stockRef:
           description: >-
-            Stock from which the item should be taken. Leave empty for type
-            UNREGISTERED.
+            Stock from which the item should be taken / stowed to. Leave empty
+            for type UNREGISTERED / DISCARD.
+          type: string
+        storageLocationRef:
+          description: >-
+            Storage location from which the item should be taken or to which the
+            item should be stowed
           type: string
         taken:
           allOf:
-            - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
+            - $ref: '#/components/schemas/TakenStowLineItemTakeFromForCreation'
           description: >-
             Operative data holding information about the stowing progress. **As
             for now stocks will *not* be updated even if the numbers indicate so
             because the stow job feature is still under development.**
         type:
           description: >-
-            The type STOCK defines that the item should be taken from a specific
-            stock
+            Define if items should be taken from specific stock or storage
+            location. Use type UNREGISTERED if a new item should be booked into
+            the system
           enum:
             - STOCK
+            - UNREGISTERED
           type: string
       required:
         - quantity
-        - stockRef
         - type
       type: object
     StowLineItemTakeFromType:
@@ -45486,72 +45448,6 @@ components:
       type: string
       xml:
         name: StowLineItemTakeFromType
-    StowLineItemTakeFromUnregistered:
-      properties:
-        quantity:
-          description: Quantity that should be taken / stowed
-          type: number
-        taken:
-          allOf:
-            - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
-          description: >-
-            Operative data holding information about the stowing progress. **As
-            for now stocks will *not* be updated even if the numbers indicate so
-            because the stow job feature is still under development.**
-        type:
-          description: >-
-            The type UNREGISTERED defines that a new item should be booked into
-            the system.
-          enum:
-            - UNREGISTERED
-          type: string
-      required:
-        - quantity
-        - type
-      type: object
-    StowLineItemTakeFromUnregisteredForCreation:
-      properties:
-        quantity:
-          description: Quantity that should be taken / stowed
-          type: number
-        taken:
-          allOf:
-            - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
-          description: >-
-            Operative data holding information about the stowing progress. **As
-            for now stocks will *not* be updated even if the numbers indicate so
-            because the stow job feature is still under development.**
-        type:
-          description: >-
-            The type UNREGISTERED defines that a new item should be booked into
-            the system.
-          enum:
-            - UNREGISTERED
-          type: string
-      required:
-        - quantity
-        - type
-      type: object
-    StowedStowLineItemStowTo:
-      properties:
-        stowedAt:
-          description: Time and date on which the item was stowed
-          format: date-time
-          type: string
-        stowedQuantity:
-          description: Quantity that was stowed
-          type: number
-        stowedStockRef:
-          description: >-
-            Stock on which the item was stowed. If this is left empty, and type
-            is not DISCARD, a new stock will be created
-          type: string
-        stowedStorageLocationRef:
-          description: Storage location on which the item was stowed
-          type: string
-      required:
-        - stowedQuantity
-      type: object
     StowedStowLineItemStowToForCreation:
       properties:
         stowedAt:
@@ -45647,7 +45543,7 @@ components:
         - onHold
         - scannableCodes
       type: object
-    TakenStowLineItemTakeFrom:
+    TakenStowLineItemTakeFromForCreation:
       properties:
         takenAt:
           description: Time and date on which the item was taken
