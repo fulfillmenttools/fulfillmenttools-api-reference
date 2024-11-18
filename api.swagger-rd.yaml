@@ -17608,6 +17608,233 @@ paths:
       summary: >-
         Provides information which kind of fulfillment is possible under given
         circumstances.
+  /api/routing/strategies:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingStrategy'
+          description: The created routing strategy.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Routing - Routing strategies
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />creates a new revision of the routing strategy
+      operationId: postRoutingStrategy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingStrategyForCreation'
+        description: The desired routing strategy
+        required: true
+      summary: Creates a new revision of the routing strategy.
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/routing/strategies/{strategyId}:
+    get:
+      parameters:
+        - description: Id of the routing strategy you wish to retrieve
+          in: path
+          name: strategyId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingStrategy'
+          description: The returned routing strategy.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Routing - Routing strategies
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />returns the routing strategy
+      operationId: getRoutingStrategy
+      summary: Returns a revision of the routing strategy.
+      x-badges:
+        - color: red
+          label: ALPHA
+    put:
+      parameters:
+        - description: Id of the routing strategy you wish to update
+          in: path
+          name: strategyId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingStrategy'
+          description: The updated routing strategy.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Routing - Routing strategies
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Updates a routing strategy
+      operationId: putRoutingStrategy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingStrategyForModification'
+        description: The updated routing strategy
+        required: true
+      summary: Updates a revision of the routing strategy.
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/routing/strategies/{strategyId}/actions:
+    post:
+      parameters:
+        - description: Id of the routing strategy
+          in: path
+          name: strategyId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingStrategyActionsParameter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingStrategy'
+          description: The updated routing strategy.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Routing - Routing strategies
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />performs an action on a routing strategy
+      operationId: actionsRoutingStrategy
+      summary: Performs Actions on a routing strategy.
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/promises/checkoutoptions/delivery/earliest:
     post:
       responses:
@@ -42128,6 +42355,33 @@ components:
       required:
         - quantity
         - tenantArticleRef
+    RoutingStrategyActionsParameter:
+      oneOf:
+        - $ref: '#/components/schemas/RoutingStrategyActivateActionParameter'
+    AbstractRoutingStrategyActionsParameter:
+      discriminator:
+        propertyName: name
+      properties:
+        name:
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    RoutingStrategyActivateActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractRoutingStrategyActionsParameter'
+      properties:
+        name:
+          enum:
+            - ACTIVATE
+          type: string
+      required:
+        - name
+        - version
     OrderActionsParameter:
       oneOf:
         - $ref: '#/components/schemas/OrderUnlockActionParameter'
@@ -42565,6 +42819,361 @@ components:
       required:
         - facilityRef
         - latestPickingStart
+    RoutingStrategy:
+      additionalProperties: true
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+        - properties:
+            id:
+              type: string
+            revision:
+              type: integer
+              example: 1
+              description: The revision of the routing strategy
+            inUse:
+              type: boolean
+              description: Only one strategy can be inUse
+            name:
+              type: string
+            nameLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            rootNode:
+              $ref: '#/components/schemas/RoutingStrategyNode'
+          required:
+            - inUse
+            - revision
+            - id
+            - nameLocalized
+            - rootNode
+      type: object
+    RoutingStrategyForCreation:
+      additionalProperties: false
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        rootNode:
+          $ref: '#/components/schemas/RoutingStrategyNode'
+      required:
+        - rootNode
+        - nameLocalized
+      type: object
+      xml:
+        name: RoutingStrategy
+    RoutingStrategyForModification:
+      additionalProperties: false
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        rootNode:
+          $ref: '#/components/schemas/RoutingStrategyNode'
+        version:
+          type: integer
+      required:
+        - rootNode
+        - nameLocalized
+        - version
+      xml:
+        name: RoutingStrategyForModification
+    RoutingStrategyCondition:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        active:
+          type: boolean
+        rule:
+          $ref: '#/components/schemas/ToolkitRulePart'
+        nextNode:
+          $ref: '#/components/schemas/RoutingStrategyNode'
+        nextCondition:
+          $ref: '#/components/schemas/RoutingStrategyCondition'
+      required:
+        - nextNode
+        - active
+        - rule
+        - id
+        - nameLocalized
+    RoutingStrategyNodeConfig:
+      additionalProperties: false
+      type: object
+      required:
+        - fences
+        - ratings
+      properties:
+        reroute:
+          $ref: '#/components/schemas/RoutingStrategyRerouteConfig'
+        orderSplit:
+          $ref: '#/components/schemas/RoutingStrategyOrderSplitConfig'
+        fences:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/RoutingStrategyNodeFenceImplementation'
+              - $ref: >-
+                  #/components/schemas/RoutingStrategyNodeToolkitFenceImplementation
+            discriminator:
+              propertyName: type
+              mapping:
+                StandardFence: '#/components/schemas/RoutingStrategyNodeFenceImplementation'
+                ToolkitFence: >-
+                  #/components/schemas/RoutingStrategyNodeToolkitFenceImplementation
+        ratings:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/RoutingStrategyNodeRatingImplementation'
+              - $ref: >-
+                  #/components/schemas/RoutingStrategyNodeToolkitRatingImplementation
+            discriminator:
+              propertyName: type
+              mapping:
+                StandardRating: '#/components/schemas/RoutingStrategyNodeRatingImplementation'
+                ToolkitRating: >-
+                  #/components/schemas/RoutingStrategyNodeToolkitRatingImplementation
+    RoutingStrategyNode:
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: string
+        active:
+          type: boolean
+        name:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        config:
+          $ref: '#/components/schemas/RoutingStrategyNodeConfig'
+        nextCondition:
+          $ref: '#/components/schemas/RoutingStrategyCondition'
+      required:
+        - active
+        - config
+        - id
+        - nameLocalized
+    RoutingStrategyOrderSplitConfig:
+      type: object
+      properties:
+        maxSplitCount:
+          type: integer
+        active:
+          type: boolean
+        activeForSameday:
+          type: boolean
+        shouldUseWaitingRoomForPreBackOrderItems:
+          type: boolean
+      required:
+        - active
+        - maxSplitCount
+        - activeForSameday
+        - shouldUseWaitingRoomForPreBackOrderItems
+    RoutingStrategyRerouteConfig:
+      type: object
+      properties:
+        manualReroute:
+          type: boolean
+        shipFromStore:
+          $ref: '#/components/schemas/RoutingStrategyRerouteShipFromStoreConfig'
+        clickAndCollect:
+          $ref: '#/components/schemas/RoutingStrategyRerouteClickAndCollectConfig'
+    RoutingStrategyRerouteShipFromStoreConfig:
+      type: object
+      properties:
+        active:
+          type: boolean
+        rerouteType:
+          $ref: '#/components/schemas/RoutingStrategyRerouteType'
+      required:
+        - rerouteType
+    RoutingStrategyRerouteType:
+      description: |-
+        The type of reroute to apply to the order
+          * `REROUTE`- the complete routing plan is rerouted.
+          * `ORDERSPLIT`- the order is splitted. The split line items will be moved to a new routing plan and rerouted.
+      enum:
+        - REROUTE
+        - ORDERSPLIT
+      type: string
+    RoutingStrategyRerouteClickAndCollectConfig:
+      type: object
+      properties:
+        active:
+          type: boolean
+        rerouteType:
+          $ref: '#/components/schemas/RoutingStrategyRerouteType'
+      required:
+        - rerouteType
+    RoutingStrategyNodeFenceImplementationType:
+      type: string
+      enum:
+        - StandardFence
+    RoutingStrategyNodeFenceImplementation:
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/RoutingStrategyNodeFenceImplementationType'
+        active:
+          type: boolean
+        description:
+          type: string
+        implementation:
+          $ref: '#/components/schemas/FenceImplementation'
+        name:
+          type: string
+        supportedModes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FenceMode'
+        activeMode:
+          $ref: '#/components/schemas/FenceMode'
+      required:
+        - active
+        - implementation
+        - type
+      type: object
+    RoutingStrategyNodeToolkitFenceImplementationType:
+      type: string
+      enum:
+        - ToolkitFence
+    RoutingStrategyNodeToolkitFenceImplementation:
+      additionalProperties: false
+      properties:
+        referenceId:
+          type: string
+        type:
+          $ref: >-
+            #/components/schemas/RoutingStrategyNodeToolkitFenceImplementationType
+        name:
+          description: The name of the fence.
+          example: CustomFence
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        description:
+          description: The description of this fence.
+          example: Some text that describes what the fence does.
+          type: string
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        active:
+          default: false
+          description: Indicates whether this fence is active or not.
+          type: boolean
+        order:
+          description: Order in which this fence is executed
+          example: 1
+          type: integer
+        entity1:
+          $ref: '#/components/schemas/ToolkitAllowedEntities'
+        entity2:
+          $ref: '#/components/schemas/ToolkitAllowedEntities'
+        rule:
+          $ref: '#/components/schemas/ToolkitRule'
+        comparisonRule:
+          $ref: '#/components/schemas/ToolkitComparisonRule'
+      required:
+        - nameLocalized
+        - active
+        - order
+        - entity1
+        - entity2
+        - type
+    RoutingStrategyNodeRatingImplementationType:
+      type: string
+      enum:
+        - StandardRating
+    RoutingStrategyNodeRatingImplementation:
+      additionalProperties: false
+      description: >-
+        A rating is used to rate a set of possible facilities against each other
+        during routing of orders.
+      properties:
+        type:
+          $ref: '#/components/schemas/RoutingStrategyNodeRatingImplementationType'
+        active:
+          type: boolean
+        configuration:
+          $ref: '#/components/schemas/AbstractRatingConfiguration'
+        description:
+          type: string
+        implementation:
+          $ref: '#/components/schemas/RatingImplementation'
+        maxPenalty:
+          example: 100
+          type: number
+          minimum: 0
+        name:
+          type: string
+      required:
+        - active
+        - implementation
+        - maxPenalty
+        - type
+      type: object
+    RoutingStrategyNodeToolkitRatingImplementationType:
+      type: string
+      enum:
+        - ToolkitRating
+    RoutingStrategyNodeToolkitRatingImplementation:
+      additionalProperties: false
+      properties:
+        referenceId:
+          type: string
+        name:
+          description: The name of the rating
+          example: CustomRating
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        description:
+          description: The description of this rating
+          example: Some text that describes what the rating does.
+          type: string
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        active:
+          default: false
+          description: Indicates whether this fence is active or not
+          type: boolean
+        entity1:
+          $ref: '#/components/schemas/ToolkitAllowedEntities'
+        entity2:
+          $ref: '#/components/schemas/ToolkitAllowedEntities'
+        rule:
+          $ref: '#/components/schemas/ToolkitRule'
+        comparisonRule:
+          $ref: '#/components/schemas/ToolkitComparisonRule'
+        maxPenalty:
+          type: integer
+          example: 100
+          description: The maximum penalty this rating can have
+        type:
+          $ref: >-
+            #/components/schemas/RoutingStrategyNodeToolkitRatingImplementationType
+      required:
+        - type
+        - nameLocalized
+        - active
+        - entity1
+        - entity2
+        - maxPenalty
+    RoutingStrategyContext:
+      additionalProperties: false
+      properties:
+        order:
+          $ref: '#/components/schemas/Order'
+        routingPlan:
+          $ref: '#/components/schemas/RoutingPlan'
+        timeStamp:
+          type: string
+          format: date-time
+      required:
+        - order
+        - routingPlan
     ArticleStockForecast:
       properties:
         created:
