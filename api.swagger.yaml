@@ -45537,6 +45537,19 @@ components:
       type: string
       xml:
         name: StowJobStatus
+    StowJobStockInformation:
+      properties:
+        properties:
+          additionalProperties:
+            type: string
+          allOf:
+            - $ref: '#/components/schemas/StockPropertyPreset'
+          description: >-
+            allow tracking of specific values such as expiry dates on a set of
+            items. They should describe physical identifiable properties of the
+            stock and are not meant to be used for metadata (see
+            "customAttributes" for that).
+      type: object
     StowLineItem:
       properties:
         article:
@@ -45779,6 +45792,12 @@ components:
           items:
             type: string
           type: array
+        stockInformation:
+          allOf:
+            - $ref: '#/components/schemas/StowJobStockInformation'
+          description: >-
+            Additional information about the newly created stock. **Only allowed
+            for type UNREGISTERED**
         stockRef:
           description: >-
             Stock from which the item should be taken / stowed to. Leave empty
@@ -45821,6 +45840,12 @@ components:
           items:
             type: string
           type: array
+        stockInformation:
+          allOf:
+            - $ref: '#/components/schemas/StowJobStockInformation'
+          description: >-
+            Additional information about the newly created stock. **Only allowed
+            for type UNREGISTERED**
         stockRef:
           description: >-
             Stock from which the item should be taken / stowed to. Leave empty
