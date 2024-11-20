@@ -44214,7 +44214,9 @@ components:
         acceptedQuantity:
           allOf:
             - $ref: '#/components/schemas/Quantity'
-          description: quantity of the stock that was accepted in this receipt
+          description: >-
+            quantity of the stock that was accepted in this receipt. If its
+            larger than 0, Stock will be created when this receipt is FINISHED.
         comments:
           description: comments regarding the receival of this item
           items:
@@ -44231,7 +44233,10 @@ components:
         rejectedQuantity:
           allOf:
             - $ref: '#/components/schemas/Quantity'
-          description: quantity of the stock that was rejected in this receipt
+          description: >-
+            quantity of the stock that was rejected in this receipt. If it is
+            larger than 0, Stock will be created with condition "defective" when
+            this receipt is FINISHED.
         stockProperties:
           additionalProperties:
             type: string
