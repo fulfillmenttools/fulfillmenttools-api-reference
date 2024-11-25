@@ -25663,11 +25663,6 @@ components:
               type: array
             resolvedCoordinates:
               $ref: '#/components/schemas/Coordinates'
-              description: >-
-                The coordinates correspond to the address of this facility. If
-                the coordinates are not provided during the creation or updating
-                of the facility, they are automatically resolved by the backend
-                system
           required:
             - companyName
           type: object
@@ -39045,7 +39040,6 @@ components:
               #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier
       required:
         - tenantArticleId
-        - predictedDeliveryDate
     CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier:
       properties:
         name:
@@ -39059,9 +39053,22 @@ components:
             description: ISO 3166-2 province code
             type: string
             example: DE-NW
+        latestPickingStartDate:
+          type: string
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
       required:
         - name
         - carrierRef
+    CheckoutOptionsDeliveryTimePeriodResponseItemAvailableCarrier:
+      allOf:
+        - $ref: >-
+            #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier
+      properties:
+        latestPickingStartDate:
+          type: string
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
     CheckoutOptionsInput:
       additionalProperties: false
       properties:
@@ -39251,7 +39258,7 @@ components:
           type: array
           items:
             $ref: >-
-              #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier
+              #/components/schemas/CheckoutOptionsDeliveryTimePeriodResponseItemAvailableCarrier
       required:
         - date
         - overallStatus
