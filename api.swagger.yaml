@@ -32914,16 +32914,34 @@ components:
       type: object
       properties:
         from:
-          type: number
-          example: 12.99
+          type: integer
+          example: 1299
+          description: >-
+            Lowest total parcel value that this carrier will be selected for.
+            Value is in configured in the smallest subunit, e.g. cents.
           minimum: 0
         to:
-          type: number
-          example: 2500
+          type: integer
+          example: 25000
+          description: >-
+            Highest total parcel value that this carrier will be selected for.
+            Value is configured in the smallest subunit, e.g. cents.
           minimum: 1
+        currency:
+          type: string
+          example: EUR
+          description: currency as 3 letter iso code
+          pattern: ^[A-Z]{3}$
+        decimalPlaces:
+          type: integer
+          description: Number of decimal places for the given currency
+          example: 2
+          minimum: 0
       required:
         - from
         - to
+        - currency
+        - decimalPlaces
     DeliveryCost:
       type: object
       additionalProperties: false
