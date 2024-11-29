@@ -5690,35 +5690,6 @@
 										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
 									},
 									"response": []
-								},
-								{
-									"name": "Put Routing Configuration",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"globalRoutingConfiguration\": {\n        \"defaultPrice\": 10,\n        \"routingTimeout\": 5,\n        \"stopRoutingAttemptsAfterTime\": \"PT05M\",\n        \"manualRerouteConfiguration\": {\n            \"active\": false\n        },\n        \"fallbackFacilityConfiguration\": {\n            \"facilityRefs\": [\n                \"facilitId1\"\n            ],\n            \"fallbackAfterTime\": \"PT0H\",\n            \"active\": false\n        }\n    },\n    \"prioritizationRules\": [],\n    \"routingRule\": {\n        \"orderSplit\": {\n            \"active\": true,\n            \"orderSplitType\": \"FIXED_COUNT\",\n            \"fixedCountConfiguration\": {\n                \"maxSplitCount\": 2,\n            },\n            \"activeForSameDay\": false\n        },\n        \"ratings\": [\n            {\n                \"implementation\": \"STOCK-AVAILABILITY\",\n                \"active\": true,\n                \"name\": \"Stock availability\",\n                \"maxPenalty\": 10,\n                \"id\": \"ad7e2453-ceac-4aea-909c-e8e31d333897\",\n                \"description\": \"Facilities that have the highest amount of items in stock that are ordered by a customer are favored by this rating.\"\n            },\n            {\n                \"implementation\": \"STOCK-BALANCING\",\n                \"active\": true,\n                \"name\": \"Stock balancing\",\n                \"maxPenalty\": 9,\n                \"id\": \"0c09006d-aeb8-45fd-87da-7cddb6a8ec76\",\n                \"description\": \"Facilities that have high stock levels of the ordered items are favored by this rating.\"\n            },\n            {\n                \"implementation\": \"GEO-DISTANCE\",\n                \"active\": true,\n                \"name\": \"Geodistance\",\n                \"maxPenalty\": 10,\n                \"id\": \"f11db201-a200-400f-8fd1-bba2f588a1ab\",\n                \"description\": \"Facilities that are nearby a consumer are favored by this rating.\"\n            },\n            {\n                \"implementation\": \"TURNOVER\",\n                \"active\": true,\n                \"name\": \"Maximizing turnover\",\n                \"maxPenalty\": 5,\n                \"id\": \"7f116f65-e3c9-44ab-a630-bc62668423d8\",\n                \"description\": \"Facilities that generate the highest turnover based on what the customer has ordered are favored by this rating.\"\n            },\n            {\n                \"implementation\": \"WORKLOAD-BALANCING\",\n                \"active\": true,\n                \"name\": \"Workload balancing\",\n                \"maxPenalty\": 10,\n                \"id\": \"8245ddc9-ec6a-42f1-904f-2887d66a32c2\",\n                \"description\": \"Facilities that have a low workload while performing a routing decision are favored by this rating.\"\n            },\n            {\n                \"implementation\": \"MATCHING-BUSINESSTYPE\",\n                \"active\": true,\n                \"name\": \"Matching service type\",\n                \"maxPenalty\": 10,\n                \"id\": \"04e6b1e6-aded-4159-96fc-794c3c7e6058\",\n                \"description\": \"Facilities that have the same service type as requested in the order are favored by this rating.\"\n            },\n            {\n                \"implementation\": \"PREFER-STORE\",\n                \"active\": true,\n                \"name\": \"Prefer stores\",\n                \"maxPenalty\": 10,\n                \"id\": \"013147fa-d3b4-4865-8177-7d5a4373656b\",\n                \"description\": \"Facilities that have the facility type store are favored by this rating.\"\n            },\n            {\n                \"implementation\": \"PREFER-WAREHOUSE\",\n                \"active\": false,\n                \"name\": \"Prefer warehouses\",\n                \"maxPenalty\": 10,\n                \"id\": \"c1782e8d-6590-4038-90ff-877d3fff2272\",\n                \"description\": \"Facilities that have the facility type warehouse are favored by this rating.\"\n            }\n        ],\n        \"fences\": [\n            {\n                \"implementation\": \"STOCK-AVAILABILITY\",\n                \"active\": false,\n                \"name\": \"Complete stock\",\n                \"id\": \"1fea494d-7cbd-44f5-ab08-04966d2bb5bb\",\n                \"description\": \"Facilities that do not have all ordered items in stock are not taken into consideration when performing an order routing.\",\n                \"activeMode\": \"static\",\n                \"supportedModes\": [\n                    \"static\",\n                    \"reactive\"\n                ]\n            },\n            {\n                \"implementation\": \"FACILITY-CAPACITY\",\n                \"active\": true,\n                \"name\": \"Facility capacity\",\n                \"id\": \"573ce657-b382-472d-b4c1-8f853caa04aa\",\n                \"description\": \"Facilities, for which the maximum amount of orders that can be fulfilled has been exceeded are not taken into consideration when performing an order routing.\",\n                \"activeMode\": \"static\",\n                \"supportedModes\": [\n                    \"static\",\n                    \"reactive\"\n                ]\n            },\n            {\n                \"implementation\": \"FACILITY-BUSINESSTYPE\",\n                \"active\": true,\n                \"name\": \"Service type\",\n                \"id\": \"d23824d1-135e-47f5-88a3-326ee363f86a\",\n                \"description\": \"Facilities that do not support the service type required by an order are not taken into consideration when performing an order routing.\",\n                \"activeMode\": \"static\"\n            },\n            {\n                \"implementation\": \"FACILITY-CARRIERAVAILABILITY\",\n                \"active\": true,\n                \"name\": \"Carrier availability\",\n                \"id\": \"d376aa51-670c-423a-997b-1620e3ec45af\",\n                \"description\": \"Facilities that do not support a specific carrier which has been requested by a customer are not taken into consideration when performing an order routing.\",\n                \"activeMode\": \"static\"\n            },\n            {\n                \"implementation\": \"FACILITY-CARRIERCAPACITY\",\n                \"active\": true,\n                \"name\": \"Carrier capacity\",\n                \"id\": \"385e99fa-a49f-42ea-aa49-6ba1c9e1b320\",\n                \"description\": \"Facilities, for which the capacity of a selected carrier has been exceeded are not taken into consideration when performing an order routing.\",\n                \"activeMode\": \"static\"\n            },\n            {\n                \"implementation\": \"PRESELECTED-FACILITY\",\n                \"active\": true,\n                \"name\": \"Preselected facilities\",\n                \"id\": \"9e672a62-01ca-472f-80c2-cb0ddc46ee38\",\n                \"description\": \"Facilities that are not specified in a predefined list are not taken into consideration when performing an order routing.\",\n                \"activeMode\": \"static\"\n            },\n            {\n                \"implementation\": \"SAMEDAY-POSSIBLE\",\n                \"active\": true,\n                \"name\": \"Same Day delivery possible\",\n                \"id\": \"741d33bd-f76b-45ed-8d7e-594cc953208c\",\n                \"description\": \"Facilities that cannot ensure a same day delivery are not taken into consideration when performing an order routing.\",\n                \"activeMode\": \"static\"\n            },\n            {\n                \"implementation\": \"FACILITY-COUNTRY\",\n                \"description\": \"Cross-country routing is prevented.\",\n                \"active\": false,\n                \"name\": \"Country borders\",\n                \"id\": \"552643c9-692f-4018-8044-aa9af9535434\",\n                \"activeMode\": \"static\"\n            }\n        ]\n    },\n    \"timingMode\": {\n        \"type\": \"DIRECT\"\n    },\n    \"version\": 1037\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{host}}/api/configurations/routing",
-											"host": [
-												"{{host}}"
-											],
-											"path": [
-												"api",
-												"configurations",
-												"routing"
-											]
-										},
-										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
-									},
-									"response": []
 								}
 							]
 						},
@@ -5989,6 +5960,209 @@
 											]
 										},
 										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration](https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration)"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "RoutingStrategy",
+							"item": [
+								{
+									"name": "Get Routing Strategy",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/routing/strategies/:strategyId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"strategies",
+												":strategyId"
+											],
+											"variable": [
+												{
+													"key": "strategyId",
+													"value": ""
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Get Routing Strategies",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/routing/strategies/?size=10",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"strategies",
+												""
+											],
+											"query": [
+												{
+													"key": "startAfterId",
+													"value": "ID-TO-START-AFTER",
+													"disabled": true
+												},
+												{
+													"key": "size",
+													"value": "10"
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Update Routing Strategy",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"nameLocalized\": {\n        \"de_DE\": \"irgendeine Config\",\n        \"en_US\": \"some config\"\n    },\n    \"rootNode\": {\n        \"active\": true,\n        \"nameLocalized\": {\n            \"de_DE\": \"Ausgangsknoten\",\n            \"en_US\": \"Root node\"\n        },\n        \"id\": \"rootNode#12345\",\n        \"config\": {\n            \"fences\": [],\n            \"ratings\": [],\n            \"orderSplit\": {\n                \"maxSplitCount\": 2,\n                \"activeForSameday\": true,\n                \"active\": true,\n                \"shouldUseWaitingRoomForPreBackOrderItems\": true\n            }\n        },\n        \"nextCondition\": {\n            \"name\": \"Priority Customer Config\",\n            \"active\": true,\n            \"rule\": {\n                \"predicates\": [\n                    {\n                        \"propertyPath\": \"$.deliveryType\",\n                        \"entityOperator\": \"VALUE_EQUALS\",\n                        \"expectedValue\": \"SAMEDAY\"\n                    }\n                ],\n                \"predicateConnector\": \"AND\"\n            },\n            \"id\": \"6ecb517f-33a6-4f28-a541-5036850a6650\",\n            \"nameLocalized\": {\n                \"de_DE\": \"Condition 6ecb517f-33a6-4f28-a541-5036850a6650\"\n            },\n            \"nextNode\": {\n                \"id\": \"0984a188-efe5-4d25-b6e3-8fde440b4c86\",\n                \"name\": \"priorityCustomerNode\",\n                \"active\": true,\n                \"nameLocalized\": {\n                    \"de_DE\": \"node\"\n                },\n                \"config\": {\n                    \"orderSplit\": {\n                        \"maxSplitCount\": 1,\n                        \"activeForSameday\": false,\n                        \"active\": true,\n                        \"shouldUseWaitingRoomForPreBackOrderItems\": true\n                    },\n                    \"fences\": [\n                        {\n                            \"active\": true,\n                            \"implementation\": \"STOCK-AVAILABILITY\",\n                            \"type\": \"StandardFence\"\n                        }\n                    ],\n                    \"ratings\": [\n                        {\n                            \"description\": \"\",\n                            \"referenceId\": \"\",\n                            \"type\": \"ToolkitRating\",\n                            \"name\": \"Priority Customer Rating\",\n                            \"nameLocalized\": {\n                                \"de_DE\": \"Prioritätskunden Bewertung\",\n                                \"en_US\": \"Priority Customer Rating\"\n                            },\n                            \"entity1\": \"ORDER\",\n                            \"entity2\": \"CARRIERCONNECTION\",\n                            \"rule\": {\n                                \"rightPart\": {\n                                    \"predicates\": [\n                                        {\n                                            \"propertyPath\": \"$.deliveryType\",\n                                            \"entityOperator\": \"VALUE_EQUALS\",\n                                            \"expectedValue\": \"SAMEDAY\"\n                                        }\n                                    ],\n                                    \"predicateConnector\": \"AND\"\n                                },\n                                \"leftPart\": {\n                                    \"predicates\": [\n                                        {\n                                            \"propertyPath\": \"$.consumer.customAttributes[?(@.customerType)].customerType\",\n                                            \"entityOperator\": \"VALUE_EQUALS\",\n                                            \"expectedValue\": \"PRIORITY\"\n                                        }\n                                    ],\n                                    \"predicateConnector\": \"OR\"\n                                },\n                                \"operator\": \"EQUALS\"\n                            },\n                            \"active\": true,\n                            \"maxPenalty\": 100\n                        }\n                    ]\n                }\n            },\n            \"nextCondition\": {\n                \"active\": true,\n                \"id\": \"unreliable-customer-config#12345\",\n                \"name\": \"Unreliable Customer Config\",\n                \"nameLocalized\": {\n                    \"de_DE\": \"Unzuverlässige-Kunden Konfiguration\",\n                    \"en_US\": \"Unreliable Customer Config\"\n                },\n                \"rule\": {\n                    \"predicates\": [\n                        {\n                            \"propertyPath\": \"$.consumer.customAttributes[?(@.paymentsPending)].paymentsPending\",\n                            \"entityOperator\": \"GREATER_EQUALS\",\n                            \"expectedValue\": 3\n                        },\n                        {\n                            \"propertyPath\": \"$.consumer.customAttributes[?(@.returnRateInPercent)].returnRateInPercent\",\n                            \"entityOperator\": \"GREATER_EQUALS\",\n                            \"expectedValue\": 25\n                        }\n                    ],\n                    \"predicateConnector\": \"OR\"\n                },\n                \"nextNode\": {\n                    \"id\": \"unreliableCustomerNode#12345\",\n                    \"name\": \"Unreliable Customer Node\",\n                    \"active\": false,\n                    \"nameLocalized\": {\n                        \"de_DE\": \"Unzuverlässige-Kunden Knoten\",\n                        \"en_US\": \"Unreliable Customer Node\"\n                    },\n                    \"config\": {\n                        \"ratings\": [],\n                        \"fences\": [\n                            {\n                                \"referenceId\": \"unreliableCustomerFence\",\n                                \"type\": \"ToolkitFence\",\n                                \"name\": \"Unreliable Customer Fence\",\n                                \"nameLocalized\": {\n                                    \"de_DE\": \"Unzuverlässige Kunden Ausschluss\",\n                                    \"en_US\": \"Unreliable Customer Fence\"\n                                },\n                                \"entity1\": \"ORDER\",\n                                \"entity2\": \"FACILITY\",\n                                \"rule\": {\n                                    \"rightPart\": {\n                                        \"predicates\": [\n                                            {\n                                                \"propertyPath\": \"$.nonExistingProperty\",\n                                                \"entityOperator\": \"VALUE_NOT_EQUALS\"\n                                            }\n                                        ],\n                                        \"predicateConnector\": \"AND\"\n                                    },\n                                    \"leftPart\": {\n                                        \"predicates\": [\n                                            {\n                                                \"propertyPath\": \"$.deliveryPreferences.collect.paid\",\n                                                \"entityOperator\": \"VALUE_EQUALS\",\n                                                \"expectedValue\": false\n                                            }\n                                        ],\n                                        \"predicateConnector\": \"OR\"\n                                    },\n                                    \"operator\": \"EQUALS\"\n                                },\n                                \"active\": true,\n                                \"order\": 2\n                            }\n                        ]\n                    }\n                }\n            }\n        }\n    },\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/routing/strategies/:strategyId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"strategies",
+												":strategyId"
+											],
+											"variable": [
+												{
+													"key": "strategyId",
+													"value": "6f157225-1d2f-421d-a11a-f669d7fc4fd5"
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Create Routing Strategy",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"nameLocalized\": {\n        \"de_DE\": \"irgendeine Config\",\n        \"en_US\": \"some config\"\n    },\n    \"rootNode\": {\n        \"active\": true,\n        \"nameLocalized\": {\n            \"de_DE\": \"Ausgangsknoten\",\n            \"en_US\": \"Root node\"\n        },\n        \"id\": \"rootNode#12345\",\n        \"config\": {\n            \"fences\": [],\n            \"ratings\": [],\n            \"orderSplit\": {\n                \"maxSplitCount\": 2,\n                \"activeForSameday\": true,\n                \"active\": true,\n                \"shouldUseWaitingRoomForPreBackOrderItems\": true\n            }\n        },\n        \"nextCondition\": {\n            \"name\": \"Priority Customer Config\",\n            \"active\": true,\n            \"rule\": {\n                \"predicates\": [\n                    {\n                        \"propertyPath\": \"$.deliveryType\",\n                        \"entityOperator\": \"VALUE_EQUALS\",\n                        \"expectedValue\": \"SAMEDAY\"\n                    }\n                ],\n                \"predicateConnector\": \"AND\"\n            },\n            \"id\": \"6ecb517f-33a6-4f28-a541-5036850a6650\",\n            \"nameLocalized\": {\n                \"de_DE\": \"Condition 6ecb517f-33a6-4f28-a541-5036850a6650\"\n            },\n            \"nextNode\": {\n                \"id\": \"0984a188-efe5-4d25-b6e3-8fde440b4c86\",\n                \"name\": \"priorityCustomerNode\",\n                \"active\": true,\n                \"nameLocalized\": {\n                    \"de_DE\": \"node\"\n                },\n                \"config\": {\n                    \"orderSplit\": {\n                        \"maxSplitCount\": 1,\n                        \"activeForSameday\": false,\n                        \"active\": true,\n                        \"shouldUseWaitingRoomForPreBackOrderItems\": true\n                    },\n                    \"fences\": [\n                        {\n                            \"active\": true,\n                            \"implementation\": \"STOCK-AVAILABILITY\",\n                            \"type\": \"StandardFence\"\n                        }\n                    ],\n                    \"ratings\": [\n                        {\n                            \"description\": \"\",\n                            \"referenceId\": \"\",\n                            \"type\": \"ToolkitRating\",\n                            \"name\": \"Priority Customer Rating\",\n                            \"nameLocalized\": {\n                                \"de_DE\": \"Prioritätskunden Bewertung\",\n                                \"en_US\": \"Priority Customer Rating\"\n                            },\n                            \"entity1\": \"ORDER\",\n                            \"entity2\": \"CARRIERCONNECTION\",\n                            \"rule\": {\n                                \"rightPart\": {\n                                    \"predicates\": [\n                                        {\n                                            \"propertyPath\": \"$.deliveryType\",\n                                            \"entityOperator\": \"VALUE_EQUALS\",\n                                            \"expectedValue\": \"SAMEDAY\"\n                                        }\n                                    ],\n                                    \"predicateConnector\": \"AND\"\n                                },\n                                \"leftPart\": {\n                                    \"predicates\": [\n                                        {\n                                            \"propertyPath\": \"$.consumer.customAttributes[?(@.customerType)].customerType\",\n                                            \"entityOperator\": \"VALUE_EQUALS\",\n                                            \"expectedValue\": \"PRIORITY\"\n                                        }\n                                    ],\n                                    \"predicateConnector\": \"OR\"\n                                },\n                                \"operator\": \"EQUALS\"\n                            },\n                            \"active\": true,\n                            \"maxPenalty\": 100\n                        }\n                    ]\n                }\n            },\n            \"nextCondition\": {\n                \"active\": true,\n                \"id\": \"unreliable-customer-config#12345\",\n                \"name\": \"Unreliable Customer Config\",\n                \"nameLocalized\": {\n                    \"de_DE\": \"Unzuverlässige-Kunden Konfiguration\",\n                    \"en_US\": \"Unreliable Customer Config\"\n                },\n                \"rule\": {\n                    \"predicates\": [\n                        {\n                            \"propertyPath\": \"$.consumer.customAttributes[?(@.paymentsPending)].paymentsPending\",\n                            \"entityOperator\": \"GREATER_EQUALS\",\n                            \"expectedValue\": 3\n                        },\n                        {\n                            \"propertyPath\": \"$.consumer.customAttributes[?(@.returnRateInPercent)].returnRateInPercent\",\n                            \"entityOperator\": \"GREATER_EQUALS\",\n                            \"expectedValue\": 25\n                        }\n                    ],\n                    \"predicateConnector\": \"OR\"\n                },\n                \"nextNode\": {\n                    \"id\": \"unreliableCustomerNode#12345\",\n                    \"name\": \"Unreliable Customer Node\",\n                    \"active\": true,\n                    \"nameLocalized\": {\n                        \"de_DE\": \"Unzuverlässige-Kunden Knoten\",\n                        \"en_US\": \"Unreliable Customer Node\"\n                    },\n                    \"config\": {\n                        \"ratings\": [],\n                        \"fences\": [\n                            {\n                                \"referenceId\": \"unreliableCustomerFence\",\n                                \"type\": \"ToolkitFence\",\n                                \"name\": \"Unreliable Customer Fence\",\n                                \"nameLocalized\": {\n                                    \"de_DE\": \"Unzuverlässige Kunden Ausschluss\",\n                                    \"en_US\": \"Unreliable Customer Fence\"\n                                },\n                                \"entity1\": \"ORDER\",\n                                \"entity2\": \"FACILITY\",\n                                \"rule\": {\n                                    \"rightPart\": {\n                                        \"predicates\": [\n                                            {\n                                                \"propertyPath\": \"$.nonExistingProperty\",\n                                                \"entityOperator\": \"VALUE_NOT_EQUALS\"\n                                            }\n                                        ],\n                                        \"predicateConnector\": \"AND\"\n                                    },\n                                    \"leftPart\": {\n                                        \"predicates\": [\n                                            {\n                                                \"propertyPath\": \"$.deliveryPreferences.collect.paid\",\n                                                \"entityOperator\": \"VALUE_EQUALS\",\n                                                \"expectedValue\": false\n                                            }\n                                        ],\n                                        \"predicateConnector\": \"OR\"\n                                    },\n                                    \"operator\": \"EQUALS\"\n                                },\n                                \"active\": true,\n                                \"order\": 2\n                            }\n                        ]\n                    }\n                }\n            }\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/routing/strategies",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"strategies"
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Activate Routing Strategy",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"ACTIVATE\",\n  \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/routing/strategies/:strategyId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"strategies",
+												":strategyId",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "strategyId",
+													"value": ""
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Evaluate Routing Strategy with Order",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"consumer\": {\n    \"email\": \"mail@mail.com\",\n    \"addresses\": [\n      {\n        \"firstName\": \"firstName\",\n        \"lastName\": \"lastName\",\n        \"city\": \"city\",\n        \"companyName\": \"companyName\",\n        \"country\": \"DE\",\n        \"houseNumber\": \"42a\",\n        \"postalCode\": \"50259\",\n        \"salutation\": \"Herr\",\n        \"street\": \"street\",\n        \"additionalAddressInfo\": \"1. OG\",\n        \"addressType\": \"INVOICE_ADDRESS\"\n      },\n      {\n        \"firstName\": \"firstName\",\n        \"lastName\": \"lastName\",\n        \"city\": \"city\",\n        \"companyName\": \"companyName\",\n        \"country\": \"DE\",\n        \"houseNumber\": \"42a\",\n        \"postalCode\": \"50259\",\n        \"salutation\": \"Herr\",\n        \"street\": \"street\",\n        \"additionalAddressInfo\": \"1. OG\",\n        \"addressType\": \"POSTAL_ADDRESS\"\n      }\n    ]\n  },\n  \"customAttributes\": {},\n  \"orderDate\": \"2024-11-26T10:12:59.420Z\",\n  \"orderLineItems\": [\n    {\n      \"article\": {\n        \"tenantArticleId\": \"4711\",\n        \"title\": \"Banana\"\n      },\n      \"quantity\": 2,\n      \"scannableCodes\": [\n        \"34758693762636\",\n        \"34758693762637\"\n      ]\n    },\n    {\n      \"article\": {\n        \"tenantArticleId\": \"4712\",\n        \"title\": \"Apple\",\n        \"attributes\": [\n          {\n            \"category\": \"descriptive\",\n            \"key\": \"someKey\",\n            \"priority\": 1,\n            \"value\": \"someValue\"\n          }\n        ]\n      },\n      \"quantity\": 14,\n      \"scannableCodes\": [\n        \"xxxx\",\n        \"yyyy\"\n      ]\n    }\n  ],\n  \"status\": \"OPEN\",\n  \"tenantOrderId\": \"FC-4711\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/routing/strategies/:strategyId/evaluation",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"strategies",
+												":strategyId",
+												"evaluation"
+											],
+											"variable": [
+												{
+													"key": "strategyId",
+													"value": ""
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
 									},
 									"response": []
 								}
