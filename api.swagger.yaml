@@ -17511,6 +17511,64 @@ paths:
         description: The desired routing strategy
         required: true
       summary: Creates a new revision of the routing strategy.
+    get:
+      parameters:
+        - description: all entities
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingStrategyTransporter'
+          description: The current list of available routing strategies
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: No more elements available
+      tags:
+        - DOMS - Routing Strategies
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: getRoutingStrategies
+      summary: Returns all routing strategies
   /api/routing/strategies/{strategyId}:
     get:
       parameters:
@@ -41298,6 +41356,22 @@ components:
       type: object
       xml:
         name: ToolkitRatingTransporter
+    RoutingStrategyTransporter:
+      properties:
+        routingStrategies:
+          items:
+            $ref: '#/components/schemas/RoutingStrategy'
+          type: array
+        total:
+          description: Total number of entities found for this query
+          example: 42
+          type: integer
+      required:
+        - routingStrategies
+        - total
+      type: object
+      xml:
+        name: RoutingStrategyTransporter
     ToolkitEntityOperatorType:
       description: The possible operator types that can be used on given entities
       enum:
