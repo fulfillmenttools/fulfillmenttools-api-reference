@@ -17727,7 +17727,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: No more elements available
       tags:
-        - DOMS - Routing Strategies
+        - Routing - Routing strategies
       description: >-
         <i>This part of the API is currently under development. That means that
         this endpoint, model, etc. can contain breaking changes and/or might not
@@ -17739,8 +17739,8 @@ paths:
       operationId: getRoutingStrategies
       summary: Returns all routing strategies
       x-badges:
-        - color: orange
-          label: BETA
+        - color: red
+          label: ALPHA
   /api/routing/strategies/{strategyId}:
     get:
       parameters:
@@ -17911,6 +17911,72 @@ paths:
         /><br />performs an action on a routing strategy
       operationId: actionsRoutingStrategy
       summary: Performs Actions on a routing strategy.
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/routing/strategies/{strategyId}/evaluation:
+    post:
+      parameters:
+        - description: Id of the routing strategy
+          in: path
+          name: strategyId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderForCreation'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingStrategyEvaluationResult'
+          description: The result of the evaluation of thi routing strategy.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The routing strategy does not exist
+      tags:
+        - Routing - Routing strategies
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />evaluates a routing strategy against a given order
+      operationId: evaluateRoutingStrategy
+      summary: Evaluates a routing strategy.
       x-badges:
         - color: red
           label: ALPHA
@@ -42430,6 +42496,44 @@ components:
     RoutingStrategyActionsParameter:
       oneOf:
         - $ref: '#/components/schemas/RoutingStrategyActivateActionParameter'
+    RoutingStrategyEvaluationResult:
+      type: object
+      properties:
+        evaluatedPath:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingStrategyPathElement'
+        evaluatedConfig:
+          $ref: '#/components/schemas/RoutingStrategyNodeConfig'
+      required:
+        - evaluatedConfig
+        - evaluatedPath
+    RoutingStrategyPathElement:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/RoutingStrategyPathElementType'
+        ref:
+          type: string
+        evaluationResult:
+          $ref: '#/components/schemas/RoutingStrategyEvaluationResultType'
+      required:
+        - type
+        - ref
+        - evaluationResult
+    RoutingStrategyPathElementType:
+      type: string
+      enum:
+        - CONDITION
+        - NODE
+    RoutingStrategyEvaluationResultType:
+      type: string
+      enum:
+        - NODE_INACTIVE
+        - NODE_ACTIVE
+        - CONDITION_INACTIVE
+        - CONDITION_FALSE
+        - CONDITION_TRUE
     AbstractRoutingStrategyActionsParameter:
       discriminator:
         propertyName: name
@@ -42984,28 +43088,24 @@ components:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/RoutingStrategyNodeFenceImplementation'
-              - $ref: >-
-                  #/components/schemas/RoutingStrategyNodeToolkitFenceImplementation
+              - $ref: '#/components/schemas/RoutingStrategyFence'
+              - $ref: '#/components/schemas/RoutingStrategyToolkitFence'
             discriminator:
               propertyName: type
               mapping:
-                StandardFence: '#/components/schemas/RoutingStrategyNodeFenceImplementation'
-                ToolkitFence: >-
-                  #/components/schemas/RoutingStrategyNodeToolkitFenceImplementation
+                StandardFence: '#/components/schemas/RoutingStrategyFence'
+                ToolkitFence: '#/components/schemas/RoutingStrategyToolkitFence'
         ratings:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/RoutingStrategyNodeRatingImplementation'
-              - $ref: >-
-                  #/components/schemas/RoutingStrategyNodeToolkitRatingImplementation
+              - $ref: '#/components/schemas/RoutingStrategyRating'
+              - $ref: '#/components/schemas/RoutingStrategyToolkitRating'
             discriminator:
               propertyName: type
               mapping:
-                StandardRating: '#/components/schemas/RoutingStrategyNodeRatingImplementation'
-                ToolkitRating: >-
-                  #/components/schemas/RoutingStrategyNodeToolkitRatingImplementation
+                StandardRating: '#/components/schemas/RoutingStrategyRating'
+                ToolkitRating: '#/components/schemas/RoutingStrategyToolkitRating'
     RoutingStrategyNode:
       additionalProperties: false
       type: object
@@ -43083,15 +43183,15 @@ components:
           $ref: '#/components/schemas/RoutingStrategyRerouteType'
       required:
         - rerouteType
-    RoutingStrategyNodeFenceImplementationType:
+    RoutingStrategyFenceType:
       type: string
       enum:
         - StandardFence
-    RoutingStrategyNodeFenceImplementation:
+    RoutingStrategyFence:
       additionalProperties: false
       properties:
         type:
-          $ref: '#/components/schemas/RoutingStrategyNodeFenceImplementationType'
+          $ref: '#/components/schemas/RoutingStrategyFenceType'
         active:
           type: boolean
         description:
@@ -43111,18 +43211,17 @@ components:
         - implementation
         - type
       type: object
-    RoutingStrategyNodeToolkitFenceImplementationType:
+    RoutingStrategyToolkitFenceType:
       type: string
       enum:
         - ToolkitFence
-    RoutingStrategyNodeToolkitFenceImplementation:
+    RoutingStrategyToolkitFence:
       additionalProperties: false
       properties:
         referenceId:
           type: string
         type:
-          $ref: >-
-            #/components/schemas/RoutingStrategyNodeToolkitFenceImplementationType
+          $ref: '#/components/schemas/RoutingStrategyToolkitFenceType'
         name:
           description: The name of the fence.
           example: CustomFence
@@ -43158,18 +43257,18 @@ components:
         - entity1
         - entity2
         - type
-    RoutingStrategyNodeRatingImplementationType:
+    RoutingStrategyRatingType:
       type: string
       enum:
         - StandardRating
-    RoutingStrategyNodeRatingImplementation:
+    RoutingStrategyRating:
       additionalProperties: false
       description: >-
         A rating is used to rate a set of possible facilities against each other
         during routing of orders.
       properties:
         type:
-          $ref: '#/components/schemas/RoutingStrategyNodeRatingImplementationType'
+          $ref: '#/components/schemas/RoutingStrategyRatingType'
         active:
           type: boolean
         configuration:
@@ -43190,11 +43289,11 @@ components:
         - maxPenalty
         - type
       type: object
-    RoutingStrategyNodeToolkitRatingImplementationType:
+    RoutingStrategyToolkitRatingType:
       type: string
       enum:
         - ToolkitRating
-    RoutingStrategyNodeToolkitRatingImplementation:
+    RoutingStrategyToolkitRating:
       additionalProperties: false
       properties:
         referenceId:
@@ -43228,8 +43327,7 @@ components:
           example: 100
           description: The maximum penalty this rating can have
         type:
-          $ref: >-
-            #/components/schemas/RoutingStrategyNodeToolkitRatingImplementationType
+          $ref: '#/components/schemas/RoutingStrategyToolkitRatingType'
       required:
         - type
         - nameLocalized
@@ -43241,7 +43339,7 @@ components:
       additionalProperties: false
       properties:
         order:
-          $ref: '#/components/schemas/Order'
+          $ref: '#/components/schemas/OrderForCreation'
         routingPlan:
           $ref: '#/components/schemas/RoutingPlan'
         timeStamp:
@@ -43249,7 +43347,6 @@ components:
           format: date-time
       required:
         - order
-        - routingPlan
     ArticleStockForecast:
       properties:
         created:
