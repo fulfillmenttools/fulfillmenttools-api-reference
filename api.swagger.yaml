@@ -38991,6 +38991,8 @@ components:
                 Id of the global process related to this entity. For example
                 used for starting the GDPR process and others.
               type: string
+            paymentInfo:
+              $ref: '#/components/schemas/OrderPaymentInfo'
             customServices:
               type: array
               minItems: 1
@@ -39012,11 +39014,28 @@ components:
       allOf:
         - $ref: '#/components/schemas/ArticleAttributeItem'
     OrderPaymentInfo:
+      additionalProperties: false
       properties:
         currency:
           description: The currency in which the consumer paid with
           example: EUR
           type: string
+        methodLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        method:
+          description: Localized value from methodLocalized
+          example: Credit Card
+          type: string
+      type: object
+    OrderPaymentInfoForCreation:
+      additionalProperties: false
+      properties:
+        currency:
+          description: The currency in which the consumer paid with
+          example: EUR
+          type: string
+        methodLocalized:
+          $ref: '#/components/schemas/LocaleString'
       type: object
     OrderForCreation:
       additionalProperties: false
@@ -39091,7 +39110,7 @@ components:
           items:
             $ref: '#/components/schemas/CustomServiceReferenceForCreation'
         paymentInfo:
-          $ref: '#/components/schemas/OrderPaymentInfo'
+          $ref: '#/components/schemas/OrderPaymentInfoForCreation'
         statusReasons:
           type: array
           items:
