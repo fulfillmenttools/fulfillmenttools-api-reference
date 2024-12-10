@@ -20430,8 +20430,92 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExternalStockChangeReasonList'
+                $ref: '#/components/schemas/ExternalStockChangeReason'
           description: List of external stock change reasons
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      tags:
+        - Inventory Management - Stocks
+      x-badges:
+        - color: red
+          label: ALPHA
+    post:
+      deprecated: false
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />post external stock change reason
+      operationId: postExternalStockChangeReason
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalStockChangeReasonForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalStockChangeReason'
+          description: The created external stock change reason
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      tags:
+        - Inventory Management - Stocks
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/externalstockchangereasons/{externalStockChangeReasonId}:
+    get:
+      deprecated: false
+      description: >-
+        <i>This part of the API is currently under development. That means that
+        this endpoint, model, etc. can contain breaking changes and/or might not
+        be available at all times in your API instance. It could disappear also
+        without warning. Thus, it currently does not fall under our SLA
+        regulations. For details on this topic please check our <a
+        href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
+        /><br />Get external stock change reason
+      operationId: getExternalStockChangeReason
+      parameters:
+        - in: path
+          name: externalStockChangeReasonId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalStockChangeReason'
+          description: The external stock change reason
         '401':
           content:
             application/json:
@@ -20458,22 +20542,27 @@ paths:
         without warning. Thus, it currently does not fall under our SLA
         regulations. For details on this topic please check our <a
         href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br
-        /><br />set external stock change reasons
-      operationId: setExternalStockChangeReasons
-      parameters: []
+        /><br />put external stock change reason
+      operationId: putExternalStockChangeReason
+      parameters:
+        - in: path
+          name: externalStockChangeReasonId
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExternalStockChangeReasonList'
+              $ref: '#/components/schemas/ExternalStockChangeReasonForUpdate'
         required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExternalStockChangeReasonList'
-          description: The updated list of external stock change reasons
+                $ref: '#/components/schemas/ExternalStockChangeReason'
+          description: The updated external stock change reason
         '401':
           content:
             application/json:
@@ -43610,7 +43699,10 @@ components:
       type: object
     ExternalStockChangeReason:
       properties:
-        key:
+        reasonLocalized:
+          description: Localizations, i.e. names which are to be displayed
+          type: object
+        tenantReasonId:
           description: >-
             Depending on type: 
 
@@ -43620,25 +43712,52 @@ components:
             * [stowTo] Reason why item was stowed on stock / storage location or
             why it was booked out
           type: string
-        reasonLocalized:
-          description: Localizations, i.e. names which are to be displayed
-          type: object
       required:
-        - key
         - reasonLocalized
       type: object
-    ExternalStockChangeReasonList:
+    ExternalStockChangeReasonForCreation:
       properties:
-        externalStockChangeReasons:
-          description: List of external stock change reasons
-          items:
-            $ref: '#/components/schemas/StockChangeReasonEntry'
-          type: array
+        active:
+          description: Whether the reason is active
+          type: boolean
+        customAttributes:
+          description: The custom attributes of this external stock change reason
+          type: object
+        reasonLocalized:
+          additionalProperties:
+            maxLength: 255
+            type: string
+          description: >-
+            Localizations, i.e. names which are to be displayed. Each localized
+            string must not exceed 255 characters
+          type: object
+        tenantReasonId:
+          description: Identifier of the stock change reason
+          type: string
+      required:
+        - active
+        - reasonLocalized
+      type: object
+    ExternalStockChangeReasonForUpdate:
+      properties:
+        active:
+          description: Whether the reason is active
+          type: boolean
+        customAttributes:
+          description: The custom attributes of this external stock change reason
+          type: object
+        reasonLocalized:
+          additionalProperties:
+            maxLength: 255
+            type: string
+          description: >-
+            Localizations, i.e. names which are to be displayed. Each localized
+            string must not exceed 255 characters
+          type: object
         version:
-          description: Version of the external stock change reason list
+          description: Version of the external stock change reason
           type: number
       required:
-        - externalStockChangeReasons
         - version
       type: object
     FacilityStock:
@@ -45498,26 +45617,6 @@ components:
       required:
         - name
         - result
-      type: object
-    StockChangeReasonEntry:
-      properties:
-        active:
-          description: Whether the reason is active
-          type: boolean
-        key:
-          description: Identifier of the stock change reason
-          type: string
-        reasonLocalized:
-          additionalProperties:
-            maxLength: 255
-            type: string
-          description: >-
-            Localizations, i.e. names which are to be displayed. Each localized
-            string must not exceed 255 characters
-          type: object
-      required:
-        - key
-        - reasonLocalized
       type: object
     StockDeleteActionResult:
       properties:
