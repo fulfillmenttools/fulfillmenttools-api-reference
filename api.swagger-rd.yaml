@@ -43253,7 +43253,7 @@ components:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
         rootNode:
-          $ref: '#/components/schemas/RoutingStrategyNode'
+          $ref: '#/components/schemas/RoutingStrategyNodeForCreation'
       required:
         - rootNode
         - nameLocalized
@@ -43266,7 +43266,7 @@ components:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
         rootNode:
-          $ref: '#/components/schemas/RoutingStrategyNode'
+          $ref: '#/components/schemas/RoutingStrategyNodeForModification'
         version:
           type: integer
       required:
@@ -43297,6 +43297,48 @@ components:
         - active
         - rule
         - id
+        - nameLocalized
+    RoutingStrategyConditionForModification:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        active:
+          type: boolean
+        rule:
+          $ref: '#/components/schemas/ToolkitRulePart'
+        nextNode:
+          $ref: '#/components/schemas/RoutingStrategyNodeForModification'
+        nextCondition:
+          $ref: '#/components/schemas/RoutingStrategyConditionForModification'
+      required:
+        - nextNode
+        - active
+        - rule
+        - nameLocalized
+    RoutingStrategyConditionForCreation:
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        active:
+          type: boolean
+        rule:
+          $ref: '#/components/schemas/ToolkitRulePart'
+        nextNode:
+          $ref: '#/components/schemas/RoutingStrategyNodeForCreation'
+        nextCondition:
+          $ref: '#/components/schemas/RoutingStrategyConditionForCreation'
+      required:
+        - nextNode
+        - active
+        - rule
         - nameLocalized
     RoutingStrategyNodeConfig:
       additionalProperties: false
@@ -43331,6 +43373,44 @@ components:
               mapping:
                 StandardRating: '#/components/schemas/RoutingStrategyRating'
                 ToolkitRating: '#/components/schemas/RoutingStrategyToolkitRating'
+    RoutingStrategyNodeForCreation:
+      additionalProperties: false
+      type: object
+      properties:
+        active:
+          type: boolean
+        name:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        config:
+          $ref: '#/components/schemas/RoutingStrategyNodeConfig'
+        nextCondition:
+          $ref: '#/components/schemas/RoutingStrategyConditionForCreation'
+      required:
+        - active
+        - config
+        - nameLocalized
+    RoutingStrategyNodeForModification:
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: string
+        active:
+          type: boolean
+        name:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        config:
+          $ref: '#/components/schemas/RoutingStrategyNodeConfig'
+        nextCondition:
+          $ref: '#/components/schemas/RoutingStrategyConditionForModification'
+      required:
+        - active
+        - config
+        - nameLocalized
     RoutingStrategyNode:
       additionalProperties: false
       type: object
