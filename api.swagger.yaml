@@ -5684,12 +5684,7 @@ paths:
           name: labelDocument
           required: true
           schema:
-            enum:
-              - return.pdf
-              - all.pdf
-              - send.pdf
-              - customs.pdf
-            type: string
+            $ref: '#/components/schemas/ParcelLabelTypeEnum'
       responses:
         '200':
           content:
@@ -5825,6 +5820,48 @@ paths:
         - Fulfillment Operations - Shipments
       operationId: getParcelReturnNote
       summary: Get returnNote for a parcel
+  /api/parcels/{parcelId}/transferlabel:
+    get:
+      parameters:
+        - description: ID of the parcel for which you want to get a transfer label
+          in: path
+          name: parcelId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: {}
+          description: The transfer label for the given parcel
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Shipments
+      description: ''
+      operationId: getParcelTransferLabel
+      summary: Get a transfer label for the parcel with the given ID
   /api/pickjobs:
     get:
       parameters:
@@ -6908,6 +6945,48 @@ paths:
       description: ''
       operationId: getPickJobDeliveryNote
       summary: Get a deliverynote for the pick job with the given ID
+  /api/pickjobs/{pickJobId}/transferlabel:
+    get:
+      parameters:
+        - description: ID of the pick job for which you want to get a transfer label
+          in: path
+          name: pickJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: {}
+          description: The transfer label for the given pickjob
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Picking
+      description: ''
+      operationId: getPickJobTransferLabel
+      summary: Get a transfer label for the pick job with the given ID
   /api/process:
     get:
       parameters:
@@ -10281,6 +10360,48 @@ paths:
       description: ''
       operationId: getPackJobDeliveryNote
       summary: Get a deliverynote for the pack job with the given ID
+  /api/packjobs/{packJobId}/transferlabel:
+    get:
+      parameters:
+        - description: ID of the pack job for which you want to get a transfer label
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: {}
+          description: The transfer label for the given packjob
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Packing
+      description: ''
+      operationId: getPackJobTransferLabel
+      summary: Get a transfer label for the pack job with the given ID
   /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}/returnnote:
     get:
       parameters:
@@ -10393,6 +10514,56 @@ paths:
       description: ''
       operationId: getPackingTargetContainerDeliveryNote
       summary: Get a deliverynote for the packingTargetContainer with the given ID
+  /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}/transferlabel:
+    get:
+      parameters:
+        - description: ID of the pack job for which you want to get a transfer label
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            ID of the packingTargetContainer for which you want to get a
+            transfer label
+          in: path
+          name: targetcontainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: {}
+          description: The transfer label for the given packingTargetContainer
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Packing
+      description: ''
+      operationId: getPackingTargetContainerTransferLabel
+      summary: Get a transfer label for the packingTargetContainer with the given ID
   /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}:
     get:
       parameters:
@@ -25265,6 +25436,14 @@ components:
         - firebaseWebApiKey
         - firebaseAppId
         - firebaseAppIdDebug
+    ParcelLabelTypeEnum:
+      description: The type of possible Parcel Labels
+      enum:
+        - return.pdf
+        - all.pdf
+        - send.pdf
+        - customs.pdf
+      type: string
     ConnectAppTypeEnum:
       example: PICKING
       description: The type of possible Apps
@@ -34406,6 +34585,7 @@ components:
         - RETURNNOTE
         - SENDLABEL
         - RETURNLABEL
+        - TRANSFERLABEL
       type: string
     AssignFacilityToProcessAction:
       allOf:
