@@ -2900,6 +2900,69 @@ paths:
         description: Representation that describes the facility
         required: true
       summary: Add a new facility
+  /api/facilities/{facilityId}/carriers/calculatepriority:
+    post:
+      parameters:
+        - description: ID of facility you want to calculate the carrier priority for
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/CarrierPriorityResult'
+          description: >-
+            Carrier priority was calculated successfully. The result is in the
+            body.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Facilities
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: calculateCarrierPriority
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarrierPriorityCalculationRequest'
+        description: Carrier priority calculation
+        required: true
+      summary: Calculate carrier priority
   /api/facilities/{facilityId}:
     delete:
       parameters:
@@ -24359,6 +24422,40 @@ components:
           type: object
       xml:
         name: Carrier
+    CarrierPriorityResult:
+      properties:
+        recommendedCarriers:
+          items:
+            $ref: '#/components/schemas/CarrierRecommendationResult'
+          type: array
+        otherCarriers:
+          items:
+            $ref: '#/components/schemas/CarrierRecommendationResult'
+          type: array
+      required:
+        - recommendedCarriers
+        - otherCarriers
+    CarrierRecommendationResult:
+      properties:
+        priority:
+          type: number
+          description: >-
+            The lower the value the higher is the priority, e.g. priority 1 is
+            higher than priority 10. The priority is used when comparing
+            multiple carriers.
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+        threshold:
+          $ref: '#/components/schemas/PriceRange'
+      required:
+        - priority
+        - carrier
+    CarrierPriorityCalculationRequest:
+      additionalProperties: false
+      properties:
+        productValue:
+          $ref: '#/components/schemas/ParcelProductValue'
+      type: object
     BringCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
@@ -29231,6 +29328,31 @@ components:
       type: object
       xml:
         name: ParcelItem
+    ParcelProductValue:
+      properties:
+        value:
+          type: integer
+          example: 25000
+          description: >-
+            Total value that should be shipped. Value is configured in the
+            smallest subunit, e.g. cents.
+          minimum: 1
+        currency:
+          description: The currency of the price as an ISO 4217 code.
+          example: EUR
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/CurrencyCode'
+        decimalPlaces:
+          type: integer
+          description: Number of decimal places for the given currency
+          example: 2
+          minimum: 0
+      required:
+        - value
+        - currency
+        - decimalPlaces
+      type: object
     ParcelItemArticle:
       allOf:
         - $ref: '#/components/schemas/AbstractArticle'
@@ -33042,6 +33164,10 @@ components:
         priority:
           type: integer
           minimum: 1
+          description: >-
+            The lower the value the higher is the priority, e.g. priority 1 is
+            higher than priority 10. The priority is used when comparing
+            multiple carriers.
         priceRange:
           $ref: '#/components/schemas/PriceRange'
       required:
@@ -33066,10 +33192,11 @@ components:
             Value is configured in the smallest subunit, e.g. cents.
           minimum: 1
         currency:
-          type: string
+          description: The currency of the price as an ISO 4217 code.
           example: EUR
-          description: currency as 3 letter iso code
-          pattern: ^[A-Z]{3}$
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/CurrencyCode'
         decimalPlaces:
           type: integer
           description: Number of decimal places for the given currency
