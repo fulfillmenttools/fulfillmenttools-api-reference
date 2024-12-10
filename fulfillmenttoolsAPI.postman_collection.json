@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "7befcb5a-9c85-4ae9-a1e5-622ff9744819",
+		"_postman_id": "d27360a9-5b27-42e0-b21a-50770c5d80f0",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21858709"
+		"_exporter_id": "12127405"
 	},
 	"item": [
 		{
@@ -9511,13 +9511,39 @@
 									"response": []
 								},
 								{
-									"name": "Set External Stock Change Reasons",
+									"name": "Get External Stock Change Reason",
 									"request": {
-										"method": "PUT",
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/externalstockchangereasons/:externalStockChangeReason",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"externalstockchangereasons",
+												":externalStockChangeReason"
+											],
+											"variable": [
+												{
+													"key": "externalStockChangeReason",
+													"value": ""
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stocks/getStockConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Create External Stock Change Reason",
+									"request": {
+										"method": "POST",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"externalStockChangeReasons\": [\n        {\n            \"reasonLocalized\": {\n              \"en_US\": \"Recounted\",\n              \"de_DE\": \"Nachgezählt\",\n              \"fr_FR\": \"Recompté\"\n            },\n            \"key\": \"Recounted\"\n        }\n    ],\n    \"version\": 1\n}",
+											"raw": "{\n    \"reasonLocalized\": {\n        \"en_US\": \"Recounted\",\n        \"de_DE\": \"Nachgezählt\",\n        \"fr_FR\": \"Recompté\"\n    },\n    \"active\": true,\n    \"tenantReasonId\": \"R5\",\n    \"customAttributes\": {\n        \"additionalInfoText\": \"Use carefully\"\n    }\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9532,6 +9558,41 @@
 											"path": [
 												"api",
 												"externalstockchangereasons"
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stocks/setStockConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Update External Stock Change Reason",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"reasonLocalized\": {\n        \"en_US\": \"Expired\",\n        \"de_DE\": \"Abgelaufen\",\n        \"fr_FR\": \"Expiré\"\n    },\n    \"active\": false,\n    \"version\": 1\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/externalstockchangereasons/:externalStockChangeReason",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"externalstockchangereasons",
+												":externalStockChangeReason"
+											],
+											"variable": [
+												{
+													"key": "externalStockChangeReason",
+													"value": ""
+												}
 											]
 										},
 										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stocks/setStockConfiguration"
@@ -12018,7 +12079,6 @@
 										},
 										{
 											"name": "Get LoadUnitType",
-                                            "description": "Deprecated use operative container types instead",
 											"request": {
 												"method": "GET",
 												"header": [],
@@ -12044,7 +12104,6 @@
 										},
 										{
 											"name": "Create LoadUnitType",
-                                            "description": "Deprecated use operative container types instead",
 											"request": {
 												"method": "POST",
 												"header": [],
@@ -13379,8 +13438,8 @@
 												}
 											]
 										},
-                                        "description": "Deprecated use operative container types instead"
-                                    },
+										"description": "Deprecated use operative container types instead"
+									},
 									"response": []
 								},
 								{
@@ -13419,7 +13478,7 @@
 												}
 											]
 										},
-                                        "description": "Deprecated use operative container types instead"
+										"description": "Deprecated use operative container types instead"
 									},
 									"response": []
 								},
@@ -13468,7 +13527,7 @@
 												}
 											]
 										},
-                                        "description": "Deprecated use operative container types instead"
+										"description": "Deprecated use operative container types instead"
 									},
 									"response": []
 								},
@@ -13510,7 +13569,7 @@
 												}
 											]
 										},
-                                        "description": "Deprecated use operative container types instead"
+										"description": "Deprecated use operative container types instead"
 									},
 									"response": []
 								}
@@ -17739,6 +17798,50 @@
 								"description": "In this Request, we will only update the status and the services of the facility. Please take a look at the Swagger API Documentation for all possibilities.\n\nDocumentation: https://fulfillmenttools.github.io/api-reference-ui/#/Facilities/patchFacility"
 							},
 							"response": []
+						},
+						{
+							"name": "Calculate Carrier Priority",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"productValue\": {\n        \"value\": 10000,\n        \"currency\": \"EUR\",\n        \"decimalPlaces\": 2\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/facilities/:facilityId/carriers/calculatepriority",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"facilities",
+										":facilityId",
+										"carriers",
+										"calculatepriority"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "facilityId",
+											"value": "SOME-FACILITY-ID"
+										}
+									]
+								},
+								"description": "In this request we calculate the ideal carrier to use for a given product value."
+							},
+							"response": []
 						}
 					]
 				},
@@ -17816,7 +17919,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-  											"raw": "{\n  \"carrierConfigurationVersion\": 6,\n  \"destinations\": [\n    {\n      \"countryCode\": \"NO\",\n      \"postalCodes\": [\n        \"1299\",\n        \"3074\"\n      ]\n    },\n    {\n      \"countryCode\": \"SW\"\n    }\n  ],\n  \"source\": {\n    \"countryCode\": \"DE\",\n    \"postalCode\": \"50733\"\n  },\n  \"producta\": [\"V53WPAK\"],\n  \"mandatoryShippingAttributes\": [\n    {\n      \"referencedField\": \"productValue\",\n      \"dataType\": \"Number\"\n    }\n  ],\n  \"additionalShippingAttributes\": [\n    {\n      \"referencedField\": \"dimensions.weight\",\n      \"dataType\": \"Number\"\n    }\n  ],\n  \"mandatoryShippingArticleAttributes\": [\n    {\n      \"referencedField\": \"attributes.hsCode\",\n      \"dataType\": \"STRING\",\n      \"category\": \"customs\",\n      \"descriptionLocalized\": {\n        \"de_DE\": \"description\"\n      }\n    }\n  ],\n  \"additionalShippingArticleAttributes\": [\n    {\n      \"referencedField\": \"attributes.countryOfManufacture\",\n      \"dataType\": \"STRING\",\n      \"category\": \"customs\",\n      \"descriptionLocalized\": {\n        \"de_DE\": \"description\"\n      }\n    }\n  ],\n  \"deliveryCosts\": [\n    {\n      \"cost\": 10,\n      \"currency\": \"EUR\"\n    }\n  ]\n}",
+											"raw": "{\n  \"carrierConfigurationVersion\": 6,\n  \"destinations\": [\n    {\n      \"countryCode\": \"NO\",\n      \"postalCodes\": [\n        \"1299\",\n        \"3074\"\n      ]\n    },\n    {\n      \"countryCode\": \"SW\"\n    }\n  ],\n  \"source\": {\n    \"countryCode\": \"DE\",\n    \"postalCode\": \"50733\"\n  },\n  \"producta\": [\"V53WPAK\"],\n  \"mandatoryShippingAttributes\": [\n    {\n      \"referencedField\": \"productValue\",\n      \"dataType\": \"Number\"\n    }\n  ],\n  \"additionalShippingAttributes\": [\n    {\n      \"referencedField\": \"dimensions.weight\",\n      \"dataType\": \"Number\"\n    }\n  ],\n  \"mandatoryShippingArticleAttributes\": [\n    {\n      \"referencedField\": \"attributes.hsCode\",\n      \"dataType\": \"STRING\",\n      \"category\": \"customs\",\n      \"descriptionLocalized\": {\n        \"de_DE\": \"description\"\n      }\n    }\n  ],\n  \"additionalShippingArticleAttributes\": [\n    {\n      \"referencedField\": \"attributes.countryOfManufacture\",\n      \"dataType\": \"STRING\",\n      \"category\": \"customs\",\n      \"descriptionLocalized\": {\n        \"de_DE\": \"description\"\n      }\n    }\n  ],\n  \"deliveryCosts\": [\n    {\n      \"cost\": 10,\n      \"currency\": \"EUR\"\n    }\n  ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
