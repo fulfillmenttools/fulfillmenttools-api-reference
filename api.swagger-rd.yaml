@@ -29248,6 +29248,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MandatoryShippingArticleAttribute'
+        additionalShippingAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdditionalShippingAttribute'
+        additionalShippingArticleAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdditionalShippingArticleAttribute'
         mandatoryShippingItemAttributes:
           type: array
           items:
@@ -32907,6 +32915,26 @@ components:
             $ref: '#/components/schemas/MandatoryShippingAttribute'
           type: array
           minItems: 0
+        additionalShippingArticleAttributes:
+          description: >-
+            Article Attributes that will be displayed in the client as
+            additional. They are not mandatory but could benefit the process.
+            Mandatory fields can not be additional. If duplicates found, the
+            additional values will be removed on read.
+          items:
+            $ref: '#/components/schemas/AdditionalShippingArticleAttribute'
+          type: array
+          minItems: 0
+        additionalShippingAttributes:
+          description: >-
+            Shipping Attributes that will be displayed in the client as
+            additional. They are not mandatory but could benefit the process.
+            Mandatory fields can not be additional If duplicates found, the
+            additional values will be removed on read.
+          items:
+            $ref: '#/components/schemas/AdditionalShippingAttribute'
+          type: array
+          minItems: 0
         mandatoryShippingItemAttributes:
           deprecated: true
           description: Deprecated - use mandatoryShippingArticleAttributes instead
@@ -32987,6 +33015,7 @@ components:
           type: array
           minItems: 0
         mandatoryShippingItemAttributes:
+          description: Deprecated - use mandatoryShippingArticleAttributes instead
           items:
             $ref: '#/components/schemas/MandatoryShippingItemAttribute'
           type: array
@@ -32994,6 +33023,26 @@ components:
         mandatoryShippingArticleAttributes:
           items:
             $ref: '#/components/schemas/MandatoryShippingArticleAttribute'
+          type: array
+          minItems: 0
+        additionalShippingArticleAttributes:
+          description: >-
+            Article Attributes that will be displayed in the client as
+            additional. They are not mandatory but could benefit the process.
+            Mandatory fields can not be additional. If duplicates found, the
+            additional values will be removed on read.
+          items:
+            $ref: '#/components/schemas/AdditionalShippingArticleAttribute'
+          type: array
+          minItems: 0
+        additionalShippingAttributes:
+          description: >-
+            Shipping Attributes that will be displayed in the client as
+            additional. They are not mandatory but could benefit the process.
+            Mandatory fields can not be additional If duplicates found, the
+            additional values will be removed on read.
+          items:
+            $ref: '#/components/schemas/AdditionalShippingAttribute'
           type: array
           minItems: 0
         products:
@@ -33062,6 +33111,7 @@ components:
           type: array
           minItems: 0
         mandatoryShippingItemAttributes:
+          description: Deprecated - use mandatoryShippingArticleAttributes instead
           items:
             $ref: '#/components/schemas/MandatoryShippingItemAttribute'
           type: array
@@ -33069,6 +33119,26 @@ components:
         mandatoryShippingArticleAttributes:
           items:
             $ref: '#/components/schemas/MandatoryShippingArticleAttribute'
+          type: array
+          minItems: 0
+        additionalShippingArticleAttributes:
+          description: >-
+            Article Attributes that will be displayed in the client as
+            additional. They are not mandatory but could benefit the process.
+            Mandatory fields can not be additional. If duplicates found, the
+            additional values will be removed on read.
+          items:
+            $ref: '#/components/schemas/AdditionalShippingArticleAttribute'
+          type: array
+          minItems: 0
+        additionalShippingAttributes:
+          description: >-
+            Shipping Attributes that will be displayed in the client as
+            additional. They are not mandatory but could benefit the process.
+            Mandatory fields can not be additional If duplicates found, the
+            additional values will be removed on read.
+          items:
+            $ref: '#/components/schemas/AdditionalShippingAttribute'
           type: array
           minItems: 0
         products:
@@ -33149,7 +33219,7 @@ components:
         descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
       type: object
-    MandatoryShippingArticleAttribute:
+    CountryServiceMappingShippingArticleAttribute:
       additionalProperties: false
       properties:
         referencedField:
@@ -33169,6 +33239,12 @@ components:
         - dataType
         - category
         - descriptionLocalized
+    MandatoryShippingArticleAttribute:
+      allOf:
+        - $ref: '#/components/schemas/CountryServiceMappingShippingArticleAttribute'
+    AdditionalShippingArticleAttribute:
+      allOf:
+        - $ref: '#/components/schemas/CountryServiceMappingShippingArticleAttribute'
     MandatoryShippingArticleAttributeReferencedField:
       enum:
         - attributes.weightPerUnit
@@ -33188,7 +33264,7 @@ components:
         - NUMBER
         - STRING
       type: string
-    MandatoryShippingAttribute:
+    CountryServiceMappingShippingAttribute:
       additionalProperties: false
       properties:
         referencedField:
@@ -33222,6 +33298,12 @@ components:
         descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
       type: object
+    MandatoryShippingAttribute:
+      allOf:
+        - $ref: '#/components/schemas/CountryServiceMappingShippingAttribute'
+    AdditionalShippingAttribute:
+      allOf:
+        - $ref: '#/components/schemas/CountryServiceMappingShippingAttribute'
     RegionInformation:
       type: object
       properties:
