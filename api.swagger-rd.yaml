@@ -8283,6 +8283,45 @@ paths:
         - Fulfillment Operations - Shipments
       operationId: getShipmentDeliveryNote
       summary: Get delivery note for a shipment
+  /api/shipments/parcels:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelForDirectCreation'
+        description: Representation that describes the parcel you want to create
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+          description: Parcel was successfully created
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Shipments
+      description: >-
+        This endpoints directly creates a parcel. If no ShipmentRef was
+        provided, a shipment will be created and linked to this parcel
+      operationId: directCreateParcel
+      summary: Creates a parcel directly
   /api/shipments/{shipmentId}/parcels:
     post:
       parameters:
@@ -24166,6 +24205,12 @@ components:
           description: >-
             a shipperRef that can optionally be defined in the DHL business
             customer portal
+        alwaysDoTrackAndTrace:
+          type: boolean
+          default: false
+          description: >-
+            If true, the track and trace will always be done, even if a parcel
+            is directly created in DONE status
     VceCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
@@ -28802,6 +28847,112 @@ components:
           items:
             $ref: '#/components/schemas/OperativeTransfer'
       type: object
+    ParcelForDirectCreation:
+      additionalProperties: false
+      properties:
+        status:
+          $ref: '#/components/schemas/ParcelStatus'
+        carrierProduct:
+          description: Desired product of given carrier to choose when ordering a label
+          type: string
+          example: EXPRESS
+        carrierRef:
+          description: >-
+            references the carrier to be used for sending. Can not be set when
+            creating a parcel for an existing shipment.
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the parcel. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the information carried here.
+          type: object
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        services:
+          $ref: '#/components/schemas/ParcelServices'
+        loadUnitRefs:
+          description: Reference to array of load unit Refs
+          items:
+            type: string
+          type: array
+        items:
+          items:
+            $ref: '#/components/schemas/ParcelItemForCreation'
+          type: array
+        recipient:
+          $ref: '#/components/schemas/ConsumerAddress'
+        invoice:
+          $ref: '#/components/schemas/ConsumerAddress'
+        sender:
+          $ref: '#/components/schemas/FacilityAddress'
+        returnAddress:
+          $ref: '#/components/schemas/FacilityAddress'
+        paymentInformation:
+          $ref: '#/components/schemas/PaymentInformation'
+        pickUpInformation:
+          $ref: '#/components/schemas/ParcelPickUpInformation'
+        shortId:
+          type: string
+          example: AA12-1
+        productValue:
+          description: >-
+            Monetary value of all goods in this parcel. Needed for sending cross
+            border packages (customs) To be interpreted as money in the currency
+            given under paymentInformation.currency. This value is calculated
+            from the items in the parcel.
+          type: number
+          example: 12.5
+        customProductValue:
+          description: >-
+            Set this value if you want to overwrite the calculated product value
+            of the parcel.
+          type: number
+          example: 12.5
+        productValueCurrency:
+          $ref: '#/components/schemas/ProductValueCurrency'
+        productValueType:
+          $ref: '#/components/schemas/ProductValueType'
+        result:
+          $ref: '#/components/schemas/ParcelResult'
+        facilityRef:
+          type: string
+          description: Reference to the facility this parcel is created for
+          example: 95EWrieX09OmeriXIUbb
+        shipmentRef:
+          type: string
+          description: >-
+            Reference to the shipment this parcel is created for. If non
+            provided, a shipment will be created automatically.
+          example: 95EWrieX09OmeriXIUbb
+        targetTime:
+          type: string
+          format: date-time
+          description: >-
+            The target time for the parcel to be delivered. If not provided, the
+            current time will be used.
+          example: '2020-02-03T08:45:50.525Z'
+        orderDate:
+          type: string
+          format: date-time
+          description: >-
+            Date when the order for the given parcel has been placed Mandatory
+            when no shipmentRef was provided
+          example: '2020-02-03T08:45:50.525Z'
+        operativeProcessRef:
+          type: string
+          description: Reference to the operative process this parcel is created for
+          example: 95EWrieX09OmeriXIUbb
+        processRef:
+          type: string
+          description: Reference to the process this parcel is created for
+          example: 95EWrieX09OmeriXIUbb
+      type: object
+      required:
+        - facilityRef
+        - carrierRef
+        - recipient
+        - sender
     ProductValueCurrency:
       additionalProperties: false
       properties:
@@ -32456,6 +32607,70 @@ components:
         - timeZoneName
         - offsetInSeconds
       type: object
+    CarrierTrackingStatus:
+      description: Native trackingStatus provided by carrier
+      additionalProperties: false
+      type: object
+      properties:
+        timestamp:
+          format: date-time
+          type: string
+          example: '2020-02-03T08:45:51.525Z'
+          description: Timestamp this status was set by the carrier
+        status:
+          type: string
+          example: DELIVERED
+          description: Status of the parcel as provided by carrier
+        description:
+          type: string
+          example: Parcel has been delivered
+          description: Description of the status
+      required:
+        - status
+    DhlTrackingStatus:
+      description: Native trackingStatus provided by carrier
+      additionalProperties: false
+      type: object
+      properties:
+        timestamp:
+          format: date-time
+          type: string
+          example: '2020-02-03T08:45:51.525Z'
+          description: Timestamp this status was set by the carrier
+        status:
+          type: string
+          example: DELIVERED
+          description: Status of the parcel as provided by carrier
+        statusDetailed:
+          type: string
+          example: Parcel has been delivered
+          description: Second status description
+        description:
+          type: string
+          example: Parcel has been delivered
+          description: Description of the status
+        location:
+          $ref: '#/components/schemas/DhlTrackingLocation'
+        statusCode:
+          type: string
+          example: delivered
+          description: Status code of the parcel as provided by carrier
+        remark:
+          type: string
+          example: Delivery successful
+          description: Remark of the status
+      required:
+        - status
+    DhlTrackingLocation:
+      additionalProperties: false
+      description: Location information provided by DHL
+      properties:
+        address:
+          type: object
+          properties:
+            addressLocality:
+              type: string
+              example: Germany
     TrackingStatus:
       description: The state of the KEP
       enum:
@@ -34645,6 +34860,10 @@ components:
           description: Summary of the result of the request in a human readable form.
           example: Package label was successfully requested at DHL.
           type: string
+        carrierTrackingStatus:
+          oneOf:
+            - $ref: '#/components/schemas/TrackingStatus'
+            - $ref: '#/components/schemas/DhlTrackingStatus'
         trackingStatus:
           $ref: '#/components/schemas/TrackingStatus'
         trackingUrl:
@@ -37318,6 +37537,12 @@ components:
           $ref: '#/components/schemas/FacilityAddress'
         trackAndTraceUrl:
           type: string
+        alwaysDoTrackAndTrace:
+          type: boolean
+          default: false
+          description: >-
+            If true, the track and trace will always be done, even if a parcel
+            is directly created in DONE status
       xml:
         name: DhlV2FacilityCarrierConfiguration
     VceFacilityCarrierConfiguration:
