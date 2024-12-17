@@ -43653,21 +43653,42 @@ components:
       type: object
     ExternalStockChangeReason:
       properties:
+        active:
+          description: Whether the reason is active
+          type: boolean
+        created:
+          description: Date of creation
+          format: date-time
+          type: string
+        customAttributes:
+          description: The custom attributes of this external stock change reason
+          type: object
+        id:
+          description: Id of the external stock change reason
+          type: string
+        lastModified:
+          description: Date of last modification
+          format: date-time
+          type: string
         reasonLocalized:
-          description: Localizations, i.e. names which are to be displayed
+          additionalProperties:
+            maxLength: 255
+            type: string
+          description: >-
+            Localizations, i.e. names which are to be displayed. Each localized
+            string must not exceed 255 characters
           type: object
         tenantReasonId:
-          description: >-
-            Depending on type: 
-
-            * [takeFrom] Reason why item was taken from stock / storage location
-            or why it was booked in 
-
-            * [stowTo] Reason why item was stowed on stock / storage location or
-            why it was booked out
+          description: Identifier of the stock change reason
           type: string
+        version:
+          description: Version of the external stock change reason
+          type: number
       required:
+        - active
         - reasonLocalized
+        - id
+        - version
       type: object
     ExternalStockChangeReasonForCreation:
       properties:
@@ -43716,6 +43737,34 @@ components:
           type: number
       required:
         - version
+      type: object
+    ExternalStockChangeReasonInput:
+      properties:
+        id:
+          description: ID of reason. Use to enrich with preconfigured reason
+          type: string
+        reasonLocalized:
+          description: >-
+            List of localized reason strings. If provided, no preconfiguration
+            is necessary. Cannot be provided in combination with id or existing
+            tenantReasonId.
+          type: object
+        tenantReasonId:
+          description: >-
+            tenantReasonId of reason. If no reasonLocalized provided, a
+            preconfigured reason with the tenantReasonId must be present
+          type: string
+      type: object
+    ExternalStockChangeReasonOutput:
+      properties:
+        reasonLocalized:
+          description: Localized reason strings
+          type: object
+        tenantReasonId:
+          description: tenantReasonId of reason
+          type: string
+      required:
+        - reasonLocalized
       type: object
     FacilityStock:
       properties:
@@ -46226,7 +46275,7 @@ components:
         reasons:
           description: The reasons for the stow operation
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
+            $ref: '#/components/schemas/ExternalStockChangeReasonOutput'
           maxItems: 10
           type: array
         stowTo:
@@ -46290,9 +46339,13 @@ components:
           nullable: true
           type: object
         reasons:
-          description: The reasons for the stow operation
+          description: >-
+            The reasons for the stow operation. Each reason can either be a
+            stand-alone reason, or a preconfigured reasons by specifying the
+            tenantReasonId and/or the id of the reason. If tenantReasonId and id
+            are specified, they have to match.
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
+            $ref: '#/components/schemas/ExternalStockChangeReasonInput'
           maxItems: 10
           type: array
         stowTo:
@@ -46325,7 +46378,7 @@ components:
         reasons:
           description: The reasons for the stow operation
           items:
-            $ref: '#/components/schemas/ExternalStockChangeReason'
+            $ref: '#/components/schemas/ExternalStockChangeReasonInput'
           maxItems: 10
           type: array
         stowTo:
