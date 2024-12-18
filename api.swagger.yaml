@@ -26674,6 +26674,15 @@ components:
       required:
         - quantity
         - article
+    HandoverJobParcelInfo:
+      allOf:
+        - $ref: '#/components/schemas/HandoverJobParcelInfoForCreation'
+        - properties:
+            carrierKey:
+              type: string
+              example: DHL
+              description: the key of the carrier
+      type: object
     Handoverjob:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -26705,22 +26714,71 @@ components:
               description: Reference to the documents collection from this entity
               type: string
             carrierKey:
-              description: Key of the carrier that is used for this entity
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
+                instead.
               type: string
+            handoverJobParcelInfo:
+              $ref: '#/components/schemas/HandoverJobParcelInfo'
       required:
         - id
         - status
       type: object
-    HandoverjobForCreation:
+    HandoverJobParcelInfoForCreation:
+      additionalProperties: false
       properties:
+        parcelRef:
+          type: string
+          example: 9ddb3c80-30ec-42c3-a750-9612296402ca
+          description: the reference to the related parcel
+        carrierTrackingNumber:
+          example: '84168117830018'
+          type: string
+          description: the tracking number of the parcel
         carrierLogoUrl:
           description: The URL to the carrier logo
           type: string
+          example: https://www.example.com/carrierlogo.png
         carrierRef:
           type: string
-        carrierTrackingNumber:
-          description: Tracking number for the created shipment
+          example: 9ddb3c80-30ec-42c3-a750-9612296402ca
+          description: the reference to the related carrier
+        shipmentRef:
           type: string
+          example: 9ddb3c80-30ec-42c3-a750-9612296402ca
+          description: the reference to the related shipment
+      type: object
+    HandoverjobForCreation:
+      additionalProperties: false
+      properties:
+        carrierLogoUrl:
+          type: string
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated This field is deprecated since 28 November 2024.
+            Use nested object handoverJobParcelInfo instead.
+        carrierRef:
+          type: string
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated This field is deprecated since 28 November 2024.
+            Use nested object handoverJobParcelInfo instead.
+        carrierTrackingNumber:
+          type: string
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated This field is deprecated since 28 November 2024.
+            Use nested object handoverJobParcelInfo instead.
         channel:
           enum:
             - DELIVERY
@@ -26751,7 +26809,12 @@ components:
           format: date-time
           type: string
         parcelRef:
-          description: The reference to the parcel.
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated This field is deprecated since 28 November 2024.
+            Use nested object handoverJobParcelInfo instead.
           example: 2fOge2ZGW54K4TgvDTQw
           type: string
         pickJobRef:
@@ -26768,7 +26831,12 @@ components:
         operativeProcessRef:
           type: string
         shipmentRef:
-          description: The reference to the shipment belonging to the handoverjob
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />@deprecated This field is deprecated since 28 November 2024.
+            Use nested object handoverJobParcelInfo instead.
           example: Esb20gpHBL94X5NdMp3C
           type: string
         shortIdentifier:
@@ -26821,6 +26889,8 @@ components:
           minItems: 0
           items:
             $ref: '#/components/schemas/OperativeTransfer'
+        handoverJobParcelInfo:
+          $ref: '#/components/schemas/HandoverJobParcelInfoForCreation'
       required:
         - facilityRef
         - targetTime
@@ -32454,6 +32524,20 @@ components:
         - properties:
             carrierRef:
               type: string
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
+            carrierKey:
+              type: string
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
             channel:
               enum:
                 - DELIVERY
@@ -32481,9 +32565,14 @@ components:
               format: date-time
               type: string
             parcelRef:
-              description: The reference to the parcel.
               example: 2fOge2ZGW54K4TgvDTQw
               type: string
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
             pickJobRef:
               description: >-
                 The reference to the pickjob for which the handoverjob is
@@ -32491,9 +32580,14 @@ components:
               example: ca525716-7208-4a63-a2a6-11274eb37f67-0
               type: string
             shipmentRef:
-              description: The reference to the shipment belonging to the handoverjob
               example: Esb20gpHBL94X5NdMp3C
               type: string
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
             status:
               $ref: '#/components/schemas/HandoverjobStatus'
             tenantOrderId:
@@ -32510,6 +32604,15 @@ components:
               items:
                 type: string
               minItems: 0
+            invoiceAddress:
+              $ref: '#/components/schemas/ConsumerAddress'
+            recipientAddress:
+              $ref: '#/components/schemas/ConsumerAddress'
+            fullIdentifier:
+              type: string
+              description: An information to identify the recipient
+            handoverJobParcelInfo:
+              $ref: '#/components/schemas/HandoverJobParcelInfo'
           required:
             - id
             - status
