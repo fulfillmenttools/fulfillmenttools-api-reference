@@ -46745,7 +46745,9 @@ components:
     StowedStowLineItemStowToForCreation:
       properties:
         stowedAt:
-          description: Time and date on which the item was stowed
+          description: >-
+            Time and date on which the item was stowed. Will be set to the
+            current time if not provided.
           format: date-time
           type: string
         stowedQuantity:
@@ -46753,13 +46755,19 @@ components:
           type: number
         stowedStockRef:
           description: >-
-            Stock on which the item was stowed. If this is left empty, and type
-            is not DISCARD, a new stock will be created
+            Specifies the stock where the item will be stowed. Set this to null
+            to explicitly create a new stock. 
+             Exception: If stowTo.type is "DISCARD", a new stock will not be created when set to `null`. However, if a stock is specified, its quantity will be increased regardless of the type.
+          nullable: true
           type: string
         stowedStorageLocationRef:
-          description: Storage location on which the item was stowed
+          description: >-
+            If a new stock is created via stowedStockRef = null, this is used to
+            set the storage location of the new stock. 
+             If a stock is specified, this field will be ignored.
           type: string
       required:
+        - stowedStockRef
         - stowedQuantity
       type: object
     StrippedInboundProcess:
@@ -46847,13 +46855,14 @@ components:
           description: Quantity that was taken
           type: number
         takenStockRef:
-          description: Stock from which the item was taken
-          type: string
-        takenStorageLocationRef:
-          description: Storage location from which the item was taken
+          description: |-
+            Specifies the stock from which the goods will be taken. 
+             Exception: If stowTo.type is "UNREGISTERED", this field may be null. If a stock is specified, its quantity will be reduced regardless of the type.
+          nullable: true
           type: string
       required:
         - takenQuantity
+        - takenStockRef
       type: object
     WebHookEvent:
       properties:
