@@ -24774,6 +24774,13 @@ components:
           type: string
         trackAndTraceWsdlUrl:
           type: string
+    HermesCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
+      properties:
+        alwaysDoTrackAndTrace:
+          type: boolean
+          default: false
     PostNlCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
@@ -25521,6 +25528,22 @@ components:
           type: object
       xml:
         name: DhlV2CarrierCredentials
+    HermesCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractCarrierCredentials'
+        - properties:
+            username:
+              description: Internal user to identify with the Hermes Api
+              type: string
+            password:
+              description: Password to authenticate with the Hermes Api
+              type: string
+          required:
+            - username
+            - password
+          type: object
+      xml:
+        name: HermesCarrierCredentials
     VceCarrierCredentials:
       allOf:
         - $ref: '#/components/schemas/AbstractCarrierCredentials'
@@ -38004,6 +38027,7 @@ components:
             - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
         credentials:
           description: Facility specific credentials for this carrier
           anyOf:
@@ -38011,6 +38035,7 @@ components:
             - $ref: '#/components/schemas/DpdChCarrierCredentials'
             - $ref: '#/components/schemas/PostNLCarrierCredentials'
             - $ref: '#/components/schemas/VceCarrierCredentials'
+            - $ref: '#/components/schemas/HermesCarrierCredentials'
         cutoffTime:
           description: >-
             @deprecated: This property has been deprecated and is no longer
@@ -38062,6 +38087,7 @@ components:
             - $ref: '#/components/schemas/DpdChCarrierCredentials'
             - $ref: '#/components/schemas/PostNLCarrierCredentials'
             - $ref: '#/components/schemas/VceCarrierCredentials'
+            - $ref: '#/components/schemas/HermesCarrierCredentials'
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
@@ -38073,6 +38099,7 @@ components:
             - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
         cutoffTime:
           deprecated: true
           description: Deprecated in favor of cutoffTimes
@@ -38116,6 +38143,7 @@ components:
             - $ref: '#/components/schemas/DpdChCarrierCredentials'
             - $ref: '#/components/schemas/PostNLCarrierCredentials'
             - $ref: '#/components/schemas/VceCarrierCredentials'
+            - $ref: '#/components/schemas/HermesCarrierCredentials'
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
@@ -38127,6 +38155,7 @@ components:
             - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
         cutoffTime:
           deprecated: true
           description: Deprecated in favor of cutoffTimes
@@ -38281,6 +38310,15 @@ components:
           type: object
       xml:
         name: FedExFacilityCarrierConfiguration
+    HermesFacilityCarrierConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+        - properties:
+            alwaysDoTrackAndTrace:
+              type: boolean
+          type: object
+      xml:
+        name: HermesFacilityCarrierConfiguration
     ZoneForCreation:
       allOf:
         - $ref: '#/components/schemas/CustomAttributesResource'
