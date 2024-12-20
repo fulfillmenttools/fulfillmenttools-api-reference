@@ -43913,6 +43913,8 @@ components:
           $ref: '#/components/schemas/RoutingStrategyRerouteConfig'
         orderSplit:
           $ref: '#/components/schemas/RoutingStrategyOrderSplitConfig'
+        fallbackFacility:
+          $ref: '#/components/schemas/RoutingStrategyFallbackFacilityConfig'
         fences:
           type: array
           items:
@@ -44011,6 +44013,28 @@ components:
         - maxSplitCount
         - activeForSameday
         - shouldUseWaitingRoomForPreBackOrderItems
+    RoutingStrategyFallbackFacilityConfig:
+      properties:
+        facilityRefs:
+          type: array
+          items:
+            type: string
+          maxItems: 1
+          minItems: 1
+        active:
+          type: boolean
+          default: false
+        fallbackAfterTime:
+          default: PT0H
+          description: >-
+            Default amount of time in ISO 8601 duration format after which a not
+            routable routingplan is routed to a configured fallback facility.
+          type: string
+          pattern: ^P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$
+      required:
+        - facilityRefs
+        - active
+        - fallbackAfterTime
     RoutingStrategyRerouteConfig:
       additionalProperties: false
       type: object
