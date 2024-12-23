@@ -43298,6 +43298,11 @@ components:
     RoutingStrategyCondition:
       additionalProperties: false
       properties:
+        activationTimeFrames:
+          maxItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivationTimeFrame'
         id:
           type: string
         name:
@@ -43321,6 +43326,11 @@ components:
     RoutingStrategyConditionForModification:
       additionalProperties: false
       properties:
+        activationTimeFrames:
+          maxItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivationTimeFrame'
         id:
           type: string
         name:
@@ -43343,6 +43353,11 @@ components:
     RoutingStrategyConditionForCreation:
       additionalProperties: false
       properties:
+        activationTimeFrames:
+          maxItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivationTimeFrame'
         name:
           type: string
         nameLocalized:
@@ -43399,6 +43414,11 @@ components:
       additionalProperties: false
       type: object
       properties:
+        activationTimeFrames:
+          maxItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivationTimeFrame'
         active:
           type: boolean
         name:
@@ -43417,6 +43437,11 @@ components:
       additionalProperties: false
       type: object
       properties:
+        activationTimeFrames:
+          maxItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivationTimeFrame'
         id:
           type: string
         active:
@@ -43433,10 +43458,38 @@ components:
         - active
         - config
         - nameLocalized
+    ActivationTimeFrame:
+      additionalProperties: false
+      type: object
+      properties:
+        activeFrom:
+          type: string
+          format: date-time
+          description: >-
+            Sets a date before which the associated entity does not become
+            active
+        activeUntil:
+          type: string
+          format: date-time
+          description: Sets a date after which the associated entity becomes active
+        recurrence:
+          $ref: '#/components/schemas/ActivationTimeFrameRecurrenceType'
+      required:
+        - recurrence
+    ActivationTimeFrameRecurrenceType:
+      type: string
+      enum:
+        - YEARLY
+        - NONRECURRING
     RoutingStrategyNode:
       additionalProperties: false
       type: object
       properties:
+        activationTimeFrames:
+          type: array
+          maxItems: 1
+          items:
+            $ref: '#/components/schemas/ActivationTimeFrame'
         id:
           type: string
         active:
