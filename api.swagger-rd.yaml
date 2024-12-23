@@ -43810,6 +43810,11 @@ components:
         - period
         - point
       type: object
+    BooleanFilter:
+      properties:
+        eq:
+          type: boolean
+      type: object
     BulkOperationError:
       properties:
         message:
@@ -43873,6 +43878,20 @@ components:
       required:
         - version
         - name
+      type: object
+    DateFilter:
+      properties:
+        eq:
+          format: date-time
+          type: string
+        gt:
+          format: date-time
+          type: string
+      type: object
+    DoubleNestedFilter:
+      properties:
+        test:
+          $ref: '#/components/schemas/BooleanFilter'
       type: object
     ExternalStockChangeReason:
       properties:
@@ -46292,6 +46311,27 @@ components:
         - storageLocation
         - stockCount
       type: object
+    StorageLocationSearchQuery:
+      properties:
+        and:
+          items:
+            type: string
+          type: array
+        created:
+          $ref: '#/components/schemas/DateFilter'
+        customFilter:
+          $ref: '#/components/schemas/StringFilter'
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        name:
+          $ref: '#/components/schemas/StringFilter'
+        or:
+          items:
+            type: string
+          type: array
+        traitConfig:
+          $ref: '#/components/schemas/TraitConfigFilter'
+      type: object
     StorageLocationTraitConfigEntry:
       properties:
         enabled:
@@ -46308,6 +46348,13 @@ components:
       required:
         - enabled
         - trait
+      type: object
+    StorageLocationsSearchPayload:
+      properties:
+        query:
+          $ref: '#/components/schemas/StorageLocationSearchQuery'
+      required:
+        - query
       type: object
     StowJob:
       properties:
@@ -46870,6 +46917,11 @@ components:
         - stowedStockRef
         - stowedQuantity
       type: object
+    StringFilter:
+      properties:
+        eq:
+          type: string
+      type: object
     StrippedInboundProcess:
       properties:
         anonymized:
@@ -46963,6 +47015,26 @@ components:
       required:
         - takenQuantity
         - takenStockRef
+      type: object
+    TraitConfigFilter:
+      properties:
+        doubleNested:
+          $ref: '#/components/schemas/DoubleNestedFilter'
+        enabled:
+          $ref: '#/components/schemas/BooleanFilter'
+        trait:
+          $ref: '#/components/schemas/TraitEnumFilter'
+      type: object
+    TraitEnumFilter:
+      properties:
+        enum:
+          enum:
+            - PICKABLE
+            - ACCESSIBLE
+            - KEEP_ON_ZERO
+            - OUTBOUND
+            - IN_MOTION
+          type: string
       type: object
     WebHookEvent:
       properties:
