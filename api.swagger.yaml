@@ -31520,7 +31520,9 @@ components:
           type: string
         rerouteZeroPicksOnly:
           default: false
-          description: Whether or not only pickjobs with zero items picked may be rerouted
+          description: >-
+            Specifies whether only pick jobs with zero items picked are eligible
+            for rerouting.
           type: boolean
       required:
         - clickAndCollectReroute
@@ -43938,6 +43940,8 @@ components:
           $ref: '#/components/schemas/RoutingStrategyOrderSplitConfig'
         fallbackFacility:
           $ref: '#/components/schemas/RoutingStrategyFallbackFacilityConfig'
+        rerouteTimeTriggered:
+          $ref: '#/components/schemas/RoutingStrategyRerouteTimeTriggeredConfig'
         fences:
           type: array
           items:
@@ -44096,17 +44100,37 @@ components:
         - facilityRefs
         - active
         - fallbackAfterTime
+    RoutingStrategyRerouteTimeTriggeredConfig:
+      additionalProperties: false
+      type: object
+      required:
+        - clickAndCollectReroute
+        - shipFromStoreDeliveryReroute
+        - shipFromStoreSamedayReroute
+      properties:
+        clickAndCollectReroute:
+          $ref: '#/components/schemas/RerouteConfiguration'
+        shipFromStoreDeliveryReroute:
+          $ref: '#/components/schemas/RerouteConfiguration'
+        shipFromStoreSamedayReroute:
+          $ref: '#/components/schemas/RerouteConfiguration'
     RoutingStrategyRerouteConfig:
       additionalProperties: false
       type: object
       properties:
         manualReroute:
           type: boolean
+        rerouteZeroPicksOnly:
+          default: false
+          description: >-
+            Specifies whether only pick jobs with zero items picked are eligible
+            for rerouting.
+          type: boolean
         shipFromStore:
-          $ref: '#/components/schemas/RoutingStrategyRerouteShipFromStoreConfig'
+          $ref: '#/components/schemas/RoutingStrategyFacilityRerouteConfig'
         clickAndCollect:
-          $ref: '#/components/schemas/RoutingStrategyRerouteClickAndCollectConfig'
-    RoutingStrategyRerouteShipFromStoreConfig:
+          $ref: '#/components/schemas/RoutingStrategyFacilityRerouteConfig'
+    RoutingStrategyFacilityRerouteConfig:
       additionalProperties: false
       type: object
       properties:
@@ -44125,16 +44149,6 @@ components:
         - REROUTE
         - ORDERSPLIT
       type: string
-    RoutingStrategyRerouteClickAndCollectConfig:
-      additionalProperties: false
-      type: object
-      properties:
-        active:
-          type: boolean
-        rerouteType:
-          $ref: '#/components/schemas/RoutingStrategyRerouteType'
-      required:
-        - rerouteType
     RoutingStrategyFenceType:
       type: string
       enum:
