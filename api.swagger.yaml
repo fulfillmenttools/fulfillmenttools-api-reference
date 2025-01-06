@@ -22807,6 +22807,7 @@ paths:
                 - $ref: '#/components/schemas/CancelStowJobAction'
                 - $ref: '#/components/schemas/ReopenStowJobAction'
                 - $ref: '#/components/schemas/CloseStowJobAction'
+                - $ref: '#/components/schemas/ModifyStowLineItemsAction'
         required: true
       responses:
         '200':
@@ -22844,75 +22845,6 @@ paths:
             The syntax of the request content was correct, but it was unable to
             process the contained instructions, possibly due to semantic errors.
       summary: Perform actions on a Stow Job
-      tags:
-        - Inventory Management - Stowing
-  /api/stowjobs/{stowJobId}/stowlineitems/{stowLineItemId}/actions:
-    post:
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      operationId: Post StowLineItem Actions
-      parameters:
-        - in: path
-          name: stowJobId
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: stowLineItemId
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ModifyStowLineItemAction'
-        required: true
-      responses:
-        '200':
-          description: Actions successfully performed
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user, although recognized, is not authorized to use this
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: The requested entity was not found
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: A version conflict occurred.
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: >-
-            The syntax of the request content was correct, but it was unable to
-            process the contained instructions, possibly due to semantic errors.
-      summary: Perform actions on a Stow Line Item
       tags:
         - Inventory Management - Stowing
   /api/configurations/notifications:
@@ -45964,22 +45896,24 @@ components:
         - timestamp
         - reasons
       type: object
-    ModifyStowLineItemAction:
+    ModifyStowLineItemsAction:
       properties:
         name:
           description: The name of the action that should be performed
           enum:
-            - MODIFY_STOW_LINE_ITEM
+            - MODIFY_STOW_LINE_ITEMS
           type: string
-        stowLineItem:
-          $ref: '#/components/schemas/StowLineItemForUpdate'
+        stowLineItems:
+          items:
+            $ref: '#/components/schemas/StowLineItemForUpdate'
+          type: array
         version:
           description: The current version of the stow job that should be modified
           type: number
       required:
         - version
         - name
-        - stowLineItem
+        - stowLineItems
       type: object
     MoveStockToLocationOptions:
       properties:
@@ -47209,7 +47143,7 @@ components:
         - OPEN_STOW_JOB
         - CANCEL_STOW_JOB
         - CLOSE_STOW_JOB
-        - MODIFY_STOW_LINE_ITEM
+        - MODIFY_STOW_LINE_ITEMS
       type: string
       xml:
         name: StowJobActionName
@@ -47451,6 +47385,9 @@ components:
             attach custom data from your systems to fulfillmenttools entities.
           nullable: true
           type: object
+        id:
+          description: The ID of the stowLineItem. Leave empty for creation
+          type: string
         reasons:
           description: The reasons for the stow operation
           items:
