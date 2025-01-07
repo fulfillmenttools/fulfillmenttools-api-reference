@@ -43953,12 +43953,15 @@ components:
               $ref: '#/components/schemas/LocaleString'
             rootNode:
               $ref: '#/components/schemas/RoutingStrategyNode'
+            globalConfiguration:
+              $ref: '#/components/schemas/RoutingStrategyGlobalConfiguration'
           required:
             - inUse
             - revision
             - id
             - nameLocalized
             - rootNode
+            - globalConfiguration
       type: object
     RoutingStrategyForCreation:
       additionalProperties: false
@@ -43967,12 +43970,37 @@ components:
           $ref: '#/components/schemas/LocaleString'
         rootNode:
           $ref: '#/components/schemas/RoutingStrategyNodeForCreation'
+        globalConfiguration:
+          $ref: '#/components/schemas/RoutingStrategyGlobalConfiguration'
       required:
         - rootNode
         - nameLocalized
+        - globalConfiguration
       type: object
       xml:
         name: RoutingStrategy
+    RoutingStrategyGlobalConfiguration:
+      additionalProperties: false
+      required:
+        - defaultPrice
+      properties:
+        stopRoutingAttemptsAfterTime:
+          default: PT8H
+          description: >-
+            The amount of time, specified in ISO 8601 duration format, after
+            which a routing plan is considered not routable. Note: The duration
+            must be a multiple of 60 seconds.
+          type: string
+          pattern: ^P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$
+        defaultPrice:
+          default: 10
+          description: >-
+            The price applied when no specific price is defined in the order or
+            listing
+          type: number
+      type: object
+      xml:
+        name: RoutingStrategyGlobalConfiguration
     RoutingStrategyForModification:
       additionalProperties: false
       properties:
