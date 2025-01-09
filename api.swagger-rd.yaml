@@ -13643,6 +13643,78 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/audits:
+    get:
+      parameters:
+        - in: query
+          name: entityRef
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: entityType
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: trace
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            maximum: 100
+            minimum: 1
+            type: number
+        - in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Audits'
+          description: config found.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Core - Audit
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: getAudits
+      summary: Get the audits for the given filter
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/externalactions:
     get:
       parameters:
@@ -36569,6 +36641,85 @@ components:
         - ACTIVE
         - INACTIVE
       type: string
+    Audits:
+      properties:
+        audits:
+          items:
+            $ref: '#/components/schemas/Audit'
+          type: array
+        total:
+          description: Total number of found audits for this query
+          example: 42
+          type: integer
+      required:
+        - audits
+        - total
+      type: object
+    Audit:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          type: string
+        entityRef:
+          type: string
+        entityType:
+          type: string
+        trace:
+          type: string
+        actor:
+          $ref: '#/components/schemas/AuditActor'
+        client:
+          $ref: '#/components/schemas/AuditClient'
+        operation:
+          $ref: '#/components/schemas/AuditOperation'
+      required:
+        - entityRef
+        - entityType
+        - actor
+        - client
+        - operation
+        - trace
+        - id
+      type: object
+    AuditActor:
+      properties:
+        id:
+          type: string
+        details:
+          $ref: '#/components/schemas/AuditActorDetails'
+      required:
+        - id
+        - details
+      type: object
+    AuditActorDetails:
+      properties:
+        topic:
+          type: string
+        username:
+          type: string
+      type: object
+    AuditClient:
+      properties:
+        api:
+          type: string
+        rawInfo:
+          type: string
+      required:
+        - api
+        - rawInfo
+      type: object
+    AuditOperation:
+      properties:
+        name:
+          type: string
+        start:
+          format: date-time
+          type: string
+      required:
+        - start
+        - name
+      type: object
     StorageLocationForCreation:
       allOf:
         - $ref: '#/components/schemas/CustomAttributesResource'
@@ -48306,6 +48457,8 @@ tags:
       Endpoints to Update and Read general configuration of the fulfillmenttools
       platform.
     name: Core - Configuration
+  - description: Auditing helps determine who did what when.
+    name: Core - Audit
   - description: Obtain Artifact information provided by platform.
     name: Infrastructure - Artifacts
   - description: Access to fulfillmenttools platform GraphQL API.
