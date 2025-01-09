@@ -24150,12 +24150,24 @@ components:
           description: >-
             a shipperRef that can optionally be defined in the DHL business
             customer portal
+        sftpConfiguration:
+          $ref: '#/components/schemas/DhlV2SftpConfiguration'
         alwaysDoTrackAndTrace:
           type: boolean
           default: false
           description: >-
             If true, the track and trace will always be done, even if a parcel
             is directly created in DONE status
+    DhlV2SftpConfiguration:
+      additionalProperties: false
+      properties:
+        useSftpForTandT:
+          type: boolean
+          example: true
+          default: false
+          description: Indicates if the SFTP should be used for tracking and tracing
+      required:
+        - useSftpForTandT
     VceCarrierConfiguration:
       title: VceCarrierConfiguration
       description: Configuration of VCE Carrier
@@ -24932,6 +24944,8 @@ components:
               type: string
             fallback:
               $ref: '#/components/schemas/DHLV2BusinessCredentials'
+            sftpCredentials:
+              $ref: '#/components/schemas/DHLV2SftpCredentials'
           required:
             - apiKey
           type: object
@@ -24955,6 +24969,24 @@ components:
           type: object
       xml:
         name: HermesCarrierCredentials
+    DHLV2SftpCredentials:
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+          example: username
+          description: Username for the SFTP
+          minLength: 1
+          maxLength: 80
+        password:
+          type: string
+          example: secretPassword
+          description: Password for the SFTP
+          minLength: 1
+          maxLength: 80
+      required:
+        - username
+        - password
     VceCarrierCredentials:
       title: VceCarrierCredentials
       description: VCE Credentials.
