@@ -3890,7 +3890,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Features'
+                items:
+                  $ref: '#/components/schemas/Feature'
           description: The available feature for all active modules
         '401':
           content:
@@ -7917,7 +7918,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScopedCapabilities'
+                items:
+                  $ref: '#/components/schemas/ScopedCapability'
           description: All ScopedCapabilities whic are at least inactive
         '401':
           content:
@@ -12093,8 +12095,7 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/RemoteConfiguration'
+                $ref: '#/components/schemas/RemoteConfigurations'
           description: Central RemoteConfiguration
         '401':
           content:
@@ -26055,17 +26056,6 @@ components:
         - inactive
         - disabled
       type: string
-    Features:
-      properties:
-        features:
-          items:
-            $ref: '#/components/schemas/Feature'
-          type: array
-        total:
-          description: Total number of found entities for this query
-          example: 42
-          type: integer
-      type: object
     NamedFile:
       additionalProperties: false
       properties:
@@ -31679,17 +31669,6 @@ components:
           type: number
       required:
         - returnedAmount
-      type: object
-    ScopedCapabilities:
-      properties:
-        capabilities:
-          items:
-            $ref: '#/components/schemas/ScopedCapability'
-          type: array
-        total:
-          description: Total number of found entities for this query
-          example: 42
-          type: integer
       type: object
     ScopedCapability:
       allOf:
