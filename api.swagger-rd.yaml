@@ -47263,18 +47263,42 @@ components:
     StowJobPaginatedResult:
       properties:
         stowJobs:
-          description: The stow jobs that match the filter criteria
           items:
             $ref: '#/components/schemas/StowJob'
           type: array
         total:
-          description: The total number of stow jobs that match the filter criteria
           minimum: 0
           type: number
       required:
         - total
         - stowJobs
       title: StowJobPaginatedResult
+      type: object
+    StowJobSearchPayload:
+      properties:
+        query:
+          $ref: '#/components/schemas/StowJobSearchQuery'
+      required:
+        - query
+      title: StowJobSearchPayload
+      type: object
+    StowJobSearchQuery:
+      properties:
+        and:
+          items:
+            type: string
+          type: array
+        facilityRef:
+          $ref: '#/components/schemas/StringFilter'
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        or:
+          items:
+            type: string
+          type: array
+        targetTime:
+          $ref: '#/components/schemas/DateFilter'
+      title: StowJobSearchQuery
       type: object
     StowJobStatus:
       description: The status of the stowJob
