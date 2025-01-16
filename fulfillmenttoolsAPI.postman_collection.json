@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "08e77cf1-28bb-4415-9761-aac4bb2b0d7e",
+		"_postman_id": "9dc33c32-9d72-40fa-b04c-a88817bca2b6",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -10367,13 +10367,13 @@
 									"name": "LineItemActions",
 									"item": [
 										{
-											"name": "Modify Metadata",
+											"name": "Modify and add items",
 											"request": {
 												"method": "POST",
 												"header": [],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n    \"stowLineItem\": {\n        \"customAttributes\": {\n            \"foo\": \"bar\"\n        },\n        \"article\": {\n            \"tenantArticleId\": \"YOUR_TENANT_ARTICLE_ID\",\n            \"imageUrl\": \"string\",\n            \"title\": \"Shirt\",\n            \"titleLocalized\": {\n                \"en_US\": \"Shirt\",\n                \"de_DE\": \"Hemd\"\n            },\n            \"measurementUnitKey\": \"kg\",\n            \"scannableCodes\": [\n                \"123456789\"\n            ]\n        }\n    },\n    \"version\": 1,\n    \"name\": \"MODIFY_STOW_LINE_ITEM\"\n}",
+													"raw": "{\n    \"stowLineItems\": [\n        // modify an existing item\n        {\n            \"id\": \"ID_OF_THE_EXISTING_ITEM\",\n            \"stowTo\": {\n                \"type\": \"STOCK\",\n                \"quantity\": 1,\n                \"stockRef\": \"YOUR_STOCK_REF\"\n            }\n        },\n        // add a new item to the stowjob\n        {\n            \"customAttributes\": {\n                \"foo\": \"bar\"\n            },\n            \"article\": {\n                \"tenantArticleId\": \"YOUR_TENANT_ARTICLE_ID\",\n                // if you already defined a listing for this article you can reference it by providing only the tenantArticleId\n                // the remaining attributes will be taken from the listing but you can override certain attributes by providing them here\n                \"imageUrl\": \"YOUR_IMAGE_URL\",\n                \"title\": \"YOUR_TITLE\",\n                \"titleLocalized\": {\n                    \"de_DE\": \"IHR_TITEL\",\n                    \"en_US\": \"YOUR_TITLE\"\n                },\n                \"measurementUnitKey\": \"grams\",\n                \"scannableCodes\": [\n                    \"12345\"\n                ]\n            },\n            \"takeFrom\": {\n                \"type\": \"UNREGISTERED\",\n                \"quantity\": 1\n            },\n            \"stowTo\": {\n                \"type\": \"STOCK\",\n                \"quantity\": 1,\n                \"stockRef\": \"YOUR_STOCK_REF\",\n                \"scannableCodes\": [\n                    \"12345\"\n                ]\n            },\n            \"reasons\": []\n        }\n    ],\n    \"version\": 2,\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\"\n}",
 													"options": {
 														"raw": {
 															"language": "json"
@@ -10381,7 +10381,7 @@
 													}
 												},
 												"url": {
-													"raw": "{{host}}/api/stowjobs/:stowJobId/stowlineitems/:stowLineItemId/actions",
+													"raw": "{{host}}/api/stowjobs/:stowJobId/actions",
 													"host": [
 														"{{host}}"
 													],
@@ -10389,17 +10389,47 @@
 														"api",
 														"stowjobs",
 														":stowJobId",
-														"stowlineitems",
-														":stowLineItemId",
 														"actions"
 													],
 													"variable": [
 														{
 															"key": "stowJobId",
 															"value": ""
-														},
+														}
+													]
+												},
+												"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowLineItem%20Actions](https://fulfillmenttools.github.io/api-reference-ui/#/Inventory%20Management%20-%20Stowing/Post%20StowLineItem%20Actions)"
+											},
+											"response": []
+										},
+										{
+											"name": "Modify Metadata",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"stowLineItem\": {\n        \"customAttributes\": {\n            \"foo\": \"bar\"\n        },\n        \"article\": {\n            \"tenantArticleId\": \"YOUR_TENANT_ARTICLE_ID\",\n            \"imageUrl\": \"string\",\n            \"title\": \"Shirt\",\n            \"titleLocalized\": {\n                \"en_US\": \"Shirt\",\n                \"de_DE\": \"Hemd\"\n            },\n            \"measurementUnitKey\": \"kg\",\n            \"scannableCodes\": [\n                \"123456789\"\n            ]\n        }\n    },\n    \"version\": 1,\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/stowjobs/:stowJobId/actions",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"stowjobs",
+														":stowJobId",
+														"actions"
+													],
+													"variable": [
 														{
-															"key": "stowLineItemId",
+															"key": "stowJobId",
 															"value": ""
 														}
 													]
@@ -10415,7 +10445,7 @@
 												"header": [],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n    \"stowLineItem\": {\n        \"takeFrom\": {\n            \"type\": \"STOCK\",\n            \"quantity\": 1,\n            \"stockRef\": \"YOUR_STOCK_REF\"\n        },\n        \"stowTo\": {\n            \"type\": \"STOCK\",\n            \"quantity\": 1,\n            \"stockRef\": \"YOUR_STOCK_REF\",\n            \"scannableCodes\": [\n                \"12345\"\n            ]\n        },\n        \"reasons\": []\n    },\n    \"version\": 2,\n    \"name\": \"MODIFY_STOW_LINE_ITEM\"\n}",
+													"raw": "{\n    \"stowLineItem\": {\n        \"takeFrom\": {\n            \"type\": \"STOCK\",\n            \"quantity\": 1,\n            \"stockRef\": \"YOUR_STOCK_REF\"\n        },\n        \"stowTo\": {\n            \"type\": \"STOCK\",\n            \"quantity\": 1,\n            \"stockRef\": \"YOUR_STOCK_REF\",\n            \"scannableCodes\": [\n                \"12345\"\n            ]\n        },\n        \"reasons\": []\n    },\n    \"version\": 2,\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\"\n}",
 													"options": {
 														"raw": {
 															"language": "json"
@@ -10423,7 +10453,7 @@
 													}
 												},
 												"url": {
-													"raw": "{{host}}/api/stowjobs/:stowJobId/stowlineitems/:stowLineItemId/actions",
+													"raw": "{{host}}/api/stowjobs/:stowJobId/actions",
 													"host": [
 														"{{host}}"
 													],
@@ -10431,17 +10461,11 @@
 														"api",
 														"stowjobs",
 														":stowJobId",
-														"stowlineitems",
-														":stowLineItemId",
 														"actions"
 													],
 													"variable": [
 														{
 															"key": "stowJobId",
-															"value": ""
-														},
-														{
-															"key": "stowLineItemId",
 															"value": ""
 														}
 													]
@@ -10457,7 +10481,7 @@
 												"header": [],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n    \"name\": \"MODIFY_STOW_LINE_ITEM\",\n    \"version\": 3,\n    \"stowLineItem\": {\n        \"takeFrom\": {\n            \"type\": \"UNREGISTERED\",\n            \"quantity\": 1,\n            \"taken\": {\n                \"takenStockRef\": null,\n                \"takenQuantity\": 1\n            }\n        },\n        \"stowTo\": {\n            \"type\": \"DISCARD\",\n            \"quantity\": 1,\n            \"stowed\": {\n                \"stowedStockRef\": null,\n                \"stowedQuantity\": 1\n            }\n        }\n    }\n}",
+													"raw": "{\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\",\n    \"version\": 3,\n    \"stowLineItem\": {\n        \"takeFrom\": {\n            \"type\": \"UNREGISTERED\",\n            \"quantity\": 1,\n            \"taken\": {\n                \"takenStockRef\": null,\n                \"takenQuantity\": 1\n            }\n        },\n        \"stowTo\": {\n            \"type\": \"DISCARD\",\n            \"quantity\": 1,\n            \"stowed\": {\n                \"stowedStockRef\": null,\n                \"stowedQuantity\": 1\n            }\n        }\n    }\n}",
 													"options": {
 														"raw": {
 															"language": "json"
@@ -10465,7 +10489,7 @@
 													}
 												},
 												"url": {
-													"raw": "{{host}}/api/stowjobs/:stowJobId/stowlineitems/:stowLineItemId/actions",
+													"raw": "{{host}}/api/stowjobs/:stowJobId/actions",
 													"host": [
 														"{{host}}"
 													],
@@ -10473,18 +10497,12 @@
 														"api",
 														"stowjobs",
 														":stowJobId",
-														"stowlineitems",
-														":stowLineItemId",
 														"actions"
 													],
 													"variable": [
 														{
 															"key": "stowJobId",
-															"value": "9600ab27-c39e-4e34-8b8f-a51b2c664b2e"
-														},
-														{
-															"key": "stowLineItemId",
-															"value": "e7b2f673-ce44-4eb2-af4e-b4daf2e53262"
+															"value": ""
 														}
 													]
 												},
@@ -12591,30 +12609,7 @@
 									"name": "Get PackJobs",
 									"request": {
 										"method": "GET",
-										"header": [
-											{
-												"key": "channel",
-												"value": "PUT-YOUR-CHANNEL-HERE",
-												"description": "COLLECT | SHIPPING",
-												"disabled": true
-											},
-											{
-												"key": "status",
-												"value": "PUT-IN-YOUR-PACKJOBS",
-												"disabled": true
-											},
-											{
-												"key": "facilityRef",
-												"value": "PUT-IN-YOUR-FACILITY-ID",
-												"disabled": true
-											},
-											{
-												"key": "orderBy",
-												"value": "PUT-YOUR-ORDER-VALUE-HERE",
-												"description": "TARGET_TIME_DESC | TARGET_TIME_ASC | LAST_MODIFIED_DESC | LAST_MODIFIED_ASC| ORDER_DATE_DESC| ORDER_DATE_ASC",
-												"disabled": true
-											}
-										],
+										"header": [],
 										"url": {
 											"raw": "{{host}}/api/packjobs/",
 											"host": [
@@ -12624,6 +12619,121 @@
 												"api",
 												"packjobs",
 												""
+											],
+											"query": [
+												{
+													"key": "searchTerm",
+													"value": "",
+													"description": "searches tenantOrderId, articleTitles, shortId, invoiceAddress, recipientAddress, tenantArticleIds, packingSourceContainerScannableCodes, firstAndLastName",
+													"disabled": true
+												},
+												{
+													"key": "size",
+													"value": "25",
+													"disabled": true
+												},
+												{
+													"key": "startAfterId",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "anonymized",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "channel",
+													"value": "",
+													"description": "COLLECT | SHIPPING",
+													"disabled": true
+												},
+												{
+													"key": "status",
+													"value": "",
+													"description": "OPEN | IN_PROGRESS | CLOSED | OBSOLETE | CANCELED | PAUSED",
+													"disabled": true
+												},
+												{
+													"key": "facilityRef",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "sourceContainerCodes",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "orderBy",
+													"value": "",
+													"description": "TARGET_TIME_DESC | TARGET_TIME_ASC | LAST_MODIFIED_DESC | LAST_MODIFIED_ASC | ORDER_DATE_DESC | ORDER_DATE_ASC",
+													"disabled": true
+												},
+												{
+													"key": "startTargetTime",
+													"value": "",
+													"description": "2024-05-07T00:00:00Z",
+													"disabled": true
+												},
+												{
+													"key": "endTargetTime",
+													"value": "",
+													"description": "2024-05-07T00:00:00Z",
+													"disabled": true
+												},
+												{
+													"key": "pickJobRef",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "orderRef",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "packJobIds",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "processId",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "shortId",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "articleTitle",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "startOrderDate",
+													"value": "",
+													"description": "2024-05-07T00:00:00Z",
+													"disabled": true
+												},
+												{
+													"key": "endOrderDate",
+													"value": "",
+													"description": "2024-05-07T00:00:00Z",
+													"disabled": true
+												},
+												{
+													"key": "lastModifiedBy",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "tenantOrderId",
+													"value": "",
+													"disabled": true
+												}
 											]
 										}
 									},
