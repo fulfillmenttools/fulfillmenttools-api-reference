@@ -45046,16 +45046,16 @@ components:
       type: object
     InboundProcessPaginatedResult:
       properties:
-        inboundProcesses:
+        inboundProcesss:
           items:
-            $ref: '#/components/schemas/StrippedInboundProcess'
+            $ref: '#/components/schemas/InboundProcess'
           type: array
         total:
           minimum: 0
           type: number
       required:
         - total
-        - inboundProcesses
+        - inboundProcesss
       title: InboundProcessPaginatedResult
       type: object
     InboundProcessPurchaseOrder:
@@ -45229,6 +45229,34 @@ components:
       required:
         - id
       title: InboundProcessPurchaseOrderTransfer
+      type: object
+    InboundProcessSearchPayload:
+      properties:
+        query:
+          $ref: '#/components/schemas/InboundProcessSearchQuery'
+      required:
+        - query
+      title: InboundProcessSearchPayload
+      type: object
+    InboundProcessSearchQuery:
+      properties:
+        and:
+          items:
+            type: string
+          type: array
+        customAttributes:
+          $ref: '#/components/schemas/StringEqFilter'
+        facilityRef:
+          $ref: '#/components/schemas/StringFilter'
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        or:
+          items:
+            type: string
+          type: array
+        tenantInboundProcessId:
+          $ref: '#/components/schemas/StringFilter'
+      title: InboundProcessSearchQuery
       type: object
     InboundReceipt:
       properties:
