@@ -36786,28 +36786,51 @@ components:
     Audit:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        id:
-          type: string
-        entityRef:
-          type: string
-        entityType:
-          type: string
-        trace:
-          type: string
-        actor:
-          $ref: '#/components/schemas/AuditActor'
-        client:
-          $ref: '#/components/schemas/AuditClient'
-        operation:
-          $ref: '#/components/schemas/AuditOperation'
+        - properties:
+            id:
+              type: string
+            eventId:
+              type: string
+            entityRef:
+              type: string
+            entityType:
+              type: string
+            entityVersion:
+              type: number
+            isAnonymized:
+              type: boolean
+            entityCreated:
+              type: string
+              format: date-time
+            deletionDate:
+              type: string
+              format: date-time
+            anonymizationDate:
+              type: string
+              format: date-time
+            trace:
+              type: string
+            actor:
+              $ref: '#/components/schemas/AuditActor'
+            globalActor:
+              $ref: '#/components/schemas/AuditActor'
+            client:
+              $ref: '#/components/schemas/AuditClient'
+            operation:
+              $ref: '#/components/schemas/AuditOperation'
       required:
         - entityRef
+        - entityVersion
+        - isAnonymized
+        - anonymizationDate
+        - deletionDate
+        - entityCreated
         - entityType
         - actor
         - client
         - operation
         - trace
+        - eventId
         - id
       type: object
     AuditActor:
