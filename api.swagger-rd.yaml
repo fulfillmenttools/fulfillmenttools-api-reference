@@ -9471,7 +9471,7 @@ paths:
           name: orderBy
           required: false
           schema:
-            type: string
+            $ref: '#/components/schemas/PackJobOrderBy'
         - description: Start date range for pack jobs
           in: query
           name: startTargetTime
@@ -9488,11 +9488,77 @@ paths:
             type: string
             example: '2020-02-03T08:45:50.525Z'
             format: date-time
+        - description: Reference to the order you want to get the corresponding packJobs
+          in: query
+          name: orderRef
+          required: false
+          schema:
+            type: string
+        - description: Reference to the packJobs you want to get
+          in: query
+          name: packJobIds
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - description: Reference to the process you want to get the corresponding packJobs
+          in: query
+          name: processId
+          required: false
+          schema:
+            type: string
+        - description: >-
+            Reference to the pickJobRef you want to get the corresponding
+            packJobs
+          in: query
+          name: pickJobRef
+          required: false
+          schema:
+            type: string
+        - description: Reference to the shortId you want to get the corresponding packJobs
+          in: query
+          name: shortId
+          required: false
+          schema:
+            type: string
+        - description: >-
+            Reference to the articleTitle you want to get the corresponding
+            packJobs
+          in: query
+          name: articleTitle
+          required: false
+          schema:
+            type: string
+        - description: Start date range of the order for the corresponding pack jobs
+          in: query
+          name: startOrderDate
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
+        - description: End date range of the order for the corresponding pack jobs
+          in: query
+          name: endOrderDate
+          required: false
+          schema:
+            type: string
+            example: '2020-02-03T08:45:50.525Z'
+            format: date-time
         - description: >-
             Reference to the username you want to get the corresponding pack
             jobs
           in: query
           name: modifiedByUsername
+          required: false
+          schema:
+            type: string
+        - description: >-
+            Reference to the tenantOrderId you want to get the corresponding
+            packJobs
+          in: query
+          name: tenantOrderId
           required: false
           schema:
             type: string
@@ -33984,6 +34050,9 @@ components:
         orderRef:
           description: The id of the order
           type: string
+        recipientName:
+          description: The name of the recipient
+          type: string
       required:
         - facilityRef
         - lineItems
@@ -34097,6 +34166,9 @@ components:
                 $ref: '#/components/schemas/OperativeTransfer'
             orderRef:
               description: The id of the order
+              type: string
+            recipientName:
+              description: The name of the recipient
               type: string
           required:
             - id
@@ -43964,7 +44036,42 @@ components:
             discriminator:
               propertyName: type
               mapping:
-                StandardRating: '#/components/schemas/RoutingStrategyStandardRating'
+                StandardRating: '#/components/schemas/RoutingStrategyRating'
+                ToolkitRating: '#/components/schemas/RoutingStrategyToolkitRating'
+    RoutingStrategyNodeConfigForUpsert:
+      additionalProperties: false
+      type: object
+      required:
+        - fences
+        - ratings
+      properties:
+        reroute:
+          $ref: '#/components/schemas/RoutingStrategyRerouteConfig'
+        orderSplit:
+          $ref: '#/components/schemas/RoutingStrategyOrderSplitConfig'
+        fallbackFacility:
+          $ref: '#/components/schemas/RoutingStrategyFallbackFacilityConfig'
+        fences:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/RoutingStrategyStandardFenceForUpsert'
+              - $ref: '#/components/schemas/RoutingStrategyToolkitFence'
+            discriminator:
+              propertyName: type
+              mapping:
+                StandardFence: '#/components/schemas/RoutingStrategyStandardFenceForUpsert'
+                ToolkitFence: '#/components/schemas/RoutingStrategyToolkitFence'
+        ratings:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/RoutingStrategyRatingForUpsert'
+              - $ref: '#/components/schemas/RoutingStrategyToolkitRating'
+            discriminator:
+              propertyName: type
+              mapping:
+                StandardRating: '#/components/schemas/RoutingStrategyRatingForUpsert'
                 ToolkitRating: '#/components/schemas/RoutingStrategyToolkitRating'
     RoutingStrategyNodeForCreation:
       additionalProperties: false
@@ -43982,7 +44089,7 @@ components:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
         config:
-          $ref: '#/components/schemas/RoutingStrategyNodeConfig'
+          $ref: '#/components/schemas/RoutingStrategyNodeConfigForUpsert'
         nextCondition:
           $ref: '#/components/schemas/RoutingStrategyConditionForCreation'
       required:
@@ -44007,7 +44114,7 @@ components:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
         config:
-          $ref: '#/components/schemas/RoutingStrategyNodeConfig'
+          $ref: '#/components/schemas/RoutingStrategyNodeConfigForUpsert'
         nextCondition:
           $ref: '#/components/schemas/RoutingStrategyConditionForModification'
       required:
@@ -44157,8 +44264,26 @@ components:
       type: string
       enum:
         - StandardFence
+    RoutingStrategyStandardFenceForUpsert:
+      title: RoutingStrategyFence
+      description: Routing Strategy Fence.
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/RoutingStrategyStandardFenceType'
+        active:
+          type: boolean
+        activeMode:
+          $ref: '#/components/schemas/FenceMode'
+        implementation:
+          $ref: '#/components/schemas/FenceImplementation'
+      required:
+        - active
+        - implementation
+        - type
+      type: object
     RoutingStrategyStandardFence:
-      title: RoutingStrategyStandardFence
+      title: RoutingStrategyFence
       description: Routing Strategy Fence.
       additionalProperties: false
       properties:
@@ -44258,6 +44383,31 @@ components:
           minimum: 0
         name:
           type: string
+      required:
+        - active
+        - implementation
+        - maxPenalty
+        - type
+      type: object
+    RoutingStrategyRatingForUpsert:
+      title: RoutingStrategyRating
+      description: >-
+        A rating is used to rate a set of possible facilities against each other
+        during routing of orders.
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/RoutingStrategyStandardRatingType'
+        active:
+          type: boolean
+        configuration:
+          $ref: '#/components/schemas/AbstractRatingConfiguration'
+        implementation:
+          $ref: '#/components/schemas/RatingImplementation'
+        maxPenalty:
+          example: 100
+          type: number
+          minimum: 0
       required:
         - active
         - implementation
