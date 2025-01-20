@@ -43323,6 +43323,7 @@ components:
     RoutingStrategyActionsParameter:
       oneOf:
         - $ref: '#/components/schemas/RoutingStrategyActivateActionParameter'
+        - $ref: '#/components/schemas/RoutingStrategyCreateCopyActionParameter'
     RoutingStrategyEvaluationResult:
       type: object
       properties:
@@ -43386,6 +43387,22 @@ components:
           type: string
       required:
         - name
+        - version
+    RoutingStrategyCreateCopyActionParameter:
+      title: RoutingStrategyCreateCopyActionParameter
+      description: Action to create a copy of a routing strategy.
+      allOf:
+        - $ref: '#/components/schemas/AbstractRoutingStrategyActionsParameter'
+      properties:
+        name:
+          enum:
+            - COPY
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      required:
+        - name
+        - nameLocalized
         - version
     OrderActionsParameter:
       oneOf:
@@ -43875,14 +43892,8 @@ components:
       properties:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
-        rootNode:
-          $ref: '#/components/schemas/RoutingStrategyNodeForCreation'
-        globalConfiguration:
-          $ref: '#/components/schemas/RoutingStrategyGlobalConfiguration'
       required:
-        - rootNode
         - nameLocalized
-        - globalConfiguration
       type: object
       xml:
         name: RoutingStrategy
@@ -43917,6 +43928,8 @@ components:
           $ref: '#/components/schemas/RoutingStrategyNodeForModification'
         version:
           type: integer
+        globalConfiguration:
+          $ref: '#/components/schemas/RoutingStrategyGlobalConfiguration'
       required:
         - rootNode
         - nameLocalized
