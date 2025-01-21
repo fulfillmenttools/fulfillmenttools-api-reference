@@ -46719,6 +46719,46 @@ components:
         - inboundProcessRef
       title: PurchaseOrder
       type: object
+    PurchaseOrderEventPayload:
+      properties:
+        created:
+          format: date-time
+          type: string
+        facilityRef:
+          type: string
+        id:
+          type: string
+        inboundProcessRef:
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        orderDate:
+          format: date-time
+          type: string
+        requestedDate:
+          $ref: '#/components/schemas/RequestedDate'
+        requestedItems:
+          items:
+            $ref: '#/components/schemas/InboundLineItem'
+          type: array
+        supplier:
+          $ref: '#/components/schemas/PurchaseOrderSupplier'
+        tenantInboundProcessId:
+          type: string
+        transfer:
+          $ref: '#/components/schemas/PurchaseOrderTransfer'
+      required:
+        - id
+        - orderDate
+        - requestedDate
+        - requestedItems
+        - inboundProcessRef
+        - facilityRef
+        - created
+        - lastModified
+      title: PurchaseOrderEventPayload
+      type: object
     PurchaseOrderForCreation:
       properties:
         cancelled:
@@ -46848,6 +46888,22 @@ components:
         name:
           type: string
       title: PurchaseOrderSupplier
+      type: object
+    PurchaseOrderTransfer:
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      title: PurchaseOrderTransfer
+      type: object
+    PurchaseOrderWebHookEvent:
+      properties:
+        payload:
+          $ref: '#/components/schemas/PurchaseOrderEventPayload'
+      required:
+        - payload
+      title: PurchaseOrderWebHookEvent
       type: object
     Quantity:
       properties:
