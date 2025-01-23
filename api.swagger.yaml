@@ -24708,6 +24708,8 @@ components:
       xml:
         name: Branding
     CallbackHeader:
+      title: CallbackHeader
+      description: Header for the Webhook call.
       properties:
         key:
           description: 'This is the key of the header. e.g.: `Authorization`'
@@ -33208,20 +33210,35 @@ components:
       properties:
         callbackUrl:
           type: string
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />Deprecated: Use new 'target' object instead.
+          deprecated: true
         event:
           type: string
+          description: Name of the event in the fulfillmenttools platform.
         headers:
           items:
             $ref: '#/components/schemas/CallbackHeader'
+          description: >-
+            <center><img
+            src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+            <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+            /><br />Deprecated: Use new 'target' object instead.
+          deprecated: true
           minItems: 1
           type: array
         name:
           type: string
+          description: Name of the event, this is freely selectable.
+        target:
+          anyOf:
+            - $ref: '#/components/schemas/SubscriptionTargetWebhook'
       required:
         - name
         - event
-        - callbackUrl
-        - headers
       type: object
     Subscriptions:
       properties:
@@ -33234,6 +33251,29 @@ components:
           example: 42
           type: integer
       type: object
+    SubscriptionTargetWebhook:
+      title: SubscriptionTargetWebhook
+      description: Subscriptions model for a Webhook target.
+      properties:
+        type:
+          $ref: '#/components/schemas/SubscriptionTargetWebhookEnum'
+        callbackUrl:
+          type: string
+        headers:
+          items:
+            $ref: '#/components/schemas/CallbackHeader'
+          minItems: 1
+          type: array
+      required:
+        - type
+        - callbackUrl
+      type: object
+    SubscriptionTargetWebhookEnum:
+      title: SubscriptionTargetWebhookEnum
+      description: Type of subscription target webhook.
+      enum:
+        - WEBHOOK
+      type: string
     Substitute:
       properties:
         attributes:
