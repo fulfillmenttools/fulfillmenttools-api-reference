@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "3da2e2c1-c149-427c-9105-97d74149a028",
+		"_postman_id": "4fd11a10-7999-4fe5-adf3-012efabc58ba",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "5030076"
+		"_exporter_id": "24314465"
 	},
 	"item": [
 		{
@@ -1188,6 +1188,34 @@
 											]
 										},
 										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/StorageLocations/getFacilityStorageLocation](https://fulfillmenttools.github.io/api-reference-ui/#/StorageLocations/getFacilityStorageLocation)"
+									},
+									"response": []
+								},
+								{
+									"name": "Search StorageLocations",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"query\": {\n        \"name\": {\n            \"eq\": \"value\"\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/storagelocations/search",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"storagelocations",
+												"search"
+											]
+										}
 									},
 									"response": []
 								},
@@ -6034,7 +6062,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"nameLocalized\": {\n        \"de_DE\": \"irgendeine Config\",\n        \"en_US\": \"some config\"\n    },\n    \"rootNode\": {\n        \"active\": true,\n        \"nameLocalized\": {\n            \"de_DE\": \"Ausgangsknoten\",\n            \"en_US\": \"Root node\"\n        },\n        \"id\": \"rootNode#12345\",\n        \"config\": {\n            \"fences\": [],\n            \"ratings\": [],\n            \"fallbackFacility\": {\n                \"active\": true,\n                \"facilityRefs\": [\n                    \"facility2\"\n                ],\n                \"fallbackAfterTime\": \"PT1M\"\n            },\n            \"orderSplit\": {\n                \"maxSplitCount\": 2,\n                \"activeForSameday\": true,\n                \"active\": true,\n                \"shouldUseWaitingRoomForPreBackOrderItems\": true\n            }\n        },\n        \"nextCondition\": {\n            \"name\": \"Priority Customer Config\",\n            \"active\": true,\n            \"rule\": {\n                \"predicates\": [\n                    {\n                        \"propertyPath\": \"$.deliveryType\",\n                        \"entityOperator\": \"VALUE_EQUALS\",\n                        \"expectedValue\": \"SAMEDAY\"\n                    }\n                ],\n                \"predicateConnector\": \"AND\"\n            },\n            \"id\": \"6ecb517f-33a6-4f28-a541-5036850a6650\",\n            \"nameLocalized\": {\n                \"de_DE\": \"Condition 6ecb517f-33a6-4f28-a541-5036850a6650\"\n            },\n            \"nextNode\": {\n                \"id\": \"0984a188-efe5-4d25-b6e3-8fde440b4c86\",\n                \"name\": \"priorityCustomerNode\",\n                \"active\": true,\n                \"nameLocalized\": {\n                    \"de_DE\": \"node\"\n                },\n                \"config\": {\n                    \"fallbackFacility\": {\n                        \"active\": true,\n                        \"facilityRefs\": [\n                            \"facility2\"\n                        ],\n                        \"fallbackAfterTime\": \"PT1M\"\n                    },\n                    \"orderSplit\": {\n                        \"maxSplitCount\": 1,\n                        \"activeForSameday\": false,\n                        \"active\": true,\n                        \"shouldUseWaitingRoomForPreBackOrderItems\": true\n                    },\n                    \"fences\": [\n                        {\n                            \"active\": true,\n                            \"implementation\": \"STOCK-AVAILABILITY\",\n                            \"type\": \"StandardFence\"\n                        }\n                    ],\n                    \"ratings\": [\n                        {\n                            \"description\": \"\",\n                            \"referenceId\": \"\",\n                            \"type\": \"ToolkitRating\",\n                            \"name\": \"Priority Customer Rating\",\n                            \"nameLocalized\": {\n                                \"de_DE\": \"Prioritätskunden Bewertung\",\n                                \"en_US\": \"Priority Customer Rating\"\n                            },\n                            \"entity1\": \"ORDER\",\n                            \"entity2\": \"CARRIERCONNECTION\",\n                            \"rule\": {\n                                \"rightPart\": {\n                                    \"predicates\": [\n                                        {\n                                            \"propertyPath\": \"$.deliveryType\",\n                                            \"entityOperator\": \"VALUE_EQUALS\",\n                                            \"expectedValue\": \"SAMEDAY\"\n                                        }\n                                    ],\n                                    \"predicateConnector\": \"AND\"\n                                },\n                                \"leftPart\": {\n                                    \"predicates\": [\n                                        {\n                                            \"propertyPath\": \"$.consumer.customAttributes[?(@.customerType)].customerType\",\n                                            \"entityOperator\": \"VALUE_EQUALS\",\n                                            \"expectedValue\": \"PRIORITY\"\n                                        }\n                                    ],\n                                    \"predicateConnector\": \"OR\"\n                                },\n                                \"operator\": \"EQUALS\"\n                            },\n                            \"active\": true,\n                            \"maxPenalty\": 100\n                        }\n                    ]\n                }\n            },\n            \"nextCondition\": {\n                \"active\": true,\n                \"id\": \"unreliable-customer-config#12345\",\n                \"name\": \"Unreliable Customer Config\",\n                \"nameLocalized\": {\n                    \"de_DE\": \"Unzuverlässige-Kunden Konfiguration\",\n                    \"en_US\": \"Unreliable Customer Config\"\n                },\n                \"rule\": {\n                    \"predicates\": [\n                        {\n                            \"propertyPath\": \"$.consumer.customAttributes[?(@.paymentsPending)].paymentsPending\",\n                            \"entityOperator\": \"GREATER_EQUALS\",\n                            \"expectedValue\": 3\n                        },\n                        {\n                            \"propertyPath\": \"$.consumer.customAttributes[?(@.returnRateInPercent)].returnRateInPercent\",\n                            \"entityOperator\": \"GREATER_EQUALS\",\n                            \"expectedValue\": 25\n                        }\n                    ],\n                    \"predicateConnector\": \"OR\"\n                },\n                \"nextNode\": {\n                    \"id\": \"unreliableCustomerNode#12345\",\n                    \"name\": \"Unreliable Customer Node\",\n                    \"active\": false,\n                    \"nameLocalized\": {\n                        \"de_DE\": \"Unzuverlässige-Kunden Knoten\",\n                        \"en_US\": \"Unreliable Customer Node\"\n                    },\n                    \"config\": {\n                        \"ratings\": [],\n                        \"fences\": [\n                            {\n                                \"referenceId\": \"unreliableCustomerFence\",\n                                \"type\": \"ToolkitFence\",\n                                \"name\": \"Unreliable Customer Fence\",\n                                \"nameLocalized\": {\n                                    \"de_DE\": \"Unzuverlässige Kunden Ausschluss\",\n                                    \"en_US\": \"Unreliable Customer Fence\"\n                                },\n                                \"entity1\": \"ORDER\",\n                                \"entity2\": \"FACILITY\",\n                                \"rule\": {\n                                    \"rightPart\": {\n                                        \"predicates\": [\n                                            {\n                                                \"propertyPath\": \"$.nonExistingProperty\",\n                                                \"entityOperator\": \"VALUE_NOT_EQUALS\"\n                                            }\n                                        ],\n                                        \"predicateConnector\": \"AND\"\n                                    },\n                                    \"leftPart\": {\n                                        \"predicates\": [\n                                            {\n                                                \"propertyPath\": \"$.deliveryPreferences.collect.paid\",\n                                                \"entityOperator\": \"VALUE_EQUALS\",\n                                                \"expectedValue\": false\n                                            }\n                                        ],\n                                        \"predicateConnector\": \"OR\"\n                                    },\n                                    \"operator\": \"EQUALS\"\n                                },\n                                \"active\": true,\n                                \"order\": 2\n                            }\n                        ]\n                    }\n                }\n            }\n        }\n    },\n    \"version\": 1\n}",
+											"raw": "{\n    \"nameLocalized\": {\n        \"de_DE\": \"irgendeine Config\",\n        \"en_US\": \"some config\"\n    },\n    \"rootNode\": {\n        \"active\": true,\n        \"nameLocalized\": {\n            \"de_DE\": \"Ausgangsknoten\",\n            \"en_US\": \"Root node\"\n        },\n        \"id\": \"rootNode#12345\",\n        \"categoryRef\": \"12345\",\n        \"config\": {\n            \"fences\": [],\n            \"ratings\": [],\n            \"fallbackFacility\": {\n                \"active\": true,\n                \"facilityRefs\": [\n                    \"facility2\"\n                ],\n                \"fallbackAfterTime\": \"PT1M\"\n            },\n            \"orderSplit\": {\n                \"maxSplitCount\": 2,\n                \"activeForSameday\": true,\n                \"active\": true,\n                \"shouldUseWaitingRoomForPreBackOrderItems\": true\n            }\n        },\n        \"nextCondition\": {\n            \"name\": \"Priority Customer Config\",\n            \"active\": true,\n            \"rule\": {\n                \"predicates\": [\n                    {\n                        \"propertyPath\": \"$.deliveryType\",\n                        \"entityOperator\": \"VALUE_EQUALS\",\n                        \"expectedValue\": \"SAMEDAY\"\n                    }\n                ],\n                \"predicateConnector\": \"AND\"\n            },\n            \"id\": \"6ecb517f-33a6-4f28-a541-5036850a6650\",\n            \"nameLocalized\": {\n                \"de_DE\": \"Condition 6ecb517f-33a6-4f28-a541-5036850a6650\"\n            },\n            \"nextNode\": {\n                \"id\": \"0984a188-efe5-4d25-b6e3-8fde440b4c86\",\n                \"name\": \"priorityCustomerNode\",\n                \"active\": true,\n                \"categoryRef\": \"12345\",\n                \"nameLocalized\": {\n                    \"de_DE\": \"node\"\n                },\n                \"config\": {\n                    \"fallbackFacility\": {\n                        \"active\": true,\n                        \"facilityRefs\": [\n                            \"facility2\"\n                        ],\n                        \"fallbackAfterTime\": \"PT1M\"\n                    },\n                    \"orderSplit\": {\n                        \"maxSplitCount\": 1,\n                        \"activeForSameday\": false,\n                        \"active\": true,\n                        \"shouldUseWaitingRoomForPreBackOrderItems\": true\n                    },\n                    \"fences\": [\n                        {\n                            \"active\": true,\n                            \"implementation\": \"STOCK-AVAILABILITY\",\n                            \"type\": \"StandardFence\"\n                        }\n                    ],\n                    \"ratings\": [\n                        {\n                            \"description\": \"\",\n                            \"referenceId\": \"\",\n                            \"type\": \"ToolkitRating\",\n                            \"name\": \"Priority Customer Rating\",\n                            \"nameLocalized\": {\n                                \"de_DE\": \"Prioritätskunden Bewertung\",\n                                \"en_US\": \"Priority Customer Rating\"\n                            },\n                            \"entity1\": \"ORDER\",\n                            \"entity2\": \"CARRIERCONNECTION\",\n                            \"rule\": {\n                                \"rightPart\": {\n                                    \"predicates\": [\n                                        {\n                                            \"propertyPath\": \"$.deliveryType\",\n                                            \"entityOperator\": \"VALUE_EQUALS\",\n                                            \"expectedValue\": \"SAMEDAY\"\n                                        }\n                                    ],\n                                    \"predicateConnector\": \"AND\"\n                                },\n                                \"leftPart\": {\n                                    \"predicates\": [\n                                        {\n                                            \"propertyPath\": \"$.consumer.customAttributes[?(@.customerType)].customerType\",\n                                            \"entityOperator\": \"VALUE_EQUALS\",\n                                            \"expectedValue\": \"PRIORITY\"\n                                        }\n                                    ],\n                                    \"predicateConnector\": \"OR\"\n                                },\n                                \"operator\": \"EQUALS\"\n                            },\n                            \"active\": true,\n                            \"maxPenalty\": 100\n                        }\n                    ]\n                }\n            },\n            \"nextCondition\": {\n                \"active\": true,\n                \"id\": \"unreliable-customer-config#12345\",\n                \"name\": \"Unreliable Customer Config\",\n                \"nameLocalized\": {\n                    \"de_DE\": \"Unzuverlässige-Kunden Konfiguration\",\n                    \"en_US\": \"Unreliable Customer Config\"\n                },\n                \"rule\": {\n                    \"predicates\": [\n                        {\n                            \"propertyPath\": \"$.consumer.customAttributes[?(@.paymentsPending)].paymentsPending\",\n                            \"entityOperator\": \"GREATER_EQUALS\",\n                            \"expectedValue\": 3\n                        },\n                        {\n                            \"propertyPath\": \"$.consumer.customAttributes[?(@.returnRateInPercent)].returnRateInPercent\",\n                            \"entityOperator\": \"GREATER_EQUALS\",\n                            \"expectedValue\": 25\n                        }\n                    ],\n                    \"predicateConnector\": \"OR\"\n                },\n                \"nextNode\": {\n                    \"id\": \"unreliableCustomerNode#12345\",\n                    \"name\": \"Unreliable Customer Node\",\n                    \"active\": false,\n                    \"nameLocalized\": {\n                        \"de_DE\": \"Unzuverlässige-Kunden Knoten\",\n                        \"en_US\": \"Unreliable Customer Node\"\n                    },\n                    \"categoryRef\": \"12345\",\n                    \"config\": {\n                        \"ratings\": [],\n                        \"fences\": [\n                            {\n                                \"referenceId\": \"unreliableCustomerFence\",\n                                \"type\": \"ToolkitFence\",\n                                \"name\": \"Unreliable Customer Fence\",\n                                \"nameLocalized\": {\n                                    \"de_DE\": \"Unzuverlässige Kunden Ausschluss\",\n                                    \"en_US\": \"Unreliable Customer Fence\"\n                                },\n                                \"entity1\": \"ORDER\",\n                                \"entity2\": \"FACILITY\",\n                                \"rule\": {\n                                    \"rightPart\": {\n                                        \"predicates\": [\n                                            {\n                                                \"propertyPath\": \"$.nonExistingProperty\",\n                                                \"entityOperator\": \"VALUE_NOT_EQUALS\"\n                                            }\n                                        ],\n                                        \"predicateConnector\": \"AND\"\n                                    },\n                                    \"leftPart\": {\n                                        \"predicates\": [\n                                            {\n                                                \"propertyPath\": \"$.deliveryPreferences.collect.paid\",\n                                                \"entityOperator\": \"VALUE_EQUALS\",\n                                                \"expectedValue\": false\n                                            }\n                                        ],\n                                        \"predicateConnector\": \"OR\"\n                                    },\n                                    \"operator\": \"EQUALS\"\n                                },\n                                \"active\": true,\n                                \"order\": 2\n                            }\n                        ]\n                    }\n                }\n            }\n        }\n    },\n    \"version\": 1\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -6202,6 +6230,133 @@
 												{
 													"key": "nodeId",
 													"value": ""
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "RoutingStrategyNodeConfigCategory",
+							"item": [
+								{
+									"name": "Get Category",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/routing/strategies/nodeconfigcategories/:categoryId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"strategies",
+												"nodeconfigcategories",
+												":categoryId"
+											],
+											"variable": [
+												{
+													"key": "categoryId",
+													"value": null
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Update Category",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"nameLocalized\": { \"de_DE\": \"categoryName\" },\n    \"color\": \"#E9967A\",\n    \"version\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/routing/strategies/nodeconfigcategories/:categoryId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"strategies",
+												"nodeconfigcategories",
+												":categoryId"
+											],
+											"variable": [
+												{
+													"key": "categoryId",
+													"value": null
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Create Category",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"nameLocalized\": { \"de_DE\": \"categoryName\" },\n    \"color\": \"#E9967A\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/routing/nodeconfigcategories",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"nodeconfigcategories"
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getRouringConfiguration"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Category",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/routing/strategies/nodeconfigcategories/:categoryId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"routing",
+												"strategies",
+												"nodeconfigcategories",
+												":categoryId"
+											],
+											"variable": [
+												{
+													"key": "categoryId",
+													"value": null
 												}
 											]
 										},
@@ -7859,6 +8014,29 @@
 							},
 							"response": []
 						},
+                        {
+                          "name": "Search Stocks",
+                          "request": {
+                            "method": "POST",
+                            "header": [],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n    \"query\": {\n        \"id\": {\n            \"eq\": \"value\"\n        }\n    }\n}",
+                              "options": {
+                                "raw": {
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{host}}/api/stocks/search",
+                              "host": ["{{host}}"],
+                              "path": ["api", "stocks", "search"]
+                            },
+                            "description": ""
+                          },
+                          "response": []
+                        },
 						{
 							"name": "Upsert Stocks",
 							"request": {
@@ -8251,6 +8429,29 @@
 							},
 							"response": []
 						},
+                        {
+                          "name": "Search Inbound Processes",
+                          "request": {
+                            "method": "POST",
+                            "header": [],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n    \"query\": {\n        \"id\": {\n            \"eq\": \"value\"\n        }\n    }\n}",
+                              "options": {
+                                "raw": {
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{host}}/api/inboundprocesses/search",
+                              "host": ["{{host}}"],
+                              "path": ["api", "inboundprocesses", "search"]
+                            },
+                            "description": ""
+                          },
+                          "response": []
+                        },
 						{
 							"name": "Create Inbound Process",
 							"request": {
@@ -10409,7 +10610,7 @@
 												"header": [],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n    \"stowLineItem\": {\n        \"customAttributes\": {\n            \"foo\": \"bar\"\n        },\n        \"article\": {\n            \"tenantArticleId\": \"YOUR_TENANT_ARTICLE_ID\",\n            \"imageUrl\": \"string\",\n            \"title\": \"Shirt\",\n            \"titleLocalized\": {\n                \"en_US\": \"Shirt\",\n                \"de_DE\": \"Hemd\"\n            },\n            \"measurementUnitKey\": \"kg\",\n            \"scannableCodes\": [\n                \"123456789\"\n            ]\n        }\n    },\n    \"version\": 1,\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\"\n}",
+													"raw": "{\n    \"stowLineItems\": [\n        {\n            \"customAttributes\": {\n                \"foo\": \"bar\"\n            },\n            \"article\": {\n                \"tenantArticleId\": \"YOUR_TENANT_ARTICLE_ID\",\n                \"imageUrl\": \"string\",\n                \"title\": \"Shirt\",\n                \"titleLocalized\": {\n                    \"en_US\": \"Shirt\",\n                    \"de_DE\": \"Hemd\"\n                },\n                \"measurementUnitKey\": \"kg\",\n                \"scannableCodes\": [\n                    \"123456789\"\n                ]\n            }\n        }\n    ],\n    \"version\": 1,\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\"\n}",
 													"options": {
 														"raw": {
 															"language": "json"
@@ -10445,7 +10646,7 @@
 												"header": [],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n    \"stowLineItem\": {\n        \"takeFrom\": {\n            \"type\": \"STOCK\",\n            \"quantity\": 1,\n            \"stockRef\": \"YOUR_STOCK_REF\"\n        },\n        \"stowTo\": {\n            \"type\": \"STOCK\",\n            \"quantity\": 1,\n            \"stockRef\": \"YOUR_STOCK_REF\",\n            \"scannableCodes\": [\n                \"12345\"\n            ]\n        },\n        \"reasons\": []\n    },\n    \"version\": 2,\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\"\n}",
+													"raw": "{\n    \"stowLineItems\": [\n        {\n            \"takeFrom\": {\n                \"type\": \"STOCK\",\n                \"quantity\": 1,\n                \"stockRef\": \"YOUR_STOCK_REF\"\n            },\n            \"stowTo\": {\n                \"type\": \"STOCK\",\n                \"quantity\": 1,\n                \"stockRef\": \"YOUR_STOCK_REF\",\n                \"scannableCodes\": [\n                    \"12345\"\n                ]\n            },\n            \"reasons\": []\n        }\n    ],\n    \"version\": 2,\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\"\n}",
 													"options": {
 														"raw": {
 															"language": "json"
@@ -10481,7 +10682,7 @@
 												"header": [],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\",\n    \"version\": 3,\n    \"stowLineItem\": {\n        \"takeFrom\": {\n            \"type\": \"UNREGISTERED\",\n            \"quantity\": 1,\n            \"taken\": {\n                \"takenStockRef\": null,\n                \"takenQuantity\": 1\n            }\n        },\n        \"stowTo\": {\n            \"type\": \"DISCARD\",\n            \"quantity\": 1,\n            \"stowed\": {\n                \"stowedStockRef\": null,\n                \"stowedQuantity\": 1\n            }\n        }\n    }\n}",
+													"raw": "{\n    \"name\": \"MODIFY_STOW_LINE_ITEMS\",\n    \"version\": 3,\n    \"stowLineItems\": [\n        {\n            \"takeFrom\": {\n                \"type\": \"UNREGISTERED\",\n                \"quantity\": 1,\n                \"taken\": {\n                    \"takenStockRef\": null,\n                    \"takenQuantity\": 1\n                }\n            },\n            \"stowTo\": {\n                \"type\": \"DISCARD\",\n                \"quantity\": 1,\n                \"stowed\": {\n                    \"stowedStockRef\": null,\n                    \"stowedQuantity\": 1\n                }\n            }\n        }\n    ]\n}",
 													"options": {
 														"raw": {
 															"language": "json"
@@ -10795,6 +10996,29 @@
 							},
 							"response": []
 						},
+                        {
+                          "name": "Search Stow Jobs",
+                          "request": {
+                            "method": "POST",
+                            "header": [],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n    \"query\": {\n        \"id\": {\n            \"eq\": \"value\"\n        }\n    }\n}",
+                              "options": {
+                                "raw": {
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{host}}/api/stowjobs/search",
+                              "host": ["{{host}}"],
+                              "path": ["api", "stowjobs", "search"]
+                            },
+                            "description": ""
+                          },
+                          "response": []
+                        },
 						{
 							"name": "Create Stow Job (mixed)",
 							"request": {
