@@ -20924,6 +20924,47 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/inboundprocesses/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for InboundProcess
+      operationId: searchInboundProcess
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboundProcessSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InboundProcessPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Inventory Management - Inbound
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/inboundprocesses/{inboundProcessId}:
     delete:
       deprecated: false
@@ -22034,6 +22075,47 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/stocks/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for Stock
+      operationId: searchStock
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Inventory Management - Stock
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/stocks/summaries:
     get:
       deprecated: false
@@ -22291,6 +22373,41 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/storagelocations/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for StorageLocation
+      operationId: searchStorageLocation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageLocationSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Inventory Management - Storage Locations
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/stowjobs:
     get:
       deprecated: false
@@ -22444,6 +22561,47 @@ paths:
             The syntax of the request content was correct, but it was unable to
             process the contained instructions, possibly due to semantic errors.
       summary: Create a new Stow Job
+      tags:
+        - Inventory Management - Stowing
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/stowjobs/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for StowJob
+      operationId: searchStowJob
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StowJobSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StowJobPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
       tags:
         - Inventory Management - Stowing
       x-badges:
@@ -45326,7 +45484,7 @@ components:
       type: object
     InboundProcessPaginatedResult:
       properties:
-        inboundProcesss:
+        inboundProcesses:
           items:
             $ref: '#/components/schemas/InboundProcess'
           type: array
@@ -45337,7 +45495,7 @@ components:
           minimum: 0
           type: number
       required:
-        - inboundProcesss
+        - inboundProcesses
       title: InboundProcessPaginatedResult
       type: object
     InboundProcessPurchaseOrder:
@@ -47421,9 +47579,11 @@ components:
           type: number
         sortBy:
           enum:
+            - NAME_ASC
             - TENANT_LOCATION_ID_ASC
             - ZONE_REF_ASC
             - CREATED_ASC
+            - NAME_DESC
             - TENANT_LOCATION_ID_DESC
             - ZONE_REF_DESC
             - CREATED_DESC
@@ -47445,8 +47605,6 @@ components:
           $ref: '#/components/schemas/DateFilter'
         customAttributes:
           $ref: '#/components/schemas/CustomAttributesFilter'
-        customFilter:
-          $ref: '#/components/schemas/StringFilter'
         facilityRef:
           $ref: '#/components/schemas/StringFilter'
         id:
