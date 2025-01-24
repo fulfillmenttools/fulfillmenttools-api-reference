@@ -18087,6 +18087,284 @@ paths:
           </i><br /><br />
       operationId: getRoutingStrategies
       summary: Returns all routing strategies
+  /api/routing/nodeconfigcategories:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/RoutingStrategyNodeConfigCategoryForResponse
+          description: The created routing strategy.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Routing Strategy
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />creates a new category for a routing strategys node config
+      operationId: postRoutingStrategyNodeConfigCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/RoutingStrategyNodeConfigCategoryForCreation
+        description: The desired category
+        required: true
+      summary: Creates a category for node configurations
+    get:
+      parameters:
+        - description: all entities
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/RoutingStrategyNodeConfigCategoryTransporter
+          description: The current list of available categories
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: No more elements available
+      tags:
+        - DOMS - Routing Strategy
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getRoutingStrategyNodeConfigCategories
+      summary: Returns all node configuration categories
+  /api/routing/nodeconfigcategories/{categoryId}:
+    get:
+      parameters:
+        - description: Id of the category you wish to retrieve
+          in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/RoutingStrategyNodeConfigCategoryForResponse
+          description: The returned category.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Routing Strategy
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />returns the category
+      operationId: getRoutingStrategyNodeConfigCategory
+      summary: Returns a category.
+    delete:
+      parameters:
+        - description: Id of the category you want to delete
+          in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The category has been deleted.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Routing Strategy
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />deletes the category
+      operationId: deleteRoutingStrategyNodeConfigCategory
+      summary: deletes a category.
+    put:
+      parameters:
+        - description: Id of the category you wish to update
+          in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/RoutingStrategyNodeConfigCategoryForResponse
+          description: The updated category.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - DOMS - Routing Strategy
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Updates a category
+      operationId: putRoutingStrategyNodeConfigCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/RoutingStrategyNodeConfigCategoryForModification
+        description: The updated category
+        required: true
+      summary: Updates a category.
   /api/routing/strategies/{strategyId}:
     get:
       parameters:
@@ -44893,6 +45171,8 @@ components:
           $ref: '#/components/schemas/RoutingStrategyNodeConfigForUpsert'
         nextCondition:
           $ref: '#/components/schemas/RoutingStrategyConditionForCreation'
+        categoryRef:
+          type: string
       required:
         - active
         - config
@@ -44916,6 +45196,8 @@ components:
           $ref: '#/components/schemas/RoutingStrategyNodeConfigForUpsert'
         nextCondition:
           $ref: '#/components/schemas/RoutingStrategyConditionForModification'
+        categoryRef:
+          type: string
       required:
         - active
         - config
@@ -44964,6 +45246,8 @@ components:
           $ref: '#/components/schemas/RoutingStrategyNodeConfig'
         nextCondition:
           $ref: '#/components/schemas/RoutingStrategyCondition'
+        categoryRef:
+          type: string
       required:
         - active
         - config
@@ -45261,6 +45545,62 @@ components:
         - entity1
         - entity2
         - maxPenalty
+    RoutingStrategyNodeConfigCategoryForCreation:
+      type: object
+      additionalProperties: false
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        color:
+          type: string
+      required:
+        - nameLocalized
+        - color
+    RoutingStrategyNodeConfigCategoryForModification:
+      type: object
+      additionalProperties: false
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        color:
+          type: string
+        version:
+          type: number
+      required:
+        - nameLocalized
+        - color
+        - version
+    RoutingStrategyNodeConfigCategory:
+      allOf:
+        - $ref: '#/components/schemas/RoutingStrategyNodeConfigCategoryForCreation'
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    RoutingStrategyNodeConfigCategoryForResponse:
+      allOf:
+        - $ref: '#/components/schemas/RoutingStrategyNodeConfigCategory'
+      properties:
+        name:
+          type: string
+    RoutingStrategyNodeConfigCategoryTransporter:
+      properties:
+        routingStrategyNodeConfigCategories:
+          items:
+            $ref: '#/components/schemas/RoutingStrategyNodeConfigCategoryForResponse'
+          type: array
+        total:
+          description: Total number of entities found for this query
+          example: 42
+          type: integer
+      required:
+        - routingStrategyNodeConfigCategories
+        - total
+      type: object
+      xml:
+        name: RoutingStrategyNodeConfigCategoryTransporter
     ArticleStockForecast:
       properties:
         created:
