@@ -21664,6 +21664,41 @@ paths:
       summary: This endpoint is deprecated. Please use /api/stocks/summaries instead.
       tags:
         - Inventory Management - Stocks
+  /api/pickjobs/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for PickJob
+      operationId: searchPickJob
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PickJobSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - PickJob
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/purchaseorders:
     post:
       deprecated: false
@@ -46715,6 +46750,46 @@ components:
         - version
         - name
       title: PauseStowJobAction
+      type: object
+    PickJobSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/PickJobSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sortBy:
+          enum:
+            - TENANT_ORDER_ID_ASC
+            - TENANT_ORDER_ID_DESC
+          type: string
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: PickJobSearchPayload
+      type: object
+    PickJobSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/PickJobSearchQuery'
+          type: array
+        or:
+          items:
+            $ref: '#/components/schemas/PickJobSearchQuery'
+          type: array
+        pickJobRef:
+          $ref: '#/components/schemas/StringFilter'
+        tenantOrderId:
+          $ref: '#/components/schemas/StringFilter'
+      title: PickJobSearchQuery
       type: object
     PurchaseOrder:
       properties:
