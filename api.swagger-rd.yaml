@@ -26335,6 +26335,31 @@ components:
       required:
         - username
       type: object
+    AssignedUser:
+      properties:
+        userId:
+          description: ID of the user who is assigned
+          type: string
+        username:
+          description: username of the user who is assigned
+          type: string
+      required:
+        - username
+        - userId
+      type: object
+    AssignedUserForCreation:
+      properties:
+        userId:
+          description: >-
+            ID of the user who should be assigned - either this or username
+            needed
+          type: string
+        username:
+          description: >-
+            username of the user should be assigned - either this or userId
+            needed
+          type: string
+      type: object
     Entity:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -39240,6 +39265,11 @@ components:
           description: >-
             Line items that are inherited from a preceding service job in a
             linked service job
+        assignedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedUser'
+          description: Assigned users for this entity
       required:
         - id
         - lineItems
@@ -39296,6 +39326,11 @@ components:
           type: string
           description: ID of the Service Job Link, the Service Job should reference.
           example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        assignedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedUserForCreation'
+          description: Assigned users for this entity
       required:
         - customServiceRef
         - facilityRef
@@ -39431,9 +39466,31 @@ components:
       required:
         - name
         - version
+    ServiceJobReplaceAssignedUsersActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobReplaceAssignedUsersActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        assignedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedUserForCreation'
+          description: Assigned users for this entity
+      required:
+        - name
+        - version
+        - assignedUsers
     ServiceJobFinishedActionEnum:
       enum:
         - FinishServiceJob
+      type: string
+    ServiceJobReplaceAssignedUsersActionEnum:
+      enum:
+        - ReplaceAssignedUsers
       type: string
     ServiceJobOpenActionEnum:
       enum:
@@ -39463,6 +39520,7 @@ components:
         - $ref: '#/components/schemas/ServiceJobWaitingForInputActionParameter'
         - $ref: '#/components/schemas/ServiceJobObsoleteActionParameter'
         - $ref: '#/components/schemas/ServiceJobOpenActionParameter'
+        - $ref: '#/components/schemas/ServiceJobReplaceAssignedUsersActionParameter'
     FacilityCustomServiceConnectionStatus:
       type: string
       enum:
