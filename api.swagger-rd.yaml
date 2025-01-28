@@ -46700,6 +46700,203 @@ components:
         - reasons
       title: InventoryFacilityStockStaleReason
       type: object
+    InventoryStockBulkWebHookEventWebHookEvent:
+      properties:
+        payload:
+          $ref: '#/components/schemas/InventoryStockWebHookEventPayload'
+      required:
+        - payload
+      title: InventoryStockBulkWebHookEventWebHookEvent
+      type: object
+    InventoryStockUpdatedDeltaShape:
+      properties:
+        available:
+          deprecated: true
+          type: number
+        availableForPicking:
+          type: number
+        availableOnStock:
+          type: number
+        availableToPromise:
+          deprecated: true
+          type: number
+        byTrait:
+          $ref: '#/components/schemas/InventoryFacilityStockShapeByTrait'
+        previousLocationRef:
+          nullable: true
+          type: string
+        readyToPick:
+          deprecated: true
+          type: number
+        reserved:
+          type: number
+        safetyStock:
+          type: number
+        stockCount:
+          type: number
+        stockOnHand:
+          type: number
+        totalAmount:
+          type: number
+      required:
+        - totalAmount
+        - reserved
+        - safetyStock
+        - available
+        - byTrait
+        - availableToPromise
+        - readyToPick
+        - availableForPicking
+        - stockCount
+        - availableOnStock
+        - stockOnHand
+        - previousLocationRef
+      title: InventoryStockUpdatedDeltaShape
+      type: object
+    InventoryStockWebHookEventPayload:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/InventoryStockWebHookEventPayloadItem'
+          type: array
+      required:
+        - items
+      title: InventoryStockWebHookEventPayload
+      type: object
+    InventoryStockWebHookEventPayloadItem:
+      properties:
+        available:
+          type: number
+        availableUntil:
+          description: >-
+            defines until when a stock is included in the stock availability as
+            available and used for routing
+          format: date-time
+          type: string
+        conditions:
+          description: |-
+            Describes conditions of a stock
+                *`DEFECTIVE` - stock is defective, not usable for customer orders
+          items:
+            enum:
+              - DEFECTIVE
+            type: string
+          type: array
+        created:
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        delta:
+          $ref: '#/components/schemas/InventoryStockUpdatedDeltaShape'
+        facilityRef:
+          description: facility in which the stock is located
+          type: string
+        facilityWideReserved:
+          deprecated: true
+          type: number
+        id:
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        locationRef:
+          description: location on which the stock is placed
+          type: string
+        properties:
+          additionalProperties:
+            type: string
+          allOf:
+            - $ref: '#/components/schemas/StockPropertyPreset'
+          description: >-
+            allow tracking of specific values such as expiry dates on a set of
+            items. They should describe physical identifiable properties of the
+            stock and are not meant to be used for metadata (see
+            "customAttributes" for that).
+        receiptDate:
+          description: >-
+            date-time when stock has entered the system, defaults to the
+            creation date
+          format: date-time
+          type: string
+        reserved:
+          description: amount of this stock for customer orders
+          type: number
+        scannableCodes:
+          description: scannableCodes such as barcodes that identify this stock
+          items:
+            type: string
+          type: array
+        scores:
+          description: >-
+            stock with a high score can used preferably over stock with a lower
+            score in routing, depending on configuration. The score can
+            represent different attributes of the stock like zone, storage
+            location, expiry date or receipt date.
+          items:
+            type: string
+          type: array
+        serializedProperties:
+          description: >-
+            properties object serialized as JSON string, sorted alphabetically
+            by key
+          type: string
+        tenantArticleId:
+          description: tenantArticleId of the stock
+          type: string
+        tenantStockId:
+          description: >-
+            tenantStockId is an optional identifier for the stock in the tenant
+            system, only set on stocks synced from listings
+          type: string
+        traitConfig:
+          description: >-
+            defines the traits of the stock, overrules the storage location
+            traits
+          items:
+            $ref: '#/components/schemas/StorageLocationTraitConfigEntry'
+          type: array
+        traits:
+          description: >-
+            provide information on how storage locations and stocks are to be
+            handled in operational processes. Can only be set via
+            storageLocation. 
+          items:
+            enum:
+              - PICKABLE
+              - ACCESSIBLE
+              - KEEP_ON_ZERO
+              - OUTBOUND
+              - IN_MOTION
+            type: string
+          type: array
+        value:
+          format: int32
+          minimum: 0
+          type: integer
+        version:
+          type: number
+      required:
+        - facilityRef
+        - tenantArticleId
+        - value
+        - reserved
+        - facilityWideReserved
+        - available
+        - id
+        - version
+        - created
+        - lastModified
+        - traits
+        - serializedProperties
+        - delta
+      title: InventoryStockWebHookEventPayloadItem
+      type: object
     ModifyStowLineItemsAction:
       description: Allows modification and adding of stowLineItems
       properties:
