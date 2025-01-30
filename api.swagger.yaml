@@ -46778,6 +46778,15 @@ components:
           $ref: '#/components/schemas/StringFilter'
       title: InboundProcessSearchQuery
       type: object
+    InboundProcessTypeEnumFilter:
+      properties:
+        eq:
+          enum:
+            - ASAP
+            - TIME_POINT
+          type: string
+      title: InboundProcessTypeEnumFilter
+      type: object
     InboundReceipt:
       properties:
         asnRef:
@@ -47734,8 +47743,12 @@ components:
       type: object
     PurchaseOrderFilter:
       properties:
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
         id:
           $ref: '#/components/schemas/StringFilter'
+        requestedDate:
+          $ref: '#/components/schemas/RequestedDateFilter'
       title: PurchaseOrderFilter
       type: object
     PurchaseOrderForCreation:
@@ -48060,6 +48073,14 @@ components:
       required:
         - type
       title: RequestedDateASAP
+      type: object
+    RequestedDateFilter:
+      properties:
+        type:
+          $ref: '#/components/schemas/InboundProcessTypeEnumFilter'
+        value:
+          $ref: '#/components/schemas/DateFilter'
+      title: RequestedDateFilter
       type: object
     RequestedDateTimePoint:
       properties:
