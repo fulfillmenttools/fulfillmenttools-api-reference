@@ -23075,6 +23075,41 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/users/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for User
+      operationId: searchUser
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Core - User Management
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/configurations/notifications:
     get:
       deprecated: false
@@ -45197,6 +45232,12 @@ components:
         - point
       title: ArticleStockForecast
       type: object
+    AuthFilter:
+      properties:
+        type:
+          $ref: '#/components/schemas/UserTypeEnumFilter'
+      title: AuthFilter
+      type: object
     BulkOperationError:
       properties:
         message:
@@ -48287,7 +48328,7 @@ components:
         totalStockValue:
           $ref: '#/components/schemas/NumberFilter'
         type:
-          $ref: '#/components/schemas/TypeEnumFilter'
+          $ref: '#/components/schemas/StorageLocationTypeEnumFilter'
         zoneRef:
           $ref: '#/components/schemas/StringFilter'
       title: StorageLocationSearchQuery
@@ -48309,6 +48350,15 @@ components:
         - enabled
         - trait
       title: StorageLocationTraitConfigEntry
+      type: object
+    StorageLocationTypeEnumFilter:
+      properties:
+        eq:
+          enum:
+            - SINGLE_STORAGE
+            - BULK_STORAGE
+          type: string
+      title: StorageLocationTypeEnumFilter
       type: object
     StowJob:
       properties:
@@ -49055,14 +49105,60 @@ components:
         - takenStockRef
       title: TakenStowLineItemTakeFromForCreation
       type: object
-    TypeEnumFilter:
+    UserSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/UserSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sortBy:
+          enum:
+            - USERNAME_ASC
+            - LASTNAME_ASC
+            - USERNAME_DESC
+            - LASTNAME_DESC
+          type: string
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: UserSearchPayload
+      type: object
+    UserSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/UserSearchQuery'
+          type: array
+        auth:
+          $ref: '#/components/schemas/AuthFilter'
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
+        lastname:
+          $ref: '#/components/schemas/StringFilter'
+        or:
+          items:
+            $ref: '#/components/schemas/UserSearchQuery'
+          type: array
+        username:
+          $ref: '#/components/schemas/StringFilter'
+      title: UserSearchQuery
+      type: object
+    UserTypeEnumFilter:
       properties:
         eq:
           enum:
-            - SINGLE_STORAGE
-            - BULK_STORAGE
+            - EMAIL_PASSWORD
+            - OIDC
           type: string
-      title: TypeEnumFilter
+      title: UserTypeEnumFilter
       type: object
     WebHookEvent:
       properties:
