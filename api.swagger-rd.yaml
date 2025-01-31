@@ -45437,27 +45437,13 @@ components:
         - name
       title: CloseStowJobAction
       type: object
-    CustomAttributesBaseFilter:
-      properties:
-        eq:
-          type: string
-        gt:
-          type: number
-        gte:
-          type: number
-        lt:
-          type: number
-        lte:
-          type: number
-        notEq:
-          type: string
-      title: CustomAttributesBaseFilter
-      type: object
     CustomAttributesFilter:
       properties:
         searchTerms:
           additionalProperties:
-            $ref: '#/components/schemas/CustomAttributesBaseFilter'
+            anyOf:
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberFilter'
           type: object
       required:
         - searchTerms
@@ -49139,6 +49125,14 @@ components:
         - stowedStockRef
         - stowedQuantity
       title: StowedStowLineItemStowToForCreation
+      type: object
+    StringEqFilter:
+      properties:
+        eq:
+          type: string
+        notEq:
+          type: string
+      title: StringEqFilter
       type: object
     StringFilter:
       properties:
