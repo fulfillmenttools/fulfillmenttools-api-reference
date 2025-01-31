@@ -11714,7 +11714,57 @@ paths:
               $ref: '#/components/schemas/RestowItemPatchActions'
         description: Patch set
         required: true
-      summary: Patches a restow item with the given ID
+      summary: >-
+        Patches a restow item with the given ID - Deprecated, please use
+        /api/restowitems/{restowItemId}/actions
+  /api/restowitems/{restowItemId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestowItemActionsParameter'
+      parameters:
+        - description: Reference to the restow item you want to call an action for
+          in: path
+          name: restowItemId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestowItem'
+          description: Updated RestowItem in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The entity you want to call an action for was not found.
+      tags:
+        - Fulfillment Operations - Restow
+      operationId: restowItemAction
+      summary: Call a single action on a given restowitem
   /api/configurations/picking:
     get:
       responses:
@@ -36584,12 +36634,15 @@ components:
         stockRef:
           description: id of the stock entity for this line item
           type: string
+        status:
+          $ref: '#/components/schemas/RestowItemStatus'
       required:
         - id
         - article
         - restowed
         - facilityRef
         - quantity
+        - status
       type: object
     RestowItemForCreation:
       properties:
@@ -36628,6 +36681,13 @@ components:
         - article
         - quantity
       type: object
+    RestowItemStatus:
+      description: Status of the restow item
+      enum:
+        - CANCELED
+        - CLOSED
+        - OPEN
+      type: string
     RestowItemArticle:
       allOf:
         - $ref: '#/components/schemas/AbstractArticle'
@@ -36644,7 +36704,9 @@ components:
         - $ref: '#/components/schemas/ArticleAttributeItem'
     RestowItemPatchActions:
       title: RestowItemPatchActions
-      description: Actions to modify restow items.
+      description: >-
+        Deprecated Actions to modify restow items - please use
+        /api/restowitem/{id}/actions
       properties:
         actions:
           items:
@@ -36697,6 +36759,48 @@ components:
         - PICKING
         - PACKING
         - HANDOVER
+      type: string
+    RestowItemActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/RestowItemRestowActionParameter'
+        - $ref: '#/components/schemas/RestowItemCancelActionParameter'
+    RestowItemRestowActionParameter:
+      title: RestowItemRestowActionParameter
+      description: Action to restow a RestowItem.
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/RestowItemRestowActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        location:
+          $ref: '#/components/schemas/Location'
+      required:
+        - name
+        - version
+    RestowItemRestowActionEnum:
+      enum:
+        - RESTOW
+      type: string
+    RestowItemCancelActionParameter:
+      title: RestowItemCancelActionParameter
+      description: Action to cancel a RestowItem.
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/RestowItemCancelActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    RestowItemCancelActionEnum:
+      enum:
+        - CANCEL
       type: string
     PickingConfigurations:
       allOf:
