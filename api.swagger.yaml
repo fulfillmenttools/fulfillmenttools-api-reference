@@ -36642,7 +36642,10 @@ components:
           type: integer
           default: 1
         operativeProcessRef:
-          description: id of the connected operative process ref if available
+          description: id of the connected operative process if available
+          type: string
+        processRef:
+          description: id of the connected process if available
           type: string
         measurementUnitKey:
           description: Identifier for items unit of measurement.
@@ -47483,6 +47486,23 @@ components:
         - payload
       title: InventoryStockBulkWebHookEventWebHookEvent
       type: object
+    InventoryStockDelta:
+      properties:
+        previousLocationRef:
+          type: string
+        reserved:
+          type: number
+        stockCount:
+          type: number
+        value:
+          type: number
+      required:
+        - previousLocationRef
+        - value
+        - reserved
+        - stockCount
+      title: InventoryStockDelta
+      type: object
     InventoryStockWebHookEventPayload:
       properties:
         items:
@@ -47522,6 +47542,8 @@ components:
             attach custom data from your systems to fulfillmenttools entities.
           nullable: true
           type: object
+        delta:
+          $ref: '#/components/schemas/InventoryStockDelta'
         facilityRef:
           description: facility in which the stock is located
           type: string
@@ -47622,6 +47644,7 @@ components:
         - lastModified
         - traits
         - serializedProperties
+        - delta
       title: InventoryStockWebHookEventPayloadItem
       type: object
     LinkedServiceJobsSearchPayload:
