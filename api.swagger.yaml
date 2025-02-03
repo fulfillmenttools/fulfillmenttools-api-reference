@@ -30833,6 +30833,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/PickingZone'
+            assignedUsers:
+              type: array
+              items:
+                $ref: '#/components/schemas/AssignedUser'
+              description: Assigned users for this entity
           required:
             - id
             - status
@@ -30928,6 +30933,11 @@ components:
             $ref: '#/components/schemas/OperativeTransfer'
         pickingTimes:
           $ref: '#/components/schemas/PickJobPickingTimes'
+        assignedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedUserForCreation'
+          description: Assigned users for this entity
       required:
         - orderDate
         - facilityRef
@@ -31298,6 +31308,29 @@ components:
         - $ref: '#/components/schemas/PickJobResetActionParameter'
         - $ref: '#/components/schemas/PickJobObsoleteActionParameter'
         - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
+        - $ref: '#/components/schemas/PickJobReplaceAssignedUsersActionParameter'
+    PickJobReplaceAssignedUsersActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobReplaceAssignedUsersActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        assignedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedUserForCreation'
+          description: Assigned users for this entity
+      required:
+        - name
+        - version
+        - assignedUsers
+    PickJobReplaceAssignedUsersActionEnum:
+      enum:
+        - REPLACE_ASSIGNED_USERS
+      type: string
     PickJobAbortActionParameter:
       title: PickJobAbortActionParameter
       description: Action to Abort a Pickjob.
@@ -40238,7 +40271,7 @@ components:
       type: string
     ServiceJobReplaceAssignedUsersActionEnum:
       enum:
-        - ReplaceAssignedUsers
+        - REPLACE_ASSIGNED_USERS
       type: string
     ServiceJobOpenActionEnum:
       enum:
