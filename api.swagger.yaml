@@ -22162,6 +22162,43 @@ paths:
       summary: This endpoint is deprecated. Please use /api/stocks/summaries instead.
       tags:
         - Inventory Management - Stocks
+  /api/linkedservicejobs/search:
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Search for LinkedServiceJobs
+      operationId: searchLinkedServiceJobs
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkedServiceJobsSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - LinkedServiceJobs
   /api/pickjobs/search:
     post:
       deprecated: false
@@ -47587,6 +47624,70 @@ components:
         - serializedProperties
       title: InventoryStockWebHookEventPayloadItem
       type: object
+    LinkedServiceJobsSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/LinkedServiceJobsSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sortBy:
+          enum:
+            - LAST_MODIFIED_ASC
+            - TARGET_TIME_ASC
+            - LAST_MODIFIED_DESC
+            - TARGET_TIME_DESC
+          type: string
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: LinkedServiceJobsSearchPayload
+      type: object
+    LinkedServiceJobsSearchQuery:
+      properties:
+        additionalInformation:
+          $ref: '#/components/schemas/StringListFilter'
+        and:
+          items:
+            $ref: '#/components/schemas/LinkedServiceJobsSearchQuery'
+          type: array
+        articleTitles:
+          $ref: '#/components/schemas/StringListFilter'
+        channel:
+          $ref: '#/components/schemas/StringFilter'
+        consumerName:
+          $ref: '#/components/schemas/StringSearchFilter'
+        facilityRef:
+          $ref: '#/components/schemas/StringFilter'
+        invoiceAddress:
+          $ref: '#/components/schemas/StringSearchFilter'
+        lastModified:
+          $ref: '#/components/schemas/DateFilter'
+        linkedServiceJobRef:
+          $ref: '#/components/schemas/StringFilter'
+        or:
+          items:
+            $ref: '#/components/schemas/LinkedServiceJobsSearchQuery'
+          type: array
+        serviceName:
+          $ref: '#/components/schemas/StringListFilter'
+        shippingAddress:
+          $ref: '#/components/schemas/StringSearchFilter'
+        status:
+          $ref: '#/components/schemas/StringFilter'
+        targetTime:
+          $ref: '#/components/schemas/DateFilter'
+        tenantOrderId:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: LinkedServiceJobsSearchQuery
+      type: object
     ModifyStowLineItemsAction:
       description: Allows modification and adding of stowLineItems
       properties:
@@ -47729,6 +47830,8 @@ components:
           items:
             $ref: '#/components/schemas/PickJobSearchQuery'
           type: array
+        consumerName:
+          $ref: '#/components/schemas/StringSearchFilter'
         or:
           items:
             $ref: '#/components/schemas/PickJobSearchQuery'
@@ -49726,6 +49829,24 @@ components:
         contains:
           type: string
       title: StringListFilter
+      type: object
+    StringSearchFilter:
+      properties:
+        eq:
+          type: string
+        in:
+          items:
+            type: string
+          type: array
+        like:
+          type: string
+        notEq:
+          type: string
+        notIn:
+          items:
+            type: string
+          type: array
+      title: StringSearchFilter
       type: object
     StrippedInboundProcess:
       properties:
