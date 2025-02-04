@@ -10118,6 +10118,54 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/packjobs/{packJobId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackJobActionsParameter'
+      parameters:
+        - description: Reference to the pack job you want to call an action for
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackJob'
+          description: Updated PackJob in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Enitity not found
+      tags:
+        - Fulfillment Operations - Packing
+      operationId: packJobAction
+      summary: Call a single action on a given packJob
   /api/packjobs/{packJobId}/documenthandling:
     get:
       parameters:
@@ -27047,6 +27095,11 @@ components:
               type: string
             handoverJobParcelInfo:
               $ref: '#/components/schemas/HandoverJobParcelInfo'
+            assignedUsers:
+              type: array
+              items:
+                $ref: '#/components/schemas/AssignedUser'
+              description: Assigned users for this entity
       required:
         - id
         - status
@@ -27220,6 +27273,11 @@ components:
             $ref: '#/components/schemas/OperativeTransfer'
         handoverJobParcelInfo:
           $ref: '#/components/schemas/HandoverJobParcelInfoForCreation'
+        assignedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedUserForCreation'
+          description: Assigned users for this entity
       required:
         - facilityRef
         - targetTime
@@ -30736,6 +30794,31 @@ components:
         - $ref: '#/components/schemas/PickJobObsoleteActionParameter'
         - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
         - $ref: '#/components/schemas/PickJobReplaceAssignedUsersActionParameter'
+    PackJobReplaceAssignedUsersActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PackJobReplaceAssignedUsersActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        assignedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedUserForCreation'
+          description: Assigned users for this entity
+      required:
+        - name
+        - version
+        - assignedUsers
+    PackJobReplaceAssignedUsersActionEnum:
+      enum:
+        - REPLACE_ASSIGNED_USERS
+      type: string
+    PackJobActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/PackJobReplaceAssignedUsersActionParameter'
     PickJobReplaceAssignedUsersActionParameter:
       additionalProperties: false
       properties:
@@ -31073,6 +31156,29 @@ components:
         - $ref: '#/components/schemas/HandoverJobCancelActionParameter'
         - $ref: '#/components/schemas/HandoverJobLineItemUpdateActionParameter'
         - $ref: '#/components/schemas/FinishHandoverJobActionParameter'
+        - $ref: '#/components/schemas/HandoverJobReplaceAssignedUsersActionParameter'
+    HandoverJobReplaceAssignedUsersActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/HandoverJobReplaceAssignedUsersActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        assignedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedUserForCreation'
+          description: Assigned users for this entity
+      required:
+        - name
+        - version
+        - assignedUsers
+    HandoverJobReplaceAssignedUsersActionEnum:
+      enum:
+        - REPLACE_ASSIGNED_USERS
+      type: string
     HandoverJobCancelActionParameter:
       title: HandoverJobCancelActionParameter
       description: Action to cancel a handoverjob.
@@ -34699,6 +34805,11 @@ components:
           items:
             $ref: '#/components/schemas/PackLineItemForCreation'
           type: array
+        assignedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedUserForCreation'
+          description: Assigned users for this entity
         processId:
           description: >-
             Id of the global process related to this entity. For example used
@@ -34791,6 +34902,11 @@ components:
               description: Reference to a pick job
               example: Pic50gpH7794X5NdMp3C
               type: string
+            assignedUsers:
+              type: array
+              items:
+                $ref: '#/components/schemas/AssignedUser'
+              description: Assigned users for this entity
             status:
               $ref: '#/components/schemas/PackJobStatus'
             lineItems:
