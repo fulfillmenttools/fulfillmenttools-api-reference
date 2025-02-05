@@ -48108,9 +48108,13 @@ components:
       type: object
     PurchaseOrderEventPayload:
       properties:
+        canceled:
+          type: boolean
         created:
           format: date-time
           type: string
+        customAttributes:
+          type: object
         facilityRef:
           type: string
         id:
@@ -48129,12 +48133,16 @@ components:
           items:
             $ref: '#/components/schemas/InboundLineItem'
           type: array
+        status:
+          type: string
         supplier:
           $ref: '#/components/schemas/PurchaseOrderSupplier'
         tenantInboundProcessId:
           type: string
         transfer:
           $ref: '#/components/schemas/PurchaseOrderTransfer'
+        version:
+          type: number
       required:
         - id
         - orderDate
@@ -48144,6 +48152,9 @@ components:
         - facilityRef
         - created
         - lastModified
+        - canceled
+        - status
+        - version
       title: PurchaseOrderEventPayload
       type: object
     PurchaseOrderFilter:
