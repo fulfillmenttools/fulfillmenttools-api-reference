@@ -46278,6 +46278,23 @@ components:
         - version
       title: InboundProcessForPatch
       type: object
+    InboundProcessSearchSort:
+      properties:
+        direction:
+          description: The direction of the sorting.
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          description: The field to sort by.
+          pattern: ^customAttributes.searchTerms..*$
+          type: string
+      required:
+        - name
+        - direction
+      title: InboundProcessSearchSort
+      type: object
     InboundProcessOrigin:
       properties:
         name:
@@ -46493,6 +46510,12 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/InboundProcessSearchSort'
+          maxItems: 1
+          type: array
         startAfterId:
           description: The ID to start after.
           type: string
@@ -47237,6 +47260,25 @@ components:
         - delta
       title: InventoryStockWebHookEventPayloadItem
       type: object
+    LinkedServiceJobsSearchSort:
+      properties:
+        direction:
+          description: The direction of the sorting.
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          description: The field to sort by.
+          enum:
+            - lastModified
+            - targetTime
+          type: string
+      required:
+        - name
+        - direction
+      title: LinkedServiceJobsSearchSort
+      type: object
     LinkedServiceJobsSearchPayload:
       properties:
         options:
@@ -47249,7 +47291,15 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/LinkedServiceJobsSearchSort'
+          maxItems: 1
+          type: array
         sortBy:
+          deprecated: true
+          description: Use sort instead
           enum:
             - LAST_MODIFIED_ASC
             - TARGET_TIME_ASC
@@ -47411,6 +47461,25 @@ components:
         - name
       title: PauseStowJobAction
       type: object
+    PickJobSearchSort:
+      properties:
+        direction:
+          description: The direction of the sorting.
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          description: The field to sort by.
+          enum:
+            - tenantOrderId
+            - targetTime
+          type: string
+      required:
+        - name
+        - direction
+      title: PickJobSearchSort
+      type: object
     PickJobSearchPayload:
       properties:
         options:
@@ -47423,7 +47492,15 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/PickJobSearchSort'
+          maxItems: 1
+          type: array
         sortBy:
+          deprecated: true
+          description: Use sort instead
           enum:
             - TENANT_ORDER_ID_ASC
             - TARGET_TIME_ASC
@@ -48449,6 +48526,23 @@ components:
         - version
       title: StockForUpsertUpdate
       type: object
+    StockSearchSort:
+      properties:
+        direction:
+          description: The direction of the sorting.
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          description: The field to sort by.
+          pattern: ^customAttributes.searchTerms..*$
+          type: string
+      required:
+        - name
+        - direction
+      title: StockSearchSort
+      type: object
     StockMoveToLocation:
       properties:
         amount:
@@ -48514,6 +48608,12 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/StockSearchSort'
+          maxItems: 1
+          type: array
         startAfterId:
           description: The ID to start after.
           type: string
@@ -48699,6 +48799,29 @@ components:
         - stocks
       title: StocksForUpsert
       type: object
+    StorageLocationSearchSort:
+      properties:
+        direction:
+          description: The direction of the sorting.
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          anyOf:
+            - enum:
+                - name
+                - tenantLocationId
+                - zoneRef
+                - created
+            - pattern: ^customAttributes.searchTerms..*$
+              type: string
+          description: The field to sort by.
+      required:
+        - name
+        - direction
+      title: StorageLocationSearchSort
+      type: object
     StorageLocationRecommendation:
       properties:
         stockCount:
@@ -48722,7 +48845,15 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/StorageLocationSearchSort'
+          maxItems: 1
+          type: array
         sortBy:
+          deprecated: true
+          description: Use sort instead
           enum:
             - NAME_ASC
             - TENANT_LOCATION_ID_ASC
@@ -48941,6 +49072,26 @@ components:
         - version
       title: StowJobForPatch
       type: object
+    StowJobSearchSort:
+      properties:
+        direction:
+          description: The direction of the sorting.
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          anyOf:
+            - enum:
+                - lastModified
+            - pattern: ^customAttributes.searchTerms..*$
+              type: string
+          description: The field to sort by.
+      required:
+        - name
+        - direction
+      title: StowJobSearchSort
+      type: object
     StowJobPaginatedResult:
       properties:
         stowJobs:
@@ -48969,7 +49120,15 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/StowJobSearchSort'
+          maxItems: 1
+          type: array
         sortBy:
+          deprecated: true
+          description: Use sort instead
           enum:
             - LAST_MODIFIED_ASC
             - LAST_MODIFIED_DESC
@@ -49568,6 +49727,27 @@ components:
         - takenStockRef
       title: TakenStowLineItemTakeFromForCreation
       type: object
+    UserSearchSort:
+      properties:
+        direction:
+          description: The direction of the sorting.
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          anyOf:
+            - enum:
+                - username
+                - lastname
+            - pattern: ^customAttributes.searchTerms..*$
+              type: string
+          description: The field to sort by.
+      required:
+        - name
+        - direction
+      title: UserSearchSort
+      type: object
     UserSearchPayload:
       properties:
         options:
@@ -49580,7 +49760,15 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/UserSearchSort'
+          maxItems: 1
+          type: array
         sortBy:
+          deprecated: true
+          description: Use sort instead
           enum:
             - USERNAME_ASC
             - LASTNAME_ASC
