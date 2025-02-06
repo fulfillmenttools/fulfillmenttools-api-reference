@@ -46135,11 +46135,14 @@ components:
         - point
       title: ArticleStockForecast
       type: object
-    AuthFilter:
+    AuthenticationProviderTypeEnumFilter:
       properties:
-        type:
-          $ref: '#/components/schemas/UserTypeEnumFilter'
-      title: AuthFilter
+        eq:
+          enum:
+            - EMAIL_PASSWORD
+            - OIDC
+          type: string
+      title: AuthenticationProviderTypeEnumFilter
       type: object
     BulkOperationError:
       properties:
@@ -46245,6 +46248,15 @@ components:
           format: date-time
           type: string
       title: DateFilter
+      type: object
+    EnumFilter:
+      properties:
+        eq:
+          enum:
+            - SINGLE_STORAGE
+            - BULK_STORAGE
+          type: string
+      title: EnumFilter
       type: object
     ExternalStockChangeReason:
       properties:
@@ -46869,6 +46881,20 @@ components:
         - direction
       title: InboundProcessSearchSort
       type: object
+    InboundProcessInboundReceiptFilter:
+      properties:
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        status:
+          $ref: '#/components/schemas/InboundReceiptStatusTypeEnumFilter'
+      title: InboundProcessInboundReceiptFilter
+      type: object
+    InboundProcessInboundReceiptListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/InboundProcessInboundReceiptFilter'
+      title: InboundProcessInboundReceiptListFilter
+      type: object
     InboundProcessOrigin:
       properties:
         name:
@@ -46957,6 +46983,16 @@ components:
         - created
         - lastModified
       title: InboundProcessPurchaseOrder
+      type: object
+    InboundProcessPurchaseOrderFilter:
+      properties:
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        requestedDate:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderRequestedDateFilter'
+      title: InboundProcessPurchaseOrderFilter
       type: object
     InboundProcessPurchaseOrderForCreation:
       properties:
@@ -47057,6 +47093,14 @@ components:
         - version
       title: InboundProcessPurchaseOrderForUpsert
       type: object
+    InboundProcessPurchaseOrderRequestedDateFilter:
+      properties:
+        type:
+          $ref: '#/components/schemas/RequestedDateTypeEnumFilter'
+        value:
+          $ref: '#/components/schemas/DateFilter'
+      title: InboundProcessPurchaseOrderRequestedDateFilter
+      type: object
     InboundProcessPurchaseOrderSupplier:
       properties:
         name:
@@ -47114,19 +47158,12 @@ components:
             $ref: '#/components/schemas/InboundProcessSearchQuery'
           type: array
         purchaseOrder:
-          $ref: '#/components/schemas/PurchaseOrderFilter'
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderFilter'
+        receipts:
+          $ref: '#/components/schemas/InboundProcessInboundReceiptListFilter'
         tenantInboundProcessId:
           $ref: '#/components/schemas/StringFilter'
       title: InboundProcessSearchQuery
-      type: object
-    InboundProcessTypeEnumFilter:
-      properties:
-        eq:
-          enum:
-            - ASAP
-            - TIME_POINT
-          type: string
-      title: InboundProcessTypeEnumFilter
       type: object
     InboundReceipt:
       properties:
@@ -47426,6 +47463,16 @@ components:
         - rejectedQuantity
         - comments
       title: InboundReceiptLineItem
+      type: object
+    InboundReceiptStatusTypeEnumFilter:
+      properties:
+        eq:
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - FINISHED
+          type: string
+      title: InboundReceiptStatusTypeEnumFilter
       type: object
     InputRequestedDate:
       properties:
@@ -48237,16 +48284,6 @@ components:
         - version
       title: PurchaseOrderEventPayload
       type: object
-    PurchaseOrderFilter:
-      properties:
-        customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
-        id:
-          $ref: '#/components/schemas/StringFilter'
-        requestedDate:
-          $ref: '#/components/schemas/RequestedDateFilter'
-      title: PurchaseOrderFilter
-      type: object
     PurchaseOrderForCreation:
       properties:
         cancelled:
@@ -48570,14 +48607,6 @@ components:
         - type
       title: RequestedDateASAP
       type: object
-    RequestedDateFilter:
-      properties:
-        type:
-          $ref: '#/components/schemas/InboundProcessTypeEnumFilter'
-        value:
-          $ref: '#/components/schemas/DateFilter'
-      title: RequestedDateFilter
-      type: object
     RequestedDateTimePoint:
       properties:
         type:
@@ -48592,6 +48621,15 @@ components:
         - type
         - value
       title: RequestedDateTimePoint
+      type: object
+    RequestedDateTypeEnumFilter:
+      properties:
+        eq:
+          enum:
+            - ASAP
+            - TIME_POINT
+          type: string
+      title: RequestedDateTypeEnumFilter
       type: object
     SafetyStock:
       properties:
@@ -49470,7 +49508,7 @@ components:
         totalStockValue:
           $ref: '#/components/schemas/NumberFilter'
         type:
-          $ref: '#/components/schemas/StorageLocationTypeEnumFilter'
+          $ref: '#/components/schemas/EnumFilter'
         zoneRef:
           $ref: '#/components/schemas/StringFilter'
       title: StorageLocationSearchQuery
@@ -49492,15 +49530,6 @@ components:
         - enabled
         - trait
       title: StorageLocationTraitConfigEntry
-      type: object
-    StorageLocationTypeEnumFilter:
-      properties:
-        eq:
-          enum:
-            - SINGLE_STORAGE
-            - BULK_STORAGE
-          type: string
-      title: StorageLocationTypeEnumFilter
       type: object
     StowJob:
       properties:
@@ -50301,6 +50330,12 @@ components:
         - takenStockRef
       title: TakenStowLineItemTakeFromForCreation
       type: object
+    UserAuthentificationProviderFilter:
+      properties:
+        type:
+          $ref: '#/components/schemas/AuthenticationProviderTypeEnumFilter'
+      title: UserAuthentificationProviderFilter
+      type: object
     UserSearchSort:
       properties:
         direction:
@@ -50363,7 +50398,7 @@ components:
             $ref: '#/components/schemas/UserSearchQuery'
           type: array
         auth:
-          $ref: '#/components/schemas/AuthFilter'
+          $ref: '#/components/schemas/UserAuthentificationProviderFilter'
         customAttributes:
           $ref: '#/components/schemas/CustomAttributesFilter'
         lastname:
@@ -50375,15 +50410,6 @@ components:
         username:
           $ref: '#/components/schemas/StringFilter'
       title: UserSearchQuery
-      type: object
-    UserTypeEnumFilter:
-      properties:
-        eq:
-          enum:
-            - EMAIL_PASSWORD
-            - OIDC
-          type: string
-      title: UserTypeEnumFilter
       type: object
     WebHookEvent:
       properties:
