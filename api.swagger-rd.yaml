@@ -21832,6 +21832,41 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/processes/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for Process
+      operationId: searchProcess
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Core - Processes
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/purchaseorders:
     post:
       deprecated: false
@@ -47583,6 +47618,84 @@ components:
         tenantOrderId:
           $ref: '#/components/schemas/StringFilter'
       title: PickJobSearchQuery
+      type: object
+    ProcessSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ProcessSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: ProcessSearchPayload
+      type: object
+    ProcessSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ProcessSearchQuery'
+          type: array
+        documentRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        domsStatus:
+          $ref: '#/components/schemas/ProcessStatusEnumFilter'
+        externalActionRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        facilityRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        flatRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        handoverJobRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        itemReturnJobsRef:
+          $ref: '#/components/schemas/StringListFilter'
+        operativeStatus:
+          $ref: '#/components/schemas/ProcessStatusEnumFilter'
+        or:
+          items:
+            $ref: '#/components/schemas/ProcessSearchQuery'
+          type: array
+        orderRef:
+          $ref: '#/components/schemas/StringFilter'
+        packJobRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        pickJobRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        returnRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        returnStatus:
+          $ref: '#/components/schemas/ProcessStatusEnumFilter'
+        routingPlanRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        serviceJobRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        shipmentRefs:
+          $ref: '#/components/schemas/StringListFilter'
+        status:
+          $ref: '#/components/schemas/ProcessStatusEnumFilter'
+      title: ProcessSearchQuery
+      type: object
+    ProcessStatusEnumFilter:
+      properties:
+        eq:
+          enum:
+            - CREATED
+            - IN_PROGRESS
+            - FINISHED
+            - CANCELED
+            - ERROR
+            - NOT_AVAILABLE
+          type: string
+      title: ProcessStatusEnumFilter
       type: object
     PurchaseOrder:
       properties:
