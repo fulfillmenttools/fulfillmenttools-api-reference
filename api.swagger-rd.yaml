@@ -11458,12 +11458,20 @@ paths:
           required: false
           schema:
             type: string
-        - description: Reference restowed status of the restoe items
+        - description: Reference restowed status of the restow items
           in: query
           name: restowed
           required: false
           schema:
             type: boolean
+        - description: Reference status of the restow items
+          in: query
+          name: status
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
         - description: all entities after given Id
           in: query
           name: startAfterId
@@ -11477,6 +11485,12 @@ paths:
           schema:
             default: 25
             type: integer
+        - description: query orderBy
+          in: query
+          name: orderBy
+          required: false
+          schema:
+            $ref: '#/components/schemas/RestowItemsSortOptionsEnum'
       responses:
         '200':
           content:
@@ -36502,6 +36516,13 @@ components:
     RestowItemCancelActionEnum:
       enum:
         - CANCEL
+      type: string
+    RestowItemsSortOptionsEnum:
+      enum:
+        - CREATED_DESC
+        - CREATED_ASC
+        - LAST_MODIFIED_DESC
+        - LAST_MODIFIED_ASC
       type: string
     PickingConfigurations:
       allOf:
