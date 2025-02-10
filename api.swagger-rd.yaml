@@ -46219,6 +46219,35 @@ components:
         - onHold
       title: InboundDeliveryReleasedPayload
       type: object
+    InboundDeliverySingleReceiptPayload:
+      properties:
+        facilityRef:
+          type: string
+        inboundProcessRef:
+          type: string
+        onHold:
+          type: boolean
+        purchaseOrder:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrder'
+        receipt:
+          $ref: '#/components/schemas/InboundReceipt'
+        status:
+          enum:
+            - OPEN
+            - PARTIAL_DELIVERY
+            - ON_HOLD
+            - CLOSED
+          type: string
+        tenantInboundProcessRef:
+          type: string
+      required:
+        - inboundProcessRef
+        - facilityRef
+        - status
+        - onHold
+        - receipt
+      title: InboundDeliverySingleReceiptPayload
+      type: object
     InboundLineItem:
       properties:
         customAttributes:
@@ -46643,6 +46672,24 @@ components:
       required:
         - id
       title: InboundProcessPurchaseOrderTransfer
+      type: object
+    InboundProcessReceiptBulkWebHookEvent:
+      properties:
+        payload:
+          $ref: '#/components/schemas/InboundProcessReceiptBulkWebHookEventPayload'
+      required:
+        - payload
+      title: InboundProcessReceiptBulkWebHookEvent
+      type: object
+    InboundProcessReceiptBulkWebHookEventPayload:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/InboundDeliverySingleReceiptPayload'
+          type: array
+      required:
+        - items
+      title: InboundProcessReceiptBulkWebHookEventPayload
       type: object
     InboundProcessSearchPayload:
       properties:
@@ -47246,13 +47293,13 @@ components:
         - reasons
       title: InventoryFacilityStockStaleReason
       type: object
-    InventoryStockBulkWebHookEventWebHookEvent:
+    InventoryStockBulkWebHookEvent:
       properties:
         payload:
           $ref: '#/components/schemas/InventoryStockWebHookEventPayload'
       required:
         - payload
-      title: InventoryStockBulkWebHookEventWebHookEvent
+      title: InventoryStockBulkWebHookEvent
       type: object
     InventoryStockDelta:
       properties:
