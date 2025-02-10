@@ -21797,6 +21797,41 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/listings/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for Listing
+      operationId: searchListing
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListingSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Core - Listings
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/pickjobs/search:
     post:
       deprecated: false
@@ -47449,6 +47484,74 @@ components:
         tenantOrderId:
           $ref: '#/components/schemas/StringSearchFilter'
       title: LinkedServiceJobsSearchQuery
+      type: object
+    ListingSearchSort:
+      properties:
+        direction:
+          description: The direction of the sorting.
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          description: The field to sort by.
+          enum:
+            - lastModified
+          type: string
+      required:
+        - name
+        - direction
+      title: ListingSearchSort
+      type: object
+    ListingSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ListingSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ListingSearchSort'
+          maxItems: 1
+          type: array
+        sortBy:
+          deprecated: true
+          description: Use sort instead
+          enum:
+            - LAST_MODIFIED_ASC
+            - LAST_MODIFIED_DESC
+          type: string
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: ListingSearchPayload
+      type: object
+    ListingSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ListingSearchQuery'
+          type: array
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
+        facilityRef:
+          $ref: '#/components/schemas/StringFilter'
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        or:
+          items:
+            $ref: '#/components/schemas/ListingSearchQuery'
+          type: array
+      title: ListingSearchQuery
       type: object
     ModifyStowLineItemsAction:
       description: Allows modification and adding of stowLineItems
