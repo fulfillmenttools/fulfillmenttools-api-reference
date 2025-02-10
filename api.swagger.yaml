@@ -40066,6 +40066,13 @@ components:
           $ref: '#/components/schemas/AdditionalInformationValueType'
         isMandatory:
           type: boolean
+        tenantAdditionalInformationId:
+          type: string
+          minLength: 1
+          example: AddInfoABC123
+          description: >-
+            Id to identifiy the additional information on an external system.
+            Must be unique per CustomService.
       required:
         - nameLocalized
         - valueType
@@ -40183,7 +40190,17 @@ components:
       properties:
         additionalInformationRef:
           type: string
-          description: ID of the additional information
+          description: >-
+            ID of the additional information. Either
+            tenantAdditionalInformationId or additionalInformationRef must be
+            set.
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        tenantAdditionalInformationRef:
+          type: string
+          description: >-
+            external ID of the additional information. Either
+            tenantAdditionalInformationId or additionalInformationRef must be
+            set.
           example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
         value:
           anyOf:
@@ -40192,8 +40209,6 @@ components:
             - type: boolean
           description: Value of the additional information
           example: some value
-      required:
-        - additionalInformationRef
     ServiceJobAdditionalInformationForUpdate:
       type: object
       properties:
@@ -40201,6 +40216,10 @@ components:
           type: string
           description: ID of the additional information
           example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        tenantAdditionalInformationRef:
+          type: string
+          description: external ID of the additional information
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
         value:
           anyOf:
             - type: string
@@ -40208,8 +40227,6 @@ components:
             - type: boolean
           description: Value of the additional information
           example: some value
-      required:
-        - additionalInformationRef
     ServiceJobLineItem:
       allOf:
         - $ref: '#/components/schemas/ServiceJobLineItemForCreation'
