@@ -43932,10 +43932,12 @@ components:
           * `ORDER`
           * `FACILITY`
           * `CARRIERCONNECTION`
+          * `LISTING`
       enum:
         - ORDER
         - FACILITY
         - CARRIERCONNECTION
+        - LISTING
       type: string
       xml:
         name: ToolkitAllowedEntities
@@ -44262,6 +44264,13 @@ components:
       type: object
       xml:
         name: ToolkitComparisonPredicate
+    ToolkitRuleScope:
+      enum:
+        - WHOLE_ENTITY
+        - LINE_ITEM
+      type: string
+      xml:
+        name: ToolkitRuleScope
     ToolkitRule:
       description: >-
         The rule, containing the left predicates and the right predicates, that
@@ -44273,6 +44282,8 @@ components:
           $ref: '#/components/schemas/ToolkitRulePart'
         rightPart:
           $ref: '#/components/schemas/ToolkitRulePart'
+        evaluationScope:
+          $ref: '#/components/schemas/ToolkitRuleScope'
       required:
         - operator
         - leftPart
@@ -44292,6 +44303,8 @@ components:
           items:
             $ref: '#/components/schemas/ToolkitComparisonPredicate'
           minItems: 1
+        evaluationScope:
+          $ref: '#/components/schemas/ToolkitRuleScope'
       required:
         - predicates
       type: object
