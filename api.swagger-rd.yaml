@@ -20877,6 +20877,41 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/facilities/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for Facility
+      operationId: searchFacility
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilitySearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Core - Facilities
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/facilities/{facilityId}/configurations/inventory:
     get:
       deprecated: false
@@ -46001,6 +46036,158 @@ components:
         - reasonLocalized
       title: ExternalStockChangeReasonOutput
       type: object
+    FacilityFacilityAddressFacilityAddressForCreationEmailAddressesFilter:
+      properties:
+        recipient:
+          $ref: '#/components/schemas/StringFilter'
+        value:
+          $ref: '#/components/schemas/StringFilter'
+      title: FacilityFacilityAddressFacilityAddressForCreationEmailAddressesFilter
+      type: object
+    FacilityFacilityAddressFacilityAddressForCreationEmailAddressesListFilter:
+      properties:
+        contains:
+          $ref: >-
+            #/components/schemas/FacilityFacilityAddressFacilityAddressForCreationEmailAddressesFilter
+      title: >-
+        FacilityFacilityAddressFacilityAddressForCreationEmailAddressesListFilter
+      type: object
+    FacilityFacilityAddressFilter:
+      properties:
+        city:
+          $ref: '#/components/schemas/StringFilter'
+        companyName:
+          $ref: '#/components/schemas/StringFilter'
+        country:
+          $ref: '#/components/schemas/StringFilter'
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
+        emailAddresses:
+          $ref: >-
+            #/components/schemas/FacilityFacilityAddressFacilityAddressForCreationEmailAddressesListFilter
+        houseNumber:
+          $ref: '#/components/schemas/StringFilter'
+        postalCode:
+          $ref: '#/components/schemas/StringFilter'
+        province:
+          $ref: '#/components/schemas/StringFilter'
+        street:
+          $ref: '#/components/schemas/StringFilter'
+      title: FacilityFacilityAddressFilter
+      type: object
+    FacilityFacilityForCreationContactFilter:
+      properties:
+        firstName:
+          $ref: '#/components/schemas/StringFilter'
+        lastName:
+          $ref: '#/components/schemas/StringFilter'
+      title: FacilityFacilityForCreationContactFilter
+      type: object
+    FacilityFacilityForCreationServicesFilter:
+      properties:
+        type:
+          $ref: '#/components/schemas/FacilityServiceTypeEnumFilter'
+      title: FacilityFacilityForCreationServicesFilter
+      type: object
+    FacilityFacilityForCreationServicesListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/FacilityFacilityForCreationServicesFilter'
+      title: FacilityFacilityForCreationServicesListFilter
+      type: object
+    FacilityLocationTypeEnumFilter:
+      properties:
+        eq:
+          enum:
+            - STORE
+            - WAREHOUSE
+            - EXTERNAL
+          type: string
+        notEq:
+          enum:
+            - STORE
+            - WAREHOUSE
+            - EXTERNAL
+          type: string
+      title: FacilityLocationTypeEnumFilter
+      type: object
+    FacilitySearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/FacilitySearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: FacilitySearchPayload
+      type: object
+    FacilitySearchQuery:
+      properties:
+        address:
+          $ref: '#/components/schemas/FacilityFacilityAddressFilter'
+        and:
+          items:
+            $ref: '#/components/schemas/FacilitySearchQuery'
+          type: array
+        contact:
+          $ref: '#/components/schemas/FacilityFacilityForCreationContactFilter'
+        locationType:
+          $ref: '#/components/schemas/FacilityLocationTypeEnumFilter'
+        name:
+          $ref: '#/components/schemas/StringFilter'
+        or:
+          items:
+            $ref: '#/components/schemas/FacilitySearchQuery'
+          type: array
+        services:
+          $ref: '#/components/schemas/FacilityFacilityForCreationServicesListFilter'
+        status:
+          $ref: '#/components/schemas/FacilityStatusEnumFilter'
+        tags:
+          $ref: '#/components/schemas/FacilityTagReferenceListFilter'
+        tenantFacilityId:
+          $ref: '#/components/schemas/StringFilter'
+      title: FacilitySearchQuery
+      type: object
+    FacilityServiceTypeEnumFilter:
+      properties:
+        eq:
+          enum:
+            - SHIP_FROM_STORE
+            - PICKUP
+          type: string
+        notEq:
+          enum:
+            - SHIP_FROM_STORE
+            - PICKUP
+          type: string
+      title: FacilityServiceTypeEnumFilter
+      type: object
+    FacilityStatusEnumFilter:
+      properties:
+        eq:
+          enum:
+            - ONLINE
+            - SUSPENDED
+            - OFFLINE
+          type: string
+        notEq:
+          enum:
+            - ONLINE
+            - SUSPENDED
+            - OFFLINE
+          type: string
+      title: FacilityStatusEnumFilter
+      type: object
     FacilityStock:
       properties:
         available:
@@ -46145,6 +46332,20 @@ components:
         - facilityName
         - price
       title: FacilityStockDistribution
+      type: object
+    FacilityTagReferenceFilter:
+      properties:
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        value:
+          $ref: '#/components/schemas/StringFilter'
+      title: FacilityTagReferenceFilter
+      type: object
+    FacilityTagReferenceListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/FacilityTagReferenceFilter'
+      title: FacilityTagReferenceListFilter
       type: object
     InboundAttachment:
       properties:
