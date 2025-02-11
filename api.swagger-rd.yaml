@@ -38216,6 +38216,55 @@ components:
       type: object
       xml:
         name: StorageLocationPatchActions
+    ZoneForCreation:
+      allOf:
+        - $ref: '#/components/schemas/CustomAttributesResource'
+      properties:
+        name:
+          description: The name of this zone
+          type: string
+        score:
+          description: The score of this zone
+          type: number
+      required:
+        - name
+        - score
+      type: object
+      xml:
+        name: ZoneForCreation
+    ZoneForReplacement:
+      allOf:
+        - $ref: '#/components/schemas/ZoneForCreation'
+      properties:
+        version:
+          example: 42
+          format: int64
+          type: integer
+      required:
+        - version
+      type: object
+      xml:
+        name: ZoneForReplacement
+    Zone:
+      allOf:
+        - $ref: '#/components/schemas/ZoneForReplacement'
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          description: The id of this zone
+          type: string
+        facilityRef:
+          description: >-
+            The id of the facility reference. The given ID has to be present in
+            the system.
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+      required:
+        - id
+        - facilityRef
+      type: object
+      xml:
+        name: Zone
     RemoteConfigurationForCreation:
       additionalProperties: false
       properties:
@@ -39333,55 +39382,6 @@ components:
           type: object
       xml:
         name: HermesFacilityCarrierConfiguration
-    ZoneForCreation:
-      allOf:
-        - $ref: '#/components/schemas/CustomAttributesResource'
-      properties:
-        name:
-          description: The name of this zone
-          type: string
-        score:
-          description: The score of this zone
-          type: number
-      required:
-        - name
-        - score
-      type: object
-      xml:
-        name: ZoneForCreation
-    ZoneForReplacement:
-      allOf:
-        - $ref: '#/components/schemas/ZoneForCreation'
-      properties:
-        version:
-          example: 42
-          format: int64
-          type: integer
-      required:
-        - version
-      type: object
-      xml:
-        name: ZoneForReplacement
-    Zone:
-      allOf:
-        - $ref: '#/components/schemas/ZoneForReplacement'
-        - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        id:
-          description: The id of this zone
-          type: string
-        facilityRef:
-          description: >-
-            The id of the facility reference. The given ID has to be present in
-            the system.
-          example: Esb20gpHBL94X5NdMp3C
-          type: string
-      required:
-        - id
-        - facilityRef
-      type: object
-      xml:
-        name: Zone
     CustomServiceForCreation:
       additionalProperties: false
       properties:
