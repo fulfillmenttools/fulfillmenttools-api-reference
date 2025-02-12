@@ -16510,6 +16510,124 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/configurations/operativeservice:
+    get:
+      parameters:
+        - description: >-
+            Provide the localized names and descriptions for operative service
+            configuration.
+             If not provided the default locale is used. for
+             example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeServiceConfiguration'
+          description: Central Configuration of all Service related operations
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Custom Services
+      operationId: getOperativeServiceConfiguration
+      summary: Get the operative service configuration
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      x-badges:
+        - color: red
+          label: ALPHA
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperativeServiceConfigurationForUpsert'
+        description: create/update operative service configuration
+        required: true
+      parameters:
+        - description: >-
+            Provide the localized names and descriptions for the operative
+            service configuration.
+             If not provided the default locale is used. for
+             example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeServiceConfiguration'
+          description: The operative service configuration was successfully updated.
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperativeServiceConfiguration'
+          description: The operative service configuration was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Custom Services
+      operationId: upsertOperativeServiceConfigurations
+      summary: Change the tenant wide operative service  configuration
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/operativeprocesses:
     get:
       parameters:
@@ -27099,6 +27217,13 @@ components:
           example: 42
           format: int64
           type: integer
+        actorAnonymization:
+          type: boolean
+          default: true
+          example: true
+          description: >-
+            If true, the actor information will be stored anonymized for
+            auditing. Might take up to 1 hour to be take into effect
         id:
           type: string
       required:
@@ -39744,6 +39869,8 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/ServiceJobStatus'
+        statusInformation:
+          $ref: '#/components/schemas/ServiceJobStatusInformation'
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
         descriptionLocalized:
@@ -39973,6 +40100,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ServiceJobAdditionalInformationForUpdate'
+        cancelReason:
+          $ref: '#/components/schemas/LocaleString'
       required:
         - name
         - version
@@ -40341,6 +40470,73 @@ components:
       type: string
       xml:
         name: LinkedServiceJobsFilterChannel
+    OperativeServiceConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Operative Service Configuration is always operativeservice
+        cancelReasons:
+          items:
+            $ref: '#/components/schemas/ServiceJobCancelReason'
+          type: array
+      required:
+        - id
+    OperativeServiceConfigurationForUpsert:
+      additionalProperties: false
+      type: object
+      properties:
+        version:
+          type: number
+          minimum: 1
+        cancelReasons:
+          items:
+            $ref: '#/components/schemas/ServiceJobCancelReason'
+          type: array
+      required:
+        - version
+    ServiceJobCancelReason:
+      additionalProperties: false
+      properties:
+        active:
+          type: boolean
+        cancelReasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        cancelReason:
+          description: translated cancelReason selected from cancelReasonLocalized
+          example: Broken Item
+          type: string
+      required:
+        - cancelReasonLocalized
+        - active
+    ServiceJobStatusInformation:
+      additionalProperties: false
+      properties:
+        cancelReason:
+          $ref: '#/components/schemas/StatusReason'
+    StatusReason:
+      additionalProperties: false
+      type: object
+      properties:
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        reason:
+          description: translated reason selected from reasonLocalized
+          example: Broken Item
+          type: string
+      required:
+        - reasonLocalized
+    StatusReasonInternal:
+      additionalProperties: false
+      type: object
+      properties:
+        cancelReasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+      required:
+        - cancelReasonLocalized
     HandoverContainer:
       additionalProperties: false
       allOf:
