@@ -2821,7 +2821,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Facility'
+                $ref: '#/components/schemas/ManagedFacility'
           description: >-
             The facility was successfully created. The Location header contains
             the URL of the facility.
@@ -2856,7 +2856,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FacilityForCreation'
+              $ref: '#/components/schemas/ManagedFacilityForCreation'
         description: Representation that describes the facility
         required: true
       summary: Add a new facility
@@ -2980,7 +2980,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Facility'
+                $ref: '#/components/schemas/ManagedFacility'
           description: >-
             Facility was found & you were allowed to access it. The result is in
             the body.
@@ -3025,7 +3025,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Facility'
+                $ref: '#/components/schemas/ManagedFacility'
           description: >-
             Facility was found & patch-set has been applied. The patched
             facility is in the body.
@@ -3090,7 +3090,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Facility'
+                $ref: '#/components/schemas/ManagedFacility'
           description: Updated Facility in the body.
         '401':
           content:
@@ -26881,31 +26881,125 @@ components:
       required:
         - summary
       type: object
+    FacilityForCreation:
+      type: object
+      properties:
+        name:
+          example: Hamburg NW2
+          type: string
+        status:
+          $ref: '#/components/schemas/FacilityStatus'
+        tenantFacilityId:
+          description: The id of the facility in the tenants own system
+          example: K12345
+          type: string
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the facility. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+      xml:
+        name: FacilityForCreation
+      required:
+        - name
     Facility:
       allOf:
-        - $ref: '#/components/schemas/FacilityForCreation'
         - $ref: '#/components/schemas/VersionedResource'
-        - properties:
-            address:
-              $ref: '#/components/schemas/FacilityAddress'
-            configs:
-              items:
-                $ref: '#/components/schemas/LinkedConfiguration'
-              type: array
-            id:
-              description: >-
-                The id of this facility. It is generated during creation
-                automatically and suits as the primary identifier of the
-                described entity.
-              example: Esb20gpHBL94X5NdMp3C
-              type: string
-            status:
-              $ref: '#/components/schemas/FacilityStatus'
-          required:
-            - id
-            - status
-            - address
-          type: object
+        - $ref: '#/components/schemas/FacilityForCreation'
+      properties:
+        id:
+          description: >-
+            The id of this facility. It is generated during creation
+            automatically and suits as the primary identifier of the described
+            entity.
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+      required:
+        - id
+      type: object
+      xml:
+        name: Facility
+    ManagedFacilityForCreation:
+      allOf:
+        - $ref: '#/components/schemas/FacilityForCreation'
+      properties:
+        address:
+          $ref: '#/components/schemas/FacilityAddressForCreation'
+        closingDays:
+          description: >-
+            Days of the year where the facility is closed and doesn't allows
+            picking
+          items:
+            $ref: '#/components/schemas/ClosingDay'
+          type: array
+        contact:
+          $ref: '#/components/schemas/FacilityContact'
+        fulfillmentProcessBuffer:
+          default: 240
+          description: Duration in minutes until an order is processed
+          example: '240'
+          minimum: 0
+          type: integer
+        locationType:
+          $ref: '#/components/schemas/FacilityLocationType'
+        capacityPlanningTimeframe:
+          description: >-
+            The range in days per facility which defines how many days in the
+            future the capacity of the facility can be planned
+          type: integer
+          minimum: 1
+        pickingTimes:
+          $ref: '#/components/schemas/PickingTimes'
+          description: >-
+            Time ranges defining the picking times per weekday. No overlapping
+            ranges are allowed
+        pickingMethods:
+          description: Picking Methods supported by this facility.
+          items:
+            $ref: '#/components/schemas/PickingMethodEnum'
+          type: array
+        scanningRule:
+          $ref: '#/components/schemas/ScanningRuleConfiguration'
+        services:
+          items:
+            $ref: '#/components/schemas/FacilityService'
+          type: array
+        capacityEnabled:
+          type: boolean
+          default: false
+          description: >-
+            Indicates that configured capacity limits for picking times are
+            considered
+      required:
+        - name
+        - address
+      type: object
+      xml:
+        name: ManagedFacilityForCreation
+    ManagedFacility:
+      allOf:
+        - $ref: '#/components/schemas/Facility'
+        - $ref: '#/components/schemas/ManagedFacilityForCreation'
+      properties:
+        address:
+          $ref: '#/components/schemas/FacilityAddress'
+        configs:
+          items:
+            $ref: '#/components/schemas/LinkedConfiguration'
+          type: array
+      required:
+        - status
+        - address
+        - name
+      type: object
+      xml:
+        name: ManagedFacility
     FacilityAddress:
       allOf:
         - $ref: '#/components/schemas/FacilityAddressForCreation'
@@ -26944,6 +27038,27 @@ components:
             - companyName
           type: object
       type: object
+    FacilityContact:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to the contact. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
+          type: object
+        firstName:
+          type: string
+        lastName:
+          type: string
+        roleDescription:
+          example: Manager, Supervisor, Teamleader, etc.
+          type: string
+      required:
+        - firstName
+        - lastName
+      type: object
+      xml:
+        name: FacilityContact
     PostalCodeValidation:
       properties:
         country:
@@ -26960,6 +27075,25 @@ components:
       type: object
       xml:
         name: PostalCodeValidation
+    FacilityService:
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/FacilityServiceType'
+      required:
+        - type
+      type: object
+      xml:
+        name: FacilityService
+    FacilityLocationType:
+      default: STORE
+      enum:
+        - STORE
+        - WAREHOUSE
+        - EXTERNAL
+      type: string
+      xml:
+        name: FacilityLocationType
     DeliveryTarget:
       type: string
       description: The destination for a delivery
@@ -26972,107 +27106,6 @@ components:
       enum:
         - SHIP_FROM_STORE
         - PICKUP
-    FacilityForCreation:
-      additionalProperties: false
-      properties:
-        address:
-          $ref: '#/components/schemas/FacilityAddressForCreation'
-        closingDays:
-          description: >-
-            Days of the year where the facility is closed and doesn't allows
-            picking
-          items:
-            $ref: '#/components/schemas/ClosingDay'
-          type: array
-        contact:
-          properties:
-            customAttributes:
-              description: >-
-                Attributes that can be added to the contact. These attributes
-                cannot be used within fulfillment processes, but it could be
-                useful to have the informations carried here.
-              type: object
-            firstName:
-              type: string
-            lastName:
-              type: string
-            roleDescription:
-              example: Manager, Supervisor, Teamleader, etc.
-              type: string
-          required:
-            - firstName
-            - lastName
-          type: object
-        customAttributes:
-          description: >-
-            Attributes that can be added to the facility. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the informations carried here.
-          type: object
-        fulfillmentProcessBuffer:
-          default: 240
-          description: Duration in minutes until an order is processed
-          example: '240'
-          minimum: 0
-          type: integer
-        locationType:
-          default: STORE
-          enum:
-            - STORE
-            - WAREHOUSE
-            - EXTERNAL
-          type: string
-        name:
-          example: Hamburg NW2
-          type: string
-        capacityPlanningTimeframe:
-          description: >-
-            The range in days per facility which defines how many days in the
-            future the capacity of the facility can be planned
-          type: integer
-          minimum: 1
-        pickingTimes:
-          $ref: '#/components/schemas/PickingTimes'
-          description: >-
-            Time ranges defining the picking times per weekday. No overlapping
-            ranges are allowed
-        pickingMethods:
-          description: Picking Methods supported by this facility.
-          items:
-            $ref: '#/components/schemas/PickingMethodEnum'
-          type: array
-        scanningRule:
-          $ref: '#/components/schemas/ScanningRuleConfiguration'
-        services:
-          items:
-            properties:
-              type:
-                $ref: '#/components/schemas/FacilityServiceType'
-            required:
-              - type
-            type: object
-          type: array
-        status:
-          $ref: '#/components/schemas/FacilityStatus'
-        tenantFacilityId:
-          description: The id of the facility in the tenants own system
-          example: K12345
-          type: string
-        capacityEnabled:
-          type: boolean
-          default: false
-          description: >-
-            Indicates that configured capacity limits for picking times are
-            considered
-        tags:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/TagReference'
-      required:
-        - name
-        - address
-      type: object
     FacilityPatchActions:
       properties:
         actions:
@@ -28998,24 +29031,7 @@ components:
                 $ref: '#/components/schemas/ClosingDay'
               type: array
             contact:
-              properties:
-                customAttributes:
-                  description: >-
-                    Attributes that can be added to the contact. These
-                    attributes cannot be used within fulfillment processes, but
-                    it could be useful to have the informations carried here.
-                  type: object
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                roleDescription:
-                  example: Manager, Supervisor, Teamleader, etc.
-                  type: string
-              required:
-                - firstName
-                - lastName
-              type: object
+              $ref: '#/components/schemas/FacilityContact'
             customAttributes:
               description: >-
                 Attributes that can be added to the facility. These attributes
@@ -29028,11 +29044,7 @@ components:
               minimum: 0
               type: integer
             locationType:
-              enum:
-                - STORE
-                - WAREHOUSE
-                - EXTERNAL
-              type: string
+              $ref: '#/components/schemas/FacilityLocationType'
             name:
               example: Hamburg NW2
               type: string
@@ -46308,25 +46320,25 @@ components:
           $ref: '#/components/schemas/StringFilter'
       title: FacilityFacilityAddressFilter
       type: object
-    FacilityFacilityForCreationContactFilter:
+    FacilityFacilityContactFilter:
       properties:
         firstName:
           $ref: '#/components/schemas/StringFilter'
         lastName:
           $ref: '#/components/schemas/StringFilter'
-      title: FacilityFacilityForCreationContactFilter
+      title: FacilityFacilityContactFilter
       type: object
-    FacilityFacilityForCreationServicesFilter:
+    FacilityFacilityServiceFilter:
       properties:
         type:
           $ref: '#/components/schemas/FacilityServiceTypeEnumFilter'
-      title: FacilityFacilityForCreationServicesFilter
+      title: FacilityFacilityServiceFilter
       type: object
-    FacilityFacilityForCreationServicesListFilter:
+    FacilityFacilityServiceListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/FacilityFacilityForCreationServicesFilter'
-      title: FacilityFacilityForCreationServicesListFilter
+          $ref: '#/components/schemas/FacilityFacilityServiceFilter'
+      title: FacilityFacilityServiceListFilter
       type: object
     FacilityLocationTypeEnumFilter:
       properties:
@@ -46372,7 +46384,7 @@ components:
             $ref: '#/components/schemas/FacilitySearchQuery'
           type: array
         contact:
-          $ref: '#/components/schemas/FacilityFacilityForCreationContactFilter'
+          $ref: '#/components/schemas/FacilityFacilityContactFilter'
         locationType:
           $ref: '#/components/schemas/FacilityLocationTypeEnumFilter'
         name:
@@ -46382,7 +46394,7 @@ components:
             $ref: '#/components/schemas/FacilitySearchQuery'
           type: array
         services:
-          $ref: '#/components/schemas/FacilityFacilityForCreationServicesListFilter'
+          $ref: '#/components/schemas/FacilityFacilityServiceListFilter'
         status:
           $ref: '#/components/schemas/FacilityStatusEnumFilter'
         tags:
@@ -50827,7 +50839,7 @@ components:
         - $ref: '#/components/schemas/WebHookEvent'
       properties:
         payload:
-          $ref: '#/components/schemas/Facility'
+          $ref: '#/components/schemas/ManagedFacility'
       required:
         - payload
       type: object
@@ -50836,7 +50848,7 @@ components:
         - $ref: '#/components/schemas/WebHookEvent'
       properties:
         payload:
-          $ref: '#/components/schemas/Facility'
+          $ref: '#/components/schemas/ManagedFacility'
       required:
         - payload
       type: object
@@ -50855,7 +50867,7 @@ components:
         - $ref: '#/components/schemas/WebHookEvent'
       properties:
         payload:
-          $ref: '#/components/schemas/Facility'
+          $ref: '#/components/schemas/ManagedFacility'
       required:
         - payload
       type: object
@@ -50864,7 +50876,7 @@ components:
         - $ref: '#/components/schemas/WebHookEvent'
       properties:
         payload:
-          $ref: '#/components/schemas/Facility'
+          $ref: '#/components/schemas/ManagedFacility'
       required:
         - payload
       type: object
@@ -50873,7 +50885,7 @@ components:
         - $ref: '#/components/schemas/WebHookEvent'
       properties:
         payload:
-          $ref: '#/components/schemas/Facility'
+          $ref: '#/components/schemas/ManagedFacility'
       required:
         - payload
       type: object
