@@ -25490,6 +25490,7 @@ components:
             - ModifyPackJob
             - PausePackJob
             - ModifyPackLineItem
+            - SplitLineItemsPackJob
             - ModifyFacility
             - ModifyListing
             - ModifyRetainedOfflineStock
@@ -31754,6 +31755,7 @@ components:
     PackJobActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/PackJobReplaceAssignedUsersActionParameter'
+        - $ref: '#/components/schemas/SplitLineItemsPackJobActionParameter'
     PickJobReplaceAssignedUsersActionParameter:
       additionalProperties: false
       properties:
@@ -36106,6 +36108,56 @@ components:
           example: 42
           type: integer
       type: object
+    SplitLineItemsPackJobActionParameter:
+      title: SplitLineItemsPackJobActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/SplitLineItemsPackJobActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        splitLineItemsInfo:
+          items:
+            $ref: '#/components/schemas/SplitLineItemsInfo'
+          type: array
+      required:
+        - name
+        - version
+        - splitLineItemsInfo
+      type: object
+    SplitLineItemsPackJobActionEnum:
+      enum:
+        - SPLIT_LINES_PACK_JOB
+      type: string
+    SplitLineItemsInfo:
+      additionalProperties: false
+      properties:
+        lineItemId:
+          type: string
+          description: references the id of the packLineItem of a packJob
+        quantity:
+          description: quantity of the specific item that has been ordered
+          example: 21
+          minimum: 1
+          type: integer
+        packed:
+          description: The amount of articles that were packed for this line item.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+        additionalAttributes:
+          items:
+            $ref: '#/components/schemas/ArticleAttributeItem'
+          type: array
+      required:
+        - lineItemId
+        - quantity
+      type: object
     PackJobPatchActions:
       properties:
         actions:
@@ -36205,7 +36257,7 @@ components:
             - id
           type: object
       xml:
-        name: ModifyPackLieItemAction
+        name: ModifyPackLineItemAction
     PartialStockForCreation:
       additionalProperties: false
       properties:
