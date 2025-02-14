@@ -22491,6 +22491,43 @@ paths:
       summary: ''
       tags:
         - Core - Listings
+  /api/orders/search:
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Search for Order
+      operationId: searchOrder
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - DOMS - Orders
   /api/pickjobs/search:
     post:
       deprecated: false
@@ -46598,6 +46635,22 @@ components:
       type: object
       xml:
         name: RoutingStrategyNodeConfigCategoryTransporter
+    AddressTypeEnumFilter:
+      properties:
+        eq:
+          enum:
+            - POSTAL_ADDRESS
+            - PARCEL_LOCKER
+            - INVOICE_ADDRESS
+          type: string
+        notEq:
+          enum:
+            - POSTAL_ADDRESS
+            - PARCEL_LOCKER
+            - INVOICE_ADDRESS
+          type: string
+      title: AddressTypeEnumFilter
+      type: object
     ArticleStockForecast:
       properties:
         created:
@@ -46673,6 +46726,14 @@ components:
             - OIDC
           type: string
       title: AuthenticationProviderTypeEnumFilter
+      type: object
+    BooleanFilter:
+      properties:
+        eq:
+          type: boolean
+        notEq:
+          type: boolean
+      title: BooleanFilter
       type: object
     BulkOperationError:
       properties:
@@ -46778,6 +46839,20 @@ components:
           format: date-time
           type: string
       title: DateFilter
+      type: object
+    DeliveryServiceLevelEnumFilter:
+      properties:
+        eq:
+          enum:
+            - DELIVERY
+            - SAMEDAY
+          type: string
+        notEq:
+          enum:
+            - DELIVERY
+            - SAMEDAY
+          type: string
+      title: DeliveryServiceLevelEnumFilter
       type: object
     EnumFilter:
       properties:
@@ -48883,6 +48958,241 @@ components:
             type: number
           type: array
       title: NumberFilter
+      type: object
+    OrderConsumerConsumerAddressFilter:
+      properties:
+        addressType:
+          $ref: '#/components/schemas/AddressTypeEnumFilter'
+        city:
+          $ref: '#/components/schemas/StringFilter'
+        companyName:
+          $ref: '#/components/schemas/StringFilter'
+        country:
+          $ref: '#/components/schemas/StringFilter'
+        email:
+          $ref: '#/components/schemas/StringFilter'
+        firstName:
+          $ref: '#/components/schemas/StringFilter'
+        houseNumber:
+          $ref: '#/components/schemas/StringFilter'
+        lastName:
+          $ref: '#/components/schemas/StringFilter'
+        postalCode:
+          $ref: '#/components/schemas/StringFilter'
+        province:
+          $ref: '#/components/schemas/StringFilter'
+        street:
+          $ref: '#/components/schemas/StringFilter'
+      title: OrderConsumerConsumerAddressFilter
+      type: object
+    OrderConsumerConsumerAddressListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/OrderConsumerConsumerAddressFilter'
+      title: OrderConsumerConsumerAddressListFilter
+      type: object
+    OrderConsumerFilter:
+      properties:
+        addresses:
+          $ref: '#/components/schemas/OrderConsumerConsumerAddressListFilter'
+        consumerId:
+          $ref: '#/components/schemas/StringFilter'
+      title: OrderConsumerFilter
+      type: object
+    OrderDeliveryPreferencesCollectDeliveryFilter:
+      properties:
+        facilityRef:
+          $ref: '#/components/schemas/StringFilter'
+        paid:
+          $ref: '#/components/schemas/BooleanFilter'
+      title: OrderDeliveryPreferencesCollectDeliveryFilter
+      type: object
+    OrderDeliveryPreferencesCollectDeliveryListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/OrderDeliveryPreferencesCollectDeliveryFilter'
+      title: OrderDeliveryPreferencesCollectDeliveryListFilter
+      type: object
+    OrderDeliveryPreferencesFilter:
+      properties:
+        collect:
+          $ref: >-
+            #/components/schemas/OrderDeliveryPreferencesCollectDeliveryListFilter
+        shipping:
+          $ref: '#/components/schemas/OrderDeliveryPreferencesShippingFilter'
+      title: OrderDeliveryPreferencesFilter
+      type: object
+    OrderDeliveryPreferencesShippingFilter:
+      properties:
+        desiredDeliveryTime:
+          $ref: '#/components/schemas/DateFilter'
+        serviceLevel:
+          $ref: '#/components/schemas/DeliveryServiceLevelEnumFilter'
+      title: OrderDeliveryPreferencesShippingFilter
+      type: object
+    OrderSearchSort:
+      properties:
+        direction:
+          description: The direction of the sorting.
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          description: The field to sort by.
+          enum:
+            - orderDate
+          type: string
+      required:
+        - name
+        - direction
+      title: OrderSearchSort
+      type: object
+    OrderOrderLineItemArticleFilter:
+      properties:
+        tenantArticleId:
+          $ref: '#/components/schemas/StringFilter'
+        title:
+          $ref: '#/components/schemas/StringFilter'
+        titleLocalized:
+          $ref: '#/components/schemas/OrderOrderLineItemArticleTitleLocalizedFilter'
+      title: OrderOrderLineItemArticleFilter
+      type: object
+    OrderOrderLineItemArticleTitleLocalizedFilter:
+      properties:
+        de_DE:
+          $ref: '#/components/schemas/StringFilter'
+        en_US:
+          $ref: '#/components/schemas/StringFilter'
+        ru_RU:
+          $ref: '#/components/schemas/StringFilter'
+      title: OrderOrderLineItemArticleTitleLocalizedFilter
+      type: object
+    OrderOrderLineItemFilter:
+      properties:
+        article:
+          $ref: '#/components/schemas/OrderOrderLineItemArticleFilter'
+      title: OrderOrderLineItemFilter
+      type: object
+    OrderOrderLineItemListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/OrderOrderLineItemFilter'
+      title: OrderOrderLineItemListFilter
+      type: object
+    OrderPaymentinfoFilter:
+      properties:
+        currency:
+          $ref: '#/components/schemas/StringFilter'
+        method:
+          $ref: '#/components/schemas/StringFilter'
+        methodLocalized:
+          $ref: '#/components/schemas/OrderPaymentinfoMethodLocalizedFilter'
+      title: OrderPaymentinfoFilter
+      type: object
+    OrderPaymentinfoMethodLocalizedFilter:
+      properties:
+        de_DE:
+          $ref: '#/components/schemas/StringFilter'
+        en_US:
+          $ref: '#/components/schemas/StringFilter'
+        ru_RU:
+          $ref: '#/components/schemas/StringFilter'
+      title: OrderPaymentinfoMethodLocalizedFilter
+      type: object
+    OrderSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/OrderSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/OrderSearchSort'
+          maxItems: 1
+          type: array
+        sortBy:
+          deprecated: true
+          description: Use sort instead
+          enum:
+            - ORDER_DATE_ASC
+            - ORDER_DATE_DESC
+          type: string
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: OrderSearchPayload
+      type: object
+    OrderSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/OrderSearchQuery'
+          type: array
+        consumer:
+          $ref: '#/components/schemas/OrderConsumerFilter'
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
+        deliveryPreferences:
+          $ref: '#/components/schemas/OrderDeliveryPreferencesFilter'
+        or:
+          items:
+            $ref: '#/components/schemas/OrderSearchQuery'
+          type: array
+        orderDate:
+          $ref: '#/components/schemas/DateFilter'
+        orderLineItems:
+          $ref: '#/components/schemas/OrderOrderLineItemListFilter'
+        paymentInfo:
+          $ref: '#/components/schemas/OrderPaymentinfoFilter'
+        status:
+          $ref: '#/components/schemas/OrderStatusEnumFilter'
+        tags:
+          $ref: '#/components/schemas/OrderTagsListFilter'
+        tenantOrderId:
+          $ref: '#/components/schemas/StringFilter'
+      title: OrderSearchQuery
+      type: object
+    OrderStatusEnumFilter:
+      properties:
+        eq:
+          enum:
+            - OPEN
+            - CANCELLED
+            - PROMISED
+            - LOCKED
+            - OBSOLETE
+          type: string
+        notEq:
+          enum:
+            - OPEN
+            - CANCELLED
+            - PROMISED
+            - LOCKED
+            - OBSOLETE
+          type: string
+      title: OrderStatusEnumFilter
+      type: object
+    OrderTagsFilter:
+      properties:
+        value:
+          $ref: '#/components/schemas/StringFilter'
+      title: OrderTagsFilter
+      type: object
+    OrderTagsListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/OrderTagsFilter'
+      title: OrderTagsListFilter
       type: object
     OutboundClearTrigger:
       properties:
