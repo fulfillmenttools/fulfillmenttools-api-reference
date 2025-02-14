@@ -51022,6 +51022,8 @@ components:
         name:
           anyOf:
             - enum:
+                - created
+                - targetTime
                 - lastModified
             - pattern: ^customAttributes.searchTerms..*$
               type: string
@@ -51069,7 +51071,11 @@ components:
           deprecated: true
           description: Use sort instead
           enum:
+            - CREATED_ASC
+            - TARGET_TIME_ASC
             - LAST_MODIFIED_ASC
+            - CREATED_DESC
+            - TARGET_TIME_DESC
             - LAST_MODIFIED_DESC
           type: string
         startAfterId:
@@ -51085,6 +51091,8 @@ components:
           items:
             $ref: '#/components/schemas/StowJobSearchQuery'
           type: array
+        created:
+          $ref: '#/components/schemas/DateFilter'
         customAttributes:
           $ref: '#/components/schemas/CustomAttributesFilter'
         facilityRef:
@@ -51095,6 +51103,14 @@ components:
           items:
             $ref: '#/components/schemas/StowJobSearchQuery'
           type: array
+        priority:
+          $ref: '#/components/schemas/NumberFilter'
+        shortId:
+          $ref: '#/components/schemas/StringFilter'
+        status:
+          $ref: '#/components/schemas/StowJobStatusTypeEnumFilter'
+        stowLineItems:
+          $ref: '#/components/schemas/StowJobStowLineItemListFilter'
         targetTime:
           $ref: '#/components/schemas/DateFilter'
       title: StowJobSearchQuery
@@ -51110,6 +51126,26 @@ components:
       type: string
       xml:
         name: StowJobStatus
+    StowJobStatusTypeEnumFilter:
+      properties:
+        eq:
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - CANCELED
+            - PAUSED
+          type: string
+        notEq:
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - CANCELED
+            - PAUSED
+          type: string
+      title: StowJobStatusTypeEnumFilter
+      type: object
     StowJobStockInformation:
       properties:
         properties:
@@ -51127,6 +51163,68 @@ components:
             $ref: '#/components/schemas/StorageLocationTraitConfigEntry'
           type: array
       title: StowJobStockInformation
+      type: object
+    StowJobStowLineItemArticleFilter:
+      properties:
+        tenantArticleId:
+          $ref: '#/components/schemas/StringFilter'
+      title: StowJobStowLineItemArticleFilter
+      type: object
+    StowJobStowLineItemFilter:
+      properties:
+        article:
+          $ref: '#/components/schemas/StowJobStowLineItemArticleFilter'
+        heldStockRef:
+          $ref: '#/components/schemas/StringFilter'
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        stowTo:
+          $ref: '#/components/schemas/StowJobStowLineItemStowLineItemStowToFilter'
+        takeFrom:
+          $ref: '#/components/schemas/StowJobStowLineItemStowLineItemTakeFromFilter'
+      title: StowJobStowLineItemFilter
+      type: object
+    StowJobStowLineItemListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/StowJobStowLineItemFilter'
+      title: StowJobStowLineItemListFilter
+      type: object
+    StowJobStowLineItemStowLineItemStowToFilter:
+      properties:
+        storageLocationRef:
+          $ref: '#/components/schemas/StringFilter'
+        stowed:
+          $ref: >-
+            #/components/schemas/StowJobStowLineItemStowLineItemStowToStowedStowLineItemStowToFilter
+        type:
+          $ref: '#/components/schemas/StringFilter'
+      title: StowJobStowLineItemStowLineItemStowToFilter
+      type: object
+    StowJobStowLineItemStowLineItemStowToStowedStowLineItemStowToFilter:
+      properties:
+        stowedStockRef:
+          $ref: '#/components/schemas/StringFilter'
+        stowedStorageLocationRef:
+          $ref: '#/components/schemas/StringFilter'
+      title: StowJobStowLineItemStowLineItemStowToStowedStowLineItemStowToFilter
+      type: object
+    StowJobStowLineItemStowLineItemTakeFromFilter:
+      properties:
+        storageLocationRef:
+          $ref: '#/components/schemas/StringFilter'
+        taken:
+          $ref: >-
+            #/components/schemas/StowJobStowLineItemStowLineItemTakeFromTakenStowLineItemTakeFromFilter
+        type:
+          $ref: '#/components/schemas/StringFilter'
+      title: StowJobStowLineItemStowLineItemTakeFromFilter
+      type: object
+    StowJobStowLineItemStowLineItemTakeFromTakenStowLineItemTakeFromFilter:
+      properties:
+        takenStockRef:
+          $ref: '#/components/schemas/StringFilter'
+      title: StowJobStowLineItemStowLineItemTakeFromTakenStowLineItemTakeFromFilter
       type: object
     StowJobWebHookEvent:
       allOf:
