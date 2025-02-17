@@ -47637,6 +47637,18 @@ components:
         - receipts
       title: InboundProcess
       type: object
+    InboundProcessCustomAttributesSort:
+      properties:
+        searchTerms:
+          additionalProperties:
+            enum:
+              - ASC
+              - DESC
+          maxProperties: 1
+          minProperties: 1
+          type: object
+      title: InboundProcessCustomAttributesSort
+      type: object
     InboundProcessForCreation:
       properties:
         customAttributes:
@@ -47703,23 +47715,6 @@ components:
       required:
         - version
       title: InboundProcessForPatch
-      type: object
-    InboundProcessSearchSort:
-      properties:
-        direction:
-          description: The direction of the sorting.
-          enum:
-            - ASC
-            - DESC
-          type: string
-        name:
-          description: The field to sort by.
-          pattern: ^customAttributes.searchTerms..*$
-          type: string
-      required:
-        - name
-        - direction
-      title: InboundProcessSearchSort
       type: object
     InboundProcessInboundReceiptFilter:
       properties:
@@ -47993,9 +47988,17 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/InboundProcessSearchSort'
+            $ref: '#/components/schemas/InboundProcessSort'
           maxItems: 1
+          minItems: 1
           type: array
+        sortBy:
+          deprecated: true
+          description: Use sort instead
+          enum:
+            - PO_CREATED_ASC
+            - PO_CREATED_DESC
+          type: string
         startAfterId:
           description: The ID to start after.
           type: string
@@ -48026,6 +48029,17 @@ components:
         tenantInboundProcessId:
           $ref: '#/components/schemas/StringFilter'
       title: InboundProcessSearchQuery
+      type: object
+    InboundProcessSort:
+      properties:
+        customAttributes:
+          $ref: '#/components/schemas/InboundProcessCustomAttributesSort'
+        po_created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: InboundProcessSort
       type: object
     InboundReceipt:
       properties:
@@ -48749,25 +48763,6 @@ components:
         - delta
       title: InventoryStockWebHookEventPayloadItem
       type: object
-    LinkedServiceJobsSearchSort:
-      properties:
-        direction:
-          description: The direction of the sorting.
-          enum:
-            - ASC
-            - DESC
-          type: string
-        name:
-          description: The field to sort by.
-          enum:
-            - lastModified
-            - targetTime
-          type: string
-      required:
-        - name
-        - direction
-      title: LinkedServiceJobsSearchSort
-      type: object
     LinkedServiceJobsSearchPayload:
       properties:
         options:
@@ -48783,8 +48778,9 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/LinkedServiceJobsSearchSort'
+            $ref: '#/components/schemas/LinkedServiceJobsSort'
           maxItems: 1
+          minItems: 1
           type: array
         sortBy:
           deprecated: true
@@ -48840,23 +48836,19 @@ components:
           $ref: '#/components/schemas/StringSearchFilter'
       title: LinkedServiceJobsSearchQuery
       type: object
-    ListingSearchSort:
+    LinkedServiceJobsSort:
       properties:
-        direction:
-          description: The direction of the sorting.
+        lastModified:
           enum:
             - ASC
             - DESC
           type: string
-        name:
-          description: The field to sort by.
+        targetTime:
           enum:
-            - lastModified
+            - ASC
+            - DESC
           type: string
-      required:
-        - name
-        - direction
-      title: ListingSearchSort
+      title: LinkedServiceJobsSort
       type: object
     ListingSearchPayload:
       properties:
@@ -48873,8 +48865,9 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/ListingSearchSort'
+            $ref: '#/components/schemas/ListingSort'
           maxItems: 1
+          minItems: 1
           type: array
         sortBy:
           deprecated: true
@@ -48907,6 +48900,15 @@ components:
             $ref: '#/components/schemas/ListingSearchQuery'
           type: array
       title: ListingSearchQuery
+      type: object
+    ListingSort:
+      properties:
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ListingSort
       type: object
     ModifyStowLineItemsAction:
       description: Allows modification and adding of stowLineItems
@@ -49030,24 +49032,6 @@ components:
           $ref: '#/components/schemas/DeliveryServiceLevelEnumFilter'
       title: OrderDeliveryPreferencesShippingFilter
       type: object
-    OrderSearchSort:
-      properties:
-        direction:
-          description: The direction of the sorting.
-          enum:
-            - ASC
-            - DESC
-          type: string
-        name:
-          description: The field to sort by.
-          enum:
-            - orderDate
-          type: string
-      required:
-        - name
-        - direction
-      title: OrderSearchSort
-      type: object
     OrderOrderLineItemArticleFilter:
       properties:
         tenantArticleId:
@@ -49115,8 +49099,9 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/OrderSearchSort'
+            $ref: '#/components/schemas/OrderSort'
           maxItems: 1
+          minItems: 1
           type: array
         sortBy:
           deprecated: true
@@ -49161,6 +49146,15 @@ components:
         tenantOrderId:
           $ref: '#/components/schemas/StringFilter'
       title: OrderSearchQuery
+      type: object
+    OrderSort:
+      properties:
+        orderDate:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: OrderSort
       type: object
     OrderStatusEnumFilter:
       properties:
@@ -49253,25 +49247,6 @@ components:
         - name
       title: PauseStowJobAction
       type: object
-    PickJobSearchSort:
-      properties:
-        direction:
-          description: The direction of the sorting.
-          enum:
-            - ASC
-            - DESC
-          type: string
-        name:
-          description: The field to sort by.
-          enum:
-            - tenantOrderId
-            - targetTime
-          type: string
-      required:
-        - name
-        - direction
-      title: PickJobSearchSort
-      type: object
     PickJobSearchPayload:
       properties:
         options:
@@ -49287,8 +49262,9 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/PickJobSearchSort'
+            $ref: '#/components/schemas/PickJobSort'
           maxItems: 1
+          minItems: 1
           type: array
         sortBy:
           deprecated: true
@@ -49328,23 +49304,19 @@ components:
           $ref: '#/components/schemas/StringFilter'
       title: PickJobSearchQuery
       type: object
-    ProcessSearchSort:
+    PickJobSort:
       properties:
-        direction:
-          description: The direction of the sorting.
+        targetTime:
           enum:
             - ASC
             - DESC
           type: string
-        name:
-          description: The field to sort by.
+        tenantOrderId:
           enum:
-            - status
+            - ASC
+            - DESC
           type: string
-      required:
-        - name
-        - direction
-      title: ProcessSearchSort
+      title: PickJobSort
       type: object
     ProcessSearchPayload:
       properties:
@@ -49361,8 +49333,9 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/ProcessSearchSort'
+            $ref: '#/components/schemas/ProcessSort'
           maxItems: 1
+          minItems: 1
           type: array
         sortBy:
           deprecated: true
@@ -49425,6 +49398,15 @@ components:
         tags:
           $ref: '#/components/schemas/ProcessTagReferenceListFilter'
       title: ProcessSearchQuery
+      type: object
+    ProcessSort:
+      properties:
+        status:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSort
       type: object
     ProcessStatusEnumFilter:
       properties:
@@ -50231,6 +50213,18 @@ components:
         - result
       title: StockActionResult
       type: object
+    StockCustomAttributesSort:
+      properties:
+        searchTerms:
+          additionalProperties:
+            enum:
+              - ASC
+              - DESC
+          maxProperties: 1
+          minProperties: 1
+          type: object
+      title: StockCustomAttributesSort
+      type: object
     StockDeleteActionResult:
       properties:
         ids:
@@ -50455,23 +50449,6 @@ components:
         - version
       title: StockForUpsertUpdate
       type: object
-    StockSearchSort:
-      properties:
-        direction:
-          description: The direction of the sorting.
-          enum:
-            - ASC
-            - DESC
-          type: string
-        name:
-          description: The field to sort by.
-          pattern: ^customAttributes.searchTerms..*$
-          type: string
-      required:
-        - name
-        - direction
-      title: StockSearchSort
-      type: object
     StockMoveToLocation:
       properties:
         amount:
@@ -50540,9 +50517,17 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/StockSearchSort'
+            $ref: '#/components/schemas/StockSort'
           maxItems: 1
+          minItems: 1
           type: array
+        sortBy:
+          deprecated: true
+          description: Use sort instead
+          enum:
+            - LOCATION_NAME_ASC
+            - LOCATION_NAME_DESC
+          type: string
         startAfterId:
           description: The ID to start after.
           type: string
@@ -50573,6 +50558,17 @@ components:
         value:
           $ref: '#/components/schemas/NumberFilter'
       title: StockSearchQuery
+      type: object
+    StockSort:
+      properties:
+        customAttributes:
+          $ref: '#/components/schemas/StockCustomAttributesSort'
+        locationName:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: StockSort
       type: object
     StockSummaries:
       properties:
@@ -50728,29 +50724,17 @@ components:
         - stocks
       title: StocksForUpsert
       type: object
-    StorageLocationSearchSort:
+    StorageLocationCustomAttributesSort:
       properties:
-        direction:
-          description: The direction of the sorting.
-          enum:
-            - ASC
-            - DESC
-          type: string
-        name:
-          anyOf:
-            - enum:
-                - name
-                - tenantLocationId
-                - zoneRef
-                - created
-                - lastModified
-            - pattern: ^customAttributes.searchTerms..*$
-              type: string
-          description: The field to sort by.
-      required:
-        - name
-        - direction
-      title: StorageLocationSearchSort
+        searchTerms:
+          additionalProperties:
+            enum:
+              - ASC
+              - DESC
+          maxProperties: 1
+          minProperties: 1
+          type: object
+      title: StorageLocationCustomAttributesSort
       type: object
     StorageLocationRecommendation:
       properties:
@@ -50778,8 +50762,9 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/StorageLocationSearchSort'
+            $ref: '#/components/schemas/StorageLocationSort'
           maxItems: 1
+          minItems: 1
           type: array
         sortBy:
           deprecated: true
@@ -50836,6 +50821,37 @@ components:
         zoneRef:
           $ref: '#/components/schemas/StringFilter'
       title: StorageLocationSearchQuery
+      type: object
+    StorageLocationSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        customAttributes:
+          $ref: '#/components/schemas/StorageLocationCustomAttributesSort'
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        name:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        tenantLocationId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        zoneRef:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: StorageLocationSort
       type: object
     StorageLocationTraitConfigEntry:
       properties:
@@ -50941,6 +50957,18 @@ components:
       type: string
       xml:
         name: StowJobActionName
+    StowJobCustomAttributesSort:
+      properties:
+        searchTerms:
+          additionalProperties:
+            enum:
+              - ASC
+              - DESC
+          maxProperties: 1
+          minProperties: 1
+          type: object
+      title: StowJobCustomAttributesSort
+      type: object
     StowJobForCreation:
       properties:
         customAttributes:
@@ -51011,28 +51039,6 @@ components:
         - version
       title: StowJobForPatch
       type: object
-    StowJobSearchSort:
-      properties:
-        direction:
-          description: The direction of the sorting.
-          enum:
-            - ASC
-            - DESC
-          type: string
-        name:
-          anyOf:
-            - enum:
-                - created
-                - targetTime
-                - lastModified
-            - pattern: ^customAttributes.searchTerms..*$
-              type: string
-          description: The field to sort by.
-      required:
-        - name
-        - direction
-      title: StowJobSearchSort
-      type: object
     StowJobPaginatedResult:
       properties:
         stowJobs:
@@ -51064,8 +51070,9 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/StowJobSearchSort'
+            $ref: '#/components/schemas/StowJobSort'
           maxItems: 1
+          minItems: 1
           type: array
         sortBy:
           deprecated: true
@@ -51114,6 +51121,27 @@ components:
         targetTime:
           $ref: '#/components/schemas/DateFilter'
       title: StowJobSearchQuery
+      type: object
+    StowJobSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        customAttributes:
+          $ref: '#/components/schemas/StowJobCustomAttributesSort'
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        targetTime:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: StowJobSort
       type: object
     StowJobStatus:
       description: The status of the stowJob
@@ -51770,26 +51798,17 @@ components:
           $ref: '#/components/schemas/AuthenticationProviderTypeEnumFilter'
       title: UserAuthenticationProviderFilter
       type: object
-    UserSearchSort:
+    UserCustomAttributesSort:
       properties:
-        direction:
-          description: The direction of the sorting.
-          enum:
-            - ASC
-            - DESC
-          type: string
-        name:
-          anyOf:
-            - enum:
-                - username
-                - lastname
-            - pattern: ^customAttributes.searchTerms..*$
-              type: string
-          description: The field to sort by.
-      required:
-        - name
-        - direction
-      title: UserSearchSort
+        searchTerms:
+          additionalProperties:
+            enum:
+              - ASC
+              - DESC
+          maxProperties: 1
+          minProperties: 1
+          type: object
+      title: UserCustomAttributesSort
       type: object
     UserSearchPayload:
       properties:
@@ -51806,8 +51825,9 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/UserSearchSort'
+            $ref: '#/components/schemas/UserSort'
           maxItems: 1
+          minItems: 1
           type: array
         sortBy:
           deprecated: true
@@ -51845,23 +51865,21 @@ components:
           $ref: '#/components/schemas/StringFilter'
       title: UserSearchQuery
       type: object
-    ZoneSearchSort:
+    UserSort:
       properties:
-        direction:
-          description: The direction of the sorting.
+        customAttributes:
+          $ref: '#/components/schemas/UserCustomAttributesSort'
+        lastname:
           enum:
             - ASC
             - DESC
           type: string
-        name:
-          description: The field to sort by.
+        username:
           enum:
-            - lastModified
+            - ASC
+            - DESC
           type: string
-      required:
-        - name
-        - direction
-      title: ZoneSearchSort
+      title: UserSort
       type: object
     ZoneSearchPayload:
       properties:
@@ -51878,8 +51896,9 @@ components:
         sort:
           description: Use for sorting the result.
           items:
-            $ref: '#/components/schemas/ZoneSearchSort'
+            $ref: '#/components/schemas/ZoneSort'
           maxItems: 1
+          minItems: 1
           type: array
         sortBy:
           deprecated: true
@@ -51914,6 +51933,15 @@ components:
             $ref: '#/components/schemas/ZoneSearchQuery'
           type: array
       title: ZoneSearchQuery
+      type: object
+    ZoneSort:
+      properties:
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ZoneSort
       type: object
     WebHookEvent:
       properties:
