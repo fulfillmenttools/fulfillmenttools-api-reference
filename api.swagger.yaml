@@ -47019,6 +47019,18 @@ components:
         - reasonLocalized
       title: ExternalStockChangeReasonOutput
       type: object
+    FacilityCustomAttributesSort:
+      properties:
+        searchTerms:
+          additionalProperties:
+            enum:
+              - ASC
+              - DESC
+          maxProperties: 1
+          minProperties: 1
+          type: object
+      title: FacilityCustomAttributesSort
+      type: object
     FacilityFacilityAddressFacilityAddressForCreationEmailAddressesFilter:
       properties:
         recipient:
@@ -47106,6 +47118,24 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/FacilitySort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        sortBy:
+          deprecated: true
+          description: Use sort instead
+          enum:
+            - NAME_ASC
+            - STATUS_ASC
+            - TENANT_FACILITY_ID_ASC
+            - NAME_DESC
+            - STATUS_DESC
+            - TENANT_FACILITY_ID_DESC
+          type: string
         startAfterId:
           description: The ID to start after.
           type: string
@@ -47123,6 +47153,8 @@ components:
           type: array
         contact:
           $ref: '#/components/schemas/FacilityFacilityContactFilter'
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
         locationType:
           $ref: '#/components/schemas/FacilityLocationTypeEnumFilter'
         name:
@@ -47154,6 +47186,27 @@ components:
             - PICKUP
           type: string
       title: FacilityServiceTypeEnumFilter
+      type: object
+    FacilitySort:
+      properties:
+        customAttributes:
+          $ref: '#/components/schemas/FacilityCustomAttributesSort'
+        name:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        status:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        tenantFacilityId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: FacilitySort
       type: object
     FacilityStatusEnumFilter:
       properties:
