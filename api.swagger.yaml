@@ -31502,6 +31502,7 @@ components:
         - CANCELED
         - OBSOLETE
         - WAITING_FOR_INPUT
+        - PAUSED
       type: string
       xml:
         name: PickJobStatus
@@ -31790,6 +31791,7 @@ components:
         - $ref: '#/components/schemas/PickJobObsoleteActionParameter'
         - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
         - $ref: '#/components/schemas/PickJobReplaceAssignedUsersActionParameter'
+        - $ref: '#/components/schemas/PickJobPauseActionParameter'
     PackJobReplaceAssignedUsersActionParameter:
       additionalProperties: false
       properties:
@@ -31999,6 +32001,24 @@ components:
     PickJobResetActionEnum:
       enum:
         - RESET
+      type: string
+    PickJobPauseActionParameter:
+      title: PickJobPauseActionParameter
+      description: Action to pause a Pickjob.
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobPauseActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+    PickJobPauseActionEnum:
+      enum:
+        - PAUSE
       type: string
     PackingTargetContainerActionsParameter:
       anyOf:
@@ -49191,7 +49211,9 @@ components:
           description: Use sort instead
           enum:
             - ORDER_DATE_ASC
+            - STATUS_ASC
             - ORDER_DATE_DESC
+            - STATUS_DESC
           type: string
         startAfterId:
           description: The ID to start after.
@@ -49233,6 +49255,11 @@ components:
     OrderSort:
       properties:
         orderDate:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        status:
           enum:
             - ASC
             - DESC
