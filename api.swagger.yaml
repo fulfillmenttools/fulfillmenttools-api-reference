@@ -27440,31 +27440,25 @@ components:
         - username
         - userId
       type: object
-    AssignedUserForCreation:
+    AssignedUserForCreationByName:
+      title: AssignedUserForCreationByName
+      description: Create a assigned user by giving a valid name
       properties:
-        userId:
-          description: >-
-            ID of the user who should be assigned - either this or username
-            needed
-          type: string
         username:
-          description: >-
-            username of the user should be assigned - either this or userId
-            needed
+          description: username of the user should be assigned
           type: string
+      required:
+        - username
       type: object
-    AssignedUserFilter:
+    AssignedUserForCreationById:
+      title: AssignedUserForCreationById
+      description: Create a assigned user by giving a valid id
       properties:
         userId:
-          description: >-
-            ID of the user who should be assigned - either this or username
-            needed
+          description: userId of the user should be assigned
           type: string
-        username:
-          description: >-
-            username of the user should be assigned - either this or userId
-            needed
-          type: string
+      required:
+        - userId
       type: object
     Entity:
       allOf:
@@ -28278,7 +28272,9 @@ components:
         assignedUsers:
           type: array
           items:
-            $ref: '#/components/schemas/AssignedUserForCreation'
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
           description: Assigned users for this entity
       required:
         - facilityRef
@@ -31413,7 +31409,9 @@ components:
         assignedUsers:
           type: array
           items:
-            $ref: '#/components/schemas/AssignedUserForCreation'
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
           description: Assigned users for this entity
       required:
         - orderDate
@@ -31790,6 +31788,8 @@ components:
         - $ref: '#/components/schemas/PickJobPauseActionParameter'
     PackJobReplaceAssignedUsersActionParameter:
       additionalProperties: false
+      title: PackJobReplaceAssignedUsersActionParameter
+      description: Action to replace the assigned users.
       properties:
         name:
           $ref: '#/components/schemas/PackJobReplaceAssignedUsersActionEnum'
@@ -31800,7 +31800,9 @@ components:
         assignedUsers:
           type: array
           items:
-            $ref: '#/components/schemas/AssignedUserForCreation'
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
           description: Assigned users for this entity
       required:
         - name
@@ -31815,6 +31817,8 @@ components:
         - $ref: '#/components/schemas/PackJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/SplitLineItemsPackJobActionParameter'
     PickJobReplaceAssignedUsersActionParameter:
+      title: PickJobReplaceAssignedUsersActionParameter
+      description: Action to replace the assigned users.
       additionalProperties: false
       properties:
         name:
@@ -31826,7 +31830,9 @@ components:
         assignedUsers:
           type: array
           items:
-            $ref: '#/components/schemas/AssignedUserForCreation'
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
           description: Assigned users for this entity
       required:
         - name
@@ -32171,6 +32177,8 @@ components:
         - $ref: '#/components/schemas/FinishHandoverJobActionParameter'
         - $ref: '#/components/schemas/HandoverJobReplaceAssignedUsersActionParameter'
     HandoverJobReplaceAssignedUsersActionParameter:
+      title: HandoverJobReplaceAssignedUsersActionParameter
+      description: Action to replace the assigned users.
       additionalProperties: false
       properties:
         name:
@@ -32182,7 +32190,9 @@ components:
         assignedUsers:
           type: array
           items:
-            $ref: '#/components/schemas/AssignedUserForCreation'
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
           description: Assigned users for this entity
       required:
         - name
@@ -35818,7 +35828,9 @@ components:
         assignedUsers:
           type: array
           items:
-            $ref: '#/components/schemas/AssignedUserForCreation'
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
           description: Assigned users for this entity
         processId:
           description: >-
@@ -40743,7 +40755,9 @@ components:
         assignedUsers:
           type: array
           items:
-            $ref: '#/components/schemas/AssignedUserForCreation'
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
           description: Assigned users for this entity
       required:
         - customServiceRef
@@ -40883,6 +40897,8 @@ components:
         - name
         - version
     ServiceJobReplaceAssignedUsersActionParameter:
+      title: ServiceJobReplaceAssignedUsersActionParameter
+      description: Action to replace the assigned users.
       additionalProperties: false
       properties:
         name:
@@ -40894,7 +40910,9 @@ components:
         assignedUsers:
           type: array
           items:
-            $ref: '#/components/schemas/AssignedUserForCreation'
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
           description: Assigned users for this entity
       required:
         - name
