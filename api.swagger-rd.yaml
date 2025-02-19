@@ -48380,6 +48380,24 @@ components:
           type: string
       title: LinkedServiceJobsSort
       type: object
+    ListingAvailabilityTimeframeFilter:
+      properties:
+        start:
+          $ref: '#/components/schemas/DateFilter'
+      title: ListingAvailabilityTimeframeFilter
+      type: object
+    ListingCustomAttributesSort:
+      properties:
+        searchTerms:
+          additionalProperties:
+            enum:
+              - ASC
+              - DESC
+          maxProperties: 1
+          minProperties: 1
+          type: object
+      title: ListingCustomAttributesSort
+      type: object
     ListingSearchPayload:
       properties:
         options:
@@ -48403,7 +48421,9 @@ components:
           deprecated: true
           description: Use sort instead
           enum:
+            - TENANT_ARTICLE_ID_ASC
             - LAST_MODIFIED_ASC
+            - TENANT_ARTICLE_ID_DESC
             - LAST_MODIFIED_DESC
           type: string
         startAfterId:
@@ -48419,26 +48439,65 @@ components:
           items:
             $ref: '#/components/schemas/ListingSearchQuery'
           type: array
+        availabilityTimeframe:
+          $ref: '#/components/schemas/ListingAvailabilityTimeframeFilter'
+        created:
+          $ref: '#/components/schemas/DateFilter'
         customAttributes:
           $ref: '#/components/schemas/CustomAttributesFilter'
         facilityRef:
           $ref: '#/components/schemas/StringFilter'
         id:
           $ref: '#/components/schemas/StringFilter'
+        measurementUnitKey:
+          $ref: '#/components/schemas/StringFilter'
         or:
           items:
             $ref: '#/components/schemas/ListingSearchQuery'
           type: array
+        outOfStockBehaviour:
+          $ref: '#/components/schemas/OutOfStockBehaviourEnumFilter'
+        price:
+          $ref: '#/components/schemas/NumberFilter'
+        status:
+          $ref: '#/components/schemas/StatusEnumEnumFilter'
+        tags:
+          $ref: '#/components/schemas/ListingTagReferenceListFilter'
+        tenantArticleId:
+          $ref: '#/components/schemas/StringFilter'
+        weight:
+          $ref: '#/components/schemas/NumberFilter'
       title: ListingSearchQuery
       type: object
     ListingSort:
       properties:
+        customAttributes:
+          $ref: '#/components/schemas/ListingCustomAttributesSort'
         lastModified:
           enum:
             - ASC
             - DESC
           type: string
+        tenantArticleId:
+          enum:
+            - ASC
+            - DESC
+          type: string
       title: ListingSort
+      type: object
+    ListingTagReferenceFilter:
+      properties:
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        value:
+          $ref: '#/components/schemas/StringFilter'
+      title: ListingTagReferenceFilter
+      type: object
+    ListingTagReferenceListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/ListingTagReferenceFilter'
+      title: ListingTagReferenceListFilter
       type: object
     ModifyStowLineItemsAction:
       description: >-
@@ -48728,6 +48787,18 @@ components:
         contains:
           $ref: '#/components/schemas/OrderTagsFilter'
       title: OrderTagsListFilter
+      type: object
+    OutOfStockBehaviourEnumFilter:
+      properties:
+        eq:
+          enum:
+            - BACKORDER
+          type: string
+        notEq:
+          enum:
+            - BACKORDER
+          type: string
+      title: OutOfStockBehaviourEnumFilter
       type: object
     OutboundClearTrigger:
       properties:
@@ -49584,6 +49655,20 @@ components:
         - version
         - name
       title: StartStowJobAction
+      type: object
+    StatusEnumEnumFilter:
+      properties:
+        eq:
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        notEq:
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+      title: StatusEnumEnumFilter
       type: object
     Stock:
       properties:
