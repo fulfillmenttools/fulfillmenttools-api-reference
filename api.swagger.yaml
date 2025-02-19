@@ -50649,7 +50649,9 @@ components:
           deprecated: true
           description: Use sort instead
           enum:
+            - PROPERTIES_ASC
             - LOCATION_NAME_ASC
+            - PROPERTIES_DESC
             - LOCATION_NAME_DESC
           type: string
         startAfterId:
@@ -50677,6 +50679,12 @@ components:
           items:
             $ref: '#/components/schemas/StockSearchQuery'
           type: array
+        properties:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/StringFilter'
+              - $ref: '#/components/schemas/DateFilter'
+          type: object
         tenantArticleId:
           $ref: '#/components/schemas/StringFilter'
         value:
@@ -50688,6 +50696,11 @@ components:
         customAttributes:
           $ref: '#/components/schemas/StockCustomAttributesSort'
         locationName:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        properties:
           enum:
             - ASC
             - DESC
