@@ -46900,6 +46900,13 @@ components:
           type: string
       title: DateFilter
       type: object
+    DateListFilter:
+      properties:
+        contains:
+          format: date-time
+          type: string
+      title: DateListFilter
+      type: object
     DeliveryServiceLevelEnumFilter:
       properties:
         eq:
@@ -48109,7 +48116,9 @@ components:
           deprecated: true
           description: Use sort instead
           enum:
+            - LAST_MODIFIED_ASC
             - PO_CREATED_ASC
+            - LAST_MODIFIED_DESC
             - PO_CREATED_DESC
           type: string
         startAfterId:
@@ -48131,6 +48140,8 @@ components:
           $ref: '#/components/schemas/StringFilter'
         id:
           $ref: '#/components/schemas/StringFilter'
+        inboundDate:
+          $ref: '#/components/schemas/DateListFilter'
         or:
           items:
             $ref: '#/components/schemas/InboundProcessSearchQuery'
@@ -48139,6 +48150,10 @@ components:
           $ref: '#/components/schemas/InboundProcessPurchaseOrderFilter'
         receipts:
           $ref: '#/components/schemas/InboundProcessInboundReceiptListFilter'
+        scannableCodes:
+          $ref: '#/components/schemas/StringListFilter'
+        status:
+          $ref: '#/components/schemas/InboundProcessStatusTypeEnumFilter'
         tenantInboundProcessId:
           $ref: '#/components/schemas/StringFilter'
       title: InboundProcessSearchQuery
@@ -48147,12 +48162,35 @@ components:
       properties:
         customAttributes:
           $ref: '#/components/schemas/InboundProcessCustomAttributesSort'
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
         po_created:
           enum:
             - ASC
             - DESC
           type: string
       title: InboundProcessSort
+      type: object
+    InboundProcessStatusTypeEnumFilter:
+      properties:
+        eq:
+          enum:
+            - OPEN
+            - PARTIAL_DELIVERY
+            - ON_HOLD
+            - CLOSED
+          type: string
+        notEq:
+          enum:
+            - OPEN
+            - PARTIAL_DELIVERY
+            - ON_HOLD
+            - CLOSED
+          type: string
+      title: InboundProcessStatusTypeEnumFilter
       type: object
     InboundReceipt:
       properties:
