@@ -52611,8 +52611,10 @@ components:
           description: Use sort instead
           enum:
             - USERNAME_ASC
+            - FIRSTNAME_ASC
             - LASTNAME_ASC
             - USERNAME_DESC
+            - FIRSTNAME_DESC
             - LASTNAME_DESC
           type: string
         startAfterId:
@@ -52632,20 +52634,27 @@ components:
           $ref: '#/components/schemas/UserAuthenticationProviderFilter'
         customAttributes:
           $ref: '#/components/schemas/CustomAttributesFilter'
+        firstname:
+          $ref: '#/components/schemas/StringSearchFilter'
         lastname:
-          $ref: '#/components/schemas/StringFilter'
+          $ref: '#/components/schemas/StringSearchFilter'
         or:
           items:
             $ref: '#/components/schemas/UserSearchQuery'
           type: array
         username:
-          $ref: '#/components/schemas/StringFilter'
+          $ref: '#/components/schemas/StringSearchFilter'
       title: UserSearchQuery
       type: object
     UserSort:
       properties:
         customAttributes:
           $ref: '#/components/schemas/UserCustomAttributesSort'
+        firstname:
+          enum:
+            - ASC
+            - DESC
+          type: string
         lastname:
           enum:
             - ASC
