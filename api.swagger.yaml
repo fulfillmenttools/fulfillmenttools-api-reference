@@ -22530,6 +22530,43 @@ paths:
       summary: ''
       tags:
         - DOMS - Orders
+  /api/packjobs/search:
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Search for PackJob
+      operationId: searchPackJob
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackJobSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - PackJob
   /api/pickjobs/search:
     post:
       deprecated: false
@@ -49507,6 +49544,162 @@ components:
         - allowedValues
         - tagId
       title: OutboundTagFilter
+      type: object
+    PackJobConsumerAddressFilter:
+      properties:
+        companyName:
+          $ref: '#/components/schemas/StringSearchFilter'
+        email:
+          $ref: '#/components/schemas/StringSearchFilter'
+        firstName:
+          $ref: '#/components/schemas/StringSearchFilter'
+        lastName:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: PackJobConsumerAddressFilter
+      type: object
+    PackJobPackLineItemFilter:
+      properties:
+        article:
+          $ref: '#/components/schemas/PackJobPackLineItemPackLineItemArticleFilter'
+      title: PackJobPackLineItemFilter
+      type: object
+    PackJobPackLineItemListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/PackJobPackLineItemFilter'
+      title: PackJobPackLineItemListFilter
+      type: object
+    PackJobPackLineItemPackLineItemArticleFilter:
+      properties:
+        tenantArticleId:
+          $ref: '#/components/schemas/StringSearchFilter'
+        title:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: PackJobPackLineItemPackLineItemArticleFilter
+      type: object
+    PackJobSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/PackJobSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/PackJobSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        sortBy:
+          deprecated: true
+          description: Use sort instead
+          enum:
+            - TARGET_TIME_ASC
+            - LAST_MODIFIED_ASC
+            - ORDER_DATE_ASC
+            - TARGET_TIME_DESC
+            - LAST_MODIFIED_DESC
+            - ORDER_DATE_DESC
+          type: string
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: PackJobSearchPayload
+      type: object
+    PackJobSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/PackJobSearchQuery'
+          type: array
+        facilityRef:
+          $ref: '#/components/schemas/StringEqFilter'
+        invoice:
+          $ref: '#/components/schemas/PackJobConsumerAddressFilter'
+        lastModified:
+          $ref: '#/components/schemas/DateFilter'
+        lineItems:
+          $ref: '#/components/schemas/PackJobPackLineItemListFilter'
+        or:
+          items:
+            $ref: '#/components/schemas/PackJobSearchQuery'
+          type: array
+        orderDate:
+          $ref: '#/components/schemas/DateFilter'
+        packingSourceContainers:
+          $ref: '#/components/schemas/PackJobStrippedPackingSourceContainerListFilter'
+        recipient:
+          $ref: '#/components/schemas/PackJobConsumerAddressFilter'
+        shortId:
+          $ref: '#/components/schemas/StringSearchFilter'
+        status:
+          $ref: '#/components/schemas/PackJobStatusEnumFilter'
+        targetTime:
+          $ref: '#/components/schemas/DateFilter'
+        tenantOrderId:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: PackJobSearchQuery
+      type: object
+    PackJobSort:
+      properties:
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        orderDate:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        targetTime:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: PackJobSort
+      type: object
+    PackJobStatusEnumFilter:
+      properties:
+        eq:
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - OBSOLETE
+            - CANCELED
+            - PAUSED
+          type: string
+        notEq:
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - OBSOLETE
+            - CANCELED
+            - PAUSED
+          type: string
+      title: PackJobStatusEnumFilter
+      type: object
+    PackJobStrippedPackingSourceContainerFilter:
+      properties:
+        codes:
+          $ref: '#/components/schemas/StringListFilter'
+      title: PackJobStrippedPackingSourceContainerFilter
+      type: object
+    PackJobStrippedPackingSourceContainerListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/PackJobStrippedPackingSourceContainerFilter'
+      title: PackJobStrippedPackingSourceContainerListFilter
       type: object
     PauseStowJobAction:
       description: Sets the status of the stowjob to PAUSED
