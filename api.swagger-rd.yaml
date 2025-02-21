@@ -17896,6 +17896,85 @@ paths:
       summary: >-
         Provides information which kind of fulfillment is possible under given
         circumstances.
+  /api/routing/sourcingoptions:
+    post:
+      tags:
+        - DOMS - Sourcing Options
+      summary: Create a new sourcing option request
+      operationId: createSourcingOptionsRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SourcingOptionsRequest'
+        required: true
+      responses:
+        '201':
+          description: Sourcing Option successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourcingOptionsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SourcingOptionsResponse'
+        '400':
+          description: Validation exception
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+  /api/routing/sourcingoptions/{sourcingOptionsRequestId}:
+    get:
+      tags:
+        - DOMS - Sourcing Options
+      summary: Get a single sourcing options response
+      operationId: getSourcingOption
+      parameters:
+        - description: Id of the sourcing option request
+          in: path
+          name: sourcingOptionsRequestId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sourcing Options successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourcingOptionsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SourcingOptionsResponse'
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
   /api/routing/strategies:
     post:
       responses:
@@ -46169,6 +46248,227 @@ components:
       type: object
       xml:
         name: RoutingStrategyNodeConfigCategoryTransporter
+    SourcingOptionsRequest:
+      type: object
+      properties:
+        resourceInvestment:
+          $ref: '#/components/schemas/ResourceInvestment'
+        order:
+          $ref: '#/components/schemas/OrderForSourcingOptionsRequest'
+        optimizationHints:
+          $ref: '#/components/schemas/OptimzationHints'
+      required:
+        - order
+    OptimzationHints:
+      type: object
+      properties:
+        requestedResultCount:
+          type: integer
+          example: 3
+          default: 1
+          description: Number of different results we calculated
+        includeCalculationHints:
+          description: >-
+            Should only be used for debugging. Includes more information on how
+            we calculated the response.
+          type: boolean
+          default: false
+    SourcingOptionsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 284f32cc-b106-487d-b633-f90d93d8c251
+        result:
+          $ref: '#/components/schemas/SourcingOptionsResult'
+      required:
+        - id
+        - result
+    SourcingOptionsResult:
+      type: object
+      properties:
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourcingOption'
+      required:
+        - options
+    SourcingOption:
+      type: object
+      properties:
+        id:
+          type: string
+        totalCosts:
+          $ref: '#/components/schemas/DeliveryCost'
+        totalPenalty:
+          type: number
+          description: The total calculated penalty we calculated for this option
+          example: 187
+        totalDeliveryTime:
+          description: >-
+            Duration of the total delivery time. Defined in ISO-8601 duration
+            notation in working days.
+          type: string
+          example: PT4D
+          pattern: ^-?P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourcingOptionNode'
+        transfers:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourcingOptionTransfer'
+      required:
+        - id
+        - totalPenalty,
+        - nodes
+        - transfers
+    NodeType:
+      type: string
+      enum:
+        - SUPPLIER
+        - MANAGED_FACILITY
+        - CUSTOMER
+    SourcingOptionNode:
+      type: object
+      properties:
+        id:
+          type: string
+        facilityRef:
+          type: string
+          example: f439e7b6-119e-47cc-a263-05a31baea0de
+          description: id of this node, unique for this Sourcing Option Responses
+        type:
+          $ref: '#/components/schemas/NodeType'
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/HandledItem'
+      required:
+        - id
+        - type
+        - lineItems
+    SourcingOptionTransfer:
+      type: object
+      properties:
+        sourceNodeRef:
+          type: string
+          example: f439e7b6-119e-47cc-a263-05a31baea0de
+        targetNodeRef:
+          type: string
+          example: ad6c5038-15ee-41b8-a180-4c86290d04c3
+        carrier:
+          type: object
+          properties:
+            carrierRef:
+              type: string
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/HandledItem'
+      required:
+        - sourceNodeRef
+        - targetNodeRef
+        - lineItems
+    HandledItem:
+      type: object
+      properties:
+        tenantArticleId:
+          type: string
+        quantity:
+          type: number
+          minimum: 1
+    ResourceInvestment:
+      type: object
+      description: How much resources should be invested during the optimization?
+      properties:
+        level:
+          description: >-
+            [abstract values]: how many resources should we invest in
+            optimization. With a higher level the results will be better,
+            nevertheless we need to invest more time for the optimization.
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.2
+      required:
+        - level
+    ConsumerAddressForSourcingOptions:
+      properties:
+        consumerId:
+          description: The id of the consumer.
+          example: e4213a07-f563-46a3-b1ba-4dfeb6abe82a
+          type: string
+        addresses:
+          items:
+            $ref: '#/components/schemas/ConsumerAddress'
+          type: array
+        customAttributes:
+          description: >-
+            Attributes that can be added to the consumer. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+      type: object
+    OrderForSourcingOptionsRequest:
+      additionalProperties: false
+      properties:
+        consumer:
+          $ref: '#/components/schemas/ConsumerAddressForSourcingOptions'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the order. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
+          type: object
+        deliveryPreferences:
+          $ref: '#/components/schemas/DeliveryPreferences'
+        orderDate:
+          description: The date this order was created at the supplying system.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        orderLineItems:
+          items:
+            $ref: '#/components/schemas/OrderLineItemForCreation'
+          type: array
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        stickers:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Sticker'
+        tenantOrderId:
+          description: >-
+            Field can be used as a reference number in foreign systems, for
+            example as a reference to the source system's identifier for this
+            order.
+          example: R456728546
+          type: string
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        customServices:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/CustomServiceReferenceForCreation'
+        paymentInfo:
+          $ref: '#/components/schemas/OrderPaymentInfoForCreation'
+        statusReasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderStatusReason'
+        promisesOptions:
+          $ref: '#/components/schemas/OrderPromisesOptions'
+      type: object
+      xml:
+        name: OrderForSourcingOptionsRequest
     AddressTypeEnumFilter:
       properties:
         eq:
