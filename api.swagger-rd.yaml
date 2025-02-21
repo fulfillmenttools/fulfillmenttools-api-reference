@@ -46715,14 +46715,8 @@ components:
     EnumFilter:
       properties:
         eq:
-          enum:
-            - SINGLE_STORAGE
-            - BULK_STORAGE
           type: string
         notEq:
-          enum:
-            - SINGLE_STORAGE
-            - BULK_STORAGE
           type: string
       title: EnumFilter
       type: object
@@ -46864,6 +46858,50 @@ components:
         - reasonLocalized
       title: ExternalStockChangeReasonOutput
       type: object
+    FacilityAddressEmailAddressesFilter:
+      properties:
+        recipient:
+          $ref: '#/components/schemas/StringFilter'
+        value:
+          $ref: '#/components/schemas/StringFilter'
+      title: FacilityAddressEmailAddressesFilter
+      type: object
+    FacilityAddressEmailAddressesListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/FacilityAddressEmailAddressesFilter'
+      title: FacilityAddressEmailAddressesListFilter
+      type: object
+    FacilityAddressFilter:
+      properties:
+        city:
+          $ref: '#/components/schemas/StringFilter'
+        companyName:
+          $ref: '#/components/schemas/StringFilter'
+        country:
+          $ref: '#/components/schemas/StringFilter'
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
+        emailAddresses:
+          $ref: '#/components/schemas/FacilityAddressEmailAddressesListFilter'
+        houseNumber:
+          $ref: '#/components/schemas/StringFilter'
+        postalCode:
+          $ref: '#/components/schemas/StringFilter'
+        province:
+          $ref: '#/components/schemas/StringFilter'
+        street:
+          $ref: '#/components/schemas/StringFilter'
+      title: FacilityAddressFilter
+      type: object
+    FacilityContactFilter:
+      properties:
+        firstName:
+          $ref: '#/components/schemas/StringFilter'
+        lastName:
+          $ref: '#/components/schemas/StringFilter'
+      title: FacilityContactFilter
+      type: object
     FacilityCustomAttributesSort:
       properties:
         searchTerms:
@@ -46875,65 +46913,6 @@ components:
           minProperties: 1
           type: object
       title: FacilityCustomAttributesSort
-      type: object
-    FacilityFacilityAddressFacilityAddressForCreationEmailAddressesFilter:
-      properties:
-        recipient:
-          $ref: '#/components/schemas/StringFilter'
-        value:
-          $ref: '#/components/schemas/StringFilter'
-      title: FacilityFacilityAddressFacilityAddressForCreationEmailAddressesFilter
-      type: object
-    FacilityFacilityAddressFacilityAddressForCreationEmailAddressesListFilter:
-      properties:
-        contains:
-          $ref: >-
-            #/components/schemas/FacilityFacilityAddressFacilityAddressForCreationEmailAddressesFilter
-      title: >-
-        FacilityFacilityAddressFacilityAddressForCreationEmailAddressesListFilter
-      type: object
-    FacilityFacilityAddressFilter:
-      properties:
-        city:
-          $ref: '#/components/schemas/StringFilter'
-        companyName:
-          $ref: '#/components/schemas/StringFilter'
-        country:
-          $ref: '#/components/schemas/StringFilter'
-        customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
-        emailAddresses:
-          $ref: >-
-            #/components/schemas/FacilityFacilityAddressFacilityAddressForCreationEmailAddressesListFilter
-        houseNumber:
-          $ref: '#/components/schemas/StringFilter'
-        postalCode:
-          $ref: '#/components/schemas/StringFilter'
-        province:
-          $ref: '#/components/schemas/StringFilter'
-        street:
-          $ref: '#/components/schemas/StringFilter'
-      title: FacilityFacilityAddressFilter
-      type: object
-    FacilityFacilityContactFilter:
-      properties:
-        firstName:
-          $ref: '#/components/schemas/StringFilter'
-        lastName:
-          $ref: '#/components/schemas/StringFilter'
-      title: FacilityFacilityContactFilter
-      type: object
-    FacilityFacilityServiceFilter:
-      properties:
-        type:
-          $ref: '#/components/schemas/FacilityServiceTypeEnumFilter'
-      title: FacilityFacilityServiceFilter
-      type: object
-    FacilityFacilityServiceListFilter:
-      properties:
-        contains:
-          $ref: '#/components/schemas/FacilityFacilityServiceFilter'
-      title: FacilityFacilityServiceListFilter
       type: object
     FacilityLocationTypeEnumFilter:
       properties:
@@ -46991,13 +46970,13 @@ components:
     FacilitySearchQuery:
       properties:
         address:
-          $ref: '#/components/schemas/FacilityFacilityAddressFilter'
+          $ref: '#/components/schemas/FacilityAddressFilter'
         and:
           items:
             $ref: '#/components/schemas/FacilitySearchQuery'
           type: array
         contact:
-          $ref: '#/components/schemas/FacilityFacilityContactFilter'
+          $ref: '#/components/schemas/FacilityContactFilter'
         customAttributes:
           $ref: '#/components/schemas/CustomAttributesFilter'
         locationType:
@@ -47009,11 +46988,11 @@ components:
             $ref: '#/components/schemas/FacilitySearchQuery'
           type: array
         services:
-          $ref: '#/components/schemas/FacilityFacilityServiceListFilter'
+          $ref: '#/components/schemas/FacilityServicesListFilter'
         status:
           $ref: '#/components/schemas/FacilityStatusEnumFilter'
         tags:
-          $ref: '#/components/schemas/FacilityTagReferenceListFilter'
+          $ref: '#/components/schemas/FacilityTagsListFilter'
         tenantFacilityId:
           $ref: '#/components/schemas/StringFilter'
       title: FacilitySearchQuery
@@ -47031,6 +47010,18 @@ components:
             - PICKUP
           type: string
       title: FacilityServiceTypeEnumFilter
+      type: object
+    FacilityServicesFilter:
+      properties:
+        type:
+          $ref: '#/components/schemas/FacilityServiceTypeEnumFilter'
+      title: FacilityServicesFilter
+      type: object
+    FacilityServicesListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/FacilityServicesFilter'
+      title: FacilityServicesListFilter
       type: object
     FacilitySort:
       properties:
@@ -47214,19 +47205,19 @@ components:
         - price
       title: FacilityStockDistribution
       type: object
-    FacilityTagReferenceFilter:
+    FacilityTagsFilter:
       properties:
         id:
           $ref: '#/components/schemas/StringFilter'
         value:
           $ref: '#/components/schemas/StringFilter'
-      title: FacilityTagReferenceFilter
+      title: FacilityTagsFilter
       type: object
-    FacilityTagReferenceListFilter:
+    FacilityTagsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/FacilityTagReferenceFilter'
-      title: FacilityTagReferenceListFilter
+          $ref: '#/components/schemas/FacilityTagsFilter'
+      title: FacilityTagsListFilter
       type: object
     InboundAttachment:
       properties:
@@ -47627,24 +47618,6 @@ components:
         - version
       title: InboundProcessForPatch
       type: object
-    InboundProcessInboundReceiptFilter:
-      properties:
-        customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
-        id:
-          $ref: '#/components/schemas/StringFilter'
-        receivedDate:
-          $ref: '#/components/schemas/DateFilter'
-        status:
-          $ref: '#/components/schemas/InboundReceiptStatusTypeEnumFilter'
-      title: InboundProcessInboundReceiptFilter
-      type: object
-    InboundProcessInboundReceiptListFilter:
-      properties:
-        contains:
-          $ref: '#/components/schemas/InboundProcessInboundReceiptFilter'
-      title: InboundProcessInboundReceiptListFilter
-      type: object
     InboundProcessOrigin:
       properties:
         name:
@@ -47884,6 +47857,24 @@ components:
         - items
       title: InboundProcessReceiptBulkWebHookEventPayload
       type: object
+    InboundProcessReceiptsFilter:
+      properties:
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
+        id:
+          $ref: '#/components/schemas/StringFilter'
+        receivedDate:
+          $ref: '#/components/schemas/DateFilter'
+        status:
+          $ref: '#/components/schemas/InboundReceiptStatusTypeEnumFilter'
+      title: InboundProcessReceiptsFilter
+      type: object
+    InboundProcessReceiptsListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/InboundProcessReceiptsFilter'
+      title: InboundProcessReceiptsListFilter
+      type: object
     InboundProcessSearchPayload:
       properties:
         options:
@@ -47940,7 +47931,7 @@ components:
         purchaseOrder:
           $ref: '#/components/schemas/InboundProcessPurchaseOrderFilter'
         receipts:
-          $ref: '#/components/schemas/InboundProcessInboundReceiptListFilter'
+          $ref: '#/components/schemas/InboundProcessReceiptsListFilter'
         scannableCodes:
           $ref: '#/components/schemas/StringListFilter'
         status:
@@ -48880,7 +48871,7 @@ components:
         status:
           $ref: '#/components/schemas/StatusEnumEnumFilter'
         tags:
-          $ref: '#/components/schemas/ListingTagReferenceListFilter'
+          $ref: '#/components/schemas/ListingTagsListFilter'
         tenantArticleId:
           $ref: '#/components/schemas/StringFilter'
         weight:
@@ -48903,19 +48894,19 @@ components:
           type: string
       title: ListingSort
       type: object
-    ListingTagReferenceFilter:
+    ListingTagsFilter:
       properties:
         id:
           $ref: '#/components/schemas/StringFilter'
         value:
           $ref: '#/components/schemas/StringFilter'
-      title: ListingTagReferenceFilter
+      title: ListingTagsFilter
       type: object
-    ListingTagReferenceListFilter:
+    ListingTagsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/ListingTagReferenceFilter'
-      title: ListingTagReferenceListFilter
+          $ref: '#/components/schemas/ListingTagsFilter'
+      title: ListingTagsListFilter
       type: object
     ModifyStowLineItemsAction:
       description: >-
@@ -48982,7 +48973,7 @@ components:
           type: array
       title: NumberFilter
       type: object
-    OrderConsumerConsumerAddressFilter:
+    OrderConsumerAddressesFilter:
       properties:
         addressType:
           $ref: '#/components/schemas/AddressTypeEnumFilter'
@@ -49006,41 +48997,40 @@ components:
           $ref: '#/components/schemas/StringFilter'
         street:
           $ref: '#/components/schemas/StringFilter'
-      title: OrderConsumerConsumerAddressFilter
+      title: OrderConsumerAddressesFilter
       type: object
-    OrderConsumerConsumerAddressListFilter:
+    OrderConsumerAddressesListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/OrderConsumerConsumerAddressFilter'
-      title: OrderConsumerConsumerAddressListFilter
+          $ref: '#/components/schemas/OrderConsumerAddressesFilter'
+      title: OrderConsumerAddressesListFilter
       type: object
     OrderConsumerFilter:
       properties:
         addresses:
-          $ref: '#/components/schemas/OrderConsumerConsumerAddressListFilter'
+          $ref: '#/components/schemas/OrderConsumerAddressesListFilter'
         consumerId:
           $ref: '#/components/schemas/StringFilter'
       title: OrderConsumerFilter
       type: object
-    OrderDeliveryPreferencesCollectDeliveryFilter:
+    OrderDeliveryPreferencesCollectFilter:
       properties:
         facilityRef:
           $ref: '#/components/schemas/StringFilter'
         paid:
           $ref: '#/components/schemas/BooleanFilter'
-      title: OrderDeliveryPreferencesCollectDeliveryFilter
+      title: OrderDeliveryPreferencesCollectFilter
       type: object
-    OrderDeliveryPreferencesCollectDeliveryListFilter:
+    OrderDeliveryPreferencesCollectListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/OrderDeliveryPreferencesCollectDeliveryFilter'
-      title: OrderDeliveryPreferencesCollectDeliveryListFilter
+          $ref: '#/components/schemas/OrderDeliveryPreferencesCollectFilter'
+      title: OrderDeliveryPreferencesCollectListFilter
       type: object
     OrderDeliveryPreferencesFilter:
       properties:
         collect:
-          $ref: >-
-            #/components/schemas/OrderDeliveryPreferencesCollectDeliveryListFilter
+          $ref: '#/components/schemas/OrderDeliveryPreferencesCollectListFilter'
         shipping:
           $ref: '#/components/schemas/OrderDeliveryPreferencesShippingFilter'
       title: OrderDeliveryPreferencesFilter
@@ -49053,17 +49043,17 @@ components:
           $ref: '#/components/schemas/DeliveryServiceLevelEnumFilter'
       title: OrderDeliveryPreferencesShippingFilter
       type: object
-    OrderOrderLineItemArticleFilter:
+    OrderOrderLineItemsArticleFilter:
       properties:
         tenantArticleId:
           $ref: '#/components/schemas/StringFilter'
         title:
           $ref: '#/components/schemas/StringFilter'
         titleLocalized:
-          $ref: '#/components/schemas/OrderOrderLineItemArticleTitleLocalizedFilter'
-      title: OrderOrderLineItemArticleFilter
+          $ref: '#/components/schemas/OrderOrderLineItemsArticleTitleLocalizedFilter'
+      title: OrderOrderLineItemsArticleFilter
       type: object
-    OrderOrderLineItemArticleTitleLocalizedFilter:
+    OrderOrderLineItemsArticleTitleLocalizedFilter:
       properties:
         de_DE:
           $ref: '#/components/schemas/StringFilter'
@@ -49071,31 +49061,31 @@ components:
           $ref: '#/components/schemas/StringFilter'
         ru_RU:
           $ref: '#/components/schemas/StringFilter'
-      title: OrderOrderLineItemArticleTitleLocalizedFilter
+      title: OrderOrderLineItemsArticleTitleLocalizedFilter
       type: object
-    OrderOrderLineItemFilter:
+    OrderOrderLineItemsFilter:
       properties:
         article:
-          $ref: '#/components/schemas/OrderOrderLineItemArticleFilter'
-      title: OrderOrderLineItemFilter
+          $ref: '#/components/schemas/OrderOrderLineItemsArticleFilter'
+      title: OrderOrderLineItemsFilter
       type: object
-    OrderOrderLineItemListFilter:
+    OrderOrderLineItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/OrderOrderLineItemFilter'
-      title: OrderOrderLineItemListFilter
+          $ref: '#/components/schemas/OrderOrderLineItemsFilter'
+      title: OrderOrderLineItemsListFilter
       type: object
-    OrderPaymentinfoFilter:
+    OrderPaymentInfoFilter:
       properties:
         currency:
           $ref: '#/components/schemas/StringFilter'
         method:
           $ref: '#/components/schemas/StringFilter'
         methodLocalized:
-          $ref: '#/components/schemas/OrderPaymentinfoMethodLocalizedFilter'
-      title: OrderPaymentinfoFilter
+          $ref: '#/components/schemas/OrderPaymentInfoMethodLocalizedFilter'
+      title: OrderPaymentInfoFilter
       type: object
-    OrderPaymentinfoMethodLocalizedFilter:
+    OrderPaymentInfoMethodLocalizedFilter:
       properties:
         de_DE:
           $ref: '#/components/schemas/StringFilter'
@@ -49103,7 +49093,7 @@ components:
           $ref: '#/components/schemas/StringFilter'
         ru_RU:
           $ref: '#/components/schemas/StringFilter'
-      title: OrderPaymentinfoMethodLocalizedFilter
+      title: OrderPaymentInfoMethodLocalizedFilter
       type: object
     OrderSearchPayload:
       properties:
@@ -49159,9 +49149,9 @@ components:
         orderDate:
           $ref: '#/components/schemas/DateFilter'
         orderLineItems:
-          $ref: '#/components/schemas/OrderOrderLineItemListFilter'
+          $ref: '#/components/schemas/OrderOrderLineItemsListFilter'
         paymentInfo:
-          $ref: '#/components/schemas/OrderPaymentinfoFilter'
+          $ref: '#/components/schemas/OrderPaymentInfoFilter'
         status:
           $ref: '#/components/schemas/OrderStatusEnumFilter'
         tags:
@@ -49271,7 +49261,7 @@ components:
         - tagId
       title: OutboundTagFilter
       type: object
-    PackJobConsumerAddressFilter:
+    PackJobInvoiceFilter:
       properties:
         companyName:
           $ref: '#/components/schemas/StringSearchFilter'
@@ -49281,27 +49271,51 @@ components:
           $ref: '#/components/schemas/StringSearchFilter'
         lastName:
           $ref: '#/components/schemas/StringSearchFilter'
-      title: PackJobConsumerAddressFilter
+      title: PackJobInvoiceFilter
       type: object
-    PackJobPackLineItemFilter:
-      properties:
-        article:
-          $ref: '#/components/schemas/PackJobPackLineItemPackLineItemArticleFilter'
-      title: PackJobPackLineItemFilter
-      type: object
-    PackJobPackLineItemListFilter:
-      properties:
-        contains:
-          $ref: '#/components/schemas/PackJobPackLineItemFilter'
-      title: PackJobPackLineItemListFilter
-      type: object
-    PackJobPackLineItemPackLineItemArticleFilter:
+    PackJobLineItemsArticleFilter:
       properties:
         tenantArticleId:
           $ref: '#/components/schemas/StringSearchFilter'
         title:
           $ref: '#/components/schemas/StringSearchFilter'
-      title: PackJobPackLineItemPackLineItemArticleFilter
+      title: PackJobLineItemsArticleFilter
+      type: object
+    PackJobLineItemsFilter:
+      properties:
+        article:
+          $ref: '#/components/schemas/PackJobLineItemsArticleFilter'
+      title: PackJobLineItemsFilter
+      type: object
+    PackJobLineItemsListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/PackJobLineItemsFilter'
+      title: PackJobLineItemsListFilter
+      type: object
+    PackJobPackingSourceContainersFilter:
+      properties:
+        codes:
+          $ref: '#/components/schemas/StringListFilter'
+      title: PackJobPackingSourceContainersFilter
+      type: object
+    PackJobPackingSourceContainersListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/PackJobPackingSourceContainersFilter'
+      title: PackJobPackingSourceContainersListFilter
+      type: object
+    PackJobRecipientFilter:
+      properties:
+        companyName:
+          $ref: '#/components/schemas/StringSearchFilter'
+        email:
+          $ref: '#/components/schemas/StringSearchFilter'
+        firstName:
+          $ref: '#/components/schemas/StringSearchFilter'
+        lastName:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: PackJobRecipientFilter
       type: object
     PackJobSearchPayload:
       properties:
@@ -49349,11 +49363,11 @@ components:
         facilityRef:
           $ref: '#/components/schemas/StringEqFilter'
         invoice:
-          $ref: '#/components/schemas/PackJobConsumerAddressFilter'
+          $ref: '#/components/schemas/PackJobInvoiceFilter'
         lastModified:
           $ref: '#/components/schemas/DateFilter'
         lineItems:
-          $ref: '#/components/schemas/PackJobPackLineItemListFilter'
+          $ref: '#/components/schemas/PackJobLineItemsListFilter'
         or:
           items:
             $ref: '#/components/schemas/PackJobSearchQuery'
@@ -49361,9 +49375,9 @@ components:
         orderDate:
           $ref: '#/components/schemas/DateFilter'
         packingSourceContainers:
-          $ref: '#/components/schemas/PackJobStrippedPackingSourceContainerListFilter'
+          $ref: '#/components/schemas/PackJobPackingSourceContainersListFilter'
         recipient:
-          $ref: '#/components/schemas/PackJobConsumerAddressFilter'
+          $ref: '#/components/schemas/PackJobRecipientFilter'
         shortId:
           $ref: '#/components/schemas/StringSearchFilter'
         status:
@@ -49414,18 +49428,6 @@ components:
             - PAUSED
           type: string
       title: PackJobStatusEnumFilter
-      type: object
-    PackJobStrippedPackingSourceContainerFilter:
-      properties:
-        codes:
-          $ref: '#/components/schemas/StringListFilter'
-      title: PackJobStrippedPackingSourceContainerFilter
-      type: object
-    PackJobStrippedPackingSourceContainerListFilter:
-      properties:
-        contains:
-          $ref: '#/components/schemas/PackJobStrippedPackingSourceContainerFilter'
-      title: PackJobStrippedPackingSourceContainerListFilter
       type: object
     PauseStowJobAction:
       description: Sets the status of the stowjob to PAUSED
@@ -49592,7 +49594,7 @@ components:
         status:
           $ref: '#/components/schemas/ProcessStatusEnumFilter'
         tags:
-          $ref: '#/components/schemas/ProcessTagReferenceListFilter'
+          $ref: '#/components/schemas/ProcessTagsListFilter'
       title: ProcessSearchQuery
       type: object
     ProcessSort:
@@ -49626,19 +49628,19 @@ components:
           type: string
       title: ProcessStatusEnumFilter
       type: object
-    ProcessTagReferenceFilter:
+    ProcessTagsFilter:
       properties:
         id:
           $ref: '#/components/schemas/StringFilter'
         value:
           $ref: '#/components/schemas/StringFilter'
-      title: ProcessTagReferenceFilter
+      title: ProcessTagsFilter
       type: object
-    ProcessTagReferenceListFilter:
+    ProcessTagsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/ProcessTagReferenceFilter'
-      title: ProcessTagReferenceListFilter
+          $ref: '#/components/schemas/ProcessTagsFilter'
+      title: ProcessTagsListFilter
       type: object
     PurchaseOrder:
       properties:
@@ -50126,90 +50128,88 @@ components:
           type: string
       title: RequestedDateTypeEnumFilter
       type: object
-    RoutingPlanCustomServiceReferenceArticleItemFilter:
+    RoutingPlanCustomServicesArticleItemsFilter:
       properties:
         tenantArticleRef:
           $ref: '#/components/schemas/StringFilter'
-      title: RoutingPlanCustomServiceReferenceArticleItemFilter
+      title: RoutingPlanCustomServicesArticleItemsFilter
       type: object
-    RoutingPlanCustomServiceReferenceArticleItemListFilter:
+    RoutingPlanCustomServicesArticleItemsListFilter:
       properties:
         contains:
-          $ref: >-
-            #/components/schemas/RoutingPlanCustomServiceReferenceArticleItemFilter
-      title: RoutingPlanCustomServiceReferenceArticleItemListFilter
+          $ref: '#/components/schemas/RoutingPlanCustomServicesArticleItemsFilter'
+      title: RoutingPlanCustomServicesArticleItemsListFilter
       type: object
-    RoutingPlanCustomServiceReferenceCustomServiceDefinitionCustomServiceDefinitionAdditionalInformationFilter:
+    RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationFilter:
       properties:
         additionalInformationRef:
           $ref: '#/components/schemas/StringFilter'
       title: >-
-        RoutingPlanCustomServiceReferenceCustomServiceDefinitionCustomServiceDefinitionAdditionalInformationFilter
+        RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationFilter
       type: object
-    RoutingPlanCustomServiceReferenceCustomServiceDefinitionCustomServiceDefinitionAdditionalInformationListFilter:
+    RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationListFilter:
       properties:
         contains:
           $ref: >-
-            #/components/schemas/RoutingPlanCustomServiceReferenceCustomServiceDefinitionCustomServiceDefinitionAdditionalInformationFilter
+            #/components/schemas/RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationFilter
       title: >-
-        RoutingPlanCustomServiceReferenceCustomServiceDefinitionCustomServiceDefinitionAdditionalInformationListFilter
+        RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationListFilter
       type: object
-    RoutingPlanCustomServiceReferenceCustomServiceDefinitionFilter:
+    RoutingPlanCustomServicesCustomServiceDefinitionFilter:
       properties:
         additionalInformation:
           $ref: >-
-            #/components/schemas/RoutingPlanCustomServiceReferenceCustomServiceDefinitionCustomServiceDefinitionAdditionalInformationListFilter
+            #/components/schemas/RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationListFilter
         customServiceRef:
           $ref: '#/components/schemas/StringFilter'
-      title: RoutingPlanCustomServiceReferenceCustomServiceDefinitionFilter
+      title: RoutingPlanCustomServicesCustomServiceDefinitionFilter
       type: object
-    RoutingPlanCustomServiceReferenceCustomServiceItemArticleItemFilter:
+    RoutingPlanCustomServicesCustomServiceItemsArticleItemsFilter:
       properties:
         tenantArticleRef:
           $ref: '#/components/schemas/StringFilter'
-      title: RoutingPlanCustomServiceReferenceCustomServiceItemArticleItemFilter
+      title: RoutingPlanCustomServicesCustomServiceItemsArticleItemsFilter
       type: object
-    RoutingPlanCustomServiceReferenceCustomServiceItemArticleItemListFilter:
+    RoutingPlanCustomServicesCustomServiceItemsArticleItemsListFilter:
       properties:
         contains:
           $ref: >-
-            #/components/schemas/RoutingPlanCustomServiceReferenceCustomServiceItemArticleItemFilter
-      title: RoutingPlanCustomServiceReferenceCustomServiceItemArticleItemListFilter
+            #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsArticleItemsFilter
+      title: RoutingPlanCustomServicesCustomServiceItemsArticleItemsListFilter
       type: object
-    RoutingPlanCustomServiceReferenceCustomServiceItemFilter:
+    RoutingPlanCustomServicesCustomServiceItemsFilter:
       properties:
         articleItems:
           $ref: >-
-            #/components/schemas/RoutingPlanCustomServiceReferenceCustomServiceItemArticleItemListFilter
-      title: RoutingPlanCustomServiceReferenceCustomServiceItemFilter
+            #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsArticleItemsListFilter
+      title: RoutingPlanCustomServicesCustomServiceItemsFilter
       type: object
-    RoutingPlanCustomServiceReferenceCustomServiceItemListFilter:
+    RoutingPlanCustomServicesCustomServiceItemsListFilter:
       properties:
         contains:
           $ref: >-
-            #/components/schemas/RoutingPlanCustomServiceReferenceCustomServiceItemFilter
-      title: RoutingPlanCustomServiceReferenceCustomServiceItemListFilter
+            #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsFilter
+      title: RoutingPlanCustomServicesCustomServiceItemsListFilter
       type: object
-    RoutingPlanCustomServiceReferenceFilter:
+    RoutingPlanCustomServicesFilter:
       properties:
         articleItems:
-          $ref: >-
-            #/components/schemas/RoutingPlanCustomServiceReferenceArticleItemListFilter
+          $ref: '#/components/schemas/RoutingPlanCustomServicesArticleItemsListFilter'
         customServiceDefinition:
           $ref: >-
-            #/components/schemas/RoutingPlanCustomServiceReferenceCustomServiceDefinitionFilter
+            #/components/schemas/RoutingPlanCustomServicesCustomServiceDefinitionFilter
         customServiceItems:
           $ref: >-
-            #/components/schemas/RoutingPlanCustomServiceReferenceCustomServiceItemListFilter
-      title: RoutingPlanCustomServiceReferenceFilter
+            #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsListFilter
+      title: RoutingPlanCustomServicesFilter
       type: object
-    RoutingPlanCustomServiceReferenceListFilter:
+    RoutingPlanCustomServicesListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/RoutingPlanCustomServiceReferenceFilter'
-      title: RoutingPlanCustomServiceReferenceListFilter
+          $ref: '#/components/schemas/RoutingPlanCustomServicesFilter'
+      title: RoutingPlanCustomServicesListFilter
       type: object
-    RoutingPlanDeliveryPreferencesCollectDeliveryFilter:
+    RoutingPlanDeliveryPreferencesCollectFilter:
       properties:
         facilityRef:
           $ref: '#/components/schemas/StringFilter'
@@ -50217,52 +50217,48 @@ components:
           $ref: '#/components/schemas/BooleanFilter'
         supplyingFacilities:
           $ref: '#/components/schemas/StringListFilter'
-      title: RoutingPlanDeliveryPreferencesCollectDeliveryFilter
+      title: RoutingPlanDeliveryPreferencesCollectFilter
       type: object
-    RoutingPlanDeliveryPreferencesCollectDeliveryListFilter:
+    RoutingPlanDeliveryPreferencesCollectListFilter:
       properties:
         contains:
-          $ref: >-
-            #/components/schemas/RoutingPlanDeliveryPreferencesCollectDeliveryFilter
-      title: RoutingPlanDeliveryPreferencesCollectDeliveryListFilter
-      type: object
-    RoutingPlanDeliveryPreferencesDeliveryPreferencesShippingFilter:
-      properties:
-        preferredCarriers:
-          $ref: '#/components/schemas/StringListFilter'
-        preferredCarriersWithProduct:
-          $ref: >-
-            #/components/schemas/RoutingPlanDeliveryPreferencesDeliveryPreferencesShippingPreferredCarrierWithProductListFilter
-      title: RoutingPlanDeliveryPreferencesDeliveryPreferencesShippingFilter
-      type: object
-    RoutingPlanDeliveryPreferencesDeliveryPreferencesShippingPreferredCarrierWithProductFilter:
-      properties:
-        carrierKey:
-          $ref: '#/components/schemas/StringFilter'
-      title: >-
-        RoutingPlanDeliveryPreferencesDeliveryPreferencesShippingPreferredCarrierWithProductFilter
-      type: object
-    RoutingPlanDeliveryPreferencesDeliveryPreferencesShippingPreferredCarrierWithProductListFilter:
-      properties:
-        contains:
-          $ref: >-
-            #/components/schemas/RoutingPlanDeliveryPreferencesDeliveryPreferencesShippingPreferredCarrierWithProductFilter
-      title: >-
-        RoutingPlanDeliveryPreferencesDeliveryPreferencesShippingPreferredCarrierWithProductListFilter
+          $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesCollectFilter'
+      title: RoutingPlanDeliveryPreferencesCollectListFilter
       type: object
     RoutingPlanDeliveryPreferencesFilter:
       properties:
         collect:
-          $ref: >-
-            #/components/schemas/RoutingPlanDeliveryPreferencesCollectDeliveryListFilter
+          $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesCollectListFilter'
         shipping:
-          $ref: >-
-            #/components/schemas/RoutingPlanDeliveryPreferencesDeliveryPreferencesShippingFilter
+          $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesShippingFilter'
         supplyingFacilities:
           $ref: '#/components/schemas/StringListFilter'
         targetTime:
           $ref: '#/components/schemas/DateFilter'
       title: RoutingPlanDeliveryPreferencesFilter
+      type: object
+    RoutingPlanDeliveryPreferencesShippingFilter:
+      properties:
+        preferredCarriers:
+          $ref: '#/components/schemas/StringListFilter'
+        preferredCarriersWithProduct:
+          $ref: >-
+            #/components/schemas/RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductListFilter
+      title: RoutingPlanDeliveryPreferencesShippingFilter
+      type: object
+    RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductFilter:
+      properties:
+        carrierKey:
+          $ref: '#/components/schemas/StringFilter'
+      title: RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductFilter
+      type: object
+    RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductListFilter:
+      properties:
+        contains:
+          $ref: >-
+            #/components/schemas/RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductFilter
+      title: >-
+        RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductListFilter
       type: object
     RoutingPlanEarliestPickingStartFilter:
       properties:
@@ -50274,6 +50270,20 @@ components:
           $ref: '#/components/schemas/DateFilter'
       title: RoutingPlanEarliestPickingStartFilter
       type: object
+    RoutingPlanHistoryFilter:
+      properties:
+        created:
+          $ref: '#/components/schemas/DateFilter'
+        status:
+          $ref: '#/components/schemas/RoutingPlanStatusEnumFilter'
+      title: RoutingPlanHistoryFilter
+      type: object
+    RoutingPlanHistoryListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/RoutingPlanHistoryFilter'
+      title: RoutingPlanHistoryListFilter
+      type: object
     RoutingPlanLatestPickingStartFilter:
       properties:
         carrierRef:
@@ -50284,45 +50294,17 @@ components:
           $ref: '#/components/schemas/DateFilter'
       title: RoutingPlanLatestPickingStartFilter
       type: object
-    RoutingPlanRoutingPlanHistoryFilter:
-      properties:
-        created:
-          $ref: '#/components/schemas/DateFilter'
-        status:
-          $ref: '#/components/schemas/RoutingPlanStatusEnumFilter'
-      title: RoutingPlanRoutingPlanHistoryFilter
-      type: object
-    RoutingPlanRoutingPlanHistoryListFilter:
-      properties:
-        contains:
-          $ref: '#/components/schemas/RoutingPlanRoutingPlanHistoryFilter'
-      title: RoutingPlanRoutingPlanHistoryListFilter
-      type: object
-    RoutingPlanRoutingPlanLineItemFilter:
+    RoutingPlanOrderLineItemsFilter:
       properties:
         id:
           $ref: '#/components/schemas/StringFilter'
-      title: RoutingPlanRoutingPlanLineItemFilter
+      title: RoutingPlanOrderLineItemsFilter
       type: object
-    RoutingPlanRoutingPlanLineItemListFilter:
+    RoutingPlanOrderLineItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/RoutingPlanRoutingPlanLineItemFilter'
-      title: RoutingPlanRoutingPlanLineItemListFilter
-      type: object
-    RoutingPlanRoutingPlanStatusReasonFilter:
-      properties:
-        reason:
-          $ref: '#/components/schemas/RoutingPlanStatusReasonReasonEnumFilter'
-        status:
-          $ref: '#/components/schemas/RoutingPlanStatusReasonStatusEnumFilter'
-      title: RoutingPlanRoutingPlanStatusReasonFilter
-      type: object
-    RoutingPlanRoutingPlanStatusReasonListFilter:
-      properties:
-        contains:
-          $ref: '#/components/schemas/RoutingPlanRoutingPlanStatusReasonFilter'
-      title: RoutingPlanRoutingPlanStatusReasonListFilter
+          $ref: '#/components/schemas/RoutingPlanOrderLineItemsFilter'
+      title: RoutingPlanOrderLineItemsListFilter
       type: object
     RoutingPlanSearchPayload:
       properties:
@@ -50352,13 +50334,13 @@ components:
         anonymized:
           $ref: '#/components/schemas/BooleanFilter'
         customServices:
-          $ref: '#/components/schemas/RoutingPlanCustomServiceReferenceListFilter'
+          $ref: '#/components/schemas/RoutingPlanCustomServicesListFilter'
         deliveryPreferences:
           $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesFilter'
         earliestPickingStart:
           $ref: '#/components/schemas/RoutingPlanEarliestPickingStartFilter'
         history:
-          $ref: '#/components/schemas/RoutingPlanRoutingPlanHistoryListFilter'
+          $ref: '#/components/schemas/RoutingPlanHistoryListFilter'
         latestPickingStart:
           $ref: '#/components/schemas/RoutingPlanLatestPickingStartFilter'
         or:
@@ -50368,7 +50350,7 @@ components:
         orderDate:
           $ref: '#/components/schemas/DateFilter'
         orderLineItems:
-          $ref: '#/components/schemas/RoutingPlanRoutingPlanLineItemListFilter'
+          $ref: '#/components/schemas/RoutingPlanOrderLineItemsListFilter'
         orderRef:
           $ref: '#/components/schemas/StringFilter'
         priority:
@@ -50384,7 +50366,7 @@ components:
         status:
           $ref: '#/components/schemas/RoutingPlanStatusEnumFilter'
         statusReasons:
-          $ref: '#/components/schemas/RoutingPlanRoutingPlanStatusReasonListFilter'
+          $ref: '#/components/schemas/RoutingPlanStatusReasonsListFilter'
         targetAddress:
           $ref: '#/components/schemas/RoutingPlanTargetAddressFilter'
       title: RoutingPlanSearchQuery
@@ -50464,6 +50446,20 @@ components:
             - OBSOLETE
           type: string
       title: RoutingPlanStatusReasonStatusEnumFilter
+      type: object
+    RoutingPlanStatusReasonsFilter:
+      properties:
+        reason:
+          $ref: '#/components/schemas/RoutingPlanStatusReasonReasonEnumFilter'
+        status:
+          $ref: '#/components/schemas/RoutingPlanStatusReasonStatusEnumFilter'
+      title: RoutingPlanStatusReasonsFilter
+      type: object
+    RoutingPlanStatusReasonsListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/RoutingPlanStatusReasonsFilter'
+      title: RoutingPlanStatusReasonsListFilter
       type: object
     RoutingPlanTargetAddressFilter:
       properties:
@@ -51472,18 +51468,6 @@ components:
         - stockCount
       title: StorageLocationRecommendation
       type: object
-    StorageLocationReferenceFilter:
-      properties:
-        stock:
-          $ref: '#/components/schemas/StorageLocationReferencedStockFilter'
-      title: StorageLocationReferenceFilter
-      type: object
-    StorageLocationReferencedStockFilter:
-      properties:
-        sumOfValues:
-          $ref: '#/components/schemas/NumberFilter'
-      title: StorageLocationReferencedStockFilter
-      type: object
     StorageLocationSearchPayload:
       properties:
         options:
@@ -51546,7 +51530,7 @@ components:
             $ref: '#/components/schemas/StorageLocationSearchQuery'
           type: array
         referenced:
-          $ref: '#/components/schemas/StorageLocationReferenceFilter'
+          $ref: '#/components/schemas/StorageLocationSumOfValuesReferenceFilter'
         scannableCodes:
           $ref: '#/components/schemas/StringListFilter'
         tenantLocationId:
@@ -51589,6 +51573,18 @@ components:
             - DESC
           type: string
       title: StorageLocationSort
+      type: object
+    StorageLocationSumOfValuesReferenceFilter:
+      properties:
+        stock:
+          $ref: '#/components/schemas/StorageLocationSumOfValuesStockFilter'
+      title: StorageLocationSumOfValuesReferenceFilter
+      type: object
+    StorageLocationSumOfValuesStockFilter:
+      properties:
+        sumOfValues:
+          $ref: '#/components/schemas/NumberFilter'
+      title: StorageLocationSumOfValuesStockFilter
       type: object
     StorageLocationTraitConfigEntry:
       properties:
@@ -51864,7 +51860,7 @@ components:
         status:
           $ref: '#/components/schemas/StowJobStatusTypeEnumFilter'
         stowLineItems:
-          $ref: '#/components/schemas/StowJobStowLineItemListFilter'
+          $ref: '#/components/schemas/StowJobStowLineItemsListFilter'
         targetTime:
           $ref: '#/components/schemas/DateFilter'
       required:
@@ -51941,67 +51937,65 @@ components:
           type: array
       title: StowJobStockInformation
       type: object
-    StowJobStowLineItemArticleFilter:
+    StowJobStowLineItemsArticleFilter:
       properties:
         tenantArticleId:
           $ref: '#/components/schemas/StringFilter'
-      title: StowJobStowLineItemArticleFilter
+      title: StowJobStowLineItemsArticleFilter
       type: object
-    StowJobStowLineItemFilter:
+    StowJobStowLineItemsFilter:
       properties:
         article:
-          $ref: '#/components/schemas/StowJobStowLineItemArticleFilter'
+          $ref: '#/components/schemas/StowJobStowLineItemsArticleFilter'
         heldStockRef:
           $ref: '#/components/schemas/StringFilter'
         id:
           $ref: '#/components/schemas/StringFilter'
         stowTo:
-          $ref: '#/components/schemas/StowJobStowLineItemStowLineItemStowToFilter'
+          $ref: '#/components/schemas/StowJobStowLineItemsStowToFilter'
         takeFrom:
-          $ref: '#/components/schemas/StowJobStowLineItemStowLineItemTakeFromFilter'
-      title: StowJobStowLineItemFilter
+          $ref: '#/components/schemas/StowJobStowLineItemsTakeFromFilter'
+      title: StowJobStowLineItemsFilter
       type: object
-    StowJobStowLineItemListFilter:
+    StowJobStowLineItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/StowJobStowLineItemFilter'
-      title: StowJobStowLineItemListFilter
+          $ref: '#/components/schemas/StowJobStowLineItemsFilter'
+      title: StowJobStowLineItemsListFilter
       type: object
-    StowJobStowLineItemStowLineItemStowToFilter:
+    StowJobStowLineItemsStowToFilter:
       properties:
         storageLocationRef:
           $ref: '#/components/schemas/StringFilter'
         stowed:
-          $ref: >-
-            #/components/schemas/StowJobStowLineItemStowLineItemStowToStowedStowLineItemStowToFilter
+          $ref: '#/components/schemas/StowJobStowLineItemsStowToStowedFilter'
         type:
           $ref: '#/components/schemas/StringFilter'
-      title: StowJobStowLineItemStowLineItemStowToFilter
+      title: StowJobStowLineItemsStowToFilter
       type: object
-    StowJobStowLineItemStowLineItemStowToStowedStowLineItemStowToFilter:
+    StowJobStowLineItemsStowToStowedFilter:
       properties:
         stowedStockRef:
           $ref: '#/components/schemas/StringFilter'
         stowedStorageLocationRef:
           $ref: '#/components/schemas/StringFilter'
-      title: StowJobStowLineItemStowLineItemStowToStowedStowLineItemStowToFilter
+      title: StowJobStowLineItemsStowToStowedFilter
       type: object
-    StowJobStowLineItemStowLineItemTakeFromFilter:
+    StowJobStowLineItemsTakeFromFilter:
       properties:
         storageLocationRef:
           $ref: '#/components/schemas/StringFilter'
         taken:
-          $ref: >-
-            #/components/schemas/StowJobStowLineItemStowLineItemTakeFromTakenStowLineItemTakeFromFilter
+          $ref: '#/components/schemas/StowJobStowLineItemsTakeFromTakenFilter'
         type:
           $ref: '#/components/schemas/StringFilter'
-      title: StowJobStowLineItemStowLineItemTakeFromFilter
+      title: StowJobStowLineItemsTakeFromFilter
       type: object
-    StowJobStowLineItemStowLineItemTakeFromTakenStowLineItemTakeFromFilter:
+    StowJobStowLineItemsTakeFromTakenFilter:
       properties:
         takenStockRef:
           $ref: '#/components/schemas/StringFilter'
-      title: StowJobStowLineItemStowLineItemTakeFromTakenStowLineItemTakeFromFilter
+      title: StowJobStowLineItemsTakeFromTakenFilter
       type: object
     StowJobWebHookEvent:
       allOf:
@@ -52557,11 +52551,11 @@ components:
         - takenStockRef
       title: TakenStowLineItemTakeFromForCreation
       type: object
-    UserAuthenticationProviderFilter:
+    UserAuthFilter:
       properties:
         type:
           $ref: '#/components/schemas/AuthenticationProviderTypeEnumFilter'
-      title: UserAuthenticationProviderFilter
+      title: UserAuthFilter
       type: object
     UserCustomAttributesSort:
       properties:
@@ -52619,7 +52613,7 @@ components:
             $ref: '#/components/schemas/UserSearchQuery'
           type: array
         auth:
-          $ref: '#/components/schemas/UserAuthenticationProviderFilter'
+          $ref: '#/components/schemas/UserAuthFilter'
         customAttributes:
           $ref: '#/components/schemas/CustomAttributesFilter'
         firstname:
