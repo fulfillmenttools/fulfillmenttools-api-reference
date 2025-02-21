@@ -50476,6 +50476,14 @@ components:
         - result
       title: StockActionResult
       type: object
+    StockConditionEnumListFilter:
+      properties:
+        contains:
+          enum:
+            - DEFECTIVE
+          type: string
+      title: StockConditionEnumListFilter
+      type: object
     StockCustomAttributesSort:
       properties:
         searchTerms:
@@ -50788,10 +50796,16 @@ components:
           deprecated: true
           description: Use sort instead
           enum:
+            - TENANT_ARTICLE_ID_ASC
+            - VALUE_ASC
             - PROPERTIES_ASC
             - LOCATION_NAME_ASC
+            - LAST_MODIFIED_ASC
+            - TENANT_ARTICLE_ID_DESC
+            - VALUE_DESC
             - PROPERTIES_DESC
             - LOCATION_NAME_DESC
+            - LAST_MODIFIED_DESC
           type: string
         startAfterId:
           description: The ID to start after.
@@ -50806,6 +50820,10 @@ components:
           items:
             $ref: '#/components/schemas/StockSearchQuery'
           type: array
+        availableUntil:
+          $ref: '#/components/schemas/DateFilter'
+        conditions:
+          $ref: '#/components/schemas/StockConditionEnumListFilter'
         customAttributes:
           $ref: '#/components/schemas/CustomAttributesFilter'
         facilityRef:
@@ -50824,8 +50842,16 @@ components:
               - $ref: '#/components/schemas/StringFilter'
               - $ref: '#/components/schemas/DateFilter'
           type: object
+        receiptDate:
+          $ref: '#/components/schemas/DateFilter'
+        scannableCodes:
+          $ref: '#/components/schemas/StringListFilter'
         tenantArticleId:
           $ref: '#/components/schemas/StringFilter'
+        tenantStockId:
+          $ref: '#/components/schemas/StringFilter'
+        traits:
+          $ref: '#/components/schemas/StorageLocationTraitEnumListFilter'
         value:
           $ref: '#/components/schemas/NumberFilter'
       title: StockSearchQuery
@@ -50834,12 +50860,27 @@ components:
       properties:
         customAttributes:
           $ref: '#/components/schemas/StockCustomAttributesSort'
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
         locationName:
           enum:
             - ASC
             - DESC
           type: string
         properties:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        tenantArticleId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        value:
           enum:
             - ASC
             - DESC
