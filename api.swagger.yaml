@@ -21752,6 +21752,43 @@ paths:
       summary: Update Stock in bulk facilityRef and tenantArticleId
       tags:
         - Inventory Management - Stocks
+  /api/handoverjobs/search:
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Search for HandoverJob
+      operationId: searchHandoverJob
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandoverJobSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Fulfillment Operations - Handover
   /api/inboundprocesses:
     get:
       deprecated: false
@@ -47213,6 +47250,20 @@ components:
         - name
       title: CancelStowJobAction
       type: object
+    ChannelEnumEnumFilter:
+      properties:
+        eq:
+          enum:
+            - DELIVERY
+            - COLLECT
+          type: string
+        notEq:
+          enum:
+            - DELIVERY
+            - COLLECT
+          type: string
+      title: ChannelEnumEnumFilter
+      type: object
     ChannelStockAvailability:
       properties:
         availableForPicking:
@@ -47811,6 +47862,201 @@ components:
         contains:
           $ref: '#/components/schemas/FacilityTagsFilter'
       title: FacilityTagsListFilter
+      type: object
+    HandoverJobAssignedUsersFilter:
+      properties:
+        userId:
+          $ref: '#/components/schemas/StringFilter'
+        username:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: HandoverJobAssignedUsersFilter
+      type: object
+    HandoverJobAssignedUsersListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/HandoverJobAssignedUsersFilter'
+      title: HandoverJobAssignedUsersListFilter
+      type: object
+    HandoverJobHandoverJobLineItemsArticleFilter:
+      properties:
+        tenantArticleId:
+          $ref: '#/components/schemas/StringSearchFilter'
+        title:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: HandoverJobHandoverJobLineItemsArticleFilter
+      type: object
+    HandoverJobHandoverJobLineItemsFilter:
+      properties:
+        article:
+          $ref: '#/components/schemas/HandoverJobHandoverJobLineItemsArticleFilter'
+        substituteLineItems:
+          $ref: >-
+            #/components/schemas/HandoverJobHandoverJobLineItemsSubstituteLineItemsListFilter
+      title: HandoverJobHandoverJobLineItemsFilter
+      type: object
+    HandoverJobHandoverJobLineItemsListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/HandoverJobHandoverJobLineItemsFilter'
+      title: HandoverJobHandoverJobLineItemsListFilter
+      type: object
+    HandoverJobHandoverJobLineItemsSubstituteLineItemsArticleFilter:
+      properties:
+        tenantArticleId:
+          $ref: '#/components/schemas/StringSearchFilter'
+        title:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: HandoverJobHandoverJobLineItemsSubstituteLineItemsArticleFilter
+      type: object
+    HandoverJobHandoverJobLineItemsSubstituteLineItemsFilter:
+      properties:
+        article:
+          $ref: >-
+            #/components/schemas/HandoverJobHandoverJobLineItemsSubstituteLineItemsArticleFilter
+      title: HandoverJobHandoverJobLineItemsSubstituteLineItemsFilter
+      type: object
+    HandoverJobHandoverJobLineItemsSubstituteLineItemsListFilter:
+      properties:
+        contains:
+          $ref: >-
+            #/components/schemas/HandoverJobHandoverJobLineItemsSubstituteLineItemsFilter
+      title: HandoverJobHandoverJobLineItemsSubstituteLineItemsListFilter
+      type: object
+    HandoverJobHandoverJobParcelInfoFilter:
+      properties:
+        carrierKey:
+          $ref: '#/components/schemas/StringFilter'
+        carrierRef:
+          $ref: '#/components/schemas/StringFilter'
+        carrierTrackingNumber:
+          $ref: '#/components/schemas/StringFilter'
+        shipmentRef:
+          $ref: '#/components/schemas/StringFilter'
+      title: HandoverJobHandoverJobParcelInfoFilter
+      type: object
+    HandoverJobInvoiceAddressFilter:
+      properties:
+        companyName:
+          $ref: '#/components/schemas/StringSearchFilter'
+        email:
+          $ref: '#/components/schemas/StringSearchFilter'
+        firstName:
+          $ref: '#/components/schemas/StringSearchFilter'
+        lastName:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: HandoverJobInvoiceAddressFilter
+      type: object
+    HandoverJobRecipientAddressFilter:
+      properties:
+        companyName:
+          $ref: '#/components/schemas/StringSearchFilter'
+        email:
+          $ref: '#/components/schemas/StringSearchFilter'
+        firstName:
+          $ref: '#/components/schemas/StringSearchFilter'
+        lastName:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: HandoverJobRecipientAddressFilter
+      type: object
+    HandoverJobSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/HandoverJobSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/HandoverJobSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        sortBy:
+          deprecated: true
+          description: Use sort instead
+          enum:
+            - TARGET_TIME_ASC
+            - TARGET_TIME_DESC
+          type: string
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: HandoverJobSearchPayload
+      type: object
+    HandoverJobSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/HandoverJobSearchQuery'
+          type: array
+        anonymized:
+          $ref: '#/components/schemas/BooleanFilter'
+        assignedUsers:
+          $ref: '#/components/schemas/HandoverJobAssignedUsersListFilter'
+        channel:
+          $ref: '#/components/schemas/ChannelEnumEnumFilter'
+        facilityRef:
+          $ref: '#/components/schemas/StringFilter'
+        fullIdentifier:
+          $ref: '#/components/schemas/StringSearchFilter'
+        handoverJobLineItems:
+          $ref: '#/components/schemas/HandoverJobHandoverJobLineItemsListFilter'
+        handoverJobParcelInfo:
+          $ref: '#/components/schemas/HandoverJobHandoverJobParcelInfoFilter'
+        invoiceAddress:
+          $ref: '#/components/schemas/HandoverJobInvoiceAddressFilter'
+        or:
+          items:
+            $ref: '#/components/schemas/HandoverJobSearchQuery'
+          type: array
+        pickJobRef:
+          $ref: '#/components/schemas/StringEqFilter'
+        recipientAddress:
+          $ref: '#/components/schemas/HandoverJobRecipientAddressFilter'
+        shortIdentifier:
+          $ref: '#/components/schemas/StringSearchFilter'
+        status:
+          $ref: '#/components/schemas/HandoverjobStatusEnumFilter'
+        targetTime:
+          $ref: '#/components/schemas/DateFilter'
+        tenantOrderId:
+          $ref: '#/components/schemas/StringSearchFilter'
+      title: HandoverJobSearchQuery
+      type: object
+    HandoverJobSort:
+      properties:
+        targetTime:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: HandoverJobSort
+      type: object
+    HandoverjobStatusEnumFilter:
+      properties:
+        eq:
+          enum:
+            - OPEN
+            - HANDED_OVER
+            - OBSOLETE
+            - CANCELED
+          type: string
+        notEq:
+          enum:
+            - OPEN
+            - HANDED_OVER
+            - OBSOLETE
+            - CANCELED
+          type: string
+      title: HandoverjobStatusEnumFilter
       type: object
     InboundAttachment:
       properties:
