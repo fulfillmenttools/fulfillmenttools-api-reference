@@ -53495,6 +53495,18 @@ components:
         - takenStockRef
       title: TakenStowLineItemTakeFromForCreation
       type: object
+    UserAssignedFacilitiesFilter:
+      properties:
+        facilityRef:
+          $ref: '#/components/schemas/StringFilter'
+      title: UserAssignedFacilitiesFilter
+      type: object
+    UserAssignedFacilitiesListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/UserAssignedFacilitiesFilter'
+      title: UserAssignedFacilitiesListFilter
+      type: object
     UserAuthFilter:
       properties:
         type:
@@ -53512,6 +53524,42 @@ components:
           minProperties: 1
           type: object
       title: UserCustomAttributesSort
+      type: object
+    UserCustomClaimsFilter:
+      properties:
+        roles:
+          $ref: '#/components/schemas/UserCustomClaimsRolesListFilter'
+      title: UserCustomClaimsFilter
+      type: object
+    UserCustomClaimsRolesFilter:
+      properties:
+        facilities:
+          $ref: '#/components/schemas/StringListFilter'
+        name:
+          $ref: '#/components/schemas/UserRoleNamesEnumFilter'
+      title: UserCustomClaimsRolesFilter
+      type: object
+    UserCustomClaimsRolesListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/UserCustomClaimsRolesFilter'
+      title: UserCustomClaimsRolesListFilter
+      type: object
+    UserRoleNamesEnumFilter:
+      properties:
+        eq:
+          enum:
+            - FULFILLER
+            - SUPERVISOR
+            - ADMINISTRATOR
+          type: string
+        notEq:
+          enum:
+            - FULFILLER
+            - SUPERVISOR
+            - ADMINISTRATOR
+          type: string
+      title: UserRoleNamesEnumFilter
       type: object
     UserSearchPayload:
       properties:
@@ -53556,10 +53604,14 @@ components:
           items:
             $ref: '#/components/schemas/UserSearchQuery'
           type: array
+        assignedFacilities:
+          $ref: '#/components/schemas/UserAssignedFacilitiesListFilter'
         auth:
           $ref: '#/components/schemas/UserAuthFilter'
         customAttributes:
           $ref: '#/components/schemas/CustomAttributesFilter'
+        customClaims:
+          $ref: '#/components/schemas/UserCustomClaimsFilter'
         firstname:
           $ref: '#/components/schemas/StringSearchFilter'
         lastname:
