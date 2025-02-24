@@ -48552,8 +48552,19 @@ components:
           $ref: '#/components/schemas/CustomAttributesFilter'
         id:
           $ref: '#/components/schemas/StringFilter'
+        orderDate:
+          $ref: '#/components/schemas/DateFilter'
         requestedDate:
           $ref: '#/components/schemas/InboundProcessPurchaseOrderRequestedDateFilter'
+        requestedItems:
+          $ref: >-
+            #/components/schemas/InboundProcessPurchaseOrderRequestedItemsListFilter
+        status:
+          $ref: '#/components/schemas/PurchaseOrderStatusEnumEnumFilter'
+        supplier:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplierFilter'
+        transfer:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderTransferFilter'
       title: InboundProcessPurchaseOrderFilter
       type: object
     InboundProcessPurchaseOrderForCreation:
@@ -48663,12 +48674,46 @@ components:
           $ref: '#/components/schemas/DateFilter'
       title: InboundProcessPurchaseOrderRequestedDateFilter
       type: object
+    InboundProcessPurchaseOrderRequestedItemsFilter:
+      properties:
+        customAttributes:
+          $ref: '#/components/schemas/CustomAttributesFilter'
+        stockProperties:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+        tenantArticleId:
+          $ref: '#/components/schemas/StringFilter'
+      title: InboundProcessPurchaseOrderRequestedItemsFilter
+      type: object
+    InboundProcessPurchaseOrderRequestedItemsListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderRequestedItemsFilter'
+      title: InboundProcessPurchaseOrderRequestedItemsListFilter
+      type: object
+    InboundProcessPurchaseOrderSort:
+      properties:
+        requestedDate:
+          $ref: '#/components/schemas/InboundProcessRequestedDateSort'
+        supplier:
+          $ref: '#/components/schemas/InboundProcessSupplierSort'
+      title: InboundProcessPurchaseOrderSort
+      type: object
     InboundProcessPurchaseOrderSupplier:
       properties:
         name:
           description: Name of the supplier.
           type: string
       title: InboundProcessPurchaseOrderSupplier
+      type: object
+    InboundProcessPurchaseOrderSupplierFilter:
+      properties:
+        name:
+          $ref: '#/components/schemas/StringFilter'
+      title: InboundProcessPurchaseOrderSupplierFilter
       type: object
     InboundProcessPurchaseOrderTransfer:
       properties:
@@ -48677,6 +48722,12 @@ components:
       required:
         - id
       title: InboundProcessPurchaseOrderTransfer
+      type: object
+    InboundProcessPurchaseOrderTransferFilter:
+      properties:
+        id:
+          $ref: '#/components/schemas/StringFilter'
+      title: InboundProcessPurchaseOrderTransferFilter
       type: object
     InboundProcessReceiptBulkWebHookEvent:
       properties:
@@ -48704,6 +48755,8 @@ components:
           $ref: '#/components/schemas/StringFilter'
         receivedDate:
           $ref: '#/components/schemas/DateFilter'
+        receivedItems:
+          $ref: '#/components/schemas/InboundProcessReceiptsReceivedItemsListFilter'
         status:
           $ref: '#/components/schemas/InboundReceiptStatusTypeEnumFilter'
       title: InboundProcessReceiptsFilter
@@ -48713,6 +48766,38 @@ components:
         contains:
           $ref: '#/components/schemas/InboundProcessReceiptsFilter'
       title: InboundProcessReceiptsListFilter
+      type: object
+    InboundProcessReceiptsReceivedItemsFilter:
+      properties:
+        stockProperties:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+        tenantArticleId:
+          $ref: '#/components/schemas/StringFilter'
+      title: InboundProcessReceiptsReceivedItemsFilter
+      type: object
+    InboundProcessReceiptsReceivedItemsListFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/InboundProcessReceiptsReceivedItemsFilter'
+      title: InboundProcessReceiptsReceivedItemsListFilter
+      type: object
+    InboundProcessRequestedDateSort:
+      properties:
+        type:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        value:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: InboundProcessRequestedDateSort
       type: object
     InboundProcessSearchPayload:
       properties:
@@ -48793,6 +48878,8 @@ components:
             - ASC
             - DESC
           type: string
+        purchaseOrder:
+          $ref: '#/components/schemas/InboundProcessPurchaseOrderSort'
       title: InboundProcessSort
       type: object
     InboundProcessStatusTypeEnumFilter:
@@ -48812,6 +48899,15 @@ components:
             - CLOSED
           type: string
       title: InboundProcessStatusTypeEnumFilter
+      type: object
+    InboundProcessSupplierSort:
+      properties:
+        name:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: InboundProcessSupplierSort
       type: object
     InboundReceipt:
       properties:
@@ -50749,6 +50845,20 @@ components:
         - version
       title: PurchaseOrderForUpdate
       type: object
+    PurchaseOrderStatusEnumEnumFilter:
+      properties:
+        eq:
+          enum:
+            - OPEN
+            - CANCELED
+          type: string
+        notEq:
+          enum:
+            - OPEN
+            - CANCELED
+          type: string
+      title: PurchaseOrderStatusEnumEnumFilter
+      type: object
     PurchaseOrderSupplier:
       properties:
         facilityRef:
@@ -51933,12 +52043,10 @@ components:
           enum:
             - TENANT_ARTICLE_ID_ASC
             - VALUE_ASC
-            - PROPERTIES_ASC
             - LOCATION_NAME_ASC
             - LAST_MODIFIED_ASC
             - TENANT_ARTICLE_ID_DESC
             - VALUE_DESC
-            - PROPERTIES_DESC
             - LOCATION_NAME_DESC
             - LAST_MODIFIED_DESC
           type: string
@@ -52001,11 +52109,6 @@ components:
             - DESC
           type: string
         locationName:
-          enum:
-            - ASC
-            - DESC
-          type: string
-        properties:
           enum:
             - ASC
             - DESC
