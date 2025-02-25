@@ -46509,12 +46509,14 @@ components:
     AddressTypeEnumFilter:
       properties:
         eq:
+          description: Search by addressType
           enum:
             - POSTAL_ADDRESS
             - PARCEL_LOCKER
             - INVOICE_ADDRESS
           type: string
         notEq:
+          description: Search by addressType
           enum:
             - POSTAL_ADDRESS
             - PARCEL_LOCKER
@@ -46587,11 +46589,13 @@ components:
     AuthenticationProviderTypeEnumFilter:
       properties:
         eq:
+          description: Search by type
           enum:
             - EMAIL_PASSWORD
             - OIDC
           type: string
         notEq:
+          description: Search by type
           enum:
             - EMAIL_PASSWORD
             - OIDC
@@ -46660,11 +46664,13 @@ components:
     ChannelEnumEnumFilter:
       properties:
         eq:
+          description: Search by channel
           enum:
             - DELIVERY
             - COLLECT
           type: string
         notEq:
+          description: Search by channel
           enum:
             - DELIVERY
             - COLLECT
@@ -46708,6 +46714,7 @@ components:
             anyOf:
               - $ref: '#/components/schemas/StringEqFilter'
               - $ref: '#/components/schemas/NumberFilter'
+          description: Search by key value pairs defined in searchTerms.
           type: object
       required:
         - searchTerms
@@ -46752,11 +46759,13 @@ components:
     DeliveryServiceLevelEnumFilter:
       properties:
         eq:
+          description: Search by serviceLevel
           enum:
             - DELIVERY
             - SAMEDAY
           type: string
         notEq:
+          description: Search by serviceLevel
           enum:
             - DELIVERY
             - SAMEDAY
@@ -46766,8 +46775,10 @@ components:
     EnumFilter:
       properties:
         eq:
+          description: Search by type
           type: string
         notEq:
+          description: Search by type
           type: string
       title: EnumFilter
       type: object
@@ -46912,45 +46923,73 @@ components:
     FacilityAddressEmailAddressesFilter:
       properties:
         recipient:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by recipient
         value:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by value
       title: FacilityAddressEmailAddressesFilter
       type: object
     FacilityAddressEmailAddressesListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/FacilityAddressEmailAddressesFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddressEmailAddressesFilter'
+          description: Contains returns if at least one entry matches
       title: FacilityAddressEmailAddressesListFilter
       type: object
     FacilityAddressFilter:
       properties:
         city:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by city
         companyName:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by companyName
         country:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by country
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         emailAddresses:
-          $ref: '#/components/schemas/FacilityAddressEmailAddressesListFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddressEmailAddressesListFilter'
+          description: Nested list search by emailAddresses
         houseNumber:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by houseNumber
         postalCode:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by postalCode
         province:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by province
         street:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by street
       title: FacilityAddressFilter
       type: object
     FacilityContactFilter:
       properties:
         firstName:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by firstName
         lastName:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by lastName
       title: FacilityContactFilter
       type: object
     FacilityCustomAttributesSort:
@@ -46968,12 +47007,14 @@ components:
     FacilityLocationTypeEnumFilter:
       properties:
         eq:
+          description: Search by locationType
           enum:
             - STORE
             - WAREHOUSE
             - EXTERNAL
           type: string
         notEq:
+          description: Search by locationType
           enum:
             - STORE
             - WAREHOUSE
@@ -47021,41 +47062,61 @@ components:
     FacilitySearchQuery:
       properties:
         address:
-          $ref: '#/components/schemas/FacilityAddressFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddressFilter'
+          description: Nested search by address
         and:
           items:
             $ref: '#/components/schemas/FacilitySearchQuery'
           type: array
         contact:
-          $ref: '#/components/schemas/FacilityContactFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityContactFilter'
+          description: Nested search by contact
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         locationType:
-          $ref: '#/components/schemas/FacilityLocationTypeEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityLocationTypeEnumFilter'
+          description: Search by locationType
         name:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by name
         or:
           items:
             $ref: '#/components/schemas/FacilitySearchQuery'
           type: array
         services:
-          $ref: '#/components/schemas/FacilityServicesListFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityServicesListFilter'
+          description: Nested list search by services
         status:
-          $ref: '#/components/schemas/FacilityStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityStatusEnumFilter'
+          description: Search by status
         tags:
-          $ref: '#/components/schemas/FacilityTagsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityTagsListFilter'
+          description: Nested list search by tags
         tenantFacilityId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantFacilityId
       title: FacilitySearchQuery
       type: object
     FacilityServiceTypeEnumFilter:
       properties:
         eq:
+          description: Search by type
           enum:
             - SHIP_FROM_STORE
             - PICKUP
           type: string
         notEq:
+          description: Search by type
           enum:
             - SHIP_FROM_STORE
             - PICKUP
@@ -47065,13 +47126,17 @@ components:
     FacilityServicesFilter:
       properties:
         type:
-          $ref: '#/components/schemas/FacilityServiceTypeEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityServiceTypeEnumFilter'
+          description: Search by type
       title: FacilityServicesFilter
       type: object
     FacilityServicesListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/FacilityServicesFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityServicesFilter'
+          description: Contains returns if at least one entry matches
       title: FacilityServicesListFilter
       type: object
     FacilitySort:
@@ -47098,12 +47163,14 @@ components:
     FacilityStatusEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - ONLINE
             - SUSPENDED
             - OFFLINE
           type: string
         notEq:
+          description: Search by status
           enum:
             - ONLINE
             - SUSPENDED
@@ -47259,110 +47326,165 @@ components:
     FacilityTagsFilter:
       properties:
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         value:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by value
       title: FacilityTagsFilter
       type: object
     FacilityTagsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/FacilityTagsFilter'
+          allOf:
+            - $ref: '#/components/schemas/FacilityTagsFilter'
+          description: Contains returns if at least one entry matches
       title: FacilityTagsListFilter
       type: object
     HandoverJobAssignedUsersFilter:
       properties:
         userId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by userId
         username:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by username
       title: HandoverJobAssignedUsersFilter
       type: object
     HandoverJobAssignedUsersListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/HandoverJobAssignedUsersFilter'
+          allOf:
+            - $ref: '#/components/schemas/HandoverJobAssignedUsersFilter'
+          description: Contains returns if at least one entry matches
       title: HandoverJobAssignedUsersListFilter
       type: object
     HandoverJobHandoverJobLineItemsArticleFilter:
       properties:
         tenantArticleId:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by tenantArticleId
         title:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by title
       title: HandoverJobHandoverJobLineItemsArticleFilter
       type: object
     HandoverJobHandoverJobLineItemsFilter:
       properties:
         article:
-          $ref: '#/components/schemas/HandoverJobHandoverJobLineItemsArticleFilter'
+          allOf:
+            - $ref: >-
+                #/components/schemas/HandoverJobHandoverJobLineItemsArticleFilter
+          description: Nested search by article
         substituteLineItems:
-          $ref: >-
-            #/components/schemas/HandoverJobHandoverJobLineItemsSubstituteLineItemsListFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/HandoverJobHandoverJobLineItemsSubstituteLineItemsListFilter
+          description: Nested list search by substituteLineItems
       title: HandoverJobHandoverJobLineItemsFilter
       type: object
     HandoverJobHandoverJobLineItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/HandoverJobHandoverJobLineItemsFilter'
+          allOf:
+            - $ref: '#/components/schemas/HandoverJobHandoverJobLineItemsFilter'
+          description: Contains returns if at least one entry matches
       title: HandoverJobHandoverJobLineItemsListFilter
       type: object
     HandoverJobHandoverJobLineItemsSubstituteLineItemsArticleFilter:
       properties:
         tenantArticleId:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by tenantArticleId
         title:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by title
       title: HandoverJobHandoverJobLineItemsSubstituteLineItemsArticleFilter
       type: object
     HandoverJobHandoverJobLineItemsSubstituteLineItemsFilter:
       properties:
         article:
-          $ref: >-
-            #/components/schemas/HandoverJobHandoverJobLineItemsSubstituteLineItemsArticleFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/HandoverJobHandoverJobLineItemsSubstituteLineItemsArticleFilter
+          description: Nested search by article
       title: HandoverJobHandoverJobLineItemsSubstituteLineItemsFilter
       type: object
     HandoverJobHandoverJobLineItemsSubstituteLineItemsListFilter:
       properties:
         contains:
-          $ref: >-
-            #/components/schemas/HandoverJobHandoverJobLineItemsSubstituteLineItemsFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/HandoverJobHandoverJobLineItemsSubstituteLineItemsFilter
+          description: Contains returns if at least one entry matches
       title: HandoverJobHandoverJobLineItemsSubstituteLineItemsListFilter
       type: object
     HandoverJobHandoverJobParcelInfoFilter:
       properties:
         carrierKey:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierKey
         carrierRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierRef
         carrierTrackingNumber:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierTrackingNumber
         shipmentRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by shipmentRef
       title: HandoverJobHandoverJobParcelInfoFilter
       type: object
     HandoverJobInvoiceAddressFilter:
       properties:
         companyName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by companyName
         email:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by email
         firstName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by firstName
         lastName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by lastName
       title: HandoverJobInvoiceAddressFilter
       type: object
     HandoverJobRecipientAddressFilter:
       properties:
         companyName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by companyName
         email:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by email
         firstName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by firstName
         lastName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by lastName
       title: HandoverJobRecipientAddressFilter
       type: object
     HandoverJobSearchPayload:
@@ -47405,37 +47527,65 @@ components:
             $ref: '#/components/schemas/HandoverJobSearchQuery'
           type: array
         anonymized:
-          $ref: '#/components/schemas/BooleanFilter'
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Search by anonymized
         assignedUsers:
-          $ref: '#/components/schemas/HandoverJobAssignedUsersListFilter'
+          allOf:
+            - $ref: '#/components/schemas/HandoverJobAssignedUsersListFilter'
+          description: Nested list search by assignedUsers
         channel:
-          $ref: '#/components/schemas/ChannelEnumEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/ChannelEnumEnumFilter'
+          description: Search by channel
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         fullIdentifier:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by fullIdentifier
         handoverJobLineItems:
-          $ref: '#/components/schemas/HandoverJobHandoverJobLineItemsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/HandoverJobHandoverJobLineItemsListFilter'
+          description: Nested list search by handoverJobLineItems
         handoverJobParcelInfo:
-          $ref: '#/components/schemas/HandoverJobHandoverJobParcelInfoFilter'
+          allOf:
+            - $ref: '#/components/schemas/HandoverJobHandoverJobParcelInfoFilter'
+          description: Nested search by handoverJobParcelInfo
         invoiceAddress:
-          $ref: '#/components/schemas/HandoverJobInvoiceAddressFilter'
+          allOf:
+            - $ref: '#/components/schemas/HandoverJobInvoiceAddressFilter'
+          description: Nested search by invoiceAddress
         or:
           items:
             $ref: '#/components/schemas/HandoverJobSearchQuery'
           type: array
         pickJobRef:
-          $ref: '#/components/schemas/StringEqFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringEqFilter'
+          description: Search by pickJobRef
         recipientAddress:
-          $ref: '#/components/schemas/HandoverJobRecipientAddressFilter'
+          allOf:
+            - $ref: '#/components/schemas/HandoverJobRecipientAddressFilter'
+          description: Nested search by recipientAddress
         shortIdentifier:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by shortIdentifier
         status:
-          $ref: '#/components/schemas/HandoverjobStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/HandoverjobStatusEnumFilter'
+          description: Search by status
         targetTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
         tenantOrderId:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by tenantOrderId
       title: HandoverJobSearchQuery
       type: object
     HandoverJobSort:
@@ -47450,6 +47600,7 @@ components:
     HandoverjobStatusEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - OPEN
             - HANDED_OVER
@@ -47457,6 +47608,7 @@ components:
             - CANCELED
           type: string
         notEq:
+          description: Search by status
           enum:
             - OPEN
             - HANDED_OVER
@@ -47956,22 +48108,39 @@ components:
     InboundProcessPurchaseOrderFilter:
       properties:
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         orderDate:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by orderDate
         requestedDate:
-          $ref: '#/components/schemas/InboundProcessPurchaseOrderRequestedDateFilter'
+          allOf:
+            - $ref: >-
+                #/components/schemas/InboundProcessPurchaseOrderRequestedDateFilter
+          description: Nested search by requestedDate
         requestedItems:
-          $ref: >-
-            #/components/schemas/InboundProcessPurchaseOrderRequestedItemsListFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/InboundProcessPurchaseOrderRequestedItemsListFilter
+          description: Nested list search by requestedItems
         status:
-          $ref: '#/components/schemas/PurchaseOrderStatusEnumEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/PurchaseOrderStatusEnumEnumFilter'
+          description: Search by status
         supplier:
-          $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplierFilter'
+          allOf:
+            - $ref: '#/components/schemas/InboundProcessPurchaseOrderSupplierFilter'
+          description: Nested search by supplier
         transfer:
-          $ref: '#/components/schemas/InboundProcessPurchaseOrderTransferFilter'
+          allOf:
+            - $ref: '#/components/schemas/InboundProcessPurchaseOrderTransferFilter'
+          description: Nested search by transfer
       title: InboundProcessPurchaseOrderFilter
       type: object
     InboundProcessPurchaseOrderForCreation:
@@ -48076,29 +48245,41 @@ components:
     InboundProcessPurchaseOrderRequestedDateFilter:
       properties:
         type:
-          $ref: '#/components/schemas/RequestedDateTypeEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/RequestedDateTypeEnumFilter'
+          description: Search by type
         value:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by value
       title: InboundProcessPurchaseOrderRequestedDateFilter
       type: object
     InboundProcessPurchaseOrderRequestedItemsFilter:
       properties:
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         stockProperties:
           additionalProperties:
             anyOf:
               - $ref: '#/components/schemas/StringFilter'
           allOf:
             - $ref: '#/components/schemas/StringFilter'
+          description: Search by stockProperties
         tenantArticleId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
       title: InboundProcessPurchaseOrderRequestedItemsFilter
       type: object
     InboundProcessPurchaseOrderRequestedItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/InboundProcessPurchaseOrderRequestedItemsFilter'
+          allOf:
+            - $ref: >-
+                #/components/schemas/InboundProcessPurchaseOrderRequestedItemsFilter
+          description: Contains returns if at least one entry matches
       title: InboundProcessPurchaseOrderRequestedItemsListFilter
       type: object
     InboundProcessPurchaseOrderSort:
@@ -48119,7 +48300,9 @@ components:
     InboundProcessPurchaseOrderSupplierFilter:
       properties:
         name:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by name
       title: InboundProcessPurchaseOrderSupplierFilter
       type: object
     InboundProcessPurchaseOrderTransfer:
@@ -48133,7 +48316,9 @@ components:
     InboundProcessPurchaseOrderTransferFilter:
       properties:
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
       title: InboundProcessPurchaseOrderTransferFilter
       type: object
     InboundProcessReceiptBulkWebHookEvent:
@@ -48157,21 +48342,34 @@ components:
     InboundProcessReceiptsFilter:
       properties:
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         receivedDate:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by receivedDate
         receivedItems:
-          $ref: '#/components/schemas/InboundProcessReceiptsReceivedItemsListFilter'
+          allOf:
+            - $ref: >-
+                #/components/schemas/InboundProcessReceiptsReceivedItemsListFilter
+          description: Nested list search by receivedItems
         status:
-          $ref: '#/components/schemas/InboundReceiptStatusTypeEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/InboundReceiptStatusTypeEnumFilter'
+          description: Search by status
       title: InboundProcessReceiptsFilter
       type: object
     InboundProcessReceiptsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/InboundProcessReceiptsFilter'
+          allOf:
+            - $ref: '#/components/schemas/InboundProcessReceiptsFilter'
+          description: Contains returns if at least one entry matches
       title: InboundProcessReceiptsListFilter
       type: object
     InboundProcessReceiptsReceivedItemsFilter:
@@ -48182,14 +48380,19 @@ components:
               - $ref: '#/components/schemas/StringFilter'
           allOf:
             - $ref: '#/components/schemas/StringFilter'
+          description: Search by stockProperties
         tenantArticleId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
       title: InboundProcessReceiptsReceivedItemsFilter
       type: object
     InboundProcessReceiptsReceivedItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/InboundProcessReceiptsReceivedItemsFilter'
+          allOf:
+            - $ref: '#/components/schemas/InboundProcessReceiptsReceivedItemsFilter'
+          description: Contains returns if at least one entry matches
       title: InboundProcessReceiptsReceivedItemsListFilter
       type: object
     InboundProcessRequestedDateSort:
@@ -48248,27 +48451,45 @@ components:
             $ref: '#/components/schemas/InboundProcessSearchQuery'
           type: array
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         inboundDate:
-          $ref: '#/components/schemas/DateListFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateListFilter'
+          description: Search by inboundDate
         or:
           items:
             $ref: '#/components/schemas/InboundProcessSearchQuery'
           type: array
         purchaseOrder:
-          $ref: '#/components/schemas/InboundProcessPurchaseOrderFilter'
+          allOf:
+            - $ref: '#/components/schemas/InboundProcessPurchaseOrderFilter'
+          description: Nested search by purchaseOrder
         receipts:
-          $ref: '#/components/schemas/InboundProcessReceiptsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/InboundProcessReceiptsListFilter'
+          description: Nested list search by receipts
         scannableCodes:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by scannableCodes
         status:
-          $ref: '#/components/schemas/InboundProcessStatusTypeEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/InboundProcessStatusTypeEnumFilter'
+          description: Search by status
         tenantInboundProcessId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantInboundProcessId
       title: InboundProcessSearchQuery
       type: object
     InboundProcessSort:
@@ -48292,6 +48513,7 @@ components:
     InboundProcessStatusTypeEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - OPEN
             - PARTIAL_DELIVERY
@@ -48299,6 +48521,7 @@ components:
             - CLOSED
           type: string
         notEq:
+          description: Search by status
           enum:
             - OPEN
             - PARTIAL_DELIVERY
@@ -48618,12 +48841,14 @@ components:
     InboundReceiptStatusTypeEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - OPEN
             - IN_PROGRESS
             - FINISHED
           type: string
         notEq:
+          description: Search by status
           enum:
             - OPEN
             - IN_PROGRESS
@@ -49082,39 +49307,65 @@ components:
     LinkedServiceJobsSearchQuery:
       properties:
         additionalInformation:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by additionalInformation
         and:
           items:
             $ref: '#/components/schemas/LinkedServiceJobsSearchQuery'
           type: array
         articleTitles:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by articleTitles
         channel:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by channel
         consumerName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by consumerName
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         invoiceAddress:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by invoiceAddress
         lastModified:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
         linkedServiceJobRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by linkedServiceJobRef
         or:
           items:
             $ref: '#/components/schemas/LinkedServiceJobsSearchQuery'
           type: array
         serviceName:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by serviceName
         shippingAddress:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by shippingAddress
         status:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by status
         targetTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
         tenantOrderId:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by tenantOrderId
       title: LinkedServiceJobsSearchQuery
       type: object
     LinkedServiceJobsSort:
@@ -49134,7 +49385,9 @@ components:
     ListingAvailabilityTimeframeFilter:
       properties:
         start:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by start
       title: ListingAvailabilityTimeframeFilter
       type: object
     ListingCustomAttributesSort:
@@ -49191,33 +49444,57 @@ components:
             $ref: '#/components/schemas/ListingSearchQuery'
           type: array
         availabilityTimeframe:
-          $ref: '#/components/schemas/ListingAvailabilityTimeframeFilter'
+          allOf:
+            - $ref: '#/components/schemas/ListingAvailabilityTimeframeFilter'
+          description: Nested search by availabilityTimeframe
         created:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         measurementUnitKey:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by measurementUnitKey
         or:
           items:
             $ref: '#/components/schemas/ListingSearchQuery'
           type: array
         outOfStockBehaviour:
-          $ref: '#/components/schemas/OutOfStockBehaviourEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/OutOfStockBehaviourEnumFilter'
+          description: Search by outOfStockBehaviour
         price:
-          $ref: '#/components/schemas/NumberFilter'
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: Search by price
         status:
-          $ref: '#/components/schemas/StatusEnumEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/StatusEnumEnumFilter'
+          description: Search by status
         tags:
-          $ref: '#/components/schemas/ListingTagsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/ListingTagsListFilter'
+          description: Nested list search by tags
         tenantArticleId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
         weight:
-          $ref: '#/components/schemas/NumberFilter'
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: Search by weight
       title: ListingSearchQuery
       type: object
     ListingSort:
@@ -49239,15 +49516,21 @@ components:
     ListingTagsFilter:
       properties:
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         value:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by value
       title: ListingTagsFilter
       type: object
     ListingTagsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/ListingTagsFilter'
+          allOf:
+            - $ref: '#/components/schemas/ListingTagsFilter'
+          description: Contains returns if at least one entry matches
       title: ListingTagsListFilter
       type: object
     ModifyStowLineItemsAction:
@@ -49318,123 +49601,194 @@ components:
     OrderConsumerAddressesFilter:
       properties:
         addressType:
-          $ref: '#/components/schemas/AddressTypeEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/AddressTypeEnumFilter'
+          description: Search by addressType
         city:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by city
         companyName:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by companyName
         country:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by country
         email:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by email
         firstName:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by firstName
         houseNumber:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by houseNumber
         lastName:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by lastName
         postalCode:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by postalCode
         province:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by province
         street:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by street
       title: OrderConsumerAddressesFilter
       type: object
     OrderConsumerAddressesListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/OrderConsumerAddressesFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderConsumerAddressesFilter'
+          description: Contains returns if at least one entry matches
       title: OrderConsumerAddressesListFilter
       type: object
     OrderConsumerFilter:
       properties:
         addresses:
-          $ref: '#/components/schemas/OrderConsumerAddressesListFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderConsumerAddressesListFilter'
+          description: Nested list search by addresses
         consumerId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by consumerId
       title: OrderConsumerFilter
       type: object
     OrderDeliveryPreferencesCollectFilter:
       properties:
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         paid:
-          $ref: '#/components/schemas/BooleanFilter'
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Search by paid
       title: OrderDeliveryPreferencesCollectFilter
       type: object
     OrderDeliveryPreferencesCollectListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/OrderDeliveryPreferencesCollectFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderDeliveryPreferencesCollectFilter'
+          description: Contains returns if at least one entry matches
       title: OrderDeliveryPreferencesCollectListFilter
       type: object
     OrderDeliveryPreferencesFilter:
       properties:
         collect:
-          $ref: '#/components/schemas/OrderDeliveryPreferencesCollectListFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderDeliveryPreferencesCollectListFilter'
+          description: Nested list search by collect
         shipping:
-          $ref: '#/components/schemas/OrderDeliveryPreferencesShippingFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderDeliveryPreferencesShippingFilter'
+          description: Nested search by shipping
       title: OrderDeliveryPreferencesFilter
       type: object
     OrderDeliveryPreferencesShippingFilter:
       properties:
         desiredDeliveryTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by desiredDeliveryTime
         serviceLevel:
-          $ref: '#/components/schemas/DeliveryServiceLevelEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/DeliveryServiceLevelEnumFilter'
+          description: Search by serviceLevel
       title: OrderDeliveryPreferencesShippingFilter
       type: object
     OrderOrderLineItemsArticleFilter:
       properties:
         tenantArticleId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
         title:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by title
         titleLocalized:
-          $ref: '#/components/schemas/OrderOrderLineItemsArticleTitleLocalizedFilter'
+          allOf:
+            - $ref: >-
+                #/components/schemas/OrderOrderLineItemsArticleTitleLocalizedFilter
+          description: Nested search by titleLocalized
       title: OrderOrderLineItemsArticleFilter
       type: object
     OrderOrderLineItemsArticleTitleLocalizedFilter:
       properties:
         de_DE:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by de_DE
         en_US:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by en_US
         ru_RU:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by ru_RU
       title: OrderOrderLineItemsArticleTitleLocalizedFilter
       type: object
     OrderOrderLineItemsFilter:
       properties:
         article:
-          $ref: '#/components/schemas/OrderOrderLineItemsArticleFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderOrderLineItemsArticleFilter'
+          description: Nested search by article
       title: OrderOrderLineItemsFilter
       type: object
     OrderOrderLineItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/OrderOrderLineItemsFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderOrderLineItemsFilter'
+          description: Contains returns if at least one entry matches
       title: OrderOrderLineItemsListFilter
       type: object
     OrderPaymentInfoFilter:
       properties:
         currency:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by currency
         method:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by method
         methodLocalized:
-          $ref: '#/components/schemas/OrderPaymentInfoMethodLocalizedFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderPaymentInfoMethodLocalizedFilter'
+          description: Nested search by methodLocalized
       title: OrderPaymentInfoFilter
       type: object
     OrderPaymentInfoMethodLocalizedFilter:
       properties:
         de_DE:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by de_DE
         en_US:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by en_US
         ru_RU:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by ru_RU
       title: OrderPaymentInfoMethodLocalizedFilter
       type: object
     OrderSearchPayload:
@@ -49479,27 +49833,45 @@ components:
             $ref: '#/components/schemas/OrderSearchQuery'
           type: array
         consumer:
-          $ref: '#/components/schemas/OrderConsumerFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderConsumerFilter'
+          description: Nested search by consumer
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         deliveryPreferences:
-          $ref: '#/components/schemas/OrderDeliveryPreferencesFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderDeliveryPreferencesFilter'
+          description: Nested search by deliveryPreferences
         or:
           items:
             $ref: '#/components/schemas/OrderSearchQuery'
           type: array
         orderDate:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by orderDate
         orderLineItems:
-          $ref: '#/components/schemas/OrderOrderLineItemsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderOrderLineItemsListFilter'
+          description: Nested list search by orderLineItems
         paymentInfo:
-          $ref: '#/components/schemas/OrderPaymentInfoFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderPaymentInfoFilter'
+          description: Nested search by paymentInfo
         status:
-          $ref: '#/components/schemas/OrderStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderStatusEnumFilter'
+          description: Search by status
         tags:
-          $ref: '#/components/schemas/OrderTagsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderTagsListFilter'
+          description: Nested list search by tags
         tenantOrderId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantOrderId
       title: OrderSearchQuery
       type: object
     OrderSort:
@@ -49519,6 +49891,7 @@ components:
     OrderStatusEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - OPEN
             - CANCELLED
@@ -49527,6 +49900,7 @@ components:
             - OBSOLETE
           type: string
         notEq:
+          description: Search by status
           enum:
             - OPEN
             - CANCELLED
@@ -49539,22 +49913,28 @@ components:
     OrderTagsFilter:
       properties:
         value:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by value
       title: OrderTagsFilter
       type: object
     OrderTagsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/OrderTagsFilter'
+          allOf:
+            - $ref: '#/components/schemas/OrderTagsFilter'
+          description: Contains returns if at least one entry matches
       title: OrderTagsListFilter
       type: object
     OutOfStockBehaviourEnumFilter:
       properties:
         eq:
+          description: Search by outOfStockBehaviour
           enum:
             - BACKORDER
           type: string
         notEq:
+          description: Search by outOfStockBehaviour
           enum:
             - BACKORDER
           type: string
@@ -49606,57 +49986,85 @@ components:
     PackJobInvoiceFilter:
       properties:
         companyName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by companyName
         email:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by email
         firstName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by firstName
         lastName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by lastName
       title: PackJobInvoiceFilter
       type: object
     PackJobLineItemsArticleFilter:
       properties:
         tenantArticleId:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by tenantArticleId
         title:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by title
       title: PackJobLineItemsArticleFilter
       type: object
     PackJobLineItemsFilter:
       properties:
         article:
-          $ref: '#/components/schemas/PackJobLineItemsArticleFilter'
+          allOf:
+            - $ref: '#/components/schemas/PackJobLineItemsArticleFilter'
+          description: Nested search by article
       title: PackJobLineItemsFilter
       type: object
     PackJobLineItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/PackJobLineItemsFilter'
+          allOf:
+            - $ref: '#/components/schemas/PackJobLineItemsFilter'
+          description: Contains returns if at least one entry matches
       title: PackJobLineItemsListFilter
       type: object
     PackJobPackingSourceContainersFilter:
       properties:
         codes:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by codes
       title: PackJobPackingSourceContainersFilter
       type: object
     PackJobPackingSourceContainersListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/PackJobPackingSourceContainersFilter'
+          allOf:
+            - $ref: '#/components/schemas/PackJobPackingSourceContainersFilter'
+          description: Contains returns if at least one entry matches
       title: PackJobPackingSourceContainersListFilter
       type: object
     PackJobRecipientFilter:
       properties:
         companyName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by companyName
         email:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by email
         firstName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by firstName
         lastName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by lastName
       title: PackJobRecipientFilter
       type: object
     PackJobSearchPayload:
@@ -49703,31 +50111,53 @@ components:
             $ref: '#/components/schemas/PackJobSearchQuery'
           type: array
         facilityRef:
-          $ref: '#/components/schemas/StringEqFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringEqFilter'
+          description: Search by facilityRef
         invoice:
-          $ref: '#/components/schemas/PackJobInvoiceFilter'
+          allOf:
+            - $ref: '#/components/schemas/PackJobInvoiceFilter'
+          description: Nested search by invoice
         lastModified:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
         lineItems:
-          $ref: '#/components/schemas/PackJobLineItemsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/PackJobLineItemsListFilter'
+          description: Nested list search by lineItems
         or:
           items:
             $ref: '#/components/schemas/PackJobSearchQuery'
           type: array
         orderDate:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by orderDate
         packingSourceContainers:
-          $ref: '#/components/schemas/PackJobPackingSourceContainersListFilter'
+          allOf:
+            - $ref: '#/components/schemas/PackJobPackingSourceContainersListFilter'
+          description: Nested list search by packingSourceContainers
         recipient:
-          $ref: '#/components/schemas/PackJobRecipientFilter'
+          allOf:
+            - $ref: '#/components/schemas/PackJobRecipientFilter'
+          description: Nested search by recipient
         shortId:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by shortId
         status:
-          $ref: '#/components/schemas/PackJobStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/PackJobStatusEnumFilter'
+          description: Search by status
         targetTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
         tenantOrderId:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by tenantOrderId
       title: PackJobSearchQuery
       type: object
     PackJobSort:
@@ -49752,6 +50182,7 @@ components:
     PackJobStatusEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - OPEN
             - IN_PROGRESS
@@ -49761,6 +50192,7 @@ components:
             - PAUSED
           type: string
         notEq:
+          description: Search by status
           enum:
             - OPEN
             - IN_PROGRESS
@@ -49829,19 +50261,29 @@ components:
             $ref: '#/components/schemas/PickJobSearchQuery'
           type: array
         consumerName:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by consumerName
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         or:
           items:
             $ref: '#/components/schemas/PickJobSearchQuery'
           type: array
         targetTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
         tenantArticleIds:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by tenantArticleIds
         tenantOrderId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantOrderId
       title: PickJobSearchQuery
       type: object
     PickJobSort:
@@ -49898,45 +50340,81 @@ components:
             $ref: '#/components/schemas/ProcessSearchQuery'
           type: array
         documentRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by documentRefs
         domsStatus:
-          $ref: '#/components/schemas/ProcessStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusEnumFilter'
+          description: Search by domsStatus
         externalActionRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by externalActionRefs
         facilityRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by facilityRefs
         flatRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by flatRefs
         handoverJobRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by handoverJobRefs
         itemReturnJobsRef:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by itemReturnJobsRef
         operativeStatus:
-          $ref: '#/components/schemas/ProcessStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusEnumFilter'
+          description: Search by operativeStatus
         or:
           items:
             $ref: '#/components/schemas/ProcessSearchQuery'
           type: array
         orderRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by orderRef
         packJobRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by packJobRefs
         pickJobRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by pickJobRefs
         returnRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by returnRefs
         returnStatus:
-          $ref: '#/components/schemas/ProcessStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusEnumFilter'
+          description: Search by returnStatus
         routingPlanRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by routingPlanRefs
         serviceJobRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by serviceJobRefs
         shipmentRefs:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by shipmentRefs
         status:
-          $ref: '#/components/schemas/ProcessStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusEnumFilter'
+          description: Search by status
         tags:
-          $ref: '#/components/schemas/ProcessTagsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/ProcessTagsListFilter'
+          description: Nested list search by tags
       title: ProcessSearchQuery
       type: object
     ProcessSort:
@@ -49951,6 +50429,7 @@ components:
     ProcessStatusEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - CREATED
             - IN_PROGRESS
@@ -49960,6 +50439,7 @@ components:
             - NOT_AVAILABLE
           type: string
         notEq:
+          description: Search by status
           enum:
             - CREATED
             - IN_PROGRESS
@@ -49973,15 +50453,21 @@ components:
     ProcessTagsFilter:
       properties:
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         value:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by value
       title: ProcessTagsFilter
       type: object
     ProcessTagsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/ProcessTagsFilter'
+          allOf:
+            - $ref: '#/components/schemas/ProcessTagsFilter'
+          description: Contains returns if at least one entry matches
       title: ProcessTagsListFilter
       type: object
     PurchaseOrder:
@@ -50255,11 +50741,13 @@ components:
     PurchaseOrderStatusEnumEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - OPEN
             - CANCELED
           type: string
         notEq:
+          description: Search by status
           enum:
             - OPEN
             - CANCELED
@@ -50473,11 +50961,13 @@ components:
     RequestedDateTypeEnumFilter:
       properties:
         eq:
+          description: Search by type
           enum:
             - ASAP
             - TIME_POINT
           type: string
         notEq:
+          description: Search by type
           enum:
             - ASAP
             - TIME_POINT
@@ -50487,179 +50977,256 @@ components:
     RoutingPlanCustomServicesArticleItemsFilter:
       properties:
         tenantArticleRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleRef
       title: RoutingPlanCustomServicesArticleItemsFilter
       type: object
     RoutingPlanCustomServicesArticleItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/RoutingPlanCustomServicesArticleItemsFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanCustomServicesArticleItemsFilter'
+          description: Contains returns if at least one entry matches
       title: RoutingPlanCustomServicesArticleItemsListFilter
       type: object
     RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationFilter:
       properties:
         additionalInformationRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by additionalInformationRef
       title: >-
         RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationFilter
       type: object
     RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationListFilter:
       properties:
         contains:
-          $ref: >-
-            #/components/schemas/RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationFilter
+          description: Contains returns if at least one entry matches
       title: >-
         RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationListFilter
       type: object
     RoutingPlanCustomServicesCustomServiceDefinitionFilter:
       properties:
         additionalInformation:
-          $ref: >-
-            #/components/schemas/RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationListFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanCustomServicesCustomServiceDefinitionAdditionalInformationListFilter
+          description: Nested list search by additionalInformation
         customServiceRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by customServiceRef
       title: RoutingPlanCustomServicesCustomServiceDefinitionFilter
       type: object
     RoutingPlanCustomServicesCustomServiceItemsArticleItemsFilter:
       properties:
         tenantArticleRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleRef
       title: RoutingPlanCustomServicesCustomServiceItemsArticleItemsFilter
       type: object
     RoutingPlanCustomServicesCustomServiceItemsArticleItemsListFilter:
       properties:
         contains:
-          $ref: >-
-            #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsArticleItemsFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsArticleItemsFilter
+          description: Contains returns if at least one entry matches
       title: RoutingPlanCustomServicesCustomServiceItemsArticleItemsListFilter
       type: object
     RoutingPlanCustomServicesCustomServiceItemsFilter:
       properties:
         articleItems:
-          $ref: >-
-            #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsArticleItemsListFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsArticleItemsListFilter
+          description: Nested list search by articleItems
       title: RoutingPlanCustomServicesCustomServiceItemsFilter
       type: object
     RoutingPlanCustomServicesCustomServiceItemsListFilter:
       properties:
         contains:
-          $ref: >-
-            #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsFilter
+          description: Contains returns if at least one entry matches
       title: RoutingPlanCustomServicesCustomServiceItemsListFilter
       type: object
     RoutingPlanCustomServicesFilter:
       properties:
         articleItems:
-          $ref: '#/components/schemas/RoutingPlanCustomServicesArticleItemsListFilter'
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanCustomServicesArticleItemsListFilter
+          description: Nested list search by articleItems
         customServiceDefinition:
-          $ref: >-
-            #/components/schemas/RoutingPlanCustomServicesCustomServiceDefinitionFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanCustomServicesCustomServiceDefinitionFilter
+          description: Nested search by customServiceDefinition
         customServiceItems:
-          $ref: >-
-            #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsListFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanCustomServicesCustomServiceItemsListFilter
+          description: Nested list search by customServiceItems
       title: RoutingPlanCustomServicesFilter
       type: object
     RoutingPlanCustomServicesListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/RoutingPlanCustomServicesFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanCustomServicesFilter'
+          description: Contains returns if at least one entry matches
       title: RoutingPlanCustomServicesListFilter
       type: object
     RoutingPlanDeliveryPreferencesCollectFilter:
       properties:
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         paid:
-          $ref: '#/components/schemas/BooleanFilter'
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Search by paid
         supplyingFacilities:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by supplyingFacilities
       title: RoutingPlanDeliveryPreferencesCollectFilter
       type: object
     RoutingPlanDeliveryPreferencesCollectListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesCollectFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesCollectFilter'
+          description: Contains returns if at least one entry matches
       title: RoutingPlanDeliveryPreferencesCollectListFilter
       type: object
     RoutingPlanDeliveryPreferencesFilter:
       properties:
         collect:
-          $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesCollectListFilter'
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanDeliveryPreferencesCollectListFilter
+          description: Nested list search by collect
         shipping:
-          $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesShippingFilter'
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanDeliveryPreferencesShippingFilter
+          description: Nested search by shipping
         supplyingFacilities:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by supplyingFacilities
         targetTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
       title: RoutingPlanDeliveryPreferencesFilter
       type: object
     RoutingPlanDeliveryPreferencesShippingFilter:
       properties:
         preferredCarriers:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by preferredCarriers
         preferredCarriersWithProduct:
-          $ref: >-
-            #/components/schemas/RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductListFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductListFilter
+          description: Nested list search by preferredCarriersWithProduct
       title: RoutingPlanDeliveryPreferencesShippingFilter
       type: object
     RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductFilter:
       properties:
         carrierKey:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierKey
       title: RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductFilter
       type: object
     RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductListFilter:
       properties:
         contains:
-          $ref: >-
-            #/components/schemas/RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductFilter
+          allOf:
+            - $ref: >-
+                #/components/schemas/RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductFilter
+          description: Contains returns if at least one entry matches
       title: >-
         RoutingPlanDeliveryPreferencesShippingPreferredCarriersWithProductListFilter
       type: object
     RoutingPlanEarliestPickingStartFilter:
       properties:
         carrierRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierRef
         earliestPickingStartDate:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by earliestPickingStartDate
         targetTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
       title: RoutingPlanEarliestPickingStartFilter
       type: object
     RoutingPlanHistoryFilter:
       properties:
         created:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
         status:
-          $ref: '#/components/schemas/RoutingPlanStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanStatusEnumFilter'
+          description: Search by status
       title: RoutingPlanHistoryFilter
       type: object
     RoutingPlanHistoryListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/RoutingPlanHistoryFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanHistoryFilter'
+          description: Contains returns if at least one entry matches
       title: RoutingPlanHistoryListFilter
       type: object
     RoutingPlanLatestPickingStartFilter:
       properties:
         carrierRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierRef
         latestPickingStartDate:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by latestPickingStartDate
         targetTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
       title: RoutingPlanLatestPickingStartFilter
       type: object
     RoutingPlanOrderLineItemsFilter:
       properties:
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
       title: RoutingPlanOrderLineItemsFilter
       type: object
     RoutingPlanOrderLineItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/RoutingPlanOrderLineItemsFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanOrderLineItemsFilter'
+          description: Contains returns if at least one entry matches
       title: RoutingPlanOrderLineItemsListFilter
       type: object
     RoutingPlanSearchPayload:
@@ -50688,48 +51255,83 @@ components:
             $ref: '#/components/schemas/RoutingPlanSearchQuery'
           type: array
         anonymized:
-          $ref: '#/components/schemas/BooleanFilter'
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Search by anonymized
         customServices:
-          $ref: '#/components/schemas/RoutingPlanCustomServicesListFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanCustomServicesListFilter'
+          description: Nested list search by customServices
         deliveryPreferences:
-          $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanDeliveryPreferencesFilter'
+          description: Nested search by deliveryPreferences
         earliestPickingStart:
-          $ref: '#/components/schemas/RoutingPlanEarliestPickingStartFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanEarliestPickingStartFilter'
+          description: Nested search by earliestPickingStart
         history:
-          $ref: '#/components/schemas/RoutingPlanHistoryListFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanHistoryListFilter'
+          description: Nested list search by history
         latestPickingStart:
-          $ref: '#/components/schemas/RoutingPlanLatestPickingStartFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanLatestPickingStartFilter'
+          description: Nested search by latestPickingStart
         or:
           items:
             $ref: '#/components/schemas/RoutingPlanSearchQuery'
           type: array
         orderDate:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by orderDate
         orderLineItems:
-          $ref: '#/components/schemas/RoutingPlanOrderLineItemsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanOrderLineItemsListFilter'
+          description: Nested list search by orderLineItems
         orderRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by orderRef
         priority:
-          $ref: '#/components/schemas/NumberFilter'
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: Search by priority
         processId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by processId
         provisioningTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by provisioningTime
         reRouteReason:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by reRouteReason
         splitCount:
-          $ref: '#/components/schemas/NumberFilter'
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: Search by splitCount
         status:
-          $ref: '#/components/schemas/RoutingPlanStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanStatusEnumFilter'
+          description: Search by status
         statusReasons:
-          $ref: '#/components/schemas/RoutingPlanStatusReasonsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanStatusReasonsListFilter'
+          description: Nested list search by statusReasons
         targetAddress:
-          $ref: '#/components/schemas/RoutingPlanTargetAddressFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanTargetAddressFilter'
+          description: Nested search by targetAddress
       title: RoutingPlanSearchQuery
       type: object
     RoutingPlanStatusEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - INITIAL
             - PRIORITIZED
@@ -50752,6 +51354,7 @@ components:
             - REROUTED
           type: string
         notEq:
+          description: Search by status
           enum:
             - INITIAL
             - PRIORITIZED
@@ -50778,12 +51381,14 @@ components:
     RoutingPlanStatusReasonReasonEnumFilter:
       properties:
         eq:
+          description: Search by reason
           enum:
             - REROUTE_AFTER_SHORTPICK
             - MANUALLY_REROUTED
             - MANUALLY_ASSIGNED
           type: string
         notEq:
+          description: Search by reason
           enum:
             - REROUTE_AFTER_SHORTPICK
             - MANUALLY_REROUTED
@@ -50794,10 +51399,12 @@ components:
     RoutingPlanStatusReasonStatusEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - OBSOLETE
           type: string
         notEq:
+          description: Search by status
           enum:
             - OBSOLETE
           type: string
@@ -50806,29 +51413,45 @@ components:
     RoutingPlanStatusReasonsFilter:
       properties:
         reason:
-          $ref: '#/components/schemas/RoutingPlanStatusReasonReasonEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanStatusReasonReasonEnumFilter'
+          description: Search by reason
         status:
-          $ref: '#/components/schemas/RoutingPlanStatusReasonStatusEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanStatusReasonStatusEnumFilter'
+          description: Search by status
       title: RoutingPlanStatusReasonsFilter
       type: object
     RoutingPlanStatusReasonsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/RoutingPlanStatusReasonsFilter'
+          allOf:
+            - $ref: '#/components/schemas/RoutingPlanStatusReasonsFilter'
+          description: Contains returns if at least one entry matches
       title: RoutingPlanStatusReasonsListFilter
       type: object
     RoutingPlanTargetAddressFilter:
       properties:
         city:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by city
         country:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by country
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         province:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by province
         street:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by street
       title: RoutingPlanTargetAddressFilter
       type: object
     SafetyStock:
@@ -50948,11 +51571,13 @@ components:
     StatusEnumEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - ACTIVE
             - INACTIVE
           type: string
         notEq:
+          description: Search by status
           enum:
             - ACTIVE
             - INACTIVE
@@ -51131,6 +51756,7 @@ components:
     StockConditionEnumListFilter:
       properties:
         contains:
+          description: Search by conditions
           enum:
             - DEFECTIVE
           type: string
@@ -51471,17 +52097,29 @@ components:
             $ref: '#/components/schemas/StockSearchQuery'
           type: array
         availableUntil:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by availableUntil
         conditions:
-          $ref: '#/components/schemas/StockConditionEnumListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StockConditionEnumListFilter'
+          description: Search by conditions
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         locationRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by locationRef
         or:
           items:
             $ref: '#/components/schemas/StockSearchQuery'
@@ -51491,19 +52129,32 @@ components:
             anyOf:
               - $ref: '#/components/schemas/StringFilter'
               - $ref: '#/components/schemas/DateFilter'
+          description: Search by properties
           type: object
         receiptDate:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by receiptDate
         scannableCodes:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by scannableCodes
         tenantArticleId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
         tenantStockId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantStockId
         traits:
-          $ref: '#/components/schemas/StorageLocationTraitEnumListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StorageLocationTraitEnumListFilter'
+          description: Search by traits
         value:
-          $ref: '#/components/schemas/NumberFilter'
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: Search by value
       title: StockSearchQuery
       type: object
     StockSort:
@@ -51820,7 +52471,9 @@ components:
     StorageLocationReferenceFilter:
       properties:
         stock:
-          $ref: '#/components/schemas/StorageLocationStockFilter'
+          allOf:
+            - $ref: '#/components/schemas/StorageLocationStockFilter'
+          description: The referenced entity
       title: StorageLocationReferenceFilter
       type: object
     StorageLocationSearchPayload:
@@ -51871,31 +52524,53 @@ components:
             $ref: '#/components/schemas/StorageLocationSearchQuery'
           type: array
         created:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         name:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by name
         or:
           items:
             $ref: '#/components/schemas/StorageLocationSearchQuery'
           type: array
         referenced:
-          $ref: '#/components/schemas/StorageLocationReferenceFilter'
+          allOf:
+            - $ref: '#/components/schemas/StorageLocationReferenceFilter'
+          description: References to other entities
         scannableCodes:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by scannableCodes
         tenantLocationId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantLocationId
         traits:
-          $ref: '#/components/schemas/StorageLocationTraitEnumListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StorageLocationTraitEnumListFilter'
+          description: Search by traits
         type:
-          $ref: '#/components/schemas/EnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/EnumFilter'
+          description: Search by type
         zoneRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by zoneRef
       title: StorageLocationSearchQuery
       type: object
     StorageLocationSort:
@@ -51932,9 +52607,15 @@ components:
     StorageLocationStockFilter:
       properties:
         hasStocks:
-          $ref: '#/components/schemas/BooleanFilter'
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Whether the storage locations has any stocks on it.
         sumOfValues:
-          $ref: '#/components/schemas/NumberFilter'
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: >-
+            The sum of all stock values in this storage location, i.e. how much
+            stock is stored in this location.
       title: StorageLocationStockFilter
       type: object
     StorageLocationTraitConfigEntry:
@@ -51958,6 +52639,7 @@ components:
     StorageLocationTraitEnumListFilter:
       properties:
         contains:
+          description: Search by traits
           enum:
             - PICKABLE
             - ACCESSIBLE
@@ -52193,27 +52875,45 @@ components:
             $ref: '#/components/schemas/StowJobSearchQuery'
           type: array
         created:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         or:
           items:
             $ref: '#/components/schemas/StowJobSearchQuery'
           type: array
         priority:
-          $ref: '#/components/schemas/NumberFilter'
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: Search by priority
         shortId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by shortId
         status:
-          $ref: '#/components/schemas/StowJobStatusTypeEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/StowJobStatusTypeEnumFilter'
+          description: Search by status
         stowLineItems:
-          $ref: '#/components/schemas/StowJobStowLineItemsListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StowJobStowLineItemsListFilter'
+          description: Nested list search by stowLineItems
         targetTime:
-          $ref: '#/components/schemas/DateFilter'
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
       required:
         - created
       title: StowJobSearchQuery
@@ -52253,6 +52953,7 @@ components:
     StowJobStatusTypeEnumFilter:
       properties:
         eq:
+          description: Search by status
           enum:
             - OPEN
             - IN_PROGRESS
@@ -52261,6 +52962,7 @@ components:
             - PAUSED
           type: string
         notEq:
+          description: Search by status
           enum:
             - OPEN
             - IN_PROGRESS
@@ -52291,61 +52993,93 @@ components:
     StowJobStowLineItemsArticleFilter:
       properties:
         tenantArticleId:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
       title: StowJobStowLineItemsArticleFilter
       type: object
     StowJobStowLineItemsFilter:
       properties:
         article:
-          $ref: '#/components/schemas/StowJobStowLineItemsArticleFilter'
+          allOf:
+            - $ref: '#/components/schemas/StowJobStowLineItemsArticleFilter'
+          description: Nested search by article
         heldStockRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by heldStockRef
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         stowTo:
-          $ref: '#/components/schemas/StowJobStowLineItemsStowToFilter'
+          allOf:
+            - $ref: '#/components/schemas/StowJobStowLineItemsStowToFilter'
+          description: Nested search by stowTo
         takeFrom:
-          $ref: '#/components/schemas/StowJobStowLineItemsTakeFromFilter'
+          allOf:
+            - $ref: '#/components/schemas/StowJobStowLineItemsTakeFromFilter'
+          description: Nested search by takeFrom
       title: StowJobStowLineItemsFilter
       type: object
     StowJobStowLineItemsListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/StowJobStowLineItemsFilter'
+          allOf:
+            - $ref: '#/components/schemas/StowJobStowLineItemsFilter'
+          description: Contains returns if at least one entry matches
       title: StowJobStowLineItemsListFilter
       type: object
     StowJobStowLineItemsStowToFilter:
       properties:
         storageLocationRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by storageLocationRef
         stowed:
-          $ref: '#/components/schemas/StowJobStowLineItemsStowToStowedFilter'
+          allOf:
+            - $ref: '#/components/schemas/StowJobStowLineItemsStowToStowedFilter'
+          description: Nested search by stowed
         type:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by type
       title: StowJobStowLineItemsStowToFilter
       type: object
     StowJobStowLineItemsStowToStowedFilter:
       properties:
         stowedStockRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by stowedStockRef
         stowedStorageLocationRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by stowedStorageLocationRef
       title: StowJobStowLineItemsStowToStowedFilter
       type: object
     StowJobStowLineItemsTakeFromFilter:
       properties:
         storageLocationRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by storageLocationRef
         taken:
-          $ref: '#/components/schemas/StowJobStowLineItemsTakeFromTakenFilter'
+          allOf:
+            - $ref: '#/components/schemas/StowJobStowLineItemsTakeFromTakenFilter'
+          description: Nested search by taken
         type:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by type
       title: StowJobStowLineItemsTakeFromFilter
       type: object
     StowJobStowLineItemsTakeFromTakenFilter:
       properties:
         takenStockRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by takenStockRef
       title: StowJobStowLineItemsTakeFromTakenFilter
       type: object
     StowJobWebHookEvent:
@@ -52905,19 +53639,25 @@ components:
     UserAssignedFacilitiesFilter:
       properties:
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
       title: UserAssignedFacilitiesFilter
       type: object
     UserAssignedFacilitiesListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/UserAssignedFacilitiesFilter'
+          allOf:
+            - $ref: '#/components/schemas/UserAssignedFacilitiesFilter'
+          description: Contains returns if at least one entry matches
       title: UserAssignedFacilitiesListFilter
       type: object
     UserAuthFilter:
       properties:
         type:
-          $ref: '#/components/schemas/AuthenticationProviderTypeEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/AuthenticationProviderTypeEnumFilter'
+          description: Search by type
       title: UserAuthFilter
       type: object
     UserCustomAttributesSort:
@@ -52935,32 +53675,42 @@ components:
     UserCustomClaimsFilter:
       properties:
         roles:
-          $ref: '#/components/schemas/UserCustomClaimsRolesListFilter'
+          allOf:
+            - $ref: '#/components/schemas/UserCustomClaimsRolesListFilter'
+          description: Nested list search by roles
       title: UserCustomClaimsFilter
       type: object
     UserCustomClaimsRolesFilter:
       properties:
         facilities:
-          $ref: '#/components/schemas/StringListFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by facilities
         name:
-          $ref: '#/components/schemas/UserRoleNamesEnumFilter'
+          allOf:
+            - $ref: '#/components/schemas/UserRoleNamesEnumFilter'
+          description: Search by name
       title: UserCustomClaimsRolesFilter
       type: object
     UserCustomClaimsRolesListFilter:
       properties:
         contains:
-          $ref: '#/components/schemas/UserCustomClaimsRolesFilter'
+          allOf:
+            - $ref: '#/components/schemas/UserCustomClaimsRolesFilter'
+          description: Contains returns if at least one entry matches
       title: UserCustomClaimsRolesListFilter
       type: object
     UserRoleNamesEnumFilter:
       properties:
         eq:
+          description: Search by name
           enum:
             - FULFILLER
             - SUPERVISOR
             - ADMINISTRATOR
           type: string
         notEq:
+          description: Search by name
           enum:
             - FULFILLER
             - SUPERVISOR
@@ -53012,23 +53762,37 @@ components:
             $ref: '#/components/schemas/UserSearchQuery'
           type: array
         assignedFacilities:
-          $ref: '#/components/schemas/UserAssignedFacilitiesListFilter'
+          allOf:
+            - $ref: '#/components/schemas/UserAssignedFacilitiesListFilter'
+          description: Nested list search by assignedFacilities
         auth:
-          $ref: '#/components/schemas/UserAuthFilter'
+          allOf:
+            - $ref: '#/components/schemas/UserAuthFilter'
+          description: Nested search by auth
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         customClaims:
-          $ref: '#/components/schemas/UserCustomClaimsFilter'
+          allOf:
+            - $ref: '#/components/schemas/UserCustomClaimsFilter'
+          description: Nested search by customClaims
         firstname:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by firstname
         lastname:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by lastname
         or:
           items:
             $ref: '#/components/schemas/UserSearchQuery'
           type: array
         username:
-          $ref: '#/components/schemas/StringSearchFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by username
       title: UserSearchQuery
       type: object
     UserSort:
@@ -53092,13 +53856,21 @@ components:
             $ref: '#/components/schemas/ZoneSearchQuery'
           type: array
         customAttributes:
-          $ref: '#/components/schemas/CustomAttributesFilter'
+          allOf:
+            - $ref: '#/components/schemas/CustomAttributesFilter'
+          description: Search by custom attributes
         facilityRef:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
         id:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         name:
-          $ref: '#/components/schemas/StringFilter'
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by name
         or:
           items:
             $ref: '#/components/schemas/ZoneSearchQuery'
