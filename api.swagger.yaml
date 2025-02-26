@@ -47351,6 +47351,18 @@ components:
         - searchTerms
       title: CustomAttributesFilter
       type: object
+    DateEqFilter:
+      properties:
+        eq:
+          format: date-time
+          maxLength: 256
+          type: string
+        notEq:
+          format: date-time
+          maxLength: 256
+          type: string
+      title: DateEqFilter
+      type: object
     DateFilter:
       properties:
         eq:
@@ -47382,9 +47394,9 @@ components:
     DateListFilter:
       properties:
         contains:
-          format: date-time
+          allOf:
+            - $ref: '#/components/schemas/DateEqFilter'
           maxLength: 256
-          type: string
       title: DateListFilter
       type: object
     DeliveryServiceLevelEnumFilter:
@@ -52442,13 +52454,26 @@ components:
         - result
       title: StockActionResult
       type: object
-    StockConditionEnumListFilter:
+    StockConditionEnumFilter:
       properties:
-        contains:
+        eq:
           description: Search by conditions
           enum:
             - DEFECTIVE
           type: string
+        notEq:
+          description: Search by conditions
+          enum:
+            - DEFECTIVE
+          type: string
+      title: StockConditionEnumFilter
+      type: object
+    StockConditionEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/StockConditionEnumFilter'
+          description: Search by conditions
       title: StockConditionEnumListFilter
       type: object
     StockCustomAttributesSort:
@@ -53325,9 +53350,9 @@ components:
         - trait
       title: StorageLocationTraitConfigEntry
       type: object
-    StorageLocationTraitEnumListFilter:
+    StorageLocationTraitEnumFilter:
       properties:
-        contains:
+        eq:
           description: Search by traits
           enum:
             - PICKABLE
@@ -53336,6 +53361,23 @@ components:
             - OUTBOUND
             - IN_MOTION
           type: string
+        notEq:
+          description: Search by traits
+          enum:
+            - PICKABLE
+            - ACCESSIBLE
+            - KEEP_ON_ZERO
+            - OUTBOUND
+            - IN_MOTION
+          type: string
+      title: StorageLocationTraitEnumFilter
+      type: object
+    StorageLocationTraitEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/StorageLocationTraitEnumFilter'
+          description: Search by traits
       title: StorageLocationTraitEnumListFilter
       type: object
     StorageLocationsWebHookEvent:
@@ -54200,8 +54242,9 @@ components:
     StringListFilter:
       properties:
         contains:
+          allOf:
+            - $ref: '#/components/schemas/StringEqFilter'
           maxLength: 256
-          type: string
       title: StringListFilter
       type: object
     StringSearchFilter:
