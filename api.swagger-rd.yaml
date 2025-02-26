@@ -53886,6 +53886,56 @@ components:
           type: string
       title: ZoneSort
       type: object
+    ZoneWebHookEventPayload:
+      properties:
+        created:
+          description: The date when the zone was created
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        facilityRef:
+          description: The reference to the facility associated with the zone
+          type: string
+        id:
+          description: The unique identifier of the zone
+          type: string
+        lastModified:
+          description: The date when the zone was last modified
+          format: date-time
+          type: string
+        name:
+          description: The name of the zone
+          type: string
+        score:
+          description: The score of the zone
+          type: number
+        version:
+          description: The version of the zone
+          type: number
+      required:
+        - version
+        - id
+        - facilityRef
+        - name
+        - score
+      title: ZoneWebHookEventPayload
+      type: object
+    ZoneWebHookEventPayloadWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/ZoneWebHookEventPayload'
+      required:
+        - payload
+      title: ZoneWebHookEventPayloadWebHookEvent
+      type: object
     WebHookEvent:
       properties:
         event:
