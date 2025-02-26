@@ -53150,8 +53150,8 @@ components:
           description: Search by id
         stowTo:
           allOf:
-            - $ref: '#/components/schemas/StowJobStowLineItemsStowToFilter'
-          description: Nested search by stowTo
+            - $ref: '#/components/schemas/StowJobStowLineItemsStowToListFilter'
+          description: Nested list search by stowTo
         takeFrom:
           allOf:
             - $ref: '#/components/schemas/StowJobStowLineItemsTakeFromFilter'
@@ -53181,6 +53181,14 @@ components:
             - $ref: '#/components/schemas/StringFilter'
           description: Search by type
       title: StowJobStowLineItemsStowToFilter
+      type: object
+    StowJobStowLineItemsStowToListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/StowJobStowLineItemsStowToFilter'
+          description: Contains returns if at least one entry matches
+      title: StowJobStowLineItemsStowToListFilter
       type: object
     StowJobStowLineItemsStowToStowedFilter:
       properties:
@@ -53256,9 +53264,12 @@ components:
           maxItems: 10
           type: array
         stowTo:
-          allOf:
-            - $ref: '#/components/schemas/StowLineItemStowToForCreation'
           description: Instructions on how and where to stow the item
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/StowLineItemStowToWithId'
+              type: array
+            - $ref: '#/components/schemas/StowLineItemStowTo'
         takeFrom:
           allOf:
             - $ref: '#/components/schemas/StowLineItemTakeFromForCreation'
@@ -53327,9 +53338,12 @@ components:
           maxItems: 10
           type: array
         stowTo:
-          allOf:
-            - $ref: '#/components/schemas/StowLineItemStowToForCreation'
           description: Instructions on how and where to stow the item
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/StowLineItemStowToForUpdate'
+              type: array
+            - $ref: '#/components/schemas/StowLineItemStowToForCreation'
         takeFrom:
           allOf:
             - $ref: '#/components/schemas/StowLineItemTakeFromForCreation'
@@ -53363,9 +53377,12 @@ components:
           maxItems: 10
           type: array
         stowTo:
-          allOf:
-            - $ref: '#/components/schemas/StowLineItemStowToForCreation'
           description: Instructions on how and where to stow the item
+          oneOf:
+            - items:
+                $ref: '#/components/schemas/StowLineItemStowToForUpdate'
+              type: array
+            - $ref: '#/components/schemas/StowLineItemStowToForCreation'
         takeFrom:
           allOf:
             - $ref: '#/components/schemas/StowLineItemTakeFromForCreation'
@@ -53460,6 +53477,52 @@ components:
         - type
       title: StowLineItemStowToForCreation
       type: object
+    StowLineItemStowToForUpdate:
+      properties:
+        id:
+          type: string
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        scannableCodes:
+          description: >-
+            ScannableCodes such as barcodes relevant for taking or stowing the
+            item
+          items:
+            type: string
+          type: array
+        stockRef:
+          description: >-
+            Stock from which the item should be taken / stowed to. Leave empty
+            for type UNREGISTERED / DISCARD.
+          type: string
+        storageLocationRef:
+          description: >-
+            Storage location from which the item should be taken or to which the
+            item should be stowed
+          type: string
+        stowed:
+          allOf:
+            - $ref: '#/components/schemas/StowedStowLineItemStowToForCreation'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: >-
+            Define if items should be stowed on a specific stock or storage
+            location. Use type DISCARD if the item should be booked out of the
+            system
+          enum:
+            - STOCK
+            - LOCATION
+            - DISCARD
+          type: string
+      required:
+        - quantity
+        - type
+      title: StowLineItemStowToForUpdate
+      type: object
     StowLineItemStowToType:
       description: >-
         Define if items should be stowed on a specific stock or storage
@@ -53472,6 +53535,54 @@ components:
       type: string
       xml:
         name: StowLineItemStowToType
+    StowLineItemStowToWithId:
+      properties:
+        id:
+          description: The ID of the stowTo instruction
+          type: string
+        quantity:
+          description: Quantity that should be taken / stowed
+          type: number
+        scannableCodes:
+          description: >-
+            ScannableCodes such as barcodes relevant for taking or stowing the
+            item
+          items:
+            type: string
+          type: array
+        stockRef:
+          description: >-
+            Stock from which the item should be taken / stowed to. Leave empty
+            for type UNREGISTERED / DISCARD.
+          type: string
+        storageLocationRef:
+          description: >-
+            Storage location from which the item should be taken or to which the
+            item should be stowed
+          type: string
+        stowed:
+          allOf:
+            - $ref: '#/components/schemas/StowedStowLineItemStowToForCreation'
+          description: >-
+            Operative data holding information about the stowing progress. **As
+            for now stocks will *not* be updated even if the numbers indicate so
+            because the stow job feature is still under development.**
+        type:
+          description: >-
+            Define if items should be stowed on a specific stock or storage
+            location. Use type DISCARD if the item should be booked out of the
+            system
+          enum:
+            - STOCK
+            - LOCATION
+            - DISCARD
+          type: string
+      required:
+        - quantity
+        - type
+        - id
+      title: StowLineItemStowToWithId
+      type: object
     StowLineItemTakeFrom:
       properties:
         quantity:
