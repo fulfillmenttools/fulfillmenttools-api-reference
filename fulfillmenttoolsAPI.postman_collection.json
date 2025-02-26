@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "f5ebbf8a-3903-443e-bb37-7c6f63391251",
+		"_postman_id": "3a9e4f0d-23cf-41c3-a781-3996b70fa178",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "16829062"
+		"_exporter_id": "5030076"
 	},
 	"item": [
 		{
@@ -2510,13 +2510,42 @@
 					"name": "Eventing & Subscriptions",
 					"item": [
 						{
-							"name": "Add Subscription",
+							"name": "Add Subscription (Webhook)",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Order created webhook\",\n    \"event\": \"ORDER_CREATED\",\n    \"target\": {\n        \"type\": \"WEBHOOK\",\n        \"callbackUrl\": \"https://webhook.site/cptn-hook\",\n        \"headers\": [\n            {\n                \"key\": \"header-key\",\n                \"value\": \"header-value\"\n            }\n        ]\n    }\n}\n",
+									"raw": "{\n    \"name\": \"Order created (Webhook)\",\n    \"event\": \"ORDER_CREATED\",\n    \"target\": {\n        \"type\": \"WEBHOOK\",\n        \"callbackUrl\": \"https://webhook.site/cptn-hook\",\n        \"headers\": [\n            {\n                \"key\": \"header-key\",\n                \"value\": \"header-value\"\n            }\n        ]\n    }\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/subscriptions/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"subscriptions",
+										""
+									]
+								},
+								"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Subscriptions/addSubscription"
+							},
+							"response": []
+						},
+						{
+							"name": "Add Subscription (Azure Service Bus)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Order created (Azure)\",\n    \"event\": \"ORDER_CREATED\",\n    \"target\": {\n        \"type\": \"MICROSOFT_AZURE_SERVICE_BUS\",\n        \"tenantId\": \"tenantId\",\n        \"clientId\": \"clientId\",\n        \"clientSecret\": \"clientSecret\",\n        \"namespace\": \"namespace\",\n        \"queueOrTopicName\": \"queueOrTopicName\"\n    }\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
