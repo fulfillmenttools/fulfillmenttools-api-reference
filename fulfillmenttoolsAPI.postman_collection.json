@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9e19edb9-d588-4812-8f2f-e9e33184a535",
+		"_postman_id": "f5ebbf8a-3903-443e-bb37-7c6f63391251",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -5294,29 +5294,34 @@
 							},
 							"response": []
 						},
-            {
-              "name": "Search RoutingPlans",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"query\": {\n        \"status\": {\n            \"eq\": \"INITIAL\"\n        }\n    }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{host}}/api/routingplans/search",
-                  "host": ["{{host}}"],
-                  "path": ["api", "routingplans", "search"]
-                },
-                "description": ""
-              },
-              "response": []
-            }
+						{
+							"name": "Search RoutingPlans",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"query\": {\n        \"status\": {\n            \"eq\": \"INITIAL\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/routingplans/search",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"routingplans",
+										"search"
+									]
+								}
+							},
+							"response": []
+						}
 					],
 					"description": "You can find the API Documentation of routing plans here: https://fulfillmenttools.github.io/api-reference-ui/#/RoutingPlans"
 				},
@@ -11808,6 +11813,41 @@
 												}
 											},
 											"response": []
+										},
+										{
+											"name": "Split PickLineItem",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"version\": 1,\n    \"name\": \"SPLIT_LINES_PICK_JOB\",\n    \"splitLineItemsInfo\": [\n        {\n        \"lineItemId\": \"PICK_LINE_ITEM_ID\",\n        \"picked\": 5,\n        \"quantity\": 6\n      }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/pickjobs/:pickJobId/actions",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"pickjobs",
+														":pickJobId",
+														"actions"
+													],
+													"variable": [
+														{
+															"key": "pickJobId",
+															"value": "PUT-IN-YOUR-PICKJOB-ID"
+														}
+													]
+												}
+											},
+											"response": []
 										}
 									]
 								},
@@ -12651,6 +12691,41 @@
 												"body": {
 													"mode": "raw",
 													"raw": "{\n    \"version\": 1,\n    \"name\": \"REMOVE_PICK_JOB\",\n    \"payload\": {\n        \"pickJobId\": \"PICK-JOB-ID-FROM-THIS-PICKRUN\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/pickruns/:pickRunId/actions",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"pickruns",
+														":pickRunId",
+														"actions"
+													],
+													"variable": [
+														{
+															"key": "pickRunId",
+															"value": "PUT-IN-YOUR-PICKRUN-ID"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Split PickRunLineItem",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"version\": 1,\n    \"name\": \"SPLIT_LINES_PICK_RUN\",\n    \"splitLineItemsInfo\": [\n        {\n            \"lineItemId\": \"PICK_RUN_LINE_ITEM_ID\",\n            \"picked\": 5,\n            \"quantity\": 100\n        }\n    ]\n}",
 													"options": {
 														"raw": {
 															"language": "json"
