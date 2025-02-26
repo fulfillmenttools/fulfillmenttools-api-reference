@@ -34645,6 +34645,7 @@ components:
         target:
           anyOf:
             - $ref: '#/components/schemas/SubscriptionTargetWebhook'
+            - $ref: '#/components/schemas/SubscriptionTargetMicrosoftAzureServiceBus'
       required:
         - name
         - event
@@ -34682,6 +34683,41 @@ components:
       description: Type of subscription target webhook.
       enum:
         - WEBHOOK
+      type: string
+    SubscriptionTargetMicrosoftAzureServiceBus:
+      title: SubscriptionTargetMicrosoftAzureServiceBus
+      description: Subscriptions model for a Microsoft Azure Service Bus target.
+      properties:
+        type:
+          $ref: '#/components/schemas/SubscriptionTargetMicrosoftAzureServiceBusEnum'
+        tenantId:
+          minLength: 1
+          type: string
+        clientId:
+          minLength: 1
+          type: string
+        clientSecret:
+          minLength: 1
+          type: string
+        namespace:
+          minLength: 1
+          type: string
+        queueOrTopicName:
+          minLength: 1
+          type: string
+      required:
+        - type
+        - tenantId
+        - clientId
+        - clientSecret
+        - namespace
+        - queueOrTopicName
+      type: object
+    SubscriptionTargetMicrosoftAzureServiceBusEnum:
+      title: SubscriptionTargetMicrosoftAzureServiceBusEnum
+      description: Type of subscription target Microsoft Azure Service Bus.
+      enum:
+        - MICROSOFT_AZURE_SERVICE_BUS
       type: string
     Substitute:
       properties:
