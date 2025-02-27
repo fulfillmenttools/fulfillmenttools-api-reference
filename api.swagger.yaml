@@ -2828,6 +2828,15 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/FacilityOrderBy'
+        - description: Filters the facilities by type
+          explode: true
+          in: query
+          name: type
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/FacilityType'
       responses:
         '200':
           content:
@@ -2862,7 +2871,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManagedFacility'
+                oneOf:
+                  - $ref: '#/components/schemas/ManagedFacility'
+                  - $ref: '#/components/schemas/Supplier'
           description: >-
             The facility was successfully created. The Location header contains
             the URL of the facility.
@@ -2897,7 +2908,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ManagedFacilityForCreation'
+              anyOf:
+                - $ref: '#/components/schemas/ManagedFacilityForCreation'
+                - $ref: '#/components/schemas/SupplierForCreation'
         description: Representation that describes the facility
         required: true
       summary: Add a new facility
@@ -3024,7 +3037,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManagedFacility'
+                anyOf:
+                  - $ref: '#/components/schemas/ManagedFacility'
+                  - $ref: '#/components/schemas/Supplier'
           description: >-
             Facility was found & you were allowed to access it. The result is in
             the body.
@@ -3115,6 +3130,70 @@ paths:
         description: Patch set
         required: true
       summary: Patches a facility with the given ID
+    put:
+      parameters:
+        - description: ID of facility you want to replace
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ManagedFacility'
+                  - $ref: '#/components/schemas/Supplier'
+          description: Facility was replaced. The replaced facility is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Facility not found
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Facility version conflict
+      tags:
+        - Core - Facilities
+      operationId: replaceFacility
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ManagedFacilityForReplacement'
+                - $ref: '#/components/schemas/SupplierForReplacement'
+              discriminator:
+                propertyName: type
+                mapping:
+                  MANAGED_FACILITY: '#/components/schemas/ManagedFacilityForReplacement'
+                  SUPPLIER: '#/components/schemas/SupplierForReplacement'
+        required: true
+      summary: Replace a facility with the given ID
   /api/facilities/{facilityId}/actions:
     post:
       requestBody:
@@ -27690,6 +27769,7 @@ components:
       default: MANAGED_FACILITY
       enum:
         - MANAGED_FACILITY
+        - SUPPLIER
       type: string
       xml:
         name: FacilityType
@@ -27738,6 +27818,7 @@ components:
       required:
         - id
         - type
+        - status
       type: object
       xml:
         name: Facility
@@ -27798,6 +27879,96 @@ components:
       type: object
       xml:
         name: ManagedFacilityForCreation
+    ManagedFacilityForReplacement:
+      additionalProperties: false
+      properties:
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+        name:
+          example: Hamburg NW2
+          type: string
+        status:
+          $ref: '#/components/schemas/FacilityStatus'
+        tenantFacilityId:
+          description: The id of the facility in the tenants own system
+          example: K12345
+          type: string
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the facility. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        type:
+          $ref: '#/components/schemas/FacilityType'
+        address:
+          $ref: '#/components/schemas/FacilityAddressForCreation'
+        closingDays:
+          description: >-
+            Days of the year where the facility is closed and doesn't allows
+            picking
+          items:
+            $ref: '#/components/schemas/ClosingDay'
+          type: array
+        contact:
+          $ref: '#/components/schemas/FacilityContact'
+        fulfillmentProcessBuffer:
+          default: 240
+          description: Duration in minutes until an order is processed
+          example: '240'
+          minimum: 0
+          type: integer
+        locationType:
+          $ref: '#/components/schemas/FacilityLocationType'
+        capacityPlanningTimeframe:
+          description: >-
+            The range in days per facility which defines how many days in the
+            future the capacity of the facility can be planned
+          type: integer
+          minimum: 1
+        pickingTimes:
+          $ref: '#/components/schemas/PickingTimes'
+        pickingMethods:
+          description: Picking Methods supported by this facility.
+          items:
+            $ref: '#/components/schemas/PickingMethodEnum'
+          type: array
+        scanningRule:
+          $ref: '#/components/schemas/ScanningRuleConfiguration'
+        services:
+          items:
+            $ref: '#/components/schemas/FacilityService'
+          type: array
+        capacityEnabled:
+          type: boolean
+          default: false
+          description: >-
+            Indicates that configured capacity limits for picking times are
+            considered
+      discriminator:
+        propertyName: type
+      required:
+        - version
+        - type
+        - status
+        - name
+        - address
+        - locationType
+        - fulfillmentProcessBuffer
+        - capacityEnabled
+      type: object
+      xml:
+        name: ManagedFacilityForReplacement
     ManagedFacility:
       allOf:
         - $ref: '#/components/schemas/Facility'
@@ -27822,6 +27993,48 @@ components:
       type: object
       xml:
         name: SupplierForCreation
+    SupplierForReplacement:
+      additionalProperties: false
+      type: object
+      properties:
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+        name:
+          example: Hamburg NW2
+          type: string
+        status:
+          $ref: '#/components/schemas/FacilityStatus'
+        tenantFacilityId:
+          description: The id of the facility in the tenants own system
+          example: K12345
+          type: string
+        tags:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the facility. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        type:
+          $ref: '#/components/schemas/FacilityType'
+      discriminator:
+        propertyName: type
+      required:
+        - version
+        - name
+        - status
+        - type
+      xml:
+        name: SupplierForReplacement
     Supplier:
       allOf:
         - $ref: '#/components/schemas/Facility'
@@ -32616,7 +32829,9 @@ components:
       xml:
         name: RemovePickJobFromPickRunAction
     PickingTimes:
-      description: There must be no overlaps for time ranges on a day
+      description: >-
+        Time ranges defining the picking times per weekday. No overlapping
+        ranges are allowed. There must be no overlaps for time ranges on a day
       properties:
         friday:
           items:
@@ -34250,14 +34465,16 @@ components:
       properties:
         facilities:
           items:
-            $ref: '#/components/schemas/StrippedFacility'
+            anyOf:
+              - $ref: '#/components/schemas/StrippedManagedFacility'
+              - $ref: '#/components/schemas/Supplier'
           type: array
         total:
           description: Total number of found entities for this query
           example: 42
           type: integer
       type: object
-    StrippedFacility:
+    StrippedManagedFacility:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/Address'
@@ -34274,9 +34491,12 @@ components:
               description: The id of the facility in the tenants own system
               example: K12345
               type: string
+            type:
+              $ref: '#/components/schemas/FacilityType'
           required:
             - id
             - status
+            - type
           type: object
     StrippedHandoverjob:
       allOf:
@@ -44170,7 +44390,7 @@ components:
         - articleAvailabilities
     FulfillabilityFacility:
       allOf:
-        - $ref: '#/components/schemas/StrippedFacility'
+        - $ref: '#/components/schemas/StrippedManagedFacility'
     FulfillabilityItemsConstraintValue:
       properties:
         items:
