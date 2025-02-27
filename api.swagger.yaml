@@ -28961,6 +28961,38 @@ components:
         hsCode:
           type: string
           maxLength: 50
+    OutOfStockConfig:
+      type: object
+      additionalProperties: false
+      properties:
+        preorder:
+          type: object
+          properties:
+            availabilityTimeframe:
+              $ref: '#/components/schemas/AvailabilityTimeframe'
+          required:
+            - availabilityTimeframe
+        restock:
+          type: object
+          properties:
+            restockableInDays:
+              type: integer
+          required:
+            - restockableInDays
+    OutOfStockBehaviour:
+      enum:
+        - BACKORDER
+        - PREORDER
+        - RESTOCK
+      description: >-
+        The PREORDER and RESTOCK can be only set, when the depending
+        outOfStockConfig is provided.
+
+        Also PREORDER and RESTOCK values are in Alpha status. For details please
+        check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      type: string
     ListingForCreation:
       properties:
         attributes:
@@ -29022,11 +29054,21 @@ components:
             type: string
           type: array
         outOfStockBehaviour:
-          enum:
-            - BACKORDER
-          type: string
+          $ref: '#/components/schemas/OutOfStockBehaviour'
+        outOfStockConfig:
+          $ref: '#/components/schemas/OutOfStockConfig'
+          description: >-
+            The outOfStockConfig is in Alpha status. For details please check
+            the <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+            target="_blank">api-release-life-cycle documentation</a>.<br /><br
+            />
         availabilityTimeframe:
           $ref: '#/components/schemas/AvailabilityTimeframe'
+          deprecated: true
+          description: >-
+            @deprecated This property (for OutOfStockBehaviour.BACKORDER) is
+            deprecated since 26th of February 2025.
         tags:
           type: array
           minItems: 0
@@ -30510,11 +30552,21 @@ components:
             weight:
               type: number
             outOfStockBehaviour:
-              enum:
-                - BACKORDER
-              type: string
+              $ref: '#/components/schemas/OutOfStockBehaviour'
+            outOfStockConfig:
+              $ref: '#/components/schemas/OutOfStockConfig'
+              description: >-
+                The outOfStockConfig is in Alpha status. For details please
+                check the <a
+                href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+                target="_blank">api-release-life-cycle documentation</a>.<br
+                /><br />
             availabilityTimeframe:
               $ref: '#/components/schemas/AvailabilityTimeframe'
+              deprecated: true
+              description: >-
+                @deprecated This property (for OutOfStockBehaviour.BACKORDER) is
+                deprecated since 26th of February 2025.
             measurementUnitKey:
               type: string
               nullable: true
@@ -43060,9 +43112,7 @@ components:
         available:
           type: number
         outOfStockBehaviour:
-          enum:
-            - BACKORDER
-          type: string
+          $ref: '#/components/schemas/OutOfStockBehaviour'
         availabilityTimeframe:
           $ref: '#/components/schemas/AvailabilityTimeframe'
     DeliveryPromiseShipment:
@@ -43340,9 +43390,7 @@ components:
             $ref: '#/components/schemas/RoutingPlanLineItemPiece'
           description: '@deprecated This property has been deprecated and has no meaning.'
         outOfStockBehaviour:
-          enum:
-            - BACKORDER
-          type: string
+          $ref: '#/components/schemas/OutOfStockBehaviour'
         availabilityTimeframe:
           $ref: '#/components/schemas/AvailabilityTimeframe'
     RoutingPlanLineItemPiece:
@@ -44297,9 +44345,7 @@ components:
         availableStock:
           type: number
         outOfStockBehaviour:
-          enum:
-            - BACKORDER
-          type: string
+          $ref: '#/components/schemas/OutOfStockBehaviour'
         availabilityTimeframe:
           $ref: '#/components/schemas/AvailabilityTimeframe'
       required:
@@ -50795,11 +50841,15 @@ components:
           description: Search by outOfStockBehaviour
           enum:
             - BACKORDER
+            - PREORDER
+            - RESTOCK
           type: string
         notEq:
           description: Search by outOfStockBehaviour
           enum:
             - BACKORDER
+            - PREORDER
+            - RESTOCK
           type: string
       title: OutOfStockBehaviourEnumFilter
       type: object
