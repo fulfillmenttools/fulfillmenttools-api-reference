@@ -14702,6 +14702,354 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/facilities/{facilityId}/connections:
+    get:
+      parameters:
+        - description: ID of facility you want to get connections
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: The targetFacilityRef of the connection
+          in: query
+          name: targetFacilityRef
+          required: false
+          schema:
+            type: string
+        - description: all entities
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+        - description: >-
+            Provide the localized names and descriptions for the parcel label
+            classifications. If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterFacilityConnections'
+          description: >-
+            Facility connections was found & you were allowed to access it. The
+            result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Facilities
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: getFacilityConnections
+      summary: >-
+        Get the details for all connections related to the facility with the
+        given ID
+      x-badges:
+        - color: orange
+          label: BETA
+    post:
+      parameters:
+        - description: ID of facility you want to create a connection for
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterFacilityConnection'
+          description: Creation was successful.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - Facilities
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: createConnectionToFacility
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: >-
+                    #/components/schemas/InterFacilityConnectionToSupplierForCreation
+                - $ref: >-
+                    #/components/schemas/InterFacilityConnectionToManagedFacilityForCreation
+                - $ref: >-
+                    #/components/schemas/InterFacilityConnectionToCustomerForCreation
+              discriminator:
+                propertyName: type
+                mapping:
+                  SUPPLIER: >-
+                    #/components/schemas/InterFacilityConnectionToSupplierForCreation
+                  MANAGED_FACILITY: >-
+                    #/components/schemas/InterFacilityConnectionToManagedFacilityForCreation
+                  CUSTOMER: >-
+                    #/components/schemas/InterFacilityConnectionToCustomerForCreation
+        description: Representation that the connection
+        required: true
+      summary: Create a connections for a suppplier facility with given ID
+      x-badges:
+        - color: orange
+          label: BETA
+  /api/facilities/{facilityId}/connections/{connectionId}:
+    get:
+      parameters:
+        - description: ID of facility you want to get connections
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            The ID that describes the connection of this facility to the its
+            connections
+          in: path
+          name: connectionId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label
+            classifications. If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterFacilityConnection'
+          description: >-
+            Facility connections was found & you were allowed to access it. The
+            result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            There is no connection for this facility referenced by the provided
+            connectionId
+      tags:
+        - Core - Facilities
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: getFacilityConnection
+      summary: >-
+        Get the details for a facility connection related to the facility with
+        the given ID
+      x-badges:
+        - color: orange
+          label: BETA
+    put:
+      parameters:
+        - description: ID of facility you want to get
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: The referenced connection ID
+          in: path
+          name: connectionId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            Provide the localized names and descriptions for the parcel label
+            classifications. If not provided the default locale is used., for
+            example de_DE.
+          in: query
+          name: locale
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterFacilityConnection'
+          description: Modification was successful.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            There is no connection with this facility referenced by the provided
+            cnnectionId.
+      tags:
+        - Core - Facilities
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: updateFacilityConnection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: >-
+                    #/components/schemas/InterFacilityConnectionToSupplierForUpdate
+                - $ref: >-
+                    #/components/schemas/InterFacilityConnectionToManagedFacilityForUpdate
+                - $ref: >-
+                    #/components/schemas/InterFacilityConnectionToCustomerForUpdate
+              discriminator:
+                propertyName: type
+                mapping:
+                  SUPPLIER: >-
+                    #/components/schemas/InterFacilityConnectionToSupplierForUpdate
+                  MANAGED_FACILITY: >-
+                    #/components/schemas/InterFacilityConnectionToManagedFacilityForUpdate
+                  CUSTOMER: >-
+                    #/components/schemas/InterFacilityConnectionToCustomerForUpdate
+        description: Representation that describes the facility
+        required: true
+      summary: Update the given connection for a facility
+      x-badges:
+        - color: orange
+          label: BETA
+    delete:
+      parameters:
+        - description: ID of facility you want to delete a connection
+          in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - description: The ID of the connection you want to delete
+          in: path
+          name: connectionId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deletion was successful
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: There is no connection for the facility and the provided id
+      tags:
+        - Core - Facilities
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: deleteFacilityConnection
+      summary: Delete the connection for facility with the given ID
+      x-badges:
+        - color: orange
+          label: BETA
   /api/health:
     get:
       responses:
@@ -35352,6 +35700,8 @@ components:
           maxItems: 1
         staticCCSMRef:
           type: string
+        countAsTransitDayBefore:
+          type: string
       required:
         - id
         - source
@@ -35448,6 +35798,8 @@ components:
           type: array
           minItems: 1
           maxItems: 1
+        countAsTransitDayBefore:
+          type: string
       required:
         - carrierConfigurationVersion
         - source
@@ -35545,6 +35897,8 @@ components:
           type: array
           minItems: 1
           maxItems: 1
+        countAsTransitDayBefore:
+          type: string
       required:
         - carrierConfigurationVersion
     CarrierProductCategory:
@@ -40229,6 +40583,209 @@ components:
           type: object
       xml:
         name: HermesFacilityCarrierConfiguration
+    InterFacilityConnections:
+      additionalProperties: false
+      properties:
+        interFacilityConnections:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnection'
+          type: array
+        total:
+          description: Total number of entities found for this query
+          example: 42
+          type: integer
+      required:
+        - interFacilityConnections
+        - total
+      type: object
+      xml:
+        name: InterFacilityConnection
+    InterFacilityConnection:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        id:
+          type: string
+        sourceFacilityRef:
+          type: string
+        target:
+          oneOf:
+            - $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
+            - $ref: >-
+                #/components/schemas/InterFacilityConnectionManagedFacilityTarget
+            - $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
+          discriminator:
+            propertyName: type
+            mapping:
+              SUPPLIER: '#/components/schemas/InterFacilityConnectionSupplierTarget'
+              MANAGED_FACILITY: >-
+                #/components/schemas/InterFacilityConnectionManagedFacilityTarget
+              CUSTOMER: '#/components/schemas/InterFacilityConnectionCustomerTarget'
+        fallbackCost:
+          $ref: '#/components/schemas/DeliveryCost'
+        fallbackTransitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        countAsTransitDayBefore:
+          type: string
+      required:
+        - id
+        - sourceFacilityRef
+        - target
+      type: object
+      xml:
+        name: InterFacilityConnection
+    ConnectionType:
+      type: string
+      enum:
+        - SUPPLIER
+        - MANAGED_FACILITY
+        - CUSTOMER
+    InterFacilityConnectionForUpdate:
+      properties:
+        version:
+          type: number
+        fallbackCost:
+          $ref: '#/components/schemas/DeliveryCost'
+        fallbackTransitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        countAsTransitDayBefore:
+          type: string
+      required:
+        - version
+      type: object
+      xml:
+        name: InterFacilityConnectionForUpdate
+    InterFacilityConnectionToCustomerForUpdate:
+      allOf:
+        - $ref: '#/components/schemas/InterFacilityConnectionForUpdate'
+      properties:
+        target:
+          $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+      required:
+        - target
+        - type
+      type: object
+      xml:
+        name: InterFacilityConnectionToCustomerForUpdate
+    InterFacilityConnectionToManagedFacilityForUpdate:
+      allOf:
+        - $ref: '#/components/schemas/InterFacilityConnectionForUpdate'
+      properties:
+        target:
+          $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+      required:
+        - target
+        - type
+      type: object
+      xml:
+        name: InterFacilityConnectionToManagedFacilityForUpdate
+    InterFacilityConnectionToSupplierForUpdate:
+      allOf:
+        - $ref: '#/components/schemas/InterFacilityConnectionForUpdate'
+      properties:
+        target:
+          $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+      required:
+        - target
+        - type
+      type: object
+      xml:
+        name: InterFacilityConnectionToSupplierForUpdate
+    InterFacilityConnectionToCustomerForCreation:
+      allOf:
+        - $ref: '#/components/schemas/InterFacilityConnectionForCreation'
+      properties:
+        target:
+          $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+      required:
+        - target
+        - type
+      type: object
+      xml:
+        name: InterFacilityConnectionToCustomerForCreation
+    InterFacilityConnectionToManagedFacilityForCreation:
+      allOf:
+        - $ref: '#/components/schemas/InterFacilityConnectionForCreation'
+      properties:
+        target:
+          $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+      required:
+        - target
+        - type
+      type: object
+      xml:
+        name: InterFacilityConnectionToManagedFacilityForCreation
+    InterFacilityConnectionToSupplierForCreation:
+      allOf:
+        - $ref: '#/components/schemas/InterFacilityConnectionForCreation'
+      properties:
+        target:
+          $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+      required:
+        - target
+        - type
+      type: object
+      xml:
+        name: InterFacilityConnectionToSupplierForCreation
+    InterFacilityConnectionForCreation:
+      properties:
+        fallbackCost:
+          $ref: '#/components/schemas/DeliveryCost'
+        fallbackTransitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        countAsTransitDayBefore:
+          type: string
+      type: object
+      xml:
+        name: InterFacilityConnectionForCreation
+    InterFacilityConnectionBaseTarget:
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+        carrierProductCategory:
+          $ref: '#/components/schemas/CarrierProductCategory'
+      required:
+        - type
+      type: object
+      xml:
+        name: InterFacilityConnectionBaseTarget
+    InterFacilityConnectionCustomerTarget:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/InterFacilityConnectionBaseTarget'
+    InterFacilityConnectionSupplierTarget:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/InterFacilityConnectionBaseTarget'
+      properties:
+        facilityRef:
+          type: string
+      required:
+        - facilityRef
+    InterFacilityConnectionManagedFacilityTarget:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/InterFacilityConnectionBaseTarget'
+      properties:
+        facilityRef:
+          type: string
+      required:
+        - facilityRef
     CustomServiceForCreation:
       additionalProperties: false
       properties:
