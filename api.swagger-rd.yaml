@@ -47472,10 +47472,8 @@ components:
     BooleanFilter:
       properties:
         eq:
-          maxLength: 256
           type: boolean
         notEq:
-          maxLength: 256
           type: boolean
       title: BooleanFilter
       type: object
@@ -47583,11 +47581,9 @@ components:
       properties:
         eq:
           format: date-time
-          maxLength: 256
           type: string
         notEq:
           format: date-time
-          maxLength: 256
           type: string
       title: DateEqFilter
       type: object
@@ -47595,36 +47591,28 @@ components:
       properties:
         eq:
           format: date-time
-          maxLength: 256
           type: string
         gt:
           format: date-time
-          maxLength: 256
           type: string
         gte:
           format: date-time
-          maxLength: 256
           type: string
         lt:
           format: date-time
-          maxLength: 256
           type: string
         lte:
           format: date-time
-          maxLength: 256
           type: string
         notEq:
           format: date-time
-          maxLength: 256
           type: string
       title: DateFilter
       type: object
     DateListFilter:
       properties:
         contains:
-          allOf:
-            - $ref: '#/components/schemas/DateEqFilter'
-          maxLength: 256
+          $ref: '#/components/schemas/DateEqFilter'
       title: DateListFilter
       type: object
     DeliveryServiceLevelEnumFilter:
@@ -49135,9 +49123,9 @@ components:
           additionalProperties:
             anyOf:
               - $ref: '#/components/schemas/StringFilter'
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
+              - $ref: '#/components/schemas/KeyExistsFilter'
           description: Search by stockProperties
+          type: object
         tenantArticleId:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -49249,9 +49237,9 @@ components:
           additionalProperties:
             anyOf:
               - $ref: '#/components/schemas/StringFilter'
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
+              - $ref: '#/components/schemas/KeyExistsFilter'
           description: Search by stockProperties
+          type: object
         tenantArticleId:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -50140,6 +50128,13 @@ components:
         - delta
       title: InventoryStockWebHookEventPayloadItem
       type: object
+    KeyExistsFilter:
+      properties:
+        exists:
+          description: Search all entities which have or do not have this key defined
+          type: boolean
+      title: KeyExistsFilter
+      type: object
     LinkedServiceJobsSearchPayload:
       properties:
         options:
@@ -50438,32 +50433,24 @@ components:
     NumberFilter:
       properties:
         eq:
-          maxLength: 256
           type: number
         gt:
-          maxLength: 256
           type: number
         gte:
-          maxLength: 256
           type: number
         in:
           items:
-            maxLength: 256
             type: number
           maxItems: 25
           type: array
         lt:
-          maxLength: 256
           type: number
         lte:
-          maxLength: 256
           type: number
         notEq:
-          maxLength: 256
           type: number
         notIn:
           items:
-            maxLength: 256
             type: number
           maxItems: 25
           type: array
@@ -53075,6 +53062,7 @@ components:
             anyOf:
               - $ref: '#/components/schemas/StringFilter'
               - $ref: '#/components/schemas/DateFilter'
+              - $ref: '#/components/schemas/KeyExistsFilter'
           description: Search by properties
           type: object
         receiptDate:
@@ -54585,9 +54573,7 @@ components:
     StringListFilter:
       properties:
         contains:
-          allOf:
-            - $ref: '#/components/schemas/StringEqFilter'
-          maxLength: 256
+          $ref: '#/components/schemas/StringEqFilter'
       title: StringListFilter
       type: object
     StringSearchFilter:
@@ -54602,6 +54588,7 @@ components:
           maxItems: 25
           type: array
         like:
+          description: Search by regex pattern
           maxLength: 256
           type: string
         notEq:
