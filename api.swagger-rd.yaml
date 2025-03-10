@@ -26955,13 +26955,67 @@ components:
           items:
             $ref: '#/components/schemas/OfferedStickersByTag'
     ExpectedPickLineItemForCreation:
-      allOf:
-        - $ref: '#/components/schemas/PickLineItemForCreation'
       properties:
         transferId:
           type: string
+        article:
+          $ref: '#/components/schemas/PickLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the pick line. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        quantity:
+          description: quantity of the specific article that has been ordered
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        secondaryMeasurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        secondaryQuantity:
+          description: quantity of the specific article that has been ordered
+          example: 21
+          format: int64
+          minimum: 0
+          type: integer
+        measurementValidation:
+          $ref: '#/components/schemas/MeasurementValidation'
+        scannableCodes:
+          items:
+            description: Codes, that identify the article
+            type: string
+          type: array
+        partialStockLocations:
+          description: >-
+            Indicates where the items to pick could be found and from where the
+            picking should be started.
+          items:
+            $ref: >-
+              #/components/schemas/PickJobLineItemPartialStockLocationForCreation
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+        allowedSubstitutes:
+          items:
+            $ref: '#/components/schemas/Substitute'
+          type: array
       required:
         - transferId
+        - quantity
+        - article
     PickLineItemForCreation:
       properties:
         article:
@@ -27018,6 +27072,11 @@ components:
           items:
             $ref: '#/components/schemas/Substitute'
           type: array
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          type: array
+          nullable: true
       required:
         - quantity
         - article
@@ -27112,6 +27171,11 @@ components:
                   type: array
             shortPickReason:
               $ref: '#/components/schemas/PickLineShortPickReason'
+            recordableAttributes:
+              items:
+                $ref: '#/components/schemas/RecordableAttribute'
+              type: array
+              nullable: true
           required:
             - id
             - picked
@@ -28101,6 +28165,10 @@ components:
       properties:
         id:
           type: string
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          type: array
       required:
         - id
     HandoverLineItemForCreation:
@@ -28150,6 +28218,10 @@ components:
             cannot be used within fulfillment processes, but it could be useful
             to have the information carried here.
           type: object
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          type: array
       required:
         - quantity
         - article
@@ -29408,7 +29480,7 @@ components:
           description: >-
             Attributes that can be added to the packing source container. These
             attributes cannot be used within fulfillment processes, but it could
-            be useful to have the informations carried here.
+            be useful to have the information carried here.
           type: object
       required:
         - packJobRefs
@@ -31238,6 +31310,10 @@ components:
             Attributes that can be added to the parcelItem. These attributes
             cannot be used within fulfillment processes, but it could be useful
             to have the information carried here.
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          type: array
       required:
         - quantity
       type: object
@@ -31354,6 +31430,10 @@ components:
             Attributes that can be added to the parcelItem. These attributes
             cannot be used within fulfillment processes, but it could be useful
             to have the information carried here.
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          type: array
       required:
         - id
         - quantity
@@ -36383,6 +36463,10 @@ components:
             description: Codes, that identify the article
             type: string
           type: array
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          type: array
       required:
         - quantity
         - article
@@ -36406,6 +36490,10 @@ components:
               format: int32
               minimum: 0
               type: integer
+            recordableAttributes:
+              items:
+                $ref: '#/components/schemas/RecordableAttribute'
+              type: array
           required:
             - id
       type: object
@@ -41019,6 +41107,11 @@ components:
             attributes cannot be used within fulfillment processes, but it could
             be useful to have the information carried here.
           type: object
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          nullable: true
+          type: array
       required:
         - quantity
         - article
@@ -41072,6 +41165,11 @@ components:
       properties:
         id:
           type: string
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          nullable: true
+          type: array
       required:
         - id
     ServiceJobLineItemArticle:
@@ -41674,6 +41772,11 @@ components:
             Attributes that can be added to custom service. These attributes
             cannot be used within fulfillment processes, but it could be useful
             to have the information carried here.
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          nullable: true
+          type: array
       required:
         - id
         - quantity
@@ -42376,6 +42479,78 @@ components:
           nullable: true
           type: object
       title: CustomAttributesResource
+      type: object
+    RecordableAttribute:
+      additionalProperties: false
+      properties:
+        group:
+          description: The group of the attribute
+          example: general
+          minLength: 1
+          nullable: true
+          type: string
+        id:
+          description: id of the recordable attribute
+          example: 17ebfdfb-e1b4-4913-9962-3aef2b49f16f
+          type: string
+        key:
+          description: >-
+            The translated key of the attribute. This field gets filled
+            automatically on request
+          example: country of origin
+          type: string
+        keyLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: The translations of the key
+        recordingRule:
+          description: Indicates whether the value has to be recorded or not
+          enum:
+            - OPTIONAL
+            - MANDATORY
+          example: MANDATORY
+          type: string
+        value:
+          description: The value of the attribute
+          example: Germany
+          minLength: 1
+          nullable: true
+          type: string
+      required:
+        - id
+        - keyLocalized
+        - recordingRule
+      title: RecordableAttribute
+      type: object
+    RecordableAttributeForCreation:
+      additionalProperties: false
+      properties:
+        group:
+          description: The group of the attribute
+          example: general
+          minLength: 1
+          nullable: true
+          type: string
+        keyLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: The translations of the key
+        recordingRule:
+          description: Indicates whether the value has to be recorded or not
+          enum:
+            - OPTIONAL
+            - MANDATORY
+          example: MANDATORY
+          type: string
+        value:
+          description: The value of the attribute
+          example: Germany
+          nullable: true
+          type: string
+      required:
+        - keyLocalized
+        - recordingRule
+      title: RecordableAttributeForCreation
       type: object
     BaseDecisionDetail:
       properties:
