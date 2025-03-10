@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "38f61c85-d73e-4a8e-ae1f-55825f505de0",
+		"_postman_id": "63a69cb2-7abf-4215-bc71-fab93d82244f",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -15711,6 +15711,34 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Search Parcels",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"query\": {\n        \"tenantOrderId\": {\n            \"eq\": \"tenantOrderId\"\n        },\n        \"lineItems\": {\n            \"contains\": {\n                \"article\": {\n                    \"title\": {\n                        \"in\": [\"articleTitle\"]\n                    }\n                }\n            }\n        },\n        \"recipient\": {\n            \"firstName\": {\n                \"like\": \"irstNam\"\n            }\n        }\n    },\n    \"sortBy\": \"TARGET_TIME_ASC\"\n}\n\n// Searchable Fields:\n// id, shipmentRef, carrierRef, facilityRef, shortId (eq, notEq, in, notIn)\n// status [OPEN, DONE, PROCESSING, FAILED, CANCELED, OBSOLETE, WAITING_FOR_INPUT] (eq, notEq, in)\n// recipient.firstName, recipient.lastName, recipient.company, recipient.email (eq, notEq, in, notIn, like)\n// invoice.firstName, invoice.lastName, invoice.company, invoice.email (eq, notEq, in, notIn, like)\n// items.article.title, items.article.tenantArticleId (eq, notEq, in, notIn, like)\n\n// Sortable Fields:\n// lastModifed: LAST_MODIFIED_DESC, LAST_MODIFIED_ASC",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/parcels/search",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"parcels",
+												"search"
+											]
+										}
+									},
+									"response": []
 								}
 							],
 							"description": "You can find the API Documentation of parcels here: https://fulfillmenttools.github.io/api-reference-ui/#/Parcels"
@@ -17372,7 +17400,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"version\": 1,\n    \"name\": \"SPLIT_LINES_SERVICE_JOB\",\n    \"splitLineItemsInfo\": [\n        {\n            \"lineItemId\": \"insert-line-item-id\",\n            \"quantity\": 5\n        },\n        {\n            \"userName\": \"splitLineItemsInfo\",\n            \"type\": \"9\"\n        }\n    ]\n}",
+											"raw": "{\n    \"version\": 1,\n    \"name\": \"SPLIT_LINES_SERVICE_JOB\",\n    \"splitLineItemsInfo\": [\n        {\n            \"lineItemId\": \"insert-line-item-id\",\n            \"quantity\": 5\n        },\n        {\n            \"lineItemId\": \"insert-line-item-id\",\n            \"quantity\": 9\n        }\n    ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
