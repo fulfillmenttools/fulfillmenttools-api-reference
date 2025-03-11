@@ -32679,12 +32679,20 @@ components:
               items:
                 $ref: >-
                   #/components/schemas/PickJobLineItemPartialStockLocationForUpdate
+            shortPickReason:
+              $ref: '#/components/schemas/ShortPickReasonForUpsert'
           required:
             - id
             - action
           type: object
       xml:
         name: ModifyPickRunLineItemAction
+    ShortPickReasonForUpsert:
+      additionalProperties: false
+      type: object
+      properties:
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
     RemovePickJobFromPickRunAction:
       title: RemovePickJobFromPickRunAction
       deprecated: true
@@ -49989,6 +49997,27 @@ components:
         - articles
       title: InventoryArticlePaginatedResult
       type: object
+    InventoryAvailabilityTimeframe:
+      properties:
+        start:
+          format: date-time
+          type: string
+      title: InventoryAvailabilityTimeframe
+      type: object
+    InventoryAvailableUntilDefinition:
+      properties:
+        calculationBase:
+          enum:
+            - CREATION
+            - EXPIRY
+          type: string
+        modifier:
+          type: string
+      required:
+        - calculationBase
+        - modifier
+      title: InventoryAvailableUntilDefinition
+      type: object
     InventoryConfiguration:
       properties:
         isMixedStorage:
@@ -50185,6 +50214,343 @@ components:
         - reasons
       title: InventoryFacilityStockStaleReason
       type: object
+    InventoryListingAttributeItem:
+      properties:
+        category:
+          enum:
+            - descriptive
+            - miscellaneous
+            - pickingSequence
+            - customs
+            - insurance
+            - shop
+            - dimensions
+            - carrierService
+          type: string
+        key:
+          type: string
+        keyLocalized:
+          additionalProperties:
+            type: string
+          description: >-
+            Provides Localized values. The key is the locale, the value is the
+            translation. See
+            https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/localization#fallback-language-mechanism
+          example:
+            de_DE: Wert
+            en_US: Value
+            ru_RU: значение
+          type: object
+        priority:
+          type: number
+        value:
+          type: string
+        valueLocalized:
+          additionalProperties:
+            type: string
+          description: >-
+            Provides Localized values. The key is the locale, the value is the
+            translation. See
+            https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/localization#fallback-language-mechanism
+          example:
+            de_DE: Wert
+            en_US: Value
+            ru_RU: значение
+          type: object
+      required:
+        - category
+        - key
+        - priority
+        - value
+      title: InventoryListingAttributeItem
+      type: object
+    InventoryListingEventPayload:
+      properties:
+        attributes:
+          items:
+            $ref: '#/components/schemas/InventoryListingAttributeItem'
+          type: array
+        availabilityTimeframe:
+          $ref: '#/components/schemas/InventoryAvailabilityTimeframe'
+        created:
+          format: date-time
+          type: string
+        currency:
+          description: The currency of the price as an ISO 4217 code.
+          enum:
+            - AED
+            - AFN
+            - ALL
+            - AMD
+            - ANG
+            - AOA
+            - ARS
+            - AUD
+            - AWG
+            - AZN
+            - BAM
+            - BBD
+            - BDT
+            - BGN
+            - BHD
+            - BIF
+            - BMD
+            - BND
+            - BOB
+            - BOV
+            - BRL
+            - BSD
+            - BTN
+            - BWP
+            - BYN
+            - BZD
+            - CAD
+            - CDF
+            - CHE
+            - CHF
+            - CHW
+            - CLF
+            - CLP
+            - CNY
+            - COP
+            - COU
+            - CRC
+            - CUC
+            - CUP
+            - CVE
+            - CZK
+            - DJF
+            - DKK
+            - DOP
+            - DZD
+            - EGP
+            - ERN
+            - ETB
+            - EUR
+            - FJD
+            - FKP
+            - GBP
+            - GEL
+            - GHS
+            - GIP
+            - GMD
+            - GNF
+            - GTQ
+            - GYD
+            - HKD
+            - HNL
+            - HTG
+            - HUF
+            - IDR
+            - ILS
+            - INR
+            - IQD
+            - IRR
+            - ISK
+            - JMD
+            - JOD
+            - JPY
+            - KES
+            - KGS
+            - KHR
+            - KMF
+            - KPW
+            - KRW
+            - KWD
+            - KYD
+            - KZT
+            - LAK
+            - LBP
+            - LKR
+            - LRD
+            - LSL
+            - LYD
+            - MAD
+            - MDL
+            - MGA
+            - MKD
+            - MMK
+            - MNT
+            - MOP
+            - MRU
+            - MUR
+            - MVR
+            - MWK
+            - MXN
+            - MXV
+            - MYR
+            - MZN
+            - NAD
+            - NGN
+            - NIO
+            - NOK
+            - NPR
+            - NZD
+            - OMR
+            - PAB
+            - PEN
+            - PGK
+            - PHP
+            - PKR
+            - PLN
+            - PYG
+            - QAR
+            - RON
+            - RSD
+            - RUB
+            - RWF
+            - SAR
+            - SBD
+            - SCR
+            - SDG
+            - SEK
+            - SGD
+            - SHP
+            - SLE
+            - SOS
+            - SRD
+            - SSP
+            - STN
+            - SVC
+            - SYP
+            - SZL
+            - THB
+            - TJS
+            - TMT
+            - TND
+            - TOP
+            - TRY
+            - TTD
+            - TWD
+            - TZS
+            - UAH
+            - UGX
+            - USD
+            - USN
+            - UYI
+            - UYU
+            - UYW
+            - UZS
+            - VED
+            - VES
+            - VND
+            - VUV
+            - WST
+            - XAF
+            - XAG
+            - XAU
+            - XBA
+            - XBB
+            - XBC
+            - XBD
+            - XCD
+            - XDR
+            - XOF
+            - XPD
+            - XPF
+            - XPT
+            - XSU
+            - XTS
+            - XUA
+            - XXX
+            - YER
+            - ZAR
+            - ZMW
+            - ZWL
+          type: string
+        facilityId:
+          type: string
+        id:
+          type: string
+        imageUrl:
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        measurementUnitKey:
+          type: string
+        outOfStockBehaviour:
+          enum:
+            - BACKORDER
+            - PREORDER
+            - RESTOCK
+          type: string
+        price:
+          type: number
+        scannableCodes:
+          items:
+            type: string
+          type: array
+        scanningRule:
+          $ref: '#/components/schemas/InventoryScanningRuleConfiguration'
+        status:
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        stockAvailableUntil:
+          $ref: '#/components/schemas/InventoryAvailableUntilDefinition'
+        stockProperties:
+          additionalProperties:
+            $ref: '#/components/schemas/InventoryStockPropertyDefinition'
+          type: object
+        tags:
+          items:
+            $ref: '#/components/schemas/InventoryTagReference'
+          type: array
+        tenantArticleId:
+          type: string
+        title:
+          type: string
+        titleLocalized:
+          additionalProperties:
+            type: string
+          description: >-
+            Provides Localized values. The key is the locale, the value is the
+            translation. See
+            https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/localization#fallback-language-mechanism
+          example:
+            de_DE: Wert
+            en_US: Value
+            ru_RU: значение
+          type: object
+        version:
+          type: number
+        weight:
+          type: number
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - facilityId
+        - tenantArticleId
+        - status
+        - title
+      title: InventoryListingEventPayload
+      type: object
+    InventoryScanningRuleConfiguration:
+      properties:
+        values:
+          items:
+            $ref: '#/components/schemas/InventoryScanningRuleValue'
+          type: array
+      title: InventoryScanningRuleConfiguration
+      type: object
+    InventoryScanningRuleValue:
+      properties:
+        priority:
+          type: number
+        scanningRuleType:
+          enum:
+            - ARTICLE
+            - LOCATION
+          type: string
+      required:
+        - priority
+        - scanningRuleType
+      title: InventoryScanningRuleValue
+      type: object
     InventoryStockBulkWebHookEvent:
       properties:
         payload:
@@ -50209,6 +50575,20 @@ components:
         - reserved
         - stockCount
       title: InventoryStockDelta
+      type: object
+    InventoryStockPropertyDefinition:
+      properties:
+        inputType:
+          enum:
+            - DATE
+            - TEXT
+          type: string
+        required:
+          type: boolean
+      required:
+        - inputType
+        - required
+      title: InventoryStockPropertyDefinition
       type: object
     InventoryStockWebHookEventPayload:
       properties:
@@ -50354,6 +50734,17 @@ components:
         - delta
       title: InventoryStockWebHookEventPayloadItem
       type: object
+    InventoryTagReference:
+      properties:
+        id:
+          type: string
+        value:
+          type: string
+      required:
+        - id
+        - value
+      title: InventoryTagReference
+      type: object
     KeyExistsFilter:
       properties:
         exists:
@@ -50481,6 +50872,16 @@ components:
             - $ref: '#/components/schemas/DateFilter'
           description: Search by start
       title: ListingAvailabilityTimeframeFilter
+      type: object
+    ListingBulkWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/ListingWebHookEventPayload'
+      required:
+        - payload
+      title: ListingBulkWebHookEvent
       type: object
     ListingCustomAttributesSort:
       properties:
@@ -50671,6 +51072,16 @@ components:
             - $ref: '#/components/schemas/ListingTagsFilter'
           description: Contains returns if at least one entry matches
       title: ListingTagsListFilter
+      type: object
+    ListingWebHookEventPayload:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/InventoryListingEventPayload'
+          type: array
+      required:
+        - items
+      title: ListingWebHookEventPayload
       type: object
     ModifyStowLineItemsAction:
       description: >-
