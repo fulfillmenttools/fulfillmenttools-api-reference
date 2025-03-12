@@ -32071,6 +32071,7 @@ components:
         - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
         - $ref: '#/components/schemas/PickJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/PickJobPauseActionParameter'
+        - $ref: '#/components/schemas/PickJobSplitLineItemsActionParameter'
     PackJobReplaceAssignedUsersActionParameter:
       additionalProperties: false
       title: PackJobReplaceAssignedUsersActionParameter
@@ -32100,7 +32101,7 @@ components:
     PackJobActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/PackJobReplaceAssignedUsersActionParameter'
-        - $ref: '#/components/schemas/SplitLineItemsPackJobActionParameter'
+        - $ref: '#/components/schemas/PackJobSplitLineItemsActionParameter'
     PickJobReplaceAssignedUsersActionParameter:
       title: PickJobReplaceAssignedUsersActionParameter
       description: Action to replace the assigned users.
@@ -32307,6 +32308,53 @@ components:
       enum:
         - PAUSE
       type: string
+    PickJobSplitLineItemsActionParameter:
+      title: PickJobSplitLineItemsActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobSplitLineItemsActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        splitLineItemsInfo:
+          items:
+            $ref: '#/components/schemas/PickJobSplitLineItemsInfo'
+          type: array
+      required:
+        - name
+        - version
+        - splitLineItemsInfo
+      type: object
+    PickJobSplitLineItemsActionEnum:
+      enum:
+        - SPLIT_LINES_PICK_JOB
+      type: string
+    PickJobSplitLineItemsInfo:
+      additionalProperties: false
+      properties:
+        lineItemId:
+          type: string
+          description: references the id of the pickLineItem of a pickJob
+        quantity:
+          description: quantity of the specific item that has been ordered
+          example: 21
+          minimum: 1
+          type: integer
+        picked:
+          description: The amount of articles that were picked for this line item.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+        - lineItemId
+        - quantity
+        - picked
+      type: object
     PackingTargetContainerActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/UpdatePackingTargetContainerLineItemAction'
@@ -32374,6 +32422,7 @@ components:
         - $ref: '#/components/schemas/PickRunFinishActionParameter'
         - $ref: '#/components/schemas/PickRunCancelActionParameter'
         - $ref: '#/components/schemas/PickRunRemovePickJobActionParameter'
+        - $ref: '#/components/schemas/PickRunSplitLineItemsActionParameter'
     PickRunFinishActionParameter:
       title: PickRunFinishActionParameter
       description: Action to finish a PickRun.
@@ -32455,6 +32504,53 @@ components:
       enum:
         - CANCEL
       type: string
+    PickRunSplitLineItemsActionParameter:
+      title: PickRunSplitLineItemsActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickRunSplitLineItemsActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        splitLineItemsInfo:
+          items:
+            $ref: '#/components/schemas/PickRunSplitLineItemsInfo'
+          type: array
+      required:
+        - name
+        - version
+        - splitLineItemsInfo
+      type: object
+    PickRunSplitLineItemsActionEnum:
+      enum:
+        - SPLIT_LINES_PICK_RUN
+      type: string
+    PickRunSplitLineItemsInfo:
+      additionalProperties: false
+      properties:
+        lineItemId:
+          type: string
+          description: references the id of the pickLineItem of a pickRun
+        quantity:
+          description: quantity of the specific item that has been ordered
+          example: 21
+          minimum: 1
+          type: integer
+        picked:
+          description: The amount of articles that were picked for this line item.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+        - lineItemId
+        - quantity
+        - picked
+      type: object
     HandoverJobActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/HandoverJobCancelActionParameter'
@@ -36558,12 +36654,12 @@ components:
           example: 42
           type: integer
       type: object
-    SplitLineItemsPackJobActionParameter:
-      title: SplitLineItemsPackJobActionParameter
+    PackJobSplitLineItemsActionParameter:
+      title: PackJobSplitLineItemsActionParameter
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/SplitLineItemsPackJobActionEnum'
+          $ref: '#/components/schemas/PackJobSplitLineItemsActionEnum'
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -36572,18 +36668,18 @@ components:
           type: integer
         splitLineItemsInfo:
           items:
-            $ref: '#/components/schemas/SplitLineItemsInfo'
+            $ref: '#/components/schemas/PackJobSplitLineItemsInfo'
           type: array
       required:
         - name
         - version
         - splitLineItemsInfo
       type: object
-    SplitLineItemsPackJobActionEnum:
+    PackJobSplitLineItemsActionEnum:
       enum:
         - SPLIT_LINES_PACK_JOB
       type: string
-    SplitLineItemsInfo:
+    PackJobSplitLineItemsInfo:
       additionalProperties: false
       properties:
         lineItemId:
@@ -36600,10 +36696,6 @@ components:
           format: int64
           minimum: 0
           type: integer
-        additionalAttributes:
-          items:
-            $ref: '#/components/schemas/ArticleAttributeItem'
-          type: array
       required:
         - lineItemId
         - quantity
