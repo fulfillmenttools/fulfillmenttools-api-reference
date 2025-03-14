@@ -32557,6 +32557,7 @@ components:
         - $ref: '#/components/schemas/HandoverJobLineItemUpdateActionParameter'
         - $ref: '#/components/schemas/FinishHandoverJobActionParameter'
         - $ref: '#/components/schemas/HandoverJobReplaceAssignedUsersActionParameter'
+        - $ref: '#/components/schemas/HandoverJobSplitLineItemsActionParameter'
     HandoverJobReplaceAssignedUsersActionParameter:
       title: HandoverJobReplaceAssignedUsersActionParameter
       description: Action to replace the assigned users.
@@ -32583,6 +32584,53 @@ components:
       enum:
         - REPLACE_ASSIGNED_USERS
       type: string
+    HandoverJobSplitLineItemsActionParameter:
+      title: HandoverJobSplitLineItemsActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/HandoverJobSplitLineItemsActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        splitLineItemsInfo:
+          items:
+            $ref: '#/components/schemas/HandoverJobSplitLineItemsInfo'
+          type: array
+      required:
+        - name
+        - version
+        - splitLineItemsInfo
+      type: object
+    HandoverJobSplitLineItemsActionEnum:
+      enum:
+        - SPLIT_LINES_HANDOVER_JOB
+      type: string
+    HandoverJobSplitLineItemsInfo:
+      additionalProperties: false
+      properties:
+        lineItemId:
+          type: string
+          description: references the id of the line item of a handover job
+        quantity:
+          description: quantity of the specific item that has been ordered
+          example: 21
+          minimum: 1
+          type: integer
+        handedOverQuantity:
+          description: The amount of articles that were handed over for this line item.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+        - lineItemId
+        - quantity
+        - handedOverQuantity
+      type: object
     HandoverJobCancelActionParameter:
       title: HandoverJobCancelActionParameter
       description: Action to cancel a handoverjob.
