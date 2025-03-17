@@ -42235,6 +42235,46 @@ components:
         - name
         - version
         - assignedUsers
+    ServiceJobSplitLineItemsActionParameter:
+      title: ServiceJobSplitLineItemsActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobSplitLineItemsActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        splitLineItemsInfo:
+          items:
+            $ref: '#/components/schemas/ServiceJobSplitLineItemsInfo'
+          type: array
+      required:
+        - name
+        - version
+        - splitLineItemsInfo
+      type: object
+    ServiceJobSplitLineItemsActionEnum:
+      enum:
+        - SPLIT_LINES_SERVICE_JOB
+      type: string
+    ServiceJobSplitLineItemsInfo:
+      additionalProperties: false
+      properties:
+        lineItemId:
+          type: string
+          description: references the id of the lineItem of a serviceJob
+        quantity:
+          description: quantity of the specific item that has been ordered
+          example: 21
+          minimum: 1
+          type: integer
+      required:
+        - lineItemId
+        - quantity
+      type: object
     ServiceJobFinishedActionEnum:
       enum:
         - FinishServiceJob
@@ -42272,6 +42312,7 @@ components:
         - $ref: '#/components/schemas/ServiceJobObsoleteActionParameter'
         - $ref: '#/components/schemas/ServiceJobOpenActionParameter'
         - $ref: '#/components/schemas/ServiceJobReplaceAssignedUsersActionParameter'
+        - $ref: '#/components/schemas/ServiceJobSplitLineItemsActionParameter'
     FacilityCustomServiceConnectionStatus:
       type: string
       enum:
