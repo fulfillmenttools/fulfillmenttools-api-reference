@@ -23120,6 +23120,43 @@ paths:
       summary: ''
       tags:
         - PackJob
+  /api/parcels/search:
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Search for Parcel
+      operationId: searchParcel
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - IFulfillment Operations - Shipments
   /api/pickjobs/search:
     post:
       deprecated: false
@@ -52539,6 +52576,207 @@ components:
             - PAUSED
           type: string
       title: PackJobStatusEnumFilter
+      type: object
+    ParcelInvoiceFilter:
+      properties:
+        companyName:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by companyName
+        email:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by email
+        firstName:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by firstName
+        lastName:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by lastName
+      title: ParcelInvoiceFilter
+      type: object
+    ParcelItemsArticleFilter:
+      properties:
+        tenantArticleId:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by tenantArticleId
+        title:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by title
+      title: ParcelItemsArticleFilter
+      type: object
+    ParcelItemsFilter:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/ParcelItemsArticleFilter'
+          description: Nested search by article
+      title: ParcelItemsFilter
+      type: object
+    ParcelItemsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/ParcelItemsFilter'
+          description: Contains returns if at least one entry matches
+      title: ParcelItemsListFilter
+      type: object
+    ParcelRecipientFilter:
+      properties:
+        companyName:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by companyName
+        email:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by email
+        firstName:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by firstName
+        lastName:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by lastName
+      title: ParcelRecipientFilter
+      type: object
+    ParcelSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ParcelSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ParcelSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: ParcelSearchPayload
+      type: object
+    ParcelSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ParcelSearchQuery'
+          type: array
+        carrierRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierRef
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        invoice:
+          allOf:
+            - $ref: '#/components/schemas/ParcelInvoiceFilter'
+          description: Nested search by invoice
+        items:
+          allOf:
+            - $ref: '#/components/schemas/ParcelItemsListFilter'
+          description: Nested list search by items
+        lastModified:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
+        or:
+          items:
+            $ref: '#/components/schemas/ParcelSearchQuery'
+          type: array
+        recipient:
+          allOf:
+            - $ref: '#/components/schemas/ParcelRecipientFilter'
+          description: Nested search by recipient
+        shipmentRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by shipmentRef
+        shortId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by shortId
+        status:
+          allOf:
+            - $ref: '#/components/schemas/ParcelStatusEnumFilter'
+          description: Search by status
+      title: ParcelSearchQuery
+      type: object
+    ParcelSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ParcelSort
+      type: object
+    ParcelStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - PROCESSING
+            - DONE
+            - FAILED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+          type: string
+        in:
+          description: Search by status
+          enum:
+            - OPEN
+            - PROCESSING
+            - DONE
+            - FAILED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+          type: string
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - PROCESSING
+            - DONE
+            - FAILED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+          type: string
+      title: ParcelStatusEnumFilter
       type: object
     PauseStowJobAction:
       description: Sets the status of the stowjob to PAUSED
