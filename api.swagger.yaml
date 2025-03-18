@@ -48531,21 +48531,6 @@ components:
         - name
       title: CloseStowJobAction
       type: object
-    CustomAttributesFilter:
-      properties:
-        searchTerms:
-          additionalProperties:
-            anyOf:
-              - $ref: '#/components/schemas/StringEqFilter'
-              - $ref: '#/components/schemas/NumberFilter'
-              - $ref: '#/components/schemas/BooleanFilter'
-              - $ref: '#/components/schemas/DateFilter'
-          description: Search by key value pairs defined in searchTerms.
-          type: object
-      required:
-        - searchTerms
-      title: CustomAttributesFilter
-      type: object
     DateEqFilter:
       properties:
         eq:
@@ -48757,9 +48742,14 @@ components:
             - $ref: '#/components/schemas/StringFilter'
           description: Search by country
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         emailAddresses:
           allOf:
             - $ref: '#/components/schemas/FacilityAddressEmailAddressesListFilter'
@@ -48793,18 +48783,6 @@ components:
             - $ref: '#/components/schemas/StringFilter'
           description: Search by lastName
       title: FacilityContactFilter
-      type: object
-    FacilityCustomAttributesSort:
-      properties:
-        searchTerms:
-          additionalProperties:
-            enum:
-              - ASC
-              - DESC
-          maxProperties: 1
-          minProperties: 1
-          type: object
-      title: FacilityCustomAttributesSort
       type: object
     FacilityLocationTypeEnumFilter:
       properties:
@@ -48872,9 +48850,14 @@ components:
             - $ref: '#/components/schemas/FacilityContactFilter'
           description: Nested search by contact
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         locationType:
           allOf:
             - $ref: '#/components/schemas/FacilityLocationTypeEnumFilter'
@@ -48947,7 +48930,10 @@ components:
     FacilitySort:
       properties:
         customAttributes:
-          $ref: '#/components/schemas/FacilityCustomAttributesSort'
+          additionalProperties: true
+          maxProperties: 1
+          minProperties: 1
+          type: object
         name:
           enum:
             - ASC
@@ -49772,18 +49758,6 @@ components:
         - receipts
       title: InboundProcess
       type: object
-    InboundProcessCustomAttributesSort:
-      properties:
-        searchTerms:
-          additionalProperties:
-            enum:
-              - ASC
-              - DESC
-          maxProperties: 1
-          minProperties: 1
-          type: object
-      title: InboundProcessCustomAttributesSort
-      type: object
     InboundProcessForCreation:
       properties:
         customAttributes:
@@ -49943,9 +49917,14 @@ components:
     InboundProcessPurchaseOrderFilter:
       properties:
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         id:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -50138,9 +50117,14 @@ components:
     InboundProcessPurchaseOrderRequestedItemsFilter:
       properties:
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         stockProperties:
           additionalProperties:
             anyOf:
@@ -50223,9 +50207,14 @@ components:
     InboundProcessReceiptsFilter:
       properties:
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         id:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -50349,9 +50338,14 @@ components:
             $ref: '#/components/schemas/InboundProcessSearchQuery'
           type: array
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         facilityRef:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -50393,7 +50387,10 @@ components:
     InboundProcessSort:
       properties:
         customAttributes:
-          $ref: '#/components/schemas/InboundProcessCustomAttributesSort'
+          additionalProperties: true
+          maxProperties: 1
+          minProperties: 1
+          type: object
         lastModified:
           enum:
             - ASC
@@ -51691,18 +51688,6 @@ components:
         - payload
       title: ListingBulkWebHookEvent
       type: object
-    ListingCustomAttributesSort:
-      properties:
-        searchTerms:
-          additionalProperties:
-            enum:
-              - ASC
-              - DESC
-          maxProperties: 1
-          minProperties: 1
-          type: object
-      title: ListingCustomAttributesSort
-      type: object
     ListingOutOfStockBehaviourEnumFilter:
       properties:
         eq:
@@ -51769,9 +51754,14 @@ components:
             - $ref: '#/components/schemas/DateFilter'
           description: Search by created
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         facilityRef:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -51817,7 +51807,10 @@ components:
     ListingSort:
       properties:
         customAttributes:
-          $ref: '#/components/schemas/ListingCustomAttributesSort'
+          additionalProperties: true
+          maxProperties: 1
+          minProperties: 1
+          type: object
         lastModified:
           enum:
             - ASC
@@ -51912,6 +51905,22 @@ components:
         deleteFromStockIfZero:
           type: boolean
       title: MoveStockToLocationOptions
+      type: object
+    NumberEqFilter:
+      properties:
+        eq:
+          type: number
+        gt:
+          type: number
+        gte:
+          type: number
+        lt:
+          type: number
+        lte:
+          type: number
+        notEq:
+          type: number
+      title: NumberEqFilter
       type: object
     NumberFilter:
       properties:
@@ -52217,9 +52226,14 @@ components:
             - $ref: '#/components/schemas/OrderConsumerFilter'
           description: Nested search by consumer
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         deliveryPreferences:
           allOf:
             - $ref: '#/components/schemas/OrderDeliveryPreferencesFilter'
@@ -54130,9 +54144,14 @@ components:
             - $ref: '#/components/schemas/StringFilter'
           description: Search by country
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         province:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -54453,18 +54472,6 @@ components:
           description: Search by conditions
       title: StockConditionEnumListFilter
       type: object
-    StockCustomAttributesSort:
-      properties:
-        searchTerms:
-          additionalProperties:
-            enum:
-              - ASC
-              - DESC
-          maxProperties: 1
-          minProperties: 1
-          type: object
-      title: StockCustomAttributesSort
-      type: object
     StockDeleteActionResult:
       properties:
         ids:
@@ -54783,9 +54790,14 @@ components:
             - $ref: '#/components/schemas/StockConditionEnumListFilter'
           description: Search by conditions
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         facilityRef:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -54839,7 +54851,10 @@ components:
     StockSort:
       properties:
         customAttributes:
-          $ref: '#/components/schemas/StockCustomAttributesSort'
+          additionalProperties: true
+          maxProperties: 1
+          minProperties: 1
+          type: object
         lastModified:
           enum:
             - ASC
@@ -55075,18 +55090,6 @@ components:
         - payload
       title: StorageLocationBulkWebHookEvent
       type: object
-    StorageLocationCustomAttributesSort:
-      properties:
-        searchTerms:
-          additionalProperties:
-            enum:
-              - ASC
-              - DESC
-          maxProperties: 1
-          minProperties: 1
-          type: object
-      title: StorageLocationCustomAttributesSort
-      type: object
     StorageLocationEventPayload:
       properties:
         created:
@@ -55241,9 +55244,14 @@ components:
             - $ref: '#/components/schemas/DateFilter'
           description: Search by created
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         facilityRef:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -55294,7 +55302,10 @@ components:
             - DESC
           type: string
         customAttributes:
-          $ref: '#/components/schemas/StorageLocationCustomAttributesSort'
+          additionalProperties: true
+          maxProperties: 1
+          minProperties: 1
+          type: object
         lastModified:
           enum:
             - ASC
@@ -55484,18 +55495,6 @@ components:
       type: string
       xml:
         name: StowJobActionName
-    StowJobCustomAttributesSort:
-      properties:
-        searchTerms:
-          additionalProperties:
-            enum:
-              - ASC
-              - DESC
-          maxProperties: 1
-          minProperties: 1
-          type: object
-      title: StowJobCustomAttributesSort
-      type: object
     StowJobForCreation:
       properties:
         customAttributes:
@@ -55619,9 +55618,14 @@ components:
             - $ref: '#/components/schemas/DateFilter'
           description: Search by created
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         facilityRef:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -55666,7 +55670,10 @@ components:
             - DESC
           type: string
         customAttributes:
-          $ref: '#/components/schemas/StowJobCustomAttributesSort'
+          additionalProperties: true
+          maxProperties: 1
+          minProperties: 1
+          type: object
         lastModified:
           enum:
             - ASC
@@ -56543,18 +56550,6 @@ components:
           description: Search by type
       title: UserAuthFilter
       type: object
-    UserCustomAttributesSort:
-      properties:
-        searchTerms:
-          additionalProperties:
-            enum:
-              - ASC
-              - DESC
-          maxProperties: 1
-          minProperties: 1
-          type: object
-      title: UserCustomAttributesSort
-      type: object
     UserCustomClaimsFilter:
       properties:
         roles:
@@ -56650,9 +56645,14 @@ components:
             - $ref: '#/components/schemas/UserAuthFilter'
           description: Nested search by auth
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         customClaims:
           allOf:
             - $ref: '#/components/schemas/UserCustomClaimsFilter'
@@ -56678,7 +56678,10 @@ components:
     UserSort:
       properties:
         customAttributes:
-          $ref: '#/components/schemas/UserCustomAttributesSort'
+          additionalProperties: true
+          maxProperties: 1
+          minProperties: 1
+          type: object
         firstname:
           enum:
             - ASC
@@ -56729,9 +56732,14 @@ components:
             $ref: '#/components/schemas/ZoneSearchQuery'
           type: array
         customAttributes:
-          allOf:
-            - $ref: '#/components/schemas/CustomAttributesFilter'
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
           description: Search by custom attributes
+          type: object
         facilityRef:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
