@@ -50519,6 +50519,8 @@ components:
         content:
           description: text content of the comment
           type: string
+        id:
+          type: string
         userRef:
           description: >-
             user that added the comment, is anonymized according to specified
@@ -50528,6 +50530,46 @@ components:
         - content
       title: InboundReceiptComment
       type: object
+    InboundReceiptCommentForCreation:
+      properties:
+        attachments:
+          description: attachments such as photos or documents
+          items:
+            $ref: '#/components/schemas/InboundAttachmentLink'
+          type: array
+        content:
+          description: text content of the comment
+          type: string
+        userRef:
+          description: >-
+            user that added the comment, is anonymized according to specified
+            rules
+          type: string
+      required:
+        - content
+      title: InboundReceiptCommentForCreation
+      type: object
+    InboundReceiptCommentForUpdate:
+      properties:
+        attachments:
+          description: attachments such as photos or documents
+          items:
+            $ref: '#/components/schemas/InboundAttachmentLink'
+          type: array
+        content:
+          description: text content of the comment
+          type: string
+        id:
+          type: string
+        userRef:
+          description: >-
+            user that added the comment, is anonymized according to specified
+            rules
+          type: string
+      required:
+        - content
+      title: InboundReceiptCommentForUpdate
+      type: object
     InboundReceiptForCreation:
       properties:
         asnRef:
@@ -50536,7 +50578,7 @@ components:
         comments:
           description: comments regarding the receipt itself
           items:
-            $ref: '#/components/schemas/InboundReceiptComment'
+            $ref: '#/components/schemas/InboundReceiptCommentForCreation'
           maxItems: 20
           type: array
         customAttributes:
@@ -50553,7 +50595,7 @@ components:
         receivedItems:
           description: list of item that arrived in the facility
           items:
-            $ref: '#/components/schemas/InboundReceiptLineItem'
+            $ref: '#/components/schemas/InboundReceiptLineItemForCreation'
           maxItems: 200
           type: array
         status:
@@ -50579,7 +50621,7 @@ components:
         comments:
           description: comments regarding the receipt itself
           items:
-            $ref: '#/components/schemas/InboundReceiptComment'
+            $ref: '#/components/schemas/InboundReceiptCommentForUpdate'
           maxItems: 20
           type: array
         customAttributes:
@@ -50596,7 +50638,7 @@ components:
         receivedItems:
           description: list of item that arrived in the facility
           items:
-            $ref: '#/components/schemas/InboundReceiptLineItem'
+            $ref: '#/components/schemas/InboundReceiptLineItemForUpdate'
           maxItems: 200
           type: array
         status:
@@ -50639,7 +50681,7 @@ components:
         receivedItems:
           description: list of item that arrived in the facility
           items:
-            $ref: '#/components/schemas/InboundReceiptLineItem'
+            $ref: '#/components/schemas/InboundReceiptLineItemForUpdate'
           maxItems: 200
           type: array
         status:
@@ -50736,6 +50778,8 @@ components:
             attach custom data from your systems to fulfillmenttools entities.
           nullable: true
           type: object
+        id:
+          type: string
         rejectedQuantity:
           allOf:
             - $ref: '#/components/schemas/Quantity'
@@ -50761,6 +50805,102 @@ components:
         - rejectedQuantity
         - comments
       title: InboundReceiptLineItem
+      type: object
+    InboundReceiptLineItemForCreation:
+      properties:
+        acceptedQuantity:
+          allOf:
+            - $ref: '#/components/schemas/Quantity'
+          description: >-
+            quantity of the stock that was accepted in this receipt. If its
+            larger than 0, Stock will be created when this receipt is FINISHED.
+        comments:
+          description: comments regarding the receival of this item
+          items:
+            $ref: '#/components/schemas/InboundReceiptCommentForCreation'
+          maxItems: 20
+          type: array
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        rejectedQuantity:
+          allOf:
+            - $ref: '#/components/schemas/Quantity'
+          description: >-
+            quantity of the stock that was rejected in this receipt. If it is
+            larger than 0, Stock will be created with condition "defective" when
+            this receipt is FINISHED.
+        stockProperties:
+          additionalProperties:
+            type: string
+          allOf:
+            - $ref: '#/components/schemas/StockPropertyPreset'
+          description: stock properties that will be set on the created stock
+        storageLocationRef:
+          description: storage location on which stock was placed
+          type: string
+        tenantArticleId:
+          description: tenantArticleId of the stock that was received
+          type: string
+      required:
+        - tenantArticleId
+        - acceptedQuantity
+        - rejectedQuantity
+        - comments
+      title: InboundReceiptLineItemForCreation
+      type: object
+    InboundReceiptLineItemForUpdate:
+      properties:
+        acceptedQuantity:
+          allOf:
+            - $ref: '#/components/schemas/Quantity'
+          description: >-
+            quantity of the stock that was accepted in this receipt. If its
+            larger than 0, Stock will be created when this receipt is FINISHED.
+        comments:
+          description: comments regarding the receival of this item
+          items:
+            $ref: '#/components/schemas/InboundReceiptCommentForUpdate'
+          maxItems: 20
+          type: array
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        id:
+          type: string
+        rejectedQuantity:
+          allOf:
+            - $ref: '#/components/schemas/Quantity'
+          description: >-
+            quantity of the stock that was rejected in this receipt. If it is
+            larger than 0, Stock will be created with condition "defective" when
+            this receipt is FINISHED.
+        stockProperties:
+          additionalProperties:
+            type: string
+          allOf:
+            - $ref: '#/components/schemas/StockPropertyPreset'
+          description: stock properties that will be set on the created stock
+        storageLocationRef:
+          description: storage location on which stock was placed
+          type: string
+        tenantArticleId:
+          description: tenantArticleId of the stock that was received
+          type: string
+      required:
+        - tenantArticleId
+        - acceptedQuantity
+        - rejectedQuantity
+        - comments
+      title: InboundReceiptLineItemForUpdate
       type: object
     InputRequestedDate:
       properties:
@@ -53451,7 +53591,7 @@ components:
         comments:
           description: comments regarding the receipt itself
           items:
-            $ref: '#/components/schemas/InboundReceiptComment'
+            $ref: '#/components/schemas/InboundReceiptCommentForCreation'
           maxItems: 20
           type: array
         customAttributes:
@@ -53470,7 +53610,7 @@ components:
         receivedItems:
           description: list of item that arrived in the facility
           items:
-            $ref: '#/components/schemas/InboundReceiptLineItem'
+            $ref: '#/components/schemas/InboundReceiptLineItemForCreation'
           maxItems: 200
           type: array
         status:
