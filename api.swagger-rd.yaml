@@ -41447,6 +41447,10 @@ components:
           type: string
           description: Id of the customService this ServiceJob was created from.
           example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        tenantCustomServiceId:
+          type: string
+          description: Tenant Id of the customService this ServiceJob was created from.
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
         linkedServiceJobsRef:
           type: string
           description: ID of the Linked Service Job, the Service Job should reference.
@@ -41483,7 +41487,15 @@ components:
           type: string
         customServiceRef:
           type: string
-          description: ID of the Custom Service, the Service Job should reference.
+          description: >-
+            ID of the Custom Service, the Service Job should reference. Either
+            this and/or the tenantCustomServiceId must passed.
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        tenantCustomServiceId:
+          type: string
+          description: >-
+            Tenant ID of the Custom Service, the Service Job should reference.
+            Either this and/or the customServiceRef must passed.
           example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
         processRef:
           type: string
@@ -41531,7 +41543,6 @@ components:
               - $ref: '#/components/schemas/AssignedUserForCreationById'
           description: Assigned users for this entity
       required:
-        - customServiceRef
         - facilityRef
         - targetTime
     ServiceJobWithSearchPaths:
