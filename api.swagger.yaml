@@ -47296,6 +47296,28 @@ components:
             How many minutes before a time triggered reroute a notification
             should be sent. Should be smaller than rerouteAfterMinutes
           minimum: 1
+        rerouteStartedJobs:
+          $ref: '#/components/schemas/RerouteStartedJobsConfiguration'
+    RerouteStartedJobsConfiguration:
+      properties:
+        active:
+          type: boolean
+          description: >-
+            If true, the reroute will be executed for jobs that are already
+            started.
+          example: true
+          default: false
+        minimumStartedTimeInMinutes:
+          type: number
+          example: '60'
+          description: >-
+            The minimum time in minutes that a job must be in a started status
+            (eg. PAUSED, IN_PROGRESS) before it should be rerouted. This is to
+            ensure that jobs are not rerouted too quickly after they have last
+            been modified. Minimum value is 60 minutes.
+          minimum: 60
+      required:
+        - active
     CancelationReasonForCreation:
       allOf:
         - $ref: '#/components/schemas/AbstractReasonForCreation'
