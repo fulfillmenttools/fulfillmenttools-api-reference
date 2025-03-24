@@ -14249,81 +14249,6 @@ paths:
           </i><br /><br />
       operationId: updateExpiry
       summary: Update Expiry
-  /api/audits:
-    get:
-      parameters:
-        - in: query
-          name: entityRef
-          required: false
-          schema:
-            type: string
-        - in: query
-          name: entityType
-          required: false
-          schema:
-            type: string
-        - in: query
-          name: trace
-          required: false
-          schema:
-            type: string
-        - in: query
-          name: size
-          required: false
-          schema:
-            default: 25
-            maximum: 100
-            minimum: 1
-            type: number
-        - in: query
-          name: startAfterId
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Audits'
-          description: config found.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Entity not found
-      tags:
-        - Core - Audit
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      operationId: getAudits
-      summary: Get the audits for the given filter
   /api/externalactions:
     get:
       parameters:
@@ -26118,6 +26043,86 @@ paths:
       summary: Replace an existing Allocation under a group
       tags:
         - Inventory Management - Channel Availability
+  /api/audits:
+    get:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getAudits
+      parameters:
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: number
+        - in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: entityRef
+          required: false
+          schema:
+            type: string
+        - explode: false
+          in: query
+          name: entityType
+          required: false
+          schema:
+            enum:
+              - PACK_JOB
+              - PICK_JOB
+              - PICK_RUN
+              - HANDOVER_JOB
+              - SHIPMENT
+              - PARCEL
+              - CUSTOM_SERVICE
+              - SERVICE_JOB
+              - LINKED_SERVICE_JOBS
+              - ORDER
+              - ROUTINGPLAN
+              - FACILITY
+              - FACILITY_CARRIER_CONNECTION
+              - FACILITY_CUSTOM_SERVICES
+              - ROUTING_STRATEGY
+              - STOW_JOB
+            type: string
+        - in: query
+          name: trace
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditsResult'
+          description: Paginated result containing the matching Audit entities
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Get multiple Audits
+      tags:
+        - Core - Audit
   /graphql:
     get:
       responses:
@@ -39976,108 +39981,6 @@ components:
         - ACTIVE
         - INACTIVE
       type: string
-    Audits:
-      properties:
-        audits:
-          items:
-            $ref: '#/components/schemas/Audit'
-          type: array
-        total:
-          description: Total number of found audits for this query
-          example: 42
-          type: integer
-      required:
-        - audits
-        - total
-      type: object
-    Audit:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-        - properties:
-            id:
-              type: string
-            eventId:
-              type: string
-            entityRef:
-              type: string
-            entityType:
-              type: string
-            entityVersion:
-              type: number
-            isAnonymized:
-              type: boolean
-            entityCreated:
-              type: string
-              format: date-time
-            deletionDate:
-              type: string
-              format: date-time
-            anonymizationDate:
-              type: string
-              format: date-time
-            trace:
-              type: string
-            actor:
-              $ref: '#/components/schemas/AuditActor'
-            globalActor:
-              $ref: '#/components/schemas/AuditActor'
-            client:
-              $ref: '#/components/schemas/AuditClient'
-            operation:
-              $ref: '#/components/schemas/AuditOperation'
-      required:
-        - entityRef
-        - entityVersion
-        - isAnonymized
-        - anonymizationDate
-        - deletionDate
-        - entityCreated
-        - entityType
-        - actor
-        - client
-        - operation
-        - trace
-        - eventId
-        - id
-      type: object
-    AuditActor:
-      properties:
-        id:
-          type: string
-        details:
-          $ref: '#/components/schemas/AuditActorDetails'
-      required:
-        - id
-        - details
-      type: object
-    AuditActorDetails:
-      properties:
-        topic:
-          type: string
-        username:
-          type: string
-      type: object
-    AuditClient:
-      properties:
-        api:
-          type: string
-        rawInfo:
-          type: string
-      required:
-        - api
-        - rawInfo
-      type: object
-    AuditOperation:
-      properties:
-        name:
-          type: string
-        start:
-          format: date-time
-          type: string
-      required:
-        - start
-        - name
-      type: object
     StorageLocationForCreation:
       allOf:
         - $ref: '#/components/schemas/CustomAttributesResource'
@@ -57987,6 +57890,146 @@ components:
         - total
         - channels
       title: AvailabilityChannelPaginatedResult
+      type: object
+    Audit:
+      properties:
+        actor:
+          $ref: '#/components/schemas/AuditActor'
+        anonymizationDate:
+          format: date-time
+          type: string
+        client:
+          $ref: '#/components/schemas/AuditClient'
+        created:
+          description: Creation date of the entity, auto-generated if not provided
+          format: date-time
+          type: string
+        deletionDate:
+          format: date-time
+          type: string
+        entityCreated:
+          format: date-time
+          type: string
+        entityRef:
+          type: string
+        entityType:
+          enum:
+            - PACK_JOB
+            - PICK_JOB
+            - PICK_RUN
+            - HANDOVER_JOB
+            - SHIPMENT
+            - PARCEL
+            - CUSTOM_SERVICE
+            - SERVICE_JOB
+            - LINKED_SERVICE_JOBS
+            - ORDER
+            - ROUTINGPLAN
+            - FACILITY
+            - FACILITY_CARRIER_CONNECTION
+            - FACILITY_CUSTOM_SERVICES
+            - ROUTING_STRATEGY
+            - STOW_JOB
+          type: string
+        entityVersion:
+          type: number
+        eventId:
+          type: string
+        globalActor:
+          $ref: '#/components/schemas/AuditActor'
+        id:
+          type: string
+        isAnonymized:
+          type: boolean
+        lastModified:
+          description: Service-generated last modification date of the entity
+          format: date-time
+          type: string
+        operation:
+          $ref: '#/components/schemas/AuditOperation'
+        trace:
+          type: string
+        version:
+          description: The version of the entity, used for optimistic locking mechanisms
+          type: number
+      required:
+        - id
+        - eventId
+        - entityRef
+        - entityType
+        - entityVersion
+        - isAnonymized
+        - entityCreated
+        - deletionDate
+        - anonymizationDate
+        - trace
+        - actor
+        - globalActor
+        - client
+        - operation
+        - version
+      title: Audit
+      type: object
+    AuditActor:
+      properties:
+        details:
+          $ref: '#/components/schemas/AuditActorDetails'
+        id:
+          type: string
+      required:
+        - id
+        - details
+      title: AuditActor
+      type: object
+    AuditActorDetails:
+      properties:
+        topic:
+          type: string
+        username:
+          type: string
+      required:
+        - topic
+        - username
+      title: AuditActorDetails
+      type: object
+    AuditClient:
+      properties:
+        api:
+          type: string
+        rawInfo:
+          type: string
+      required:
+        - api
+        - rawInfo
+      title: AuditClient
+      type: object
+    AuditOperation:
+      properties:
+        name:
+          type: string
+        start:
+          format: date-time
+          type: string
+      required:
+        - name
+        - start
+      title: AuditOperation
+      type: object
+    AuditsResult:
+      properties:
+        audits:
+          description: The audits that match the filter criteria
+          items:
+            $ref: '#/components/schemas/Audit'
+          type: array
+        total:
+          description: The total number of audits that match the filter criteria
+          minimum: 0
+          type: number
+      required:
+        - audits
+        - total
+      title: AuditsResult
       type: object
 tags:
   - description: >-
