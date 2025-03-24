@@ -32648,6 +32648,8 @@ components:
         - $ref: '#/components/schemas/PickJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/PickJobPauseActionParameter'
         - $ref: '#/components/schemas/PickJobSplitLineItemsActionParameter'
+        - $ref: >-
+            #/components/schemas/PickJobUpdateRecordableAttributesActionParameter
     PackJobReplaceAssignedUsersActionParameter:
       additionalProperties: false
       title: PackJobReplaceAssignedUsersActionParameter
@@ -32931,6 +32933,31 @@ components:
         - quantity
         - picked
       type: object
+    PickJobUpdateRecordableAttributesActionParameter:
+      title: PickJobUpdateRecordableAttributesActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobUpdateRecordableAttributesActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        recordableAttributeUpdates:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForUpdate'
+          type: array
+      required:
+        - name
+        - version
+        - recordableAttributeUpdates
+      type: object
+    PickJobUpdateRecordableAttributesActionEnum:
+      enum:
+        - UPDATE_RECORDABLE_ATTRIBUTES_PICK_JOB
+      type: string
     PackingTargetContainerActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/UpdatePackingTargetContainerLineItemAction'
@@ -43328,6 +43355,39 @@ components:
         - keyLocalized
         - recordingRule
       title: RecordableAttributeForCreation
+      type: object
+    RecordableAttributeForUpdate:
+      additionalProperties: false
+      properties:
+        group:
+          description: The group of the attribute to set
+          example: general
+          minLength: 1
+          nullable: true
+          type: string
+        id:
+          description: id of the recordable attribute to update
+          example: 17ebfdfb-e1b4-4913-9962-3aef2b49f16f
+          type: string
+        keyLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: The translations of the key
+        recordingRule:
+          description: Indicates whether the value has to be recorded or not
+          enum:
+            - OPTIONAL
+            - MANDATORY
+          example: MANDATORY
+          type: string
+        value:
+          description: The value of the attribute to set
+          example: Germany
+          nullable: true
+          type: string
+      required:
+        - id
+      title: RecordableAttributeForUpdate
       type: object
     BaseDecisionDetail:
       properties:
