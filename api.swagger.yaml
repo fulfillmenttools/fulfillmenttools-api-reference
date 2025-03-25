@@ -55418,13 +55418,27 @@ components:
         - stockCount
       title: StorageLocationRecommendation
       type: object
-    StorageLocationReferenceFilter:
+    StorageLocationReferencedFilter:
       properties:
         stock:
           allOf:
-            - $ref: '#/components/schemas/StorageLocationStockFilter'
-          description: The referenced entity
-      title: StorageLocationReferenceFilter
+            - $ref: '#/components/schemas/StorageLocationReferencedStockFilter'
+          description: Nested search by stock
+      title: StorageLocationReferencedFilter
+      type: object
+    StorageLocationReferencedStockFilter:
+      properties:
+        hasStocks:
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Whether the storage locations has any stocks on it.
+        sumOfValues:
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: >-
+            The sum of all stock values in this storage location, i.e. how much
+            stock is stored in this location.
+      title: StorageLocationReferencedStockFilter
       type: object
     StorageLocationSearchPayload:
       properties:
@@ -55489,8 +55503,8 @@ components:
           type: array
         referenced:
           allOf:
-            - $ref: '#/components/schemas/StorageLocationReferenceFilter'
-          description: References to other entities
+            - $ref: '#/components/schemas/StorageLocationReferencedFilter'
+          description: Nested search by referenced
         scannableCodes:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
@@ -55546,20 +55560,6 @@ components:
             - DESC
           type: string
       title: StorageLocationSort
-      type: object
-    StorageLocationStockFilter:
-      properties:
-        hasStocks:
-          allOf:
-            - $ref: '#/components/schemas/BooleanFilter'
-          description: Whether the storage locations has any stocks on it.
-        sumOfValues:
-          allOf:
-            - $ref: '#/components/schemas/NumberFilter'
-          description: >-
-            The sum of all stock values in this storage location, i.e. how much
-            stock is stored in this location.
-      title: StorageLocationStockFilter
       type: object
     StorageLocationTraitConfigEntry:
       properties:
