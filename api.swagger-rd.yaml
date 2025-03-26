@@ -24081,6 +24081,7 @@ paths:
                 - $ref: '#/components/schemas/ReopenStowJobAction'
                 - $ref: '#/components/schemas/CloseStowJobAction'
                 - $ref: '#/components/schemas/ModifyStowLineItemsAction'
+                - $ref: '#/components/schemas/StowJobReplaceAssignedUsersAction'
         required: true
       responses:
         '200':
@@ -55064,6 +55065,12 @@ components:
       type: object
     StowJob:
       properties:
+        assignedUsers:
+          description: The users that are assigned to the stow job
+          items:
+            $ref: '#/components/schemas/AssignedUser'
+          maxItems: 20
+          type: array
         created:
           description: Creation date of the entity, auto-generated if not provided
           format: date-time
@@ -55133,11 +55140,21 @@ components:
         - CANCEL_STOW_JOB
         - CLOSE_STOW_JOB
         - MODIFY_STOW_LINE_ITEMS
+        - REPLACE_ASSIGNED_USERS
       type: string
       xml:
         name: StowJobActionName
     StowJobForCreation:
       properties:
+        assignedUsers:
+          description: The users that are assigned to the stow job
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUser'
+          maxItems: 20
+          type: array
         customAttributes:
           description: >-
             Attributes that can be added to this entity. These attributes
@@ -55184,6 +55201,15 @@ components:
       type: object
     StowJobForPatch:
       properties:
+        assignedUsers:
+          description: The users that are assigned to the stow job
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUser'
+          maxItems: 20
+          type: array
         customAttributes:
           description: >-
             Attributes that can be added to this entity. These attributes
@@ -55221,6 +55247,32 @@ components:
       required:
         - stowJobs
       title: StowJobPaginatedResult
+      type: object
+    StowJobReplaceAssignedUsersAction:
+      description: REPLACE_ASSIGNED_USERS replaces the assigned users of the stow job
+      properties:
+        assignedUsers:
+          description: The users are assigned to the stow job
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/AssignedUserForCreationById'
+              - $ref: '#/components/schemas/AssignedUserForCreationByName'
+              - $ref: '#/components/schemas/AssignedUser'
+          maxItems: 20
+          type: array
+        name:
+          description: The name of the action that should be performed
+          enum:
+            - REPLACE_ASSIGNED_USERS
+          type: string
+        version:
+          description: The current version of the stow job that should be modified
+          type: number
+      required:
+        - version
+        - name
+        - assignedUsers
+      title: StowJobReplaceAssignedUsersAction
       type: object
     StowJobSearchPayload:
       properties:
