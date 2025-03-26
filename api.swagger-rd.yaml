@@ -55227,7 +55227,7 @@ components:
         options:
           $ref: '#/components/schemas/SearchOptions'
         query:
-          $ref: '#/components/schemas/StowJobSearchQuery'
+          $ref: '#/components/schemas/StowJobSearchQueryWrapper'
         size:
           default: 20
           description: Number of items to return.
@@ -55299,9 +55299,62 @@ components:
           allOf:
             - $ref: '#/components/schemas/DateFilter'
           description: Search by targetTime
+      title: StowJobSearchQuery
+      type: object
+    StowJobSearchQueryWrapper:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/StowJobSearchQuery'
+          type: array
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
+        customAttributes:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
+          description: Search by custom attributes
+          type: object
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        or:
+          items:
+            $ref: '#/components/schemas/StowJobSearchQuery'
+          type: array
+        priority:
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: Search by priority
+        shortId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by shortId
+        status:
+          allOf:
+            - $ref: '#/components/schemas/StowJobStatusTypeEnumFilter'
+          description: Search by status
+        stowLineItems:
+          allOf:
+            - $ref: '#/components/schemas/StowJobStowLineItemsListFilter'
+          description: Nested list search by stowLineItems
+        targetTime:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
       required:
         - created
-      title: StowJobSearchQuery
+      title: StowJobSearchQueryWrapper
       type: object
     StowJobSort:
       properties:
