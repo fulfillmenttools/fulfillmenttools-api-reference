@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e49f11fc-6194-4e6b-a899-2d101a7e4b61",
+		"_postman_id": "9d9a29cd-ee1e-4c8d-9698-65c2b1cefc9f",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -5383,7 +5383,7 @@
 							},
 							"response": []
 						},
-            {
+						{
 							"name": "Update Order",
 							"request": {
 								"method": "PATCH",
@@ -18135,6 +18135,34 @@
 											"key": ":serviceJobLinkId",
 											"value": "PUT-IN-YOUR-ID"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search Linked Service Jobs",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"query\": {\n        \"status\": {\n            \"eq\": \"OPEN\"\n        },\n        \"consumerName\": {\n            \"like\": \"name\"\n        },\n        \"articleTitles\": {\n            \"in\": [\"title\", \"otherTitle\"]\n        }\n    },\n    \"sort\": {\n        \"created\": \"ASC\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/linkedservicejobs/search",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"linkedservicejobs",
+										"search"
 									]
 								}
 							},
