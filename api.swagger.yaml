@@ -19273,6 +19273,58 @@ paths:
       description: ''
       operationId: getOrder
       summary: Get a order with the given ID
+    patch:
+      parameters:
+        - description: ID of Order you want to patch
+          in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: >-
+            Order was found & patch-set has been applied. The patched entity is
+            in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found, for more information please look at details.
+      tags:
+        - DOMS - Orders
+      description: ''
+      operationId: updateOrder
+      summary: Update an order by the given ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderForUpdate'
+        description: Request body for updating an order
+        required: true
   /api/orders/{orderId}/actions:
     post:
       requestBody:
@@ -43332,6 +43384,28 @@ components:
       type: object
       xml:
         name: Order
+    OrderForUpdate:
+      additionalProperties: false
+      properties:
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+        customAttributes:
+          description: >-
+            Attributes that can be added to the order. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
+          type: object
+          nullable: true
+      type: object
+      required:
+        - version
+      xml:
+        name: OrderForUpdate
     OrderPromisesOptions:
       additionalProperties: false
       required:
