@@ -42030,6 +42030,31 @@ components:
         - lineItemId
         - quantity
       type: object
+    ServiceJobUpdateRecordableAttributesActionParameter:
+      title: ServiceJobUpdateRecordableAttributesActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ServiceJobUpdateRecordableAttributesActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        recordableAttributeUpdates:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForUpdate'
+          type: array
+      required:
+        - name
+        - version
+        - recordableAttributeUpdates
+      type: object
+    ServiceJobUpdateRecordableAttributesActionEnum:
+      enum:
+        - UPDATE_RECORDABLE_ATTRIBUTES_SERVICE_JOB
+      type: string
     ServiceJobFinishedActionEnum:
       enum:
         - FinishServiceJob
@@ -42068,6 +42093,8 @@ components:
         - $ref: '#/components/schemas/ServiceJobOpenActionParameter'
         - $ref: '#/components/schemas/ServiceJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/ServiceJobSplitLineItemsActionParameter'
+        - $ref: >-
+            #/components/schemas/ServiceJobUpdateRecordableAttributesActionParameter
     FacilityCustomServiceConnectionStatus:
       type: string
       enum:
