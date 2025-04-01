@@ -47618,6 +47618,20 @@ components:
         - point
       title: ArticleStockForecast
       type: object
+    AssignedRoles:
+      properties:
+        contextLimitations:
+          description: The context limitations of the assigned role
+          items:
+            $ref: '#/components/schemas/ContextLimitation'
+          type: array
+        ref:
+          description: The id of the assigned role
+          type: string
+      required:
+        - ref
+      title: AssignedRoles
+      type: object
     AuthenticationProvider:
       properties:
         id:
@@ -47722,6 +47736,22 @@ components:
         - version
         - name
       title: CloseStowJobAction
+      type: object
+    ContextLimitation:
+      properties:
+        type:
+          description: The type of the context limitation
+          enum:
+            - FACILITY
+            - ZONE
+          type: string
+        values:
+          description: The values of the context limitation
+          type: array
+      required:
+        - type
+        - values
+      title: ContextLimitation
       type: object
     CustomClaims:
       properties:
@@ -55955,6 +55985,11 @@ components:
         assignedFacilities:
           description: The assigned facilities of the user
           type: array
+        assignedRoles:
+          description: The assigned roles of a user
+          items:
+            $ref: '#/components/schemas/AssignedRoles'
+          type: array
         authenticationProvider:
           allOf:
             - $ref: '#/components/schemas/AuthenticationProvider'
@@ -56001,6 +56036,7 @@ components:
         - id
         - authenticationProvider
         - version
+        - assignedRoles
       title: User
       type: object
     UserAssignedFacilitiesFilter:
