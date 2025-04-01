@@ -5758,6 +5758,57 @@ paths:
         description: Patch set
         required: true
       summary: Patches a parcel with the given ID
+  /api/parcels/{parcelId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelActionsParameter'
+      parameters:
+        - description: Reference to the parcel you want to call an action for
+          in: path
+          name: parcelId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+          description: Updated Parcel in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Shipments
+      operationId: parcelAction
+      summary: Call a single action on a given parcel
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
   /api/parcels/{parcelId}/labels/{labelDocument}:
     get:
       parameters:
@@ -8412,6 +8463,57 @@ paths:
         description: Patch set
         required: true
       summary: Patches a shipment with the given ID
+  /api/shipments/{shipmentId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentActionsParameter'
+      parameters:
+        - description: Reference to the shipment you want to call an action for
+          in: path
+          name: shipmentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shipment'
+          description: Updated Shipment in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Fulfillment Operations - Shipments
+      operationId: shipmentActions
+      summary: Call a single action on a given shipment
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
   /api/shipments/{shipmentId}/deliverynote:
     get:
       parameters:
@@ -32638,6 +32740,49 @@ components:
           type: object
       xml:
         name: FinishPickRunAction
+    ParcelActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/ParcelSplitItemsActionParameter'
+    ParcelSplitItemsActionParameter:
+      title: ParcelSplitItemsActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ParcelSplitItemsActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        splitItemsInfo:
+          items:
+            $ref: '#/components/schemas/ParcelSplitItemsInfo'
+          type: array
+      required:
+        - name
+        - version
+        - splitItemsInfo
+      type: object
+    ParcelSplitItemsActionEnum:
+      enum:
+        - SPLIT_LINES_PARCEL
+      type: string
+    ParcelSplitItemsInfo:
+      additionalProperties: false
+      properties:
+        itemId:
+          type: string
+          description: references the id of the item of a parcel
+        quantity:
+          description: quantity of the specific item that has been ordered
+          example: 21
+          minimum: 1
+          type: integer
+      required:
+        - itemId
+        - quantity
+      type: object
     PickJobActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/PickJobAbortActionParameter'
@@ -34944,6 +35089,49 @@ components:
         - CANCELED
         - OBSOLETE
       type: string
+    ShipmentActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/ShipmentSplitLineItemsActionParameter'
+    ShipmentSplitLineItemsActionParameter:
+      title: ShipmentSplitLineItemsActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ShipmentSplitLineItemsActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        splitLineItemsInfo:
+          items:
+            $ref: '#/components/schemas/ShipmentSplitLineItemsInfo'
+          type: array
+      required:
+        - name
+        - version
+        - splitLineItemsInfo
+      type: object
+    ShipmentSplitLineItemsActionEnum:
+      enum:
+        - SPLIT_LINE_LINES_SHIPMENT
+      type: string
+    ShipmentSplitLineItemsInfo:
+      additionalProperties: false
+      properties:
+        lineItemId:
+          type: string
+          description: references the id of the item of a shipment
+        quantity:
+          description: quantity of the specific item that has been shipped
+          example: 21
+          minimum: 1
+          type: integer
+      required:
+        - lineItemId
+        - quantity
+      type: object
     Status:
       additionalProperties: false
       properties:
