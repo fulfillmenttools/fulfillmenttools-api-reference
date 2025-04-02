@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9d9a29cd-ee1e-4c8d-9698-65c2b1cefc9f",
+		"_postman_id": "9eeea051-217c-4367-b2e5-bc11d84c653e",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -12989,6 +12989,35 @@
 										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/PickJobs/getPickJob"
 									},
 									"response": []
+								},
+								{
+									"name": "Search PickJobs",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"query\": {\n        \"id\": {\n            \"eq\": \"pickJobRef\"\n        },\n        \"tenantOrderId\": {\n            \"eq\": \"tenantOrderId\"\n        },\n        \"tenantArticleIds\": {\n            \"contains\": \"tenantArticleId\"\n        },\n        \"consumerName\": {\n            \"like\": \"consu\"\n        },\n        \"transfers\": {\n            \"contains\": {\n                \"id\": {\n                    \"eq\": \"transferId\"\n                }\n            }\n        }\n    },\n    \"sort\": [\n        {\n            \"targetTime\": \"ASC\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/pickjobs/search",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"pickjobs",
+												"search"
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/PickJobs/getPickJob"
+									},
+									"response": []
 								}
 							],
 							"description": "You can find the API Documentation of pick jobs here: https://fulfillmenttools.github.io/api-reference-ui/#/PickJobs"
@@ -18740,6 +18769,76 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Change Line Items to Not Returnable Line Items",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"CHANGE_LINE_ITEMS_TO_NOT_RETURNABLE_IN_ITEM_RETURN_JOB\",\n  \"version\": 1,\n  \"lineItemIds\": [\"itemReturnJobLineItemId\"]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"itemreturnjobs",
+												":itemReturnJobId",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "itemReturnJobId",
+													"value": "PUT-IN-YOUR-ITEM-RETURN-JOB-ID"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Change Line Items to Returnable Line Items",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"CHANGE_LINE_ITEMS_TO_RETURNABLE_IN_ITEM_RETURN_JOB\",\n  \"version\": 1,\n  \"lineItemIds\": [\"itemReturnJobLineItemId\"]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/itemreturnjobs/:itemReturnJobId/actions",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"itemreturnjobs",
+												":itemReturnJobId",
+												"actions"
+											],
+											"variable": [
+												{
+													"key": "itemReturnJobId",
+													"value": "PUT-IN-YOUR-ITEM-RETURN-JOB-ID"
+												}
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -18846,7 +18945,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"processRef\": \"ADD-PROCESS-OR-REMOVE\",\n  \"originFacilityRefs\": [\n    \"ADD-FACILITY-ID\"\n  ],\n  \"status\": \"OPEN\",\n  \"tenantReceiptId\": \"OptionalTenantReceiptId\",\n  \"consumerAddresses\": [\n    {\n      \"companyName\": \"Company\",\n      \"firstName\": \"Jane\",\n      \"lastName\": \"Doe\",\n      \"city\": \"Cologne\",\n      \"country\": \"DE\",\n      \"houseNumber\": \"10\",\n      \"postalCode\": \"50667\",\n      \"street\": \"Some Str.\",\n      \"salutation\": \"Ms\",\n      \"email\": \"some@mail.com\",\n      \"addressType\": \"POSTAL_ADDRESS\"\n    }\n  ],\n  \"scannableCodes\": [\n    \"SomeCode\",\n    \"SecondCode\"\n  ],\n  \"returnableLineItems\": [\n    {\n      \"article\": {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"title\": \"SomeTitel\",\n        \"weight\": 12.50,\n        \"imageUrl\": \"SomeUrl\",\n        \"customAttributes\": {\n          \"not\": \"validated\",\n          \"free\": \"jsonBlob\"\n        }\n      },\n      \"delivered\": 5,\n      \"scannableCodes\": [\n        \"LineItemCode1\", \n        \"LineItemCode2\"\n      ]\n    }\n  ]\n}",
+									"raw": "{\n  \"processRef\": \"ADD-PROCESS-OR-REMOVE\",\n  \"originFacilityRefs\": [\n    \"ADD-FACILITY-ID\"\n  ],\n  \"status\": \"OPEN\",\n  \"tenantReceiptId\": \"OptionalTenantReceiptId\",\n  \"consumerAddresses\": [\n    {\n      \"companyName\": \"Company\",\n      \"firstName\": \"Jane\",\n      \"lastName\": \"Doe\",\n      \"city\": \"Cologne\",\n      \"country\": \"DE\",\n      \"houseNumber\": \"10\",\n      \"postalCode\": \"50667\",\n      \"street\": \"Some Str.\",\n      \"salutation\": \"Ms\",\n      \"email\": \"some@mail.com\",\n      \"addressType\": \"POSTAL_ADDRESS\"\n    }\n  ],\n  \"scannableCodes\": [\n    \"SomeCode\",\n    \"SecondCode\"\n  ],\n  \"returnableLineItems\": [\n    {\n      \"article\": {\n        \"tenantArticleId\": \"93f32dd8-99a8-4f61-899b-2b9924485609\",\n        \"title\": \"SomeTitel\",\n        \"weight\": 12.50,\n        \"imageUrl\": \"SomeUrl\",\n        \"customAttributes\": {\n          \"not\": \"validated\",\n          \"free\": \"jsonBlob\"\n        }\n      },\n      \"delivered\": 5,\n      \"scannableCodes\": [\n        \"LineItemCode1\", \n        \"LineItemCode2\"\n      ],\n      \"recordableAttributes\": [\n        {\n            \"keyLocalized\": {\n                \"de_DE\": \"Seriennummer\",\n                \"en_US\": \"Serialnumber\"\n            },\n            \"value\": \"100\",\n            \"group\": \"group\",\n            \"recordingRule\": \"MANDATORY\"\n        }\n      ]\n    }\n  ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
