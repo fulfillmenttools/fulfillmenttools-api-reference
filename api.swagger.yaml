@@ -3084,7 +3084,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManagedFacility'
+                anyOf:
+                  - $ref: '#/components/schemas/ManagedFacility'
+                  - $ref: '#/components/schemas/Supplier'
           description: >-
             Facility was found & patch-set has been applied. The patched
             facility is in the body.
@@ -3126,7 +3128,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FacilityPatchActions'
+              anyOf:
+                - $ref: '#/components/schemas/FacilityPatchActions'
+                - $ref: '#/components/schemas/ManagedFacilityForModification'
+                - $ref: '#/components/schemas/SupplierForModification'
         description: Patch set
         required: true
       summary: Patches a facility with the given ID
@@ -28456,6 +28461,10 @@ components:
           description: >-
             Indicates that configured capacity limits for picking times are
             considered
+        configs:
+          items:
+            $ref: '#/components/schemas/LinkedConfiguration'
+          type: array
       discriminator:
         propertyName: type
       required:
@@ -28658,6 +28667,13 @@ components:
         - SHIP_FROM_STORE
         - PICKUP
     FacilityPatchActions:
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+        <br /> <i>This endpoint is deprecated and has been replaced.</i><br
+        /><br />Deprecated; works only on managed facilities. Prefer to use
+        ManagedFacilityForModification / SupplierForModification for full
+        compatibility.
       properties:
         actions:
           items:
@@ -38252,6 +38268,155 @@ components:
           type: object
       xml:
         name: ModifyPackingContainerType
+    NullableEntity:
+      nullable: true
+    SupplierForModification:
+      additionalProperties: false
+      properties:
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+        name:
+          example: Hamburg NW2
+          type: string
+        address:
+          type: object
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddressForCreation'
+        status:
+          $ref: '#/components/schemas/FacilityStatus'
+        tenantFacilityId:
+          description: The id of the facility in the tenants own system
+          example: K12345
+          type: string
+          nullable: true
+        tags:
+          type: array
+          nullable: true
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the facility. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+          nullable: true
+        type:
+          $ref: '#/components/schemas/FacilityType'
+      required:
+        - type
+        - version
+      type: object
+    ManagedFacilityForModification:
+      additionalProperties: false
+      properties:
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+        name:
+          example: Hamburg NW2
+          type: string
+        status:
+          $ref: '#/components/schemas/FacilityStatus'
+        tenantFacilityId:
+          description: The id of the facility in the tenants own system
+          example: K12345
+          type: string
+          nullable: true
+        tags:
+          type: array
+          nullable: true
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TagReference'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the facility. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+          nullable: true
+        type:
+          $ref: '#/components/schemas/FacilityType'
+        address:
+          $ref: '#/components/schemas/FacilityAddressForCreation'
+        closingDays:
+          description: >-
+            Days of the year where the facility is closed and doesn't allows
+            picking
+          items:
+            $ref: '#/components/schemas/ClosingDay'
+          type: array
+          nullable: true
+        contact:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/FacilityContact'
+          type: object
+        fulfillmentProcessBuffer:
+          description: Duration in minutes until an order is processed
+          example: '240'
+          minimum: 0
+          type: integer
+          nullable: true
+        locationType:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/FacilityLocationType'
+        capacityPlanningTimeframe:
+          description: >-
+            The range in days per facility which defines how many days in the
+            future the capacity of the facility can be planned
+          type: integer
+          nullable: true
+          minimum: 1
+        pickingTimes:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/PickingTimes'
+        pickingMethods:
+          description: Picking Methods supported by this facility.
+          items:
+            $ref: '#/components/schemas/PickingMethodEnum'
+          type: array
+          nullable: true
+        scanningRule:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ScanningRuleConfiguration'
+        services:
+          items:
+            $ref: '#/components/schemas/FacilityService'
+          type: array
+          nullable: true
+        capacityEnabled:
+          type: boolean
+          nullable: true
+          description: >-
+            Indicates that configured capacity limits for picking times are
+            considered
+        configs:
+          nullable: true
+          items:
+            $ref: '#/components/schemas/LinkedConfiguration'
+          type: array
+      required:
+        - type
+        - version
+      type: object
+      xml:
+        name: ManagedFacilityForModification
     ModifyPackingContainerTypeIconAction:
       title: ModifyPackingContainerTypeIconAction
       description: Action to a modify the type icon of a packing container.
@@ -41395,6 +41560,9 @@ components:
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         countAsTransitDayBefore:
+          description: The time before which the connection is counted as a transit day.
+          pattern: ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$
+          example: '12:00'
           type: string
       required:
         - id
@@ -41418,9 +41586,15 @@ components:
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         countAsTransitDayBefore:
+          description: The time before which the connection is counted as a transit day.
+          pattern: ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$
+          example: '12:00'
           type: string
+        type:
+          $ref: '#/components/schemas/ConnectionType'
       required:
         - version
+        - type
       type: object
       xml:
         name: InterFacilityConnectionForUpdate
@@ -41430,11 +41604,8 @@ components:
       properties:
         target:
           $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
-        type:
-          $ref: '#/components/schemas/ConnectionType'
       required:
         - target
-        - type
       type: object
       xml:
         name: InterFacilityConnectionToCustomerForUpdate
@@ -41444,11 +41615,8 @@ components:
       properties:
         target:
           $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
-        type:
-          $ref: '#/components/schemas/ConnectionType'
       required:
         - target
-        - type
       type: object
       xml:
         name: InterFacilityConnectionToManagedFacilityForUpdate
@@ -41458,11 +41626,8 @@ components:
       properties:
         target:
           $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
-        type:
-          $ref: '#/components/schemas/ConnectionType'
       required:
         - target
-        - type
       type: object
       xml:
         name: InterFacilityConnectionToSupplierForUpdate
@@ -41472,11 +41637,8 @@ components:
       properties:
         target:
           $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
-        type:
-          $ref: '#/components/schemas/ConnectionType'
       required:
         - target
-        - type
       type: object
       xml:
         name: InterFacilityConnectionToCustomerForCreation
@@ -41486,11 +41648,8 @@ components:
       properties:
         target:
           $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
-        type:
-          $ref: '#/components/schemas/ConnectionType'
       required:
         - target
-        - type
       type: object
       xml:
         name: InterFacilityConnectionToManagedFacilityForCreation
@@ -41500,11 +41659,8 @@ components:
       properties:
         target:
           $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
-        type:
-          $ref: '#/components/schemas/ConnectionType'
       required:
         - target
-        - type
       type: object
       xml:
         name: InterFacilityConnectionToSupplierForCreation
@@ -41515,7 +41671,14 @@ components:
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         countAsTransitDayBefore:
+          description: The time before which the connection is counted as a transit day.
+          pattern: ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$
+          example: '12:00'
           type: string
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+      required:
+        - type
       type: object
       xml:
         name: InterFacilityConnectionForCreation
@@ -46491,6 +46654,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
+        activeConfig:
+          $ref: '#/components/schemas/RoutingStrategyNodeConfig'
         transfers:
           items:
             $ref: '#/components/schemas/Transfer'
@@ -54139,6 +54304,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
           description: Search by orderRef
+        pickJobRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by pickJobRef
         priority:
           allOf:
             - $ref: '#/components/schemas/NumberFilter'
