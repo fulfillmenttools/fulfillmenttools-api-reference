@@ -27843,6 +27843,11 @@ components:
             cannot be used within fulfillment processes, but it could be useful
             to have the informations carried here.
           type: object
+        operativeCosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityOperativeCostForCreation'
+          maxItems: 1
         type:
           default: MANAGED_FACILITY
           $ref: '#/components/schemas/FacilityType'
@@ -27852,6 +27857,61 @@ components:
         - name
       title: FacilityForCreation
       description: FacilityForCreation
+    FacilityOperativeCost:
+      properties:
+        value:
+          type: integer
+          example: 25000
+          description: >-
+            Value of operational cost of the facility. Value is configured in
+            the smallest subunit, e.g. cents.
+          minimum: 0
+        currency:
+          description: The currency of the price as an ISO 4217 code.
+          example: EUR
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/CurrencyCode'
+        decimalPlaces:
+          type: integer
+          description: Number of decimal places for the given currency
+          example: 2
+          minimum: 0
+      required:
+        - value
+        - currency
+        - decimalPlaces
+      type: object
+      title: FacilityOperativeCost
+      description: FacilityOperativeCost
+    FacilityOperativeCostForCreation:
+      properties:
+        value:
+          type: integer
+          example: 25000
+          description: >-
+            Value of operational cost of the facility. Value is configured in
+            the smallest subunit, e.g. cents.
+          minimum: 0
+        currency:
+          description: The currency of the price as an ISO 4217 code.
+          example: EUR
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/CurrencyCode'
+        decimalPlaces:
+          type: integer
+          description: >-
+            Number of decimal places for the given currency. We be defaulted
+            according to the currency if missing.
+          example: 2
+          minimum: 0
+      required:
+        - value
+        - currency
+      type: object
+      title: FacilityOperativeCostForCreation
+      description: FacilityOperativeCostForCreation
     Facility:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -27864,6 +27924,11 @@ components:
             entity.
           example: Esb20gpHBL94X5NdMp3C
           type: string
+        operativeCosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityOperativeCost'
+          maxItems: 1
       required:
         - id
         - type
@@ -30471,6 +30536,10 @@ components:
               minItems: 0
               items:
                 $ref: '#/components/schemas/TagReference'
+            operativeCosts:
+              items:
+                $ref: '#/components/schemas/FacilityOperativeCostForCreation'
+              maxItems: 1
           required:
             - action
           type: object
