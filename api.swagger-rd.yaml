@@ -22912,6 +22912,41 @@ paths:
       summary: Delete a single Safety Stock
       tags:
         - Inventory Management - Stocks
+  /api/shipments/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for Shipment
+      operationId: searchShipment
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Shipment
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/stocks:
     get:
       deprecated: false
@@ -56100,6 +56135,258 @@ components:
       title: SearchOptions
       type: object
       description: SearchOptions
+    ShipmentParcelsFilter:
+      properties:
+        status:
+          allOf:
+            - $ref: '#/components/schemas/ShipmentParcelsParcelStatusEnumFilter'
+          description: Search by status
+      title: ShipmentParcelsFilter
+      type: object
+      description: ShipmentParcelsFilter
+    ShipmentParcelsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/ShipmentParcelsFilter'
+          description: Contains returns if at least one entry matches
+      title: ShipmentParcelsListFilter
+      type: object
+      description: ShipmentParcelsListFilter
+    ShipmentParcelsParcelStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - PROCESSING
+            - DONE
+            - FAILED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+          type: string
+        in:
+          description: Search by status
+          enum:
+            - OPEN
+            - PROCESSING
+            - DONE
+            - FAILED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+          type: string
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - PROCESSING
+            - DONE
+            - FAILED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+          type: string
+      title: ShipmentParcelsParcelStatusEnumFilter
+      type: object
+      description: ShipmentParcelsParcelStatusEnumFilter
+    ShipmentSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ShipmentSearchQueryWrapper'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ShipmentSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: ShipmentSearchPayload
+      type: object
+      description: ShipmentSearchPayload
+    ShipmentSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ShipmentSearchQuery'
+          type: array
+        anonymized:
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Search by anonymized
+        carrierKey:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierKey
+        carrierRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierRef
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        or:
+          items:
+            $ref: '#/components/schemas/ShipmentSearchQuery'
+          type: array
+        parcels:
+          allOf:
+            - $ref: '#/components/schemas/ShipmentParcelsListFilter'
+          description: Nested list search by parcels
+        pickJobRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by pickJobRef
+        status:
+          allOf:
+            - $ref: '#/components/schemas/ShipmentStatusEnumFilter'
+          description: Search by status
+        targetTime:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
+        tenantOrderId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantOrderId
+      title: ShipmentSearchQuery
+      type: object
+      description: ShipmentSearchQuery
+    ShipmentSearchQueryWrapper:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ShipmentSearchQuery'
+          type: array
+        anonymized:
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Search by anonymized
+        carrierKey:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierKey
+        carrierRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierRef
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        or:
+          items:
+            $ref: '#/components/schemas/ShipmentSearchQuery'
+          type: array
+        parcels:
+          allOf:
+            - $ref: '#/components/schemas/ShipmentParcelsListFilter'
+          description: Nested list search by parcels
+        pickJobRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by pickJobRef
+        status:
+          allOf:
+            - $ref: '#/components/schemas/ShipmentStatusEnumFilter'
+          description: Search by status
+        targetTime:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
+        tenantOrderId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantOrderId
+      required:
+        - created
+      title: ShipmentSearchQueryWrapper
+      type: object
+      description: ShipmentSearchQueryWrapper
+    ShipmentSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        targetTime:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ShipmentSort
+      type: object
+      description: ShipmentSort
+    ShipmentStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - INITIAL
+            - REQUEST
+            - RETRYABLE
+            - CONFIRMED
+            - COMPLETED
+            - CANCELED
+            - OBSOLETE
+          type: string
+        in:
+          description: Search by status
+          enum:
+            - INITIAL
+            - REQUEST
+            - RETRYABLE
+            - CONFIRMED
+            - COMPLETED
+            - CANCELED
+            - OBSOLETE
+          type: string
+        notEq:
+          description: Search by status
+          enum:
+            - INITIAL
+            - REQUEST
+            - RETRYABLE
+            - CONFIRMED
+            - COMPLETED
+            - CANCELED
+            - OBSOLETE
+          type: string
+      title: ShipmentStatusEnumFilter
+      type: object
+      description: ShipmentStatusEnumFilter
     StartStowJobAction:
       description: Sets the status of the stowjob to IN_PROGRESS
       properties:
