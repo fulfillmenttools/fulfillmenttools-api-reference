@@ -39177,6 +39177,11 @@ components:
             $ref: '#/components/schemas/ItemReturnJobLineItem'
           type: array
           minItems: 1
+        notReturnableLineItems:
+          items:
+            $ref: '#/components/schemas/ItemReturnJobLineItem'
+          type: array
+          minItems: 0
         itemReturns:
           items:
             $ref: '#/components/schemas/ItemReturn'
@@ -39244,6 +39249,11 @@ components:
             $ref: '#/components/schemas/ItemReturnJobLineItemForCreation'
           type: array
           minItems: 1
+        notReturnableLineItems:
+          items:
+            $ref: '#/components/schemas/ItemReturnJobLineItemForCreation'
+          type: array
+          minItems: 0
       type: object
       required:
         - originFacilityRefs
@@ -39283,9 +39293,13 @@ components:
           minimum: 0
         notReturnableItemsExists:
           type: boolean
-          description: >-
-            Marks if some of the items could be not refundable. E.g. through
-            altering via a ServiceJob via engraving.
+          description: Add items to notReturnableLineItems array in itemReturnJob instead.
+          deprecated: true
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          nullable: true
+          type: array
       required:
         - id
         - article
@@ -39322,9 +39336,8 @@ components:
           minimum: 1
         notReturnableItemsExists:
           type: boolean
-          description: >-
-            Marks if some of the items could be not refundable. E.g. through
-            altering via a ServiceJob via engraving.
+          description: Add items to notReturnableLineItems array in itemReturnJob instead.
+          deprecated: true
         scannableCodes:
           items:
             type: string
@@ -39335,6 +39348,11 @@ components:
             be used within fulfillment processes, but it could be useful to have
             the information carried here.
           type: object
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          nullable: true
+          type: array
       required:
         - article
         - delivered
@@ -39438,6 +39456,11 @@ components:
           type: array
         refund:
           $ref: '#/components/schemas/ReturnedLineItemRefund'
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          nullable: true
+          type: array
       required:
         - id
         - status
@@ -39530,6 +39553,11 @@ components:
             be used within fulfillment processes, but it could be useful to have
             the information carried here.
           type: object
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          nullable: true
+          type: array
       required:
         - tenantArticleId
         - status
@@ -39589,6 +39617,10 @@ components:
         - $ref: '#/components/schemas/StartItemReturnJobActionParameter'
         - $ref: '#/components/schemas/FinishItemReturnJobActionParameter'
         - $ref: '#/components/schemas/RestartItemReturnJobActionParameter'
+        - $ref: >-
+            #/components/schemas/ChangeLineItemsToNotReturnableInItemReturnJobActionParameter
+        - $ref: >-
+            #/components/schemas/ChangeLineItemsToReturnableInItemReturnJobActionParameter
     StartItemReturnJobActionParameter:
       title: StartItemReturnJobActionParameter
       description: Action to start a ItemReturnJob.
@@ -39643,6 +39675,58 @@ components:
       enum:
         - RestartItemReturnJob
       type: string
+    ChangeLineItemsToNotReturnableInItemReturnJobActionParameter:
+      title: ChangeLineItemsToNotReturnableInItemReturnJobActionParameter
+      description: >-
+        Action to move line items from returnableLineItems to
+        notReturnableLineItems.
+      additionalProperties: false
+      properties:
+        name:
+          $ref: >-
+            #/components/schemas/ChangeLineItemsToNotReturnableInItemReturnJobActionEnum
+        version:
+          description: Version of the entity to be changed
+          type: integer
+          minimum: 0
+        lineItemIds:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - version
+        - lineItemIds
+    ChangeLineItemsToNotReturnableInItemReturnJobActionEnum:
+      type: string
+      enum:
+        - CHANGE_LINE_ITEMS_TO_NOT_RETURNABLE_IN_ITEM_RETURN_JOB
+    ChangeLineItemsToReturnableInItemReturnJobActionParameter:
+      title: ChangeLineItemsToReturnableInItemReturnJobActionParameter
+      description: >-
+        Action to move line items from notReturnableLineItems to
+        returnableLineItems.
+      additionalProperties: false
+      properties:
+        name:
+          $ref: >-
+            #/components/schemas/ChangeLineItemsToReturnableInItemReturnJobActionEnum
+        version:
+          description: Version of the entity to be changed
+          type: integer
+          minimum: 0
+        lineItemIds:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - version
+        - lineItemIds
+    ChangeLineItemsToReturnableInItemReturnJobActionEnum:
+      type: string
+      enum:
+        - CHANGE_LINE_ITEMS_TO_RETURNABLE_IN_ITEM_RETURN_JOB
     ItemReturnActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/AnnounceItemReturnActionParameter'
