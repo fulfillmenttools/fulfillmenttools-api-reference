@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4d6b09d4-eaaa-4d92-a2a6-40b6203385a1",
+		"_postman_id": "1cda5eef-99ed-4d8c-a53f-b278902d8470",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -12363,6 +12363,41 @@
 											"response": []
 										},
 										{
+											"name": "Merge PickLineItem",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"version\": 1,\n    \"name\": \"MERGE_LINES_PICK_JOB\",\n    \"lineItemIds\": [\n        \"VALID_LINE_ITEM_ID_1\",\n        \"VALID_LINE_ITEM_ID_2\"\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{host}}/api/pickjobs/:pickJobId/actions",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"pickjobs",
+														":pickJobId",
+														"actions"
+													],
+													"variable": [
+														{
+															"key": "pickJobId",
+															"value": "PUT-IN-YOUR-PICKJOB-ID"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
 											"name": "Update recordable attributes",
 											"request": {
 												"method": "POST",
@@ -14991,6 +15026,46 @@
 									"request": {
 										"method": "DELETE",
 										"header": [],
+										"url": {
+											"raw": "{{host}}/api/packjobs/:packJobId/targetcontainers/:targetcontainerId",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"packjobs",
+												":packJobId",
+												"targetcontainers",
+												":targetcontainerId"
+											],
+											"variable": [
+												{
+													"key": "packJobId",
+													"value": null
+												},
+												{
+													"key": "targetcontainerId",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update recordable attributes",
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"actions\": [\n    {\n      \"action\": \"UpdateRecordableAttributesPackingTargetContainer\",\n      \"recordableAttributeUpdates\": [\n        {\n        \"group\": \"group\",\n        \"id\": \"ID_OF_RECORDABLE_ATTRIBUTE\",\n        \"keyLocalized\": {\n            \"deDE\": \"key localized\"\n        },\n        \"recordingRule\": \"OPTIONAL\",\n        \"value\": \"value\"\n      }\n      ]\n    }\n  ],\n  \"version\": 42\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{host}}/api/packjobs/:packJobId/targetcontainers/:targetcontainerId",
 											"host": [
