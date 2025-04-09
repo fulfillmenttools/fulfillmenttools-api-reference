@@ -32855,6 +32855,7 @@ components:
     ParcelActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/ParcelSplitItemsActionParameter'
+        - $ref: '#/components/schemas/ParcelUpdateRecordableAttributesActionParameter'
     ParcelSplitItemsActionParameter:
       title: ParcelSplitItemsActionParameter
       additionalProperties: false
@@ -32895,6 +32896,31 @@ components:
         - itemId
         - quantity
       type: object
+    ParcelUpdateRecordableAttributesActionParameter:
+      title: ParcelUpdateRecordableAttributesActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ParcelUpdateRecordableAttributesActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        recordableAttributeUpdates:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForUpdate'
+          type: array
+      required:
+        - name
+        - version
+        - recordableAttributeUpdates
+      type: object
+    ParcelUpdateRecordableAttributesActionEnum:
+      enum:
+        - UPDATE_RECORDABLE_ATTRIBUTES_PARCEL
+      type: string
     PickJobActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/PickJobAbortActionParameter'
