@@ -48945,6 +48945,8 @@ components:
           type: string
         values:
           description: The values of the context limitation
+          items:
+            type: array
           type: array
       required:
         - type
@@ -52476,6 +52478,39 @@ components:
         - name
         - stowLineItems
       title: ModifyStowLineItemsAction
+      type: object
+    ModifyUserAction:
+      properties:
+        action:
+          $ref: '#/components/schemas/UserActionEnum'
+        assignedFacilities:
+          description: The new assigned facilities of the user
+          items:
+            $ref: '#/components/schemas/UserAssignedFacilityForCreation'
+          type: array
+        customAttributes:
+          description: The new custom attributes of the user
+          nullable: true
+          type: object
+        firstname:
+          description: The new firstname of the user
+          type: string
+        lastname:
+          description: The new lastname of the user
+          type: string
+        locale:
+          $ref: '#/components/schemas/SupportedLocale'
+        password:
+          description: The new password of the user
+          type: string
+        roles:
+          description: The new roles of the user
+          items:
+            $ref: '#/components/schemas/UserRole'
+          type: array
+      required:
+        - action
+      title: ModifyUserAction
       type: object
     MoveStockToLocationOptions:
       properties:
@@ -57456,6 +57491,8 @@ components:
       properties:
         assignedFacilities:
           description: The assigned facilities of the user
+          items:
+            $ref: '#/components/schemas/UserAssignedFacility'
           type: array
         assignedRoles:
           description: The assigned roles of a user
@@ -57511,6 +57548,12 @@ components:
         - assignedRoles
       title: User
       type: object
+    UserActionEnum:
+      description: The type of action to perform
+      enum:
+        - ModifyUser
+      title: UserActionEnum
+      type: string
     UserAssignedFacilitiesFilter:
       properties:
         facilityRef:
@@ -57526,6 +57569,24 @@ components:
             - $ref: '#/components/schemas/UserAssignedFacilitiesFilter'
           description: Contains returns if at least one entry matches
       title: UserAssignedFacilitiesListFilter
+      type: object
+    UserAssignedFacility:
+      properties:
+        assignedZones:
+          description: The assigned zones of the user
+          items:
+            $ref: '#/components/schemas/UserAssignedZone'
+          type: array
+        facilityRef:
+          description: The id of the assigned facility
+          type: string
+        id:
+          description: The id of the assigned facility
+          type: string
+      required:
+        - facilityRef
+        - id
+      title: UserAssignedFacility
       type: object
     UserAssignedFacilityForCreation:
       properties:
@@ -57639,6 +57700,8 @@ components:
       properties:
         assignedFacilities:
           description: The assigned facilities of the user
+          items:
+            $ref: '#/components/schemas/UserAssignedFacilityForCreation'
           type: array
         firstname:
           description: The first name of the user
@@ -57693,6 +57756,8 @@ components:
       properties:
         actions:
           description: The actions to perform
+          items:
+            $ref: '#/components/schemas/ModifyUserAction'
           type: array
         version:
           description: The version of the user to modify
