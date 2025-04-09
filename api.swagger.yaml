@@ -32963,6 +32963,8 @@ components:
       anyOf:
         - $ref: '#/components/schemas/PackJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/PackJobSplitLineItemsActionParameter'
+        - $ref: >-
+            #/components/schemas/PackJobUpdateRecordableAttributesActionParameter
     PickJobReplaceAssignedUsersActionParameter:
       title: PickJobReplaceAssignedUsersActionParameter
       description: Action to replace the assigned users.
@@ -37471,6 +37473,31 @@ components:
         - lineItemId
         - quantity
       type: object
+    PackJobUpdateRecordableAttributesActionParameter:
+      title: PackJobUpdateRecordableAttributesActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PackJobUpdateRecordableAttributesActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        recordableAttributeUpdates:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForUpdate'
+          type: array
+      required:
+        - name
+        - version
+        - recordableAttributeUpdates
+      type: object
+    PackJobUpdateRecordableAttributesActionEnum:
+      enum:
+        - UPDATE_RECORDABLE_ATTRIBUTES_PACK_JOB
+      type: string
     PackJobPatchActions:
       properties:
         actions:
@@ -39274,7 +39301,7 @@ components:
           items:
             $ref: '#/components/schemas/ItemReturnJobLineItemForCreation'
           type: array
-          minItems: 1
+          minItems: 0
         notReturnableLineItems:
           items:
             $ref: '#/components/schemas/ItemReturnJobLineItemForCreation'
