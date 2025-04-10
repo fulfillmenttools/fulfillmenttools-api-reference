@@ -20930,6 +20930,45 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/categories/{categoryId}:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: getCategory
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Get category
+      tags:
+        - Inventory Management - Categories
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/configurations/inventory:
     get:
       deprecated: false
@@ -50169,6 +50208,41 @@ components:
         - name
       title: CancelStowJobAction
       type: object
+    Category:
+      properties:
+        created:
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        id:
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleStringConstrained'
+        tenantCategoryId:
+          description: unique identifier for categories used in the customer systems
+          maxLength: 256
+          minLength: 2
+          pattern: ^[A-Za-z0-9_-]+$
+          type: string
+        version:
+          type: number
+      required:
+        - nameLocalized
+        - created
+        - lastModified
+        - version
+      title: Category
+      type: object
+      description: Category
     ChannelStockAvailability:
       properties:
         availableForPicking:
@@ -53857,6 +53931,11 @@ components:
       title: ListingWebHookEventPayload
       type: object
       description: ListingWebHookEventPayload
+    LocaleStringConstrained:
+      properties: {}
+      title: LocaleStringConstrained
+      type: object
+      description: LocaleStringConstrained
     ModifyStowLineItemsAction:
       description: >-
         MODIFY_STOW_LINE_ITEMS targets specific stowJob.stowLineItems by ID.
