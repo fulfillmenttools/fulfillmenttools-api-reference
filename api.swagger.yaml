@@ -33446,6 +33446,8 @@ components:
         - $ref: '#/components/schemas/FinishHandoverJobActionParameter'
         - $ref: '#/components/schemas/HandoverJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/HandoverJobSplitLineItemsActionParameter'
+        - $ref: >-
+            #/components/schemas/HandoverJobUpdateRecordableAttributesActionParameter
     HandoverJobReplaceAssignedUsersActionParameter:
       title: HandoverJobReplaceAssignedUsersActionParameter
       description: Action to replace the assigned users.
@@ -33519,6 +33521,31 @@ components:
         - quantity
         - handedOverQuantity
       type: object
+    HandoverJobUpdateRecordableAttributesActionParameter:
+      title: HandoverJobUpdateRecordableAttributesActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/HandoverJobUpdateRecordableAttributesActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        recordableAttributeUpdates:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForUpdate'
+          type: array
+      required:
+        - name
+        - version
+        - recordableAttributeUpdates
+      type: object
+    HandoverJobUpdateRecordableAttributesActionEnum:
+      enum:
+        - UPDATE_RECORDABLE_ATTRIBUTES_HANDOVER_JOB
+      type: string
     HandoverJobCancelActionParameter:
       title: HandoverJobCancelActionParameter
       description: Action to cancel a handoverjob.
