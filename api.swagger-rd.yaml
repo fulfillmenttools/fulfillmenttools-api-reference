@@ -25728,6 +25728,7 @@ components:
             - AddLineItemToPackingTargetContainer
             - RemoveLineItemFromPackingTargetContainer
             - UpdateLineItemOnPackingTargetContainer
+            - UpdateRecordableAttributesPackingTargetContainer
             - ModifyCustomService
             - UnlockOrder
           example: <Use the corresponding action, see documentation>
@@ -38396,6 +38397,8 @@ components:
                   #/components/schemas/RemoveLineItemFromPackingTargetContainerAction
               - $ref: >-
                   #/components/schemas/UpdateLineItemOnPackingTargetContainerAction
+              - $ref: >-
+                  #/components/schemas/UpdateRecordableAttributesPackingTargetContainerAction
           minItems: 1
           type: array
         version:
@@ -38505,6 +38508,32 @@ components:
           type: object
       xml:
         name: UpdateLineItemOnPackingTargetContainer
+    UpdateRecordableAttributesPackingTargetContainerAction:
+      title: UpdateRecordableAttributesPackingTargetContainerAction
+      description: >-
+        Action to a update the recordable attributes of the line items of a
+        packing target container.
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use this action to update the recordable attributes of the line
+                items of a packing target container
+              enum:
+                - UpdateRecordableAttributesPackingTargetContainer
+              type: string
+            recordableAttributeUpdates:
+              items:
+                $ref: '#/components/schemas/RecordableAttributeForUpdate'
+              type: array
+          required:
+            - action
+            - recordableAttributeUpdates
+          type: object
+      xml:
+        name: UpdateRecordableAttributesPackingTargetContainer
     PackingTargetContainerLineItem:
       allOf:
         - $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
