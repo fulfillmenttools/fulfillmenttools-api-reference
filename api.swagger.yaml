@@ -3973,6 +3973,242 @@ paths:
         - Core - Listings
       operationId: deleteFacilityListingPartialStock
       summary: Delete partial stocks of a listings of a facility with the given ID
+  /api/facilitygroups:
+    get:
+      parameters:
+        - description: Returns all entries that were created after the entry with this ID.
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: Specifies the number of facility groups to return.
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            maximum: 100
+            type: integer
+        - description: Filters facility groups by the given tenant facility group ID.
+          in: query
+          name: tenantFacilityGroupId
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityGroups'
+          description: The facility groups that were found based on the given filters.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            The user is not authenticated or not allowed to operate against this
+            API instance.
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The user is not authorized to access this API instance.
+      tags:
+        - Core - FacilityGroups
+      description: ''
+      operationId: getAllFacilityGroups
+      summary: Return all facility groups
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityGroup'
+          description: The facility group was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. Please refer to the response for more details.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            The user is not authenticated or not allowed to operate against this
+            API instance.
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The user is not authorized to access this API instance.
+      tags:
+        - Core - FacilityGroups
+      description: ''
+      operationId: addFacilityGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityGroupForCreation'
+        description: >-
+          Representation of a facility group, including relevant details such as
+          ID, name, description, and associated data.
+        required: true
+      summary: Add a new facility group
+  /api/facilitygroups/{facilityGroupId}:
+    delete:
+      parameters:
+        - description: The ID of the facility to be deleted.
+          in: path
+          name: facilityGroupId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Facility group was found and deleted.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            The user is not authenticated or not allowed to operate against this
+            API instance.
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The user is not authorized to access this API instance.
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Facility group not found.
+      tags:
+        - Core - FacilityGroups
+      description: ''
+      operationId: deleteFacilityGroup
+      summary: deletes a facility group with the given ID
+    get:
+      parameters:
+        - description: The ID of the requested facility group.
+          in: path
+          name: facilityGroupId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityGroup'
+          description: Facility group was found. The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            The user is not authenticated or not allowed to operate against this
+            API instance.
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The user is not authorized to access this API instance.
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Facility group not found.
+      tags:
+        - Core - FacilityGroups
+      description: ''
+      operationId: getFacilityGroup
+      summary: Get a facility group with the given ID
+    patch:
+      parameters:
+        - description: The ID of the facility group to update.
+          in: path
+          name: facilityGroupId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityGroup'
+          description: >-
+            Facility group was replaced. The replaced facility group is in the
+            body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            The user is not authenticated or not allowed to operate against this
+            API instance.
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The user is not authorized to access this API instance.
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Facility group not found.
+        '409':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Facility group version conflict.
+      tags:
+        - Core - FacilityGroups
+      operationId: replaceFacilityGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityGroupForUpdate'
+        required: true
+      summary: Replace a facility group with the given ID
   /api/validations/postalcodes:
     post:
       responses:
@@ -28463,6 +28699,96 @@ components:
       type: object
       xml:
         name: Facility
+    FacilityGroup:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/FacilityGroupForCreation'
+      properties:
+        id:
+          description: >-
+            The id of this facility group. It is generated during creation
+            automatically and suits as the primary identifier of the described
+            entity.
+          example: Esb20gpHBL94X5NdMp3C
+          type: string
+        name:
+          description: The name of this facility group.
+          type: string
+      required:
+        - id
+      type: object
+      additionalProperties: false
+      xml:
+        name: FacilityGroup
+    FacilityGroups:
+      properties:
+        facilityGroups:
+          items:
+            $ref: '#/components/schemas/FacilityGroup'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
+    FacilityGroupForUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          format: int64
+          type: integer
+        tenantFacilityGroupId:
+          description: The id of the facility group in the tenants own system
+          example: K12345
+          type: string
+        facilityRefs:
+          type: array
+          items:
+            type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the facility group. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+      required:
+        - version
+      xml:
+        name: FacilityGroupForUpdate
+    FacilityGroupForCreation:
+      type: object
+      additionalProperties: false
+      properties:
+        tenantFacilityGroupId:
+          description: The id of the facility group in the tenants own system
+          example: K12345
+          type: string
+        facilityRefs:
+          type: array
+          maxItems: 500
+          items:
+            type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the facility group. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+      xml:
+        name: FacilityGroupForCreation
+      required:
+        - tenantFacilityGroupId
+        - facilityRefs
+        - nameLocalized
     ManagedFacilityForCreation:
       allOf:
         - $ref: '#/components/schemas/FacilityForCreation'
@@ -49128,7 +49454,7 @@ components:
         values:
           description: The values of the context limitation
           items:
-            type: array
+            type: string
           type: array
       required:
         - type
