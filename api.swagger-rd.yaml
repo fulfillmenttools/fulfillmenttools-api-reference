@@ -55381,6 +55381,99 @@ components:
       title: PickJobTransfersListFilter
       type: object
       description: PickJobTransfersListFilter
+    ProcessReferencedCarrierFilter:
+      properties:
+        name:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by name
+      title: ProcessReferencedCarrierFilter
+      type: object
+      description: ProcessReferencedCarrierFilter
+    ProcessReferencedConsumerAddressFilter:
+      properties:
+        country:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by country
+      title: ProcessReferencedConsumerAddressFilter
+      type: object
+      description: ProcessReferencedConsumerAddressFilter
+    ProcessReferencedFacilityAddressFilter:
+      properties:
+        country:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by country
+      title: ProcessReferencedFacilityAddressFilter
+      type: object
+      description: ProcessReferencedFacilityAddressFilter
+    ProcessReferencedFacilityFilter:
+      properties:
+        address:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedFacilityAddressFilter'
+          description: Nested search by address
+        name:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by name
+      title: ProcessReferencedFacilityFilter
+      type: object
+      description: ProcessReferencedFacilityFilter
+    ProcessReferencedFilter:
+      properties:
+        carrier:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedCarrierFilter'
+          description: Nested search by carrier
+        consumerAddress:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedConsumerAddressFilter'
+          description: Nested search by consumerAddress
+        facility:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedFacilityFilter'
+          description: Nested search by facility
+        order:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedOrderFilter'
+          description: Nested search by order
+        pickjob:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedPickjobFilter'
+          description: Nested search by pickjob
+      title: ProcessReferencedFilter
+      type: object
+      description: ProcessReferencedFilter
+    ProcessReferencedOrderFilter:
+      properties:
+        orderDate:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by orderDate
+      title: ProcessReferencedOrderFilter
+      type: object
+      description: ProcessReferencedOrderFilter
+    ProcessReferencedPickjobDeliveryInformationFilter:
+      properties:
+        targetTime:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
+      title: ProcessReferencedPickjobDeliveryInformationFilter
+      type: object
+      description: ProcessReferencedPickjobDeliveryInformationFilter
+    ProcessReferencedPickjobFilter:
+      properties:
+        deliveryInformation:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPickjobDeliveryInformationFilter
+          description: Nested search by deliveryInformation
+      title: ProcessReferencedPickjobFilter
+      type: object
+      description: ProcessReferencedPickjobFilter
     ProcessSearchPayload:
       properties:
         options:
@@ -55393,13 +55486,6 @@ components:
           maximum: 250
           minimum: 1
           type: number
-        sort:
-          description: Use for sorting the result.
-          items:
-            $ref: '#/components/schemas/ProcessSort'
-          maxItems: 1
-          minItems: 1
-          type: array
         startAfterId:
           description: The ID to start after.
           type: string
@@ -55462,6 +55548,14 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
           description: Search by pickJobRefs
+        processId:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by processId
+        referenced:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedFilter'
+          description: Nested search by referenced
         returnRefs:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
@@ -55474,6 +55568,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
           description: Search by routingPlanRefs
+        searchTerm:
+          allOf:
+            - $ref: '#/components/schemas/SearchFilter'
+          description: Full-text search for this entity
         serviceJobRefs:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
@@ -55486,23 +55584,9 @@ components:
           allOf:
             - $ref: '#/components/schemas/ProcessStatusEnumFilter'
           description: Search by status
-        tags:
-          allOf:
-            - $ref: '#/components/schemas/ProcessTagsListFilter'
-          description: Nested list search by tags
       title: ProcessSearchQuery
       type: object
       description: ProcessSearchQuery
-    ProcessSort:
-      properties:
-        status:
-          enum:
-            - ASC
-            - DESC
-          type: string
-      title: ProcessSort
-      type: object
-      description: ProcessSort
     ProcessStatusEnumFilter:
       properties:
         eq:
@@ -55538,28 +55622,6 @@ components:
       title: ProcessStatusEnumFilter
       type: object
       description: ProcessStatusEnumFilter
-    ProcessTagsFilter:
-      properties:
-        id:
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
-          description: Search by id
-        value:
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
-          description: Search by value
-      title: ProcessTagsFilter
-      type: object
-      description: ProcessTagsFilter
-    ProcessTagsListFilter:
-      properties:
-        contains:
-          allOf:
-            - $ref: '#/components/schemas/ProcessTagsFilter'
-          description: Contains returns if at least one entry matches
-      title: ProcessTagsListFilter
-      type: object
-      description: ProcessTagsListFilter
     PurchaseOrder:
       properties:
         cancelled:
@@ -56817,6 +56879,15 @@ components:
       title: SafetyStocksPaginatedResult
       type: object
       description: SafetyStocksPaginatedResult
+    SearchFilter:
+      properties:
+        like:
+          description: Search by regex pattern
+          maxLength: 256
+          type: string
+      title: SearchFilter
+      type: object
+      description: SearchFilter
     SearchOptions:
       properties:
         withTotal:
