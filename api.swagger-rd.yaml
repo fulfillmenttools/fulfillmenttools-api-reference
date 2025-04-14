@@ -5196,6 +5196,61 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/loadunits/{loadUnitId}/actions:
+    post:
+      parameters:
+        - description: id of the load unit
+          in: path
+          name: loadUnitId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoadUnitActionsParameter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoadUnit'
+          description: Updated entity
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Picking
+      operationId: updateLoadUnit
+      summary: Updates a load unit
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/loadunits/{loadUnitId}/stack:
     get:
       parameters:
@@ -30138,6 +30193,38 @@ components:
       type: object
       title: LoadUnitForCreation
       description: LoadUnitForCreation
+    LoadUnitActionsParameter:
+      oneOf:
+        - $ref: >-
+            #/components/schemas/LoadUnitLineItemUpdateRecordableAttributesActionParameter
+      title: LoadUnitActionsParameter
+      description: LoadUnitActionsParameter
+    LoadUnitLineItemUpdateRecordableAttributesActionParameter:
+      title: LoadUnitLineItemUpdateRecordableAttributesActionParameter
+      description: Update the recordable attributes of the line items of a load unit
+      additionalProperties: false
+      properties:
+        name:
+          $ref: >-
+            #/components/schemas/LoadUnitLineItemUpdateRecordableAttributesActionEnum
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForUpdate'
+          type: array
+      required:
+        - name
+        - version
+        - recordableAttributes
+    LoadUnitLineItemUpdateRecordableAttributesActionEnum:
+      enum:
+        - UPDATE_LOAD_UNIT_LINE_ITEM_RECORDABLE_ATTRIBUTES
+      description: Update the recordable attributes of the line items of a load unit
+      type: string
+      title: LoadUnitLineItemUpdateRecordableAttributesActionEnum
     Stack:
       additionalProperties: false
       allOf:

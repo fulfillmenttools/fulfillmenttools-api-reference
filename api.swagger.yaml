@@ -5247,6 +5247,64 @@ paths:
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />LoadUnitPatchActions: Deprecated - For future usage please use the /actions endpoints mentioned in the corresponding PatchActions
         LoadUnit: Partial Patch on this entity.
+  /api/loadunits/{loadUnitId}/actions:
+    post:
+      parameters:
+        - description: id of the load unit
+          in: path
+          name: loadUnitId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoadUnitActionsParameter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoadUnit'
+          description: Updated entity
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      tags:
+        - Fulfillment Operations - Picking
+      operationId: updateLoadUnit
+      summary: Updates a load unit
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
   /api/loadunits/{loadUnitId}/stack:
     get:
       parameters:
@@ -30455,6 +30513,35 @@ components:
       required:
         - pickJobRefs
       type: object
+    LoadUnitActionsParameter:
+      oneOf:
+        - $ref: >-
+            #/components/schemas/LoadUnitLineItemUpdateRecordableAttributesActionParameter
+    LoadUnitLineItemUpdateRecordableAttributesActionParameter:
+      title: LoadUnitLineItemUpdateRecordableAttributesActionParameter
+      description: Update the recordable attributes of the line items of a load unit
+      additionalProperties: false
+      properties:
+        name:
+          $ref: >-
+            #/components/schemas/LoadUnitLineItemUpdateRecordableAttributesActionEnum
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForUpdate'
+          type: array
+      required:
+        - name
+        - version
+        - recordableAttributes
+    LoadUnitLineItemUpdateRecordableAttributesActionEnum:
+      enum:
+        - UPDATE_LOAD_UNIT_LINE_ITEM_RECORDABLE_ATTRIBUTES
+      description: Update the recordable attributes of the line items of a load unit
+      type: string
     Stack:
       additionalProperties: false
       allOf:
