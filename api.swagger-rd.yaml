@@ -21270,6 +21270,45 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: createCategory
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Create category
+      tags:
+        - Inventory Management - Categories
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/categories/{categoryId}:
     get:
       deprecated: false
@@ -50707,12 +50746,34 @@ components:
           type: number
       required:
         - nameLocalized
+        - version
         - created
         - lastModified
-        - version
       title: Category
       type: object
       description: Category
+    CategoryForCreation:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleStringConstrained'
+        tenantCategoryId:
+          description: unique identifier for categories used in the customer systems
+          maxLength: 256
+          minLength: 2
+          pattern: ^[A-Za-z0-9_-]+$
+          type: string
+      required:
+        - nameLocalized
+      title: CategoryForCreation
+      type: object
+      description: CategoryForCreation
     ChannelStockAvailability:
       properties:
         availableForPicking:
@@ -55635,6 +55696,13 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ProcessSort'
+          maxItems: 1
+          minItems: 1
+          type: array
         startAfterId:
           description: The ID to start after.
           type: string
@@ -55736,6 +55804,16 @@ components:
       title: ProcessSearchQuery
       type: object
       description: ProcessSearchQuery
+    ProcessSort:
+      properties:
+        status:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSort
+      type: object
+      description: ProcessSort
     ProcessStatusEnumFilter:
       properties:
         eq:

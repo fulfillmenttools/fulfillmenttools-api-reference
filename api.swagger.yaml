@@ -21697,6 +21697,48 @@ paths:
       summary: Get categories
       tags:
         - Inventory Management - Categories
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: createCategory
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Create category
+      tags:
+        - Inventory Management - Categories
   /api/categories/{categoryId}:
     get:
       deprecated: false
@@ -49547,10 +49589,31 @@ components:
           type: number
       required:
         - nameLocalized
+        - version
         - created
         - lastModified
-        - version
       title: Category
+      type: object
+    CategoryForCreation:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleStringConstrained'
+        tenantCategoryId:
+          description: unique identifier for categories used in the customer systems
+          maxLength: 256
+          minLength: 2
+          pattern: ^[A-Za-z0-9_-]+$
+          type: string
+      required:
+        - nameLocalized
+      title: CategoryForCreation
       type: object
     ChannelStockAvailability:
       properties:
@@ -54272,6 +54335,13 @@ components:
           maximum: 250
           minimum: 1
           type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ProcessSort'
+          maxItems: 1
+          minItems: 1
+          type: array
         startAfterId:
           description: The ID to start after.
           type: string
@@ -54370,6 +54440,15 @@ components:
             - $ref: '#/components/schemas/ProcessStatusEnumFilter'
           description: Search by status
       title: ProcessSearchQuery
+      type: object
+    ProcessSort:
+      properties:
+        status:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSort
       type: object
     ProcessStatusEnumFilter:
       properties:
