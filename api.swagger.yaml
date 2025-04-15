@@ -27046,7 +27046,7 @@ components:
             - AddLineItemToPackingTargetContainer
             - RemoveLineItemFromPackingTargetContainer
             - UpdateLineItemOnPackingTargetContainer
-            - UpdateRecordableAttributesPackingTargetContainer
+            - UpdatePackingTargetContainerLineItemRecordableAttributes
             - ModifyCustomService
             - UnlockOrder
           example: <Use the corresponding action, see documentation>
@@ -33921,7 +33921,8 @@ components:
     ParcelActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/ParcelSplitItemsActionParameter'
-        - $ref: '#/components/schemas/ParcelUpdateRecordableAttributesActionParameter'
+        - $ref: >-
+            #/components/schemas/UpdateParcelItemRecordableAttributesActionParameter
     ParcelSplitItemsActionParameter:
       title: ParcelSplitItemsActionParameter
       additionalProperties: false
@@ -33962,12 +33963,12 @@ components:
         - itemId
         - quantity
       type: object
-    ParcelUpdateRecordableAttributesActionParameter:
-      title: ParcelUpdateRecordableAttributesActionParameter
+    UpdateParcelItemRecordableAttributesActionParameter:
+      title: UpdateParcelItemRecordableAttributesActionParameter
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/ParcelUpdateRecordableAttributesActionEnum'
+          $ref: '#/components/schemas/UpdateParcelItemRecordableAttributesActionEnum'
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -33983,9 +33984,9 @@ components:
         - version
         - recordableAttributeUpdates
       type: object
-    ParcelUpdateRecordableAttributesActionEnum:
+    UpdateParcelItemRecordableAttributesActionEnum:
       enum:
-        - UPDATE_RECORDABLE_ATTRIBUTES_PARCEL
+        - UPDATE_PARCEL_ITEM_RECORDABLE_ATTRIBUTES
       type: string
     PickJobActionsParameter:
       anyOf:
@@ -33998,7 +33999,7 @@ components:
         - $ref: '#/components/schemas/PickJobPauseActionParameter'
         - $ref: '#/components/schemas/PickJobSplitLineItemsActionParameter'
         - $ref: >-
-            #/components/schemas/PickJobUpdateRecordableAttributesActionParameter
+            #/components/schemas/UpdatePickLineItemRecordableAttributesActionParameter
     PackJobReplaceAssignedUsersActionParameter:
       additionalProperties: false
       title: PackJobReplaceAssignedUsersActionParameter
@@ -34030,7 +34031,7 @@ components:
         - $ref: '#/components/schemas/PackJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/PackJobSplitLineItemsActionParameter'
         - $ref: >-
-            #/components/schemas/PackJobUpdateRecordableAttributesActionParameter
+            #/components/schemas/UpdatePackLineItemRecordableAttributesActionParameter
     PickJobReplaceAssignedUsersActionParameter:
       title: PickJobReplaceAssignedUsersActionParameter
       description: Action to replace the assigned users.
@@ -34284,12 +34285,13 @@ components:
         - quantity
         - picked
       type: object
-    PickJobUpdateRecordableAttributesActionParameter:
-      title: PickJobUpdateRecordableAttributesActionParameter
+    UpdatePickLineItemRecordableAttributesActionParameter:
+      title: UpdatePickLineItemRecordableAttributesActionParameter
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/PickJobUpdateRecordableAttributesActionEnum'
+          $ref: >-
+            #/components/schemas/UpdatePickLineItemRecordableAttributesActionEnum
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -34305,9 +34307,9 @@ components:
         - version
         - recordableAttributeUpdates
       type: object
-    PickJobUpdateRecordableAttributesActionEnum:
+    UpdatePickLineItemRecordableAttributesActionEnum:
       enum:
-        - UPDATE_RECORDABLE_ATTRIBUTES_PICK_JOB
+        - UPDATE_PICK_LINE_ITEM_RECORDABLE_ATTRIBUTES
       type: string
     PackingTargetContainerActionsParameter:
       anyOf:
@@ -34513,7 +34515,7 @@ components:
         - $ref: '#/components/schemas/HandoverJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/HandoverJobSplitLineItemsActionParameter'
         - $ref: >-
-            #/components/schemas/HandoverJobUpdateRecordableAttributesActionParameter
+            #/components/schemas/UpdateHandoverLineItemRecordableAttributesActionParameter
     HandoverJobReplaceAssignedUsersActionParameter:
       title: HandoverJobReplaceAssignedUsersActionParameter
       description: Action to replace the assigned users.
@@ -34587,12 +34589,13 @@ components:
         - quantity
         - handedOverQuantity
       type: object
-    HandoverJobUpdateRecordableAttributesActionParameter:
-      title: HandoverJobUpdateRecordableAttributesActionParameter
+    UpdateHandoverLineItemRecordableAttributesActionParameter:
+      title: UpdateHandoverLineItemRecordableAttributesActionParameter
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/HandoverJobUpdateRecordableAttributesActionEnum'
+          $ref: >-
+            #/components/schemas/UpdateHandoverLineItemRecordableAttributesActionEnum
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -34608,9 +34611,9 @@ components:
         - version
         - recordableAttributeUpdates
       type: object
-    HandoverJobUpdateRecordableAttributesActionEnum:
+    UpdateHandoverLineItemRecordableAttributesActionEnum:
       enum:
-        - UPDATE_RECORDABLE_ATTRIBUTES_HANDOVER_JOB
+        - UPDATE_HANDOVER_LINE_ITEM_RECORDABLE_ATTRIBUTES
       type: string
     HandoverJobCancelActionParameter:
       title: HandoverJobCancelActionParameter
@@ -38566,12 +38569,13 @@ components:
         - lineItemId
         - quantity
       type: object
-    PackJobUpdateRecordableAttributesActionParameter:
-      title: PackJobUpdateRecordableAttributesActionParameter
+    UpdatePackLineItemRecordableAttributesActionParameter:
+      title: UpdatePackLineItemRecordableAttributesActionParameter
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/PackJobUpdateRecordableAttributesActionEnum'
+          $ref: >-
+            #/components/schemas/UpdatePackLineItemRecordableAttributesActionEnum
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -38587,9 +38591,9 @@ components:
         - version
         - recordableAttributeUpdates
       type: object
-    PackJobUpdateRecordableAttributesActionEnum:
+    UpdatePackLineItemRecordableAttributesActionEnum:
       enum:
-        - UPDATE_RECORDABLE_ATTRIBUTES_PACK_JOB
+        - UPDATE_PACK_LINE_ITEM_RECORDABLE_ATTRIBUTES
       type: string
     PackJobPatchActions:
       properties:
@@ -39201,7 +39205,7 @@ components:
               - $ref: >-
                   #/components/schemas/UpdateLineItemOnPackingTargetContainerAction
               - $ref: >-
-                  #/components/schemas/UpdateRecordableAttributesPackingTargetContainerAction
+                  #/components/schemas/UpdatePackingTargetContainerLineItemRecordableAttributesAction
           minItems: 1
           type: array
         version:
@@ -39309,8 +39313,8 @@ components:
           type: object
       xml:
         name: UpdateLineItemOnPackingTargetContainer
-    UpdateRecordableAttributesPackingTargetContainerAction:
-      title: UpdateRecordableAttributesPackingTargetContainerAction
+    UpdatePackingTargetContainerLineItemRecordableAttributesAction:
+      title: UpdatePackingTargetContainerLineItemRecordableAttributesAction
       description: >-
         Action to a update the recordable attributes of the line items of a
         packing target container.
@@ -39323,7 +39327,7 @@ components:
                 Use this action to update the recordable attributes of the line
                 items of a packing target container
               enum:
-                - UpdateRecordableAttributesPackingTargetContainer
+                - UpdatePackingTargetContainerLineItemRecordableAttributes
               type: string
             recordableAttributeUpdates:
               items:
@@ -39334,7 +39338,7 @@ components:
             - recordableAttributeUpdates
           type: object
       xml:
-        name: UpdateRecordableAttributesPackingTargetContainer
+        name: UpdatePackingTargetContainerLineItemRecordableAttributes
     PackingTargetContainerLineItem:
       allOf:
         - $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
@@ -43742,12 +43746,13 @@ components:
         - lineItemId
         - quantity
       type: object
-    ServiceJobUpdateRecordableAttributesActionParameter:
-      title: ServiceJobUpdateRecordableAttributesActionParameter
+    UpdateServiceJobLineItemRecordableAttributesActionParameter:
+      title: UpdateServiceJobLineItemRecordableAttributesActionParameter
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/ServiceJobUpdateRecordableAttributesActionEnum'
+          $ref: >-
+            #/components/schemas/UpdateServiceJobLineItemRecordableAttributesActionEnum
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -43763,9 +43768,9 @@ components:
         - version
         - recordableAttributeUpdates
       type: object
-    ServiceJobUpdateRecordableAttributesActionEnum:
+    UpdateServiceJobLineItemRecordableAttributesActionEnum:
       enum:
-        - UPDATE_RECORDABLE_ATTRIBUTES_SERVICE_JOB
+        - UPDATE_SERVICE_JOB_LINE_ITEM_RECORDABLE_ATTRIBUTES
       type: string
     ServiceJobFinishedActionEnum:
       enum:
@@ -43806,7 +43811,7 @@ components:
         - $ref: '#/components/schemas/ServiceJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/ServiceJobSplitLineItemsActionParameter'
         - $ref: >-
-            #/components/schemas/ServiceJobUpdateRecordableAttributesActionParameter
+            #/components/schemas/UpdateServiceJobLineItemRecordableAttributesActionParameter
     FacilityCustomServiceConnectionStatus:
       type: string
       enum:
@@ -44848,14 +44853,14 @@ components:
           minLength: 1
           nullable: true
           type: string
-        id:
-          description: id of the recordable attribute to update
-          example: 17ebfdfb-e1b4-4913-9962-3aef2b49f16f
-          type: string
         keyLocalized:
           allOf:
             - $ref: '#/components/schemas/LocaleString'
           description: The translations of the key
+        recordableAttributeId:
+          description: id of the recordable attribute to update
+          example: 17ebfdfb-e1b4-4913-9962-3aef2b49f16f
+          type: string
         recordingRule:
           description: Indicates whether the value has to be recorded or not
           enum:
@@ -44869,7 +44874,7 @@ components:
           nullable: true
           type: string
       required:
-        - id
+        - recordableAttributeId
       title: RecordableAttributeForUpdate
       type: object
     BaseDecisionDetail:
