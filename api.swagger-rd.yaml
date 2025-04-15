@@ -21587,6 +21587,44 @@ paths:
         - color: red
           label: ALPHA
   /api/categories/{categoryId}:
+    delete:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: deleteCategory
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Delete category
+      tags:
+        - Inventory Management - Categories
+      x-badges:
+        - color: red
+          label: ALPHA
     get:
       deprecated: false
       description: >-
@@ -46103,6 +46141,12 @@ components:
         filterDuplicates:
           type: boolean
           default: true
+        customAttributes:
+          description: >-
+            Attributes that can be added to the order. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
+          type: object
       required:
         - orderLineItems
         - deliveryPreferences
@@ -53586,7 +53630,7 @@ components:
         comments:
           description: comments regarding the receipt itself
           items:
-            $ref: '#/components/schemas/InboundReceiptComment'
+            $ref: '#/components/schemas/InboundReceiptCommentForUpdate'
           maxItems: 20
           type: array
         customAttributes:
@@ -53692,7 +53736,7 @@ components:
             quantity of the stock that was accepted in this receipt. If its
             larger than 0, Stock will be created when this receipt is FINISHED.
         comments:
-          description: comments regarding the receival of this item
+          description: comments regarding the receipt itself
           items:
             $ref: '#/components/schemas/InboundReceiptComment'
           maxItems: 20
@@ -53742,7 +53786,7 @@ components:
             quantity of the stock that was accepted in this receipt. If its
             larger than 0, Stock will be created when this receipt is FINISHED.
         comments:
-          description: comments regarding the receival of this item
+          description: comments regarding the receipt itself
           items:
             $ref: '#/components/schemas/InboundReceiptCommentForCreation'
           maxItems: 20
