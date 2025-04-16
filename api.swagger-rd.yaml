@@ -21704,6 +21704,50 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+    put:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: replaceCategory
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryForUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Replace category
+      tags:
+        - Inventory Management - Categories
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/configurations/inventory:
     get:
       deprecated: false
@@ -51597,6 +51641,33 @@ components:
       title: CategoryForCreation
       type: object
       description: CategoryForCreation
+    CategoryForUpdate:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        id:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleStringConstrained'
+        tenantCategoryId:
+          description: unique identifier for categories used in the customer systems
+          maxLength: 256
+          minLength: 2
+          pattern: ^[A-Za-z0-9_-]+$
+          type: string
+        version:
+          type: number
+      required:
+        - nameLocalized
+        - version
+      title: CategoryForUpdate
+      type: object
+      description: CategoryForUpdate
     CategoryPaginatedResult:
       properties:
         categories:
