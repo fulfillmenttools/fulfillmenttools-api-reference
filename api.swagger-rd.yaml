@@ -21586,6 +21586,47 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/categories/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for Category
+      operationId: searchCategory
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategorySearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Inventory Management - Categories
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/categories/{categoryId}:
     delete:
       deprecated: false
@@ -51522,6 +51563,107 @@ components:
       title: CategoryForCreation
       type: object
       description: CategoryForCreation
+    CategoryPaginatedResult:
+      properties:
+        categories:
+          items:
+            $ref: '#/components/schemas/Category'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - categories
+      title: CategoryPaginatedResult
+      type: object
+      description: CategoryPaginatedResult
+    CategorySearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/CategorySearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/CategorySort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: CategorySearchPayload
+      type: object
+      description: CategorySearchPayload
+    CategorySearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/CategorySearchQuery'
+          type: array
+        customAttributes:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
+          description: Search by custom attributes
+          type: object
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        nameLocalized:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/StringFilter'
+              - $ref: '#/components/schemas/KeyExistsFilter'
+          description: Search by nameLocalized
+          type: object
+        or:
+          items:
+            $ref: '#/components/schemas/CategorySearchQuery'
+          type: array
+        tenantCategoryId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantCategoryId
+      title: CategorySearchQuery
+      type: object
+      description: CategorySearchQuery
+    CategorySort:
+      properties:
+        customAttributes:
+          additionalProperties: true
+          maxProperties: 1
+          minProperties: 1
+          type: object
+        id:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        tenantCategoryId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: CategorySort
+      type: object
+      description: CategorySort
     ChannelStockAvailability:
       properties:
         availableForPicking:
