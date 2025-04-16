@@ -34163,6 +34163,7 @@ components:
         - $ref: '#/components/schemas/PickJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/PickJobPauseActionParameter'
         - $ref: '#/components/schemas/PickJobSplitLineItemsActionParameter'
+        - $ref: '#/components/schemas/PickJobMergeLineItemsActionParameter'
         - $ref: >-
             #/components/schemas/UpdatePickLineItemRecordableAttributesActionParameter
     PackJobReplaceAssignedUsersActionParameter:
@@ -34426,7 +34427,33 @@ components:
       type: object
     PickJobSplitLineItemsActionEnum:
       enum:
-        - SPLIT_LINES_PICK_JOB
+        - SPLIT_LINE_ITEMS_PICK_JOB
+      type: string
+    PickJobMergeLineItemsActionParameter:
+      title: PickJobMergeLineItemsActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobMergeLineItemsActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        lineItemIds:
+          description: Ids of the line items that should be merged
+          items:
+            type: string
+          type: array
+      required:
+        - name
+        - version
+        - lineItemIds
+      type: object
+    PickJobMergeLineItemsActionEnum:
+      enum:
+        - MERGE_LINE_ITEMS_PICK_JOB
       type: string
     PickJobSplitLineItemsInfo:
       additionalProperties: false
