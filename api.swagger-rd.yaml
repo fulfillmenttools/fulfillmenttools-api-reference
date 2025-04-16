@@ -28017,6 +28017,11 @@ components:
             $ref: '#/components/schemas/RecordableAttributeForCreation'
           type: array
           nullable: true
+        globalLineItemId:
+          type: string
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
       required:
         - quantity
         - article
@@ -28033,7 +28038,7 @@ components:
       description: PickRunLineItem
     PickLineItem:
       allOf:
-        - $ref: '#/components/schemas/PickLineItemForCreation'
+        - $ref: '#/components/schemas/LineItem'
         - properties:
             id:
               description: >-
@@ -28128,10 +28133,65 @@ components:
                 before any split has happened. This can be used to restore the
                 ‘pre-split’ status.
               example: df671041-10dd-4600-a2ff-e9ffe2556bba
+            globalLineItemId:
+              type: string
+              description: >-
+                This id is used to identify if this line item is related to the
+                line item of other operational entities.
+              example: a81f818e-2405-4570-8cde-b0c80fd3de31
+            article:
+              $ref: '#/components/schemas/PickLineItemArticle'
+            customAttributes:
+              description: >-
+                Attributes that can be added to the pick line. These attributes
+                cannot be used within fulfillment processes, but it could be
+                useful to have the information carried here.
+              type: object
+            measurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            quantity:
+              description: quantity of the specific article that has been ordered
+              example: 21
+              format: int64
+              minimum: 1
+              type: integer
+            secondaryMeasurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            secondaryQuantity:
+              description: quantity of the specific article that has been ordered
+              example: 21
+              format: int64
+              minimum: 0
+              type: integer
+            measurementValidation:
+              $ref: '#/components/schemas/MeasurementValidation'
+            scannableCodes:
+              items:
+                description: Codes, that identify the article
+                type: string
+              type: array
+            tags:
+              items:
+                $ref: '#/components/schemas/TagReference'
+              type: array
+            stickers:
+              items:
+                $ref: '#/components/schemas/Sticker'
+              type: array
+            allowedSubstitutes:
+              items:
+                $ref: '#/components/schemas/Substitute'
+              type: array
           required:
             - id
             - picked
             - status
+            - quantity
+            - article
           type: object
       title: PickLineItem
       description: PickLineItem
@@ -33600,25 +33660,19 @@ components:
       description: SubstituteLineItemPartialStockLocation
     PickLineItemArticle:
       allOf:
-        - $ref: '#/components/schemas/AbstractArticle'
-        - properties:
-            attributes:
-              items:
-                $ref: '#/components/schemas/ArticleAttributeItem'
-              type: array
-              maxItems: 40
-            prices:
-              deprecated: true
-              items:
-                $ref: '#/components/schemas/ArticlePrice'
-              type: array
-              description: >-
-                This part of the API is deprecated. For details please check the
-                <a
-                href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-                target="_blank">api-release-life-cycle documentation</a>.<br
-                /><br />
-          type: object
+        - $ref: '#/components/schemas/LineItemArticle'
+      properties:
+        prices:
+          deprecated: true
+          items:
+            $ref: '#/components/schemas/ArticlePrice'
+          type: array
+          description: >-
+            This part of the API is deprecated. For details please check the <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
+            target="_blank">api-release-life-cycle documentation</a>.<br /><br
+            />
+      type: object
       xml:
         name: PickLineItemArticle
       title: PickLineItemArticle
@@ -45658,6 +45712,92 @@ components:
       title: RecordableAttributeForUpdate
       type: object
       description: RecordableAttributeForUpdate
+    LineItem:
+      additionalProperties: false
+      properties:
+        article:
+          description: information about the lineItem
+          type: object
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
+        id:
+          description: id of the recordable attribute
+          example: 17ebfdfb-e1b4-4913-9962-3aef2b49f16f
+          type: string
+        quantity:
+          description: The quantity of the lineItem
+          type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            type: string
+          type: array
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
+      required:
+        - id
+        - article
+      title: LineItem
+      type: object
+      description: LineItem
+    LineItemArticle:
+      properties:
+        attributes:
+          description: >-
+            Attributes are used in the fulfillmenttools platform in order to
+            impose a certain degree of customization to a process, such as
+            improving the appearance in the platform and clients. Details about
+            usage can be found <a
+            href=\"https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/customization-via-attributes">here</a>
+          items:
+            $ref: '#/components/schemas/ArticleAttributeItem'
+          type: array
+        customAttributes:
+          deprecated: true
+          description: 'deprecated: use customAttributes on lineItem instead.'
+          nullable: true
+          type: object
+        imageUrl:
+          description: >-
+            A web link to a picture of this article. Please make sure that no
+            authentication is required to fetch the image!
+          type: string
+        tenantArticleId:
+          description: This is a reference to an article number
+          example: '4711'
+          type: string
+        title:
+          description: The title of the product
+          example: Cologne Water
+          type: string
+        titleLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: The translations for the title of the product
+        weight:
+          description: weight value is in gram
+          minimum: 0
+          type: number
+      required:
+        - title
+        - tenantArticleId
+      title: LineItemArticle
+      type: object
+      description: LineItemArticle
     BaseDecisionDetail:
       properties:
         decisionType:
@@ -46604,7 +46744,7 @@ components:
                 improving the appearance in the platform and clients.
 
                 Details about usage can be found <a
-                href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/customization-via-attributes">here</a>
+                href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/customization-via-attributes">here</a>
           type: object
       xml:
         name: OrderLineItemArticle
