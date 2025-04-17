@@ -43169,11 +43169,37 @@ components:
                 #/components/schemas/InterFacilityConnectionManagedFacilityTarget
               CUSTOMER: '#/components/schemas/InterFacilityConnectionCustomerTarget'
         fallbackCost:
-          $ref: '#/components/schemas/DeliveryCost'
+          $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         cutoffTimes:
           $ref: '#/components/schemas/CarrierCutoffTimes'
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionContext'
+          type: array
+          maxItems: 2000
+          minItems: 0
+        carrierName:
+          type: string
+          description: The name of the carrier that is used for this connection.
+          example: DHL
+        carrierKey:
+          type: string
+          description: >-
+            The key of the carrier that is used for this connection. References
+            known and configured carriers in the system.
+          example: DHL_V2
+        nonDeliveryDays:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+        packagingUnitsByContexts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingUnitsByContext'
+          maxItems: 2000
+          minItems: 0
       required:
         - id
         - sourceFacilityRef
@@ -43192,13 +43218,39 @@ components:
         version:
           type: number
         fallbackCost:
-          $ref: '#/components/schemas/DeliveryCost'
+          $ref: '#/components/schemas/InterFacilityConnectionFallbackCost'
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         cutoffTimes:
           $ref: '#/components/schemas/CarrierCutoffTimes'
         type:
           $ref: '#/components/schemas/ConnectionType'
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionContext'
+          type: array
+          maxItems: 2000
+          minItems: 0
+        carrierName:
+          type: string
+          description: The name of the carrier that is used for this connection.
+          example: DHL
+        carrierKey:
+          type: string
+          description: >-
+            The key of the carrier that is used for this connection. References
+            known and configured carriers in the system.
+          example: DHL_V2
+        nonDeliveryDays:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+        packagingUnitsByContexts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingUnitsByContext'
+          maxItems: 2000
+          minItems: 0
       required:
         - version
         - type
@@ -43274,13 +43326,39 @@ components:
     InterFacilityConnectionForCreation:
       properties:
         fallbackCost:
-          $ref: '#/components/schemas/DeliveryCost'
+          $ref: '#/components/schemas/InterFacilityConnectionFallbackCost'
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         cutoffTimes:
           $ref: '#/components/schemas/CarrierCutoffTimes'
         type:
           $ref: '#/components/schemas/ConnectionType'
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionContext'
+          type: array
+          maxItems: 2000
+          minItems: 0
+        carrierName:
+          type: string
+          description: The name of the carrier that is used for this connection.
+          example: DHL
+        carrierKey:
+          type: string
+          description: >-
+            The key of the carrier that is used for this connection. References
+            known and configured carriers in the system.
+          example: DHL_V2
+        nonDeliveryDays:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+        packagingUnitsByContexts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingUnitsByContext'
+          maxItems: 2000
+          minItems: 0
       required:
         - type
       type: object
@@ -43292,8 +43370,6 @@ components:
       properties:
         type:
           $ref: '#/components/schemas/ConnectionType'
-        carrierProductCategory:
-          $ref: '#/components/schemas/CarrierProductCategory'
       required:
         - type
       type: object
@@ -43321,6 +43397,185 @@ components:
           type: string
       required:
         - facilityRef
+    InterFacilityConnectionDeliveryCost:
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: integer
+          example: 25000
+          description: >-
+            Value of operational cost of the facility. Value is configured in
+            the smallest subunit, e.g. cents.
+          minimum: 0
+        currency:
+          $ref: '#/components/schemas/CurrencyCode'
+        decimalPlaces:
+          type: integer
+          description: Number of decimal places for the given currency
+          example: 2
+          minimum: 0
+        deliveryCostCoefficient:
+          $ref: '#/components/schemas/DeliverCostCoefficient'
+      required:
+        - value
+        - currency
+    DeliverCostCoefficient:
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: number
+          description: The coefficient value
+          example: 1.5
+          minimum: 0
+        measurementUnit:
+          type: string
+          description: The unit of measurement for the coefficient
+          example: KG
+      required:
+        - value
+        - measurementUnit
+    InterFacilityConnectionFallbackCost:
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: integer
+          example: 25000
+          description: >-
+            Value of operational cost of the facility. Value is configured in
+            the smallest subunit, e.g. cents.
+          minimum: 0
+        currency:
+          $ref: '#/components/schemas/CurrencyCode'
+        decimalPlaces:
+          type: integer
+          description: Number of decimal places for the given currency
+          example: 2
+          minimum: 0
+      required:
+        - value
+        - currency
+    PackagingUnitsByContext:
+      type: object
+      additionalProperties: false
+      properties:
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingUnitContext'
+          maxItems: 2000
+          minItems: 0
+        packagingUnits:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackagingUnit'
+          maxItems: 2000
+          minItems: 1
+      required:
+        - context
+        - packagingUnits
+    PackagingUnit:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The name of the packaging unit
+          example: Parcel XXL
+        volumeBufferInPercent:
+          type: integer
+          description: The volume buffer of PackagingUnit in percent
+          example: 10
+          minimum: 0
+        maxItemQuantity:
+          type: integer
+          description: The maximum item quantity of the packaging unit
+          example: 10
+          minimum: 0
+        priority:
+          type: integer
+          description: >-
+            The priority of the packaging unit. Lowest value has the highest
+            priority. Must be unique per context
+          example: 1
+          minimum: 0
+        dimensions:
+          $ref: '#/components/schemas/PackagingUnitDimensions'
+        price:
+          $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+        transitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+      required:
+        - name
+        - priority
+    PackagingUnitDimensions:
+      type: object
+      additionalProperties: false
+      properties:
+        length:
+          type: number
+          description: The length of the packaging unit
+          example: 100
+          minimum: 0
+        width:
+          type: number
+          description: The width of the packaging unit
+          example: 50
+          minimum: 0
+        height:
+          type: number
+          description: The height of the packaging unit
+          example: 50
+          minimum: 0
+        maxWeightInGram:
+          type: number
+          description: The weight of the packaging unit
+          example: 1000
+          minimum: 0
+    PackagingUnitContextTypes:
+      enum:
+        - TARGET_POSTALCODE
+        - TARGET_COUNTRY
+        - CATEGORY
+      type: string
+    InterFacilityConnectionContextTypes:
+      enum:
+        - FACILITY
+        - FACILITY_GROUP
+        - CATEGORY
+      type: string
+    PackagingUnitContext:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/PackagingUnitContextTypes'
+        values:
+          type: array
+          items:
+            type: string
+            maxItems: 2000
+            minItems: 0
+      required:
+        - type
+        - values
+    InterFacilityConnectionContext:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/InterFacilityConnectionContextTypes'
+        values:
+          type: array
+          items:
+            type: string
+            maxItems: 2000
+            minItems: 0
+      required:
+        - type
+        - values
     CustomServiceForCreation:
       additionalProperties: false
       properties:
