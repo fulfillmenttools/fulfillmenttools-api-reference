@@ -1,10 +1,11 @@
 {
 	"info": {
-		"_postman_id": "a2f92a59-4952-4052-a9bb-b63fa0e369b6",
+		"_postman_id": "d2b554e6-7ae1-4f76-8c32-f66a5cf3c198",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "19028498"
+		"_exporter_id": "11673215",
+		"_collection_link": "https://cloudy-firefly-771136.postman.co/workspace/FFtApiPostman~3412b37c-b9c1-4e97-8878-de4006ba46bb/collection/11673215-d2b554e6-7ae1-4f76-8c32-f66a5cf3c198?action=share&source=collection_link&creator=11673215"
 	},
 	"item": [
 		{
@@ -2079,6 +2080,188 @@
 												},
 												{
 													"key": "customserviceId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Facilities InterFacilityConnections",
+							"item": [
+								{
+									"name": "Get FacilityConnections",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/connections",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"connections"
+											],
+											"query": [
+												{
+													"key": "startAfterId",
+													"value": "",
+													"description": "All entities after given Id",
+													"disabled": true
+												},
+												{
+													"key": "size",
+													"value": "25",
+													"description": "Number of entities to retrieve",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get FacilityConnection by ID",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/connections/:facilityConnectionRef",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"connections",
+												":facilityConnectionRef"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": null
+												},
+												{
+													"key": "facilityConnectionRef",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create FacilityConnection",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"type\": \"SUPPLIER\",\n    \"target\": {\n        \"facilityRef\": \"uuid_targetFacility\",\n        \"type\": \"SUPPLIER\"\n    },\n    \"fallbackTransitTime\": {\n        \"maxTransitDays\": 2,\n        \"minTransitDays\": 1\n    },\n    \"fallbackCost\": {\n        \"value\": 10,\n        \"currency\": \"EUR\",\n        \"decimalPlaces\": 2,\n        \"deliveryCostCoefficient\": {\n            \"measurementUnit\": \"KG\",\n            \"value\": 2\n        }\n    },\n    \"carrierKey\": \"DHL_V2\",\n    \"carrierName\": \"MyDhl\",\n    \"context\": [\n        {\n            \"type\": \"CATEGORY\",\n            \"values\": [\n                \"category1\",\n                \"category2\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY\",\n            \"values\": [\n                \"uuid_facility\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY_GROUP\",\n            \"values\": [\n                \"uuid_facility_group\"\n            ]\n        }\n    ],\n    \"nonDeliveryDays\": [\n        {\n            \"nonDeliveryDay\": \"2025-12-12\",\n            \"nonDeliveryType\": \"SINGLE\"\n        }\n    ],\n    \"packagingUnitsByContexts\": [\n        {\n            \"context\": [\n                {\n                    \"type\": \"TARGET_COUNTRY\",\n                    \"values\": [\n                        \"DE\",\n                        \"NL\"\n                    ]\n                },\n                {\n                    \"type\": \"TARGET_POSTALCODE\",\n                    \"values\": [\n                        \"50688\"\n                    ]\n                },\n                {\n                    \"type\": \"CATEGORY\",\n                    \"values\": [\n                        \"CatA\"\n                    ]\n                }\n            ],\n            \"packagingUnits\": [\n                {\n                    \"dimensions\": {\n                        \"height\": 1,\n                        \"length\": 2,\n                        \"width\": 3,\n                        \"weightInGram\": 1000\n                    },\n                    \"maxItemQuantity\": 1337,\n                    \"name\": \"StandardPackage\",\n                    \"price\": {\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2,\n                        \"value\": 12\n                    },\n                    \"priority\": 1,\n                    \"transitTime\": {\n                        \"maxTransitDays\": 1,\n                        \"minTransitDays\": 1\n                    },\n                    \"volumeBufferInPercent\": 1\n                }\n            ]\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/connections",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"connections"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update FacilityConnection",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"version\": 1,\n    \"type\": \"SUPPLIER\",\n    \"target\": {\n        \"facilityRef\": \"uuid_targetFacility\",\n        \"type\": \"SUPPLIER\"\n    },\n    \"fallbackTransitTime\": {\n        \"maxTransitDays\": 2,\n        \"minTransitDays\": 1\n    },\n    \"fallbackCost\": {\n        \"value\": 10,\n        \"currency\": \"EUR\",\n        \"decimalPlaces\": 2\n    },\n    \"carrierKey\": \"DHL_V2\",\n    \"carrierName\": \"MyDhl\",\n    \"context\": [\n        {\n            \"type\": \"CATEGORY\",\n            \"values\": [\n                \"category1\",\n                \"category2\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY\",\n            \"values\": [\n                \"uuid_facility\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY_GROUP\",\n            \"values\": [\n                \"uuid_facility_group\"\n            ]\n        }\n    ],\n      \"nonDeliveryDays\": [\n          {\n            \"country\": \"DE\",\n            \"nonDeliveryDays\": [{ \"nonDeliveryDay\": \"2025-01-01\", \"nonDeliveryType\": \"SINGLE\" }],\n            \"nonDeliveryDaysPerProvince\": [\n              {\n                \"nonDeliveryDays\": [{ \"nonDeliveryDay\": \"2025-01-01\", \"nonDeliveryType\": \"SINGLE\" }],\n                \"province\": \"NRW\",\n                \"recurringNonDeliveryWeekdays\": [\"SUNDAY\"]\n              }\n            ],\n            \"recurringNonDeliveryWeekdays\": [\"FRIDAY\"]\n          }\n        ],\n    \"packagingUnitsByContexts\": [\n        {\n            \"context\": [\n                {\n                    \"type\": \"TARGET_COUNTRY\",\n                    \"values\": [\n                        \"DE\",\n                        \"NL\"\n                    ]\n                },\n                {\n                    \"type\": \"TARGET_POSTALCODE\",\n                    \"values\": [\n                        \"50688\"\n                    ]\n                },\n                {\n                    \"type\": \"CATEGORY\",\n                    \"values\": [\n                        \"CatA\"\n                    ]\n                }\n            ],\n            \"packagingUnits\": [\n                {\n                    \"dimensions\": {\n                        \"height\": 1,\n                        \"length\": 2,\n                        \"width\": 3,\n                        \"maxWeightInGram\": 1000\n                    },\n                    \"maxItemQuantity\": 1337,\n                    \"name\": \"StandardPackage\",\n                    \"price\": {\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2,\n                        \"value\": 12\n                    },\n                    \"priority\": 1,\n                    \"transitTime\": {\n                        \"maxTransitDays\": 1,\n                        \"minTransitDays\": 1\n                    },\n                    \"volumeBufferInPercent\": 1\n                }\n            ]\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/connections/:facilityConnectionRef",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"connections",
+												":facilityConnectionRef"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": null
+												},
+												{
+													"key": "facilityConnectionRef",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete FacilityConnectio",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/connections/:facilityConnectionRef",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"connections",
+												":facilityConnectionRef"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": null
+												},
+												{
+													"key": "facilityConnectionRef",
 													"value": ""
 												}
 											]
