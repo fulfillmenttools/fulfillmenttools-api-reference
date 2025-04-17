@@ -45857,7 +45857,14 @@ components:
             - shop
             - dimensions
             - carrierService
+            - salesPrice
           type: string
+        context:
+          allOf:
+            - $ref: '#/components/schemas/ArticleAttributeItemContext'
+          description: >-
+            Context for salesPrice category and valuePerUnit key. Can only be
+            set via Listing endpoints.
         key:
           description: |-
             Providing the key %%subtitle%% (see example) here will cause the
@@ -45910,6 +45917,24 @@ components:
       title: ArticleAttributeItem
       type: object
       description: ArticleAttributeItem
+    ArticleAttributeItemContext:
+      properties:
+        type:
+          description: Indicates the entity type the value refers to.
+          enum:
+            - FACILITY_GROUP
+            - FACILITY
+          type: string
+        value:
+          description: Holds the reference to the entity the attribute refers to.
+          minLength: 1
+          type: string
+      required:
+        - type
+        - value
+      title: ArticleAttributeItemContext
+      type: object
+      description: ArticleAttributeItemContext
     AbstractArticle:
       properties:
         customAttributes:
@@ -54851,6 +54876,7 @@ components:
             - shop
             - dimensions
             - carrierService
+            - salesPrice
           type: string
         key:
           type: string
