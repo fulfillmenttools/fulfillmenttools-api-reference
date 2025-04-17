@@ -30990,6 +30990,12 @@ components:
             **cannot** be used within fulfillment processes, but enable you to
             attach custom data from your systems to fulfillmenttools entities.
           type: object
+        categoryRefs:
+          type: array
+          description: References to categories the listing belongs to.
+          maxItems: 10
+          items:
+            type: string
       required:
         - tenantArticleId
         - title
@@ -32520,6 +32526,12 @@ components:
                 to attach custom data from your systems to fulfillmenttools
                 entities.
               type: object
+            categoryRefs:
+              type: array
+              description: References to categories the listing belongs to.
+              maxItems: 10
+              items:
+                type: string
           required:
             - action
           type: object
@@ -53611,6 +53623,10 @@ components:
           type: array
         availabilityTimeframe:
           $ref: '#/components/schemas/InventoryAvailabilityTimeframe'
+        categoryRefs:
+          items:
+            type: string
+          type: array
         created:
           format: date-time
           type: string
@@ -54301,6 +54317,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/ListingAvailabilityTimeframeFilter'
           description: Nested search by availabilityTimeframe
+        categoryRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by categoryRefs
         created:
           allOf:
             - $ref: '#/components/schemas/DateFilter'
