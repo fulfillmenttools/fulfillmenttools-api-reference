@@ -37230,6 +37230,7 @@ components:
           anyOf:
             - $ref: '#/components/schemas/SubscriptionTargetWebhook'
             - $ref: '#/components/schemas/SubscriptionTargetMicrosoftAzureServiceBus'
+            - $ref: '#/components/schemas/SubscriptionTargetGoogleCloudPubSub'
       required:
         - name
         - event
@@ -37311,6 +37312,31 @@ components:
       description: Type of subscription target Microsoft Azure Service Bus.
       enum:
         - MICROSOFT_AZURE_SERVICE_BUS
+      type: string
+    SubscriptionTargetGoogleCloudPubSub:
+      title: SubscriptionTargetGoogleCloudPubSub
+      description: Subscriptions model for a Google Cloud Pub/Sub target.
+      properties:
+        type:
+          $ref: '#/components/schemas/SubscriptionTargetGoogleCloudPubSubEnum'
+        projectId:
+          minLength: 1
+          type: string
+          description: Id of the Google Cloud project.
+        topicId:
+          minLength: 1
+          type: string
+          description: Id of the Google Cloud Pub/Sub topic.
+      required:
+        - type
+        - projectId
+        - topicId
+      type: object
+    SubscriptionTargetGoogleCloudPubSubEnum:
+      title: SubscriptionTargetGoogleCloudPubSubEnum
+      description: Type of subscription target Google Cloud Pub/Sub.
+      enum:
+        - GOOGLE_CLOUD_PUB_SUB
       type: string
     Substitute:
       properties:
