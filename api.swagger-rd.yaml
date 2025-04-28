@@ -28142,15 +28142,12 @@ components:
       title: ExpectedPickLineItemForCreation
       description: ExpectedPickLineItemForCreation
     PickLineItemForCreation:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/LineItemForCreation'
       properties:
         article:
           $ref: '#/components/schemas/PickLineItemArticle'
-        customAttributes:
-          description: >-
-            Attributes that can be added to the pick line. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the information carried here.
-          type: object
         measurementUnitKey:
           description: Identifier for items unit of measurement.
           example: liter
@@ -28173,11 +28170,6 @@ components:
           type: integer
         measurementValidation:
           $ref: '#/components/schemas/MeasurementValidation'
-        scannableCodes:
-          items:
-            description: Codes, that identify the article
-            type: string
-          type: array
         partialStockLocations:
           description: >-
             Indicates where the items to pick could be found and from where the
@@ -28197,16 +28189,29 @@ components:
           items:
             $ref: '#/components/schemas/Substitute'
           type: array
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttributeForCreation'
-          type: array
-          nullable: true
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
         globalLineItemId:
-          type: string
           description: >-
             This id is used to identify if this line item is related to the line
             item of other operational entities.
+          type: string
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          type: array
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
       required:
         - quantity
         - article
@@ -30912,7 +30917,6 @@ components:
       description: LoadUnit.
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
-        - $ref: '#/components/schemas/LoadUnitForCreation'
       properties:
         dimensions:
           $ref: '#/components/schemas/LoadUnitDimensions'
@@ -30942,11 +30946,49 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LoadUnitLineItem'
+        codes:
+          items:
+            description: List of codes
+            type: string
+          type: array
+        loadUnitTypeRef:
+          type: string
+          deprecated: true
+          description: >-
+            This part of the API is deprecated. For details please check the <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
+            target="_blank">api-release-life-cycle documentation</a>.<br /><br
+            />Use operativeContainerTypeRef instead.
+        pickJobRefs:
+          items:
+            description: List of corresponding pickjob Ids
+            type: string
+          maxItems: 1
+          minItems: 1
+          type: array
+        customAttributes:
+          description: >-
+            Attributes that can be added to the LoadUnit. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        storageLocationRef:
+          description: >-
+            the reference to the storage location this load unit as been placed
+            into
+          type: string
+        operativeContainerTypeRef:
+          description: the reference to the operativeContainerType
+          type: string
+        stackRef:
+          description: the reference to the stackRef this loadUnit is part of
+          type: string
       required:
         - id
         - nameLocalized
         - version
         - facilityRef
+        - pickJobRefs
       type: object
     LoadUnitConfiguration:
       allOf:
@@ -30961,7 +31003,57 @@ components:
       title: LoadUnitConfiguration
       description: LoadUnitConfiguration
     LoadUnitLineItemForCreation:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/LineItemForCreation'
       properties:
+        article:
+          $ref: '#/components/schemas/PickLineItemArticle'
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
+        quantity:
+          description: The quantity of the lineItem
+          type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          type: array
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
+      required:
+        - article
+      title: LoadUnitLineItemForCreation
+      description: LoadUnitLineItemForCreation
+    LoadUnitLineItem:
+      allOf:
+        - $ref: '#/components/schemas/LineItem'
+      properties:
+        id:
+          type: string
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          type: array
+          nullable: true
         article:
           $ref: '#/components/schemas/PickLineItemArticle'
         customAttributes:
@@ -30985,28 +31077,9 @@ components:
             description: Codes, that identify the article
             type: string
           type: array
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttributeForCreation'
-          type: array
-          nullable: true
-      required:
-        - article
-      title: LoadUnitLineItemForCreation
-      description: LoadUnitLineItemForCreation
-    LoadUnitLineItem:
-      allOf:
-        - $ref: '#/components/schemas/LoadUnitLineItemForCreation'
-      properties:
-        id:
-          type: string
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttribute'
-          type: array
-          nullable: true
       required:
         - id
+        - article
       title: LoadUnitLineItem
       description: LoadUnitLineItem
     LoadUnitForCreation:
@@ -46267,7 +46340,6 @@ components:
       type: object
       description: RecordableAttributeForUpdate
     LineItem:
-      additionalProperties: false
       properties:
         article:
           description: information about the lineItem
@@ -46295,7 +46367,7 @@ components:
             Customizable information about the lineItem that can be set during
             the process.
           items:
-            type: string
+            $ref: '#/components/schemas/RecordableAttribute'
           type: array
         scannableCodes:
           description: Codes that can be used for scanning this lineItem
@@ -46352,6 +46424,42 @@ components:
       title: LineItemArticle
       type: object
       description: LineItemArticle
+    LineItemForCreation:
+      properties:
+        article:
+          description: information about the lineItem
+          type: object
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
+        quantity:
+          description: The quantity of the lineItem
+          type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          type: array
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
+      required:
+        - article
+      title: LineItemForCreation
+      type: object
+      description: LineItemForCreation
     BaseDecisionDetail:
       properties:
         decisionType:
