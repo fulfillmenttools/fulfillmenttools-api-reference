@@ -31367,34 +31367,12 @@ components:
       properties:
         id:
           type: string
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttribute'
-          type: array
-          nullable: true
         article:
           $ref: '#/components/schemas/PickLineItemArticle'
-        customAttributes:
-          description: >-
-            Attributes that can be added to the orderline. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the informations carried here.
-          type: object
         measurementUnitKey:
           description: Identifier for items unit of measurement.
           example: liter
           type: string
-        quantity:
-          description: quantity of the specific article that has been ordered
-          example: 21
-          format: int64
-          minimum: 1
-          type: integer
-        scannableCodes:
-          items:
-            description: Codes, that identify the article
-            type: string
-          type: array
       required:
         - id
         - article
@@ -38542,6 +38520,7 @@ components:
       description: ISO 3166 ALPHA-2 of country
       example: DE
     PackJobForCreation:
+      additionalProperties: false
       properties:
         customAttributes:
           description: >-
@@ -38820,17 +38799,13 @@ components:
       xml:
         name: AddAllowedValueToTagAction
     PackLineItemForCreation:
+      allOf:
+        - $ref: '#/components/schemas/LineItemForCreation'
       properties:
         article:
           $ref: '#/components/schemas/PackLineItemArticle'
-        customAttributes:
-          description: >-
-            Attributes that can be added to the pack line. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the information carried here.
-          type: object
         quantity:
-          description: quantity of the specific article that has been ordered
+          description: quantity of this item
           example: 21
           format: int64
           minimum: 1
@@ -38847,15 +38822,6 @@ components:
           items:
             $ref: '#/components/schemas/Sticker'
           type: array
-        scannableCodes:
-          items:
-            description: Codes, that identify the article
-            type: string
-          type: array
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttributeForCreation'
-          type: array
       required:
         - quantity
         - article
@@ -38864,7 +38830,7 @@ components:
         name: PackLineItemForCreation
     PackLineItem:
       allOf:
-        - $ref: '#/components/schemas/PackLineItemForCreation'
+        - $ref: '#/components/schemas/LineItem'
         - properties:
             id:
               description: >-
@@ -38879,10 +38845,6 @@ components:
               format: int32
               minimum: 0
               type: integer
-            recordableAttributes:
-              items:
-                $ref: '#/components/schemas/RecordableAttribute'
-              type: array
             originId:
               nullable: true
               type: string
@@ -38891,8 +38853,30 @@ components:
                 before any split has happened. This can be used to restore the
                 ‘pre-split’ status.
               example: df671041-10dd-4600-a2ff-e9ffe2556bba
+            article:
+              $ref: '#/components/schemas/PackLineItemArticle'
+            quantity:
+              description: quantity of this item
+              example: 21
+              format: int64
+              minimum: 1
+              type: integer
+            measurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            tags:
+              items:
+                $ref: '#/components/schemas/TagReference'
+              type: array
+            stickers:
+              items:
+                $ref: '#/components/schemas/Sticker'
+              type: array
           required:
             - id
+            - quantity
+            - article
       type: object
       xml:
         name: PackLineItem
