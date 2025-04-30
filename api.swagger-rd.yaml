@@ -40026,7 +40026,7 @@ components:
         name: UpdatePackingTargetContainerLineItemRecordableAttributes
     PackingTargetContainerLineItem:
       allOf:
-        - $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
+        - $ref: '#/components/schemas/LineItem'
       properties:
         id:
           description: >-
@@ -40035,11 +40035,18 @@ components:
             entity.
           example: climk4dcQFiPdA5ULuhS
           type: string
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttribute'
-          type: array
-          nullable: true
+        article:
+          $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        quantity:
+          description: quantity of the item
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
       required:
         - id
         - article
@@ -40047,35 +40054,21 @@ components:
       title: PackingTargetContainerLineItem
       description: PackingTargetContainerLineItem
     PackingTargetContainerLineItemForCreation:
+      allOf:
+        - $ref: '#/components/schemas/LineItemForCreation'
       properties:
         article:
           $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
-        customAttributes:
-          description: >-
-            Attributes that can be added to the line item. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the informations carried here.
-          type: object
         measurementUnitKey:
           description: Identifier for items unit of measurement.
           example: liter
           type: string
         quantity:
-          description: quantity of the specific article that has been ordered
+          description: quantity of the item
           example: 21
           format: int64
           minimum: 1
           type: integer
-        scannableCodes:
-          items:
-            description: Codes, that identify the article
-            type: string
-          type: array
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttributeForCreation'
-          type: array
-          nullable: true
       required:
         - article
         - quantity
