@@ -24168,6 +24168,49 @@ paths:
       summary: Put receipt to id
       tags:
         - Inventory Management - Inbound
+  /api/roles/search:
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Search for Role
+      operationId: searchRole
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolePaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Core - User Management
   /api/routingplans/search:
     post:
       deprecated: false
@@ -56605,6 +56648,96 @@ components:
         - type
         - value
       title: RequestedDateTimePoint
+      type: object
+    Role:
+      properties:
+        created:
+          description: The date the role was created
+          format: date-time
+          type: string
+        customAttributes:
+          description: The new custom attributes of the role
+          nullable: true
+          type: object
+        id:
+          description: The id of the role
+          type: string
+        lastModified:
+          description: The date the role was last modified
+          format: date-time
+          type: string
+        name:
+          description: The name of the role
+          maxLength: 20
+          minLength: 3
+          type: string
+        permissions:
+          description: The permissions of the role
+          items:
+            type: string
+          type: array
+        version:
+          description: The version of the role
+          type: number
+      required:
+        - name
+        - permissions
+        - created
+        - id
+        - lastModified
+        - version
+      title: Role
+      type: object
+    RolePaginatedResult:
+      properties:
+        roles:
+          items:
+            $ref: '#/components/schemas/Role'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - roles
+      title: RolePaginatedResult
+      type: object
+    RoleSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/RoleSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: RoleSearchPayload
+      type: object
+    RoleSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/RoleSearchQuery'
+          type: array
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by id
+        or:
+          items:
+            $ref: '#/components/schemas/RoleSearchQuery'
+          type: array
+      title: RoleSearchQuery
       type: object
     RoutingPlanCustomServicesArticleItemsFilter:
       properties:
