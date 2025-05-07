@@ -28189,7 +28189,7 @@ components:
     PickLineItemForCreation:
       additionalProperties: false
       allOf:
-        - $ref: '#/components/schemas/LineItemForCreation'
+        - $ref: '#/components/schemas/MandatoryLineItemForCreation'
       properties:
         article:
           $ref: '#/components/schemas/PickLineItemArticle'
@@ -28273,7 +28273,7 @@ components:
       description: PickRunLineItem
     PickLineItem:
       allOf:
-        - $ref: '#/components/schemas/LineItem'
+        - $ref: '#/components/schemas/MandatoryLineItem'
         - properties:
             id:
               description: >-
@@ -33314,12 +33314,9 @@ components:
       title: ProductValueType
       description: ProductValueType
     ParcelItemForCreation:
+      allOf:
+        - $ref: '#/components/schemas/LineItemForCreation'
       properties:
-        quantity:
-          type: integer
-          minimum: 1
-          description: amount of the given items
-          example: 5
         hsCode:
           type: string
           maxLength: 50
@@ -33337,16 +33334,11 @@ components:
           type: string
         article:
           $ref: '#/components/schemas/ParcelItemArticle'
-        customAttributes:
-          type: object
-          description: >-
-            Attributes that can be added to the parcelItem. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the information carried here.
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttributeForCreation'
-          type: array
+        quantity:
+          type: integer
+          minimum: 1
+          description: amount of the given items
+          example: 5
       required:
         - quantity
       type: object
@@ -33426,6 +33418,8 @@ components:
       title: ParcelPostalCharge
       description: ParcelPostalCharge
     ParcelItem:
+      allOf:
+        - $ref: '#/components/schemas/LineItem'
       properties:
         id:
           description: The id of this parcelItem.
@@ -33467,16 +33461,6 @@ components:
           type: string
         article:
           $ref: '#/components/schemas/ParcelItemArticle'
-        customAttributes:
-          type: object
-          description: >-
-            Attributes that can be added to the parcelItem. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the information carried here.
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttribute'
-          type: array
         originId:
           nullable: true
           type: string
@@ -39048,7 +39032,7 @@ components:
         name: AddAllowedValueToTagAction
     PackLineItemForCreation:
       allOf:
-        - $ref: '#/components/schemas/LineItemForCreation'
+        - $ref: '#/components/schemas/MandatoryLineItemForCreation'
       properties:
         article:
           $ref: '#/components/schemas/PackLineItemArticle'
@@ -39080,7 +39064,7 @@ components:
       description: PackLineItemForCreation
     PackLineItem:
       allOf:
-        - $ref: '#/components/schemas/LineItem'
+        - $ref: '#/components/schemas/MandatoryLineItem'
         - properties:
             id:
               description: >-
@@ -40071,7 +40055,7 @@ components:
         name: UpdatePackingTargetContainerLineItemRecordableAttributes
     PackingTargetContainerLineItem:
       allOf:
-        - $ref: '#/components/schemas/LineItem'
+        - $ref: '#/components/schemas/MandatoryLineItem'
       properties:
         id:
           description: >-
@@ -40100,7 +40084,7 @@ components:
       description: PackingTargetContainerLineItem
     PackingTargetContainerLineItemForCreation:
       allOf:
-        - $ref: '#/components/schemas/LineItemForCreation'
+        - $ref: '#/components/schemas/MandatoryLineItemForCreation'
       properties:
         article:
           $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
@@ -44616,31 +44600,16 @@ components:
         name: ModifyCustomServiceAction
     ServiceJobLineItemForCreation:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/LineItemForCreation'
       properties:
         quantity:
           type: integer
           description: Quantity of the items
           example: 12
           minimum: 1
-        scannableCodes:
-          items:
-            type: string
-            description: Codes, that identify the article
-            example: '4012345678901'
-          type: array
         article:
           $ref: '#/components/schemas/ServiceJobLineItemArticle'
-        customAttributes:
-          description: >-
-            Attributes that can be added to the service job line item. These
-            attributes cannot be used within fulfillment processes, but it could
-            be useful to have the information carried here.
-          type: object
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttributeForCreation'
-          nullable: true
-          type: array
       required:
         - quantity
         - article
@@ -44694,17 +44663,12 @@ components:
       description: ServiceJobAdditionalInformationForUpdate
     ServiceJobLineItem:
       allOf:
-        - $ref: '#/components/schemas/ServiceJobLineItemForCreation'
+        - $ref: '#/components/schemas/MandatoryLineItem'
       additionalProperties: false
       type: object
       properties:
         id:
           type: string
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttribute'
-          nullable: true
-          type: array
         originId:
           nullable: true
           type: string
@@ -44713,8 +44677,17 @@ components:
             any split has happened. This can be used to restore the ‘pre-split’
             status.
           example: df671041-10dd-4600-a2ff-e9ffe2556bba
+        quantity:
+          type: integer
+          description: Quantity of the items
+          example: 12
+          minimum: 1
+        article:
+          $ref: '#/components/schemas/ServiceJobLineItemArticle'
       required:
         - id
+        - quantity
+        - article
       title: ServiceJobLineItem
       description: ServiceJobLineItem
     ServiceJobLineItemArticle:
@@ -45444,6 +45417,8 @@ components:
       description: ServiceJobLink
     InheritedServiceJobLineItem:
       additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItem'
       properties:
         id:
           type: string
@@ -45452,27 +45427,10 @@ components:
           description: Quantity of the items
           example: 12
           minimum: 1
-        scannableCodes:
-          items:
-            type: string
-            description: Codes, that identify the article
-            example: '4012345678901'
-          type: array
         article:
           $ref: '#/components/schemas/ServiceJobLineItemArticle'
         serviceJobRef:
           type: string
-        customAttributes:
-          type: object
-          description: >-
-            Attributes that can be added to custom service. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the information carried here.
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttribute'
-          nullable: true
-          type: array
       required:
         - id
         - quantity
@@ -46398,7 +46356,6 @@ components:
           type: array
       required:
         - id
-        - article
       title: LineItem
       type: object
       description: LineItem
@@ -46477,11 +46434,88 @@ components:
           items:
             type: string
           type: array
-      required:
-        - article
       title: LineItemForCreation
       type: object
       description: LineItemForCreation
+    MandatoryLineItem:
+      properties:
+        article:
+          description: information about the lineItem
+          type: object
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
+        id:
+          description: id of the recordable attribute
+          example: 17ebfdfb-e1b4-4913-9962-3aef2b49f16f
+          type: string
+        quantity:
+          description: The quantity of the lineItem
+          type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          type: array
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
+      required:
+        - id
+        - article
+        - quantity
+      title: MandatoryLineItem
+      type: object
+      description: MandatoryLineItem
+    MandatoryLineItemForCreation:
+      properties:
+        article:
+          description: information about the lineItem
+          type: object
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
+        quantity:
+          description: The quantity of the lineItem
+          type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          type: array
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
+      required:
+        - article
+        - quantity
+      title: MandatoryLineItemForCreation
+      type: object
+      description: MandatoryLineItemForCreation
     BaseDecisionDetail:
       properties:
         decisionType:
