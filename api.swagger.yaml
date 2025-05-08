@@ -4546,6 +4546,47 @@ paths:
               $ref: '#/components/schemas/FacilityGroupForUpdate'
         required: true
       summary: Replace a facility group with the given ID
+  /api/facilitygroups/{facilityGroupId}/actions:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityGroupActionsParameter'
+      parameters:
+        - description: Reference to the facility group you want to call the action for.
+          in: path
+          name: facilityGroupId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityGroup'
+          description: Updated facility group in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      tags:
+        - Core - FacilityGroups
+      operationId: facilityGroupAction
+      summary: Call a single action on a given facility group
   /api/validations/postalcodes:
     post:
       responses:
@@ -32360,7 +32401,7 @@ components:
         - version
     UpdateFacilityCoordinatesActionParameter:
       title: UpdateFacilityCoordinatesActionParameter
-      description: Update facility Coorindates.
+      description: Update facility Coordinates.
       allOf:
         - $ref: '#/components/schemas/AbstractFacilityActionsParameter'
       properties:
@@ -32376,7 +32417,7 @@ components:
         - version
     RemoveFacilityCoordinatesActionParameter:
       title: RemoveFacilityCoordinatesActionParameter
-      description: Remove facility Coorindates.
+      description: Remove facility Coordinates.
       allOf:
         - $ref: '#/components/schemas/AbstractFacilityActionsParameter'
       properties:
@@ -32391,6 +32432,30 @@ components:
       anyOf:
         - $ref: '#/components/schemas/RemoveFacilityCoordinatesActionParameter'
         - $ref: '#/components/schemas/UpdateFacilityCoordinatesActionParameter'
+    AddFacilitiesToGroupActionParameter:
+      title: AddFacilitiesToGroupActionParameter
+      description: Add facilitites to facility group.
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityActionsParameter'
+      properties:
+        name:
+          $ref: '#/components/schemas/AddFacilitiesToGroupActionEnum'
+        facilitiesToAdd:
+          items:
+            type: string
+          minItems: 1
+          type: array
+      required:
+        - name
+        - version
+        - facilitiesToAdd
+    AddFacilitiesToGroupActionEnum:
+      enum:
+        - ADD_FACILITIES_TO_GROUP
+      type: string
+    FacilityGroupActionsParameter:
+      anyOf:
+        - $ref: '#/components/schemas/AddFacilitiesToGroupActionParameter'
     ModifyFacilityAddress:
       allOf:
         - $ref: '#/components/schemas/ModifyAddress'
