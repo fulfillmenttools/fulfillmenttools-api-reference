@@ -22275,6 +22275,41 @@ paths:
       summary: Update Stock in bulk facilityRef and tenantArticleId
       tags:
         - Inventory Management - Stocks
+  /api/facilitygroups/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for FacilityGroup
+      operationId: searchFacilityGroup
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityGroupSearchPayload'
+        required: true
+      responses:
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Core - Facilities
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/handoverjobs/search:
     post:
       deprecated: false
@@ -52683,6 +52718,47 @@ components:
       title: FacilityContactFilter
       type: object
       description: FacilityContactFilter
+    FacilityGroupSearchPayload:
+      properties:
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/FacilityGroupSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        startAfterId:
+          description: The ID to start after.
+          type: string
+      required:
+        - query
+      title: FacilityGroupSearchPayload
+      type: object
+      description: FacilityGroupSearchPayload
+    FacilityGroupSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/FacilityGroupSearchQuery'
+          type: array
+        facilityRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by facilityRefs
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringEqFilter'
+          description: Search by id
+        or:
+          items:
+            $ref: '#/components/schemas/FacilityGroupSearchQuery'
+          type: array
+      title: FacilityGroupSearchQuery
+      type: object
+      description: FacilityGroupSearchQuery
     FacilityLocationTypeEnumFilter:
       properties:
         eq:
