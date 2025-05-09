@@ -36791,6 +36791,10 @@ components:
                 described entity.
               example: climk4dcQFiPdA5ULuhS
               type: string
+            recordableAttributes:
+              items:
+                $ref: '#/components/schemas/RecordableAttribute'
+              type: array
           required:
             - id
           type: object
@@ -36839,6 +36843,10 @@ components:
             description: Codes, that identify the article
             type: string
           type: array
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          type: array
       required:
         - quantity
         - article
@@ -36886,6 +36894,8 @@ components:
     ShipmentActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/ShipmentSplitLineItemsActionParameter'
+        - $ref: >-
+            #/components/schemas/UpdateShipmentLineItemRecordableAttributesActionParameter
       title: ShipmentActionsParameter
       description: ShipmentActionsParameter
     ShipmentSplitLineItemsActionParameter:
@@ -36933,6 +36943,35 @@ components:
       type: object
       title: ShipmentSplitLineItemsInfo
       description: ShipmentSplitLineItemsInfo
+    UpdateShipmentLineItemRecordableAttributesActionParameter:
+      title: UpdateShipmentLineItemRecordableAttributesActionParameter
+      additionalProperties: false
+      properties:
+        name:
+          $ref: >-
+            #/components/schemas/UpdateShipmentLineItemRecordableAttributesActionEnum
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        recordableAttributeUpdates:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForUpdate'
+          type: array
+      required:
+        - name
+        - version
+        - recordableAttributeUpdates
+      type: object
+      description: UpdateShipmentLineItemRecordableAttributesActionParameter
+    UpdateShipmentLineItemRecordableAttributesActionEnum:
+      enum:
+        - UPDATE_SHIPMENT_LINE_ITEM_RECORDABLE_ATTRIBUTES
+      type: string
+      title: UpdateShipmentLineItemRecordableAttributesActionEnum
+      description: UpdateShipmentLineItemRecordableAttributesActionEnum
     Status:
       additionalProperties: false
       properties:
