@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "fb4ea805-0ee5-4ddc-ad20-fd9d1ff58d5b",
+		"_postman_id": "72b7c06f-c1ec-4f8a-b55a-93cf90b394fa",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "16829062"
+		"_exporter_id": "22612271"
 	},
 	"item": [
 		{
@@ -1715,6 +1715,156 @@
 							]
 						},
 						{
+							"name": "Facility Connections",
+							"item": [
+								{
+									"name": "Get FacilityConnections",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/connections",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"connections"
+											],
+											"query": [
+												{
+													"key": "startAfterId",
+													"value": "",
+													"description": "All entities after given Id",
+													"disabled": true
+												},
+												{
+													"key": "size",
+													"value": "25",
+													"description": "Number of entities to retrieve",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create FacilityConnection to Customer",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"type\": \"CUSTOMER\",\n  \"target\": {\n    \"type\": \"CUSTOMER\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/connections",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"connections"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create FacilityConnection to ManagedFacility",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"type\": \"MANAGED_FACILITY\",\n  \"target\": {\n    \"type\": \"MANAGED_FACILITY\",\n    \"facilityRef\": \"uuid\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/connections",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"connections"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create FacilityConnection to Supplier",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"type\": \"SUPPLIER\",\n  \"target\": {\n    \"type\": \"SUPPLIER\",\n    \"facilityRef\": \"uuid\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/facilities/:facilityId/connections",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"facilities",
+												":facilityId",
+												"connections"
+											],
+											"variable": [
+												{
+													"key": "facilityId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Add New Facility (Cologne)",
 							"request": {
 								"method": "POST",
@@ -1950,7 +2100,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/api/facilities/",
+									"raw": "{{host}}/api/facilities/?type=MANAGED_FACILITY&type=SUPPLIER",
 									"host": [
 										"{{host}}"
 									],
@@ -1982,6 +2132,14 @@
 											"key": "status",
 											"value": "ONLINE",
 											"disabled": true
+										},
+										{
+											"key": "type",
+											"value": "MANAGED_FACILITY"
+										},
+										{
+											"key": "type",
+											"value": "SUPPLIER"
 										}
 									]
 								}
