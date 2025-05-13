@@ -30018,14 +30018,12 @@ components:
     HandoverLineItem:
       additionalProperties: false
       allOf:
-        - $ref: '#/components/schemas/HandoverLineItemForCreation'
+        - $ref: '#/components/schemas/MandatoryLineItem'
       properties:
         id:
           type: string
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttribute'
-          type: array
+        article:
+          $ref: '#/components/schemas/HandoverLineItemArticle'
         originId:
           nullable: true
           type: string
@@ -30034,11 +30032,53 @@ components:
             any split has happened. This can be used to restore the ‘pre-split’
             status.
           example: df671041-10dd-4600-a2ff-e9ffe2556bba
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefusedItem'
+        quantity:
+          description: quantity of the specific item that has been provided for handover
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        handedOverQuantity:
+          description: quantity of the specific item that has been handed over
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+        substituteLineItems:
+          description: >-
+            This part of the API is in Beta status. For details please check the
+            <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+            target="_blank">api-release-life-cycle documentation</a>.<br /><br
+            />
+          items:
+            $ref: '#/components/schemas/HandoverSubstituteLineItem'
+          type: array
+          x-badges:
+            - color: orange
+              label: BETA
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
       required:
         - id
+        - article
+        - quantity
+        - handedOverQuantity
       title: HandoverLineItem
       description: HandoverLineItem
     HandoverLineItemForCreation:
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItemForCreation'
       properties:
         refused:
           type: array
@@ -30078,16 +30118,6 @@ components:
         stickers:
           items:
             $ref: '#/components/schemas/Sticker'
-          type: array
-        customAttributes:
-          description: >-
-            Attributes that can be added to the handover line. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the information carried here.
-          type: object
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttributeForCreation'
           type: array
       required:
         - quantity
@@ -45816,28 +45846,19 @@ components:
       description: HandoverContainerForCreation
     HandoverContainerLineItem:
       additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItem'
       properties:
         id:
           type: string
         article:
           $ref: '#/components/schemas/HandoverContainerLineItemArticle'
-        customAttributes:
-          description: >-
-            Attributes that can be added to the service job. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the information carried here.
-          type: object
         quantity:
-          description: ''
+          description: Amount per line item
           type: number
         measurementUnitKey:
           description: Identifier for items unit of measurement.
           type: string
-        scannableCodes:
-          description: Codes, that identify the line item
-          type: array
-          items:
-            type: string
       required:
         - id
         - quantity
@@ -45846,26 +45867,40 @@ components:
       description: HandoverContainerLineItem
     HandoverContainerLineItemForCreation:
       additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItemForCreation'
       properties:
         article:
           $ref: '#/components/schemas/HandoverContainerLineItemArticle'
-        customAttributes:
-          description: >-
-            Attributes that can be added to the service job. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the information carried here.
-          type: object
         quantity:
           description: Amount per line item
           type: number
         measurementUnitKey:
           description: Identifier for items unit of measurement.
           type: string
-        scannableCodes:
-          description: Codes, that identify the line item
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
           type: array
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
           items:
             type: string
+          type: array
       required:
         - quantity
         - article
