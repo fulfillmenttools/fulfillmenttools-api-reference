@@ -51419,6 +51419,20 @@ components:
       type: object
     DateFilter:
       properties:
+        after:
+          description: >-
+            Search using ISO‑8601 dates relative to today. Prefix with “–” for
+            past dates. Results include events after the specified date.
+            Example: “–P1D” for yesterday, “P1W” for next week.
+          maxLength: 256
+          type: string
+        before:
+          description: >-
+            Search using ISO‑8601 dates relative to today. Prefix with “–” for
+            past dates. Results include events before the specified date.
+            Example: “–P1D” for yesterday, “P1W” for next week.
+          maxLength: 256
+          type: string
         eq:
           format: date-time
           type: string
@@ -60936,6 +60950,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by firstname
+        lastModified:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
         lastname:
           allOf:
             - $ref: '#/components/schemas/StringSearchFilter'
