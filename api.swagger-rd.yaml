@@ -61107,7 +61107,7 @@ components:
         options:
           $ref: '#/components/schemas/SearchOptions'
         query:
-          $ref: '#/components/schemas/StowJobSearchQueryWrapper'
+          $ref: '#/components/schemas/StowJobSearchQuery'
         size:
           default: 20
           description: Number of items to return.
@@ -61141,6 +61141,8 @@ components:
         created:
           allOf:
             - $ref: '#/components/schemas/DateFilter'
+          default:
+            after: '-P1W'
           description: >-
             Search entries by created. Applying a narrow and well-considered
             filter value is strongly recommended, as it can greatly improve
@@ -61189,62 +61191,6 @@ components:
       title: StowJobSearchQuery
       type: object
       description: StowJobSearchQuery
-    StowJobSearchQueryWrapper:
-      properties:
-        and:
-          items:
-            $ref: '#/components/schemas/StowJobSearchQuery'
-          type: array
-        created:
-          allOf:
-            - $ref: '#/components/schemas/DateFilter'
-          description: Search by created
-        customAttributes:
-          additionalProperties:
-            anyOf:
-              - $ref: '#/components/schemas/BooleanFilter'
-              - $ref: '#/components/schemas/StringEqFilter'
-              - $ref: '#/components/schemas/NumberEqFilter'
-              - $ref: '#/components/schemas/DateFilter'
-          description: Search by custom attributes
-          type: object
-        facilityRef:
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
-          description: Search by facilityRef
-        id:
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
-          description: Search by id
-        or:
-          items:
-            $ref: '#/components/schemas/StowJobSearchQuery'
-          type: array
-        priority:
-          allOf:
-            - $ref: '#/components/schemas/NumberFilter'
-          description: Search by priority
-        shortId:
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
-          description: Search by shortId
-        status:
-          allOf:
-            - $ref: '#/components/schemas/StowJobStatusTypeEnumFilter'
-          description: Search by status
-        stowLineItems:
-          allOf:
-            - $ref: '#/components/schemas/StowJobStowLineItemsListFilter'
-          description: Nested list search by stowLineItems
-        targetTime:
-          allOf:
-            - $ref: '#/components/schemas/DateFilter'
-          description: Search by targetTime
-      required:
-        - created
-      title: StowJobSearchQueryWrapper
-      type: object
-      description: StowJobSearchQueryWrapper
     StowJobSort:
       properties:
         created:
