@@ -24911,6 +24911,36 @@ paths:
       summary: Creates a user.
       tags:
         - Core - User Management
+  /api/users/me:
+    patch:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: updateMe
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyUserPersonalData'
+        required: true
+      responses:
+        '200':
+          description: Updating my data was successful.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+      summary: Update my own data.
+      tags:
+        - Core - User Management
+      x-badges:
+        - color: orange
+          label: BETA
   /api/users/me/effectivepermissions:
     get:
       deprecated: false
@@ -56303,6 +56333,22 @@ components:
       title: ModifyUserAction
       type: object
       description: ModifyUserAction
+    ModifyUserPersonalData:
+      properties:
+        firstname:
+          description: The new firstname of the user
+          type: string
+        lastname:
+          description: The new lastname of the user
+          type: string
+        locale:
+          $ref: '#/components/schemas/SupportedLocale'
+        password:
+          description: The new password of the user
+          type: string
+      title: ModifyUserPersonalData
+      type: object
+      description: ModifyUserPersonalData
     MoveStockToLocationOptions:
       properties:
         deleteFromStockIfZero:

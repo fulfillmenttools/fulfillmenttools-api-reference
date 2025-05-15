@@ -25470,6 +25470,38 @@ paths:
       summary: Creates a user.
       tags:
         - Core - User Management
+  /api/users/me:
+    patch:
+      deprecated: false
+      description: >-
+        <center><img
+        src='https://storage.googleapis.com/ocff-assets/api/beta_174x74.png'
+          /></center> <br /> <i>This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a></i><br /><br />
+      operationId: updateMe
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyUserPersonalData'
+        required: true
+      responses:
+        '200':
+          description: Updating my data was successful.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+      summary: Update my own data.
+      tags:
+        - Core - User Management
   /api/users/me/effectivepermissions:
     get:
       deprecated: false
@@ -54972,6 +55004,21 @@ components:
       required:
         - action
       title: ModifyUserAction
+      type: object
+    ModifyUserPersonalData:
+      properties:
+        firstname:
+          description: The new firstname of the user
+          type: string
+        lastname:
+          description: The new lastname of the user
+          type: string
+        locale:
+          $ref: '#/components/schemas/SupportedLocale'
+        password:
+          description: The new password of the user
+          type: string
+      title: ModifyUserPersonalData
       type: object
     MoveStockToLocationOptions:
       properties:
