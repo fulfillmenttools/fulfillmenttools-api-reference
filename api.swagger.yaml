@@ -51537,7 +51537,7 @@ components:
       properties:
         city:
           allOf:
-            - $ref: '#/components/schemas/StringFilter'
+            - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by city
         companyName:
           allOf:
@@ -51545,7 +51545,7 @@ components:
           description: Search by companyName
         country:
           allOf:
-            - $ref: '#/components/schemas/StringFilter'
+            - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by country
         customAttributes:
           additionalProperties:
@@ -51566,7 +51566,7 @@ components:
           description: Search by houseNumber
         postalCode:
           allOf:
-            - $ref: '#/components/schemas/StringFilter'
+            - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by postalCode
         province:
           allOf:
@@ -51577,6 +51577,25 @@ components:
             - $ref: '#/components/schemas/StringFilter'
           description: Search by street
       title: FacilityAddressFilter
+      type: object
+    FacilityAddressSort:
+      properties:
+        city:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        country:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        postalCode:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: FacilityAddressSort
       type: object
     FacilityContactFilter:
       properties:
@@ -51731,7 +51750,7 @@ components:
           description: Search by locationType
         name:
           allOf:
-            - $ref: '#/components/schemas/StringFilter'
+            - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by name
         or:
           items:
@@ -51753,6 +51772,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
           description: Search by tenantFacilityId
+        type:
+          allOf:
+            - $ref: '#/components/schemas/FacilityTypeEnumFilter'
+          description: Search by type
       title: FacilitySearchQuery
       type: object
     FacilityServicesFacilityServiceTypeEnumFilter:
@@ -51796,6 +51819,8 @@ components:
       type: object
     FacilitySort:
       properties:
+        address:
+          $ref: '#/components/schemas/FacilityAddressSort'
         customAttributes:
           additionalProperties: true
           maxProperties: 1
@@ -51812,6 +51837,11 @@ components:
             - DESC
           type: string
         tenantFacilityId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        type:
           enum:
             - ASC
             - DESC
@@ -52007,6 +52037,28 @@ components:
             - $ref: '#/components/schemas/FacilityTagsFilter'
           description: Contains returns if at least one entry matches
       title: FacilityTagsListFilter
+      type: object
+    FacilityTypeEnumFilter:
+      properties:
+        eq:
+          description: Search by type
+          enum:
+            - MANAGED_FACILITY
+            - SUPPLIER
+          type: string
+        in:
+          description: Search by type
+          enum:
+            - MANAGED_FACILITY
+            - SUPPLIER
+          type: string
+        notEq:
+          description: Search by type
+          enum:
+            - MANAGED_FACILITY
+            - SUPPLIER
+          type: string
+      title: FacilityTypeEnumFilter
       type: object
     HandoverJobAssignedUsersFilter:
       properties:
