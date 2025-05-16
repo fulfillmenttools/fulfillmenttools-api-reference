@@ -40333,6 +40333,7 @@ components:
       type: object
     RestowItem:
       allOf:
+        - $ref: '#/components/schemas/MandatoryLineItem'
         - $ref: '#/components/schemas/VersionedResource'
       properties:
         id:
@@ -40361,11 +40362,6 @@ components:
           example: true
           default: false
           description: Indicates if the restowItem has been restowed
-        scannableCodes:
-          items:
-            description: Codes, that identify the article
-            type: string
-          type: array
         facilityRef:
           description: >-
             The id of the facility reference. The given ID has to be present in
@@ -40379,11 +40375,6 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/RestowItemStatus'
-        recordableAttributes:
-          items:
-            $ref: '#/components/schemas/RecordableAttribute'
-          type: array
-          nullable: true
       required:
         - id
         - article
@@ -40393,6 +40384,9 @@ components:
         - status
       type: object
     RestowItemForCreation:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItemForCreation'
       properties:
         measurementUnitKey:
           description: Identifier for items unit of measurement.
@@ -40429,6 +40423,17 @@ components:
             $ref: '#/components/schemas/RecordableAttributeForCreation'
           type: array
           nullable: true
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
       required:
         - facilityRef
         - article
