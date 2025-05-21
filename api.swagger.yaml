@@ -269,6 +269,7 @@ paths:
                   - $ref: '#/components/schemas/DhlV2CarrierConfiguration'
                   - $ref: '#/components/schemas/VceCarrierConfiguration'
                   - $ref: '#/components/schemas/PostNlCarrierConfiguration'
+                  - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The
             result is in the body.
@@ -322,6 +323,7 @@ paths:
                   - $ref: '#/components/schemas/DhlV2CarrierConfiguration'
                   - $ref: '#/components/schemas/VceCarrierConfiguration'
                   - $ref: '#/components/schemas/PostNlCarrierConfiguration'
+                  - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The
             result is in the body.
@@ -365,6 +367,7 @@ paths:
                 - $ref: '#/components/schemas/DhlV2CarrierConfiguration'
                 - $ref: '#/components/schemas/VceCarrierConfiguration'
                 - $ref: '#/components/schemas/PostNlCarrierConfiguration'
+                - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
         description: Carrier Configuration
         required: true
       summary: Update a carrier configuration with the given ID
@@ -22155,7 +22158,7 @@ paths:
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+          </i><br /><br />Return a list of all configured OIDC providers.
       operationId: getOidcProviders
       parameters: []
       responses:
@@ -22191,7 +22194,7 @@ paths:
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+          </i><br /><br />Registers an external OIDC provider so the platform can interact with it for user authentication.
       operationId: createOidcProvider
       parameters: []
       requestBody:
@@ -22240,7 +22243,7 @@ paths:
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+          </i><br /><br />Removes an OIDC provider configuration, disabling the platform’s ability to authenticate via that provider.
       operationId: deleteOidcProvider
       parameters:
         - in: path
@@ -22283,7 +22286,7 @@ paths:
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+          </i><br /><br />Get the configuration of a configured OIDC provider.
       operationId: getOidcProvider
       parameters:
         - in: path
@@ -22315,6 +22318,59 @@ paths:
       summary: Get OIDC provider by id.
       tags:
         - Infrastructure - OIDC Configuration
+    patch:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Change the configuration of an already configured OIDC provider. Only the specified values are changed.
+      operationId: patchOidcProvider
+      parameters:
+        - in: path
+          name: oidcProviderId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OidcProviderForPatch'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrippedOidcProvider'
+          description: Provider was patched successfully
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Patch an OIDC Provider.
+      tags:
+        - Infrastructure - OIDC Configuration
     put:
       deprecated: false
       description: |-
@@ -22326,7 +22382,7 @@ paths:
           could disappear also without warning. Thus, it currently does not fall
           under our SLA regulations. For details on this topic please check our
           <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
+          </i><br /><br />Change the configuration of an already configured OIDC provider. The configuration has to contain all necessary values.
       operationId: updateOidcProvider
       parameters:
         - in: path
@@ -27807,6 +27863,17 @@ components:
       description: Configuration of VCE Carrier
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
+    SevenSendersCarrierConfiguration:
+      title: SevenSendersCarrierConfiguration
+      description: Configuration of Seven Senders Carrier
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
+      properties:
+        warehouse:
+          type: string
+          description: >-
+            The name of the warehouse that should be passed to Seven Senders, as
+            configured in Seven Senders.
     GlsCarrierConfiguration:
       title: GlsCarrierConfiguration
       description: Configuration of GLS Carrier
@@ -28707,6 +28774,20 @@ components:
           type: object
       xml:
         name: BringCarrierCredentials
+    SevenSendersCredentials:
+      title: SevenSendersCredentials
+      description: Seven Senders Credentials.
+      allOf:
+        - $ref: '#/components/schemas/AbstractCarrierCredentials'
+        - properties:
+            accessKey:
+              description: Access key to communicate with the Seven Senders Api
+              type: string
+          required:
+            - accessKey
+          type: object
+      xml:
+        name: SevenSendersCredentials
     DomainConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -43082,6 +43163,7 @@ components:
             - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/SevenSendersFacilityCarrierConfiguration'
         credentials:
           description: Facility specific credentials for this carrier
           anyOf:
@@ -43090,6 +43172,7 @@ components:
             - $ref: '#/components/schemas/PostNLCarrierCredentials'
             - $ref: '#/components/schemas/VceCarrierCredentials'
             - $ref: '#/components/schemas/HermesCarrierCredentials'
+            - $ref: '#/components/schemas/SevenSendersCredentials'
         cutoffTime:
           description: >-
             @deprecated: This property has been deprecated and is no longer
@@ -43142,6 +43225,7 @@ components:
             - $ref: '#/components/schemas/PostNLCarrierCredentials'
             - $ref: '#/components/schemas/VceCarrierCredentials'
             - $ref: '#/components/schemas/HermesCarrierCredentials'
+            - $ref: '#/components/schemas/SevenSendersCredentials'
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
@@ -43154,6 +43238,7 @@ components:
             - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/SevenSendersFacilityCarrierConfiguration'
         cutoffTime:
           deprecated: true
           description: Deprecated in favor of cutoffTimes
@@ -43198,6 +43283,7 @@ components:
             - $ref: '#/components/schemas/PostNLCarrierCredentials'
             - $ref: '#/components/schemas/VceCarrierCredentials'
             - $ref: '#/components/schemas/HermesCarrierCredentials'
+            - $ref: '#/components/schemas/SevenSendersCredentials'
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
@@ -43210,6 +43296,7 @@ components:
             - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/SevenSendersFacilityCarrierConfiguration'
         cutoffTime:
           deprecated: true
           description: Deprecated in favor of cutoffTimes
@@ -43391,6 +43478,19 @@ components:
           type: object
       xml:
         name: HermesFacilityCarrierConfiguration
+    SevenSendersFacilityCarrierConfiguration:
+      title: SevenSendersFacilityCarrierConfiguration
+      description: Seven Senders Facility Carrier Configuration.
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+      properties:
+        warehouse:
+          type: string
+          description: >-
+            The name of the warehouse that should be passed to Seven Senders, as
+            configured in Seven Senders.
+      xml:
+        name: SevenSendersFacilityCarrierConfiguration
     InterFacilityConnections:
       additionalProperties: false
       properties:
@@ -55213,6 +55313,43 @@ components:
         - assignedGroups
         - clientSecret
       title: OidcProviderForCreation
+      type: object
+    OidcProviderForPatch:
+      properties:
+        assignedGroups:
+          description: The assigned groups of the OIDC provider
+          items:
+            $ref: '#/components/schemas/AssignedGroup'
+          type: array
+        clientId:
+          description: The client id of the OIDC provider
+          type: string
+        clientSecret:
+          description: The client secret of the OIDC provider
+          type: string
+        customParameters:
+          description: The custom parameters of the OIDC provider
+          items:
+            $ref: '#/components/schemas/OidcProviderCustomParameter'
+          type: array
+        issuer:
+          description: The issuer of the OIDC provider
+          type: string
+        name:
+          description: The name of the OIDC provider
+          type: string
+        status:
+          description: The status of the OIDC provider
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        version:
+          description: The version of the OIDC provider
+          type: number
+      required:
+        - version
+      title: OidcProviderForPatch
       type: object
     OidcProviderForUpdate:
       properties:
