@@ -52105,12 +52105,53 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/HandledItem'
+        timeLine:
+          $ref: '#/components/schemas/TransferTimeLine'
       required:
         - sourceNodeRef
         - targetNodeRef
         - lineItems
       title: SourcingOptionTransfer
       description: SourcingOptionTransfer
+    TransferTimeLine:
+      type: object
+      properties:
+        calculationStartPoint:
+          description: >-
+            The date and time from which all time-related calculations for the
+            corresponding items are based.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        earliestPickingStart:
+          description: >-
+            The earliest date and time when picking for the corresponding items
+            can begin.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        targetTime:
+          description: >-
+            The desired date and time by which the corresponding items should be
+            fulfilled.
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+          type: string
+        earliestPossibleDeliveryTime:
+          description: >-
+            The earliest date at which the corresponding items can be delivered
+            to the recipient.
+          example: '2020-02-03T00:00:00.000Z'
+          format: date-time
+          type: string
+      required:
+        - calculationStartPoint
+        - earliestPickingStart
+        - targetTime
+      xml:
+        name: TransferTimeLine
+      title: TransferTimeLine
+      description: TransferTimeLine
     HandledItem:
       type: object
       properties:
