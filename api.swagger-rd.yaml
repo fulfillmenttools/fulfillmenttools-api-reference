@@ -48071,6 +48071,27 @@ components:
       type: string
       title: RoutingPlansGraphEdgeReason
       description: RoutingPlansGraphEdgeReason
+    CombinedCostRatingConfiguration:
+      description: >-
+        This rating configuration is used to calculate the rating based on the
+        total sales prices and/or the total shipping costs of the order line
+        items. At least one of the cost components must be selected.
+      allOf:
+        - $ref: '#/components/schemas/AbstractRatingConfiguration'
+      properties:
+        totalSalesPrices:
+          description: >-
+            >- If set to true, the total sales prices of the order line items
+            are used for the calculation of the rating.
+          default: false
+          type: boolean
+        totalShippingCosts:
+          description: >-
+            If set to true, the total shipping costs of the order line items are
+            used for the calculation of the rating."
+          default: false
+          type: boolean
+      title: CombinedCostRatingConfiguration
     AbstractRatingConfiguration:
       description: Base Configuration for Ratings. See documentation for Details.
       type: object
@@ -48130,6 +48151,7 @@ components:
         - CAPACITY
         - DELIVERY-COSTS
         - DELIVERY-TIME
+        - COST-COMPONENTS
       type: string
       xml:
         name: RatingImplementation
