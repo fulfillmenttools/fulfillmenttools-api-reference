@@ -30172,6 +30172,8 @@ components:
           items:
             $ref: '#/components/schemas/Sticker'
           type: array
+        status:
+          $ref: '#/components/schemas/HandoverLineItemStatus'
       required:
         - id
         - article
@@ -30179,6 +30181,13 @@ components:
         - handedOverQuantity
       title: HandoverLineItem
       description: HandoverLineItem
+    HandoverLineItemStatus:
+      type: string
+      enum:
+        - OPEN
+        - CLOSED
+      title: HandoverLineItemStatus
+      description: HandoverLineItemStatus
     HandoverLineItemForCreation:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItemForCreation'
@@ -30195,6 +30204,8 @@ components:
           format: int64
           minimum: 1
           type: integer
+        status:
+          $ref: '#/components/schemas/HandoverLineItemStatus'
         handedOverQuantity:
           description: quantity of the specific item that has been handed over
           example: 20
@@ -35244,6 +35255,8 @@ components:
           properties:
             id:
               type: string
+            status:
+              $ref: '#/components/schemas/HandoverLineItemStatus'
             refused:
               items:
                 $ref: '#/components/schemas/RefusedItemForUpdate'
