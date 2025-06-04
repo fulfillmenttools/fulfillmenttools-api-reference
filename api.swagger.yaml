@@ -38080,6 +38080,26 @@ components:
         - delayed
         - notification
       type: string
+    SearchTrackingStatus:
+      title: SearchTrackingStatus
+      description: >-
+        The state of the KEP, the same as TrackingStatus enum but in uppercase,
+        it is used for Search Filters
+      enum:
+        - REGISTERED
+        - PICKED_UP
+        - DELIVERED
+        - NOT_DELIVERED
+        - TRANSIT
+        - EXCEPTION
+        - OUT_FOR_DELIVERY
+        - DESTROYED
+        - UNKNOWN
+        - CANCELED
+        - AWAITS_PICKUP_BY_RECEIVER
+        - DELAYED
+        - NOTIFICATION
+      type: string
     PickRunStatus:
       description: The state of the PickRun
       enum:
@@ -56721,6 +56741,11 @@ components:
           allOf:
             - $ref: '#/components/schemas/ProcessReferencedOrderFilter'
           description: Nested search by order
+        parcelTrackingStatus:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedParcelTrackingStatusEnumListFilter
+          description: Search by parcelTrackingStatus
         serviceLevel:
           allOf:
             - $ref: '#/components/schemas/ProcessReferencedServiceLevelEnumListFilter'
@@ -56799,6 +56824,70 @@ components:
           description: Search by status
       title: ProcessReferencedOrderOrderStatusEnumListFilter
       type: object
+    ProcessReferencedParcelTrackingStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by parcelTrackingStatus
+          enum:
+            - REGISTERED
+            - PICKED_UP
+            - DELIVERED
+            - NOT_DELIVERED
+            - TRANSIT
+            - EXCEPTION
+            - OUT_FOR_DELIVERY
+            - DESTROYED
+            - UNKNOWN
+            - CANCELED
+            - AWAITS_PICKUP_BY_RECEIVER
+            - DELAYED
+            - NOTIFICATION
+          type: string
+        in:
+          description: Search by parcelTrackingStatus
+          enum:
+            - REGISTERED
+            - PICKED_UP
+            - DELIVERED
+            - NOT_DELIVERED
+            - TRANSIT
+            - EXCEPTION
+            - OUT_FOR_DELIVERY
+            - DESTROYED
+            - UNKNOWN
+            - CANCELED
+            - AWAITS_PICKUP_BY_RECEIVER
+            - DELAYED
+            - NOTIFICATION
+          type: string
+        notEq:
+          description: Search by parcelTrackingStatus
+          enum:
+            - REGISTERED
+            - PICKED_UP
+            - DELIVERED
+            - NOT_DELIVERED
+            - TRANSIT
+            - EXCEPTION
+            - OUT_FOR_DELIVERY
+            - DESTROYED
+            - UNKNOWN
+            - CANCELED
+            - AWAITS_PICKUP_BY_RECEIVER
+            - DELAYED
+            - NOTIFICATION
+          type: string
+      title: ProcessReferencedParcelTrackingStatusEnumFilter
+      type: object
+    ProcessReferencedParcelTrackingStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedParcelTrackingStatusEnumFilter
+          description: Search by parcelTrackingStatus
+      title: ProcessReferencedParcelTrackingStatusEnumListFilter
+      type: object
     ProcessReferencedServiceLevelEnumFilter:
       properties:
         eq:
@@ -56841,6 +56930,11 @@ components:
           $ref: '#/components/schemas/ProcessFacilitySort'
         order:
           $ref: '#/components/schemas/ProcessOrderSort'
+        parcelTrackingStatus:
+          enum:
+            - ASC
+            - DESC
+          type: string
         sticker:
           $ref: '#/components/schemas/ProcessStickerSort'
         targetTime:
