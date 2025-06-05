@@ -30603,6 +30603,7 @@ components:
         - HANDED_OVER
         - OBSOLETE
         - CANCELED
+        - WAITING_FOR_INPUT
       type: string
       title: HandoverjobStatus
       description: HandoverjobStatus
@@ -35141,6 +35142,7 @@ components:
         - $ref: '#/components/schemas/HandoverJobCancelActionParameter'
         - $ref: '#/components/schemas/HandoverJobLineItemUpdateActionParameter'
         - $ref: '#/components/schemas/FinishHandoverJobActionParameter'
+        - $ref: '#/components/schemas/SetHandoverJobToWaitingForInputActionParameter'
         - $ref: '#/components/schemas/HandoverJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/HandoverJobSplitLineItemsActionParameter'
         - $ref: >-
@@ -35278,6 +35280,20 @@ components:
         - name
         - version
         - payload
+    SetHandoverJobToWaitingForInputActionParameter:
+      title: SetHandoverJobToWaitingForInputActionParameter
+      description: Action to set a handoverjob to waiting for input.
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/SetHandoverJobToWaitingForInputActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
     HandoverJobLineItemUpdateActionParameter:
       title: HandoverJobLineItemUpdateActionParameter
       description: Action to update a lineItem of a handoverjob.
@@ -35411,6 +35427,12 @@ components:
       type: string
       title: HandoverJobCancelActionEnum
       description: HandoverJobCancelActionEnum
+    SetHandoverJobToWaitingForInputActionEnum:
+      enum:
+        - WAITING_FOR_INPUT
+      type: string
+      title: SetHandoverJobToWaitingForInputActionEnum
+      description: SetHandoverJobToWaitingForInputActionEnum
     HandoverJobLineItemUpdateActionEnum:
       enum:
         - UPDATE_LINEITEM
@@ -53798,6 +53820,7 @@ components:
             - HANDED_OVER
             - OBSOLETE
             - CANCELED
+            - WAITING_FOR_INPUT
           type: string
         in:
           description: Search by status
@@ -53806,6 +53829,7 @@ components:
             - HANDED_OVER
             - OBSOLETE
             - CANCELED
+            - WAITING_FOR_INPUT
           type: string
         notEq:
           description: Search by status
@@ -53814,6 +53838,7 @@ components:
             - HANDED_OVER
             - OBSOLETE
             - CANCELED
+            - WAITING_FOR_INPUT
           type: string
       title: HandoverJobHandoverjobStatusEnumFilter
       type: object
