@@ -30597,6 +30597,55 @@ components:
         - article
         - handedOverQuantity
       type: object
+    ExpectedHandoverLineItemForCreation:
+      additionalProperties: false
+      properties:
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
+        article:
+          $ref: '#/components/schemas/HandoverLineItemArticle'
+        quantity:
+          description: quantity of the specific item that has been provided for handover
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        status:
+          $ref: '#/components/schemas/HandoverLineItemStatus'
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+        transferId:
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+      required:
+        - quantity
+        - article
+        - transferId
+      type: object
+    ExpectedHandoverLineItem:
+      allOf:
+        - $ref: '#/components/schemas/ExpectedHandoverLineItemForCreation'
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      type: object
     HandoverLineItemArticle:
       allOf:
         - $ref: '#/components/schemas/AbstractArticle'
@@ -30650,11 +30699,144 @@ components:
     Handoverjob:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
-        - $ref: '#/components/schemas/HandoverjobForCreation'
         - properties:
+            carrierLogoUrl:
+              type: string
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
+                instead.
+            carrierRef:
+              type: string
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
+                instead.
+            carrierTrackingNumber:
+              type: string
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
+                instead.
+            channel:
+              enum:
+                - DELIVERY
+                - COLLECT
+              type: string
+            customAttributes:
+              description: >-
+                Attributes that can be added to the handover job. These
+                attributes cannot be used within fulfillment processes, but it
+                could be useful to have the informations carried here.
+              type: object
+            facilityRef:
+              description: The id of the facility reference.
+              example: Esb20gpHBL94X5NdMp3C
+              type: string
+            loadUnitRefs:
+              description: Reference to array of load unit Refs
+              items:
+                type: string
+              type: array
+            orderDate:
+              description: The date this order was created at the supplying system.
+              example: '2020-02-03T08:45:50.525Z'
+              format: date-time
+              type: string
+            parcelRef:
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
+                instead.
+              example: 2fOge2ZGW54K4TgvDTQw
+              type: string
+            pickJobRef:
+              description: >-
+                The reference to the pickjob for which the handoverjob is
+                assigned to
+              example: ca525716-7208-4a63-a2a6-11274eb37f67-0
+              type: string
+            processId:
+              description: >-
+                Id of the global process related to this entity. For example
+                used for starting the GDPR process and others.
+              type: string
+            operativeProcessRef:
+              type: string
+            shipmentRef:
+              description: >-
+                <center><img
+                src='https://storage.googleapis.com/ocff-assets/api/fft-deprectated_254x51.png'></center>
+                <br /> <i>This endpoint is deprecated and has been
+                replaced.</i><br /><br />@deprecated This field is deprecated
+                since 28 November 2024. Use nested object handoverJobParcelInfo
+                instead.
+              example: Esb20gpHBL94X5NdMp3C
+              type: string
+            shortIdentifier:
+              description: The short identifier of the shipment.
+              type: string
+            status:
+              $ref: '#/components/schemas/HandoverjobStatus'
+            targetTime:
+              description: >-
+                The time the handoverjob is expected to be picked up at the
+                facility.
+              format: date-time
+              type: string
+            tenantOrderId:
+              description: >-
+                Field can be used as a reference number in foreign systems, for
+                example as a reference to the source system's identifier for
+                this order.
+              example: R456728546
+              type: string
+            paid:
+              description: Indicates if the order is already paid
+              example: false
+              type: boolean
+            tags:
+              description: >-
+                Tags can only be set when there is no process related with this
+                handoverJob. Setting processId and tags will lead to an
+                validationError.
+              type: array
+              minItems: 1
+              items:
+                $ref: '#/components/schemas/TagReference'
+            cancelReason:
+              $ref: '#/components/schemas/HandoverJobCancelReason'
+            invoiceAddress:
+              $ref: '#/components/schemas/ConsumerAddress'
+            recipientAddress:
+              $ref: '#/components/schemas/ConsumerAddress'
+            fullIdentifier:
+              type: string
+              description: An information to identify the recipient
+            transfers:
+              type: array
+              minItems: 0
+              items:
+                $ref: '#/components/schemas/OperativeTransfer'
             handoverJobLineItems:
               items:
                 $ref: '#/components/schemas/HandoverLineItem'
+            expectedHandoverJobLineItems:
+              items:
+                $ref: '#/components/schemas/ExpectedHandoverLineItem'
+              type: array
             anonymized:
               description: Indicates if gdpr related data was anonymized
               example: false
@@ -30696,6 +30878,10 @@ components:
       required:
         - id
         - status
+        - facilityRef
+        - targetTime
+        - channel
+        - orderDate
       type: object
     HandoverJobParcelInfoForCreation:
       additionalProperties: false
@@ -30773,6 +30959,10 @@ components:
           items:
             $ref: '#/components/schemas/HandoverLineItemForCreation'
           type: array
+        expectedHandoverJobLineItems:
+          items:
+            $ref: '#/components/schemas/ExpectedHandoverLineItemForCreation'
+          type: array
         loadUnitRefs:
           description: Reference to array of load unit Refs
           items:
@@ -30798,6 +30988,12 @@ components:
             to
           example: ca525716-7208-4a63-a2a6-11274eb37f67-0
           type: string
+        routingPlanRef:
+          description: >-
+            The reference to the routing plan for which the handoverjob is
+            assigned to
+          type: string
+          example: ca525716-7208-4a63-a2a6-11274eb37f67-0
         processId:
           description: >-
             Id of the global process related to this entity. For example used
@@ -41714,6 +41910,9 @@ components:
         processRef:
           type: string
           description: Reference to the overall process
+        routingPlanRef:
+          type: string
+          description: Reference to the connected routing plan if available
         facilityRef:
           type: string
           description: Reference to the facility this operative process is handled in
@@ -41742,6 +41941,9 @@ components:
         processRef:
           type: string
           description: Reference to the overall process
+        routingPlanRef:
+          type: string
+          description: Reference to the connected routing plan if available
         facilityRef:
           type: string
           description: Reference to the facility this operative process is handled in
