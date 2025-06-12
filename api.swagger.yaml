@@ -61347,6 +61347,73 @@ components:
         - facilityRef
       title: UserAssignedFacilityForCreation
       type: object
+    UserAssignedRolesContextLimitationsContextTypesEnumFilter:
+      properties:
+        eq:
+          description: Search by type
+          enum:
+            - FACILITY
+            - ROLE
+            - ZONE
+          type: string
+        in:
+          description: Search by type
+          enum:
+            - FACILITY
+            - ROLE
+            - ZONE
+          type: string
+        notEq:
+          description: Search by type
+          enum:
+            - FACILITY
+            - ROLE
+            - ZONE
+          type: string
+      title: UserAssignedRolesContextLimitationsContextTypesEnumFilter
+      type: object
+    UserAssignedRolesContextLimitationsFilter:
+      properties:
+        type:
+          allOf:
+            - $ref: >-
+                #/components/schemas/UserAssignedRolesContextLimitationsContextTypesEnumFilter
+          description: Search by type
+        values:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by values
+      title: UserAssignedRolesContextLimitationsFilter
+      type: object
+    UserAssignedRolesContextLimitationsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/UserAssignedRolesContextLimitationsFilter'
+          description: Contains returns if at least one entry matches
+      title: UserAssignedRolesContextLimitationsListFilter
+      type: object
+    UserAssignedRolesFilter:
+      properties:
+        contextLimitations:
+          allOf:
+            - $ref: >-
+                #/components/schemas/UserAssignedRolesContextLimitationsListFilter
+          description: Nested list search by contextLimitations
+        ref:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by ref
+      title: UserAssignedRolesFilter
+      type: object
+    UserAssignedRolesListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/UserAssignedRolesFilter'
+          description: Contains returns if at least one entry matches
+      title: UserAssignedRolesListFilter
+      type: object
     UserAssignedZone:
       properties:
         zoneRef:
@@ -61591,6 +61658,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/UserAssignedFacilitiesListFilter'
           description: Nested list search by assignedFacilities
+        assignedRoles:
+          allOf:
+            - $ref: '#/components/schemas/UserAssignedRolesListFilter'
+          description: Nested list search by assignedRoles
         auth:
           allOf:
             - $ref: '#/components/schemas/UserAuthFilter'
