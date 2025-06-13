@@ -29615,14 +29615,10 @@ components:
         - value
       title: FacilityDiscountRelative
       description: FacilityDiscountRelative
-    FacilityDiscountAbsolute:
+    FacilityDiscountAbsoluteElement:
       type: object
       additionalProperties: false
       properties:
-        type:
-          type: string
-          enum:
-            - ABSOLUTE
         value:
           description: >-
             Total value that should be shipped. Value is configured in the
@@ -29641,10 +29637,26 @@ components:
           example: 2
           minimum: 0
       required:
-        - type
         - value
         - currency
         - decimalPlaces
+      title: FacilityDiscountAbsoluteElement
+      description: FacilityDiscountAbsoluteElement
+    FacilityDiscountAbsolute:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          enum:
+            - ABSOLUTE
+        values:
+          minLength: 1
+          items:
+            $ref: '#/components/schemas/FacilityDiscountAbsoluteElement'
+      required:
+        - type
+        - values
       title: FacilityDiscountAbsolute
       description: FacilityDiscountAbsolute
     FacilityDiscountAbsoluteForCreation:
@@ -29655,27 +29667,13 @@ components:
           type: string
           enum:
             - ABSOLUTE
-        value:
-          description: >-
-            Total value that should be shipped. Value is configured in the
-            smallest subunit, e.g. cents.
-          example: 5
-          type: integer
-          minimum: 1
-        currency:
-          description: The currency of the price as an ISO 4217 code.
-          example: EUR
-          allOf:
-            - $ref: '#/components/schemas/CurrencyCode'
-        decimalPlaces:
-          type: integer
-          description: Number of decimal places for the given currency
-          example: 2
-          minimum: 0
+        values:
+          minLength: 1
+          items:
+            $ref: '#/components/schemas/FacilityDiscountAbsoluteElement'
       required:
         - type
-        - value
-        - currency
+        - values
       title: FacilityDiscountAbsoluteForCreation
       description: FacilityDiscountAbsoluteForCreation
     FacilityDiscountType:
