@@ -23324,6 +23324,187 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/permissions:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />This endpoint returns all available permissions in the FFT platform.
+      operationId: getPermissions
+      parameters:
+        - in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            maximum: 100
+            minimum: 1
+            type: number
+        - in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: The key of the permission to filter by
+          in: query
+          name: key
+          required: false
+          schema:
+            enum:
+              - user_read
+              - users_read
+              - user_write
+              - user_modify
+              - role_read
+              - role_write
+              - facility_read
+              - facility_write
+              - facility_create
+              - facility_delete
+              - facility_group_read
+              - facility_group_write
+              - order_read
+              - order_write
+              - audit_read
+              - expiries_read
+              - expiries_write
+              - config_read
+              - config_write
+              - routing_config_read
+              - routing_config_write
+              - promises_config_read
+              - promises_config_write
+              - oidc_providers_config_read
+              - oidc_providers_config_write
+              - locale_write
+              - listing_read
+              - listing_write
+              - listing_delete
+              - carrier_read
+              - carrier_write
+              - return_read
+              - return_write
+              - routing_write
+              - routing_read
+              - parcel_write
+              - parcel_read
+              - shipment_write
+              - shipment_read
+              - handoverjob_read
+              - handoverjob_write
+              - pickjob_read
+              - pickjob_write
+              - pickjob_reroute
+              - remote_config_read
+              - remote_config_write
+              - pickrun_read
+              - pickrun_write
+              - loadunittype_read
+              - loadunittype_write
+              - loadunit_read
+              - loadunit_write
+              - measurementunit_read
+              - measurementunit_write
+              - event_read
+              - subscription_read
+              - subscription_write
+              - substitute_read
+              - substitute_write
+              - process_read
+              - process_write
+              - operative_process_read
+              - operative_process_write
+              - deliverynote_write
+              - packjob_read
+              - packjob_write
+              - packingcontainer_type_write
+              - packing_source_container_read
+              - packing_source_container_write
+              - restowitem_write
+              - restowitem_read
+              - tag_write
+              - tag_read
+              - stock_summary_read
+              - stock_distribution_read
+              - stock_write
+              - stock_read
+              - external_stock_change_reasons_read
+              - external_stock_change_reasons_write
+              - stow_job_read
+              - stow_job_operative_write
+              - stow_job_full_write
+              - notification_center_config_read
+              - notification_center_config_write
+              - doms_toolkit_read
+              - doms_toolkit_write
+              - analytics_dashboard_read
+              - document_set_read
+              - document_set_write
+              - inbound_process_read
+              - inbound_process_write
+              - admin_data_reset
+              - admin_modules_write
+              - admin_modules_read
+              - tenant_connector_config_read
+              - custom_service_write
+              - custom_service_read
+              - validations_read
+              - service_job_read
+              - service_job_write
+              - linked_service_jobs_read
+              - linked_service_jobs_write
+              - operation_statistics_read
+              - doms_statistics_read
+              - availability_channel_read
+              - availability_channel_write
+              - handover_container_read
+              - handover_container_write
+              - stacks_read
+              - stacks_write
+              - category_read
+              - category_write
+              - permission_read
+            type: string
+        - description: The group of the permission to filter by
+          in: query
+          name: group
+          required: false
+          schema:
+            enum:
+              - INVENTORY
+              - ORDER_MANAGEMENT
+              - ADMIN
+              - CORE
+              - USER_MANAGEMENT
+              - OPERATIONS
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionsResponse'
+          description: The Permissions
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Returns all available permissions.
+      tags:
+        - Core - User Management
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/pickjobs/search:
     post:
       deprecated: false
@@ -58106,6 +58287,238 @@ components:
         - name
       title: PauseStowJobAction
       type: object
+    Permission:
+      properties:
+        description:
+          description: The localized description of the permission
+          type: string
+        group:
+          description: The group of the permission
+          enum:
+            - INVENTORY
+            - ORDER_MANAGEMENT
+            - ADMIN
+            - CORE
+            - USER_MANAGEMENT
+            - OPERATIONS
+          type: string
+        key:
+          description: The key of the permission
+          enum:
+            - user_read
+            - users_read
+            - user_write
+            - user_modify
+            - role_read
+            - role_write
+            - facility_read
+            - facility_write
+            - facility_create
+            - facility_delete
+            - facility_group_read
+            - facility_group_write
+            - order_read
+            - order_write
+            - audit_read
+            - expiries_read
+            - expiries_write
+            - config_read
+            - config_write
+            - routing_config_read
+            - routing_config_write
+            - promises_config_read
+            - promises_config_write
+            - oidc_providers_config_read
+            - oidc_providers_config_write
+            - locale_write
+            - listing_read
+            - listing_write
+            - listing_delete
+            - carrier_read
+            - carrier_write
+            - return_read
+            - return_write
+            - routing_write
+            - routing_read
+            - parcel_write
+            - parcel_read
+            - shipment_write
+            - shipment_read
+            - handoverjob_read
+            - handoverjob_write
+            - pickjob_read
+            - pickjob_write
+            - pickjob_reroute
+            - remote_config_read
+            - remote_config_write
+            - pickrun_read
+            - pickrun_write
+            - loadunittype_read
+            - loadunittype_write
+            - loadunit_read
+            - loadunit_write
+            - measurementunit_read
+            - measurementunit_write
+            - event_read
+            - subscription_read
+            - subscription_write
+            - substitute_read
+            - substitute_write
+            - process_read
+            - process_write
+            - operative_process_read
+            - operative_process_write
+            - deliverynote_write
+            - packjob_read
+            - packjob_write
+            - packingcontainer_type_write
+            - packing_source_container_read
+            - packing_source_container_write
+            - restowitem_write
+            - restowitem_read
+            - tag_write
+            - tag_read
+            - stock_summary_read
+            - stock_distribution_read
+            - stock_write
+            - stock_read
+            - external_stock_change_reasons_read
+            - external_stock_change_reasons_write
+            - stow_job_read
+            - stow_job_operative_write
+            - stow_job_full_write
+            - notification_center_config_read
+            - notification_center_config_write
+            - doms_toolkit_read
+            - doms_toolkit_write
+            - analytics_dashboard_read
+            - document_set_read
+            - document_set_write
+            - inbound_process_read
+            - inbound_process_write
+            - admin_data_reset
+            - admin_modules_write
+            - admin_modules_read
+            - tenant_connector_config_read
+            - custom_service_write
+            - custom_service_read
+            - validations_read
+            - service_job_read
+            - service_job_write
+            - linked_service_jobs_read
+            - linked_service_jobs_write
+            - operation_statistics_read
+            - doms_statistics_read
+            - availability_channel_read
+            - availability_channel_write
+            - handover_container_read
+            - handover_container_write
+            - stacks_read
+            - stacks_write
+            - category_read
+            - category_write
+            - permission_read
+          type: string
+        operation:
+          description: The operation of the permission
+          enum:
+            - READ
+            - WRITE
+            - DELETE
+            - REROUTE
+            - LIST
+            - MODIFY
+            - CREATE
+            - RESET
+          type: string
+        subGroup:
+          description: The subgroup of the permission
+          enum:
+            - LISTING
+            - ORDER
+            - USER
+            - ROLE
+            - EXPIRY
+            - AUDIT
+            - FACILITY
+            - FACILITY_GROUP
+            - CONFIG
+            - ROUTING_CONFIG
+            - ROUTING
+            - OIDC_PROVIDER_CONFIG
+            - PROMISES_CONFIG
+            - LOCALE
+            - CARRIER
+            - RETURN
+            - PARCEL
+            - SHIPMENT
+            - HANDOVERJOB
+            - PICKJOB
+            - PICKRUN
+            - PACKJOB
+            - PACKING_SOURCE_CONTAINER
+            - PACKINGCONTAINER_TYPE
+            - RESTOW_ITEM
+            - TAG
+            - STOCK_SUMMARY
+            - STOCK_DISTRIBUTION
+            - STOCK
+            - EXTERNAL_STOCK_CHANGE_REASONS
+            - STOW_JOB
+            - NOTIFICATION_CENTER_CONFIG
+            - DOMS_TOOLKIT
+            - ANALYTICS_DASHBOARD
+            - DOCUMENT_SET
+            - INBOUND_PROCESS
+            - TENANT_CONNECTOR_CONFIG
+            - ADMIN_MODULES
+            - CUSTOM_SERVICE
+            - VALIDATIONS
+            - SERVICE_JOB
+            - LINKED_SERVICE_JOBS
+            - OPERATION_STATISTICS
+            - DOMS_STATISTICS
+            - AVAILABILITY_CHANNEL
+            - HANDOVER_CONTAINER
+            - STACKS
+            - CATEGORY
+            - PERMISSION
+            - LOADUNIT_TYPE
+            - LOADUNIT
+            - MEASUREMENT_UNIT
+            - EVENT
+            - SUBSCRIPTION
+            - SUBSTITUTE
+            - PROCESS
+            - OPERATIVE_PROCESS
+            - DELIVERYNOTE
+            - REMOTE_CONFIG
+            - ADMIN_DATA
+          type: string
+      required:
+        - operation
+        - key
+        - group
+        - subGroup
+      title: Permission
+      type: object
+      description: Permission
+    PermissionsResponse:
+      properties:
+        permissions:
+          description: The list of permissions
+          items:
+            $ref: '#/components/schemas/Permission'
+          type: array
+        total:
+          description: The total number of (filtered) permissions
+          type: number
+      required:
+        - permissions
+        - total
+      title: PermissionsResponse
+      type: object
+      description: PermissionsResponse
     PickJobSearchPayload:
       properties:
         after:
