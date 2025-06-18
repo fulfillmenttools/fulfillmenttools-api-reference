@@ -24775,6 +24775,91 @@ paths:
       tags:
         - Inventory Management - Inbound
       x-fft-api-performance-category: single-entity-upsert
+  /api/roles:
+    get:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getAllRoles
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Role'
+                type: array
+          description: The requested roles.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: >-
+        Returns all existing roles, including their permissions and context
+        ceilings.
+      tags:
+        - Core - User Management
+      x-fft-api-performance-category: search-b-class
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: createRole
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: The created role.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Creates a new custom role.
+      tags:
+        - Core - User Management
+      x-fft-api-performance-category: single-entity-upsert
   /api/roles/search:
     post:
       deprecated: false
@@ -24819,6 +24904,157 @@ paths:
       tags:
         - Core - User Management
       x-fft-api-performance-category: search-a-class
+  /api/roles/{name}:
+    delete:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: deleteRole
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: The deleted role.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Deletes a custom role.
+      tags:
+        - Core - User Management
+      x-fft-api-performance-category: single-entity-upsert
+    get:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getRole
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: The requested role.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Returns a role requested by its name.
+      tags:
+        - Core - User Management
+      x-fft-api-performance-category: single-entity-read
+    put:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: updateRole
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleForUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: The updated role, including all the updates made.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Updates a custom role.
+      tags:
+        - Core - User Management
+      x-fft-api-performance-category: single-entity-upsert
   /api/routingplans/search:
     post:
       deprecated: false
@@ -58701,8 +58937,8 @@ components:
           description: The new custom attributes of the role
           nullable: true
           type: object
-        id:
-          description: The id of the role
+        description:
+          description: The description of the role
           type: string
         lastModified:
           description: The date the role was last modified
@@ -58724,11 +58960,72 @@ components:
       required:
         - name
         - permissions
-        - created
-        - id
-        - lastModified
         - version
+        - created
+        - lastModified
       title: Role
+      type: object
+    RoleForCreation:
+      properties:
+        contextCeiling:
+          description: The context ceiling of the role
+          items:
+            $ref: '#/components/schemas/ContextLimitation'
+          type: array
+        customAttributes:
+          description: The new custom attributes of the role
+          nullable: true
+          type: object
+        description:
+          description: The description of the role
+          type: string
+        name:
+          description: The name of the role
+          maxLength: 20
+          minLength: 3
+          type: string
+        permissions:
+          description: The permissions of the role
+          items:
+            type: string
+          type: array
+      required:
+        - name
+        - permissions
+      title: RoleForCreation
+      type: object
+    RoleForUpdate:
+      properties:
+        contextCeiling:
+          description: The context ceiling of the role
+          items:
+            $ref: '#/components/schemas/ContextLimitation'
+          type: array
+        customAttributes:
+          description: The new custom attributes of the role
+          nullable: true
+          type: object
+        description:
+          description: The description of the role
+          type: string
+        name:
+          description: The name of the role
+          maxLength: 20
+          minLength: 3
+          type: string
+        permissions:
+          description: The permissions of the role
+          items:
+            type: string
+          type: array
+        version:
+          description: The version of the role
+          type: number
+      required:
+        - name
+        - permissions
+        - version
+      title: RoleForUpdate
       type: object
     RolePaginatedResult:
       properties:
