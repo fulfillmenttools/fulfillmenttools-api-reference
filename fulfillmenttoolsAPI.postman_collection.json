@@ -476,7 +476,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{host}}/api/permissions?group=<optional-permission-group-filter>",
+											"raw": "{{host}}/api/permissions",
 											"host": [
 												"{{host}}"
 											],
@@ -500,7 +500,174 @@
 												{
 													"key": "group",
 													"value": "<optional-permission-group-filter>",
-													"description": "Name of permission group to filter by"
+													"description": "Name of permission group to filter by",
+													"disabled": true
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Users/getAllUsers"
+									},
+									"response": []
+								},
+								{
+									"name": "Get Role",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/roles/:name",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"roles",
+												":name"
+											],
+											"variable": [
+												{
+													"key": "name",
+													"value": "SUPERVISOR"
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Users/getAllUsers"
+									},
+									"response": []
+								},
+								{
+									"name": "Search Roles",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"query\": {}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/roles/search",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"roles",
+												"search"
+											],
+											"query": [
+												{
+													"key": "startAfterId",
+													"value": "ADMINISTRATOR",
+													"description": "all entities after given Id",
+													"disabled": true
+												},
+												{
+													"key": "size",
+													"value": "10",
+													"disabled": true
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Users/getAllUsers"
+									},
+									"response": []
+								},
+								{
+									"name": "Add a Role",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"myNewRole\",\n    \"permissions\": [\"user_read\", \"users_write\"],\n    \"contextLimitations\": [\n        {\n            \"type\": \"ROLE\",\n            \"values\": \"FULFILLER\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/roles",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"roles"
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Users/getAllUsers"
+									},
+									"response": []
+								},
+								{
+									"name": "Update a Role",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"myNewRole\",\n    \"version\": 1,\n    \"permissions\": [\"user_read\"],\n    \"contextLimitations\": [\n        {\n            \"type\": \"ROLE\",\n            \"values\": \"FULFILLER\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/roles/:name",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"roles",
+												":name"
+											],
+											"variable": [
+												{
+													"key": "name",
+													"value": "myNewRole"
+												}
+											]
+										},
+										"description": "https://fulfillmenttools.github.io/api-reference-ui/#/Users/getAllUsers"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete a Role",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"myNewRole\",\n    \"version\": 1,\n    \"permissions\": [\"user_read\"],\n    \"contextLimitations\": [\n        {\n            \"type\": \"ROLE\",\n            \"values\": \"FULFILLER\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/roles/:name",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"roles",
+												":name"
+											],
+											"variable": [
+												{
+													"key": "name",
+													"value": "myNewRole"
 												}
 											]
 										},
