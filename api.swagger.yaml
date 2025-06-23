@@ -52037,7 +52037,7 @@ components:
         id:
           type: string
         totalCosts:
-          $ref: '#/components/schemas/DeliveryCost'
+          $ref: '#/components/schemas/SolutionCosts'
         totalPenalty:
           type: number
           description: The total calculated penalty we calculated for this option
@@ -52146,6 +52146,57 @@ components:
         - targetTime
       xml:
         name: TransferTimeLine
+    SolutionCosts:
+      type: object
+      additionalProperties: false
+      properties:
+        cost:
+          type: number
+          example: 10.99
+          description: Combined total costs of a solution
+        currency:
+          type: string
+          example: EUR
+          description: currency as 3 letter iso code
+          pattern: ^[A-Z]{3}$
+        totalSalesPrice:
+          type: number
+          example: 10
+          description: Sum of all sales prices of the items in the solution
+        totalShippingCosts:
+          $ref: '#/components/schemas/ShippingCosts'
+      required:
+        - total
+    ShippingCosts:
+      type: object
+      additionalProperties: false
+      properties:
+        totalTransportCost:
+          type: number
+          example: 0.99
+          description: Combined total costs of all packagingUnits
+        packageCosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackageCost'
+          description: Costs of the individual packaging units
+      required:
+        - totalTransportCost
+    PackageCost:
+      type: object
+      additionalProperties: false
+      properties:
+        packageName:
+          type: string
+          example: Small Box
+          description: Name of the package
+        cost:
+          type: number
+          example: 0.99
+          description: Cost of the package
+      required:
+        - packageName
+        - cost
     HandledItem:
       type: object
       properties:
