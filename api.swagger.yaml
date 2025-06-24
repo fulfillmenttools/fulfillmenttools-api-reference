@@ -24362,6 +24362,8 @@ paths:
               - category_read
               - category_write
               - permission_read
+              - reservation_write
+              - reservation_read
             type: string
         - description: The group of the permission to filter by
           in: query
@@ -24830,6 +24832,60 @@ paths:
       summary: Put receipt to id
       tags:
         - Inventory Management - Inbound
+      x-fft-api-performance-category: single-entity-upsert
+  /api/reservations/actions:
+    post:
+      deprecated: false
+      description: |
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />REMOVE_RESERVATIONS_KEEP_STOCKS: Removes reservations without modifying stock levels.
+
+              REMOVE_RESERVATIONS_AND_REDUCE_STOCKS:  Removes reservations and reduces stock levels accordingly.
+      operationId: performReservationActions
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationAction'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ReservationActionResult'
+                type: array
+          description: List of reservation removal results with stock operations
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Remove reservations and reduce stocks
+      tags:
+        - Inventory Management - Reservations
       x-fft-api-performance-category: single-entity-upsert
   /api/roles:
     get:
@@ -57787,6 +57843,8 @@ components:
             - category_read
             - category_write
             - permission_read
+            - reservation_write
+            - reservation_read
           type: string
         operation:
           description: The operation of the permission
@@ -57863,6 +57921,7 @@ components:
             - DELIVERYNOTE
             - REMOTE_CONFIG
             - ADMIN_DATA
+            - RESERVATION
           type: string
       required:
         - operation
@@ -59051,6 +59110,77 @@ components:
         - type
         - value
       title: RequestedDateTimePoint
+      type: object
+    ReservationAction:
+      properties:
+        name:
+          description: Which action to perform
+          enum:
+            - REMOVE_RESERVATIONS_AND_REDUCE_STOCKS
+            - REMOVE_RESERVATIONS_KEEP_STOCKS
+          type: string
+        relatedRefs:
+          description: >-
+            Holds the Ids of entities that are related to the reservation such
+            as reservationId, orderId or routingPlanId.
+                  May specify one ORDER or one ROUTING_PLAN, but multiple RESERVATIONs.
+          items:
+            $ref: '#/components/schemas/ReservationSelector'
+          maxItems: 100
+          minItems: 1
+          type: array
+      required:
+        - name
+        - relatedRefs
+      title: ReservationAction
+      type: object
+    ReservationActionResult:
+      properties:
+        reservationId:
+          type: string
+        status:
+          enum:
+            - REMOVED
+          type: string
+        stockOperations:
+          items:
+            $ref: '#/components/schemas/ReservationActionStockOperation'
+          type: array
+      required:
+        - status
+        - reservationId
+        - stockOperations
+      title: ReservationActionResult
+      type: object
+    ReservationActionStockOperation:
+      properties:
+        status:
+          enum:
+            - DELETED
+            - REDUCED
+          type: string
+        stock:
+          type: object
+      required:
+        - status
+        - stock
+      title: ReservationActionStockOperation
+      type: object
+    ReservationSelector:
+      properties:
+        reference:
+          description: ID of the entity specified in the type
+          type: string
+        type:
+          enum:
+            - RESERVATION
+            - ORDER
+            - ROUTING_PLAN
+          type: string
+      required:
+        - type
+        - reference
+      title: ReservationSelector
       type: object
     Role:
       properties:
