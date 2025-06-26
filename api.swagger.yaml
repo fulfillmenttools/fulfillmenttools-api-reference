@@ -22012,279 +22012,6 @@ paths:
         required: true
       summary: Change the tenant wide order cancelation configuration
       x-fft-api-performance-category: single-entity-upsert
-  /api/articlecategories:
-    get:
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      operationId: getCategories
-      parameters:
-        - in: query
-          name: size
-          required: false
-          schema:
-            default: 25
-            maximum: 100
-            minimum: 1
-            type: number
-        - in: query
-          name: startAfterId
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ArticleCategory'
-                type: array
-          description: ''
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user, although recognized, is not authorized to use this
-      summary: Get categories
-      tags:
-        - Inventory Management - Article Categories
-      x-fft-api-performance-category: search-b-class
-    post:
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      operationId: createArticleCategory
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ArticleCategoryForCreation'
-        required: true
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArticleCategory'
-          description: ''
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user, although recognized, is not authorized to use this
-      summary: Create article category
-      tags:
-        - Inventory Management - Article Categories
-      x-fft-api-performance-category: single-entity-upsert
-  /api/articlecategories/search:
-    post:
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />Search for ArticleCategory
-      operationId: searchArticleCategory
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ArticleCategorySearchPayload'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArticleCategoryPaginatedResult'
-          description: Your search result
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user, although recognized, is not authorized to use this
-      summary: ''
-      tags:
-        - Inventory Management - Article Categories
-      x-fft-api-performance-category: search-a-class
-  /api/articlecategories/{categoryId}:
-    delete:
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      operationId: deleteArticleCategory
-      parameters:
-        - in: path
-          name: categoryId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArticleCategory'
-          description: ''
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user, although recognized, is not authorized to use this
-      summary: Delete article category
-      tags:
-        - Inventory Management - Article Categories
-      x-fft-api-performance-category: single-entity-upsert
-    get:
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      operationId: getArticleCategory
-      parameters:
-        - in: path
-          name: categoryId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArticleCategory'
-          description: ''
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user, although recognized, is not authorized to use this
-      summary: Get article category
-      tags:
-        - Inventory Management - Article Categories
-      x-fft-api-performance-category: single-entity-read
-    put:
-      deprecated: false
-      description: |-
-        <i><center>
-          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
-          </center> <br /> This part of the API is currently under development.
-          That means that this endpoint, model, etc. can contain breaking changes
-          and / or might not be available at all times in your API instance. It
-          could disappear also without warning. Thus, it currently does not fall
-          under our SLA regulations. For details on this topic please check our
-          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
-          </i><br /><br />
-      operationId: replaceArticleCategory
-      parameters:
-        - in: path
-          name: categoryId
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ArticleCategoryForUpdate'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArticleCategory'
-          description: ''
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user, although recognized, is not authorized to use this
-      summary: Replace article category
-      tags:
-        - Inventory Management - Article Categories
-      x-fft-api-performance-category: single-entity-upsert
   /api/articles:
     get:
       deprecated: true
@@ -22503,6 +22230,279 @@ paths:
       tags:
         - Inventory Management - Stocks
       x-fft-api-performance-category: single-entity-read
+  /api/categories:
+    get:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getCategories
+      parameters:
+        - in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            maximum: 100
+            minimum: 1
+            type: number
+        - in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Category'
+                type: array
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Get categories
+      tags:
+        - Inventory Management - Categories
+      x-fft-api-performance-category: search-b-class
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: createCategory
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Create category
+      tags:
+        - Inventory Management - Categories
+      x-fft-api-performance-category: single-entity-upsert
+  /api/categories/search:
+    post:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />Search for Category
+      operationId: searchCategory
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategorySearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Inventory Management - Categories
+      x-fft-api-performance-category: search-a-class
+  /api/categories/{categoryId}:
+    delete:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: deleteCategory
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Delete category
+      tags:
+        - Inventory Management - Categories
+      x-fft-api-performance-category: single-entity-upsert
+    get:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: getCategory
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Get category
+      tags:
+        - Inventory Management - Categories
+      x-fft-api-performance-category: single-entity-read
+    put:
+      deprecated: false
+      description: |-
+        <i><center>
+          <img src='https://storage.googleapis.com/ocff-assets/api/fft-alpha_174x51.png'/>
+          </center> <br /> This part of the API is currently under development.
+          That means that this endpoint, model, etc. can contain breaking changes
+          and / or might not be available at all times in your API instance. It
+          could disappear also without warning. Thus, it currently does not fall
+          under our SLA regulations. For details on this topic please check our
+          <a href="https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle">documentation</a>
+          </i><br /><br />
+      operationId: replaceCategory
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryForUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Replace category
+      tags:
+        - Inventory Management - Categories
+      x-fft-api-performance-category: single-entity-upsert
   /api/configurations/inventory:
     get:
       deprecated: false
@@ -52509,208 +52509,6 @@ components:
       type: object
       xml:
         name: OrderForSourcingOptionsRequest
-    ArticleCategory:
-      properties:
-        created:
-          format: date-time
-          type: string
-        customAttributes:
-          description: >-
-            Attributes that can be added to this entity. These attributes
-            **cannot** be used within fulfillment processes, but enable you to
-            attach custom data from your systems to fulfillmenttools entities.
-          nullable: true
-          type: object
-        id:
-          type: string
-        lastModified:
-          format: date-time
-          type: string
-        nameLocalized:
-          $ref: '#/components/schemas/LocaleStringConstrained'
-        tenantCategoryId:
-          description: unique identifier for categories used in the customer systems
-          maxLength: 256
-          minLength: 2
-          pattern: ^[A-Za-z0-9_-]+$
-          type: string
-        version:
-          type: number
-      required:
-        - nameLocalized
-        - version
-        - created
-        - lastModified
-      title: ArticleCategory
-      type: object
-    ArticleCategoryForCreation:
-      properties:
-        customAttributes:
-          description: >-
-            Attributes that can be added to this entity. These attributes
-            **cannot** be used within fulfillment processes, but enable you to
-            attach custom data from your systems to fulfillmenttools entities.
-          nullable: true
-          type: object
-        nameLocalized:
-          $ref: '#/components/schemas/LocaleStringConstrained'
-        tenantCategoryId:
-          description: unique identifier for categories used in the customer systems
-          maxLength: 256
-          minLength: 2
-          pattern: ^[A-Za-z0-9_-]+$
-          type: string
-      required:
-        - nameLocalized
-      title: ArticleCategoryForCreation
-      type: object
-    ArticleCategoryForUpdate:
-      properties:
-        customAttributes:
-          description: >-
-            Attributes that can be added to this entity. These attributes
-            **cannot** be used within fulfillment processes, but enable you to
-            attach custom data from your systems to fulfillmenttools entities.
-          nullable: true
-          type: object
-        id:
-          type: string
-        nameLocalized:
-          $ref: '#/components/schemas/LocaleStringConstrained'
-        tenantCategoryId:
-          description: unique identifier for categories used in the customer systems
-          maxLength: 256
-          minLength: 2
-          pattern: ^[A-Za-z0-9_-]+$
-          type: string
-        version:
-          type: number
-      required:
-        - nameLocalized
-        - version
-      title: ArticleCategoryForUpdate
-      type: object
-    ArticleCategoryPaginatedResult:
-      properties:
-        articleCategories:
-          items:
-            $ref: '#/components/schemas/ArticleCategory'
-          type: array
-        pageInfo:
-          allOf:
-            - $ref: '#/components/schemas/PageInfo'
-          description: Pagination information for the search result.
-        total:
-          description: >-
-            The total number of items matching the search criteria. Only filled,
-            if withTotal is set to true in the search options.
-          minimum: 0
-          type: number
-      required:
-        - pageInfo
-        - articleCategories
-      title: ArticleCategoryPaginatedResult
-      type: object
-    ArticleCategorySearchPayload:
-      properties:
-        after:
-          deprecated: false
-          description: >-
-            The cursor to start after. The value is provided in the
-            `pageInfo.endCursor` field of the response.
-          type: string
-        options:
-          $ref: '#/components/schemas/SearchOptions'
-        query:
-          $ref: '#/components/schemas/ArticleCategorySearchQuery'
-        size:
-          default: 20
-          description: Number of items to return.
-          maximum: 250
-          minimum: 1
-          type: number
-        sort:
-          description: Use for sorting the result.
-          items:
-            $ref: '#/components/schemas/ArticleCategorySort'
-          maxItems: 1
-          minItems: 1
-          type: array
-        startAfterId:
-          deprecated: true
-          description: >-
-            The ID to start after. Deprecated, use `after` with the value
-            provided in `pageInfo.endCursor` instead.
-          type: string
-      required:
-        - query
-      title: ArticleCategorySearchPayload
-      type: object
-    ArticleCategorySearchQuery:
-      properties:
-        and:
-          items:
-            $ref: '#/components/schemas/ArticleCategorySearchQuery'
-          type: array
-        customAttributes:
-          additionalProperties:
-            anyOf:
-              - $ref: '#/components/schemas/BooleanFilter'
-              - $ref: '#/components/schemas/StringEqFilter'
-              - $ref: '#/components/schemas/NumberEqFilter'
-              - $ref: '#/components/schemas/DateFilter'
-          description: Search by custom attributes
-          type: object
-        id:
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
-          description: Search by id
-        nameLocalized:
-          additionalProperties:
-            anyOf:
-              - $ref: '#/components/schemas/StringFilter'
-              - $ref: '#/components/schemas/KeyExistsFilter'
-          description: Search by nameLocalized
-          type: object
-        or:
-          items:
-            $ref: '#/components/schemas/ArticleCategorySearchQuery'
-          type: array
-        tenantCategoryId:
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
-          description: Search by tenantCategoryId
-      title: ArticleCategorySearchQuery
-      type: object
-    ArticleCategorySort:
-      properties:
-        created:
-          enum:
-            - ASC
-            - DESC
-          type: string
-        customAttributes:
-          additionalProperties: true
-          maxProperties: 1
-          minProperties: 1
-          type: object
-        id:
-          enum:
-            - ASC
-            - DESC
-          type: string
-        lastModified:
-          enum:
-            - ASC
-            - DESC
-          type: string
-        tenantCategoryId:
-          enum:
-            - ASC
-            - DESC
-          type: string
-      title: ArticleCategorySort
-      type: object
     ArticleStockForecast:
       properties:
         created:
@@ -52874,6 +52672,208 @@ components:
         - version
         - name
       title: CancelStowJobAction
+      type: object
+    Category:
+      properties:
+        created:
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        id:
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleStringConstrained'
+        tenantCategoryId:
+          description: unique identifier for categories used in the customer systems
+          maxLength: 256
+          minLength: 2
+          pattern: ^[A-Za-z0-9_-]+$
+          type: string
+        version:
+          type: number
+      required:
+        - nameLocalized
+        - version
+        - created
+        - lastModified
+      title: Category
+      type: object
+    CategoryForCreation:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleStringConstrained'
+        tenantCategoryId:
+          description: unique identifier for categories used in the customer systems
+          maxLength: 256
+          minLength: 2
+          pattern: ^[A-Za-z0-9_-]+$
+          type: string
+      required:
+        - nameLocalized
+      title: CategoryForCreation
+      type: object
+    CategoryForUpdate:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        id:
+          type: string
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleStringConstrained'
+        tenantCategoryId:
+          description: unique identifier for categories used in the customer systems
+          maxLength: 256
+          minLength: 2
+          pattern: ^[A-Za-z0-9_-]+$
+          type: string
+        version:
+          type: number
+      required:
+        - nameLocalized
+        - version
+      title: CategoryForUpdate
+      type: object
+    CategoryPaginatedResult:
+      properties:
+        categories:
+          items:
+            $ref: '#/components/schemas/Category'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - categories
+      title: CategoryPaginatedResult
+      type: object
+    CategorySearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after. The value is provided in the
+            `pageInfo.endCursor` field of the response.
+          type: string
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/CategorySearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/CategorySort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: CategorySearchPayload
+      type: object
+    CategorySearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/CategorySearchQuery'
+          type: array
+        customAttributes:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
+          description: Search by custom attributes
+          type: object
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        nameLocalized:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/StringFilter'
+              - $ref: '#/components/schemas/KeyExistsFilter'
+          description: Search by nameLocalized
+          type: object
+        or:
+          items:
+            $ref: '#/components/schemas/CategorySearchQuery'
+          type: array
+        tenantCategoryId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantCategoryId
+      title: CategorySearchQuery
+      type: object
+    CategorySort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        customAttributes:
+          additionalProperties: true
+          maxProperties: 1
+          minProperties: 1
+          type: object
+        id:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        tenantCategoryId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: CategorySort
       type: object
     ChannelStockAvailability:
       properties:
