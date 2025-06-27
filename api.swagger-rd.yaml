@@ -24081,6 +24081,47 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/reservations/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for Reservation
+      operationId: searchReservation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: ''
+      tags:
+        - Inventory Management - Reservations
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/reservations/{reservationId}:
     get:
       deprecated: false
@@ -60523,6 +60564,102 @@ components:
       title: ReservationHost
       type: object
       description: ReservationHost
+    ReservationPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        reservations:
+          items:
+            $ref: '#/components/schemas/Reservation'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - reservations
+      title: ReservationPaginatedResult
+      type: object
+      description: ReservationPaginatedResult
+    ReservationRelatedRefsFilter:
+      properties:
+        routingPlanRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by routingPlanRefs
+        transferRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by transferRefs
+      title: ReservationRelatedRefsFilter
+      type: object
+      description: ReservationRelatedRefsFilter
+    ReservationSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after. The value is provided in the
+            `pageInfo.endCursor` field of the response.
+          type: string
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ReservationSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ReservationSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: ReservationSearchPayload
+      type: object
+      description: ReservationSearchPayload
+    ReservationSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ReservationSearchQuery'
+          type: array
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringEqFilter'
+          description: Search by facilityRef
+        or:
+          items:
+            $ref: '#/components/schemas/ReservationSearchQuery'
+          type: array
+        relatedRefs:
+          allOf:
+            - $ref: '#/components/schemas/ReservationRelatedRefsFilter'
+          description: Nested search by relatedRefs
+        tenantArticleId:
+          allOf:
+            - $ref: '#/components/schemas/StringEqFilter'
+          description: Search by tenantArticleId
+      title: ReservationSearchQuery
+      type: object
+      description: ReservationSearchQuery
     ReservationSelector:
       properties:
         reference:
@@ -60540,6 +60677,21 @@ components:
       title: ReservationSelector
       type: object
       description: ReservationSelector
+    ReservationSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ReservationSort
+      type: object
+      description: ReservationSort
     Role:
       properties:
         contextLimitations:
