@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "5accc9e2-77e7-41ed-b57e-9971326331bd",
+		"_postman_id": "b988eee2-39b6-4345-b447-13705d2fd695",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "16829062"
+		"_exporter_id": "22612271"
 	},
 	"item": [
 		{
@@ -255,6 +255,88 @@
 							"path": [
 								"v1",
 								"accounts:signInWithPassword"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{vault:{{projectId}}-api-key}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request Auth Token (external Idp)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code < 300) {",
+									"    console.log(\"Login Successful, Access Tokens retrieved.\");",
+									"    console.log(\" Setting JWT Auth Token...\");",
+									"    pm.environment.set(\"authToken\", pm.response.json().idToken);",
+									"    console.log(\" Setting Refresh Token...\");",
+									"    pm.environment.set(\"refreshToken\", pm.response.json().refreshToken);",
+									"} else {",
+									"    const jsonErrorResponse = pm.response.json().error;",
+									"    var code = \"NONE\";",
+									"    var message = \"NONE\";",
+									"",
+									"    if (jsonErrorResponse.code != null) {",
+									"        code = jsonErrorResponse.code;",
+									"    }",
+									"",
+									"    if (jsonErrorResponse.message != null) {",
+									"        message = jsonErrorResponse.message;",
+									"    }",
+									"",
+									"    console.log(\"ERROR (HTTP \" + code + \") - Refresh FFT API Access Token: \" + message);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"requestUri\": \"http://localhost\",\n  \"postBody\": \"id_token=<insert-id-token>&providerId=oidc.external.0037b6ad-c9c0-4744-81b2-44e7f64f9b63\",\n  \"returnRefreshToken\": true,\n  \"sessionId\": null,\n  \"idToken\": null,\n  \"returnSecureToken\": true,\n  \"returnIdpCredential\": null,\n  \"tenantId\": null,\n  \"pendingToken\": null\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key={{vault:{{projectId}}-api-key}}",
+							"protocol": "https",
+							"host": [
+								"identitytoolkit",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"v1",
+								"accounts:signInWithIdp"
 							],
 							"query": [
 								{
