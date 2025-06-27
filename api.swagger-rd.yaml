@@ -60499,15 +60499,14 @@ components:
             - REMOVE_RESERVATIONS_KEEP_STOCKS
           type: string
         relatedRefs:
+          allOf:
+            - $ref: '#/components/schemas/ReservationRelatedRefs'
           description: >-
             Holds the Ids of entities that are related to the reservation such
-            as reservationId, orderId or routingPlanId.
-                  May specify one ORDER or one ROUTING_PLAN, but multiple RESERVATIONs.
-          items:
-            $ref: '#/components/schemas/ReservationSelector'
-          maxItems: 100
-          minItems: 1
-          type: array
+            as reservationRefs, orderRefs or routingPlanRefs.
+                  May specify one orderRef or one routingPlanRef, but multiple reservationRefs.
+          maxProperties: 1
+          minProperties: 1
       required:
         - name
         - relatedRefs
@@ -60520,7 +60519,7 @@ components:
           type: string
         status:
           enum:
-            - REMOVED
+            - DELETED
           type: string
         stockOperations:
           items:
@@ -60529,7 +60528,6 @@ components:
       required:
         - status
         - reservationId
-        - stockOperations
       title: ReservationActionResult
       type: object
       description: ReservationActionResult
@@ -60541,7 +60539,7 @@ components:
             - REDUCED
           type: string
         stock:
-          type: object
+          $ref: '#/components/schemas/ReservationStock'
       required:
         - status
         - stock
@@ -60586,6 +60584,23 @@ components:
       title: ReservationPaginatedResult
       type: object
       description: ReservationPaginatedResult
+    ReservationRelatedRefs:
+      properties:
+        orderRefs:
+          items:
+            type: string
+          type: array
+        reservationRefs:
+          items:
+            type: string
+          type: array
+        routingPlanRefs:
+          items:
+            type: string
+          type: array
+      title: ReservationRelatedRefs
+      type: object
+      description: ReservationRelatedRefs
     ReservationRelatedRefsFilter:
       properties:
         routingPlanRefs:
@@ -60660,23 +60675,6 @@ components:
       title: ReservationSearchQuery
       type: object
       description: ReservationSearchQuery
-    ReservationSelector:
-      properties:
-        reference:
-          description: ID of the entity specified in the type
-          type: string
-        type:
-          enum:
-            - RESERVATION
-            - ORDER
-            - ROUTING_PLAN
-          type: string
-      required:
-        - type
-        - reference
-      title: ReservationSelector
-      type: object
-      description: ReservationSelector
     ReservationSort:
       properties:
         created:
@@ -60692,6 +60690,18 @@ components:
       title: ReservationSort
       type: object
       description: ReservationSort
+    ReservationStock:
+      properties:
+        id:
+          type: string
+        version:
+          type: number
+      required:
+        - id
+        - version
+      title: ReservationStock
+      type: object
+      description: ReservationStock
     Role:
       properties:
         contextLimitations:
