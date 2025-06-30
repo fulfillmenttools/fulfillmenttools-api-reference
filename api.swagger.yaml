@@ -56789,9 +56789,17 @@ components:
         action:
           $ref: '#/components/schemas/UserActionEnum'
         assignedFacilities:
-          description: The new assigned facilities of the user
+          deprecated: true
+          description: >-
+            Deprecated: Use assignedRoles with contextLimitation of type
+            FACILITY instead
           items:
             $ref: '#/components/schemas/UserAssignedFacilityForCreation'
+          type: array
+        assignedRoles:
+          description: The new roles of the user
+          items:
+            $ref: '#/components/schemas/AssignedRoles'
           type: array
         customAttributes:
           description: The new custom attributes of the user
@@ -56809,7 +56817,8 @@ components:
           description: The new password of the user
           type: string
         roles:
-          description: The new roles of the user
+          deprecated: true
+          description: 'Deprecated: Use assignedRoles instead'
           items:
             $ref: '#/components/schemas/UserRole'
           type: array
@@ -63243,7 +63252,8 @@ components:
     User:
       properties:
         assignedFacilities:
-          description: The assigned facilities of the user
+          deprecated: true
+          description: 'Deprecated: Find all relevant information in assignedRoles instead'
           items:
             $ref: '#/components/schemas/UserAssignedFacility'
           type: array
@@ -63265,7 +63275,8 @@ components:
         customClaims:
           allOf:
             - $ref: '#/components/schemas/CustomClaims'
-          description: The custom claims of the user
+          deprecated: true
+          description: 'Deprecated: Find all relevant information in assignedRoles instead'
         firstname:
           description: The first name of the user
           example: John
@@ -63529,6 +63540,13 @@ components:
           items:
             $ref: '#/components/schemas/UserAssignedFacilityForCreation'
           type: array
+        assignedRoles:
+          description: The roles which are assigned to the user
+          items:
+            $ref: '#/components/schemas/AssignedRoles'
+          maxItems: 10
+          minItems: 1
+          type: array
         firstname:
           description: The first name of the user
           example: John
@@ -63544,7 +63562,8 @@ components:
           example: elephantMangoDance123
           type: string
         roles:
-          description: The roles of the user
+          deprecated: true
+          description: 'Deprecated: Use assignedRoles instead'
           items:
             $ref: '#/components/schemas/UserRole'
           maxItems: 1
@@ -63559,7 +63578,6 @@ components:
         - lastname
         - username
         - password
-        - roles
       title: UserForCreation
       type: object
     UserPaginatedResult:
