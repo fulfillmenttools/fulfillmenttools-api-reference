@@ -30056,7 +30056,7 @@ components:
         - $ref: '#/components/schemas/FacilityForCreation'
       properties:
         address:
-          $ref: '#/components/schemas/FacilityAddressForCreation'
+          $ref: '#/components/schemas/SupplierAddressForCreation'
       type: object
       xml:
         name: SupplierForCreation
@@ -30079,7 +30079,7 @@ components:
         status:
           $ref: '#/components/schemas/FacilityStatus'
         address:
-          $ref: '#/components/schemas/FacilityAddressForCreation'
+          $ref: '#/components/schemas/SupplierAddressForCreation'
         tenantFacilityId:
           description: The id of the facility in the tenants own system
           example: K12345
@@ -30114,7 +30114,7 @@ components:
         - $ref: '#/components/schemas/SupplierForCreation'
       properties:
         address:
-          $ref: '#/components/schemas/FacilityAddress'
+          $ref: '#/components/schemas/SupplierAddress'
       type: object
       xml:
         name: Supplier
@@ -30376,6 +30376,116 @@ components:
         - NOT
       type: string
       title: ContextOperator
+    SupplierAddress:
+      allOf:
+        - $ref: '#/components/schemas/SupplierAddressForCreation'
+        - properties:
+            resolvedTimeZone:
+              $ref: '#/components/schemas/TimeZone'
+          type: object
+      type: object
+      title: SupplierAddress
+      description: SupplierAddress
+    SupplierAddressForCreation:
+      properties:
+        additionalAddressInfo:
+          example: 'to care of: Mrs. Müller'
+          type: string
+        city:
+          example: Langenfeld
+          pattern: ^.+$
+          type: string
+        country:
+          description: A two-digit country code as per ISO 3166-1 alpha-2
+          example: DE
+          pattern: ^[A-Z]{2}$
+          type: string
+        province:
+          example: NRW
+          pattern: ^.+$
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the address. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
+          type: object
+        houseNumber:
+          example: 42a
+          pattern: ^.+$
+          type: string
+        phoneNumbers:
+          items:
+            $ref: '#/components/schemas/SupplierAddressPhoneNumber'
+          type: array
+        postalCode:
+          example: '40764'
+          pattern: ^.+$
+          type: string
+        street:
+          example: Hauptstr.
+          pattern: ^.+$
+          type: string
+        companyName:
+          example: Speedy Boxales Ltd.
+          type: string
+        emailAddresses:
+          items:
+            $ref: '#/components/schemas/SupplierAddressEmailAddress'
+          type: array
+        resolvedCoordinates:
+          $ref: '#/components/schemas/Coordinates'
+      required:
+        - country
+        - companyName
+      type: object
+      title: SupplierAddressForCreation
+      description: SupplierAddressForCreation
+    SupplierAddressEmailAddress:
+      properties:
+        recipient:
+          description: >-
+            Human readable information who is the recipient for emails sent to
+            this address.
+          example: >-
+            'Mailinglist reaching all the employees', 'Marc Fulton, Manager',
+            etc.
+          type: string
+        value:
+          format: email
+          type: string
+      required:
+        - value
+      type: object
+      title: SupplierAddressEmailAddress
+      description: SupplierAddressEmailAddress
+    SupplierAddressPhoneNumber:
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to the phonenumber. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        label:
+          description: >-
+            Can be used to give a description for the number, like "private",
+            "business number", etc.
+          type: string
+        type:
+          enum:
+            - MOBILE
+            - PHONE
+          type: string
+        value:
+          description: The number itself. We do not enforce any format (yet).
+          type: string
+      required:
+        - value
+        - type
+      type: object
+      title: SupplierAddressPhoneNumber
+      description: SupplierAddressPhoneNumber
     FacilityAddress:
       allOf:
         - $ref: '#/components/schemas/FacilityAddressForCreation'
@@ -41315,7 +41425,7 @@ components:
           type: object
           nullable: true
           allOf:
-            - $ref: '#/components/schemas/FacilityAddressForCreation'
+            - $ref: '#/components/schemas/SupplierAddressForCreation'
         status:
           $ref: '#/components/schemas/FacilityStatus'
         tenantFacilityId:
