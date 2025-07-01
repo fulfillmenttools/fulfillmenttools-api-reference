@@ -24029,6 +24029,62 @@ paths:
       summary: Put receipt to id
       tags:
         - Inventory Management - Inbound
+  /api/reservations:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: getPaginatedReservations
+      parameters:
+        - in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            maximum: 100
+            minimum: 1
+            type: number
+        - description: >-
+            The cursor to start after. The value is provided in the
+            `pageInfo.endCursor` field of the response.
+          in: query
+          name: after
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationsPaginatedResult'
+          description: Reservation details
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Get all reservations
+      tags:
+        - Inventory Management - Reservations
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/reservations/actions:
     post:
       deprecated: false
@@ -60870,6 +60926,24 @@ components:
       title: ReservationStock
       type: object
       description: ReservationStock
+    ReservationsPaginatedResult:
+      properties:
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+        reservations:
+          items:
+            $ref: '#/components/schemas/Reservation'
+          type: array
+        total:
+          minimum: 0
+          type: number
+      required:
+        - total
+        - pageInfo
+        - reservations
+      title: ReservationsPaginatedResult
+      type: object
+      description: ReservationsPaginatedResult
     Role:
       properties:
         contextLimitations:
