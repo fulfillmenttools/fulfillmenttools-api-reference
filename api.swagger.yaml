@@ -36973,10 +36973,16 @@ components:
     PreselectedFacility:
       properties:
         facilityRef:
-          description: Reference to the facility which is supposed to fulfill the order
+          description: Reference to the facility which is supposed to fulfill the order.
           type: string
-      required:
-        - facilityRef
+        tenantFacilityId:
+          description: Reference to the facility which is supposed to fulfill the order.
+          type: string
+      anyOf:
+        - required:
+            - facilityRef
+        - required:
+            - tenantFacilityId
       type: object
     PrioritizationRule:
       description: >-
@@ -47598,8 +47604,11 @@ components:
         consumer:
           properties:
             facilityRef:
-              description: The id of the facility, if the recipient is a facility.
+              description: ID of the facility, if the recipient is a facility.
               example: e4213a07-f563-46a3-b1ba-4dfeb6abe82a
+              type: string
+            tenantFacilityId:
+              description: tenantFacilityId of the facility, if the recipient is a facility
               type: string
             consumerId:
               description: The id of the consumer.
@@ -50655,12 +50664,20 @@ components:
       properties:
         facilityRef:
           type: string
+          description: ID of the facility.
+        tenantFacilityId:
+          description: Reference to the facility.
+          type: string
         deliveryEvents:
           items:
             $ref: '#/components/schemas/DeliveryEvent'
           type: array
+      anyOf:
+        - required:
+            - facilityRef
+        - required:
+            - tenantFacilityId
       required:
-        - facilityRef
         - deliveryEvents
     DeliveryEvent:
       properties:
@@ -50980,14 +50997,20 @@ components:
             Reference to the facility where the consumer expects to collect the
             items
           type: string
+        tenantFacilityId:
+          description: >-
+            Reference to the facility where the consumer expects to collect the
+            items.
+          type: string
         paid:
           default: false
           description: Indicates if the order is already paid.
           type: boolean
         supplyingFacilities:
-          description: DEPRECATED
+          deprecated: true
+          description: '@deprecated Use supplyingFacilitiesConfigurations'
           items:
-            description: Reference of a Facility
+            description: Reference of a Facility.
             example: 928f3730-bc48-4d85-b83f-3fd86b776178
             type: string
           type: array
@@ -51003,8 +51026,11 @@ components:
           example: '2020-02-03T08:45:50.525Z'
           format: date-time
           type: string
-      required:
-        - facilityRef
+      anyOf:
+        - required:
+            - facilityRef
+        - required:
+            - tenantFacilityId
       type: object
     PreferredCarrier:
       description: Keys of the preferred carriers to handle out the order
