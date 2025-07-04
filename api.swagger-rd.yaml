@@ -54376,7 +54376,7 @@ components:
           description: Search by id
         name:
           allOf:
-            - $ref: '#/components/schemas/StringSearchFilter'
+            - $ref: '#/components/schemas/LocalizedStringSearchFilter'
           description: Search by name
         or:
           items:
@@ -57904,6 +57904,33 @@ components:
       title: LocaleStringConstrained
       type: object
       description: LocaleStringConstrained
+    LocalizedStringSearchFilter:
+      properties:
+        eq:
+          maxLength: 256
+          type: string
+        in:
+          items:
+            maxLength: 256
+            type: string
+          maxItems: 25
+          type: array
+        like:
+          description: Search by regex pattern
+          maxLength: 256
+          type: string
+        notEq:
+          maxLength: 256
+          type: string
+        notIn:
+          items:
+            maxLength: 256
+            type: string
+          maxItems: 25
+          type: array
+      title: LocalizedStringSearchFilter
+      type: object
+      description: LocalizedStringSearchFilter
     ModifyStowLineItemsAction:
       description: >-
         MODIFY_STOW_LINE_ITEMS targets specific stowJob.stowLineItems by ID.
