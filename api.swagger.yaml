@@ -17276,7 +17276,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LinkedServiceJobsPaginatedResult'
+                $ref: '#/components/schemas/LinkedServiceJobsResult'
           description: LinkedServiceJobs could be found in response body.
         '401':
           content:
@@ -23036,6 +23036,12 @@ paths:
               $ref: '#/components/schemas/FacilitySearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -23262,6 +23268,12 @@ paths:
               $ref: '#/components/schemas/FacilityGroupSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityGroupPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -23300,6 +23312,12 @@ paths:
               $ref: '#/components/schemas/HandoverJobSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandoverJobPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -24097,6 +24115,12 @@ paths:
               $ref: '#/components/schemas/LinkedServiceJobsSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedServiceJobsPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -24135,6 +24159,12 @@ paths:
               $ref: '#/components/schemas/ListingSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -24173,6 +24203,12 @@ paths:
               $ref: '#/components/schemas/OrderSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -24211,6 +24247,12 @@ paths:
               $ref: '#/components/schemas/PackJobSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackJobPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -24249,6 +24291,12 @@ paths:
               $ref: '#/components/schemas/ParcelSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -24473,6 +24521,12 @@ paths:
               $ref: '#/components/schemas/PickJobSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickJobPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -24511,6 +24565,12 @@ paths:
               $ref: '#/components/schemas/ProcessSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -25392,6 +25452,12 @@ paths:
               $ref: '#/components/schemas/RoutingPlanSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingPlanPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -25552,6 +25618,12 @@ paths:
               $ref: '#/components/schemas/ShipmentSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipmentPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -26070,6 +26142,12 @@ paths:
               $ref: '#/components/schemas/StorageLocationSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageLocationPaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -26976,6 +27054,12 @@ paths:
               $ref: '#/components/schemas/ZoneSearchPayload'
         required: true
       responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZonePaginatedResult'
+          description: Your search result
         '401':
           content:
             application/json:
@@ -46444,7 +46528,7 @@ components:
             type: string
       required:
         - searchPaths
-    LinkedServiceJobsPaginatedResult:
+    LinkedServiceJobsResult:
       additionalProperties: false
       type: object
       properties:
@@ -53506,6 +53590,27 @@ components:
           description: Search by lastName
       title: FacilityContactFilter
       type: object
+    FacilityGroupPaginatedResult:
+      properties:
+        facilityGroups:
+          items:
+            $ref: '#/components/schemas/FacilityGroup'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - facilityGroups
+      title: FacilityGroupPaginatedResult
+      type: object
     FacilityGroupSearchPayload:
       properties:
         after:
@@ -53588,6 +53693,27 @@ components:
             - EXTERNAL
           type: string
       title: FacilityLocationTypeEnumFilter
+      type: object
+    FacilityPaginatedResult:
+      properties:
+        facilities:
+          items:
+            $ref: '#/components/schemas/Facility'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - facilities
+      title: FacilityPaginatedResult
       type: object
     FacilitySearchPayload:
       properties:
@@ -54157,6 +54283,27 @@ components:
             - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by lastName
       title: HandoverJobInvoiceAddressFilter
+      type: object
+    HandoverJobPaginatedResult:
+      properties:
+        handoverJobs:
+          items:
+            $ref: '#/components/schemas/Handoverjob'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - handoverJobs
+      title: HandoverJobPaginatedResult
       type: object
     HandoverJobRecipientAddressFilter:
       properties:
@@ -56580,6 +56727,27 @@ components:
           type: boolean
       title: KeyExistsFilter
       type: object
+    LinkedServiceJobsPaginatedResult:
+      properties:
+        linkedServiceJobs:
+          items:
+            $ref: '#/components/schemas/LinkedServiceJobs'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - linkedServiceJobs
+      title: LinkedServiceJobsPaginatedResult
+      type: object
     LinkedServiceJobsSearchPayload:
       properties:
         after:
@@ -56766,6 +56934,27 @@ components:
             - PREORDER_AND_RESTOCK
           type: string
       title: ListingOutOfStockBehaviourEnumFilter
+      type: object
+    ListingPaginatedResult:
+      properties:
+        listings:
+          items:
+            $ref: '#/components/schemas/Listing'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - listings
+      title: ListingPaginatedResult
       type: object
     ListingSearchPayload:
       properties:
@@ -57467,6 +57656,27 @@ components:
           description: Contains returns if at least one entry matches
       title: OrderOrderLineItemsListFilter
       type: object
+    OrderPaginatedResult:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/Order'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - orders
+      title: OrderPaginatedResult
+      type: object
     OrderPaymentInfoFilter:
       properties:
         currency:
@@ -57760,6 +57970,27 @@ components:
           description: Contains returns if at least one entry matches
       title: PackJobPackingSourceContainersListFilter
       type: object
+    PackJobPaginatedResult:
+      properties:
+        packJobs:
+          items:
+            $ref: '#/components/schemas/PackJob'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - packJobs
+      title: PackJobPaginatedResult
+      type: object
     PackJobRecipientFilter:
       properties:
         companyName:
@@ -58003,6 +58234,27 @@ components:
             - $ref: '#/components/schemas/ParcelItemsFilter'
           description: Contains returns if at least one entry matches
       title: ParcelItemsListFilter
+      type: object
+    ParcelPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        parcels:
+          items:
+            $ref: '#/components/schemas/Parcel'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - parcels
+      title: ParcelPaginatedResult
       type: object
     ParcelRecipientFilter:
       properties:
@@ -58427,6 +58679,27 @@ components:
         - total
       title: PermissionsResponse
       type: object
+    PickJobPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        pickJobs:
+          items:
+            $ref: '#/components/schemas/PickJob'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - pickJobs
+      title: PickJobPaginatedResult
+      type: object
     PickJobSearchPayload:
       properties:
         after:
@@ -58598,6 +58871,27 @@ components:
             - DESC
           type: string
       title: ProcessOrderSort
+      type: object
+    ProcessPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        processes:
+          items:
+            $ref: '#/components/schemas/Process'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - processes
+      title: ProcessPaginatedResult
       type: object
     ProcessReferencedBrandFilter:
       properties:
@@ -60416,6 +60710,27 @@ components:
           description: Contains returns if at least one entry matches
       title: RoutingPlanOrderLineItemsListFilter
       type: object
+    RoutingPlanPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        routingPlans:
+          items:
+            $ref: '#/components/schemas/RoutingPlan'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - routingPlans
+      title: RoutingPlanPaginatedResult
+      type: object
     RoutingPlanSearchPayload:
       properties:
         after:
@@ -60851,6 +61166,27 @@ components:
             result.
           type: boolean
       title: SearchOptions
+      type: object
+    ShipmentPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        shipments:
+          items:
+            $ref: '#/components/schemas/Shipment'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - shipments
+      title: ShipmentPaginatedResult
       type: object
     ShipmentParcelsFilter:
       properties:
@@ -62066,6 +62402,27 @@ components:
         - trait
         - enabled
       title: StorageLocationEventTraitConfigInner
+      type: object
+    StorageLocationPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        storageLocations:
+          items:
+            $ref: '#/components/schemas/StorageLocation'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - storageLocations
+      title: StorageLocationPaginatedResult
       type: object
     StorageLocationRecommendation:
       properties:
@@ -64019,6 +64376,27 @@ components:
             - DESC
           type: string
       title: UserSort
+      type: object
+    ZonePaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+        zones:
+          items:
+            $ref: '#/components/schemas/Zone'
+          type: array
+      required:
+        - pageInfo
+        - zones
+      title: ZonePaginatedResult
       type: object
     ZoneSearchPayload:
       properties:
