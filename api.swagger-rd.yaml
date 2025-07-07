@@ -48361,6 +48361,12 @@ components:
           items:
             $ref: >-
               #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier
+        availableFacilityConnections:
+          description: List of available facility connections.
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableConnection
       required:
         - tenantArticleId
       title: CheckoutOptionsDeliveryEarliestResponseItem
@@ -48409,6 +48415,25 @@ components:
         - carrierRef
       title: CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier
       description: CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier
+    CheckoutOptionsDeliveryEarliestResponseItemAvailableConnection:
+      properties:
+        connectionRef:
+          type: string
+        nonDeliveryDays:
+          type: array
+          items:
+            description: ISO 3166-2 province code
+            type: string
+            example: DE-NW
+        latestPickingStartDate:
+          type: string
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+      required:
+        - name
+        - connectionRef
+      title: CheckoutOptionsDeliveryEarliestResponseItemAvailableConnection
+      description: CheckoutOptionsDeliveryEarliestResponseItemAvailableConnection
     CheckoutOptionsDeliveryTimePeriodResponseItemAvailableCarrier:
       allOf:
         - $ref: >-
@@ -48420,6 +48445,17 @@ components:
           format: date-time
       title: CheckoutOptionsDeliveryTimePeriodResponseItemAvailableCarrier
       description: CheckoutOptionsDeliveryTimePeriodResponseItemAvailableCarrier
+    CheckoutOptionsDeliveryTimePeriodResponseItemAvailableConnection:
+      allOf:
+        - $ref: >-
+            #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableConnection
+      properties:
+        latestPickingStartDate:
+          type: string
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+      title: CheckoutOptionsDeliveryTimePeriodResponseItemAvailableConnection
+      description: CheckoutOptionsDeliveryTimePeriodResponseItemAvailableConnection
     CheckoutOptionsInput:
       additionalProperties: false
       properties:
@@ -48684,6 +48720,11 @@ components:
           items:
             $ref: >-
               #/components/schemas/CheckoutOptionsDeliveryTimePeriodResponseItemAvailableCarrier
+        availableFacilityConnections:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/CheckoutOptionsDeliveryTimePeriodResponseItemAvailableConnection
       required:
         - date
         - overallStatus

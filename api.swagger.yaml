@@ -47976,6 +47976,12 @@ components:
           items:
             $ref: >-
               #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier
+        availableFacilityConnections:
+          description: List of available facility connections.
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableConnection
       required:
         - tenantArticleId
     CheckoutOptionsCollectEarliestResponseItem:
@@ -48018,10 +48024,36 @@ components:
       required:
         - name
         - carrierRef
+    CheckoutOptionsDeliveryEarliestResponseItemAvailableConnection:
+      properties:
+        connectionRef:
+          type: string
+        nonDeliveryDays:
+          type: array
+          items:
+            description: ISO 3166-2 province code
+            type: string
+            example: DE-NW
+        latestPickingStartDate:
+          type: string
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+      required:
+        - name
+        - connectionRef
     CheckoutOptionsDeliveryTimePeriodResponseItemAvailableCarrier:
       allOf:
         - $ref: >-
             #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableCarrier
+      properties:
+        latestPickingStartDate:
+          type: string
+          example: '2020-02-03T08:45:50.525Z'
+          format: date-time
+    CheckoutOptionsDeliveryTimePeriodResponseItemAvailableConnection:
+      allOf:
+        - $ref: >-
+            #/components/schemas/CheckoutOptionsDeliveryEarliestResponseItemAvailableConnection
       properties:
         latestPickingStartDate:
           type: string
@@ -48271,6 +48303,11 @@ components:
           items:
             $ref: >-
               #/components/schemas/CheckoutOptionsDeliveryTimePeriodResponseItemAvailableCarrier
+        availableFacilityConnections:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/CheckoutOptionsDeliveryTimePeriodResponseItemAvailableConnection
       required:
         - date
         - overallStatus
