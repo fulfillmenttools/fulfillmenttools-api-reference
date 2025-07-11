@@ -34072,11 +34072,13 @@ components:
     AddFacilitiesToGroupActionParameter:
       title: AddFacilitiesToGroupActionParameter
       description: Add facilitites to facility group.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityActionsParameter'
       properties:
         name:
           $ref: '#/components/schemas/AddFacilitiesToGroupActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
         facilitiesToAdd:
           items:
             type: string
@@ -34084,11 +34086,11 @@ components:
           type: array
       required:
         - name
-        - version
         - facilitiesToAdd
     AddFacilitiesToGroupActionEnum:
       enum:
         - ADD_FACILITIES_TO_GROUP
+        - VERSIONLESS_ADD_FACILITIES_TO_GROUP
       type: string
     FacilityGroupActionsParameter:
       anyOf:
