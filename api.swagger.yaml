@@ -52849,7 +52849,7 @@ components:
           example: 0.2
       required:
         - level
-    ConsumerAddressForSourcingOptions:
+    ConsumerAddressesForSourcingOptions:
       properties:
         facilityRef:
           type: string
@@ -52861,7 +52861,7 @@ components:
           type: string
         addresses:
           items:
-            $ref: '#/components/schemas/ConsumerAddress'
+            $ref: '#/components/schemas/ConsumerAddressForSourcingOptions'
           type: array
         customAttributes:
           description: >-
@@ -52870,11 +52870,104 @@ components:
             to have the informations carried here.
           type: object
       type: object
+    ConsumerAddressForSourcingOptions:
+      additionalProperties: false
+      properties:
+        city:
+          type: string
+          description: The city of the address.
+          example: Berlin
+        postalCode:
+          type: string
+          description: The postal code of the address.
+          example: 10115
+        street:
+          type: string
+          description: The street of the address.
+          example: Invalidenstraße 116
+        companyName:
+          example: Speedy Boxales Ltd.
+          type: string
+        firstName:
+          example: Maxine
+          type: string
+        lastName:
+          example: Muller
+          type: string
+        personalTitle:
+          example: Dr.
+          type: string
+        salutation:
+          example: Frau
+          type: string
+        email:
+          type: string
+          minLength: 1
+          format: email
+          example: test@try.de
+        addressType:
+          $ref: '#/components/schemas/AddressType'
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        additionalAddressInfo:
+          example: 'to care of: Mrs. Müller'
+          type: string
+        country:
+          description: A two-digit country code as per ISO 3166-1 alpha-2
+          example: DE
+          pattern: ^[A-Z]{2}$
+          type: string
+        province:
+          example: NRW
+          pattern: ^.+$
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the address. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
+          type: object
+        houseNumber:
+          example: 42a
+          pattern: ^.+$
+          type: string
+        phoneNumbers:
+          items:
+            $ref: '#/components/schemas/ConsumerAddressForSourcingOptionsPhoneNumber'
+          type: array
+      required:
+        - country
+    ConsumerAddressForSourcingOptionsPhoneNumber:
+      additionalProperties: false
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to the phonenumber. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        label:
+          description: >-
+            Can be used to give a description for the number, like "private",
+            "business number", etc.
+          type: string
+        type:
+          enum:
+            - MOBILE
+            - PHONE
+          type: string
+        value:
+          description: The number itself. We do not enforce any format (yet).
+          type: string
+      required:
+        - value
+        - type
+      type: object
     OrderForSourcingOptionsRequest:
       additionalProperties: false
       properties:
         consumer:
-          $ref: '#/components/schemas/ConsumerAddressForSourcingOptions'
+          $ref: '#/components/schemas/ConsumerAddressesForSourcingOptions'
         customAttributes:
           description: >-
             Attributes that can be added to the order. These attributes cannot
