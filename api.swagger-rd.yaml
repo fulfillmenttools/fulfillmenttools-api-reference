@@ -49710,6 +49710,73 @@ components:
         - assignedItems
       title: RoutingResults
       description: RoutingResults
+    SourcingOptionsExecutionResults:
+      type: object
+      properties:
+        totalRatingsResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourcingOptionTotalRatingResult'
+      title: SourcingOptionsExecutionResults
+      description: SourcingOptionsExecutionResults
+    SourcingOptionTotalRatingResult:
+      type: object
+      properties:
+        id:
+          type: string
+        minPenalty:
+          type: number
+        maxPenalty:
+          type: number
+        avgPenalty:
+          type: number
+      required:
+        - id
+        - minPenalty
+        - maxPenalty
+        - avgPenalty
+      title: SourcingOptionTotalRatingResult
+      description: SourcingOptionTotalRatingResult
+    SourcingOptionsDecisionLog:
+      properties:
+        id:
+          type: string
+        relatedRefs:
+          type: object
+          properties:
+            orderRef:
+              type: string
+              description: The orderRef of the order this decision log is related to.
+            routingPlanRefs:
+              type: array
+              items:
+                type: string
+              description: >-
+                The routingPlanRefs of the routing plans this decision log is
+                related to.
+            sourcingOptionsRequestRef:
+              type: string
+              description: >-
+                The sourcingOptionsRequestRef of the request this decision log
+                is related to.
+        sourcingOptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourcingOption'
+        routingStrategyEvaluationResult:
+          $ref: '#/components/schemas/RoutingStrategyEvaluationResult'
+        executionResults:
+          $ref: '#/components/schemas/SourcingOptionsExecutionResults'
+      required:
+        - id
+        - relatedRefs
+        - sourcingOptions
+        - executionResults
+      type: object
+      xml:
+        name: SourcingOptionsDecisionLog
+      title: SourcingOptionsDecisionLog
+      description: SourcingOptionsDecisionLog
     RoutingStatistics:
       properties:
         fenceStatistics:
@@ -53467,7 +53534,7 @@ components:
         id:
           type: string
         totalCosts:
-          $ref: '#/components/schemas/SolutionCosts'
+          $ref: '#/components/schemas/SourcingOptionCosts'
         totalPenalty:
           type: number
           description: The total calculated penalty we calculated for this option
@@ -53489,13 +53556,40 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/HandledItem'
+        ratingResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatingResult'
       required:
         - id
         - totalPenalty,
         - nodes
         - transfers
+        - ratingResults
       title: SourcingOption
       description: SourcingOption
+    RatingResult:
+      properties:
+        penalty:
+          type: number
+        id:
+          type: string
+        type:
+          type: string
+          description: The type of the rating, e.g. 'StandardRating' or 'ToolkitRating'
+      required:
+        - penalty
+        - id
+        - type
+      title: RatingResult
+      description: RatingResult
+    RatingResultType:
+      type: string
+      enum:
+        - STANDARD
+        - TOOLKIT
+      title: RatingResultType
+      description: RatingResultType
     NodeType:
       type: string
       enum:
@@ -53599,7 +53693,7 @@ components:
         name: TransferTimeLine
       title: TransferTimeLine
       description: TransferTimeLine
-    SolutionCosts:
+    SourcingOptionCosts:
       type: object
       additionalProperties: false
       properties:
@@ -53620,8 +53714,8 @@ components:
           $ref: '#/components/schemas/ShippingCosts'
       required:
         - total
-      title: SolutionCosts
-      description: SolutionCosts
+      title: SourcingOptionCosts
+      description: SourcingOptionCosts
     ShippingCosts:
       type: object
       additionalProperties: false
