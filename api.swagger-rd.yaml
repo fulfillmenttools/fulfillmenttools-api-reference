@@ -61236,25 +61236,19 @@ components:
             - REMOVE_RESERVATIONS_AND_REDUCE_STOCKS
             - REMOVE_RESERVATIONS_KEEP_STOCKS
           type: string
-        relatedRefs:
+        reservationSelector:
           allOf:
-            - $ref: '#/components/schemas/ReservationRelatedRefs'
-          description: >-
-            Holds the Ids of entities that are related to the reservation such
-            as reservationRefs, orderRefs or routingPlanRefs.
-                  May specify one orderRef or one routingPlanRef, but multiple reservationRefs.
-          maxProperties: 1
+            - $ref: '#/components/schemas/ReservationActionSelector'
           minProperties: 1
       required:
         - name
-        - relatedRefs
       title: ReservationAction
       type: object
       description: ReservationAction
     ReservationActionResult:
       properties:
-        reservationId:
-          type: string
+        reservation:
+          $ref: '#/components/schemas/StrippedReservation'
         status:
           enum:
             - DELETED
@@ -61265,10 +61259,41 @@ components:
           type: array
       required:
         - status
-        - reservationId
+        - reservation
       title: ReservationActionResult
       type: object
       description: ReservationActionResult
+    ReservationActionSelector:
+      properties:
+        orderRefs:
+          items:
+            type: string
+          maxItems: 1
+          minItems: 1
+          type: array
+        reservationPredicate:
+          $ref: '#/components/schemas/ReservationSearchQuery'
+        reservationRefs:
+          items:
+            type: string
+          maxItems: 100
+          minItems: 1
+          type: array
+        routingPlanRefs:
+          items:
+            type: string
+          maxItems: 1
+          minItems: 1
+          type: array
+        tenantOrderIds:
+          items:
+            type: string
+          maxItems: 1
+          minItems: 1
+          type: array
+      title: ReservationActionSelector
+      type: object
+      description: ReservationActionSelector
     ReservationActionStockOperation:
       properties:
         status:
@@ -61322,35 +61347,6 @@ components:
       title: ReservationPaginatedResult
       type: object
       description: ReservationPaginatedResult
-    ReservationRelatedRefs:
-      properties:
-        orderRefs:
-          items:
-            type: string
-          maxItems: 1
-          minItems: 1
-          type: array
-        reservationRefs:
-          items:
-            type: string
-          maxItems: 100
-          minItems: 1
-          type: array
-        routingPlanRefs:
-          items:
-            type: string
-          maxItems: 1
-          minItems: 1
-          type: array
-        tenantOrderId:
-          items:
-            type: string
-          maxItems: 1
-          minItems: 1
-          type: array
-      title: ReservationRelatedRefs
-      type: object
-      description: ReservationRelatedRefs
     ReservationRelatedRefsFilter:
       properties:
         routingPlanRefs:
@@ -65307,6 +65303,15 @@ components:
       title: StrippedOidcProvider
       type: object
       description: StrippedOidcProvider
+    StrippedReservation:
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      title: StrippedReservation
+      type: object
+      description: StrippedReservation
     TakenStowLineItemTakeFromForCreation:
       properties:
         takenAt:
