@@ -32095,6 +32095,14 @@ components:
         price:
           example: 1200
           type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/ListingRecordableAttribute'
+          type: array
+          maxItems: 40
         stockinformation:
           $ref: '#/components/schemas/StockInformationForCreation'
           deprecated: true
@@ -32201,6 +32209,39 @@ components:
         name: ListingForCreation
       title: ListingForCreation
       description: ListingForCreation
+    ListingRecordableAttribute:
+      additionalProperties: false
+      properties:
+        group:
+          description: The group of the attribute
+          example: general
+          minLength: 1
+          nullable: true
+          type: string
+        key:
+          description: Calculated value from keyLocalized based on passed locale
+          example: Serialnumber
+          type: string
+        keyLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        recordingRule:
+          description: Indicates whether the value has to be recorded or not
+          enum:
+            - OPTIONAL
+            - MANDATORY
+          example: MANDATORY
+          type: string
+        value:
+          description: The value of the attribute
+          example: Germany
+          nullable: true
+          type: string
+      required:
+        - keyLocalized
+        - recordingRule
+      title: ListingRecordableAttribute
+      type: object
+      description: ListingRecordableAttribute
     PickingStockProperty:
       title: PickingStockProperty
       description: Picking Stock Property.
@@ -57807,6 +57848,10 @@ components:
           type: string
         price:
           type: number
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/InventoryRecordableAttribute'
+          type: array
         scannableCodes:
           items:
             type: string
@@ -57860,6 +57905,22 @@ components:
       title: InventoryListingEventPayload
       type: object
       description: InventoryListingEventPayload
+    InventoryRecordableAttribute:
+      properties:
+        group:
+          type: string
+        keyLocalized:
+          type: object
+        recordingRule:
+          type: string
+        value:
+          type: string
+      required:
+        - keyLocalized
+        - recordingRule
+      title: InventoryRecordableAttribute
+      type: object
+      description: InventoryRecordableAttribute
     InventoryScanningRuleConfiguration:
       properties:
         values:
