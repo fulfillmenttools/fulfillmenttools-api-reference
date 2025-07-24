@@ -61650,6 +61650,14 @@ components:
       description: ReservationPaginatedResult
     ReservationRelatedRefsFilter:
       properties:
+        orderRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by orderRefs
+        pickJobRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by pickJobRefs
         routingPlanRefs:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
@@ -61705,8 +61713,12 @@ components:
           type: array
         facilityRef:
           allOf:
-            - $ref: '#/components/schemas/StringEqFilter'
+            - $ref: '#/components/schemas/StringFilter'
           description: Search by facilityRef
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
         or:
           items:
             $ref: '#/components/schemas/ReservationSearchQuery'
@@ -61717,7 +61729,7 @@ components:
           description: Nested search by relatedRefs
         tenantArticleId:
           allOf:
-            - $ref: '#/components/schemas/StringEqFilter'
+            - $ref: '#/components/schemas/StringFilter'
           description: Search by tenantArticleId
       title: ReservationSearchQuery
       type: object
