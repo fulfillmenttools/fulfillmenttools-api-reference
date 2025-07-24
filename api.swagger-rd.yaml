@@ -24688,6 +24688,56 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+    patch:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: patchRole
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleForPatch'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: The patched role, including all the updates made.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Patches a custom role.
+      tags:
+        - Core - User Management
+      x-badges:
+        - color: red
+          label: ALPHA
     put:
       deprecated: false
       description: >-
@@ -62193,7 +62243,9 @@ components:
     Role:
       properties:
         contextLimitations:
-          description: The context ceiling of the role
+          description: >-
+            The context limitations of the role, which define what contexts the
+            role is restricted to.
           items:
             $ref: '#/components/schemas/ContextLimitation'
           type: array
@@ -62202,26 +62254,37 @@ components:
           format: date-time
           type: string
         customAttributes:
-          description: The new custom attributes of the role
-          nullable: true
+          description: >-
+            The custom attributes of the role, which can be used to store
+            additional information.
           type: object
         description:
-          description: The description of the role
+          description: >-
+            The description of the role, which provides more details about its
+            purpose.
+          maxLength: 100
           type: string
         displayName:
-          description: The display name of the role.
+          description: >-
+            The display name of the role, which is used for user interfaces and
+            may differ from the name (defaults to name if not provided).
+          maxLength: 20
           type: string
         lastModified:
           description: The date the role was last modified
           format: date-time
           type: string
         name:
-          description: The name of the role
+          description: >-
+            The name of the role, which must be unique and is used to identify
+            the role.
           maxLength: 20
           minLength: 3
           type: string
         permissions:
-          description: The permissions of the role
+          description: >-
+            The permissions associated with the role, which define what actions
+            the role can perform.
           items:
             enum:
               - USER_READ
@@ -62359,27 +62422,40 @@ components:
     RoleForCreation:
       properties:
         contextLimitations:
-          description: The context ceiling of the role
+          description: >-
+            The context limitations of the role, which define what contexts the
+            role is restricted to.
           items:
             $ref: '#/components/schemas/ContextLimitation'
           type: array
         customAttributes:
-          description: The new custom attributes of the role
-          nullable: true
+          description: >-
+            The custom attributes of the role, which can be used to store
+            additional information.
           type: object
         description:
-          description: The description of the role
+          description: >-
+            The description of the role, which provides more details about its
+            purpose.
+          maxLength: 100
           type: string
         displayName:
-          description: The display name of the role (defaults to the name if not provided)
+          description: >-
+            The display name of the role, which is used for user interfaces and
+            may differ from the name (defaults to name if not provided).
+          maxLength: 20
           type: string
         name:
-          description: The name of the role
+          description: >-
+            The name of the role, which must be unique and is used to identify
+            the role.
           maxLength: 20
           minLength: 3
           type: string
         permissions:
-          description: The permissions of the role
+          description: >-
+            The permissions associated with the role, which define what actions
+            the role can perform.
           items:
             enum:
               - USER_READ
@@ -62508,30 +62584,209 @@ components:
       title: RoleForCreation
       type: object
       description: RoleForCreation
+    RoleForPatch:
+      properties:
+        contextLimitations:
+          description: >-
+            The context limitations of the role, which define what contexts the
+            role is restricted to.
+          items:
+            type: array
+          type: array
+        customAttributes:
+          description: >-
+            The custom attributes of the role, which can be used to store
+            additional information.
+          type: object
+        description:
+          description: >-
+            The description of the role, which provides more details about its
+            purpose.
+          maxLength: 100
+          type: string
+        displayName:
+          description: >-
+            The display name of the role, which is used for user interfaces and
+            may differ from the name (defaults to name if not provided).
+          maxLength: 100
+          type: string
+        name:
+          description: >-
+            The name of the role, which must be unique and is used to identify
+            the role.
+          type: string
+        permissions:
+          description: >-
+            The permissions associated with the role, which define what actions
+            the role can perform.
+          items:
+            enum:
+              - USER_READ
+              - USERS_READ
+              - USER_WRITE
+              - USER_MODIFY
+              - ROLE_READ
+              - ROLE_WRITE
+              - FACILITY_READ
+              - FACILITY_WRITE
+              - FACILITY_CREATE
+              - FACILITY_DELETE
+              - FACILITY_GROUP_READ
+              - FACILITY_GROUP_WRITE
+              - ORDER_READ
+              - ORDER_WRITE
+              - ORDER_FORCE_CANCEL
+              - AUDIT_READ
+              - EXPIRIES_READ
+              - EXPIRIES_WRITE
+              - CONFIG_READ
+              - CONFIG_WRITE
+              - ROUTING_CONFIG_READ
+              - ROUTING_CONFIG_WRITE
+              - PROMISES_CONFIG_READ
+              - PROMISES_CONFIG_WRITE
+              - OIDC_PROVIDERS_CONFIG_READ
+              - OIDC_PROVIDERS_CONFIG_WRITE
+              - LOCALE_WRITE
+              - LISTING_READ
+              - LISTING_WRITE
+              - LISTING_DELETE
+              - CARRIER_READ
+              - CARRIER_WRITE
+              - RETURN_WRITE
+              - RETURN_READ
+              - ROUTING_READ
+              - ROUTING_WRITE
+              - PARCEL_READ
+              - PARCEL_WRITE
+              - SHIPMENT_READ
+              - SHIPMENT_WRITE
+              - HANDOVERJOB_READ
+              - HANDOVERJOB_WRITE
+              - PICKJOB_READ
+              - PICKJOB_WRITE
+              - PICKJOB_REROUTE
+              - REMOTE_CONFIG_READ
+              - REMOTE_CONFIG_WRITE
+              - PICKRUN_READ
+              - PICKRUN_WRITE
+              - LOADUNITTYPE_READ
+              - LOADUNITTYPE_WRITE
+              - LOADUNIT_READ
+              - LOADUNIT_WRITE
+              - MEASUREMENTUNIT_READ
+              - MEASUREMENTUNIT_WRITE
+              - EVENT_READ
+              - SUBSCRIPTION_READ
+              - SUBSCRIPTION_WRITE
+              - SUBSTITUTE_READ
+              - SUBSTITUTE_WRITE
+              - PROCESS_READ
+              - PROCESS_WRITE
+              - OPERATIVE_PROCESS_READ
+              - OPERATIVE_PROCESS_WRITE
+              - DELIVERYNOTE_WRITE
+              - PACKJOB_READ
+              - PACKJOB_WRITE
+              - PACKINGCONTAINER_TYPE_WRITE
+              - PACKING_SOURCE_CONTAINER_READ
+              - PACKING_SOURCE_CONTAINER_WRITE
+              - RESTOW_ITEM_READ
+              - RESTOW_ITEM_WRITE
+              - TAG_READ
+              - TAG_WRITE
+              - STOCK_SUMMARY_READ
+              - STOCK_DISTRIBUTION_READ
+              - STOCK_READ
+              - STOCK_WRITE
+              - EXTERNAL_STOCK_CHANGE_REASONS_READ
+              - EXTERNAL_STOCK_CHANGE_REASONS_WRITE
+              - STOW_JOB_READ
+              - STOW_JOB_OPERATIVE_WRITE
+              - STOW_JOB_FULL_WRITE
+              - NOTIFICATION_CENTER_CONFIG_READ
+              - NOTIFICATION_CENTER_CONFIG_WRITE
+              - DOMS_TOOLKIT_READ
+              - DOMS_TOOLKIT_WRITE
+              - ANALYTICS_DASHBOARD_READ
+              - DOCUMENT_SET_READ
+              - DOCUMENT_SET_WRITE
+              - INBOUND_PROCESS_READ
+              - INBOUND_PROCESS_WRITE
+              - ADMIN_DATA_RESET
+              - ADMIN_MODULES_READ
+              - ADMIN_MODULES_WRITE
+              - TENANT_CONNECTOR_CONFIG_READ
+              - CUSTOM_SERVICE_WRITE
+              - CUSTOM_SERVICE_READ
+              - VALIDATIONS_READ
+              - SERVICE_JOB_READ
+              - SERVICE_JOB_WRITE
+              - LINKED_SERVICE_JOBS_READ
+              - LINKED_SERVICE_JOBS_WRITE
+              - OPERATION_STATISTICS_READ
+              - DOMS_STATISTICS_READ
+              - AVAILABILITY_CHANNEL_READ
+              - AVAILABILITY_CHANNEL_WRITE
+              - HANDOVER_CONTAINER_READ
+              - HANDOVER_CONTAINER_WRITE
+              - STACKS_READ
+              - STACKS_WRITE
+              - CATEGORY_READ
+              - CATEGORY_WRITE
+              - PERMISSION_READ
+              - RESERVATION_WRITE
+              - RESERVATION_READ
+              - FILTER_ENTITY_READ
+              - BRAND_READ
+            type: string
+          type: array
+        version:
+          description: The version of the role
+          type: number
+      required:
+        - version
+        - name
+      title: RoleForPatch
+      type: object
+      description: RoleForPatch
     RoleForUpdate:
       properties:
         contextLimitations:
-          description: The context ceiling of the role
+          description: >-
+            The context limitations of the role, which define what contexts the
+            role is restricted to.
           items:
             $ref: '#/components/schemas/ContextLimitation'
           type: array
         customAttributes:
-          description: The new custom attributes of the role
-          nullable: true
+          description: >-
+            The custom attributes of the role, which can be used to store
+            additional information.
           type: object
         description:
-          description: The description of the role
+          description: >-
+            The description of the role, which provides more details about its
+            purpose.
+          maxLength: 100
           type: string
         displayName:
-          description: The display name of the role (defaults to the name if not provided)
+          description: >-
+            The display name of the role, which is used for user interfaces and
+            may differ from the name (defaults to name if not provided).
+          maxLength: 20
           type: string
         name:
-          description: The name of the role
+          description: >-
+            The name of the role, which must be unique and is used to identify
+            the role.
           maxLength: 20
           minLength: 3
           type: string
         permissions:
-          description: The permissions of the role
+          description: >-
+            The permissions associated with the role, which define what actions
+            the role can perform.
           items:
             enum:
               - USER_READ
