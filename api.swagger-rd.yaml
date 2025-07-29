@@ -23508,6 +23508,64 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/listings:
+    put:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      operationId: bulkUpsertListings
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListingBulkUpsertPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingBulkUpsertResponse'
+          description: Result of the bulk upsert operation
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+      summary: Bulk upsert listings independently of their facility
+      tags:
+        - Core - Listings
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/listings/search:
     post:
       deprecated: false
@@ -54740,6 +54798,20 @@ components:
       title: BulkOperationError
       type: object
       description: BulkOperationError
+    BulkUpsertSummary:
+      properties:
+        created:
+          description: The number of operations that led to an insertion
+          type: number
+        updated:
+          description: The number of operations that led to an update
+          type: number
+      required:
+        - created
+        - updated
+      title: BulkUpsertSummary
+      type: object
+      description: BulkUpsertSummary
     ByTrait:
       properties:
         ACCESSIBLE:
@@ -55471,6 +55543,18 @@ components:
       title: FacilityPaginatedResult
       type: object
       description: FacilityPaginatedResult
+    FacilityRefSelector:
+      properties:
+        facilityRef:
+          description: >-
+            Resolves a facility by its reference. This is the preferred way to
+            resolve a facility.
+          type: string
+      required:
+        - facilityRef
+      title: FacilityRefSelector
+      type: object
+      description: FacilityRefSelector
     FacilitySearchPayload:
       properties:
         after:
@@ -58788,6 +58872,63 @@ components:
       title: ListingAvailabilityTimeframeFilter
       type: object
       description: ListingAvailabilityTimeframeFilter
+    ListingBulkUpsertPayload:
+      properties:
+        listings:
+          description: >-
+            List of listings to be upserted in bulk. Number of entries times
+            selectors must not exceed 25.
+          discriminator:
+            mapping:
+              MULTI_SELECTOR: '#/components/schemas/ListingForBulkUpsertBySelector'
+              SINGLE_FACILITY: '#/components/schemas/ListingForBulkUpsertByFacility'
+            propertyName: targetingStrategy
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ListingForBulkUpsertBySelector'
+              - $ref: '#/components/schemas/ListingForBulkUpsertByFacility'
+          minItems: 1
+          type: array
+      required:
+        - listings
+      title: ListingBulkUpsertPayload
+      type: object
+      description: ListingBulkUpsertPayload
+    ListingBulkUpsertResponse:
+      properties:
+        listings:
+          description: Listings upsert operations that were successfully upserted.
+          items:
+            $ref: '#/components/schemas/ListingBulkUpsertSuccess'
+          type: array
+        summary:
+          allOf:
+            - $ref: '#/components/schemas/BulkUpsertSummary'
+          description: Summary of the operations.
+      required:
+        - summary
+        - listings
+      title: ListingBulkUpsertResponse
+      type: object
+      description: ListingBulkUpsertResponse
+    ListingBulkUpsertSuccess:
+      properties:
+        result:
+          allOf:
+            - $ref: '#/components/schemas/Listing'
+          description: The resulting entity.
+        status:
+          description: Indicates whether the operation created or updated the entity.
+          enum:
+            - CREATED
+            - UPDATED
+          type: string
+      required:
+        - status
+        - result
+      title: ListingBulkUpsertSuccess
+      type: object
+      description: ListingBulkUpsertSuccess
     ListingBulkWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
@@ -58799,6 +58940,255 @@ components:
       title: ListingBulkWebHookEvent
       type: object
       description: ListingBulkWebHookEvent
+    ListingFacilitySelector:
+      properties:
+        facility:
+          description: >-
+            Selector for the facility. Either a facility reference or a tenant
+            facility ID must be provided.
+          oneOf:
+            - $ref: '#/components/schemas/FacilityRefSelector'
+            - $ref: '#/components/schemas/TenantFacilityIdSelector'
+        version:
+          description: >-
+            Optional version of the facility. Must be provided for existing
+            facilities. Leave empty for new facilities.
+          type: number
+      required:
+        - facility
+      title: ListingFacilitySelector
+      type: object
+      description: ListingFacilitySelector
+    ListingForBulkUpsertByFacility:
+      properties:
+        attributes:
+          items:
+            $ref: '#/components/schemas/ListingAttributeItem'
+          maxItems: 40
+          type: array
+        categoryRefs:
+          description: References to categories the listing belongs to.
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        currency:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyCode'
+          description: >-
+            The currency of the price as an ISO 4217 code. Attention - Routing
+            currently does not convert between different currencies. Don't use
+            multiple currencies when using price ratings in order routing.
+          example: EUR
+          nullable: true
+        customAttributes:
+          description: >-
+            Attributes that can be added to the listing. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        facility:
+          description: >-
+            Selector for the facility. Either a facility reference or a tenant
+            facility ID must be provided.
+          oneOf:
+            - $ref: '#/components/schemas/FacilityRefSelector'
+            - $ref: '#/components/schemas/TenantFacilityIdSelector'
+        imageUrl:
+          description: >-
+            A web link to a picture of this article. Please make sure that no
+            authentication is required to fetch the image!
+          type: string
+        legal:
+          $ref: '#/components/schemas/ListingLegal'
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        outOfStockBehaviour:
+          $ref: '#/components/schemas/OutOfStockBehaviour'
+        outOfStockConfig:
+          allOf:
+            - $ref: '#/components/schemas/OutOfStockConfig'
+          description: >-
+            The outOfStockConfig is in Alpha status. For details please check
+            the api-release-life-cycle documentation.
+        price:
+          example: 1200
+          type: number
+        scannableCodes:
+          description: Codes, that identify the article
+          items:
+            type: string
+          type: array
+        scanningRule:
+          $ref: '#/components/schemas/ScanningRuleConfiguration'
+        status:
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        stockAvailableUntil:
+          $ref: '#/components/schemas/AvailableUntilDefinition'
+        stockProperties:
+          additionalProperties:
+            $ref: '#/components/schemas/StockPropertyDefinition'
+          type: object
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          minItems: 0
+          type: array
+        targetingStrategy:
+          description: >-
+            Targeting strategy for this bulk upsert entry - determines how
+            target facilities are specified.
+          enum:
+            - MULTI_SELECTOR
+            - SINGLE_FACILITY
+          example: SINGLE_FACILITY
+          type: string
+        tenantArticleId:
+          description: This is a reference to an article Id
+          example: '4711'
+          minLength: 1
+          type: string
+        title:
+          description: a title describing the article
+          example: Adidas Superstar
+          type: string
+        titleLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        version:
+          description: >-
+            Optional version of the facility. Must be provided for existing
+            facilities.
+          type: number
+        weight:
+          minimum: 0
+          type: number
+      required:
+        - tenantArticleId
+        - title
+        - targetingStrategy
+        - facility
+      title: ListingForBulkUpsertByFacility
+      type: object
+      description: ListingForBulkUpsertByFacility
+    ListingForBulkUpsertBySelector:
+      properties:
+        attributes:
+          items:
+            $ref: '#/components/schemas/ListingAttributeItem'
+          maxItems: 40
+          type: array
+        categoryRefs:
+          description: References to categories the listing belongs to.
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        currency:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyCode'
+          description: >-
+            The currency of the price as an ISO 4217 code. Attention - Routing
+            currently does not convert between different currencies. Don't use
+            multiple currencies when using price ratings in order routing.
+          example: EUR
+          nullable: true
+        customAttributes:
+          description: >-
+            Attributes that can be added to the listing. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        imageUrl:
+          description: >-
+            A web link to a picture of this article. Please make sure that no
+            authentication is required to fetch the image!
+          type: string
+        legal:
+          $ref: '#/components/schemas/ListingLegal'
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        outOfStockBehaviour:
+          $ref: '#/components/schemas/OutOfStockBehaviour'
+        outOfStockConfig:
+          allOf:
+            - $ref: '#/components/schemas/OutOfStockConfig'
+          description: >-
+            The outOfStockConfig is in Alpha status. For details please check
+            the api-release-life-cycle documentation.
+        price:
+          example: 1200
+          type: number
+        scannableCodes:
+          description: Codes, that identify the article
+          items:
+            type: string
+          type: array
+        scanningRule:
+          $ref: '#/components/schemas/ScanningRuleConfiguration'
+        selector:
+          description: >-
+            Facility selectors for bulk operations. Add one or more selectors to
+            specify the facilities for the listings.
+          items:
+            $ref: '#/components/schemas/ListingFacilitySelector'
+          minItems: 1
+          type: array
+        status:
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        stockAvailableUntil:
+          $ref: '#/components/schemas/AvailableUntilDefinition'
+        stockProperties:
+          additionalProperties:
+            $ref: '#/components/schemas/StockPropertyDefinition'
+          type: object
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          minItems: 0
+          type: array
+        targetingStrategy:
+          description: >-
+            Targeting strategy for this bulk upsert entry - determines how
+            target facilities are specified.
+          enum:
+            - MULTI_SELECTOR
+            - SINGLE_FACILITY
+          example: MULTI_SELECTOR
+          type: string
+        tenantArticleId:
+          description: This is a reference to an article Id
+          example: '4711'
+          minLength: 1
+          type: string
+        title:
+          description: a title describing the article
+          example: Adidas Superstar
+          type: string
+        titleLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        weight:
+          minimum: 0
+          type: number
+      required:
+        - tenantArticleId
+        - title
+        - targetingStrategy
+        - selector
+      title: ListingForBulkUpsertBySelector
+      type: object
+      description: ListingForBulkUpsertBySelector
     ListingOutOfStockBehaviourEnumFilter:
       properties:
         eq:
@@ -66705,6 +67095,16 @@ components:
       title: TakenStowLineItemTakeFromForCreation
       type: object
       description: TakenStowLineItemTakeFromForCreation
+    TenantFacilityIdSelector:
+      properties:
+        tenantFacilityId:
+          description: Resolves a facility by its tenantFacilityId.
+          type: string
+      required:
+        - tenantFacilityId
+      title: TenantFacilityIdSelector
+      type: object
+      description: TenantFacilityIdSelector
     User:
       properties:
         assignedFacilities:
