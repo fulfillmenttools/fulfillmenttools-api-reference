@@ -31787,6 +31787,15 @@ components:
           type: array
         resolvedCoordinates:
           $ref: '#/components/schemas/Coordinates'
+        resolvedTimeZone:
+          description: >-
+            User-specified time zone in identifier format (e.g.,
+            "America/Los_Angeles"). Used to determine local time. Relevant only
+            if the country spans multiple time zones; otherwise, the time zone
+            is automatically determined from the country or via Google if
+            unspecified.
+          example: America/Los_Angeles
+          $ref: '#/components/schemas/TimeZoneForCreation'
       required:
         - country
         - companyName
@@ -31866,6 +31875,15 @@ components:
               type: array
             resolvedCoordinates:
               $ref: '#/components/schemas/Coordinates'
+            resolvedTimeZone:
+              description: >-
+                User-specified time zone in identifier format (e.g.,
+                "America/Los_Angeles"). Used to determine local time. Relevant
+                only if the country spans multiple time zones; otherwise, the
+                time zone is automatically determined from the country or via
+                Google if unspecified.
+              example: America/Los_Angeles
+              $ref: '#/components/schemas/TimeZoneForCreation'
           required:
             - companyName
           type: object
@@ -39896,7 +39914,9 @@ components:
       description: Timezone for information retrieved e.g. by the Google Maps API
       properties:
         offsetInSeconds:
-          description: offset in seconds to standard time
+          description: >-
+            offset in seconds to standard time. Does not account for daylight
+            saving time.
           example: 28800
           type: number
         timeZoneId:
@@ -39907,10 +39927,24 @@ components:
           description: descriptive name of the timezone
           example: Pacific Standard Time
           type: string
+        source:
+          description: source of the timezone information
+          example: Google Maps API
+          type: string
       required:
         - timeZoneId
         - timeZoneName
         - offsetInSeconds
+      type: object
+    TimeZoneForCreation:
+      description: Self-provided timezone for determining the local time of a facility
+      properties:
+        timeZoneId:
+          description: official id of the timezone
+          example: America/Los_Angeles
+          type: string
+      required:
+        - timeZoneId
       type: object
     CarrierTrackingStatus:
       description: Native trackingStatus provided by carrier
