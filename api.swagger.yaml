@@ -25985,6 +25985,11 @@ paths:
           schema:
             type: string
         - in: query
+          name: tenantFacilityId
+          required: false
+          schema:
+            type: string
+        - in: query
           name: tenantArticleId
           required: false
           schema:
@@ -57054,6 +57059,16 @@ components:
         - version
       title: InventoryFacilityConfigurationForPatch
       type: object
+    InventoryFacilityReferences:
+      properties:
+        facilityRef:
+          type: string
+        tenantFacilityId:
+          type: string
+      required:
+        - facilityRef
+      title: InventoryFacilityReferences
+      type: object
     InventoryFacilityStockDeltaShape:
       properties:
         available:
@@ -57130,6 +57145,8 @@ components:
           type: string
         delta:
           $ref: '#/components/schemas/InventoryFacilityStockDeltaShape'
+        facility:
+          $ref: '#/components/schemas/InventoryFacilityReferences'
         facilityRef:
           type: string
         readyToPick:
@@ -57156,6 +57173,7 @@ components:
           type: number
       required:
         - facilityRef
+        - facility
         - tenantArticleId
         - totalAmount
         - reserved
@@ -57641,6 +57659,8 @@ components:
           type: object
         delta:
           $ref: '#/components/schemas/InventoryStockDelta'
+        facility:
+          $ref: '#/components/schemas/StockFacilityReferences'
         facilityRef:
           description: facility in which the stock is located
           type: string
@@ -57729,11 +57749,11 @@ components:
         version:
           type: number
       required:
-        - facilityRef
         - tenantArticleId
         - value
         - reserved
         - facilityWideReserved
+        - facility
         - available
         - id
         - version
@@ -63482,6 +63502,8 @@ components:
             attach custom data from your systems to fulfillmenttools entities.
           nullable: true
           type: object
+        facility:
+          $ref: '#/components/schemas/StockFacilityReferences'
         facilityRef:
           description: facility in which the stock is located
           type: string
@@ -63570,11 +63592,11 @@ components:
         version:
           type: number
       required:
-        - facilityRef
         - tenantArticleId
         - value
         - reserved
         - facilityWideReserved
+        - facility
         - available
         - id
         - version
@@ -63728,6 +63750,18 @@ components:
         - facilityStocks
       title: StockDistribution
       type: object
+    StockFacilityReferences:
+      properties:
+        facilityRef:
+          description: facility in which the stock is located
+          type: string
+        tenantFacilityId:
+          description: tenantFacilityId in which the stock is located
+          type: string
+      required:
+        - facilityRef
+      title: StockFacilityReferences
+      type: object
     StockForCreation:
       properties:
         availableUntil:
@@ -63753,7 +63787,9 @@ components:
           nullable: true
           type: object
         facilityRef:
-          description: facility in which the stock is located
+          description: >-
+            facility in which the stock is located - fill with either
+            facilityRef or tenantFacilityId
           type: string
         locationRef:
           description: location on which the stock is placed
@@ -63777,6 +63813,11 @@ components:
         tenantArticleId:
           description: tenantArticleId of the stock
           type: string
+        tenantFacilityId:
+          description: >-
+            tenantFacilityId in which the stock is located - fill with either
+            facilityRef or tenantFacilityId
+          type: string
         traitConfig:
           description: >-
             defines the traits of the stock, overrules the storage location
@@ -63789,7 +63830,6 @@ components:
           minimum: 0
           type: integer
       required:
-        - facilityRef
         - tenantArticleId
         - value
       title: StockForCreation
@@ -64036,6 +64076,12 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
           description: Search by tenantArticleId
+        tenantFacilityId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: >-
+            tenantFacilityId is handled like facilityRef filter, if you want to
+            search by both you should wrap that filter in an "or" filter
         tenantStockId:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
