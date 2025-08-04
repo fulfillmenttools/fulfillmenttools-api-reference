@@ -58728,6 +58728,7 @@ components:
         - value
         - reserved
         - facilityWideReserved
+        - facilityRef
         - facility
         - available
         - id
@@ -64785,6 +64786,7 @@ components:
         - value
         - reserved
         - facilityWideReserved
+        - facilityRef
         - facility
         - available
         - id
@@ -64986,10 +64988,19 @@ components:
             attach custom data from your systems to fulfillmenttools entities.
           nullable: true
           type: object
+        facility:
+          description: >-
+            Selector for the facility. Either a facility reference or a tenant
+            facility ID must be provided.
+          oneOf:
+            - $ref: '#/components/schemas/FacilityRefSelector'
+            - $ref: '#/components/schemas/TenantFacilityIdSelector'
         facilityRef:
+          deprecated: true
           description: >-
             facility in which the stock is located - fill with either
-            facilityRef or tenantFacilityId
+            facilityRef or tenantFacilityId - Deprecated: use facility object
+            instead
           type: string
         locationRef:
           description: location on which the stock is placed
@@ -65014,9 +65025,11 @@ components:
           description: tenantArticleId of the stock
           type: string
         tenantFacilityId:
+          deprecated: true
           description: >-
             tenantFacilityId in which the stock is located - fill with either
-            facilityRef or tenantFacilityId
+            facilityRef or tenantFacilityId - Deprecated: use facility object
+            instead
           type: string
         traitConfig:
           description: >-
