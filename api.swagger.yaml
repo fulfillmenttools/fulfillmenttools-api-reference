@@ -65747,6 +65747,15 @@ components:
           type: array
       title: StringFilter
       type: object
+    StringListExistsFilter:
+      properties:
+        contains:
+          $ref: '#/components/schemas/StringEqFilter'
+        exists:
+          description: Search all entities which have or do not have this key defined
+          type: boolean
+      title: StringListExistsFilter
+      type: object
     StringListFilter:
       properties:
         contains:
@@ -65964,6 +65973,13 @@ components:
             - $ref: '#/components/schemas/CustomClaims'
           deprecated: true
           description: 'Deprecated: Find all relevant information in assignedRoles instead'
+        facilityLimitations:
+          description: >-
+            Facilities where at least one role of the user has access to. Not
+            present if the user has at least one role which is unrestricted
+          items:
+            type: string
+          type: array
         firstname:
           description: The first name of the user
           example: John
@@ -66398,6 +66414,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/UserCustomClaimsFilter'
           description: Nested search by customClaims
+        facilityLimitations:
+          allOf:
+            - $ref: '#/components/schemas/StringListExistsFilter'
+          description: Search by facilityLimitations
         firstname:
           allOf:
             - $ref: '#/components/schemas/StringSearchFilter'
