@@ -46784,48 +46784,111 @@ components:
         - version
       title: ServiceJobInProgressActionParameter
       description: ServiceJobInProgressActionParameter
-    ServiceItemSelectedQuantityActionParameter:
+    ServiceItemSelectQuantityActionParameter:
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/ServiceItemSelectedQuantityActionEnum'
+          $ref: '#/components/schemas/ServiceItemSelectQuantityActionEnum'
         serviceItemsToSelect:
           type: array
           minItems: 1
           items:
             $ref: '#/components/schemas/ServiceItemInfo'
           description: Service items that are selected to be used in the service job
-        version:
+        serviceJobVersion:
           description: Version of the service job
           minimum: 0
           type: integer
       required:
         - name
         - serviceItemsToSelect
-        - version
-      title: ServiceItemSelectedQuantityActionParameter
-      description: ServiceItemSelectedQuantityActionParameter
-    ServiceItemUnselectedQuantityActionParameter:
+        - serviceJobVersion
+      title: ServiceItemSelectQuantityActionParameter
+      description: ServiceItemSelectQuantityActionParameter
+    ServiceItemUnselectQuantityActionParameter:
       additionalProperties: false
       properties:
         name:
-          $ref: '#/components/schemas/ServiceItemUnselectedQuantityActionEnum'
+          $ref: '#/components/schemas/ServiceItemUnselectQuantityActionEnum'
         serviceItemsToUnselect:
           type: array
           minItems: 1
           items:
             $ref: '#/components/schemas/ServiceItemInfo'
           description: Service items that are unselected from being used in the service job
-        version:
+        serviceJobVersion:
           description: Version of the service job
           minimum: 0
           type: integer
       required:
         - name
         - serviceItemsToUnselect
-        - version
-      title: ServiceItemUnselectedQuantityActionParameter
-      description: ServiceItemUnselectedQuantityActionParameter
+        - serviceJobVersion
+      title: ServiceItemUnselectQuantityActionParameter
+      description: ServiceItemUnselectQuantityActionParameter
+    AddServiceDataAvailableLineItemsActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/AddServiceDataAvailableLineItemsActionEnum'
+        serviceDataAvailableLineItems:
+          description: Service data available line items to be added
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ServiceDataAvailableLineItemForCreation'
+        serviceDataVersion:
+          description: Version of the service data
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - serviceDataAvailableLineItems
+        - serviceDataVersion
+      title: AddServiceDataAvailableLineItemsActionParameter
+      description: AddServiceDataAvailableLineItemsActionParameter
+    RemoveServiceDataAvailableLineItemsActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/RemoveServiceDataAvailableLineItemsActionEnum'
+        serviceDataAvailableLineItemIds:
+          description: Ids of the service data available line items to be removed
+          type: array
+          minItems: 1
+          items:
+            type: string
+        serviceDataVersion:
+          description: Version of the service data
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - serviceDataAvailableLineItemIds
+        - serviceDataVersion
+      title: RemoveServiceDataAvailableLineItemsActionParameter
+      description: RemoveServiceDataAvailableLineItemsActionParameter
+    UpdateServiceDataAvailableLineItemsActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/UpdateServiceDataAvailableLineItemsActionEnum'
+        serviceDataAvailableLineItemsUpdates:
+          description: availableLineItem Updates
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ServiceDataAvailableLineItemForUpdate'
+        serviceDataVersion:
+          description: Version of the service data
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - serviceDataAvailableLineItemsUpdates
+        - serviceDataVersion
+      title: UpdateServiceDataAvailableLineItemsActionParameter
+      description: UpdateServiceDataAvailableLineItemsActionParameter
     ServiceJobObsoleteActionParameter:
       additionalProperties: false
       properties:
@@ -47066,22 +47129,45 @@ components:
             #/components/schemas/UpdateServiceJobLineItemRecordableAttributesActionParameter
       title: ServiceJobActionsParameter
       description: ServiceJobActionsParameter
-    ServiceItemSelectedQuantityActionEnum:
+    ServiceItemSelectQuantityActionEnum:
       enum:
         - SELECT_ITEMS_FOR_SERVICE_JOB
       type: string
-      title: ServiceItemSelectedQuantityActionEnum
-      description: ServiceItemSelectedQuantityActionEnum
-    ServiceItemUnselectedQuantityActionEnum:
+      title: ServiceItemSelectQuantityActionEnum
+      description: ServiceItemSelectQuantityActionEnum
+    ServiceItemUnselectQuantityActionEnum:
       enum:
         - UNSELECT_ITEMS_FOR_SERVICE_JOB
       type: string
-      title: ServiceItemUnselectedQuantityActionEnum
-      description: ServiceItemUnselectedQuantityActionEnum
+      title: ServiceItemUnselectQuantityActionEnum
+      description: ServiceItemUnselectQuantityActionEnum
+    AddServiceDataAvailableLineItemsActionEnum:
+      enum:
+        - ADD_SERVICE_DATA_AVAILABLE_LINE_ITEMS
+      type: string
+      title: AddServiceDataAvailableLineItemsActionEnum
+      description: AddServiceDataAvailableLineItemsActionEnum
+    RemoveServiceDataAvailableLineItemsActionEnum:
+      enum:
+        - REMOVE_SERVICE_DATA_AVAILABLE_LINE_ITEMS
+      type: string
+      title: RemoveServiceDataAvailableLineItemsActionEnum
+      description: RemoveServiceDataAvailableLineItemsActionEnum
+    UpdateServiceDataAvailableLineItemsActionEnum:
+      enum:
+        - UPDATE_SERVICE_DATA_AVAILABLE_LINE_ITEMS
+      type: string
+      title: UpdateServiceDataAvailableLineItemsActionEnum
+      description: UpdateServiceDataAvailableLineItemsActionEnum
     ServiceDataActionsParameter:
       anyOf:
-        - $ref: '#/components/schemas/ServiceItemSelectedQuantityActionParameter'
-        - $ref: '#/components/schemas/ServiceItemUnselectedQuantityActionParameter'
+        - $ref: '#/components/schemas/ServiceItemSelectQuantityActionParameter'
+        - $ref: '#/components/schemas/ServiceItemUnselectQuantityActionParameter'
+        - $ref: '#/components/schemas/AddServiceDataAvailableLineItemsActionParameter'
+        - $ref: >-
+            #/components/schemas/RemoveServiceDataAvailableLineItemsActionParameter
+        - $ref: >-
+            #/components/schemas/UpdateServiceDataAvailableLineItemsActionParameter
       title: ServiceDataActionsParameter
       description: ServiceDataActionsParameter
     FacilityCustomServiceConnectionStatus:
@@ -47611,6 +47697,9 @@ components:
             any split has happened. This can be used to restore the ‘pre-split’
             status.
           example: df671041-10dd-4600-a2ff-e9ffe2556bba
+        quantity:
+          description: The quantity of the lineItem
+          type: number
       required:
         - article
         - quantity
@@ -47618,6 +47707,31 @@ components:
         - selected
       title: ServiceDataAvailableLineItemForCreation
       description: ServiceDataAvailableLineItemForCreation
+    ServiceDataAvailableLineItemForUpdate:
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the available line item to update
+        availableQuantity:
+          type: integer
+          description: Available quantity of the items
+          example: 10
+          minimum: 0
+        quantity:
+          type: integer
+          description: Quantity of the items
+          example: 5
+          minimum: 0
+        selected:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceDataAvailableLineItemSelectedInfo'
+      required:
+        - id
+      title: ServiceDataAvailableLineItemForUpdate
+      description: ServiceDataAvailableLineItemForUpdate
     ServiceDataItemArticle:
       allOf:
         - $ref: '#/components/schemas/AbstractArticle'
