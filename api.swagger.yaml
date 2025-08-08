@@ -53532,6 +53532,8 @@ components:
           $ref: '#/components/schemas/OrderForSourcingOptionsRequest'
         optimizationHints:
           $ref: '#/components/schemas/OptimizationHints'
+        additionalInfo:
+          $ref: '#/components/schemas/SourcingOptionsRequestAdditionalInfo'
       required:
         - order
     OptimizationHints:
@@ -53547,6 +53549,15 @@ components:
             Should only be used for debugging. Includes more information on how
             we calculated the response.
           type: boolean
+          default: false
+    SourcingOptionsRequestAdditionalInfo:
+      type: object
+      properties:
+        includeListingCustomAttributes:
+          type: boolean
+          description: >-
+            If true, the listing custom attributes are included in the response.
+            This is useful for debugging purposes.
           default: false
     SourcingOptionsResponse:
       type: object
@@ -53586,6 +53597,15 @@ components:
           type: string
           example: '2025-02-05'
           pattern: ^\d{4}-\d{2}-\d{2}$
+        validUntil:
+          description: >-
+            The latest date at which this option is still valid in UTC (ISO8601
+            format).
+          type: string
+        listingDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourcingOptionListingDetails'
         nodes:
           type: array
           items:
@@ -53605,10 +53625,21 @@ components:
       required:
         - id
         - runId
-        - totalPenalty,
+        - totalPenalty
         - nodes
         - transfers
         - ratingResults
+    SourcingOptionListingDetails:
+      properties:
+        facilityRef:
+          type: string
+          example: abcd-efgh-ijkl-mnop
+        tenantArticleId:
+          type: string
+          example: CGN-4711
+        customAttributes:
+          type: object
+          additionalProperties: true
     RatingResult:
       properties:
         penalty:
@@ -53681,10 +53712,108 @@ components:
             $ref: '#/components/schemas/HandledItem'
         timeLine:
           $ref: '#/components/schemas/TransferTimeLine'
+        packagingInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourcingOptionsTransferPackagingInformation'
       required:
         - sourceNodeRef
         - targetNodeRef
         - lineItems
+        - packagingInformation
+    SourcingOptionsTransferPackagingInformation:
+      type: object
+      properties:
+        packagingUnit:
+          $ref: '#/components/schemas/SourcingOptionsTransferPackagingUnit'
+        packedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/HandledItem'
+        costs:
+          type: number
+      required:
+        - packagingUnit
+        - costs
+        - packedItems
+    SourcingOptionsTransferPackagingUnit:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Small Box
+        volumeBufferInPercent:
+          type: number
+          example: 10
+          description: The volume buffer in percent for this packaging unit
+        maxItemQuantity:
+          type: integer
+          example: 10
+          description: >-
+            The maximum number of items that can be packed in this packaging
+            unit
+        priority:
+          type: integer
+          example: 1
+          description: The priority of this packaging unit, lower values are preferred
+        dimensions:
+          $ref: '#/components/schemas/SourcingOptionsTransferPackagingUnitDimensions'
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourcingOptionsTransferDeliveryCost'
+        transitTime:
+          $ref: '#/components/schemas/SourcingOptionsTransferTransitTime'
+      required:
+        - name
+        - priority
+    SourcingOptionsTransferTransitTime:
+      type: object
+      properties:
+        minTransitDays:
+          type: number
+        maxTransitDays:
+          type: number
+      required:
+        - minTransitDays
+        - maxTransitDays
+    SourcingOptionsTransferDeliveryCost:
+      type: object
+      properties:
+        value:
+          type: number
+        currency:
+          type: string
+        decimalPlaces:
+          type: number
+        deliveryCostCoefficient:
+          $ref: '#/components/schemas/SourcingOptionsTransferDeliverCostCoefficient'
+      required:
+        - value
+        - currency
+    SourcingOptionsTransferDeliverCostCoefficient:
+      type: object
+      properties:
+        value:
+          type: number
+        measurementUnit:
+          type: string
+          enum:
+            - GRAM
+      required:
+        - value
+        - measurementUnit
+    SourcingOptionsTransferPackagingUnitDimensions:
+      type: object
+      properties:
+        length:
+          type: number
+        width:
+          type: number
+        height:
+          type: number
+        maxWeightInGram:
+          type: number
     TransferTimeLine:
       type: object
       properties:
@@ -53739,10 +53868,57 @@ components:
           type: number
           example: 10
           description: Sum of all sales prices of the items in the solution
+        salesPrices:
+          type: array
+          description: >-
+            Sales prices and applied discounts of the individual items in the
+            solution. Only present if costComponentRating is enabled.
+          items:
+            $ref: '#/components/schemas/SourcingOptionSalesPrice'
         totalShippingCosts:
           $ref: '#/components/schemas/ShippingCosts'
       required:
         - total
+        - salesPrices
+    SourcingOptionSalesPrice:
+      type: object
+      additionalProperties: false
+      properties:
+        tenantArticleId:
+          type: string
+          example: DE-ZGT-4711
+          description: The tenant article id of the item
+        amount:
+          type: number
+          example: 1
+          description: The amount of the item in the solution
+        salesPricePerUnitWithoutDiscount:
+          type: number
+          example: 10
+          description: The sales price of the item
+        salesPricePerUnitWithDiscount:
+          type: number
+          example: 9.5
+          description: The sales price of the item after discount has been applied
+        discount:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/FacilityDiscountRelative'
+              - $ref: '#/components/schemas/FacilityDiscountAbsoluteForCreation'
+        sourceFacilityRef:
+          type: string
+          example: DE-FAC-4711
+          description: The facility reference of the source facility
+        sourceTenantFacilityId:
+          type: string
+          example: facility-east
+          description: The tenant facility id of the source facility
+      required:
+        - tenantArticleId
+        - salesPricePerUnitWithoutDiscount
+        - amount
+        - sourceFacilityRef
     ShippingCosts:
       type: object
       additionalProperties: false
