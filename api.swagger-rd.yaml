@@ -74,7 +74,7 @@ paths:
         - Last Mile Integration - Carriers
       description: ''
       operationId: getCarriers
-      summary: Returns all configured CEP partners
+      summary: Returns list of carriers
     post:
       parameters:
         - description: >-
@@ -128,7 +128,7 @@ paths:
               $ref: '#/components/schemas/CarrierForCreation'
         description: Carrier object
         required: true
-      summary: Add a new carrier as a CEP partner
+      summary: Creates new carrier
   /api/carriers/{carrierId}:
     get:
       parameters:
@@ -182,7 +182,7 @@ paths:
         - Last Mile Integration - Carriers
       description: ''
       operationId: getCarrier
-      summary: Get a carrier with the given ID
+      summary: Get carrier by ID
     patch:
       parameters:
         - description: ID of carrier you want to patch
@@ -249,7 +249,7 @@ paths:
               $ref: '#/components/schemas/CarrierPatchActions'
         description: Patch set
         required: true
-      summary: Patches a carrier with the given ID
+      summary: Patch carrier by ID
   /api/carriers/{carrierId}/configuration:
     get:
       parameters:
@@ -301,10 +301,10 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Carrier Configuration not found
       tags:
-        - Last Mile Integration - Carriers
+        - Carriers Configuration
       description: ''
       operationId: getCarrierConfiguration
-      summary: Get a carrier configuration with the given ID
+      summary: Get carrier configuration by ID
     put:
       parameters:
         - description: ID of the carrier you want to update the configuration
@@ -355,7 +355,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Carrier Configuration not found
       tags:
-        - Last Mile Integration - Carriers
+        - Carriers Configuration
       description: ''
       operationId: putCarrierConfiguration
       requestBody:
@@ -374,7 +374,7 @@ paths:
                 - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
         description: Carrier Configuration
         required: true
-      summary: Update a carrier configuration with the given ID
+      summary: Update carrier configuration by ID
   /api/carriers/{carrierId}/configuration/countryservicemappings:
     get:
       parameters:
@@ -418,10 +418,10 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Carrier's countryservicemappings Configuration not found
       tags:
-        - Last Mile Integration - Carriers
+        - Carriers Configuration
       description: ''
       operationId: getCarrierCountryServiceMappings
-      summary: Get a CarrierCountryServiceMappings for carrier with given ID
+      summary: Get carrier country service mappings by ID
     post:
       parameters:
         - description: ID of the carrier you want to create a countryservicemapping for
@@ -463,7 +463,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Carrier not found
       tags:
-        - Last Mile Integration - Carriers
+        - Carriers Configuration
       description: ''
       operationId: createCarrierCountryServiceMapping
       requestBody:
@@ -473,7 +473,7 @@ paths:
               $ref: '#/components/schemas/CarrierCountryServiceMappingForCreation'
         description: Carrier Configuration
         required: true
-      summary: Crwate a carrierCountryServiceMapping for carrier with given ID
+      summary: Create carrier country service mapping by ID
   /api/carriers/{carrierId}/configuration/countryservicemappings/{countryServiceMappingId}:
     get:
       parameters:
@@ -522,10 +522,10 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Carrier's countryservicemappings Configuration not found
       tags:
-        - Last Mile Integration - Carriers
+        - Carriers Configuration
       description: ''
       operationId: getCarrierCountryServiceMapping
-      summary: Get a CarrierCountryServiceMappings for carrier with given ID
+      summary: Get carrier country service mappings by ID
     patch:
       parameters:
         - description: ID of the carrier you want to update a countryservicemapping of
@@ -573,7 +573,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Carrier or CarrierCountryServiceMapping not found
       tags:
-        - Last Mile Integration - Carriers
+        - Carriers Configuration
       description: ''
       operationId: updateCarrierCountryServiceMapping
       requestBody:
@@ -583,7 +583,7 @@ paths:
               $ref: '#/components/schemas/CarrierCountryServiceMappingForUpdate'
         description: Carrier Mapping for update
         required: true
-      summary: Update a carrierCountryServiceMapping for carrier with given ID
+      summary: Update carrier country service mapping by ID
     delete:
       parameters:
         - description: ID of the carrier you want to delete a countryservicemapping from
@@ -625,10 +625,10 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Carrier or CarrierCountryServiceMapping not found
       tags:
-        - Last Mile Integration - Carriers
+        - Carriers Configuration
       description: ''
       operationId: deleteCarrierCountryServiceMapping
-      summary: Delete a carrierCountryServiceMapping for carrier with given ID
+      summary: Delete carrier country service mapping by ID
   /api/configurations/transittime:
     get:
       responses:
@@ -1540,13 +1540,13 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Entity not found
       tags:
-        - DOMS - Orders
+        - Orders Configuration
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />
       operationId: getOrderTagConfiguration
-      summary: Read tag configuration for orders
+      summary: Get tag configuration for orders
       x-badges:
         - color: orange
           label: BETA
@@ -1582,7 +1582,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Orders
+        - Orders Configuration
       description: ''
       operationId: putOrderTagConfigurations
       requestBody:
@@ -1592,7 +1592,7 @@ paths:
               $ref: '#/components/schemas/OrderTagConfiguration'
         description: Desired Tag Configuration for orders
         required: true
-      summary: Change the tag configuration for orders
+      summary: Update tag configuration for orders
   /api/configurations/domain:
     get:
       responses:
@@ -2415,6 +2415,9 @@ paths:
       deprecated: true
       operationId: getPackingContainerRequirement
       summary: Get the packing container requirement configuration
+      x-badges:
+        - color: red
+          label: DEPRECATED
     put:
       responses:
         '200':
@@ -2473,6 +2476,9 @@ paths:
         description: Validation picking scan code to activate/deactivate
         required: true
       summary: Change the tenant wide packing container requirement configuration
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/deliverynotes:
     post:
       parameters:
@@ -3316,13 +3322,13 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Carriers not found
       tags:
-        - Last Mile Integration - Carriers
+        - Carriers
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />
       operationId: getFacilityCeps
-      summary: Get the available CEPs for a facility
+      summary: Get carriers for facility by ID
       x-badges:
         - color: orange
           label: BETA
@@ -3853,6 +3859,9 @@ paths:
         - Core - Listings
       operationId: getFacilityListingPartialStock
       summary: Get a partial stocks for a listing
+      x-badges:
+        - color: red
+          label: DEPRECATED
     put:
       deprecated: true
       description: >
@@ -3915,6 +3924,9 @@ paths:
         description: Patch set
         required: true
       summary: Replace partial stocks of a listings of a facility with the given ID
+      x-badges:
+        - color: red
+          label: DEPRECATED
     patch:
       deprecated: true
       description: >
@@ -3987,6 +3999,9 @@ paths:
         description: Patch set
         required: true
       summary: Patches partial stocks of a listings of a facility with the given ID
+      x-badges:
+        - color: red
+          label: DEPRECATED
     delete:
       deprecated: true
       description: >-
@@ -4042,6 +4057,9 @@ paths:
         - Core - Listings
       operationId: deleteFacilityListingPartialStock
       summary: Delete partial stocks of a listings of a facility with the given ID
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/facilitygroups:
     get:
       parameters:
@@ -8398,6 +8416,9 @@ paths:
         description: 'ReturnJob object '
         required: true
       summary: Add a new return
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/returns/{returnId}:
     get:
       parameters:
@@ -8449,6 +8470,9 @@ paths:
       deprecated: true
       operationId: getReturnLines
       summary: Get return with the given return ID
+      x-badges:
+        - color: red
+          label: DEPRECATED
     patch:
       parameters:
         - description: ID of return you want to patch
@@ -8512,6 +8536,9 @@ paths:
         required: true
       summary: Patches a return with the given ID
       deprecated: true
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/scopedcapabilities:
     get:
       parameters:
@@ -17763,13 +17790,13 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Cancelation reason not found
       tags:
-        - DOMS - Orders
+        - Orders Configuration
       description: >-
         This part of the API is in Alpha status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />
       operationId: getCancelationReasons
-      summary: Get a list with all cancelation reasons
+      summary: Get list of cancelation reasons
       x-badges:
         - color: red
           label: ALPHA
@@ -17811,7 +17838,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Orders
+        - Orders Configuration
       operationId: postCancelationReason
       requestBody:
         content:
@@ -17820,7 +17847,7 @@ paths:
               $ref: '#/components/schemas/CancelationReasonForCreation'
         description: Cancelation reason
         required: true
-      summary: Post a new cancelation reason
+      summary: Create new cancelation reason
       description: >-
         This part of the API is in Alpha status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
@@ -17870,13 +17897,13 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Cancelation reason not found
       tags:
-        - DOMS - Orders
+        - Orders Configuration
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />
       operationId: getCancelationReasonById
-      summary: Get a cancelation reason with the given id
+      summary: Get cancelation reason by id
       x-badges:
         - color: orange
           label: BETA
@@ -17926,13 +17953,13 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Cancelation reason not found
       tags:
-        - DOMS - Orders
+        - Orders Configuration
       description: >-
         This part of the API is in Alpha status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />
       operationId: putCancelationReason
-      summary: Update a cancelation reason
+      summary: Update cancelation reason by ID
       x-badges:
         - color: red
           label: ALPHA
@@ -17973,13 +18000,13 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Cancelation reason not found
       tags:
-        - DOMS - Orders
+        - Orders Configuration
       description: >-
         This part of the API is in Alpha status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />
       operationId: deleteCancelationReason
-      summary: Delete a cancelation reason
+      summary: Delete cancelation reason by ID
       x-badges:
         - color: red
           label: ALPHA
@@ -18401,6 +18428,9 @@ paths:
       summary: >-
         Provides information which kind of fulfillment is possible under given
         circumstances.
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/fulfillability/clickandcollect:
     post:
       responses:
@@ -18456,6 +18486,9 @@ paths:
       summary: >-
         Provides information which kind of fulfillment is possible under given
         circumstances.
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/fulfillability/shipfromstore:
     post:
       responses:
@@ -18509,6 +18542,9 @@ paths:
       summary: >-
         Provides information which kind of fulfillment is possible under given
         circumstances.
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/routing/sourcingoptions:
     post:
       parameters:
@@ -19484,6 +19520,9 @@ paths:
         required: true
       summary: Evaluate a checkout options input against the DOMS
       deprecated: true
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/promises/checkoutoptions/delivery/timepoint:
     post:
       responses:
@@ -19582,10 +19621,10 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Orders
+        - Orders
       description: ''
       operationId: getAllOrders
-      summary: Return all orders
+      summary: Get orders
     post:
       responses:
         '201':
@@ -19620,7 +19659,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Orders
+        - Orders
       description: ''
       operationId: addOrder
       requestBody:
@@ -19630,7 +19669,7 @@ paths:
               $ref: '#/components/schemas/OrderForCreation'
         description: Order object supplied by your shop instance
         required: true
-      summary: Add a new order for future fulfillment
+      summary: Create new order
   /api/orders/{orderId}:
     get:
       parameters:
@@ -19673,10 +19712,10 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Entity not found
       tags:
-        - DOMS - Orders
+        - Orders
       description: ''
       operationId: getOrder
-      summary: Get a order with the given ID
+      summary: Get order by ID
     patch:
       parameters:
         - description: ID of Order you want to patch
@@ -19718,10 +19757,10 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Entity not found, for more information please look at details.
       tags:
-        - DOMS - Orders
+        - Orders
       description: ''
       operationId: updateOrder
-      summary: Update an order by the given ID
+      summary: Update order by ID
       requestBody:
         content:
           application/json:
@@ -19774,9 +19813,9 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Order not found or expired
       tags:
-        - DOMS - Orders
+        - Orders
       operationId: orderAction
-      summary: Call a single action on a given order
+      summary: Execute action for order by ID
   /api/orders/{orderId}/orderlineitems/{orderLineItemId}/actions:
     post:
       requestBody:
@@ -19821,9 +19860,9 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Orders
+        - Orders
       operationId: orderLineItemAction
-      summary: Call a single action on a given order and line item
+      summary: Execute action for order line item by ID
   /api/routing/commands/reroute:
     post:
       responses:
@@ -20500,7 +20539,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Entity not found
       tags:
-        - DOMS - Orders
+        - Orders
       operationId: cancelOrder
       requestBody:
         required: false
@@ -20512,13 +20551,16 @@ paths:
                 cancelationReasonId:
                   description: ID of the cancelation reason
                   type: string
-      summary: Cancel an order with the given ID
+      summary: Cancel order by ID
       deprecated: true
       description: >-
         This part of the API is deprecated. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br
         />Deprecated: Use /actions with "CANCEL" instead.
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/promises/deliverypromise:
     post:
       responses:
@@ -20552,7 +20594,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Orders
+        - Orders
       description: ''
       operationId: postDeliveryPromise
       requestBody:
@@ -20562,7 +20604,7 @@ paths:
               $ref: '#/components/schemas/OrderForCreation'
         description: Order object supplied by your shop instance
         required: true
-      summary: Add a new order for future fulfillment
+      summary: Create promise order
   /api/configurations/routing/toolkit/ratings/{toolkitRatingId}:
     get:
       parameters:
@@ -20947,6 +20989,9 @@ paths:
       deprecated: true
       operationId: getManualRerouteConfiguration
       summary: Get a tenant manual order reroute config
+      x-badges:
+        - color: red
+          label: DEPRECATED
     put:
       responses:
         '200':
@@ -20995,6 +21040,9 @@ paths:
               $ref: '#/components/schemas/ManualRerouteConfiguration'
         required: true
       summary: Update manual order reroute configuration of a tenant
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/configurations/promises:
     get:
       responses:
@@ -21030,10 +21078,10 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: Promises configuration not found
       tags:
-        - DOMS - Orders
+        - Orders Configuration
       description: ''
       operationId: getPromisesConfiguration
-      summary: Get a tenant promises config
+      summary: Get tenant promises config
     put:
       responses:
         '200':
@@ -21066,7 +21114,7 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       tags:
-        - DOMS - Orders
+        - Orders Configuration
       description: ''
       operationId: putPromisesConfiguration
       requestBody:
@@ -21076,7 +21124,7 @@ paths:
               $ref: '#/components/schemas/PromisesConfiguration'
         description: Desired promises configuration to put
         required: true
-      summary: Change the tenant wide promises configuration
+      summary: Change tenant promises config
   /api/configurations/routing:
     get:
       parameters:
@@ -21547,6 +21595,9 @@ paths:
       summary: Search articles tenant-wide based on title or tenantArticleId
       tags:
         - Inventory Management - Stocks
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/articles/{tenantArticleId}/forecasts:
     get:
       deprecated: false
@@ -22603,6 +22654,9 @@ paths:
       summary: Get stock related to a facilityRef
       tags:
         - Inventory Management - Stocks
+      x-badges:
+        - color: red
+          label: DEPRECATED
     put:
       deprecated: true
       description: >-
@@ -22649,6 +22703,9 @@ paths:
       summary: Update Stock in bulk facilityRef and tenantArticleId
       tags:
         - Inventory Management - Stocks
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/facilitygroups/search:
     post:
       deprecated: false
@@ -23470,6 +23527,9 @@ paths:
       summary: This endpoint is deprecated. Please use /api/stocks/summaries instead.
       tags:
         - Inventory Management - Stocks
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/linkedservicejobs/search:
     post:
       deprecated: false
@@ -26177,6 +26237,9 @@ paths:
       summary: Get transloadit of user.
       tags:
         - Core - User Management
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/users/{userId}:
     delete:
       deprecated: false
@@ -26370,6 +26433,9 @@ paths:
       summary: Removes a facility from a user.
       tags:
         - Core - User Management
+      x-badges:
+        - color: red
+          label: DEPRECATED
   /api/users/{userId}/permissions:
     get:
       deprecated: false
@@ -29603,6 +29669,9 @@ components:
                 indicates which scanning rule should be applied for this pick
                 line. Only generated on demand on separate call, no persistence.
               $ref: '#/components/schemas/ScanningRuleConfiguration'
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             scanningRules:
               properties:
                 scanningMode:
@@ -31134,6 +31203,9 @@ components:
       xml:
         name: FacilityPatchActions
       title: FacilityPatchActions
+      x-badges:
+        - color: red
+          label: DEPRECATED
     FacilityStatus:
       description: >-
         The state of the facility. ONLINE means that this facility can process
@@ -31189,6 +31261,9 @@ components:
                   minimum: 0.01
                   type: number
               type: object
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             shortpick:
               properties:
                 active:
@@ -31567,6 +31642,9 @@ components:
                 target="_blank">api-release-life-cycle documentation</a>.<br
                 /><br />@deprecated This field is deprecated since 28 November
                 2024. Use nested object handoverJobParcelInfo instead.
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             carrierRef:
               type: string
               description: >-
@@ -31576,6 +31654,9 @@ components:
                 target="_blank">api-release-life-cycle documentation</a>.<br
                 /><br />@deprecated This field is deprecated since 28 November
                 2024. Use nested object handoverJobParcelInfo instead.
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             carrierTrackingNumber:
               type: string
               description: >-
@@ -31585,6 +31666,9 @@ components:
                 target="_blank">api-release-life-cycle documentation</a>.<br
                 /><br />@deprecated This field is deprecated since 28 November
                 2024. Use nested object handoverJobParcelInfo instead.
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             channel:
               enum:
                 - DELIVERY
@@ -31620,6 +31704,9 @@ components:
                 2024. Use nested object handoverJobParcelInfo instead.
               example: 2fOge2ZGW54K4TgvDTQw
               type: string
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             pickJobRef:
               description: >-
                 The reference to the pickjob for which the handoverjob is
@@ -31643,6 +31730,9 @@ components:
                 2024. Use nested object handoverJobParcelInfo instead.
               example: Esb20gpHBL94X5NdMp3C
               type: string
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             shortIdentifier:
               description: The short identifier of the shipment.
               type: string
@@ -31726,6 +31816,9 @@ components:
                 /><br />@deprecated This field is deprecated since 28 November
                 2024. Use nested object handoverJobParcelInfo instead.
               type: string
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             handoverJobParcelInfo:
               $ref: '#/components/schemas/HandoverJobParcelInfo'
             assignedUsers:
@@ -31786,6 +31879,9 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />@deprecated This field is deprecated since 28 November 2024. Use
             nested object handoverJobParcelInfo instead.
+          x-badges:
+            - color: red
+              label: DEPRECATED
         carrierRef:
           type: string
           description: >-
@@ -31794,6 +31890,9 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />@deprecated This field is deprecated since 28 November 2024. Use
             nested object handoverJobParcelInfo instead.
+          x-badges:
+            - color: red
+              label: DEPRECATED
         carrierTrackingNumber:
           type: string
           description: >-
@@ -31802,6 +31901,9 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />@deprecated This field is deprecated since 28 November 2024. Use
             nested object handoverJobParcelInfo instead.
+          x-badges:
+            - color: red
+              label: DEPRECATED
         channel:
           enum:
             - DELIVERY
@@ -31844,6 +31946,9 @@ components:
             nested object handoverJobParcelInfo instead.
           example: 2fOge2ZGW54K4TgvDTQw
           type: string
+          x-badges:
+            - color: red
+              label: DEPRECATED
         pickJobRef:
           description: >-
             The reference to the pickjob for which the handoverjob is assigned
@@ -31872,6 +31977,9 @@ components:
             nested object handoverJobParcelInfo instead.
           example: Esb20gpHBL94X5NdMp3C
           type: string
+          x-badges:
+            - color: red
+              label: DEPRECATED
         shortIdentifier:
           description: The short identifier of the shipment.
           type: string
@@ -32148,6 +32256,9 @@ components:
                 /><br />@deprecated This field is deprecated since 11th of
                 September 2023. Use /api/stocks endpoints instead.
               $ref: '#/components/schemas/StockInformation'
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             facilityId:
               description: This is a reference to a facility
               example: '4711'
@@ -32172,6 +32283,9 @@ components:
                 September 2023. Use /api/stocks endpoints instead.
               items:
                 $ref: '#/components/schemas/PartialStock'
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             scannableCodes:
               items:
                 description: Codes, that identify the article
@@ -32361,6 +32475,9 @@ components:
             />@deprecated This field is deprecated since 11th of September 2023.
 
             Use /api/stocks endpoints instead.
+          x-badges:
+            - color: red
+              label: DEPRECATED
         tenantArticleId:
           description: This is a reference to an article Id
           example: '4711'
@@ -32384,6 +32501,9 @@ components:
             Use /api/stocks endpoints instead.
           items:
             $ref: '#/components/schemas/PartialStockForCreation'
+          x-badges:
+            - color: red
+              label: DEPRECATED
         weight:
           type: number
           minimum: 0
@@ -32705,6 +32825,9 @@ components:
             href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />Use operativeContainerTypeRef instead.
+          x-badges:
+            - color: red
+              label: DEPRECATED
         pickJobRefs:
           items:
             description: List of corresponding pickjob Ids
@@ -32821,6 +32944,9 @@ components:
             href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />Use operativeContainerTypeRef instead.
+          x-badges:
+            - color: red
+              label: DEPRECATED
         loadUnitLineItems:
           type: array
           items:
@@ -34078,6 +34204,9 @@ components:
           type: object
       xml:
         name: CancelHandoverjobAction
+      x-badges:
+        - color: red
+          label: DEPRECATED
     ModifyListingAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -34136,6 +34265,9 @@ components:
                 target="_blank">api-release-life-cycle documentation</a>.<br
                 /><br />@deprecated This field is deprecated since 11th of
                 September 2023. Use /api/stocks endpoints instead.
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             subtitle:
               description: a subtitle describing the article
               example: 44 2/3
@@ -34306,6 +34438,9 @@ components:
           type: object
       xml:
         name: RestartPickJobAction
+      x-badges:
+        - color: red
+          label: DEPRECATED
     ResetPickJobAction:
       title: ResetPickJobAction
       description: >-
@@ -34330,6 +34465,9 @@ components:
           type: object
       xml:
         name: ResetPickJobAction
+      x-badges:
+        - color: red
+          label: DEPRECATED
     ModifyPickJobLastEditorAction:
       title: ModifyPickJobLastEditorAction
       description: Action to modify the last editor of a PickJob.
@@ -34403,6 +34541,9 @@ components:
           type: object
       xml:
         name: AbortPickJobAction
+      x-badges:
+        - color: red
+          label: DEPRECATED
     ModifyPickLineItemAction:
       title: ModifyPickLineItemAction
       description: Action to modify a picklineitem of a PickJob.
@@ -34504,6 +34645,9 @@ components:
               enum:
                 - ModifyRetainedOfflineStock
               type: string
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             active:
               description: The retained Offline Stock is enabled or disabled.
               type: boolean
@@ -34521,6 +34665,9 @@ components:
           type: object
       xml:
         name: ModifyRetainedOfflineStockAction
+      x-badges:
+        - color: red
+          label: DEPRECATED
     ModifyReturnAction:
       title: ModifyReturnAction
       description: Action to modify a return
@@ -35696,6 +35843,9 @@ components:
             href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />
+          x-badges:
+            - color: red
+              label: DEPRECATED
       type: object
       xml:
         name: PickLineItemArticle
@@ -35838,6 +35988,9 @@ components:
           type: object
       xml:
         name: CancelPickRunAction
+      x-badges:
+        - color: red
+          label: DEPRECATED
     StartPickRunAction:
       title: StartPickRunAction
       description: >-
@@ -35860,6 +36013,9 @@ components:
           type: object
       xml:
         name: StartPickRunAction
+      x-badges:
+        - color: red
+          label: DEPRECATED
     FinishPickRunAction:
       title: FinishPickRunAction
       description: >-
@@ -35882,6 +36038,9 @@ components:
           type: object
       xml:
         name: FinishPickRunAction
+      x-badges:
+        - color: red
+          label: DEPRECATED
     ParcelActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/ParcelSplitItemsActionParameter'
@@ -36954,6 +37113,9 @@ components:
           type: object
       xml:
         name: RemovePickJobFromPickRunAction
+      x-badges:
+        - color: red
+          label: DEPRECATED
     PickingTimes:
       description: >-
         Time ranges defining the picking times per weekday. No overlapping
@@ -37601,6 +37763,9 @@ components:
             />Enable or disable legacy returns. Use returnTypeConfiguration
             instead
           type: boolean
+          x-badges:
+            - color: red
+              label: DEPRECATED
         returnTypeConfiguration:
           $ref: '#/components/schemas/ReturnTypeConfiguration'
         availableItemConditions:
@@ -37677,6 +37842,9 @@ components:
             />Enable or disable legacy returns. Use returnTypeConfiguration
             instead
           type: boolean
+          x-badges:
+            - color: red
+              label: DEPRECATED
         returnTypeConfiguration:
           $ref: '#/components/schemas/ReturnTypeConfiguration'
         availableItemConditions:
@@ -38546,6 +38714,9 @@ components:
             will be moved to remoteConfig
           example: true
           type: boolean
+          x-badges:
+            - color: red
+              label: DEPRECATED
         id:
           type: string
       required:
@@ -38602,6 +38773,9 @@ components:
           minimum: 0
           multipleOf: 1
           type: number
+          x-badges:
+            - color: red
+              label: DEPRECATED
         stock:
           description: >-
             This the amount of the given article that is in stock for the given
@@ -38735,6 +38909,9 @@ components:
                 target="_blank">api-release-life-cycle documentation</a>.<br
                 /><br />@deprecated This field is deprecated since 28 November
                 2024. Use nested object handoverJobParcelInfo
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             carrierKey:
               type: string
               description: >-
@@ -38744,6 +38921,9 @@ components:
                 target="_blank">api-release-life-cycle documentation</a>.<br
                 /><br />@deprecated This field is deprecated since 28 November
                 2024. Use nested object handoverJobParcelInfo
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             channel:
               enum:
                 - DELIVERY
@@ -38780,6 +38960,9 @@ components:
                 target="_blank">api-release-life-cycle documentation</a>.<br
                 /><br />@deprecated This field is deprecated since 28 November
                 2024. Use nested object handoverJobParcelInfo
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             pickJobRef:
               description: >-
                 The reference to the pickjob for which the handoverjob is
@@ -38796,6 +38979,9 @@ components:
                 target="_blank">api-release-life-cycle documentation</a>.<br
                 /><br />@deprecated This field is deprecated since 28 November
                 2024. Use nested object handoverJobParcelInfo
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             status:
               $ref: '#/components/schemas/HandoverjobStatus'
             tenantOrderId:
@@ -39092,6 +39278,9 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />Deprecated: Use new 'target' object instead.
           deprecated: true
+          x-badges:
+            - color: red
+              label: DEPRECATED
         event:
           type: string
           description: Name of the event in the fulfillmenttools platform.
@@ -39106,6 +39295,9 @@ components:
           deprecated: true
           minItems: 1
           type: array
+          x-badges:
+            - color: red
+              label: DEPRECATED
         name:
           type: string
           description: Name of the event, this is freely selectable.
@@ -39998,6 +40190,9 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />@deprecated - Use source instead.
           example: DE
+          x-badges:
+            - color: red
+              label: DEPRECATED
         destinations:
           description: The destination regions this mapping should be applied to.
           items:
@@ -40014,6 +40209,9 @@ components:
             $ref: '#/components/schemas/CountryCode'
           minItems: 1
           type: array
+          x-badges:
+            - color: red
+              label: DEPRECATED
         mandatoryShippingArticleAttributes:
           items:
             $ref: '#/components/schemas/MandatoryShippingArticleAttribute'
@@ -40111,6 +40309,9 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />@deprecated Use source instead.
           example: DE
+          x-badges:
+            - color: red
+              label: DEPRECATED
         destinationCountries:
           deprecated: true
           description: >-
@@ -40122,6 +40323,9 @@ components:
             $ref: '#/components/schemas/CountryCode'
           minItems: 1
           type: array
+          x-badges:
+            - color: red
+              label: DEPRECATED
         mandatoryShippingAttributes:
           items:
             $ref: '#/components/schemas/MandatoryShippingAttribute'
@@ -40211,6 +40415,9 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />@deprecated Use source instead.
           example: DE
+          x-badges:
+            - color: red
+              label: DEPRECATED
         destinationCountries:
           deprecated: true
           description: >-
@@ -40222,6 +40429,9 @@ components:
             $ref: '#/components/schemas/CountryCode'
           minItems: 1
           type: array
+          x-badges:
+            - color: red
+              label: DEPRECATED
         mandatoryShippingAttributes:
           items:
             $ref: '#/components/schemas/MandatoryShippingAttribute'
@@ -51570,6 +51780,9 @@ components:
             marked not routable. This field is deprecated in favour of
             stopRoutingAttemptsAfterTime
           type: number
+          x-badges:
+            - color: red
+              label: DEPRECATED
         stopRoutingAttemptsAfterTime:
           default: PT8H
           description: >-
@@ -51640,6 +51853,9 @@ components:
                 routing plan is marked not routable. This field is deprecated in
                 favour of stopRoutingAttemptsAfterTime
               type: number
+              x-badges:
+                - color: red
+                  label: DEPRECATED
             stopRoutingAttemptsAfterTime:
               default: PT8H
               description: >-
@@ -52299,6 +52515,9 @@ components:
           items:
             $ref: '#/components/schemas/PrioritizationRule'
           type: array
+          x-badges:
+            - color: red
+              label: DEPRECATED
         routingRule:
           $ref: '#/components/schemas/RoutingRule'
         timingMode:
@@ -52606,6 +52825,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoutingPlanStatus'
+          x-badges:
+            - color: red
+              label: DEPRECATED
         history:
           type: array
           items:
@@ -69511,6 +69733,13 @@ components:
       scheme: bearer
       bearerFormat: JWT
 tags:
+  - description: Endpoints to create, retrieve, update, and manage customer orders.
+    name: Orders
+  - description: >-
+      Endpoints to define and manage configuration settings related to order
+      processing, such as defaults, business rules, and operational parameters
+      that influence how orders are handled.
+    name: Orders Configuration
   - description: >-
       Everything your customer ordered in your shop, so everything he or she
       orders for fulfillment.
