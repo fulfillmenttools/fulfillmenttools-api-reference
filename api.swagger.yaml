@@ -53581,7 +53581,6 @@ components:
           description: >-
             The start of the evaluated time period. Defaults to "now" (timestamp
             of the request)
-          default: now
         endDate:
           type: string
           example: '2024-07-13T00:00:00.000Z'
@@ -53916,7 +53915,7 @@ components:
             discriminator:
               propertyName: type
               mapping:
-                StandardRating: '#/components/schemas/RoutingStrategyRating'
+                StandardRating: '#/components/schemas/RoutingStrategyStandardRating'
                 ToolkitRating: '#/components/schemas/RoutingStrategyToolkitRating'
       title: RoutingStrategyNodeConfig
       description: RoutingStrategyNodeConfig
@@ -65447,10 +65446,11 @@ components:
           description: location on which the stock is placed
           type: string
         properties:
-          additionalProperties:
-            type: string
           allOf:
             - $ref: '#/components/schemas/StockPropertyPreset'
+            - additionalProperties:
+                type: string
+              type: object
           description: >-
             allow tracking of specific values such as expiry dates on a set of
             items. They should describe physical identifiable properties of the
