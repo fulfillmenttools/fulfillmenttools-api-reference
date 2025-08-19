@@ -33161,10 +33161,15 @@ components:
             attributes cannot be used within fulfillment processes, but it could
             be useful to have the information carried here.
           type: object
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackingSourceContainerLineItemForCreation'
       required:
         - packJobRefs
         - nameLocalized
         - facilityRef
+        - lineItems
       type: object
       title: PackingSourceContainerForCreation
       description: PackingSourceContainerForCreation
@@ -33207,8 +33212,8 @@ components:
           $ref: '#/components/schemas/LocaleString'
         facilityRef:
           description: >-
-            The id of the facility reference. The given ID has to be present in
-            the system. But it is not updatable.
+            Reference to the facility the packing source container is related
+            to.
           example: Esb20gpHBL94X5NdMp3C
           type: string
         iconUrl:
@@ -33226,7 +33231,9 @@ components:
         packJobRefs:
           type: array
           minItems: 1
-          description: List of references to packJobs
+          description: >-
+            List of references to packJobs this packing source container is
+            related to.
           items:
             type: string
             example: 0857914c-d965-421e-b6cf-330501bcca58
@@ -33243,8 +33250,12 @@ components:
           description: >-
             Attributes that can be added to the packing source container. These
             attributes cannot be used within fulfillment processes, but it could
-            be useful to have the informations carried here.
+            be useful to have the information carried here.
           type: object
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackingSourceContainerLineItem'
       additionalProperties: false
       required:
         - packJobRefs
@@ -33254,9 +33265,128 @@ components:
         - version
         - lastModified
         - created
+        - lineItems
       type: object
       title: PackingSourceContainer
       description: PackingSourceContainer
+    PackingSourceContainerLineItem:
+      additionalProperties: false
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItem'
+      properties:
+        id:
+          description: >-
+            The id of this lineItem. It is generated during creation
+            automatically and suits as the primary identifier of the described
+            entity.
+          example: da488ad1-4215-4b9a-9642-c39883c6cd2c
+          type: string
+        article:
+          $ref: '#/components/schemas/LineItemArticle'
+        quantity:
+          description: quantity of this item
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        originId:
+          nullable: true
+          type: string
+          description: >-
+            The id of the line item this line item was originated from, before
+            any split has happened. This can be used to restore the ‘pre-split’
+            status.
+          example: df671041-10dd-4600-a2ff-e9ffe2556bba
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        secondaryQuantity:
+          description: >-
+            secondary quantity of this item, E.g. quantity is the count and
+            secondaryQuantity is the weight
+          example: 200
+          format: int64
+          minimum: 1
+          type: integer
+        secondaryMeasurementUnitKey:
+          description: >-
+            Identifier for items unit of measurement. E.g. measurementUnitKey is
+            pieces and secondaryQuantity is gram
+          example: gram
+          type: string
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+      required:
+        - id
+        - quantity
+        - article
+      description: item that is inside the packingSourceContainer
+      xml:
+        name: PackingSourceContainerLineItem
+      title: PackingSourceContainerLineItem
+    PackingSourceContainerLineItemForCreation:
+      additionalProperties: false
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItemForCreation'
+      properties:
+        article:
+          $ref: '#/components/schemas/LineItemArticle'
+        quantity:
+          description: quantity of this item
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        originId:
+          nullable: true
+          type: string
+          description: >-
+            The id of the line item this line item was originated from, before
+            any split has happened. This can be used to restore the ‘pre-split’
+            status.
+          example: df671041-10dd-4600-a2ff-e9ffe2556bba
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        secondaryQuantity:
+          description: >-
+            secondary quantity of this item, E.g. quantity is the count and
+            secondaryQuantity is the weight
+          example: 200
+          format: int64
+          minimum: 1
+          type: integer
+        secondaryMeasurementUnitKey:
+          description: >-
+            Identifier for items unit of measurement. E.g. measurementUnitKey is
+            pieces and secondaryQuantity is gram
+          example: gram
+          type: string
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+      required:
+        - quantity
+        - article
+      description: items that are inside the packingSourceContainer
+      xml:
+        name: PackingSourceContainerLineItemForCreation
+      title: PackingSourceContainerLineItemForCreation
     LocaleConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
