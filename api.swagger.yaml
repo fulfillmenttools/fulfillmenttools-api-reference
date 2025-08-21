@@ -51474,8 +51474,16 @@ components:
           example: 1
           type: integer
         entity1:
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         entity2:
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         rule:
           $ref: '#/components/schemas/ToolkitRule'
@@ -51486,8 +51494,6 @@ components:
         - nameLocalized
         - active
         - order
-        - entity1
-        - entity2
       type: object
       xml:
         name: ToolkitFenceForCreation
@@ -51564,8 +51570,16 @@ components:
           description: Indicates whether this fence is active or not
           type: boolean
         entity1:
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         entity2:
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         rule:
           $ref: '#/components/schemas/ToolkitRule'
@@ -51579,8 +51593,6 @@ components:
         - name
         - nameLocalized
         - active
-        - entity1
-        - entity2
         - maxPenalty
       type: object
       xml:
@@ -51758,6 +51770,7 @@ components:
       required:
         - propertyPath
         - entityOperator
+        - entity
       type: object
       xml:
         name: ToolkitPredicate
@@ -51807,6 +51820,8 @@ components:
         - rightPropertyPath
         - leftPropertyPath
         - entityOperator
+        - leftEntity
+        - rightEntity
       type: object
       xml:
         name: ToolkitComparisonPredicate
@@ -51837,6 +51852,7 @@ components:
         - operator
         - leftPart
         - rightPart
+        - evaluationScope
       type: object
       xml:
         name: ToolkitRule
@@ -51857,6 +51873,7 @@ components:
           $ref: '#/components/schemas/ToolkitRuleScope'
       required:
         - predicates
+        - evaluationScope
       type: object
       xml:
         name: ToolkitRule
@@ -53231,7 +53248,7 @@ components:
         active:
           type: boolean
         rule:
-          $ref: '#/components/schemas/ToolkitRulePart'
+          $ref: '#/components/schemas/RoutingStrategyConditionRule'
         nextNode:
           $ref: '#/components/schemas/RoutingStrategyNode'
         nextCondition:
@@ -53244,6 +53261,52 @@ components:
         - nameLocalized
       title: RoutingStrategyCondition
       description: RoutingStrategyCondition
+    RoutingStrategyConditionRule:
+      additionalProperties: false
+      properties:
+        predicateConnector:
+          $ref: '#/components/schemas/ToolkitPredicateConnector'
+        predicates:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingStrategyConditionPredicate'
+          minItems: 1
+      required:
+        - predicates
+      type: object
+      xml:
+        name: RoutingStrategyConditionRule
+      title: RoutingStrategyConditionRule
+      description: RoutingStrategyConditionRule
+    RoutingStrategyConditionPredicate:
+      description: The predicate for a routing strategy condition rule
+      properties:
+        propertyPath:
+          type: string
+          minLength: 1
+        entityOperator:
+          $ref: '#/components/schemas/ToolkitEntityOperatorType'
+        transformation:
+          $ref: '#/components/schemas/ToolkitTransformationType'
+        transformationArgs:
+          type: array
+          items:
+            oneOf:
+              - type: string
+              - type: number
+              - type: boolean
+        expectedValue:
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+      required:
+        - propertyPath
+        - entityOperator
+      type: object
+      xml:
+        name: RoutingStrategyConditionPredicate
+      title: RoutingStrategyConditionPredicate
     RoutingStrategyConditionForModification:
       additionalProperties: false
       properties:
@@ -53263,7 +53326,7 @@ components:
         active:
           type: boolean
         rule:
-          $ref: '#/components/schemas/ToolkitRulePart'
+          $ref: '#/components/schemas/RoutingStrategyConditionRule'
         nextNode:
           $ref: '#/components/schemas/RoutingStrategyNodeForModification'
         nextCondition:
@@ -53294,7 +53357,7 @@ components:
         active:
           type: boolean
         rule:
-          $ref: '#/components/schemas/ToolkitRulePart'
+          $ref: '#/components/schemas/RoutingStrategyConditionRule'
         nextNode:
           $ref: '#/components/schemas/RoutingStrategyNodeForCreation'
         nextCondition:
@@ -53688,8 +53751,16 @@ components:
           example: 1
           type: integer
         entity1:
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         entity2:
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         rule:
           $ref: '#/components/schemas/ToolkitRule'
@@ -53699,8 +53770,6 @@ components:
         - nameLocalized
         - active
         - order
-        - entity1
-        - entity2
         - type
         - referenceId
     RoutingStrategyStandardRatingType:
@@ -53793,8 +53862,16 @@ components:
           description: Indicates whether this fence is active or not
           type: boolean
         entity1:
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         entity2:
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
           $ref: '#/components/schemas/ToolkitAllowedEntities'
         rule:
           $ref: '#/components/schemas/ToolkitRule'
@@ -53810,8 +53887,6 @@ components:
         - type
         - nameLocalized
         - active
-        - entity1
-        - entity2
         - maxPenalty
         - referenceId
     RoutingStrategyNodeConfigCategoryForCreation:
