@@ -47859,10 +47859,10 @@ components:
           description: Quantity of the item that is available
           example: 12
           minimum: 0
-        selected:
+        executedServiceJobData:
           type: array
           items:
-            $ref: '#/components/schemas/ServiceDataAvailableLineItemSelectedInfo'
+            $ref: '#/components/schemas/ServiceDataExecutedServiceJobs'
         originId:
           nullable: true
           type: string
@@ -47876,9 +47876,44 @@ components:
         - article
         - quantity
         - availableQuantity
-        - selected
+        - executedServiceJobData
       title: ServiceDataAvailableLineItem
       description: ServiceDataAvailableLineItem
+    ServiceDataExecutedServiceJobs:
+      additionalProperties: false
+      type: object
+      properties:
+        serviceJobRef:
+          type: string
+          description: >-
+            Id of the Service Job, that has been applied to the
+            ServiceDataAvailableLineItem.
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+        sequence:
+          type: integer
+          description: >-
+            sequence in which this service job has been executed for this line
+            item. the lower, the earlier it has been executed.
+          example: 1
+          minimum: 1
+        appliedQuantity:
+          type: integer
+          description: Quantity of the item that has been selected from this service job
+          example: 0
+          minimum: 0
+        itemsReturnable:
+          type: boolean
+          description: >-
+            Indicates if the item is returnable based on the used service job
+            definition while adding the items
+          example: true
+      required:
+        - serviceJobRef
+        - sequence
+        - appliedQuantity
+        - itemsReturnable
+      title: ServiceDataExecutedServiceJobs
+      description: ServiceDataExecutedServiceJobs
     ServiceDataAvailableLineItemForCreation:
       additionalProperties: false
       type: object
@@ -47892,10 +47927,10 @@ components:
           description: Quantity of the item that is available
           example: 12
           minimum: 0
-        selected:
+        executedServiceJobData:
           type: array
           items:
-            $ref: '#/components/schemas/ServiceDataAvailableLineItemSelectedInfo'
+            $ref: '#/components/schemas/ServiceDataExecutedServiceJobs'
         originId:
           nullable: true
           type: string
@@ -47911,7 +47946,7 @@ components:
         - article
         - quantity
         - availableQuantity
-        - selected
+        - executedServiceJobData
       title: ServiceDataAvailableLineItemForCreation
       description: ServiceDataAvailableLineItemForCreation
     ServiceDataAvailableLineItemForUpdate:
@@ -47931,10 +47966,10 @@ components:
           description: Quantity of the items
           example: 5
           minimum: 0
-        selected:
+        executedServiceJobData:
           type: array
           items:
-            $ref: '#/components/schemas/ServiceDataAvailableLineItemSelectedInfo'
+            $ref: '#/components/schemas/ServiceDataExecutedServiceJobs'
       required:
         - id
       title: ServiceDataAvailableLineItemForUpdate
@@ -47955,26 +47990,6 @@ components:
         name: ServiceDataAvailableItemArticle
       title: ServiceDataItemArticle
       description: ServiceDataItemArticle
-    ServiceDataAvailableLineItemSelectedInfo:
-      additionalProperties: false
-      type: object
-      properties:
-        serviceJobRef:
-          type: string
-          description: >-
-            Id of the Service Job, that has been applied to the
-            ServiceDataAvailableLineItem.
-          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
-        selectedQuantity:
-          type: integer
-          description: Quantity of the item that has been selected
-          example: 0
-          minimum: 0
-      required:
-        - serviceJobRef
-        - selectedQuantity
-      title: ServiceDataAvailableLineItemSelectedInfo
-      description: ServiceDataAvailableLineItemSelectedInfo
     ServiceItemInfo:
       additionalProperties: false
       type: object
