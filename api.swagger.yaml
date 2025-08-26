@@ -23771,6 +23771,47 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/processsearchresults/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for ProcessSearchResult
+      operationId: searchProcessSearchResult
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessSearchResultSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessSearchResultPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: List processes search results data(search)
+      tags:
+        - Core - ProcessSearchResult
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/promises/checkoutoptions:
     post:
       deprecated: true
@@ -53081,6 +53122,33 @@ components:
         name: CancelationReasonForCreation
       title: CancelationReasonForCreation
       description: CancelationReasonForCreation
+    ProcessSearchResult:
+      properties:
+        version:
+          type: integer
+        created:
+          description: Information about the time, when a routing plan status is set
+          example: '2024-05-12T08:45:50.525Z'
+          format: date-time
+          type: string
+        lastModified:
+          description: Information about the time, when a routing plan status is set
+          example: '2024-05-12T08:45:50.525Z'
+          format: date-time
+          type: string
+        id:
+          type: string
+        processSearchResultEntities:
+          type: object
+      title: ProcessSearchResult
+      type: object
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - processSearchResultEntities
+      description: ProcessSearchResult
     CancelationReason:
       allOf:
         - $ref: '#/components/schemas/AbstractReason'
@@ -62363,6 +62431,760 @@ components:
       title: ProcessSearchQuery
       type: object
       description: ProcessSearchQuery
+    ProcessSearchResultAddressSort:
+      properties:
+        country:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSearchResultAddressSort
+      type: object
+      description: ProcessSearchResultAddressSort
+    ProcessSearchResultBrandSort:
+      properties:
+        name:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSearchResultBrandSort
+      type: object
+      description: ProcessSearchResultBrandSort
+    ProcessSearchResultCarrierSort:
+      properties:
+        name:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSearchResultCarrierSort
+      type: object
+      description: ProcessSearchResultCarrierSort
+    ProcessSearchResultConsumerAddressSort:
+      properties:
+        country:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSearchResultConsumerAddressSort
+      type: object
+      description: ProcessSearchResultConsumerAddressSort
+    ProcessSearchResultDomainStatusesDomainStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by order
+          enum:
+            - PENDING
+            - CREATED
+            - IN_PROGRESS
+            - STUCK
+            - FINISHED
+            - CANCELED
+            - OBSOLETE
+          type: string
+        in:
+          description: Search by order
+          items:
+            enum:
+              - PENDING
+              - CREATED
+              - IN_PROGRESS
+              - STUCK
+              - FINISHED
+              - CANCELED
+              - OBSOLETE
+            type: string
+          type: array
+        notEq:
+          description: Search by order
+          enum:
+            - PENDING
+            - CREATED
+            - IN_PROGRESS
+            - STUCK
+            - FINISHED
+            - CANCELED
+            - OBSOLETE
+          type: string
+      title: ProcessSearchResultDomainStatusesDomainStatusEnumFilter
+      type: object
+      description: ProcessSearchResultDomainStatusesDomainStatusEnumFilter
+    ProcessSearchResultDomainStatusesDomainStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultDomainStatusesDomainStatusEnumFilter
+          description: Search by order
+      title: ProcessSearchResultDomainStatusesDomainStatusEnumListFilter
+      type: object
+      description: ProcessSearchResultDomainStatusesDomainStatusEnumListFilter
+    ProcessSearchResultDomainStatusesFilter:
+      properties:
+        handover:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultDomainStatusesDomainStatusEnumListFilter
+          description: Search by handover
+        order:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultDomainStatusesDomainStatusEnumListFilter
+          description: Search by order
+        packing:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultDomainStatusesDomainStatusEnumListFilter
+          description: Search by packing
+        picking:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultDomainStatusesDomainStatusEnumListFilter
+          description: Search by picking
+        return:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultDomainStatusesDomainStatusEnumListFilter
+          description: Search by return
+        routing:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultDomainStatusesDomainStatusEnumListFilter
+          description: Search by routing
+        shipping:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultDomainStatusesDomainStatusEnumListFilter
+          description: Search by shipping
+      title: ProcessSearchResultDomainStatusesFilter
+      type: object
+      description: ProcessSearchResultDomainStatusesFilter
+    ProcessSearchResultFacilitySort:
+      properties:
+        address:
+          $ref: '#/components/schemas/ProcessSearchResultAddressSort'
+        name:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSearchResultFacilitySort
+      type: object
+      description: ProcessSearchResultFacilitySort
+    ProcessSearchResultOrderSort:
+      properties:
+        desiredDeliveryTime:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        orderDate:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        provisioningTime:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        tenantOrderId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSearchResultOrderSort
+      type: object
+      description: ProcessSearchResultOrderSort
+    ProcessSearchResultPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        processSearchResults:
+          items:
+            $ref: '#/components/schemas/ProcessSearchResult'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - processSearchResults
+      title: ProcessSearchResultPaginatedResult
+      type: object
+      description: ProcessSearchResultPaginatedResult
+    ProcessSearchResultProcessStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - CREATED
+            - IN_PROGRESS
+            - FINISHED
+            - CANCELED
+            - ERROR
+            - NOT_AVAILABLE
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - CREATED
+              - IN_PROGRESS
+              - FINISHED
+              - CANCELED
+              - ERROR
+              - NOT_AVAILABLE
+            type: string
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - CREATED
+            - IN_PROGRESS
+            - FINISHED
+            - CANCELED
+            - ERROR
+            - NOT_AVAILABLE
+          type: string
+      title: ProcessSearchResultProcessStatusEnumFilter
+      type: object
+      description: ProcessSearchResultProcessStatusEnumFilter
+    ProcessSearchResultReferencedBrandFilter:
+      properties:
+        name:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by name
+      title: ProcessSearchResultReferencedBrandFilter
+      type: object
+      description: ProcessSearchResultReferencedBrandFilter
+    ProcessSearchResultReferencedCarrierFilter:
+      properties:
+        carrierTrackingNumber:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by carrierTrackingNumber
+        name:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by name
+      title: ProcessSearchResultReferencedCarrierFilter
+      type: object
+      description: ProcessSearchResultReferencedCarrierFilter
+    ProcessSearchResultReferencedConsumerAddressFilter:
+      properties:
+        country:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by country
+        deliveryCountry:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by deliveryCountry
+      title: ProcessSearchResultReferencedConsumerAddressFilter
+      type: object
+      description: ProcessSearchResultReferencedConsumerAddressFilter
+    ProcessSearchResultReferencedFacilityAddressFilter:
+      properties:
+        country:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by country
+      title: ProcessSearchResultReferencedFacilityAddressFilter
+      type: object
+      description: ProcessSearchResultReferencedFacilityAddressFilter
+    ProcessSearchResultReferencedFacilityFilter:
+      properties:
+        address:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultReferencedFacilityAddressFilter
+          description: Nested search by address
+        name:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by name
+      title: ProcessSearchResultReferencedFacilityFilter
+      type: object
+      description: ProcessSearchResultReferencedFacilityFilter
+    ProcessSearchResultReferencedFilter:
+      properties:
+        brand:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultReferencedBrandFilter'
+          description: Nested search by brand
+        carrier:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultReferencedCarrierFilter'
+          description: Nested search by carrier
+        consumerAddress:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultReferencedConsumerAddressFilter
+          description: Nested search by consumerAddress
+        facility:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultReferencedFacilityFilter'
+          description: Nested search by facility
+        order:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultReferencedOrderFilter'
+          description: Nested search by order
+        parcelTrackingStatus:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultReferencedParcelTrackingStatusEnumListFilter
+          description: Search by parcelTrackingStatus
+        serviceLevel:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultReferencedServiceLevelEnumListFilter
+          description: Search by serviceLevel
+        serviceType:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by serviceType
+        sticker:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultReferencedStickerFilter'
+          description: Nested search by sticker
+        targetTime:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by targetTime
+        tenantArticleId:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by tenantArticleId
+      title: ProcessSearchResultReferencedFilter
+      type: object
+      description: ProcessSearchResultReferencedFilter
+    ProcessSearchResultReferencedOrderFilter:
+      properties:
+        desiredDeliveryTime:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by desiredDeliveryTime
+        orderDate:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by orderDate
+        provisioningTime:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by provisioningTime
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultReferencedOrderOrderStatusEnumListFilter
+          description: Search by status
+        tenantOrderId:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by tenantOrderId
+      title: ProcessSearchResultReferencedOrderFilter
+      type: object
+      description: ProcessSearchResultReferencedOrderFilter
+    ProcessSearchResultReferencedOrderOrderStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - CANCELLED
+            - PROMISED
+            - LOCKED
+            - OBSOLETE
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - OPEN
+              - CANCELLED
+              - PROMISED
+              - LOCKED
+              - OBSOLETE
+            type: string
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - CANCELLED
+            - PROMISED
+            - LOCKED
+            - OBSOLETE
+          type: string
+      title: ProcessSearchResultReferencedOrderOrderStatusEnumFilter
+      type: object
+      description: ProcessSearchResultReferencedOrderOrderStatusEnumFilter
+    ProcessSearchResultReferencedOrderOrderStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultReferencedOrderOrderStatusEnumFilter
+          description: Search by status
+      title: ProcessSearchResultReferencedOrderOrderStatusEnumListFilter
+      type: object
+      description: ProcessSearchResultReferencedOrderOrderStatusEnumListFilter
+    ProcessSearchResultReferencedParcelTrackingStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by parcelTrackingStatus
+          enum:
+            - REGISTERED
+            - PICKED_UP
+            - DELIVERED
+            - NOT_DELIVERED
+            - TRANSIT
+            - EXCEPTION
+            - OUT_FOR_DELIVERY
+            - DESTROYED
+            - UNKNOWN
+            - CANCELED
+            - AWAITS_PICKUP_BY_RECEIVER
+            - DELAYED
+            - NOTIFICATION
+          type: string
+        in:
+          description: Search by parcelTrackingStatus
+          items:
+            enum:
+              - REGISTERED
+              - PICKED_UP
+              - DELIVERED
+              - NOT_DELIVERED
+              - TRANSIT
+              - EXCEPTION
+              - OUT_FOR_DELIVERY
+              - DESTROYED
+              - UNKNOWN
+              - CANCELED
+              - AWAITS_PICKUP_BY_RECEIVER
+              - DELAYED
+              - NOTIFICATION
+            type: string
+          type: array
+        notEq:
+          description: Search by parcelTrackingStatus
+          enum:
+            - REGISTERED
+            - PICKED_UP
+            - DELIVERED
+            - NOT_DELIVERED
+            - TRANSIT
+            - EXCEPTION
+            - OUT_FOR_DELIVERY
+            - DESTROYED
+            - UNKNOWN
+            - CANCELED
+            - AWAITS_PICKUP_BY_RECEIVER
+            - DELAYED
+            - NOTIFICATION
+          type: string
+      title: ProcessSearchResultReferencedParcelTrackingStatusEnumFilter
+      type: object
+      description: ProcessSearchResultReferencedParcelTrackingStatusEnumFilter
+    ProcessSearchResultReferencedParcelTrackingStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultReferencedParcelTrackingStatusEnumFilter
+          description: Search by parcelTrackingStatus
+      title: ProcessSearchResultReferencedParcelTrackingStatusEnumListFilter
+      type: object
+      description: ProcessSearchResultReferencedParcelTrackingStatusEnumListFilter
+    ProcessSearchResultReferencedServiceLevelEnumFilter:
+      properties:
+        eq:
+          description: Search by serviceLevel
+          enum:
+            - DELIVERY
+            - SAMEDAY
+          type: string
+        in:
+          description: Search by serviceLevel
+          items:
+            enum:
+              - DELIVERY
+              - SAMEDAY
+            type: string
+          type: array
+        notEq:
+          description: Search by serviceLevel
+          enum:
+            - DELIVERY
+            - SAMEDAY
+          type: string
+      title: ProcessSearchResultReferencedServiceLevelEnumFilter
+      type: object
+      description: ProcessSearchResultReferencedServiceLevelEnumFilter
+    ProcessSearchResultReferencedServiceLevelEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessSearchResultReferencedServiceLevelEnumFilter
+          description: Search by serviceLevel
+      title: ProcessSearchResultReferencedServiceLevelEnumListFilter
+      type: object
+      description: ProcessSearchResultReferencedServiceLevelEnumListFilter
+    ProcessSearchResultReferencedSort:
+      properties:
+        brand:
+          $ref: '#/components/schemas/ProcessSearchResultBrandSort'
+        carrier:
+          $ref: '#/components/schemas/ProcessSearchResultCarrierSort'
+        consumerAddress:
+          $ref: '#/components/schemas/ProcessSearchResultConsumerAddressSort'
+        facility:
+          $ref: '#/components/schemas/ProcessSearchResultFacilitySort'
+        order:
+          $ref: '#/components/schemas/ProcessSearchResultOrderSort'
+        parcelTrackingStatus:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        sticker:
+          $ref: '#/components/schemas/ProcessSearchResultStickerSort'
+        targetTime:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSearchResultReferencedSort
+      type: object
+      description: ProcessSearchResultReferencedSort
+    ProcessSearchResultReferencedStickerFilter:
+      properties:
+        name:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by name
+      title: ProcessSearchResultReferencedStickerFilter
+      type: object
+      description: ProcessSearchResultReferencedStickerFilter
+    ProcessSearchResultSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after. The value is provided in the
+            `pageInfo.endCursor` field of the response.
+          type: string
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ProcessSearchResultSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ProcessSearchResultSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: ProcessSearchResultSearchPayload
+      type: object
+      description: ProcessSearchResultSearchPayload
+    ProcessSearchResultSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ProcessSearchResultSearchQuery'
+          type: array
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
+        documentRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by documentRefs
+        domainStatuses:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultDomainStatusesFilter'
+          description: Nested search by domainStatuses
+        domsStatus:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultProcessStatusEnumFilter'
+          description: Search by domsStatus
+        externalActionRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by externalActionRefs
+        facilityRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by facilityRefs
+        facilityRefsWithActiveOperations:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRefsWithActiveOperations
+        flatRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by flatRefs
+        handoverJobRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by handoverJobRefs
+        itemReturnJobsRef:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by itemReturnJobsRef
+        operativeStatus:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultProcessStatusEnumFilter'
+          description: Search by operativeStatus
+        or:
+          items:
+            $ref: '#/components/schemas/ProcessSearchResultSearchQuery'
+          type: array
+        orderRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by orderRef
+        packJobRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by packJobRefs
+        pickJobRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by pickJobRefs
+        processId:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by processId
+        referenced:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultReferencedFilter'
+          description: Nested search by referenced
+        returnRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by returnRefs
+        returnStatus:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultProcessStatusEnumFilter'
+          description: Search by returnStatus
+        routingPlanRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by routingPlanRefs
+        searchTerm:
+          allOf:
+            - $ref: '#/components/schemas/SearchFilter'
+          description: Full-text search for this entity
+        serviceJobRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by serviceJobRefs
+        shipmentRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by shipmentRefs
+        status:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultProcessStatusEnumFilter'
+          description: Search by status
+        tags:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultTagsListFilter'
+          description: Nested list search by tags
+      title: ProcessSearchResultSearchQuery
+      type: object
+      description: ProcessSearchResultSearchQuery
+    ProcessSearchResultSort:
+      properties:
+        domsStatus:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        operativeStatus:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        processId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        referenced:
+          $ref: '#/components/schemas/ProcessSearchResultReferencedSort'
+        returnStatus:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        status:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSearchResultSort
+      type: object
+      description: ProcessSearchResultSort
+    ProcessSearchResultStickerSort:
+      properties:
+        name:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ProcessSearchResultStickerSort
+      type: object
+      description: ProcessSearchResultStickerSort
+    ProcessSearchResultTagsFilter:
+      properties:
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        value:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by value
+      title: ProcessSearchResultTagsFilter
+      type: object
+      description: ProcessSearchResultTagsFilter
+    ProcessSearchResultTagsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/ProcessSearchResultTagsFilter'
+          description: Contains returns if at least one entry matches
+      title: ProcessSearchResultTagsListFilter
+      type: object
+      description: ProcessSearchResultTagsListFilter
     ProcessSort:
       properties:
         domsStatus:
