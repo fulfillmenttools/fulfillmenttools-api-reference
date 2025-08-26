@@ -43208,12 +43208,18 @@ components:
       properties:
         id:
           type: string
+          description: Generated identifier of this entity
+          example: 611c860f-3f00-4b01-9f4c-64cdee38a30e
         returned:
           type: number
           minimum: 0
+          description: Quantity of this line item that has been returned
+          example: '5'
         returnable:
           type: number
           minimum: 0
+          description: Quantity of this line item that can be returned
+          example: '7'
         notReturnableItemsExists:
           type: boolean
           description: Add items to notReturnableLineItems array in itemReturnJob instead.
@@ -43223,6 +43229,11 @@ components:
             $ref: '#/components/schemas/RecordableAttribute'
           nullable: true
           type: array
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
       required:
         - id
         - article
@@ -43262,6 +43273,8 @@ components:
         delivered:
           type: number
           minimum: 1
+          description: Quantity of this line item that has been delivered
+          example: '7'
         notReturnableItemsExists:
           type: boolean
           description: Add items to notReturnableLineItems array in itemReturnJob instead.
@@ -43270,6 +43283,7 @@ components:
           items:
             type: string
           type: array
+          description: Codes that can be used for scanning this line item
         customAttributes:
           description: >-
             Attributes that can be added to the entity. These attributes cannot
@@ -43281,6 +43295,11 @@ components:
             $ref: '#/components/schemas/RecordableAttributeForCreation'
           nullable: true
           type: array
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
       required:
         - article
         - delivered
