@@ -61929,6 +61929,95 @@ components:
       title: ProcessConsumerAddressSort
       type: object
       description: ProcessConsumerAddressSort
+    ProcessDomainStatusesDomainStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by order
+          enum:
+            - PENDING
+            - CREATED
+            - IN_PROGRESS
+            - STUCK
+            - FINISHED
+            - CANCELED
+            - OBSOLETE
+          type: string
+        in:
+          description: Search by order
+          items:
+            enum:
+              - PENDING
+              - CREATED
+              - IN_PROGRESS
+              - STUCK
+              - FINISHED
+              - CANCELED
+              - OBSOLETE
+            type: string
+          type: array
+        notEq:
+          description: Search by order
+          enum:
+            - PENDING
+            - CREATED
+            - IN_PROGRESS
+            - STUCK
+            - FINISHED
+            - CANCELED
+            - OBSOLETE
+          type: string
+      title: ProcessDomainStatusesDomainStatusEnumFilter
+      type: object
+      description: ProcessDomainStatusesDomainStatusEnumFilter
+    ProcessDomainStatusesDomainStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/ProcessDomainStatusesDomainStatusEnumFilter'
+          description: Search by order
+      title: ProcessDomainStatusesDomainStatusEnumListFilter
+      type: object
+      description: ProcessDomainStatusesDomainStatusEnumListFilter
+    ProcessDomainStatusesFilter:
+      properties:
+        handover:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessDomainStatusesDomainStatusEnumListFilter
+          description: Search by handover
+        order:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessDomainStatusesDomainStatusEnumListFilter
+          description: Search by order
+        packing:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessDomainStatusesDomainStatusEnumListFilter
+          description: Search by packing
+        picking:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessDomainStatusesDomainStatusEnumListFilter
+          description: Search by picking
+        return:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessDomainStatusesDomainStatusEnumListFilter
+          description: Search by return
+        routing:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessDomainStatusesDomainStatusEnumListFilter
+          description: Search by routing
+        shipping:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessDomainStatusesDomainStatusEnumListFilter
+          description: Search by shipping
+      title: ProcessDomainStatusesFilter
+      type: object
+      description: ProcessDomainStatusesFilter
     ProcessFacilitySort:
       properties:
         address:
@@ -62016,6 +62105,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by country
+        deliveryCountry:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by deliveryCountry
       title: ProcessReferencedConsumerAddressFilter
       type: object
       description: ProcessReferencedConsumerAddressFilter
@@ -62340,10 +62433,18 @@ components:
           items:
             $ref: '#/components/schemas/ProcessSearchQuery'
           type: array
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by created
         documentRefs:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
           description: Search by documentRefs
+        domainStatuses:
+          allOf:
+            - $ref: '#/components/schemas/ProcessDomainStatusesFilter'
+          description: Nested search by domainStatuses
         domsStatus:
           allOf:
             - $ref: '#/components/schemas/ProcessStatusEnumFilter'
@@ -62356,6 +62457,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
           description: Search by facilityRefs
+        facilityRefsWithActiveOperations:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRefsWithActiveOperations
         flatRefs:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
