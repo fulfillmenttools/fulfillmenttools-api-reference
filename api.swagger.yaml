@@ -43432,8 +43432,6 @@ components:
       description: ItemReturnStatus
     ItemReturnLineItem:
       additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/ItemReturnLineItemForCreation'
       properties:
         id:
           type: string
@@ -43457,6 +43455,27 @@ components:
             $ref: '#/components/schemas/RecordableAttribute'
           nullable: true
           type: array
+        tenantArticleId:
+          example: a69006ba-7100-4b4d-a610-1ca28016a4eb
+          type: string
+        itemConditionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        itemConditionComment:
+          type: string
+          minLength: 1
+          example: Upper corner damaged
+        scannedCodes:
+          type: array
+          items:
+            type: string
+        status:
+          $ref: '#/components/schemas/ItemReturnLineItemStatus'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the entity. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the information carried here.
+          type: object
       required:
         - id
         - status
@@ -43489,6 +43508,10 @@ components:
           type: string
         tenantOrderId:
           type: string
+          description: >-
+            deprecated: will be automatically deducted from related
+            itemReturnJob
+          deprecated: true
         scannableCodes:
           items:
             type: string
@@ -43534,6 +43557,10 @@ components:
     ItemReturnLineItemForCreation:
       additionalProperties: false
       properties:
+        itemReturnJobLineItemRef:
+          type: string
+          description: id of the item return job line item that is returned
+          example: a69006ba-7100-4b4d-a610-1ca28016a4eb
         itemConditionLocalized:
           $ref: '#/components/schemas/LocaleString'
         itemConditionComment:
@@ -43565,7 +43592,7 @@ components:
           nullable: true
           type: array
       required:
-        - tenantArticleId
+        - itemReturnJobLineItemRef
         - status
       title: ItemReturnLineItemForCreation
       description: ItemReturnLineItemForCreation
