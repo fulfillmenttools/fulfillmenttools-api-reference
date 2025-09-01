@@ -23556,9 +23556,6 @@ paths:
               - OIDC_PROVIDERS_CONFIG_READ
               - OIDC_PROVIDERS_CONFIG_WRITE
               - LOCALE_WRITE
-              - LISTING_READ
-              - LISTING_WRITE
-              - LISTING_DELETE
               - CARRIER_READ
               - CARRIER_WRITE
               - RETURN_WRITE
@@ -23652,6 +23649,10 @@ paths:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - LISTING_READ
+              - LISTING_WRITE
+              - LISTING_DELETE
+              - PURCHASE_PRICE_READ
             type: string
         - description: The group of the permission to filter by
           in: query
@@ -54921,6 +54922,31 @@ components:
       title: ByTrait
       type: object
       description: ByTrait
+    CalculatedPurchasePrice:
+      properties:
+        discount:
+          description: The discount applied to the purchase price
+          oneOf:
+            - $ref: '#/components/schemas/FacilityDiscountRelative'
+            - $ref: '#/components/schemas/FacilityDiscountAbsolute'
+        discountedPurchasePrice:
+          allOf:
+            - $ref: '#/components/schemas/PurchasePrice'
+          description: Discounted purchase price for the listing.
+        purchasePrice:
+          allOf:
+            - $ref: '#/components/schemas/PurchasePrice'
+          description: purchase price information for the listing.
+        supplierFacilityRef:
+          description: The reference of the supplier facility.
+          type: string
+      required:
+        - supplierFacilityRef
+        - purchasePrice
+        - discountedPurchasePrice
+      title: CalculatedPurchasePrice
+      type: object
+      description: CalculatedPurchasePrice
     CancelStowJobAction:
       description: Sets the status of the stowjob to CANCELED
       properties:
@@ -61543,9 +61569,6 @@ components:
             - OIDC_PROVIDERS_CONFIG_READ
             - OIDC_PROVIDERS_CONFIG_WRITE
             - LOCALE_WRITE
-            - LISTING_READ
-            - LISTING_WRITE
-            - LISTING_DELETE
             - CARRIER_READ
             - CARRIER_WRITE
             - RETURN_WRITE
@@ -61639,6 +61662,10 @@ components:
             - RESERVATION_READ
             - FILTER_ENTITY_READ
             - BRAND_READ
+            - LISTING_READ
+            - LISTING_WRITE
+            - LISTING_DELETE
+            - PURCHASE_PRICE_READ
           type: string
         operation:
           description: The operation of the permission
@@ -61732,6 +61759,7 @@ components:
             - RESERVATION
             - FILTER_ENTITY
             - BRAND
+            - PURCHASE_PRICE
           type: string
       required:
         - operation
@@ -63687,6 +63715,41 @@ components:
       title: PurchaseOrderWebHookEvent
       type: object
       description: PurchaseOrderWebHookEvent
+    PurchasePrice:
+      properties:
+        currency:
+          $ref: '#/components/schemas/CurrencyCode'
+          description: The currency of the purchase price.
+        decimalPlaces:
+          description: The number of decimal places for the purchase price.
+          type: number
+        value:
+          description: The value of the purchase price.
+          type: number
+      required:
+        - value
+        - currency
+        - decimalPlaces
+      title: PurchasePrice
+      type: object
+      description: PurchasePrice
+    PurchasePriceResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the purchase prices.
+        purchasePrices:
+          description: The calculated purchase prices for the target listing.
+          items:
+            $ref: '#/components/schemas/CalculatedPurchasePrice'
+          type: array
+      required:
+        - purchasePrices
+        - pageInfo
+      title: PurchasePriceResult
+      type: object
+      description: PurchasePriceResult
     Quantity:
       properties:
         unit:
@@ -64324,9 +64387,6 @@ components:
               - OIDC_PROVIDERS_CONFIG_READ
               - OIDC_PROVIDERS_CONFIG_WRITE
               - LOCALE_WRITE
-              - LISTING_READ
-              - LISTING_WRITE
-              - LISTING_DELETE
               - CARRIER_READ
               - CARRIER_WRITE
               - RETURN_WRITE
@@ -64420,6 +64480,10 @@ components:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - LISTING_READ
+              - LISTING_WRITE
+              - LISTING_DELETE
+              - PURCHASE_PRICE_READ
             type: string
           type: array
         version:
@@ -64504,9 +64568,6 @@ components:
               - OIDC_PROVIDERS_CONFIG_READ
               - OIDC_PROVIDERS_CONFIG_WRITE
               - LOCALE_WRITE
-              - LISTING_READ
-              - LISTING_WRITE
-              - LISTING_DELETE
               - CARRIER_READ
               - CARRIER_WRITE
               - RETURN_WRITE
@@ -64600,6 +64661,10 @@ components:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - LISTING_READ
+              - LISTING_WRITE
+              - LISTING_DELETE
+              - PURCHASE_PRICE_READ
             type: string
           type: array
       required:
@@ -64676,9 +64741,6 @@ components:
               - OIDC_PROVIDERS_CONFIG_READ
               - OIDC_PROVIDERS_CONFIG_WRITE
               - LOCALE_WRITE
-              - LISTING_READ
-              - LISTING_WRITE
-              - LISTING_DELETE
               - CARRIER_READ
               - CARRIER_WRITE
               - RETURN_WRITE
@@ -64772,6 +64834,10 @@ components:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - LISTING_READ
+              - LISTING_WRITE
+              - LISTING_DELETE
+              - PURCHASE_PRICE_READ
             type: string
           type: array
         version:
@@ -64853,9 +64919,6 @@ components:
               - OIDC_PROVIDERS_CONFIG_READ
               - OIDC_PROVIDERS_CONFIG_WRITE
               - LOCALE_WRITE
-              - LISTING_READ
-              - LISTING_WRITE
-              - LISTING_DELETE
               - CARRIER_READ
               - CARRIER_WRITE
               - RETURN_WRITE
@@ -64949,6 +65012,10 @@ components:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - LISTING_READ
+              - LISTING_WRITE
+              - LISTING_DELETE
+              - PURCHASE_PRICE_READ
             type: string
           type: array
         version:
