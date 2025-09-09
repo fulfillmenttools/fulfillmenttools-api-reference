@@ -33308,14 +33308,24 @@ components:
           example: Esb20gpHBL94X5NdMp3C
           type: string
         iconUrl:
-          description: ''
+          description: Url to the icon of the packing source container
           type: string
         description:
+          description: >-
+            Description of the packing source container in the locale the client
+            requests.
           type: string
         name:
+          description: >-
+            Name of the packing source container in the locale the client
+            requests.
           type: string
         id:
           type: string
+          description: >-
+            The id of this packing source container. It is generated during
+            creation automatically and suits as the primary identifier of the
+            described entity.
           example: c7467ba8-c28a-4473-8748-a4e54e675e4c
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -33329,6 +33339,9 @@ components:
             type: string
             example: 0857914c-d965-421e-b6cf-330501bcca58
         loadUnitRef:
+          description: >-
+            Reference to the load unit this packing source container is related
+            to.
           type: string
           example: 2357914c-d965-421e-b6cf-330501bccaab
         codes:
@@ -33343,6 +33356,8 @@ components:
             attributes cannot be used within fulfillment processes, but it could
             be useful to have the information carried here.
           type: object
+        type:
+          $ref: '#/components/schemas/PackingSourceContainerType'
         lineItems:
           type: array
           items:
@@ -33362,9 +33377,17 @@ components:
         - lastModified
         - created
         - lineItems
+        - type
       type: object
       title: PackingSourceContainer
       description: PackingSourceContainer
+    PackingSourceContainerType:
+      enum:
+        - VIRTUAL
+        - PHYSICAL
+      description: Type of the packing source container
+      type: string
+      title: PackingSourceContainerType
     PackingSourceContainerLineItem:
       additionalProperties: false
       type: object
@@ -41762,6 +41785,9 @@ components:
           description: Reference to the documents collection from this entity
           type: string
         description:
+          description: >-
+            Description of the packing source container in the locale the client
+            requests. Automatically filled upon request.
           type: string
         descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -41772,14 +41798,28 @@ components:
           example: Esb20gpHBL94X5NdMp3C
           type: string
         packJobRef:
+          description: >-
+            Reference to the packJob this packing source container is related
+            to.
           type: string
         shortId:
+          description: Short identifier for the container
           type: string
         operativeProcessRef:
+          description: >-
+            Reference to the operative process this packing target container is
+            related to.
           type: string
         iconUrl:
+          description: >-
+            Url to the icon of the packing source container  (inherited from
+            operative container type).
           type: string
         id:
+          description: >-
+            The id of this packing source container. It is generated during
+            creation automatically and suits as the primary identifier of the
+            described entity.
           type: string
         dimensions:
           $ref: '#/components/schemas/ContainerDimensions'
@@ -41789,6 +41829,9 @@ components:
           type: number
           minimum: 1
         name:
+          description: >-
+            Name of the packing source container in the locale the client
+            requests. Automatically filled upon request.
           type: string
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -41799,6 +41842,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Parcel'
+        type:
+          $ref: '#/components/schemas/PackingTargetContainerType'
       required:
         - id
         - nameLocalized
@@ -41806,9 +41851,17 @@ components:
         - facilityRef
         - packJobRef
         - lineItems
+        - type
       type: object
       title: PackingTargetContainer
       description: PackingTargetContainer
+    PackingTargetContainerType:
+      enum:
+        - VIRTUAL
+        - PHYSICAL
+      description: Type of the packing taret container
+      type: string
+      title: PackingTargetContainerType
     PackingTargetContainerForCreation:
       properties:
         codes:
