@@ -55392,6 +55392,12 @@ components:
         includeCalculationHints:
           description: Whether to include calculation hints in the response
           type: boolean
+        includeListingDetails:
+          description: >-
+            Indicates whether listing-related details should be included in the
+            response. If set to `true`, the response contains additional listing
+            details. Defaults to `false`.
+          type: boolean
         tenantArticleIds:
           description: List of tenant article IDs
           items:
@@ -55439,6 +55445,11 @@ components:
           description: Earliest predicted delivery date
           format: date-time
           type: string
+        listingDetails:
+          description: Listing details
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsListingDetails'
+          type: array
         tenantArticleId:
           description: Tenant article ID
           type: string
@@ -55785,6 +55796,23 @@ components:
       title: CheckoutOptionsInput
       type: object
       description: CheckoutOptionsInput
+    CheckoutOptionsListingDetails:
+      properties:
+        customAttributes:
+          description: Custom attributes associated with the listing
+          type: object
+        facilityRef:
+          description: Facility reference of the listing
+          type: string
+        tenantFacilityId:
+          description: Tenant facility id of the listing
+          type: string
+      required:
+        - facilityRef
+        - tenantFacilityId
+      title: CheckoutOptionsListingDetails
+      type: object
+      description: CheckoutOptionsListingDetails
     CloseStowJobAction:
       description: Sets the status of the stowjob to CLOSED
       properties:
