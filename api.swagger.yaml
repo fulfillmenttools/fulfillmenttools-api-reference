@@ -27722,6 +27722,7 @@ components:
             - ModifyPartialStock
             - AddTagsToProcess
             - AssignFacilityToProcess
+            - UpdateGdprCleanupDateAction
             - ModifyStorageLocation
             - ModifyPackingContainerType
             - ModifyPackingContainerTypeIcon
@@ -41300,6 +41301,7 @@ components:
             anyOf:
               - $ref: '#/components/schemas/AddTagsToProcessAction'
               - $ref: '#/components/schemas/AssignFacilityToProcessAction'
+              - $ref: '#/components/schemas/UpdateGdprCleanupDateAction'
           minItems: 1
           type: array
         version:
@@ -41341,6 +41343,32 @@ components:
           type: object
       xml:
         name: AddTagsToProcessAction
+    UpdateGdprCleanupDateAction:
+      title: UpdateGdprCleanupDateAction
+      description: Action to set the GDPR cleanup date of a process.
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use value 'UpdateGdprCleanupDateAction' to update the GDPR
+                cleanup date of a process.
+              enum:
+                - UpdateGdprCleanupDateAction
+              type: string
+            gdprCleanupDate:
+              description: >-
+                The date when the process and all connected entities should be
+                cleaned up / anonymized.
+              type: string
+              format: date
+          required:
+            - action
+            - gdprCleanupDate
+          type: object
+      xml:
+        name: UpdateGdprCleanupDateAction
     PrintableDocument:
       type: object
       properties:
