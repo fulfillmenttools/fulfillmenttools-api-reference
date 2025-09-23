@@ -23217,6 +23217,98 @@
 								}
 							]
 						},
+                        {
+                            "name": "Ubsend",
+                            "item": [
+                                {
+                                    "name": "Ubsend PostNord",
+                                    "item": [
+                                        {
+                                            "name": "Ubsend PostNord DK",
+                                            "item": [
+                                                {
+                                                    "name": "Add Ubsend PostNord DK as new Carrier",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [],
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n  \"key\": \"UBSEND_POST_NORD_DK\",\n  \"name\": \"PostNord DK via Ubsend\",\n  \"status\": \"ACTIVE\",\n  \"credentials\": {\n    \"key\": \"UBSEND_POST_NORD_DK\",\n    \"username\": \"VALID_USER_NAME\",\n    \"password\": \"VALID_PASSWORD\",\n    \"clientId\": \"VALID_CLIENT_ID\"\n  }\n}",
+                                                            "options": {
+                                                                "raw": {
+                                                                    "language": "json"
+                                                                }
+                                                            }
+                                                        },
+                                                        "url": "{{host}}/api/carriers"
+                                                    },
+                                                    "response": []
+                                                },
+                                                {
+                                                    "name": "Add Order for PostNord DK via UBSend Copy",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [],
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    // Facility must be located in DK\n    \"consumer\": {\n        \"email\":\"noreply@fulfillmenttools.com\",\n        \"addresses\": [\n            {\n                \"salutation\": \"Mr\",\n                \"firstName\": \"First\",\n                \"lastName\": \"Last\",\n                \"street\": \"Ingerslevsgade\",\n                \"houseNumber\": \"108\",\n                \"postalCode\": \"1705\",\n                \"city\": \"København\",\n                \"country\": \"DK\",\n                \"phoneNumbers\": [\n                    {\n                        \"type\": \"MOBILE\",\n                        \"value\": \"+492216700220\"\n                    }\n                ],\n                \"addressType\": \"POSTAL_ADDRESS\"\n            }\n        ]\n    },\n    \"deliveryPreferences\": {\n        \"shipping\": {\n            \"preferredCarriersWithProduct\": [ \n                {\n                    \"carrierKey\":\"UBSEND_POST_NORD_DK\"\n                }\n            ]\n        }\n    },\n    \n    \"orderLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"GR7411\",\n                \"title\": \"Item Title\",\n                \"attributes\": [\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"hsCode\",\n                        \"value\": \"71131930\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"1500\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"CURRENCY\"\n                    }\n                ]\n            },\n            \"quantity\": 2,\n            \"scannableCodes\": [\n                \"GR7411\"\n            ]\n        }\n    ],\n    \n    \"tenantOrderId\": \"UBSEND_POST_NORD_DK-{{$guid}}\",\n    \"orderDate\": \"{{$isoTimestamp}}\"\n}",
+                                                            "options": {
+                                                                "raw": {
+                                                                    "language": "json"
+                                                                }
+                                                            }
+                                                        },
+                                                        "url": "{{host}}/api/orders"
+                                                    },
+                                                    "response": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "Ubsend PostNord NO",
+                                            "item": [
+                                                {
+                                                    "name": "Add Ubsend PostNord NO as new Carrier",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [],
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n  \"key\": \"UBSEND_POST_NORD_NO\",\n  \"name\": \"PostNord NO via Ubsend\",\n  \"status\": \"ACTIVE\",\n  \"credentials\": {\n    \"key\": \"UBSEND_POST_NORD_NO\",\n    \"username\": \"VALID_USER_NAME\",\n    \"password\": \"VALID_PASSWORD\",\n    \"clientId\": \"VALID_CLIENT_ID\"\n  }\n}",
+                                                            "options": {
+                                                                "raw": {
+                                                                    "language": "json"
+                                                                }
+                                                            }
+                                                        },
+                                                        "url": "{{host}}/api/carriers"
+                                                    },
+                                                    "response": []
+                                                },
+                                                {
+                                                    "name": "Add Order for PostNord NO via UBSend",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [],
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    // Facility must be located in NO \n    \"consumer\": {\n        \"email\":\"noreply@fulfillmenttools.com\",\n        \"addresses\": [\n            {\n                \"salutation\": \"Mr\",\n                \"firstName\": \"First\",\n                \"lastName\": \"Last\",\n                \"street\": \"Munkedamsveien\",\n                \"houseNumber\": \"14\",\n                \"postalCode\": \"0115\",\n                \"city\": \"Oslo\",\n                \"country\": \"NO\",\n                \"phoneNumbers\": [\n                    {\n                        \"type\": \"MOBILE\",\n                        \"value\": \"+492216700220\"\n                    }\n                ],\n                \"addressType\": \"POSTAL_ADDRESS\"\n            }\n        ]\n    },\n    \"deliveryPreferences\": {\n        \"shipping\": {\n            \"preferredCarriersWithProduct\": [ \n                {\n                    \"carrierKey\":\"UBSEND_POST_NORD_NO\"\n                }\n            ]\n        }\n    },\n    \n    \"orderLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"GR7411\",\n                \"title\": \"Item Title\",\n                \"attributes\": [\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"hsCode\",\n                        \"value\": \"71131930\",\n                        \"type\":\"STRING\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"valuePerUnit\",\n                        \"value\": \"1500\",\n                        \"type\":\"NUMBER\"\n                    },\n                    {\n                        \"category\": \"customs\",\n                        \"key\": \"currency\",\n                        \"value\": \"EUR\",\n                        \"type\":\"CURRENCY\"\n                    }\n                ]\n            },\n            \"quantity\": 2,\n            \"scannableCodes\": [\n                \"GR7411\"\n            ]\n        }\n    ],\n    \n    \"tenantOrderId\": \"UBSEND_POST_NORD_NO-{{$guid}}\",\n    \"orderDate\": \"{{$isoTimestamp}}\"\n}",
+                                                            "options": {
+                                                                "raw": {
+                                                                    "language": "json"
+                                                                }
+                                                            }
+                                                        },
+                                                        "url": "{{host}}/api/orders"
+                                                    },
+                                                    "response": []
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
 						{
 							"name": "FedEx",
 							"item": [
