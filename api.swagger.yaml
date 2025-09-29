@@ -261,6 +261,7 @@ paths:
                   - $ref: '#/components/schemas/VceCarrierConfiguration'
                   - $ref: '#/components/schemas/PostNlCarrierConfiguration'
                   - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
+                  - $ref: '#/components/schemas/UBSendCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The
             result is in the body.
@@ -312,6 +313,7 @@ paths:
                   - $ref: '#/components/schemas/VceCarrierConfiguration'
                   - $ref: '#/components/schemas/PostNlCarrierConfiguration'
                   - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
+                  - $ref: '#/components/schemas/UBSendCarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The
             result is in the body.
@@ -353,6 +355,7 @@ paths:
                 - $ref: '#/components/schemas/VceCarrierConfiguration'
                 - $ref: '#/components/schemas/PostNlCarrierConfiguration'
                 - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
+                - $ref: '#/components/schemas/UBSendCarrierConfiguration'
         description: Carrier Configuration
         required: true
       summary: Update carrier config
@@ -27485,6 +27488,11 @@ components:
             configured in Seven Senders.
         trackAndTraceUrl:
           type: string
+    UBSendCarrierConfiguration:
+      title: UBSendCarrierConfiguration
+      description: Configuration of UBSend Carrier
+      allOf:
+        - $ref: '#/components/schemas/CarrierConfiguration'
     GlsCarrierConfiguration:
       title: GlsCarrierConfiguration
       description: Configuration of GLS Carrier
@@ -28480,6 +28488,28 @@ components:
           type: object
       xml:
         name: SevenSendersCredentials
+    UBSendCredentials:
+      title: UBSendCredentials
+      description: UBSend Credentials.
+      allOf:
+        - $ref: '#/components/schemas/AbstractCarrierCredentials'
+        - properties:
+            username:
+              description: User name to communicate with the UBSend Api
+              type: string
+            password:
+              description: Password to communicate with the UBSend Api
+              type: string
+            clientId:
+              description: Id provided by UBSend
+              type: string
+          required:
+            - username
+            - password
+            - clientId
+          type: object
+      xml:
+        name: UBSendCredentials
     DomainConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -32950,6 +32980,26 @@ components:
         name: ModifyGLSCarrierCredentials
       title: ModifyGLSCarrierCredentials
       description: ModifyGLSCarrierCredentials
+    ModifyUBSendCarrierCredentials:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
+        - properties:
+            username:
+              description: Username to communicate with the UbSend Api
+              type: string
+            password:
+              description: Password to communicate with the UbSend Api
+              type: string
+            clientId:
+              description: ID provided by UbSend
+              type: string
+          required:
+            - key
+          type: object
+      xml:
+        name: ModifyUBSendCarrierCredentials
+      title: ModifyUBSendCarrierCredentials
+      description: ModifyUBSendCarrierCredentials
     ModifyFacilityAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -44753,6 +44803,7 @@ components:
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/SevenSendersFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/UBSendFacilityCarrierConfiguration'
         credentials:
           description: Facility specific credentials for this carrier
           anyOf:
@@ -44762,6 +44813,7 @@ components:
             - $ref: '#/components/schemas/VceCarrierCredentials'
             - $ref: '#/components/schemas/HermesCarrierCredentials'
             - $ref: '#/components/schemas/SevenSendersCredentials'
+            - $ref: '#/components/schemas/UBSendCredentials'
         cutoffTime:
           description: >-
             @deprecated: This property has been deprecated and is no longer
@@ -44817,6 +44869,7 @@ components:
             - $ref: '#/components/schemas/VceCarrierCredentials'
             - $ref: '#/components/schemas/HermesCarrierCredentials'
             - $ref: '#/components/schemas/SevenSendersCredentials'
+            - $ref: '#/components/schemas/UBSendCredentials'
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
@@ -44830,6 +44883,7 @@ components:
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/SevenSendersFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/UBSendFacilityCarrierConfiguration'
         cutoffTime:
           deprecated: true
           description: Deprecated in favor of cutoffTimes
@@ -44877,6 +44931,7 @@ components:
             - $ref: '#/components/schemas/VceCarrierCredentials'
             - $ref: '#/components/schemas/HermesCarrierCredentials'
             - $ref: '#/components/schemas/SevenSendersCredentials'
+            - $ref: '#/components/schemas/UBSendCredentials'
         configuration:
           description: Facility specific configuration for this carrier
           anyOf:
@@ -44890,6 +44945,7 @@ components:
             - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
             - $ref: '#/components/schemas/SevenSendersFacilityCarrierConfiguration'
+            - $ref: '#/components/schemas/UBSendFacilityCarrierConfiguration'
         cutoffTime:
           deprecated: true
           description: Deprecated in favor of cutoffTimes
@@ -45090,6 +45146,13 @@ components:
           type: string
       xml:
         name: SevenSendersFacilityCarrierConfiguration
+    UBSendFacilityCarrierConfiguration:
+      title: UBSendFacilityCarrierConfiguration
+      description: UBSend Facility Carrier Configuration.
+      allOf:
+        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
+      xml:
+        name: UBSendFacilityCarrierConfiguration
     InterFacilityConnections:
       additionalProperties: false
       properties:
