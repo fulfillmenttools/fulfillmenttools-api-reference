@@ -21,10 +21,10 @@ openapi-generator-cli version
 ```
 
 ### 3. Obtain the OpenAPI specification
-Ensure you have the latest version of FFT’s `api.swagger.yaml` in your working directory. You can download it from [this link](api.swagger.yaml).
+Ensure you have the latest version of FFT’s `api.swagger.yaml` in your working directory. You can download it from [this link](https://github.com/fulfillmenttools/fulfillmenttools-api-reference/blob/master/api.swagger.yaml).
 
-### 4. Generate the client
+### 4. Generate the client (node / typescript)
 Run the generator with your preferred target language. For example, to generate a TypeScript client using the Fetch API:
 ```bash
-openapi-generator-cli generate -i api.swagger.yaml -g typescript-fetch -o ./path/to/output/folder
+openapi-generator-cli generate -i api.swagger.yaml -g typescript-fetch -o ./out/typescript-fetch
 ```
