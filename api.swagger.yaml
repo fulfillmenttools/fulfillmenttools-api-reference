@@ -46202,13 +46202,13 @@ components:
           type: array
           description: Information about the items that are required
           items:
-            $ref: '#/components/schemas/RequiredLineItem'
+            $ref: '#/components/schemas/RequiredLineItemForCreation'
       required:
         - facilityRef
         - targetTime
       title: ServiceJobForCreation
       description: ServiceJobForCreation
-    RequiredLineItem:
+    RequiredLineItemForCreation:
       additionalProperties: false
       type: object
       properties:
@@ -46216,7 +46216,7 @@ components:
           $ref: '#/components/schemas/ServiceDataItemArticle'
         quantity:
           type: integer
-          description: Quantity of the items
+          description: Needed quantity of the items
           example: 12
           minimum: 1
         scannableCodes:
@@ -46227,8 +46227,61 @@ components:
       required:
         - article
         - quantity
+      title: RequiredLineItemForCreation
+      description: RequiredLineItemForCreation
+    RequiredLineItem:
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          description: Unique ID of the required line item
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+          type: string
+        article:
+          $ref: '#/components/schemas/ServiceDataItemArticle'
+        quantity:
+          type: integer
+          description: Needed quantity of the items
+          example: 12
+          minimum: 1
+        assignedItems:
+          description: >-
+            line items that have been assigned from the matching service data
+            object
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedRequiredLineItem'
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
+      required:
+        - id
+        - article
+        - quantity
       title: RequiredLineItem
       description: RequiredLineItem
+    AssignedRequiredLineItem:
+      additionalProperties: false
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: assigned quantity of the items
+          example: 12
+          minimum: 0
+        serviceDataLineItemId:
+          description: >-
+            Id matching service data line item where this assigned required line
+            item is assigned from
+          type: string
+          example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
+      required:
+        - quantity
+        - serviceDataLineItemId
+      title: AssignedRequiredLineItem
+      description: AssignedRequiredLineItem
     ServiceJobWithSearchPaths:
       allOf:
         - $ref: '#/components/schemas/ServiceJob'
