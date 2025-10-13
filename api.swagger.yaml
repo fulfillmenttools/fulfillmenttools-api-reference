@@ -2731,66 +2731,6 @@ paths:
       description: ''
       operationId: getDiscountForFacility
       summary: Get facility discount
-  /api/facilities/{facilityId}/carriers/prioritization:
-    post:
-      parameters:
-        - description: >-
-            ID of facility you want to calculate the carrier priority for. Also
-            accepts tenantFacilityId in urn format (e.g.
-            urn:fft:facility:tenantFacilityId:{your-tenant-facility-id}).
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/CarrierPriorityResult'
-          description: >-
-            Carrier priority was calculated successfully. The result is in the
-            body.
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      tags:
-        - Facilities (Core)
-      description: >-
-        This part of the API is in Alpha status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
-      operationId: calculateCarrierPriority
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CarrierPriorityCalculationRequest'
-        description: Carrier priority calculation
-        required: true
-      summary: Create carrier priority
-      x-badges:
-        - color: red
-          label: ALPHA
   /api/facilities/{facilityId}:
     delete:
       parameters:
@@ -3053,52 +2993,6 @@ paths:
         - Facilities (Core)
       operationId: facilityAction
       summary: Call facility action
-  /api/facilities/{facilityId}/carriers:
-    get:
-      parameters:
-        - description: >-
-            ID of facility you want to get. Also accepts tenantFacilityId in urn
-            format (e.g.
-            urn:fft:facility:tenantFacilityId:{your-tenant-facility-id}).
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StrippedCarriers'
-          description: >-
-            Carriers are found & you were allowed to access it. The result is in
-            the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Carriers not found
-      tags:
-        - Carriers (Operations)
-      description: ''
-      operationId: getFacilityCeps
-      summary: List facility carriers
   /api/facilities/{facilityId}/configurations/stock:
     get:
       parameters:
@@ -13821,224 +13715,6 @@ paths:
       x-badges:
         - color: orange
           label: BETA
-  /api/facilities/{facilityId}/carriers/{carrierRef}:
-    get:
-      parameters:
-        - description: ID of facility you want to get listing
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: >-
-            The ID that describes the connection of this facility to the
-            referenced carrier
-          in: path
-          name: carrierRef
-          required: true
-          schema:
-            type: string
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FacilityCarrierConnection'
-          description: >-
-            Carrier to facility connections was found & you were allowed to
-            access it. The result is in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            There is no connection to a carrier with this facility referenced by
-            the provided facilityCarrierConnectionId
-      tags:
-        - Facilities (Core)
-      operationId: getFacilityCarrier
-      description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
-        the details for a carrier related to the facility with the given ID
-      summary: Get facility carrier connection
-      x-badges:
-        - color: orange
-          label: BETA
-    post:
-      parameters:
-        - description: ID of facility you want to get
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: The referenced carrier ID
-          in: path
-          name: carrierRef
-          required: true
-          schema:
-            type: string
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FacilityCarrierConnection'
-          description: Creation was successful.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            There is no connection to a carrier with this facility referenced by
-            the provided facilityCarrierConnectionId.
-      tags:
-        - Facilities (Core)
-      operationId: createCarrierToFacility
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FacilityCarrierConnectionForCreation'
-        description: Representation that describes the facility
-        required: true
-      description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Create a connection of a configured carrier to the facility with given
-        ID
-      summary: Create facility carrier connection
-      x-badges:
-        - color: orange
-          label: BETA
-    put:
-      parameters:
-        - description: ID of facility you want to get
-          in: path
-          name: facilityId
-          required: true
-          schema:
-            type: string
-        - description: The referenced carrier ID
-          in: path
-          name: carrierRef
-          required: true
-          schema:
-            type: string
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FacilityCarrierConnection'
-          description: Modification was successful.
-        '401':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            There is no connection to a carrier with this facility referenced by
-            the provided facilityCarrierConnectionId.
-      tags:
-        - Facilities (Core)
-      operationId: connectCarrierToFacility
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FacilityCarrierConnectionForModification'
-        description: Representation that describes the facility
-        required: true
-      description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Connect a configured carrier to the facility with given ID 
-      summary: Update facility carrier connection
-      x-badges:
-        - color: orange
-          label: BETA
   /api/facilities/{facilityId}/connections:
     get:
       parameters:
@@ -21335,6 +21011,322 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/facilities/{facilityId}/carriers:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />List all carrier connections configured for the given facility
+      operationId: listFacilityCarriers
+      parameters:
+        - in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  carriers:
+                    items:
+                      properties:
+                        deliveryType:
+                          type: string
+                        id:
+                          type: string
+                        key:
+                          type: string
+                        name:
+                          type: string
+                        status:
+                          type: string
+                        version:
+                          type: number
+                      required:
+                        - id
+                        - key
+                        - status
+                        - version
+                      type: object
+                    type: array
+                  total:
+                    description: Total number of carrier connections
+                    type: number
+                required:
+                  - total
+                  - carriers
+                type: object
+          description: Listing returned successfully.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: List facility carrier connections
+      tags:
+        - Facilities (Core)
+      x-badges:
+        - color: orange
+          label: BETA
+  /api/facilities/{facilityId}/carriers/prioritization:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Calculate prioritized list of recommended carriers for the given
+        facility and input parameters
+      operationId: calculateBestCarrier
+      parameters:
+        - in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarrierPriorityCalculationRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrierPriorityResult'
+          description: Calculated carrier prioritization result.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Calculate best carriers
+      tags:
+        - Facilities (Core)
+      x-badges:
+        - color: orange
+          label: BETA
+  /api/facilities/{facilityId}/carriers/{carrierRef}:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
+        the details for a carrier related to the facility with the given ID
+      operationId: getFacilityCarrier
+      parameters:
+        - in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: carrierRef
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityCarrierConnection'
+          description: >-
+            Carrier to facility connections was found & you were allowed to
+            access it. The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get facility carrier connection
+      tags:
+        - Facilities (Core)
+      x-badges:
+        - color: orange
+          label: BETA
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Create a connection of a configured carrier to the facility with given
+        ID
+      operationId: createCarrierToFacility
+      parameters:
+        - in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: carrierRef
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityCarrierConnectionForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityCarrierConnection'
+          description: Creation was successful.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Create facility carrier connection
+      tags:
+        - Facilities (Core)
+      x-badges:
+        - color: orange
+          label: BETA
+    put:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Connect a configured carrier to the facility with given ID
+      operationId: connectCarrierToFacility
+      parameters:
+        - in: path
+          name: facilityId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: carrierRef
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityCarrierConnectionForModification'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityCarrierConnection'
+          description: Modification was successful.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Update facility carrier connection
+      tags:
+        - Facilities (Core)
+      x-badges:
+        - color: orange
+          label: BETA
   /api/facilities/{facilityId}/configurations/inventory:
     get:
       deprecated: false
@@ -27324,46 +27316,6 @@ components:
         name: Carrier
       title: Carrier
       description: Carrier
-    CarrierPriorityResult:
-      properties:
-        recommendedCarriers:
-          items:
-            $ref: '#/components/schemas/CarrierRecommendationResult'
-          type: array
-        otherCarriers:
-          items:
-            $ref: '#/components/schemas/CarrierRecommendationResult'
-          type: array
-      required:
-        - recommendedCarriers
-        - otherCarriers
-      title: CarrierPriorityResult
-      description: CarrierPriorityResult
-    CarrierRecommendationResult:
-      properties:
-        priority:
-          type: number
-          description: >-
-            The lower the value the higher is the priority, e.g. priority 1 is
-            higher than priority 10. The priority is used when comparing
-            multiple carriers.
-        carrier:
-          $ref: '#/components/schemas/Carrier'
-        threshold:
-          $ref: '#/components/schemas/PriceRange'
-      required:
-        - priority
-        - carrier
-      title: CarrierRecommendationResult
-      description: CarrierRecommendationResult
-    CarrierPriorityCalculationRequest:
-      additionalProperties: false
-      properties:
-        productValue:
-          $ref: '#/components/schemas/ParcelProductValue'
-      type: object
-      title: CarrierPriorityCalculationRequest
-      description: CarrierPriorityCalculationRequest
     BringCarrierConfiguration:
       title: BringCarrierConfiguration
       description: Configuration of Bring Carrier
@@ -44775,387 +44727,6 @@ components:
         name: CarrierCutoffTimes
       title: CarrierCutoffTimes
       description: CarrierCutoffTimes
-    FacilityCarrierConnection:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        id:
-          example: fsfdsf87fsd
-          type: string
-        facilityRef:
-          description: The id of the facility reference.
-          example: Esb20gpHBL94X5NdMp3C
-          type: string
-        carrierRef:
-          description: ID that references the configured carrier.
-          type: string
-        deliveryType:
-          $ref: '#/components/schemas/CarrierDeliveryType'
-        key:
-          type: string
-        configuration:
-          description: Facility specific configuration for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/GlsFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/AngelFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/SevenSendersFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/UBSendFacilityCarrierConfiguration'
-        credentials:
-          description: Facility specific credentials for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/DHLV2BusinessCredentials'
-            - $ref: '#/components/schemas/DpdChCarrierCredentials'
-            - $ref: '#/components/schemas/PostNLCarrierCredentials'
-            - $ref: '#/components/schemas/VceCarrierCredentials'
-            - $ref: '#/components/schemas/HermesCarrierCredentials'
-            - $ref: '#/components/schemas/SevenSendersCredentials'
-            - $ref: '#/components/schemas/UBSendCredentials'
-        cutoffTime:
-          description: >-
-            @deprecated: This property has been deprecated and is no longer
-            considered. Please use the new property ‘cutoffTimes’ instead
-          deprecated: true
-          $ref: '#/components/schemas/CutoffTime'
-        cutoffTimes:
-          $ref: '#/components/schemas/CarrierCutoffTimes'
-        deliveryAreas:
-          items:
-            $ref: '#/components/schemas/DeliveryArea'
-          type: array
-        name:
-          description: >-
-            This is the well known name for a supported CEP partner. Can be
-            adapted to the clients needs.
-          example: DHL Köln
-          type: string
-        status:
-          $ref: '#/components/schemas/CarrierStatus'
-        parcelLabelClassifications:
-          items:
-            $ref: '#/components/schemas/ParcelLabelClassification'
-          type: array
-        tags:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/TagReference'
-        validDeliveryTargets:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/DeliveryTarget'
-      required:
-        - id
-        - facilityRef
-        - carrierRef
-        - key
-        - status
-      type: object
-      title: FacilityCarrierConnection
-      description: FacilityCarrierConnection
-    FacilityCarrierConnectionForCreation:
-      additionalProperties: false
-      properties:
-        credentials:
-          description: Facility specific credentials for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/DHLV2BusinessCredentials'
-            - $ref: '#/components/schemas/DpdChCarrierCredentials'
-            - $ref: '#/components/schemas/PostNLCarrierCredentials'
-            - $ref: '#/components/schemas/VceCarrierCredentials'
-            - $ref: '#/components/schemas/HermesCarrierCredentials'
-            - $ref: '#/components/schemas/SevenSendersCredentials'
-            - $ref: '#/components/schemas/UBSendCredentials'
-        configuration:
-          description: Facility specific configuration for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/GlsFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/AngelFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/SevenSendersFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/UBSendFacilityCarrierConfiguration'
-        cutoffTime:
-          deprecated: true
-          description: Deprecated in favor of cutoffTimes
-          $ref: '#/components/schemas/CutoffTime'
-        cutoffTimes:
-          $ref: '#/components/schemas/CarrierCutoffTimes'
-        deliveryAreas:
-          items:
-            $ref: '#/components/schemas/DeliveryArea'
-          type: array
-        name:
-          description: >-
-            This is the well known name for a supported CEP partner. Can be
-            adapted to the clients needs.
-          example: DHL Köln
-          type: string
-        status:
-          $ref: '#/components/schemas/CarrierStatus'
-        parcelLabelClassifications:
-          items:
-            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
-          type: array
-        tags:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/TagReference'
-        validDeliveryTargets:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/DeliveryTarget'
-      type: object
-      title: FacilityCarrierConnectionForCreation
-      description: FacilityCarrierConnectionForCreation
-    FacilityCarrierConnectionForModification:
-      additionalProperties: false
-      properties:
-        credentials:
-          description: Facility specific credentials for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/DHLV2BusinessCredentials'
-            - $ref: '#/components/schemas/DpdChCarrierCredentials'
-            - $ref: '#/components/schemas/PostNLCarrierCredentials'
-            - $ref: '#/components/schemas/VceCarrierCredentials'
-            - $ref: '#/components/schemas/HermesCarrierCredentials'
-            - $ref: '#/components/schemas/SevenSendersCredentials'
-            - $ref: '#/components/schemas/UBSendCredentials'
-        configuration:
-          description: Facility specific configuration for this carrier
-          anyOf:
-            - $ref: '#/components/schemas/GlsFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/AngelFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/PostNLFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DpdChFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/DhlV2FacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/VceFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/BringFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/FedExFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/HermesFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/SevenSendersFacilityCarrierConfiguration'
-            - $ref: '#/components/schemas/UBSendFacilityCarrierConfiguration'
-        cutoffTime:
-          deprecated: true
-          description: Deprecated in favor of cutoffTimes
-          $ref: '#/components/schemas/CutoffTime'
-        cutoffTimes:
-          $ref: '#/components/schemas/CarrierCutoffTimes'
-        deliveryAreas:
-          items:
-            $ref: '#/components/schemas/DeliveryArea'
-          type: array
-        name:
-          description: >-
-            This is the well known name for a supported CEP partner. Can be
-            adapted to the clients needs.
-          example: DHL Köln
-          type: string
-        status:
-          $ref: '#/components/schemas/CarrierStatus'
-        parcelLabelClassifications:
-          items:
-            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
-          type: array
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagReference'
-        version:
-          type: number
-        validDeliveryTargets:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/DeliveryTarget'
-      required:
-        - version
-      type: object
-      title: FacilityCarrierConnectionForModification
-      description: FacilityCarrierConnectionForModification
-    AbstractFacilityCarrierConfiguration:
-      discriminator:
-        propertyName: key
-      properties:
-        key:
-          type: string
-        serviceUrl:
-          type: string
-        thresholdPriceValue:
-          $ref: '#/components/schemas/ThresholdPriceValue'
-        alternativeReturnAddress:
-          $ref: '#/components/schemas/FacilityAddress'
-        alternativeSendAddress:
-          $ref: '#/components/schemas/FacilityAddress'
-      required:
-        - key
-      type: object
-      xml:
-        name: AbstractFacilityCarrierConfiguration
-      title: AbstractFacilityCarrierConfiguration
-      description: AbstractFacilityCarrierConfiguration
-    DhlV2FacilityCarrierConfiguration:
-      title: DhlV2FacilityCarrierConfiguration
-      description: DHL Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-      properties:
-        trackAndTraceUrl:
-          type: string
-        shipperRef:
-          type: string
-        alwaysDoTrackAndTrace:
-          type: boolean
-          default: false
-          description: >-
-            If true, the track and trace will always be done, even if a parcel
-            is directly created in DONE status
-      xml:
-        name: DhlV2FacilityCarrierConfiguration
-    VceFacilityCarrierConfiguration:
-      title: VceFacilityCarrierConfiguration
-      description: VCE Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-      properties:
-        trackAndTraceUrl:
-          type: string
-      xml:
-        name: VceFacilityCarrierConfiguration
-    AngelFacilityCarrierConfiguration:
-      title: AngelFacilityCarrierConfiguration
-      description: Angel Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            pickupLocationId:
-              description: The id of the Pickup Location
-              type: string
-              pattern: ^[A-z0-9-]{15}$
-          type: object
-      xml:
-        name: AngelFacilityCarrierConfiguration
-    PostNLFacilityCarrierConfiguration:
-      title: PostNLFacilityCarrierConfiguration
-      description: Post NL Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            customerId:
-              type: string
-            customerCode:
-              type: string
-            trackAndTraceUrl:
-              type: string
-          type: object
-          required:
-            - customerId
-            - customerCode
-      xml:
-        name: PostNLFacilityCarrierConfiguration
-    GlsFacilityCarrierConfiguration:
-      title: GlsFacilityCarrierConfiguration
-      description: Gls Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            contactId:
-              type: string
-              pattern: ^[A-z0-9-]{15}$
-            returnContactId:
-              type: string
-              pattern: ^[A-z0-9-]{15}$
-            trackAndTraceUrl:
-              type: string
-            trackAndTraceWsdlUrl:
-              type: string
-          type: object
-      xml:
-        name: GlsFacilityCarrierConfiguration
-    DpdChFacilityCarrierConfiguration:
-      title: DpdChFacilityCarrierConfiguration
-      description: DPD CH Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            depot:
-              type: string
-            trackAndTraceUrl:
-              type: string
-          type: object
-      xml:
-        name: DpdChFacilityCarrierConfiguration
-    BringFacilityCarrierConfiguration:
-      title: BringFacilityCarrierConfiguration
-      description: Bring Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            trackAndTraceUrl:
-              type: string
-            webhookFftHost:
-              type: string
-          type: object
-      xml:
-        name: BringFacilityCarrierConfiguration
-    FedExFacilityCarrierConfiguration:
-      title: FedExFacilityCarrierConfiguration
-      description: FedEx Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            trackAndTraceUrl:
-              type: string
-          type: object
-      xml:
-        name: FedExFacilityCarrierConfiguration
-    HermesFacilityCarrierConfiguration:
-      title: HermesFacilityCarrierConfiguration
-      description: Hermes Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-        - properties:
-            alwaysDoTrackAndTrace:
-              type: boolean
-          type: object
-      xml:
-        name: HermesFacilityCarrierConfiguration
-    SevenSendersFacilityCarrierConfiguration:
-      title: SevenSendersFacilityCarrierConfiguration
-      description: Seven Senders Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-      properties:
-        warehouse:
-          type: string
-          description: >-
-            The name of the warehouse that should be passed to Seven Senders, as
-            configured in Seven Senders.
-        trackAndTraceUrl:
-          type: string
-      xml:
-        name: SevenSendersFacilityCarrierConfiguration
-    UBSendFacilityCarrierConfiguration:
-      title: UBSendFacilityCarrierConfiguration
-      description: UBSend Facility Carrier Configuration.
-      allOf:
-        - $ref: '#/components/schemas/AbstractFacilityCarrierConfiguration'
-      xml:
-        name: UBSendFacilityCarrierConfiguration
     InterFacilityConnections:
       additionalProperties: false
       properties:
@@ -54278,6 +53849,49 @@ components:
         - name
       title: CancelStowJobAction
       type: object
+    CarrierPriorityCalculationRequest:
+      properties:
+        productValue:
+          $ref: '#/components/schemas/ParcelProductValue'
+          description: Product value information used to calculate carrier priority
+      title: CarrierPriorityCalculationRequest
+      type: object
+      description: CarrierPriorityCalculationRequest
+    CarrierPriorityResult:
+      properties:
+        otherCarriers:
+          description: Other eligible carriers ordered by priority
+          items:
+            $ref: '#/components/schemas/CarrierRecommendationResult'
+          type: array
+        recommendedCarriers:
+          description: Recommended carriers ordered by priority (best first)
+          items:
+            $ref: '#/components/schemas/CarrierRecommendationResult'
+          type: array
+      required:
+        - recommendedCarriers
+        - otherCarriers
+      title: CarrierPriorityResult
+      type: object
+      description: CarrierPriorityResult
+    CarrierRecommendationResult:
+      properties:
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+          description: Carrier that is recommended
+        priority:
+          description: Calculated priority value (lower typically indicates a better match)
+          type: number
+        threshold:
+          $ref: '#/components/schemas/PriceRange'
+          description: Applicable price threshold for this recommendation
+      required:
+        - priority
+        - carrier
+      title: CarrierRecommendationResult
+      type: object
+      description: CarrierRecommendationResult
     Category:
       properties:
         created:
@@ -55421,6 +55035,187 @@ components:
       title: FacilityAddressSort
       type: object
       description: FacilityAddressSort
+    FacilityCarrierConnection:
+      properties:
+        carrierRef:
+          description: Reference to the carrier
+          type: string
+        configuration:
+          description: Carrier-specific configuration
+          type: object
+        created:
+          description: Creation timestamp
+          format: date-time
+          type: string
+        credentials:
+          description: Carrier-specific credentials
+          type: object
+        cutoffTime:
+          $ref: '#/components/schemas/CutoffTime'
+          description: Cutoff time configuration
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
+          description: Carrier cutoff times configuration
+        deliveryAreas:
+          description: Delivery areas supported by this connection
+          items:
+            $ref: '#/components/schemas/DeliveryArea'
+          type: array
+        deliveryType:
+          description: Type of delivery service
+          enum:
+            - SAMEDAY
+            - DELIVERY
+          type: string
+        facilityRef:
+          description: Reference to the facility
+          type: string
+        id:
+          description: Unique identifier for the facility carrier connection
+          type: string
+        key:
+          description: Configuration key for the carrier connection
+          type: string
+        lastModified:
+          description: Last modification timestamp
+          format: date-time
+          type: string
+        name:
+          description: Human-readable name for the connection
+          type: string
+        parcelLabelClassifications:
+          description: Parcel label classifications
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassification'
+          type: array
+        status:
+          description: Status of the carrier connection
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        tags:
+          description: Tags associated with the connection
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        validDeliveryTargets:
+          description: Valid delivery targets for this connection
+          items:
+            $ref: '#/components/schemas/DeliveryTarget'
+          type: array
+        version:
+          description: Version number for optimistic locking
+          type: number
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - facilityRef
+        - carrierRef
+        - key
+        - status
+      title: FacilityCarrierConnection
+      type: object
+      description: FacilityCarrierConnection
+    FacilityCarrierConnectionForCreation:
+      properties:
+        configuration:
+          description: Carrier-specific configuration
+          type: object
+        credentials:
+          description: Carrier-specific credentials
+          type: object
+        cutoffTime:
+          $ref: '#/components/schemas/CutoffTime'
+          description: Cutoff time configuration
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
+          description: Carrier cutoff times configuration
+        deliveryAreas:
+          description: Delivery areas supported by this connection
+          items:
+            $ref: '#/components/schemas/DeliveryArea'
+          type: array
+        name:
+          description: Human-readable name for the connection
+          type: string
+        parcelLabelClassifications:
+          description: Parcel label classifications for creation
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
+          type: array
+        status:
+          description: Status of the carrier connection
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        tags:
+          description: Tags associated with the connection
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        validDeliveryTargets:
+          description: Valid delivery targets for this connection
+          items:
+            $ref: '#/components/schemas/DeliveryTarget'
+          type: array
+      title: FacilityCarrierConnectionForCreation
+      type: object
+      description: FacilityCarrierConnectionForCreation
+    FacilityCarrierConnectionForModification:
+      properties:
+        configuration:
+          description: Carrier-specific configuration
+          type: object
+        credentials:
+          description: Carrier-specific credentials
+          type: object
+        cutoffTime:
+          $ref: '#/components/schemas/CutoffTime'
+          description: Cutoff time configuration
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
+          description: Carrier cutoff times configuration
+        deliveryAreas:
+          description: Delivery areas supported by this connection
+          items:
+            $ref: '#/components/schemas/DeliveryArea'
+          type: array
+        name:
+          description: Human-readable name for the connection
+          type: string
+        parcelLabelClassifications:
+          description: Parcel label classifications for creation
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
+          type: array
+        status:
+          description: Status of the carrier connection
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        tags:
+          description: Tags associated with the connection
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+        validDeliveryTargets:
+          description: Valid delivery targets for this connection
+          items:
+            $ref: '#/components/schemas/DeliveryTarget'
+          type: array
+        version:
+          description: Version number for optimistic locking
+          type: number
+      required:
+        - version
+      title: FacilityCarrierConnectionForModification
+      type: object
+      description: FacilityCarrierConnectionForModification
     FacilityContactFilter:
       properties:
         firstName:
