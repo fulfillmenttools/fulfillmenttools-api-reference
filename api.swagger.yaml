@@ -31458,6 +31458,78 @@ components:
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />
       type: string
       title: OutOfStockBehaviour
+    OutOfStockBehaviourContextType:
+      description: >-
+        The context type of the OutOfStockBehaviourContext. This is used to
+        determine the conditions under which the outOfStockBehaviour can be
+        applied.
+      enum:
+        - FACILITY_GROUP
+        - TAG_REFERENCE
+      type: string
+      title: OutOfStockBehaviourContextType
+    OutOfStockBehaviourContext:
+      description: >-
+        The context of the outOfStockBehaviour. This is used to determine the
+        conditions under which the outOfStockBehaviour can be applied.
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/OutOfStockBehaviourContextType'
+        values:
+          description: >-
+            The values of the context. This is used to determine the conditions
+            under which the outOfStockBehaviour can be applied.
+          type: array
+          items:
+            type: string
+            example: uuid-bkrs-0157
+            maxItems: 100
+            minItems: 0
+        operator:
+          $ref: '#/components/schemas/ContextOperator'
+      required:
+        - type
+        - values
+      title: OutOfStockBehaviourContext
+    OutOfStockBehaviourByContext:
+      properties:
+        outOfStockBehaviour:
+          $ref: '#/components/schemas/OutOfStockBehaviour'
+        outOfStockConfig:
+          $ref: '#/components/schemas/OutOfStockConfig'
+        context:
+          description: >-
+            The context of the outOfStockBehaviour. This is used to determine
+            the conditions under which the outOfStockBehaviour can be applied.
+
+            For details please check the <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/context"
+            target="_blank">context documentation</a>.
+          items:
+            minItems: 1
+            maxLength: 5
+            $ref: '#/components/schemas/OutOfStockBehaviourContext'
+        priority:
+          description: >-
+            This value gives the priority in the respective
+            OutOfStockBehaviourByContexts. The lower the value the higher is the
+            priority, e.g. priority 1 is higher than priority 10. The priority
+            can be used to order OutOfStockBehaviourByContexts.
+          example: 100
+          format: int32
+          maximum: 1000
+          minimum: 1
+          type: integer
+      required:
+        - outOfStockBehaviour
+        - context
+        - priority
+      type: object
+      additionalProperties: false
+      title: OutOfStockBehaviourByContext
+      description: OutOfStockBehaviourByContext
     ListingForCreation:
       properties:
         attributes:
@@ -31531,6 +31603,18 @@ components:
           description: >-
             The outOfStockConfig is in Alpha status. For details please check
             the <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+            target="_blank">api-release-life-cycle documentation</a>.<br /><br
+            />
+        outOfStockBehaviourByContexts:
+          items:
+            $ref: '#/components/schemas/OutOfStockBehaviourByContext'
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: >-
+            The OutOfStockBehaviourByContexts is in Alpha status. For details
+            please check the <a
             href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />
@@ -58253,6 +58337,12 @@ components:
             - RESTOCK
             - PREORDER_AND_RESTOCK
           type: string
+        outOfStockBehaviourByContexts:
+          items:
+            $ref: '#/components/schemas/InventoryOutOfStockBehaviourByContext'
+          type: array
+        outOfStockConfig:
+          $ref: '#/components/schemas/InventoryOutOfStockConfig'
         price:
           type: number
         recordableAttributes:
@@ -58312,6 +58402,88 @@ components:
       title: InventoryListingEventPayload
       type: object
       description: InventoryListingEventPayload
+    InventoryOutOfStockBehaviourByContext:
+      properties:
+        context:
+          description: >-
+            The context of the outOfStockBehaviour. This is used to determine
+            the conditions under which the outOfStockBehaviour can be applied.
+          items:
+            $ref: '#/components/schemas/InventoryOutOfStockBehaviourContext'
+          type: array
+        outOfStockBehaviour:
+          enum:
+            - BACKORDER
+            - PREORDER
+            - RESTOCK
+            - PREORDER_AND_RESTOCK
+          type: string
+        outOfStockConfig:
+          $ref: '#/components/schemas/InventoryOutOfStockConfig'
+        priority:
+          description: >-
+            This value gives the priority in the respective
+            OutOfStockBehaviourByContexts. The lower the value the higher is the
+            priority, e.g. priority 1 is higher than priority 10.
+          type: number
+      required:
+        - outOfStockBehaviour
+        - context
+        - priority
+      title: InventoryOutOfStockBehaviourByContext
+      type: object
+      description: InventoryOutOfStockBehaviourByContext
+    InventoryOutOfStockBehaviourContext:
+      properties:
+        operator:
+          enum:
+            - NOT
+          type: string
+        type:
+          enum:
+            - FACILITY_GROUP
+            - TAG_REFERENCE
+          type: string
+        values:
+          description: >-
+            The values of the context. This is used to determine the conditions
+            under which the outOfStockBehaviour can be applied.
+          items:
+            type: string
+          type: array
+      required:
+        - type
+        - values
+      title: InventoryOutOfStockBehaviourContext
+      type: object
+      description: InventoryOutOfStockBehaviourContext
+    InventoryOutOfStockConfig:
+      properties:
+        preorder:
+          $ref: '#/components/schemas/InventoryOutOfStockConfigPreorder'
+        restock:
+          $ref: '#/components/schemas/InventoryOutOfStockConfigRestock'
+      title: InventoryOutOfStockConfig
+      type: object
+      description: InventoryOutOfStockConfig
+    InventoryOutOfStockConfigPreorder:
+      properties:
+        availabilityTimeframe:
+          $ref: '#/components/schemas/InventoryAvailabilityTimeframe'
+      required:
+        - availabilityTimeframe
+      title: InventoryOutOfStockConfigPreorder
+      type: object
+      description: InventoryOutOfStockConfigPreorder
+    InventoryOutOfStockConfigRestock:
+      properties:
+        restockableInDays:
+          type: number
+      required:
+        - restockableInDays
+      title: InventoryOutOfStockConfigRestock
+      type: object
+      description: InventoryOutOfStockConfigRestock
     InventoryRecordableAttribute:
       properties:
         keyLocalized:
