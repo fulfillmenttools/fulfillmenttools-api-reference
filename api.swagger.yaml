@@ -22649,6 +22649,8 @@ paths:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - AUDIT_READ
+              - NOTIFICATION_READ
+              - NOTIFICATION_WRITE
               - EXPIRIES_READ
               - EXPIRIES_WRITE
               - CONFIG_READ
@@ -54884,6 +54886,26 @@ components:
       title: DateListFilter
       type: object
       description: DateListFilter
+    EntityLink:
+      properties:
+        ref:
+          description: The reference ID of the linked entity
+          type: string
+        type:
+          description: The type of the linked entity
+          enum:
+            - ORDER
+            - FACILITY
+            - ROUTING_PLAN
+            - PROCESS
+            - PICK_JOB
+          type: string
+      required:
+        - ref
+        - type
+      title: EntityLink
+      type: object
+      description: EntityLink
     ExternalStockChangeReason:
       properties:
         active:
@@ -59591,6 +59613,286 @@ components:
       title: MoveStockToLocationOptions
       type: object
       description: MoveStockToLocationOptions
+    Notification:
+      properties:
+        category:
+          description: The category of the notification.
+          enum:
+            - ORDER
+            - FACILITY
+            - MISC
+          type: string
+        created:
+          description: Timestamp when the notification was created.
+          format: date-time
+          type: string
+        event:
+          description: The event name that triggered the notification.
+          type: string
+        id:
+          description: Identifier of the notification.
+          type: string
+        lastModified:
+          description: Last modification timestamp of the notification.
+          format: date-time
+          type: string
+        payload:
+          allOf:
+            - $ref: '#/components/schemas/NotificationPayload'
+          description: The payload of the notification.
+        priority:
+          description: The priority of the notification
+          properties:
+            label:
+              description: Priority label
+              enum:
+                - LOW
+                - MEDIUM
+                - HIGH
+            sequence:
+              description: Priority sequence number
+              type: number
+          type: object
+        status:
+          description: The status of the notification
+          enum:
+            - OPEN
+            - FINISHED
+          type: string
+        type:
+          description: The type of the notification channel.
+          enum:
+            - EMAIL
+          type: string
+        version:
+          description: Current version of the notification.
+          type: number
+      required:
+        - created
+        - id
+        - lastModified
+        - version
+        - category
+        - status
+        - priority
+        - event
+        - payload
+        - type
+      title: Notification
+      type: object
+      description: Notification
+    NotificationAction:
+      properties:
+        name:
+          description: Which action to perform
+          enum:
+            - ACK_NOTIFICATION
+          type: string
+        version:
+          description: The current version of the notification that should be modified
+          type: number
+      required:
+        - version
+        - name
+      title: NotificationAction
+      type: object
+      description: NotificationAction
+    NotificationCategoryEnumFilter:
+      properties:
+        eq:
+          description: Search by category
+          enum:
+            - ORDER
+            - FACILITY
+            - MISC
+          type: string
+        in:
+          description: Search by category
+          items:
+            enum:
+              - ORDER
+              - FACILITY
+              - MISC
+            type: string
+          type: array
+        notEq:
+          description: Search by category
+          enum:
+            - ORDER
+            - FACILITY
+            - MISC
+          type: string
+      title: NotificationCategoryEnumFilter
+      type: object
+      description: NotificationCategoryEnumFilter
+    NotificationClientNotificationStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - FINISHED
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - OPEN
+              - FINISHED
+            type: string
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - FINISHED
+          type: string
+      title: NotificationClientNotificationStatusEnumFilter
+      type: object
+      description: NotificationClientNotificationStatusEnumFilter
+    NotificationPaginatedResult:
+      properties:
+        notifications:
+          items:
+            $ref: '#/components/schemas/Notification'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - notifications
+      title: NotificationPaginatedResult
+      type: object
+      description: NotificationPaginatedResult
+    NotificationPayload:
+      properties:
+        entityLinks:
+          description: Array of entity links related to this notification
+          items:
+            $ref: '#/components/schemas/EntityLink'
+          type: array
+        message:
+          description: The message of the notification.
+          type: string
+        messageLocalized:
+          additionalProperties:
+            type: string
+          description: The localized message of the notification.
+          type: object
+        subject:
+          description: The subject of the notification (only for email notifications).
+          type: string
+        subjectLocalized:
+          additionalProperties:
+            type: string
+          description: >-
+            The localized subject of the notification (only for email
+            notifications).
+          type: object
+        title:
+          description: The title of the notification (only for client notifications).
+          type: string
+        titleLocalized:
+          additionalProperties:
+            type: string
+          description: >-
+            The localized title of the notification (only for client
+            notifications).
+          type: object
+      required:
+        - messageLocalized
+        - entityLinks
+      title: NotificationPayload
+      type: object
+      description: NotificationPayload
+    NotificationSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after. The value is provided in the
+            `pageInfo.endCursor` field of the response.
+          type: string
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/NotificationSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/NotificationSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: NotificationSearchPayload
+      type: object
+      description: NotificationSearchPayload
+    NotificationSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/NotificationSearchQuery'
+          type: array
+        category:
+          allOf:
+            - $ref: '#/components/schemas/NotificationCategoryEnumFilter'
+          description: Search by category
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: >-
+            Search entries by created. Applying a narrow and well-considered
+            filter value is strongly recommended, as it can greatly improve
+            response times, especially when working with large datasets.
+        or:
+          items:
+            $ref: '#/components/schemas/NotificationSearchQuery'
+          type: array
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/NotificationClientNotificationStatusEnumFilter
+          description: Search by status
+      title: NotificationSearchQuery
+      type: object
+      description: NotificationSearchQuery
+    NotificationSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        status:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: NotificationSort
+      type: object
+      description: NotificationSort
     NumberEqFilter:
       properties:
         eq:
@@ -60871,6 +61173,8 @@ components:
             - ORDER_CONSUMER_WRITE
             - ORDER_CUSTOM_ATTRIBUTES_WRITE
             - AUDIT_READ
+            - NOTIFICATION_READ
+            - NOTIFICATION_WRITE
             - EXPIRIES_READ
             - EXPIRIES_WRITE
             - CONFIG_READ
@@ -61038,6 +61342,7 @@ components:
             - EXTERNAL_STOCK_CHANGE_REASONS
             - STORAGE_LOCATION
             - STOW_JOB
+            - NOTIFICATION
             - NOTIFICATION_CENTER_CONFIG
             - DOMS_TOOLKIT
             - ANALYTICS_DASHBOARD
@@ -62942,6 +63247,8 @@ components:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - AUDIT_READ
+              - NOTIFICATION_READ
+              - NOTIFICATION_WRITE
               - EXPIRIES_READ
               - EXPIRIES_WRITE
               - CONFIG_READ
@@ -63128,6 +63435,8 @@ components:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - AUDIT_READ
+              - NOTIFICATION_READ
+              - NOTIFICATION_WRITE
               - EXPIRIES_READ
               - EXPIRIES_WRITE
               - CONFIG_READ
@@ -63306,6 +63615,8 @@ components:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - AUDIT_READ
+              - NOTIFICATION_READ
+              - NOTIFICATION_WRITE
               - EXPIRIES_READ
               - EXPIRIES_WRITE
               - CONFIG_READ
@@ -63489,6 +63800,8 @@ components:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - AUDIT_READ
+              - NOTIFICATION_READ
+              - NOTIFICATION_WRITE
               - EXPIRIES_READ
               - EXPIRIES_WRITE
               - CONFIG_READ
