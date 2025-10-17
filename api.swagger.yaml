@@ -38482,6 +38482,7 @@ components:
       title: Subscription
       description: Subscription
     SubscriptionForCreation:
+      additionalProperties: false
       properties:
         callbackUrl:
           type: string
@@ -38513,6 +38514,15 @@ components:
             - $ref: '#/components/schemas/SubscriptionTargetWebhook'
             - $ref: '#/components/schemas/SubscriptionTargetMicrosoftAzureServiceBus'
             - $ref: '#/components/schemas/SubscriptionTargetGoogleCloudPubSub'
+        contexts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionContext'
+          description: >-
+            Optional context filters to limit which events trigger the
+            subscription based on facility relationships. Multiple contexts are
+            evaluated with logical AND. FACILITY context can only appear once,
+            FACILITY_GROUP contexts can appear multiple times.
       required:
         - name
         - event
@@ -38535,6 +38545,7 @@ components:
     SubscriptionTargetWebhook:
       title: SubscriptionTargetWebhook
       description: Subscriptions model for a Webhook target.
+      additionalProperties: false
       properties:
         type:
           $ref: '#/components/schemas/SubscriptionTargetWebhookEnum'
@@ -38558,6 +38569,7 @@ components:
     SubscriptionTargetMicrosoftAzureServiceBus:
       title: SubscriptionTargetMicrosoftAzureServiceBus
       description: Subscriptions model for a Microsoft Azure Service Bus target.
+      additionalProperties: false
       properties:
         type:
           $ref: '#/components/schemas/SubscriptionTargetMicrosoftAzureServiceBusEnum'
@@ -38602,6 +38614,7 @@ components:
     SubscriptionTargetGoogleCloudPubSub:
       title: SubscriptionTargetGoogleCloudPubSub
       description: Subscriptions model for a Google Cloud Pub/Sub target.
+      additionalProperties: false
       properties:
         type:
           $ref: '#/components/schemas/SubscriptionTargetGoogleCloudPubSubEnum'
@@ -38624,6 +38637,31 @@ components:
       enum:
         - GOOGLE_CLOUD_PUB_SUB
       type: string
+    SubscriptionContextType:
+      title: SubscriptionContextType
+      description: Types of context filters for subscriptions.
+      enum:
+        - FACILITY
+        - FACILITY_GROUP
+      type: string
+    SubscriptionContext:
+      title: SubscriptionContext
+      description: >-
+        Context filter for subscriptions to limit events based on facility
+        relationships.
+      properties:
+        type:
+          $ref: '#/components/schemas/SubscriptionContextType'
+        values:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: Array of facility IDs or facility group names to filter by.
+      required:
+        - type
+        - values
+      type: object
     Substitute:
       properties:
         attributes:
