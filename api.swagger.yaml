@@ -27350,6 +27350,7 @@ components:
         channel:
           oneOf:
             - $ref: '#/components/schemas/EmailNotificationChannelForCreation'
+            - $ref: '#/components/schemas/ClientNotificationChannelForCreation'
         name:
           enum:
             - ADD_CHANNEL
@@ -30671,6 +30672,67 @@ components:
       type: object
       title: ClickAndCollectRerouteConfiguration
       description: ClickAndCollectRerouteConfiguration
+    ClientNotificationChannel:
+      properties:
+        enabled:
+          type: boolean
+        events:
+          description: >-
+            Supported events for triggering external notifications:
+            PICK_JOB_CREATED, UPCOMING_TIME_TRIGGERED_REROUTE,
+            ROUTING_PLAN_NOT_ROUTABLE, ROUTING_PLAN_WAITING.
+          items:
+            enum:
+              - PICK_JOB_CREATED
+              - UPCOMING_TIME_TRIGGERED_REROUTE
+              - ROUTING_PLAN_NOT_ROUTABLE
+              - ROUTING_PLAN_WAITING
+            type: string
+          type: array
+          uniqueItems: true
+        id:
+          type: string
+        type:
+          enum:
+            - CLIENT
+          type: string
+      required:
+        - enabled
+        - events
+        - type
+        - id
+      title: ClientNotificationChannel
+      type: object
+      description: ClientNotificationChannel
+    ClientNotificationChannelForCreation:
+      properties:
+        enabled:
+          type: boolean
+        events:
+          description: >-
+            Supported events for triggering external notifications:
+            PICK_JOB_CREATED, UPCOMING_TIME_TRIGGERED_REROUTE,
+            ROUTING_PLAN_NOT_ROUTABLE, ROUTING_PLAN_WAITING.
+          items:
+            enum:
+              - PICK_JOB_CREATED
+              - UPCOMING_TIME_TRIGGERED_REROUTE
+              - ROUTING_PLAN_NOT_ROUTABLE
+              - ROUTING_PLAN_WAITING
+            type: string
+          type: array
+          uniqueItems: true
+        type:
+          enum:
+            - CLIENT
+          type: string
+      required:
+        - enabled
+        - events
+        - type
+      title: ClientNotificationChannelForCreation
+      type: object
+      description: ClientNotificationChannelForCreation
     CloseStowJobAction:
       description: Sets the status of the stowjob to CLOSED
       properties:
@@ -32668,12 +32730,10 @@ components:
         enabled:
           type: boolean
         events:
-          description: |-
+          description: >-
             Supported events for triggering external notifications:
-                  - PICK_JOB_CREATED: Available for facility scoped config and tenant wide config
-                  - ROUTING_PLAN_NOT_ROUTABLE: Available for tenant wide config
-                  - ROUTING_PLAN_WAITING: Available for tenant wide config
-              
+            PICK_JOB_CREATED, UPCOMING_TIME_TRIGGERED_REROUTE,
+            ROUTING_PLAN_NOT_ROUTABLE, ROUTING_PLAN_WAITING.
           items:
             enum:
               - PICK_JOB_CREATED
@@ -32691,6 +32751,8 @@ components:
           type: array
           uniqueItems: true
         type:
+          enum:
+            - EMAIL
           type: string
       required:
         - enabled
@@ -32706,12 +32768,10 @@ components:
         enabled:
           type: boolean
         events:
-          description: |-
+          description: >-
             Supported events for triggering external notifications:
-                  - PICK_JOB_CREATED: Available for facility scoped config and tenant wide config
-                  - ROUTING_PLAN_NOT_ROUTABLE: Available for tenant wide config
-                  - ROUTING_PLAN_WAITING: Available for tenant wide config
-              
+            PICK_JOB_CREATED, UPCOMING_TIME_TRIGGERED_REROUTE,
+            ROUTING_PLAN_NOT_ROUTABLE, ROUTING_PLAN_WAITING.
           items:
             enum:
               - PICK_JOB_CREATED
@@ -32727,6 +32787,8 @@ components:
           type: array
           uniqueItems: true
         type:
+          enum:
+            - EMAIL
           type: string
       required:
         - enabled
@@ -45797,6 +45859,7 @@ components:
           description: The type of the notification channel.
           enum:
             - EMAIL
+            - CLIENT
           type: string
         version:
           description: Current version of the notification.
@@ -45865,6 +45928,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/EmailNotificationChannel'
+              - $ref: '#/components/schemas/ClientNotificationChannel'
           type: array
         created:
           format: date-time
@@ -45888,6 +45952,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/EmailNotificationChannelForCreation'
+              - $ref: '#/components/schemas/ClientNotificationChannelForCreation'
           type: array
       required:
         - channels
@@ -45900,6 +45965,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/EmailNotificationChannelForCreation'
+              - $ref: '#/components/schemas/ClientNotificationChannelForCreation'
           type: array
         version:
           type: number
@@ -68359,6 +68425,7 @@ components:
         channel:
           oneOf:
             - $ref: '#/components/schemas/EmailNotificationChannel'
+            - $ref: '#/components/schemas/ClientNotificationChannel'
         name:
           enum:
             - UPDATE_CHANNEL
