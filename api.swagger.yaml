@@ -33937,6 +33937,8 @@ components:
               $ref: '#/components/schemas/TimeZone'
           type: object
       type: object
+      xml:
+        name: FacilityAddress
       title: FacilityAddress
       description: FacilityAddress
     FacilityAddressEmailAddressesFilter:
@@ -34046,6 +34048,8 @@ components:
             - companyName
           type: object
       type: object
+      xml:
+        name: FacilityAddressForCreation
       title: FacilityAddressForCreation
       description: FacilityAddressForCreation
     FacilityAddressSort:
@@ -34695,26 +34699,49 @@ components:
       title: FacilityForCreation
       description: FacilityForCreation
     FacilityGroup:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-        - $ref: '#/components/schemas/FacilityGroupForCreation'
       properties:
+        nameLocalized:
+          additionalProperties:
+            type: string
+          description: Localized name object
+          type: object
+        created:
+          description: Creation timestamp
+          format: date-time
+          type: string
+        customAttributes:
+          description: Custom attributes
+          type: object
+        facilityRefs:
+          description: Array of facility references
+          items:
+            type: string
+          type: array
         id:
-          description: >-
-            The id of this facility group. It is generated during creation
-            automatically and suits as the primary identifier of the described
-            entity.
-          example: Esb20gpHBL94X5NdMp3C
+          description: The facility group ID
+          type: string
+        lastModified:
+          description: Last modified timestamp
+          format: date-time
           type: string
         name:
-          description: The name of this facility group.
+          description: The name of the facility group
           type: string
+        tenantFacilityGroupId:
+          description: The tenant facility group ID
+          type: string
+        version:
+          description: Document version for optimistic locking
+          type: number
       required:
         - id
+        - version
+        - created
+        - lastModified
+        - tenantFacilityGroupId
+        - facilityRefs
+        - nameLocalized
       type: object
-      xml:
-        name: FacilityGroup
       title: FacilityGroup
       description: FacilityGroup
     FacilityGroupActionsParameter:
@@ -34749,7 +34776,10 @@ components:
       additionalProperties: false
       properties:
         nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
+          additionalProperties:
+            type: string
+          description: The localized name
+          type: object
         customAttributes:
           description: >-
             Attributes that can be added to the facility group. These attributes
@@ -34779,7 +34809,10 @@ components:
       additionalProperties: false
       properties:
         nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
+          additionalProperties:
+            type: string
+          description: The localized name
+          type: object
         customAttributes:
           description: >-
             Attributes that can be added to the facility group. These attributes
