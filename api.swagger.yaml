@@ -48565,6 +48565,9 @@ components:
             Name of the packing source container in the locale the client
             requests.
           type: string
+        operativeContainerTypeRef:
+          description: Reference to the assigned operativeContainerType
+          type: string
         packJobRefs:
           description: >-
             List of references to packJobs this packing source container is
@@ -48634,6 +48637,11 @@ components:
           items:
             $ref: '#/components/schemas/PackingSourceContainerLineItemForCreation'
           type: array
+        operativeContainerTypeRef:
+          description: >-
+            Reference to the operativeContainerType, available values will be
+            taken from the container type while creating the container
+          type: string
         packJobRefs:
           description: List of references to packJobs
           items:
@@ -48924,12 +48932,42 @@ components:
           description: Identifier for items unit of measurement.
           example: liter
           type: string
+        originId:
+          description: >-
+            The id of the line item this line item was originated from, before
+            any split has happened. This can be used to restore the ‘pre-split’
+            status.
+          example: df671041-10dd-4600-a2ff-e9ffe2556bba
+          nullable: true
+          type: string
         quantity:
           description: quantity of the item
           example: 21
           format: int64
           minimum: 1
           type: integer
+        secondaryMeasurementUnitKey:
+          description: >-
+            Identifier for items unit of measurement. E.g. measurementUnitKey is
+            pieces and secondaryQuantity is gram
+          example: gram
+          type: string
+        secondaryQuantity:
+          description: >-
+            secondary quantity of this item, E.g. quantity is the count and
+            secondaryQuantity is the weight
+          example: 200
+          format: int64
+          minimum: 1
+          type: integer
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
       required:
         - id
         - article
@@ -48960,12 +48998,42 @@ components:
           description: Identifier for items unit of measurement.
           example: liter
           type: string
+        originId:
+          description: >-
+            The id of the line item this line item was originated from, before
+            any split has happened. This can be used to restore the ‘pre-split’
+            status.
+          example: df671041-10dd-4600-a2ff-e9ffe2556bba
+          nullable: true
+          type: string
         quantity:
           description: quantity of the item
           example: 21
           format: int64
           minimum: 1
           type: integer
+        secondaryMeasurementUnitKey:
+          description: >-
+            Identifier for items unit of measurement. E.g. measurementUnitKey is
+            pieces and secondaryQuantity is gram
+          example: gram
+          type: string
+        secondaryQuantity:
+          description: >-
+            secondary quantity of this item, E.g. quantity is the count and
+            secondaryQuantity is the weight
+          example: 200
+          format: int64
+          minimum: 1
+          type: integer
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
       required:
         - article
         - quantity
@@ -49138,6 +49206,10 @@ components:
         - $ref: '#/components/schemas/PackJobSplitLineItemsActionParameter'
         - $ref: >-
             #/components/schemas/UpdatePackLineItemRecordableAttributesActionParameter
+        - $ref: >-
+            #/components/schemas/PackJobMoveEachesToSourceContainerActionParameter
+        - $ref: >-
+            #/components/schemas/PackJobMoveEachesToTargetContainerActionParameter
       title: PackJobActionsParameter
       description: PackJobActionsParameter
     PackJobCreationPerTag:
@@ -49298,6 +49370,118 @@ components:
       title: PackJobLineItemsListFilter
       type: object
       description: PackJobLineItemsListFilter
+    PackJobMoveEachesToContainerActionParameterMove:
+      additionalProperties: false
+      description: Assigned users for this entity
+      properties:
+        from:
+          items:
+            $ref: '#/components/schemas/PackJobMoveEachesToContainerFrom'
+          minItems: 1
+          type: array
+        to:
+          oneOf:
+            - $ref: '#/components/schemas/PackJobMoveEachesToContainerTo'
+            - $ref: '#/components/schemas/PackJobMoveEachesToNewContainerTo'
+      required:
+        - from
+        - to
+      type: object
+      title: PackJobMoveEachesToContainerActionParameterMove
+    PackJobMoveEachesToContainerFrom:
+      additionalProperties: false
+      description: Where to take the eaches from
+      properties:
+        containerId:
+          description: id of the container to move the eaches from
+          type: string
+        containerVersion:
+          description: version of the container to move the eaches from
+          minimum: 0
+          type: integer
+        globalLineItemId:
+          description: global line item id of the line item to move eaches from
+          type: string
+        quantity:
+          description: amount of items to move
+          minimum: 0
+          type: integer
+        secondaryQuantity:
+          description: secondary amount of items to move
+          minimum: 0
+          type: integer
+      required:
+        - containerId
+        - containerVersion
+        - globalLineItemId
+        - quantity
+      title: PackJobMoveEachesToContainerFrom
+    PackJobMoveEachesToContainerTo:
+      additionalProperties: false
+      description: Where to move the eaches to.
+      properties:
+        containerId:
+          description: id of the container to move the eaches to
+          type: string
+        containerVersion:
+          description: version of the container to move the eaches to
+          minimum: 0
+          type: integer
+      required:
+        - containerId
+        - containerVersion
+      title: PackJobMoveEachesToContainerTo
+    PackJobMoveEachesToNewContainerTo:
+      additionalProperties: false
+      description: Additional information for the new created container during a move
+      properties:
+        codes:
+          items:
+            description: Codes, that identify the container
+            type: string
+          type: array
+        operativeContainerTypeRef:
+          description: the reference to the operativeContainerType
+          type: string
+      required:
+        - operativeContainerTypeRef
+      title: PackJobMoveEachesToContainerTo
+    PackJobMoveEachesToSourceContainerActionEnum:
+      enum:
+        - MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER
+      type: string
+      title: PackJobMoveEachesToSourceContainerActionEnum
+      description: PackJobMoveEachesToSourceContainerActionEnum
+    PackJobMoveEachesToSourceContainerActionParameter:
+      additionalProperties: false
+      description: Action to replace the assigned users.
+      properties:
+        move:
+          $ref: '#/components/schemas/PackJobMoveEachesToContainerActionParameterMove'
+        name:
+          $ref: '#/components/schemas/PackJobMoveEachesToSourceContainerActionEnum'
+      required:
+        - name
+        - move
+      title: PackJobReplaceAssignedUsersActionParameter
+    PackJobMoveEachesToTargetContainerActionEnum:
+      enum:
+        - MOVE_EACHES_TO_PACKING_TARGET_CONTAINER
+      type: string
+      title: PackJobMoveEachesToTargetContainerActionEnum
+      description: PackJobMoveEachesToTargetContainerActionEnum
+    PackJobMoveEachesToTargetContainerActionParameter:
+      additionalProperties: false
+      description: Action to replace the assigned users.
+      properties:
+        move:
+          $ref: '#/components/schemas/PackJobMoveEachesToContainerActionParameterMove'
+        name:
+          $ref: '#/components/schemas/PackJobMoveEachesToTargetContainerActionEnum'
+      required:
+        - name
+        - move
+      title: PackJobReplaceAssignedUsersActionParameter
     PackJobOrderBy:
       description: Attribute to order a packJobs by
       enum:
