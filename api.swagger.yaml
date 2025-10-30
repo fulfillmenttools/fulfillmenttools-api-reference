@@ -39830,6 +39830,7 @@ components:
       title: InterFacilityConnectionForCreation
       description: InterFacilityConnectionForCreation
     InterFacilityConnectionForUpdate:
+      additionalProperties: false
       properties:
         carrierKey:
           description: >-
@@ -39937,78 +39938,339 @@ components:
       title: InterFacilityConnectionSupplierTarget
       description: InterFacilityConnectionSupplierTarget
     InterFacilityConnectionToCustomerForCreation:
-      allOf:
-        - $ref: '#/components/schemas/InterFacilityConnectionForCreation'
+      additionalProperties: false
       properties:
+        carrierKey:
+          description: >-
+            The key of the carrier that is used for this connection. References
+            known and configured carriers in the system.
+          example: DHL_V2
+          type: string
+        carrierName:
+          description: The name of the carrier that is used for this connection.
+          example: DHL
+          type: string
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
+        customAttributes:
+          additionalProperties: true
+          description: >-
+            Custom attributes that can be used to store additional information
+            about the connection.
+          type: object
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
+        fallbackCosts:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          type: array
+        fallbackTransitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        nonDeliveryDays:
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          type: array
+        packagingUnitsByContexts:
+          items:
+            $ref: '#/components/schemas/PackagingUnitsByContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
       required:
         - target
+        - type
       type: object
       xml:
         name: InterFacilityConnectionToCustomerForCreation
       title: InterFacilityConnectionToCustomerForCreation
       description: InterFacilityConnectionToCustomerForCreation
     InterFacilityConnectionToCustomerForUpdate:
-      allOf:
-        - $ref: '#/components/schemas/InterFacilityConnectionForUpdate'
+      additionalProperties: false
       properties:
+        carrierKey:
+          description: >-
+            The key of the carrier that is used for this connection. References
+            known and configured carriers in the system.
+          example: DHL_V2
+          type: string
+        carrierName:
+          description: The name of the carrier that is used for this connection.
+          example: DHL
+          type: string
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
+        customAttributes:
+          additionalProperties: true
+          description: >-
+            Custom attributes that can be used to store additional information
+            about the connection.
+          type: object
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
+        fallbackCosts:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          type: array
+        fallbackTransitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        nonDeliveryDays:
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          type: array
+        packagingUnitsByContexts:
+          items:
+            $ref: '#/components/schemas/PackagingUnitsByContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+        version:
+          type: number
       required:
         - target
+        - version
+        - type
       type: object
       xml:
         name: InterFacilityConnectionToCustomerForUpdate
       title: InterFacilityConnectionToCustomerForUpdate
       description: InterFacilityConnectionToCustomerForUpdate
     InterFacilityConnectionToManagedFacilityForCreation:
-      allOf:
-        - $ref: '#/components/schemas/InterFacilityConnectionForCreation'
+      additionalProperties: false
       properties:
+        carrierKey:
+          description: >-
+            The key of the carrier that is used for this connection. References
+            known and configured carriers in the system.
+          example: DHL_V2
+          type: string
+        carrierName:
+          description: The name of the carrier that is used for this connection.
+          example: DHL
+          type: string
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
+        customAttributes:
+          additionalProperties: true
+          description: >-
+            Custom attributes that can be used to store additional information
+            about the connection.
+          type: object
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
+        fallbackCosts:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          type: array
+        fallbackTransitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        nonDeliveryDays:
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          type: array
+        packagingUnitsByContexts:
+          items:
+            $ref: '#/components/schemas/PackagingUnitsByContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
       required:
         - target
+        - type
       type: object
       xml:
         name: InterFacilityConnectionToManagedFacilityForCreation
       title: InterFacilityConnectionToManagedFacilityForCreation
       description: InterFacilityConnectionToManagedFacilityForCreation
     InterFacilityConnectionToManagedFacilityForUpdate:
-      allOf:
-        - $ref: '#/components/schemas/InterFacilityConnectionForUpdate'
+      additionalProperties: false
       properties:
+        carrierKey:
+          description: >-
+            The key of the carrier that is used for this connection. References
+            known and configured carriers in the system.
+          example: DHL_V2
+          type: string
+        carrierName:
+          description: The name of the carrier that is used for this connection.
+          example: DHL
+          type: string
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
+        customAttributes:
+          additionalProperties: true
+          description: >-
+            Custom attributes that can be used to store additional information
+            about the connection.
+          type: object
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
+        fallbackCosts:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          type: array
+        fallbackTransitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        nonDeliveryDays:
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          type: array
+        packagingUnitsByContexts:
+          items:
+            $ref: '#/components/schemas/PackagingUnitsByContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+        version:
+          type: number
       required:
         - target
+        - version
+        - type
       type: object
       xml:
         name: InterFacilityConnectionToManagedFacilityForUpdate
       title: InterFacilityConnectionToManagedFacilityForUpdate
       description: InterFacilityConnectionToManagedFacilityForUpdate
     InterFacilityConnectionToSupplierForCreation:
-      allOf:
-        - $ref: '#/components/schemas/InterFacilityConnectionForCreation'
+      additionalProperties: false
       properties:
+        carrierKey:
+          description: >-
+            The key of the carrier that is used for this connection. References
+            known and configured carriers in the system.
+          example: DHL_V2
+          type: string
+        carrierName:
+          description: The name of the carrier that is used for this connection.
+          example: DHL
+          type: string
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
+        customAttributes:
+          additionalProperties: true
+          description: >-
+            Custom attributes that can be used to store additional information
+            about the connection.
+          type: object
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
+        fallbackCosts:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          type: array
+        fallbackTransitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        nonDeliveryDays:
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          type: array
+        packagingUnitsByContexts:
+          items:
+            $ref: '#/components/schemas/PackagingUnitsByContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
       required:
         - target
+        - type
       type: object
       xml:
         name: InterFacilityConnectionToSupplierForCreation
       title: InterFacilityConnectionToSupplierForCreation
       description: InterFacilityConnectionToSupplierForCreation
     InterFacilityConnectionToSupplierForUpdate:
-      allOf:
-        - $ref: '#/components/schemas/InterFacilityConnectionForUpdate'
+      additionalProperties: false
       properties:
+        carrierKey:
+          description: >-
+            The key of the carrier that is used for this connection. References
+            known and configured carriers in the system.
+          example: DHL_V2
+          type: string
+        carrierName:
+          description: The name of the carrier that is used for this connection.
+          example: DHL
+          type: string
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
+        customAttributes:
+          additionalProperties: true
+          description: >-
+            Custom attributes that can be used to store additional information
+            about the connection.
+          type: object
+        cutoffTimes:
+          $ref: '#/components/schemas/CarrierCutoffTimes'
+        fallbackCosts:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          type: array
+        fallbackTransitTime:
+          $ref: '#/components/schemas/CarrierTransitTime'
+        nonDeliveryDays:
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          type: array
+        packagingUnitsByContexts:
+          items:
+            $ref: '#/components/schemas/PackagingUnitsByContext'
+          maxItems: 2000
+          minItems: 0
+          type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
+        type:
+          $ref: '#/components/schemas/ConnectionType'
+        version:
+          type: number
       required:
         - target
+        - version
+        - type
       type: object
       xml:
         name: InterFacilityConnectionToSupplierForUpdate
