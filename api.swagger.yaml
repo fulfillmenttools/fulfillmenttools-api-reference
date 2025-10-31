@@ -20638,7 +20638,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OrderForCreation'
+              $ref: '#/components/schemas/PromiseRequest'
         description: Order object supplied by your shop instance
         required: true
       responses:
@@ -55009,6 +55009,28 @@ components:
         - name
         - version
       title: PromiseExtendActionParameter
+    PromiseRequest:
+      allOf:
+        - $ref: '#/components/schemas/OrderForCreation'
+        - properties:
+            additionalInfo:
+              $ref: '#/components/schemas/PromiseRequestAdditionalInfo'
+          type: object
+      xml:
+        name: PromiseRequest
+      title: PromiseRequest
+      description: PromiseRequest
+    PromiseRequestAdditionalInfo:
+      properties:
+        includeListingCustomAttributes:
+          default: false
+          description: >-
+            If true, the listing custom attributes are included in the response.
+            This is useful for debugging purposes.
+          type: boolean
+      type: object
+      title: PromiseRequestAdditionalInfo
+      description: PromiseRequestAdditionalInfo
     PromisesConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
