@@ -47545,37 +47545,7 @@ components:
       additionalProperties: false
       properties:
         consumer:
-          properties:
-            addresses:
-              items:
-                $ref: '#/components/schemas/ConsumerAddress'
-              type: array
-            consumerId:
-              description: The id of the consumer.
-              example: e4213a07-f563-46a3-b1ba-4dfeb6abe82a
-              type: string
-            customAttributes:
-              description: >-
-                Attributes that can be added to the consumer. These attributes
-                cannot be used within fulfillment processes, but it could be
-                useful to have the informations carried here.
-              type: object
-            email:
-              deprecated: true
-              description: >
-                @deprecated The email address of the consumer. Use email in
-                addresses array
-              example: max@speedyboxales.com
-              format: email
-              type: string
-            facilityRef:
-              description: ID of the facility, if the recipient is a facility.
-              example: e4213a07-f563-46a3-b1ba-4dfeb6abe82a
-              type: string
-            tenantFacilityId:
-              description: tenantFacilityId of the facility, if the recipient is a facility
-              type: string
-          type: object
+          $ref: '#/components/schemas/OrderForCreationConsumer'
         customAttributes:
           description: >-
             Attributes that can be added to the order. These attributes cannot
@@ -47635,6 +47605,40 @@ components:
         name: Order
       title: OrderForCreation
       description: OrderForCreation
+    OrderForCreationConsumer:
+      properties:
+        addresses:
+          items:
+            $ref: '#/components/schemas/ConsumerAddress'
+          type: array
+        consumerId:
+          description: The id of the consumer.
+          example: e4213a07-f563-46a3-b1ba-4dfeb6abe82a
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the consumer. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        email:
+          deprecated: true
+          description: >
+            @deprecated The email address of the consumer. Use email in
+            addresses array
+          example: max@speedyboxales.com
+          format: email
+          type: string
+        facilityRef:
+          description: ID of the facility, if the recipient is a facility.
+          example: e4213a07-f563-46a3-b1ba-4dfeb6abe82a
+          type: string
+        tenantFacilityId:
+          description: tenantFacilityId of the facility, if the recipient is a facility
+          type: string
+      type: object
+      title: OrderForCreationConsumer
+      description: OrderForCreationConsumer
     OrderForSourcingOptionsRequest:
       additionalProperties: false
       properties:
@@ -55022,12 +55026,66 @@ components:
         - version
       title: PromiseExtendActionParameter
     PromiseRequest:
-      allOf:
-        - $ref: '#/components/schemas/OrderForCreation'
-        - properties:
-            additionalInfo:
-              $ref: '#/components/schemas/PromiseRequestAdditionalInfo'
+      additionalProperties: false
+      properties:
+        additionalInfo:
+          $ref: '#/components/schemas/PromiseRequestAdditionalInfo'
+        consumer:
+          $ref: '#/components/schemas/OrderForCreationConsumer'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the order. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
           type: object
+        customServices:
+          items:
+            $ref: '#/components/schemas/CustomServiceReferenceForCreation'
+          minItems: 1
+          type: array
+        deliveryPreferences:
+          $ref: '#/components/schemas/DeliveryPreferences'
+        orderDate:
+          description: The date this order was created at the supplying system.
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        orderLineItems:
+          items:
+            $ref: '#/components/schemas/OrderLineItemForCreation'
+          type: array
+        paymentInfo:
+          $ref: '#/components/schemas/OrderPaymentInfoForCreation'
+        promisesOptions:
+          $ref: '#/components/schemas/OrderPromisesOptions'
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        statusReasons:
+          items:
+            $ref: '#/components/schemas/OrderStatusReason'
+          type: array
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          maxItems: 100
+          minItems: 1
+          type: array
+        tenantOrderId:
+          description: >-
+            Field can be used as a reference number in foreign systems, for
+            example as a reference to the source system's identifier for this
+            order.
+          example: R456728546
+          type: string
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          minItems: 1
+          type: array
+      required:
+        - orderDate
+        - orderLineItems
+        - consumer
       xml:
         name: PromiseRequest
       title: PromiseRequest
