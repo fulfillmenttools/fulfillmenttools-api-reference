@@ -28563,6 +28563,15 @@ components:
       type: object
       title: AvailabilityTimeframe
       description: AvailabilityTimeframe
+    AvailabilityTimeframe2:
+      properties:
+        start:
+          type: string
+      required:
+        - start
+      title: AvailabilityTimeframe2
+      type: object
+      description: AvailabilityTimeframe2
     AvailableForPickingDetails:
       properties:
         total:
@@ -42412,12 +42421,12 @@ components:
           description: >-
             List of listings to be upserted in bulk. Number of entries times
             selectors must not exceed 25.
-          discriminator:
-            mapping:
-              MULTI_SELECTOR: '#/components/schemas/ListingForBulkUpsertBySelector'
-              SINGLE_FACILITY: '#/components/schemas/ListingForBulkUpsertByFacility'
-            propertyName: targetingStrategy
           items:
+            discriminator:
+              mapping:
+                MULTI_SELECTOR: '#/components/schemas/ListingForBulkUpsertBySelector'
+                SINGLE_FACILITY: '#/components/schemas/ListingForBulkUpsertByFacility'
+              propertyName: targetingStrategy
             oneOf:
               - $ref: '#/components/schemas/ListingForBulkUpsertBySelector'
               - $ref: '#/components/schemas/ListingForBulkUpsertByFacility'
@@ -42553,13 +42562,13 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />
           items:
-            $ref: '#/components/schemas/OutOfStockBehaviourByContext'
+            $ref: '#/components/schemas/OutOfStockBehaviourByContext2'
           maxItems: 10
           minItems: 1
           type: array
         outOfStockConfig:
           allOf:
-            - $ref: '#/components/schemas/OutOfStockConfig'
+            - $ref: '#/components/schemas/OutOfStockConfig2'
           description: >-
             The outOfStockConfig is in Alpha status. For details please check
             the api-release-life-cycle documentation.
@@ -42676,13 +42685,13 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />
           items:
-            $ref: '#/components/schemas/OutOfStockBehaviourByContext'
+            $ref: '#/components/schemas/OutOfStockBehaviourByContext2'
           maxItems: 10
           minItems: 1
           type: array
         outOfStockConfig:
           allOf:
-            - $ref: '#/components/schemas/OutOfStockConfig'
+            - $ref: '#/components/schemas/OutOfStockConfig2'
           description: >-
             The outOfStockConfig is in Alpha status. For details please check
             the api-release-life-cycle documentation.
@@ -48467,8 +48476,9 @@ components:
             target="_blank">context documentation</a>.
           items:
             $ref: '#/components/schemas/OutOfStockBehaviourContext'
-            maxLength: 5
+            maxItems: 5
             minItems: 1
+          type: array
         outOfStockBehaviour:
           $ref: '#/components/schemas/OutOfStockBehaviour'
         outOfStockConfig:
@@ -48491,6 +48501,32 @@ components:
       type: object
       title: OutOfStockBehaviourByContext
       description: OutOfStockBehaviourByContext
+    OutOfStockBehaviourByContext2:
+      properties:
+        context:
+          description: >-
+            The OutOfStockBehaviourByContexts is in Alpha status. For details
+            please check the <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+            target="_blank">api-release-life-cycle documentation</a>.<br /><br/>
+          items:
+            $ref: '#/components/schemas/OutOfStockBehaviourContext'
+          maxItems: 5
+          minItems: 1
+          type: array
+        outOfStockBehaviour:
+          $ref: '#/components/schemas/OutOfStockBehaviour'
+        outOfStockConfig:
+          $ref: '#/components/schemas/OutOfStockConfig2'
+        priority:
+          type: number
+      required:
+        - outOfStockBehaviour
+        - context
+        - priority
+      title: OutOfStockBehaviourByContext2
+      type: object
+      description: OutOfStockBehaviourByContext2
     OutOfStockBehaviourContext:
       additionalProperties: false
       description: >-
@@ -48546,6 +48582,24 @@ components:
       type: object
       title: OutOfStockConfig
       description: OutOfStockConfig
+    OutOfStockConfig2:
+      properties:
+        preorder:
+          $ref: '#/components/schemas/OutOfStockConfigPreorder2'
+        restock:
+          $ref: '#/components/schemas/InventoryOutOfStockConfigRestock'
+      title: OutOfStockConfig2
+      type: object
+      description: OutOfStockConfig2
+    OutOfStockConfigPreorder2:
+      properties:
+        availabilityTimeframe:
+          $ref: '#/components/schemas/AvailabilityTimeframe2'
+      required:
+        - availabilityTimeframe
+      title: OutOfStockConfigPreorder2
+      type: object
+      description: OutOfStockConfigPreorder2
     PackageCost:
       additionalProperties: false
       properties:
