@@ -1,11 +1,10 @@
 {
 	"info": {
-		"_postman_id": "a1df3e5a-4194-4abb-b6ff-085392fbfe70",
+		"_postman_id": "81037596-88c5-4717-9eba-79f463074cb0",
 		"name": "fulfillmenttoolsAPI",
 		"description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11673215",
-		"_collection_link": "https://cloudy-firefly-771136.postman.co/workspace/FFtApiPostman~3412b37c-b9c1-4e97-8878-de4006ba46bb/collection/11673215-a1df3e5a-4194-4abb-b6ff-085392fbfe70?action=share&source=collection_link&creator=11673215"
+		"_exporter_id": "21858709"
 	},
 	"item": [
 		{
@@ -6355,7 +6354,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"version\": 1,\n    \"customAttributes\": {\n        \"myAttribute\": \"myValue\"\n    }\n}",
+									"raw": "{\n    \"version\": 3,\n    \"comment\": \"customer wanted item amount increase\",\n    \"customAttributes\": {\n        \"attribute1\":\"value\"\n    },\n    \"preferredHandlingTime\": \"2024-05-04T13:00:00.000Z\",\n    \"orderLineItems\": [\n        {\n            \"id\":\"orderLineItem-ID\",\n            \"quantity\": 100\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -7376,6 +7375,60 @@
 												"api",
 												"configurations",
 												"ordercancelation"
+											]
+										},
+										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration](https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration)"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Order Modification Configuration",
+							"item": [
+								{
+									"name": "Get Order Modification Configuration",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/configurations/ordermodification",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"ordermodification"
+											]
+										},
+										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getCapacityPlanningTimeframeConfiguration](https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/getCapacityPlanningTimeframeConfiguration)"
+									},
+									"response": []
+								},
+								{
+									"name": "Update Order Modification Configuration",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"version\": 1,\n    \"allowOrderLineItemModification\": false\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/configurations/ordermodification",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"configurations",
+												"ordermodification"
 											]
 										},
 										"description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration](https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration)"
@@ -15562,161 +15615,161 @@
 								{
 									"name": "PackJob Actions",
 									"item": [
-                                        {
-                                            "name": "Move Eaches",
-                                            "item": [
-                                                {
-                                                    "name": "Target Containers",
-                                                    "item": [
-                                                        {
-                                                            "name": "Move Eaches into new Target Container",
-                                                            "request": {
-                                                                "method": "POST",
-                                                                "header": [],
-                                                                "body": {
-                                                                    "mode": "raw",
-                                                                    "raw": "{\n    \"name\": \"MOVE_EACHES_TO_PACKING_TARGET_CONTAINER\",\n    \"move\": {\n        \"from\": [\n            {\n                \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n                \"globalLineItemId\": \"PUT-IN-VALID-LINE-ITEM-ID\",\n                \"quantity\": 1,\n                \"containerVersion\": 2\n            }\n        ],\n        \"to\": {\n            \"operativeContainerTypeRef\": \"PUT-IN-VALID-CONTAINER-TYPE-REF\"\n        }\n    }\n}",
-                                                                    "options": {
-                                                                        "raw": {
-                                                                            "language": "json"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "url": {
-                                                                    "raw": "{{host}}/api/packjobs/:packJobId/actions",
-                                                                    "host": [
-                                                                        "{{host}}"
-                                                                    ],
-                                                                    "path": [
-                                                                        "api",
-                                                                        "packjobs",
-                                                                        ":packJobId",
-                                                                        "actions"
-                                                                    ],
-                                                                    "variable": [
-                                                                        {
-                                                                            "key": "packJobId",
-                                                                            "value": "PUT-IN-VALID-PACKJOB-ID"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            },
-                                                            "response": []
-                                                        },
-                                                        {
-                                                            "name": "Move Eaches into existing Target Container",
-                                                            "request": {
-                                                                "method": "POST",
-                                                                "header": [],
-                                                                "body": {
-                                                                    "mode": "raw",
-                                                                    "raw": "{\n    \"name\": \"MOVE_EACHES_TO_PACKING_TARGET_CONTAINER\",\n    \"move\": {\n        \"from\": [\n            {\n                \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n                \"globalLineItemId\": \"PUT-IN-VALID-LINE-ITEM-ID\",\n                \"quantity\": 1,\n                \"containerVersion\": 2\n            }\n        ],\n        \"to\": {\n            \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n            \"containerVersion\": 2\n        }\n    }\n}",
-                                                                    "options": {
-                                                                        "raw": {
-                                                                            "language": "json"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "url": {
-                                                                    "raw": "{{host}}/api/packjobs/:packJobId/actions",
-                                                                    "host": [
-                                                                        "{{host}}"
-                                                                    ],
-                                                                    "path": [
-                                                                        "api",
-                                                                        "packjobs",
-                                                                        ":packJobId",
-                                                                        "actions"
-                                                                    ],
-                                                                    "variable": [
-                                                                        {
-                                                                            "key": "packJobId",
-                                                                            "value": "PUT-IN-VALID-PACKJOB-ID"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            },
-                                                            "response": []
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "name": "Source Containers",
-                                                    "item": [
-                                                        {
-                                                            "name": "Move Eaches into new Source Container",
-                                                            "request": {
-                                                                "method": "POST",
-                                                                "header": [],
-                                                                "body": {
-                                                                    "mode": "raw",
-                                                                    "raw": "{\n    \"name\": \"MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER\",\n    \"move\": {\n        \"from\": [\n            {\n                \"containerId\": \"393689e7-23e0-4d19-ab32-95b5ea97b153\",\n                \"globalLineItemId\": \"2453c12a-4fb3-4d90-824b-3979d0da2565\",\n                \"quantity\": 1,\n                \"containerVersion\": 2\n            }\n        ]\n    }\n}",
-                                                                    "options": {
-                                                                        "raw": {
-                                                                            "language": "json"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "url": {
-                                                                    "raw": "{{host}}/api/packjobs/:packJobId/actions",
-                                                                    "host": [
-                                                                        "{{host}}"
-                                                                    ],
-                                                                    "path": [
-                                                                        "api",
-                                                                        "packjobs",
-                                                                        ":packJobId",
-                                                                        "actions"
-                                                                    ],
-                                                                    "variable": [
-                                                                        {
-                                                                            "key": "packJobId",
-                                                                            "value": "43495997-17b8-4236-8f5a-0c322e840731"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            },
-                                                            "response": []
-                                                        },
-                                                        {
-                                                            "name": "Move Eaches into existing Source Container",
-                                                            "request": {
-                                                                "method": "POST",
-                                                                "header": [],
-                                                                "body": {
-                                                                    "mode": "raw",
-                                                                    "raw": "{\n    \"name\": \"MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER\",\n    \"move\": {\n        \"from\": [\n            {\n                \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n                \"globalLineItemId\": \"PUT-IN-VALID-LINE-ITEM-ID\",\n                \"quantity\": 1,\n                \"containerVersion\": 2\n            }\n        ],\n        \"to\": {\n            \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n            \"containerVersion\": 2\n        }\n    }\n}",
-                                                                    "options": {
-                                                                        "raw": {
-                                                                            "language": "json"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "url": {
-                                                                    "raw": "{{host}}/api/packjobs/:packJobId/actions",
-                                                                    "host": [
-                                                                        "{{host}}"
-                                                                    ],
-                                                                    "path": [
-                                                                        "api",
-                                                                        "packjobs",
-                                                                        ":packJobId",
-                                                                        "actions"
-                                                                    ],
-                                                                    "variable": [
-                                                                        {
-                                                                            "key": "packJobId",
-                                                                            "value": "PUT-IN-VALID-PACKJOB-ID"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            },
-                                                            "response": []
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        },
+										{
+											"name": "Move Eaches",
+											"item": [
+												{
+													"name": "Target Containers",
+													"item": [
+														{
+															"name": "Move Eaches into new Target Container",
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"name\": \"MOVE_EACHES_TO_PACKING_TARGET_CONTAINER\",\n    \"move\": {\n        \"from\": [\n            {\n                \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n                \"globalLineItemId\": \"PUT-IN-VALID-LINE-ITEM-ID\",\n                \"quantity\": 1,\n                \"containerVersion\": 2\n            }\n        ],\n        \"to\": {\n            \"operativeContainerTypeRef\": \"PUT-IN-VALID-CONTAINER-TYPE-REF\"\n        }\n    }\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{host}}/api/packjobs/:packJobId/actions",
+																	"host": [
+																		"{{host}}"
+																	],
+																	"path": [
+																		"api",
+																		"packjobs",
+																		":packJobId",
+																		"actions"
+																	],
+																	"variable": [
+																		{
+																			"key": "packJobId",
+																			"value": "PUT-IN-VALID-PACKJOB-ID"
+																		}
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Move Eaches into existing Target Container",
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"name\": \"MOVE_EACHES_TO_PACKING_TARGET_CONTAINER\",\n    \"move\": {\n        \"from\": [\n            {\n                \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n                \"globalLineItemId\": \"PUT-IN-VALID-LINE-ITEM-ID\",\n                \"quantity\": 1,\n                \"containerVersion\": 2\n            }\n        ],\n        \"to\": {\n            \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n            \"containerVersion\": 2\n        }\n    }\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{host}}/api/packjobs/:packJobId/actions",
+																	"host": [
+																		"{{host}}"
+																	],
+																	"path": [
+																		"api",
+																		"packjobs",
+																		":packJobId",
+																		"actions"
+																	],
+																	"variable": [
+																		{
+																			"key": "packJobId",
+																			"value": "PUT-IN-VALID-PACKJOB-ID"
+																		}
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "Source Containers",
+													"item": [
+														{
+															"name": "Move Eaches into new Source Container",
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"name\": \"MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER\",\n    \"move\": {\n        \"from\": [\n            {\n                \"containerId\": \"393689e7-23e0-4d19-ab32-95b5ea97b153\",\n                \"globalLineItemId\": \"2453c12a-4fb3-4d90-824b-3979d0da2565\",\n                \"quantity\": 1,\n                \"containerVersion\": 2\n            }\n        ]\n    }\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{host}}/api/packjobs/:packJobId/actions",
+																	"host": [
+																		"{{host}}"
+																	],
+																	"path": [
+																		"api",
+																		"packjobs",
+																		":packJobId",
+																		"actions"
+																	],
+																	"variable": [
+																		{
+																			"key": "packJobId",
+																			"value": "43495997-17b8-4236-8f5a-0c322e840731"
+																		}
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Move Eaches into existing Source Container",
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"name\": \"MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER\",\n    \"move\": {\n        \"from\": [\n            {\n                \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n                \"globalLineItemId\": \"PUT-IN-VALID-LINE-ITEM-ID\",\n                \"quantity\": 1,\n                \"containerVersion\": 2\n            }\n        ],\n        \"to\": {\n            \"containerId\": \"PUT-IN-VALID-CONTAINER-ID\",\n            \"containerVersion\": 2\n        }\n    }\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{host}}/api/packjobs/:packJobId/actions",
+																	"host": [
+																		"{{host}}"
+																	],
+																	"path": [
+																		"api",
+																		"packjobs",
+																		":packJobId",
+																		"actions"
+																	],
+																	"variable": [
+																		{
+																			"key": "packJobId",
+																			"value": "PUT-IN-VALID-PACKJOB-ID"
+																		}
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												}
+											]
+										},
 										{
 											"name": "Replace Assigned Users on PackJob",
 											"request": {
