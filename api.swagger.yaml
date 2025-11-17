@@ -15510,10 +15510,12 @@ paths:
         - Operative Container (Operations)
   /api/operativeprocesses:
     get:
+      deprecated: false
       description: >-
         This part of the API is in Alpha status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
+        all operative processes
       operationId: getOperativeProcesses
       parameters:
         - description: facility to filter the results
@@ -15542,39 +15544,32 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/OperativeProcess'
+                $ref: '#/components/schemas/OperativeProcessPaginatedResult'
           description: All operative processes matching the given parameters
         '400':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
         '401':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/ApiError'
           description: Your user is not allowed to operate against this API instance
         '403':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
       summary: List operative processes
       tags:
         - Operative Process (Operations)
@@ -15583,14 +15578,15 @@ paths:
           label: ALPHA
   /api/operativeprocesses/{operativeProcessId}:
     get:
+      deprecated: false
       description: >-
         This part of the API is in Alpha status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
+        the operative processes for a specific id
       operationId: getOperativeProcessById
       parameters:
-        - description: id of the operativeProcess you want to retrieve
-          in: path
+        - in: path
           name: operativeProcessId
           required: true
           schema:
@@ -15606,32 +15602,26 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
         '401':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/ApiError'
           description: Your user is not allowed to operate against this API instance
         '403':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
       summary: Get operative process
       tags:
         - Operative Process (Operations)
@@ -46637,47 +46627,48 @@ components:
       title: OperativeContainerTypesResponse
       description: OperativeContainerTypesResponse
     OperativeEntity:
-      additionalProperties: false
       properties:
         entityChildren:
           description: Tree structure of entities belonging to this entity
           items:
             $ref: '#/components/schemas/OperativeEntity'
+            minLength: 0
+          type: array
         entityRef:
           description: Reference to the full entity
           type: string
         entityType:
-          $ref: '#/components/schemas/OperativeEntityType'
+          description: Type of the entity
+          enum:
+            - PICK_JOB
+            - PACK_JOB
+            - SHIPMENT
+            - HANDOVER_JOB
+            - PARCEL
+            - SERVICE_JOB
+            - RESTOW_ITEM
+            - ITEM_RETURN_JOB
+            - LINKED_SERVICE_JOBS
+            - PACKING_TARGET_CONTAINER
+          type: string
       required:
         - entityRef
         - entityType
       title: OperativeEntity
+      type: object
       description: OperativeEntity
-    OperativeEntityType:
-      enum:
-        - PICK_JOB
-        - PACK_JOB
-        - SHIPMENT
-        - HANDOVER_JOB
-        - PARCEL
-        - SERVICE_JOB
-        - RESTOW_ITEM
-        - ITEM_RETURN_JOB
-        - LINKED_SERVICE_JOBS
-        - PACKING_TARGET_CONTAINER
-      type: string
-      title: OperativeEntityType
-      description: OperativeEntityType
     OperativeProcess:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
       properties:
+        created:
+          description: Creation date of the user
+          format: date-time
+          type: string
         entityChildren:
           description: Tree structure of entities belonging to this operative process
           items:
             $ref: '#/components/schemas/OperativeEntity'
-          minLength: 0
+            minLength: 0
+          type: array
         facilityRef:
           description: Reference to the facility this operative process is handled in
           type: string
@@ -46686,9 +46677,15 @@ components:
             References to all operational entities belonging to this operative
             process
           items:
+            minLength: 0
             type: string
-          minLength: 0
+          type: array
         id:
+          description: auto generated unique identifier
+          type: string
+        lastModified:
+          description: Last modification date of the user
+          format: date-time
           type: string
         processRef:
           description: Reference to the overall process
@@ -46696,37 +46693,38 @@ components:
         routingPlanRef:
           description: Reference to the connected routing plan if available
           type: string
+        version:
+          description: Version of the user
+          example: 1
+          type: number
       required:
         - id
+        - version
         - processRef
         - facilityRef
         - flatEntityRefs
         - entityChildren
-      type: object
       title: OperativeProcess
-      description: OperativeProcess
-    OperativeProcessForCreation:
-      additionalProperties: false
-      properties:
-        entityChildren:
-          description: Tree structure of entities belonging to this operative process
-          items:
-            $ref: '#/components/schemas/OperativeEntity'
-        facilityRef:
-          description: Reference to the facility this operative process is handled in
-          type: string
-        processRef:
-          description: Reference to the overall process
-          type: string
-        routingPlanRef:
-          description: Reference to the connected routing plan if available
-          type: string
-      required:
-        - processRef
-        - facilityRef
       type: object
-      title: OperativeProcessForCreation
-      description: OperativeProcessForCreation
+      description: OperativeProcess
+    OperativeProcessPaginatedResult:
+      properties:
+        operativeProcesses:
+          items:
+            $ref: '#/components/schemas/OperativeProcess'
+          type: array
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+        total:
+          minimum: 0
+          type: number
+      required:
+        - total
+        - pageInfo
+        - operativeProcesses
+      title: OperativeProcessPaginatedResult
+      type: object
+      description: OperativeProcessPaginatedResult
     OperativeServiceConfiguration:
       additionalProperties: false
       allOf:
