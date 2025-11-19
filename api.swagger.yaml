@@ -52749,6 +52749,8 @@ components:
         - $ref: '#/components/schemas/PickRunStartActionParameter'
         - $ref: '#/components/schemas/PickRunFinishActionParameter'
         - $ref: '#/components/schemas/PickRunCancelActionParameter'
+        - $ref: '#/components/schemas/PickRunPauseActionParameter'
+        - $ref: '#/components/schemas/PickRunResumeActionParameter'
         - $ref: '#/components/schemas/PickRunRemovePickJobActionParameter'
         - $ref: '#/components/schemas/PickRunSplitLineItemsActionParameter'
       title: PickRunActionsParameter
@@ -52992,6 +52994,26 @@ components:
         name: PickRunPatchAction
       title: PickRunPatchAction
       description: PickRunPatchAction
+    PickRunPauseActionEnum:
+      enum:
+        - PAUSE
+      type: string
+      title: PickRunPauseActionEnum
+      description: PickRunPauseActionEnum
+    PickRunPauseActionParameter:
+      additionalProperties: false
+      description: Action to pause a PickRun.
+      properties:
+        name:
+          $ref: '#/components/schemas/PickRunPauseActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+      title: PickRunPauseActionParameter
     PickRunPickJobsPatchAction:
       properties:
         actions:
@@ -53045,6 +53067,26 @@ components:
         - version
         - payload
       title: PickRunRemovePickJobActionParameter
+    PickRunResumeActionEnum:
+      enum:
+        - RESUME
+      type: string
+      title: PickRunResumeActionEnum
+      description: PickRunResumeActionEnum
+    PickRunResumeActionParameter:
+      additionalProperties: false
+      description: Action to resume a PickRun.
+      properties:
+        name:
+          $ref: '#/components/schemas/PickRunResumeActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+      title: PickRunResumeActionParameter
     PickRunSplitLineItemsActionEnum:
       enum:
         - SPLIT_LINES_PICK_RUN
@@ -53123,6 +53165,7 @@ components:
         - OPEN
         - IN_PROGRESS
         - CLOSED
+        - PAUSED
         - CANCELED
         - OBSOLETE
       type: string
