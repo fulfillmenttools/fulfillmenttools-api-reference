@@ -19335,6 +19335,60 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/processes/{processId}/historylogs:
+    get:
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Return all logs for a given process.
+      operationId: getProcessHistoryLogs
+      parameters:
+        - in: path
+          name: processId
+          required: true
+          schema:
+            type: string
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessHistoryLogs'
+          description: The process logs which were found in response body
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Get process history logs
+      tags:
+        - Processes (Core)
+      x-badges:
+        - color: orange
+          label: BETA
   /api/processes/{processId}/reroute:
     post:
       description: ''
@@ -28142,6 +28196,22 @@ components:
         name: CancelationReasonForModification
       title: CancelationReasonForModification
       description: CancelationReasonForModification
+    CancelationReasonHistoryLog:
+      properties:
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        id:
+          type: string
+        reason:
+          type: string
+        version:
+          type: number
+      required:
+        - id
+        - version
+      type: object
+      title: CancelationReasonHistoryLog
+      description: CancelationReasonHistoryLog
     CancelationReasons:
       allOf:
         - $ref: '#/components/schemas/AbstractReasons'
@@ -30135,6 +30205,17 @@ components:
       type: object
       title: ConsumerAddress
       description: ConsumerAddress
+    ConsumerAddressChangedPayload:
+      allOf:
+        - $ref: '#/components/schemas/OrderModificationPayloadBase'
+      properties:
+        changedFields:
+          description: List of changed address fields
+          items:
+            type: string
+          type: array
+      title: ConsumerAddressChangedPayload
+      description: ConsumerAddressChangedPayload
     ConsumerAddressesForSourcingOptions:
       properties:
         addresses:
@@ -43396,6 +43477,28 @@ components:
         - active
       type: object
       title: ManualRerouteConfiguration
+    ManualRoutingPayload:
+      properties:
+        rerouteDescription:
+          $ref: '#/components/schemas/RerouteDescriptionHistoryLog'
+        targetFacility:
+          properties:
+            facilityRef:
+              type: string
+            name:
+              type: string
+            version:
+              type: number
+          required:
+            - facilityRef
+            - version
+            - name
+          type: object
+      required:
+        - targetFacility
+      type: object
+      title: ManualRoutingPayload
+      description: ManualRoutingPayload
     MeasurementUnit:
       additionalProperties: false
       allOf:
@@ -46150,6 +46253,40 @@ components:
       title: OperativeEntity
       type: object
       description: OperativeEntity
+    OperativeEntityPayloadBase:
+      properties:
+        facility:
+          $ref: '#/components/schemas/ProcessHistoryLogFacility'
+        shortId:
+          type: string
+      required:
+        - facility
+      type: object
+      title: OperativeEntityPayloadBase
+      description: OperativeEntityPayloadBase
+    OperativeEntityPayloadShortPicked:
+      allOf:
+        - $ref: '#/components/schemas/OperativeEntityPayloadBase'
+      properties:
+        article:
+          properties:
+            titleLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            title:
+              type: string
+          type: object
+        picked:
+          type: number
+        quantity:
+          type: number
+        shortPickReason:
+          $ref: '#/components/schemas/PickLineShortPickReason'
+      required:
+        - article
+        - picked
+        - quantity
+      title: OperativeEntityPayloadShortPicked
+      description: OperativeEntityPayloadShortPicked
     OperativeProcess:
       properties:
         created:
@@ -46415,6 +46552,13 @@ components:
       x-badges:
         - color: orange
           label: BETA
+    OrderCancellationPayload:
+      properties:
+        cancelationReason:
+          $ref: '#/components/schemas/CancelationReasonHistoryLog'
+      type: object
+      title: OrderCancellationPayload
+      description: OrderCancellationPayload
     OrderCancelledByExpiryEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
@@ -47153,6 +47297,13 @@ components:
       x-badges:
         - color: orange
           label: BETA
+    OrderModificationPayloadBase:
+      properties:
+        reason:
+          type: string
+      type: object
+      title: OrderModificationPayloadBase
+      description: OrderModificationPayloadBase
     OrderModifiedEventPayload:
       allOf:
         - $ref: '#/components/schemas/Order'
@@ -53727,6 +53878,174 @@ components:
       title: ProcessFacilitySort
       type: object
       description: ProcessFacilitySort
+    ProcessHistoryDomainType:
+      description: The domain type of the process history entry
+      enum:
+        - ORDER
+        - PICKJOB
+        - PACKJOB
+        - PARCEL
+        - HANDOVER
+        - ROUTING_PLAN
+        - EXTERNAL_ACTION
+      type: string
+      title: ProcessHistoryDomainType
+    ProcessHistoryEventType:
+      description: Event types for process history
+      enum:
+        - ORDER_CANCELLED
+        - ORDER_FORCE_CANCELLED
+        - ORDER_UNLOCKED
+        - ORDER_MANUAL_REROUTE
+        - UNROUTABLE_ITEMS_REROUTE
+        - ORDER_MANUAL_FACILITY_ASSIGNMENT
+        - ORDER_TIME_TRIGGERED_REROUTE
+        - ORDER_INACTIVITY_TIME_TRIGGERED_REROUTE
+        - TASK_MANUAL_ASSIGNMENT
+        - CONSUMER_ADDRESS_CHANGED
+        - ORDER_ITEM_AMOUNT_CHANGED
+        - ORDER_ITEM_DELETED
+        - ORDER_ITEM_ADDED
+        - ORDER_PREFERRED_DATE_MODIFIED
+        - OPERATIVE_TASK_CREATED
+        - PICKING_IN_PROGRESS
+        - PICKING_DONE
+        - PICKING_DONE_INCOMPLETE
+        - PICKING_ABORTED_NO_ITEMS_PICKED
+        - PICKING_ITEM_SHORTPICKED
+        - PACKING_CREATED
+        - PACKING_IN_PROGRESS
+        - PACKING_DONE
+        - PARCEL_CREATED
+        - PICKUP_DONE
+        - PICKUP_DONE_WITH_REFUSED_ITEMS
+        - PICKUP_CANCELED
+        - ACTION_TRIGGERED
+        - COMMENT_ADDED
+      type: string
+      title: ProcessHistoryEventType
+    ProcessHistoryLog:
+      allOf:
+        - $ref: '#/components/schemas/ProcessHistoryLogBase'
+      properties:
+        eventType:
+          $ref: '#/components/schemas/ProcessHistoryEventType'
+        payload:
+          description: Payload varies based on eventType
+          nullable: true
+          type: object
+      required:
+        - eventType
+      title: ProcessHistoryLog
+      description: ProcessHistoryLog
+    ProcessHistoryLogBase:
+      properties:
+        domain:
+          $ref: '#/components/schemas/ProcessHistoryDomainType'
+        domainRef:
+          type: string
+        eventCause:
+          type: string
+        id:
+          type: string
+        status:
+          description: >-
+            Status can be OrderStatus, PickJobStatus, PackJobStatus,
+            ParcelStatus, HandoverjobStatus, RoutingPlanStatus, or null
+          nullable: true
+          type: string
+        timestamp:
+          format: date-time
+          type: string
+        type:
+          description: Can be ProcessHistoryLogTypeCommon or user-defined action type
+          type: string
+        user:
+          $ref: '#/components/schemas/ProcessHistoryLogUser'
+        version:
+          nullable: true
+          type: number
+        info:
+          type: string
+      required:
+        - id
+        - type
+        - domain
+        - status
+        - domainRef
+        - version
+        - user
+        - timestamp
+      type: object
+      title: ProcessHistoryLogBase
+      description: ProcessHistoryLogBase
+    ProcessHistoryLogFacility:
+      properties:
+        facilityGroups:
+          items:
+            $ref: '#/components/schemas/ProcessHistoryLogFacilityGroup'
+          type: array
+        facilityRef:
+          type: string
+        name:
+          type: string
+        version:
+          type: number
+      type: object
+      title: ProcessHistoryLogFacility
+      description: ProcessHistoryLogFacility
+    ProcessHistoryLogFacilityGroup:
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        facilityGroupRef:
+          type: string
+        name:
+          type: string
+        version:
+          type: number
+      required:
+        - facilityGroupRef
+        - version
+        - nameLocalized
+      type: object
+      title: ProcessHistoryLogFacilityGroup
+      description: ProcessHistoryLogFacilityGroup
+    ProcessHistoryLogs:
+      properties:
+        historyLogs:
+          items:
+            $ref: '#/components/schemas/ProcessHistoryLog'
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 3
+          type: integer
+      type: object
+      title: ProcessHistoryLogs
+      description: ProcessHistoryLogs
+    ProcessHistoryLogTypeCommon:
+      description: Common log types for process history
+      enum:
+        - ORDER_LIFECYCLE
+        - ROUTING
+        - FULFILLMENT
+        - ORDER_MODIFICATION
+        - COMMENT
+      type: string
+      title: ProcessHistoryLogTypeCommon
+    ProcessHistoryLogUser:
+      properties:
+        username:
+          type: string
+        userRef:
+          type: string
+      required:
+        - userRef
+        - username
+      type: object
+      title: ProcessHistoryLogUser
+      description: ProcessHistoryLogUser
     ProcessOrderSort:
       properties:
         desiredDeliveryTime:
@@ -56072,6 +56391,22 @@ components:
         name: RerouteDescriptionForModification
       title: RerouteDescriptionForModification
       description: RerouteDescriptionForModification
+    RerouteDescriptionHistoryLog:
+      properties:
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        id:
+          type: string
+        reason:
+          type: string
+        version:
+          type: number
+      required:
+        - id
+        - version
+      type: object
+      title: RerouteDescriptionHistoryLog
+      description: RerouteDescriptionHistoryLog
     RerouteDescriptions:
       allOf:
         - $ref: '#/components/schemas/AbstractReasons'
