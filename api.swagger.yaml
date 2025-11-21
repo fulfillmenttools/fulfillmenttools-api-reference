@@ -32574,6 +32574,17 @@ components:
         name: ExternalActionForReplacement
       title: ExternalActionForReplacement
       description: ExternalActionForReplacement
+    ExternalActionHistoryLogPayload:
+      properties:
+        groups:
+          items:
+            type: string
+          type: array
+      required:
+        - groups
+      type: object
+      title: ExternalActionHistoryLogPayload
+      description: ExternalActionHistoryLogPayload
     ExternalActionLog:
       additionalProperties: false
       allOf:
@@ -53948,6 +53959,14 @@ components:
         payload:
           description: Payload varies based on eventType
           nullable: true
+          oneOf:
+            - $ref: '#/components/schemas/ManualRoutingPayload'
+            - $ref: '#/components/schemas/OrderCancellationPayload'
+            - $ref: '#/components/schemas/OrderModificationPayloadBase'
+            - $ref: '#/components/schemas/ConsumerAddressChangedPayload'
+            - $ref: '#/components/schemas/OperativeEntityPayloadBase'
+            - $ref: '#/components/schemas/ExternalActionHistoryLogPayload'
+            - $ref: '#/components/schemas/OperativeEntityPayloadShortPicked'
           type: object
       required:
         - eventType
