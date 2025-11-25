@@ -42543,7 +42543,6 @@ components:
           items:
             description: List of corresponding pickjob Ids
             type: string
-          maxItems: 1
           minItems: 1
           type: array
         stackRef:
@@ -42661,7 +42660,6 @@ components:
           items:
             description: List of corresponding pickjob Ids
             type: string
-          maxItems: 1
           minItems: 1
           type: array
         stackRef:
@@ -42678,26 +42676,6 @@ components:
       title: LoadUnitForCreation
       description: LoadUnitForCreation
     LoadUnitLineItem:
-      allOf:
-        - $ref: '#/components/schemas/LineItem'
-      properties:
-        article:
-          $ref: '#/components/schemas/PickLineItemArticle'
-        id:
-          type: string
-        measurementUnitKey:
-          description: Identifier for items unit of measurement.
-          example: liter
-          type: string
-      required:
-        - id
-        - article
-      title: LoadUnitLineItem
-      description: LoadUnitLineItem
-    LoadUnitLineItemForCreation:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/LineItemForCreation'
       properties:
         article:
           $ref: '#/components/schemas/PickLineItemArticle'
@@ -42708,10 +42686,60 @@ components:
             to have the information carried here.
           type: object
         globalLineItemId:
-          description: >-
-            This id is used to identify if this line item is related to the line
-            item of other operational entities.
+          deprecated: true
+          description: Deprecated. Use globalLineItemIds instead.
           type: string
+        globalLineItemIds:
+          items:
+            description: Global line item ids that refer to this line item
+            type: string
+          type: array
+        id:
+          type: string
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        quantity:
+          description: The quantity of the lineItem
+          type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          type: array
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
+      required:
+        - id
+        - article
+      title: LoadUnitLineItem
+      description: LoadUnitLineItem
+    LoadUnitLineItemForCreation:
+      additionalProperties: false
+      properties:
+        article:
+          $ref: '#/components/schemas/PickLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        globalLineItemId:
+          deprecated: true
+          description: Deprecated. Use globalLineItemIds instead.
+          type: string
+        globalLineItemIds:
+          items:
+            description: Global line item ids that refer to this line item
+            type: string
+          type: array
         measurementUnitKey:
           description: Identifier for items unit of measurement.
           example: liter
