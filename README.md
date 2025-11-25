@@ -8,7 +8,12 @@ Public api assets for the fulfillmenttools platform API
 ## Generate API Client with HeyAPI OpenAPI Generator
 
 ### 1. Obtain the OpenAPI specification
-Ensure you have the latest version of FFT’s `api.swagger.yaml` in your working directory. You can download it from [this link](https://github.com/fulfillmenttools/fulfillmenttools-api-reference/blob/master/api.swagger.yaml).
+Ensure you have the latest version of FFT’s `api.swagger.yaml` in your working directory. You can download it from [this link](https://raw.githubusercontent.com/fulfillmenttools/fulfillmenttools-api-reference/refs/heads/master/api.swagger.yaml).
+```bash
+wget https://raw.githubusercontent.com/fulfillmenttools/fulfillmenttools-api-reference/refs/heads/master/api.swagger.yaml
+```
+
+
 
 ### 2. Generate the client (e.g. node / typescript)
 Run the generator with your preferred target language. For example, to generate a TypeScript client using the Fetch API:
@@ -26,7 +31,7 @@ npm install typescript ts-node node-fetch @types/node
 ```
 
 2. Compile and Integrate the Generated Client
-- Copy the contents of the `generated/typescript-fetch` folder into your project (or ensure it's referenced properly).
+- Copy the `src/client` folder into your project
 - Add a tsconfig.json to configure TypeScript if not present:
 ```json
 {
@@ -41,17 +46,16 @@ npm install typescript ts-node node-fetch @types/node
   "include": ["./src/client", "./src"]
 }
 ```
-- Create a src folder for your own code.
 
 3. Call an API endpoint
-- Create a src/index.ts file and add an API
+- Create a src/index.ts file and replace placeholders with your tenant information
 ```typescript
 import { type ClientOptions, getAllUsers } from "./client";
 import { createConfig } from "./client/client";
 import { client } from "./client/client.gen";
 
 client.setConfig(createConfig<ClientOptions>({
-    baseUrl: 'https://ocff-<myTenant>-<tier>.api.fulfillmenttools.com'
+    baseUrl: 'https://ocff-<tenant>-<tier>.api.fulfillmenttools.com'
 }));
 
 async function run() {
