@@ -48,20 +48,45 @@ npm install typescript ts-node node-fetch @types/node
 ```
 
 3. Call an API endpoint
-- Create a src/index.ts file and replace placeholders with your tenant information
+- Create a src/index.ts file and replace placeholders with your tenant information and credentials
 ```typescript
 import { type ClientOptions, getAllUsers } from "./client";
 import { createConfig } from "./client/client";
 import { client } from "./client/client.gen";
 
-client.setConfig(createConfig<ClientOptions>({
-    baseUrl: 'https://ocff-<tenant>-<tier>.api.fulfillmenttools.com'
-}));
+const options = {
+    baseUrl: 'https://<tenant>.api.fulfillmenttools.com',
+    email: '<email>',
+    password: '<password>',
+    apiKey: '<api-key>'
+}
+
+async function getJwtToken(): Promise<string> {
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${options.apiKey}`;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email: options.email, password: options.password, returnSecureToken: true,}),
+    });
+
+    if (!res.ok) {
+        const text = await res.text();
+        console.error(text);
+        throw new Error('Error obtaining firebase token, please check credentials.');
+    }
+    return (await res.json()).idToken;
+}
+
 
 async function run() {
     try {
+        client.setConfig(createConfig<ClientOptions>({
+            baseUrl: options.baseUrl,
+            headers: { Authorization: `Bearer ${await getJwtToken()}` },
+        }));
+
         const result = await getAllUsers();
-        console.log(result);
+        console.log(result.data);
     } catch (error) {
         console.error('Request failed:', error);
     }
@@ -74,91 +99,4 @@ run();
 4. Run the Code
 ```bash
 npx ts-node src/index.ts
-```
-
-5. Sample implementation for authentication with Firebase token
-
-In this example, we use axios to obtain a Firebase token using email and password authentication.
-```typescript
-import axios from "axios";
-
-export interface FirebaseToken {
-    idToken: string;
-    expiresIn: number;
-}
-
-export interface Token {
-    token: string;
-    expiryDate: Date;
-}
-
-export async function getFirebaseToken(options: {
-    email: string,
-    password: string,
-    firebaseWebApiKey: string
-}): Promise<Token> {
-    try {
-        const token = await axios.post<FirebaseToken>(
-            `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${options.firebaseWebApiKey}`,
-            {
-                email: options.email,
-                password: options.password,
-                returnSecureToken: true,
-            },
-            {
-                headers: {
-                    Accept: `application/json`,
-                    'Content-Type': `application/json`,
-                },
-            }
-        );
-
-        const expiryDate = new Date(Date.now() + 1000 * (token.data.expiresIn - 300));
-
-        return {
-            token: token.data.idToken,
-            expiryDate: expiryDate,
-        };
-    } catch (e) {
-        //@ts-ignore
-        console.error(e.response.data);
-        throw Error(`Error obtaining firebase token, please check credentials.`);
-    }
-}
-
-let firebaseToken: Token | undefined;
-let isTokenFetching = false;
-
-async function checkToken() {
-    if (!firebaseToken || firebaseToken.expiryDate < Date.now()) {
-        if (!isTokenFetching) {
-            isTokenFetching = true;
-            const firebaseToken = await getFirebaseToken({
-                email: '<myUsername>@ocff-<myTenant>-<tier>.com',
-                password: '<myPassword>',
-                firebaseWebApiKey: '<myFirebaseWebApiKey>'
-            });
-            config.headers.set('Authorization', `Bearer ${firebaseToken?.token}`);
-            isTokenFetching = false;
-        } else {
-            // wait for the token to be fetched
-            while (isTokenFetching) {
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-        }
-    }
-}
-```
-
-Now we can use this function to get a token and set it as header in our API calls if necessary.
-```typescript
-async function run() {
-    try {
-        checkToken();
-        const result = await getAllUsers();
-        console.log(result);
-    } catch (error) {
-        console.error('Request failed:', error);
-    }
-}
 ```
