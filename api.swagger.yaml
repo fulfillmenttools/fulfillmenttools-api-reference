@@ -27212,8 +27212,14 @@ components:
       description: AssignedRequiredLineItem
     AssignedRoles:
       properties:
-        contextLimitations:
+        context:
           description: The context limitations of the assigned role
+          items:
+            $ref: '#/components/schemas/ContextLimitation'
+          type: array
+        contextLimitations:
+          deprecated: true
+          description: The context limitations of the assigned role (deprecated)
           items:
             $ref: '#/components/schemas/ContextLimitation'
           type: array
@@ -69624,6 +69630,54 @@ components:
       title: UserAssignedFacilityForCreation
       type: object
       description: UserAssignedFacilityForCreation
+    UserAssignedRolesContextContextTypesEnumFilter:
+      properties:
+        eq:
+          description: Search by type
+          enum:
+            - FACILITY
+            - FACILITY_GROUP
+            - ROLE
+            - USER_ROLE
+            - ZONE
+          type: string
+        in:
+          description: Search by type
+          items:
+            enum:
+              - FACILITY
+              - FACILITY_GROUP
+              - ROLE
+              - USER_ROLE
+              - ZONE
+            type: string
+          type: array
+        notEq:
+          description: Search by type
+          enum:
+            - FACILITY
+            - FACILITY_GROUP
+            - ROLE
+            - USER_ROLE
+            - ZONE
+          type: string
+      title: UserAssignedRolesContextContextTypesEnumFilter
+      type: object
+      description: UserAssignedRolesContextContextTypesEnumFilter
+    UserAssignedRolesContextFilter:
+      properties:
+        type:
+          allOf:
+            - $ref: >-
+                #/components/schemas/UserAssignedRolesContextContextTypesEnumFilter
+          description: Search by type
+        values:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by values
+      title: UserAssignedRolesContextFilter
+      type: object
+      description: UserAssignedRolesContextFilter
     UserAssignedRolesContextLimitationsContextTypesEnumFilter:
       properties:
         eq:
@@ -69681,13 +69735,27 @@ components:
       title: UserAssignedRolesContextLimitationsListFilter
       type: object
       description: UserAssignedRolesContextLimitationsListFilter
+    UserAssignedRolesContextListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/UserAssignedRolesContextFilter'
+          description: Contains returns if at least one entry matches
+      title: UserAssignedRolesContextListFilter
+      type: object
+      description: UserAssignedRolesContextListFilter
     UserAssignedRolesFilter:
       properties:
+        context:
+          allOf:
+            - $ref: '#/components/schemas/UserAssignedRolesContextListFilter'
+          description: Nested list search by context
         contextLimitations:
           allOf:
             - $ref: >-
                 #/components/schemas/UserAssignedRolesContextLimitationsListFilter
-          description: Nested list search by contextLimitations
+          deprecated: true
+          description: 'Deprecated: Use context field instead'
         ref:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -69961,8 +70029,14 @@ components:
       type: string
     UserRole:
       properties:
-        contextLimitations:
+        context:
           description: The context limitations for this role
+          items:
+            $ref: '#/components/schemas/ContextLimitation'
+          type: array
+        contextLimitations:
+          deprecated: true
+          description: The context limitations for this role (deprecated)
           items:
             $ref: '#/components/schemas/ContextLimitation'
           type: array
