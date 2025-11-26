@@ -17746,6 +17746,8 @@ paths:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - WORKFLOW_DEFINITION_READ
+              - WORKFLOW_DEFINITION_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -30097,6 +30099,28 @@ components:
       type: object
       title: CompanyAddress
       description: CompanyAddress
+    ConditionWorkflowNode:
+      properties:
+        condition:
+          description: >-
+            Condition expression that determines the path. Connections from this
+            node must use .TRUE or .FALSE suffixes
+          type: string
+        key:
+          description: Unique identifier for this node within the workflow
+          type: string
+        type:
+          description: Type of the workflow node
+          enum:
+            - CONDITION
+          type: string
+      required:
+        - key
+        - type
+        - condition
+      title: ConditionWorkflowNode
+      type: object
+      description: ConditionWorkflowNode
     ConnectAppTypeEnum:
       description: The type of possible Apps
       enum:
@@ -33151,6 +33175,25 @@ components:
       title: ExternalStockChangeReasonOutput
       type: object
       description: ExternalStockChangeReasonOutput
+    ExternalSystemWorkflowNode:
+      properties:
+        description:
+          description: Optional description of the external system
+          type: string
+        key:
+          description: Unique identifier for this node within the workflow
+          type: string
+        type:
+          description: Type of the workflow node
+          enum:
+            - EXTERNAL_SYSTEM
+          type: string
+      required:
+        - key
+        - type
+      title: ExternalSystemWorkflowNode
+      type: object
+      description: ExternalSystemWorkflowNode
     Facility:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -35187,6 +35230,27 @@ components:
         - durationMs
       title: FenceStatistic
       description: FenceStatistic
+    FFTActivityNode:
+      properties:
+        key:
+          description: Unique identifier for this node within the workflow
+          type: string
+        type:
+          description: Type of the workflow node
+          enum:
+            - ORDER
+            - PICKING
+            - PACKING
+            - HANDOVER
+            - RESERVATION
+            - ROUTING
+          type: string
+      required:
+        - key
+        - type
+      title: FFTActivityNode
+      type: object
+      description: FFTActivityNode
     FilterEntity:
       properties:
         valueLocalized:
@@ -35774,6 +35838,26 @@ components:
       title: GLSCarrierCredentials
       xml:
         name: GLSCarrierCredentials
+    GuardWorkflowNode:
+      properties:
+        condition:
+          description: Condition expression that guards the workflow path
+          type: string
+        key:
+          description: Unique identifier for this node within the workflow
+          type: string
+        type:
+          description: Type of the workflow node
+          enum:
+            - GUARD
+          type: string
+      required:
+        - key
+        - type
+        - condition
+      title: GuardWorkflowNode
+      type: object
+      description: GuardWorkflowNode
     HandledItem:
       properties:
         quantity:
@@ -51306,6 +51390,8 @@ components:
             - RESERVATION_READ
             - FILTER_ENTITY_READ
             - BRAND_READ
+            - WORKFLOW_DEFINITION_READ
+            - WORKFLOW_DEFINITION_WRITE
             - STOCK_AVAILABILITIES_READ
             - LISTING_READ
             - LISTING_WRITE
@@ -51408,6 +51494,7 @@ components:
             - RESERVATION
             - FILTER_ENTITY
             - BRAND
+            - WORKFLOW_DEFINITION
             - STOCK_AVAILABILITIES
             - LISTING
             - PURCHASE_PRICE
@@ -58025,6 +58112,8 @@ components:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - WORKFLOW_DEFINITION_READ
+              - WORKFLOW_DEFINITION_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -58220,6 +58309,8 @@ components:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - WORKFLOW_DEFINITION_READ
+              - WORKFLOW_DEFINITION_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -58407,6 +58498,8 @@ components:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - WORKFLOW_DEFINITION_READ
+              - WORKFLOW_DEFINITION_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -58599,6 +58692,8 @@ components:
               - RESERVATION_READ
               - FILTER_ENTITY_READ
               - BRAND_READ
+              - WORKFLOW_DEFINITION_READ
+              - WORKFLOW_DEFINITION_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -68942,6 +69037,32 @@ components:
       type: object
       title: TransitTimeConfigurationForUpsert
       description: TransitTimeConfigurationForUpsert
+    TriggerExternalWorkflowNode:
+      properties:
+        description:
+          description: Optional description of the external trigger
+          type: string
+        interface:
+          description: Interface type for external trigger
+          enum:
+            - HTTP
+            - EVENT
+          type: string
+        key:
+          description: Unique identifier for this node within the workflow
+          type: string
+        type:
+          description: Type of the workflow node
+          enum:
+            - TRIGGER_EXTERNAL
+          type: string
+      required:
+        - key
+        - type
+        - interface
+      title: TriggerExternalWorkflowNode
+      type: object
+      description: TriggerExternalWorkflowNode
     UBSendCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
@@ -70098,6 +70219,181 @@ components:
       xml:
         name: WeekDay
       title: WeekDay
+    WorkflowConnection:
+      properties:
+        from:
+          description: >-
+            Source node key. For condition nodes, may include .TRUE or .FALSE
+            suffix (e.g., "fraud-check.TRUE")
+          type: string
+        to:
+          description: >-
+            Target node key. For condition nodes, may include .TRUE or .FALSE
+            suffix (e.g., "fraud-check.FALSE")
+          type: string
+      required:
+        - from
+        - to
+      title: WorkflowConnection
+      type: object
+      description: WorkflowConnection
+    WorkflowDefinition:
+      properties:
+        connections:
+          description: Array of connections between workflow nodes
+          items:
+            $ref: '#/components/schemas/WorkflowConnection'
+          type: array
+        description:
+          description: Description of what the workflow does
+          example: Conditional fraud verification flow with manual review
+          type: string
+        id:
+          description: Unique identifier for the workflow definition
+          example: 507f1f77bcf86cd799439011
+          type: string
+        key:
+          description: Unique key for the workflow definition
+          example: fraud-check-workflow
+          type: string
+        name:
+          description: Human-readable name of the workflow
+          example: Fraud Check Workflow
+          type: string
+        nodes:
+          description: Array of workflow nodes
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/FFTActivityNode'
+              - $ref: '#/components/schemas/GuardWorkflowNode'
+              - $ref: '#/components/schemas/ConditionWorkflowNode'
+              - $ref: '#/components/schemas/ExternalSystemWorkflowNode'
+              - $ref: '#/components/schemas/TriggerExternalWorkflowNode'
+          type: array
+        rootId:
+          description: Key of the root node where workflow execution begins
+          example: order-node
+          type: string
+        type:
+          description: Type of workflow
+          enum:
+            - ORDER
+          type: string
+      required:
+        - id
+        - key
+        - type
+        - name
+        - description
+        - rootId
+        - nodes
+        - connections
+      title: WorkflowDefinition
+      type: object
+      description: WorkflowDefinition
+    WorkflowDefinitionForCreation:
+      properties:
+        connections:
+          description: Array of connections between workflow nodes
+          items:
+            $ref: '#/components/schemas/WorkflowConnection'
+          type: array
+        description:
+          description: Description of what the workflow does
+          example: Conditional fraud verification flow with manual review
+          type: string
+        key:
+          description: Unique key for the workflow definition
+          example: fraud-check-workflow
+          type: string
+        name:
+          description: Human-readable name of the workflow
+          example: Fraud Check Workflow
+          type: string
+        nodes:
+          description: Array of workflow nodes
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/FFTActivityNode'
+              - $ref: '#/components/schemas/GuardWorkflowNode'
+              - $ref: '#/components/schemas/ConditionWorkflowNode'
+              - $ref: '#/components/schemas/ExternalSystemWorkflowNode'
+              - $ref: '#/components/schemas/TriggerExternalWorkflowNode'
+          type: array
+        rootId:
+          description: Key of the root node where workflow execution begins
+          example: order-node
+          type: string
+        type:
+          description: Type of workflow. Currently only ORDER workflows are supported
+          enum:
+            - ORDER
+          type: string
+      required:
+        - key
+        - type
+        - name
+        - description
+        - rootId
+        - nodes
+        - connections
+      title: WorkflowDefinitionForCreation
+      type: object
+      description: WorkflowDefinitionForCreation
+    WorkflowDefinitionForUpdate:
+      properties:
+        connections:
+          description: Array of connections between workflow nodes
+          items:
+            $ref: '#/components/schemas/WorkflowConnection'
+          type: array
+        description:
+          description: Description of what the workflow does
+          example: Conditional fraud verification flow with manual review
+          type: string
+        key:
+          description: Unique key for the workflow definition
+          example: fraud-check-workflow
+          type: string
+        name:
+          description: Human-readable name of the workflow
+          example: Fraud Check Workflow
+          type: string
+        nodes:
+          description: Array of workflow nodes
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/FFTActivityNode'
+              - $ref: '#/components/schemas/GuardWorkflowNode'
+              - $ref: '#/components/schemas/ConditionWorkflowNode'
+              - $ref: '#/components/schemas/ExternalSystemWorkflowNode'
+              - $ref: '#/components/schemas/TriggerExternalWorkflowNode'
+          type: array
+        rootId:
+          description: Key of the root node where workflow execution begins
+          example: order-node
+          type: string
+        type:
+          description: Type of workflow. Currently only ORDER workflows are supported
+          enum:
+            - ORDER
+          type: string
+        version:
+          description: Current version of the workflow definition for optimistic locking
+          example: 1
+          type: number
+      required:
+        - key
+        - type
+        - name
+        - description
+        - rootId
+        - nodes
+        - connections
+        - version
+      title: WorkflowDefinitionForUpdate
+      type: object
+      description: WorkflowDefinitionForUpdate
     Zone:
       allOf:
         - $ref: '#/components/schemas/ZoneForReplacement'
