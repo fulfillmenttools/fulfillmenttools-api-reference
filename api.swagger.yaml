@@ -30543,6 +30543,7 @@ components:
             - services.SaturdayDelivery
             - services.IdentityCheckPrivate
             - services.IdentityCheckCompany
+            - carrierInformation.shippingContainerNumber
           type: string
       type: object
       title: CountryServiceMappingShippingAttribute
@@ -44665,6 +44666,8 @@ components:
               enum:
                 - ModifyParcel
               type: string
+            carrierInformation:
+              $ref: '#/components/schemas/ParcelCarrierInformation'
             carrierProduct:
               description: Only changable on status OPEN or FAILED of the existing Parcel
               nullable: true
@@ -50010,6 +50013,8 @@ components:
               description: Indicates if gdpr related data was anonymized
               example: false
               type: boolean
+            carrierInformation:
+              $ref: '#/components/schemas/ParcelCarrierInformation'
             carrierProduct:
               description: Desired product of given carrier to choose when ordering a label
               example: EXPRESS
@@ -50131,6 +50136,16 @@ components:
         - category
       title: ParcelArticleAttributeItemForUpdate
       description: ParcelArticleAttributeItemForUpdate
+    ParcelCarrierInformation:
+      additionalProperties: false
+      description: Carrier specific information about the parcel for the label creation
+      properties:
+        shippingContainerNumber:
+          description: Specific shipping container number for the parcel
+          example: 123456-ABC
+          type: string
+      type: object
+      title: ParcelCarrierInformation
     ParcelDimensions:
       additionalProperties: false
       nullable: true
@@ -50163,6 +50178,8 @@ components:
     ParcelForCreation:
       additionalProperties: false
       properties:
+        carrierInformation:
+          $ref: '#/components/schemas/ParcelCarrierInformation'
         carrierProduct:
           description: Desired product of given carrier to choose when ordering a label
           example: EXPRESS
