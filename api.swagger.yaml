@@ -43633,21 +43633,6 @@ components:
         - active
       type: object
       title: ManualRerouteConfiguration
-    ManualRoutingPayload:
-      properties:
-        rerouteDescription:
-          $ref: '#/components/schemas/RerouteDescriptionHistoryLog'
-        targetFacility:
-          $ref: '#/components/schemas/ProcessHistoryLogFacility'
-          required:
-            - facilityRef
-            - version
-            - name
-      required:
-        - targetFacility
-      type: object
-      title: ManualRoutingPayload
-      description: ManualRoutingPayload
     MeasurementUnit:
       additionalProperties: false
       allOf:
@@ -54070,8 +54055,9 @@ components:
         - UNROUTABLE_ITEMS_REROUTE
         - ORDER_MANUAL_FACILITY_ASSIGNMENT
         - ORDER_TIME_TRIGGERED_REROUTE
+        - ORDER_HAS_UNROUTABLE_ITEMS
         - ORDER_INACTIVITY_TIME_TRIGGERED_REROUTE
-        - TASK_MANUAL_ASSIGNMENT
+        - TASK_MANUAL_REROUTE
         - CONSUMER_ADDRESS_CHANGED
         - ORDER_ITEM_AMOUNT_CHANGED
         - ORDER_ITEM_DELETED
@@ -54105,7 +54091,8 @@ components:
           description: Payload varies based on eventType
           nullable: true
           oneOf:
-            - $ref: '#/components/schemas/ManualRoutingPayload'
+            - $ref: '#/components/schemas/RerouteLogPayload'
+            - $ref: '#/components/schemas/RerouteLogPayloadBase'
             - $ref: '#/components/schemas/OrderCancellationPayload'
             - $ref: '#/components/schemas/OrderModificationPayloadBase'
             - $ref: '#/components/schemas/ConsumerAddressChangedPayload'
@@ -56621,6 +56608,28 @@ components:
       type: object
       title: RerouteDescriptions
       description: RerouteDescriptions
+    RerouteLogPayload:
+      properties:
+        rerouteDescription:
+          $ref: '#/components/schemas/RerouteDescriptionHistoryLog'
+        targetFacility:
+          $ref: '#/components/schemas/ProcessHistoryLogFacility'
+          required:
+            - facilityRef
+            - version
+            - name
+      required:
+        - targetFacility
+      type: object
+      title: RerouteLogPayload
+      description: RerouteLogPayload
+    RerouteLogPayloadBase:
+      properties:
+        rerouteDescription:
+          $ref: '#/components/schemas/RerouteDescriptionHistoryLog'
+      type: object
+      title: RerouteLogPayloadBase
+      description: RerouteLogPayloadBase
     RerouteReason:
       enum:
         - ORDERMODIFIED
