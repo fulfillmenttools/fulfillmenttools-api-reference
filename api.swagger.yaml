@@ -26229,6 +26229,41 @@ components:
       title: AbstractArticle
       type: object
       description: AbstractArticle
+    AbstractArticleForCreation:
+      properties:
+        titleLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: The translations for the title of the product
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        imageUrl:
+          description: >-
+            A web link to a picture of this article. Please make sure that no
+            authentication is required to fetch the image!
+          type: string
+        tenantArticleId:
+          description: This is a reference to an article number
+          example: '4711'
+          type: string
+        title:
+          description: The title of the product
+          example: Cologne Water
+          type: string
+        weight:
+          description: weight value is in gram
+          minimum: 0
+          type: number
+      required:
+        - title
+      title: AbstractArticleForCreation
+      type: object
+      description: AbstractArticleForCreation
     AbstractCarrierCredentials:
       discriminator:
         propertyName: key
@@ -47274,6 +47309,26 @@ components:
         name: OrderLineItemArticle
       title: OrderLineItemArticle
       description: OrderLineItemArticle
+    OrderLineItemArticleForUpdate:
+      allOf:
+        - $ref: '#/components/schemas/AbstractArticleForCreation'
+        - properties:
+            attributes:
+              description: >-
+                Attributes are used in the fulfillmenttools platform in order to
+                impose a certain degree of customization to a process, such as
+                improving the appearance in the platform and clients.
+
+                Details about usage can be found <a
+                href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/customization-via-attributes">here</a>
+              items:
+                $ref: '#/components/schemas/OrderArticleAttributeItem'
+              type: array
+          type: object
+      xml:
+        name: OrderLineItemArticleForUpdate
+      title: OrderLineItemArticleForUpdate
+      description: OrderLineItemArticleForUpdate
     OrderLineItemCustomAttributesUpdateParameter:
       allOf:
         - $ref: '#/components/schemas/AbstractOrderLineItemActionsParameter'
@@ -47400,6 +47455,8 @@ components:
       description: OrderLineItemForCreation
     OrderLineItemForUpdate:
       properties:
+        article:
+          $ref: '#/components/schemas/OrderLineItemArticleForUpdate'
         id:
           description: >-
             The id of this order line item. It is generated during creation
@@ -47410,8 +47467,6 @@ components:
           description: The quantity of this order line item.
           example: 2
           type: number
-      required:
-        - id
       title: OrderLineItemForUpdate
       description: OrderLineItemForUpdate
     OrderModificationConfiguration:
