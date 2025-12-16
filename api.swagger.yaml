@@ -51645,6 +51645,8 @@ components:
           $ref: '#/components/schemas/StorageLocationAssignmentConfiguration'
         takeOverPickJobConfiguration:
           $ref: '#/components/schemas/TakeOverPickJobConfiguration'
+        takeOverPickRunConfiguration:
+          $ref: '#/components/schemas/TakeOverPickRunConfiguration'
       type: object
       title: PickingConfigurations
       description: PickingConfigurations
@@ -53130,6 +53132,7 @@ components:
         - $ref: '#/components/schemas/PickRunResumeActionParameter'
         - $ref: '#/components/schemas/PickRunRemovePickJobActionParameter'
         - $ref: '#/components/schemas/PickRunSplitLineItemsActionParameter'
+        - $ref: '#/components/schemas/TakeOverPickRunActionParameter'
       title: PickRunActionsParameter
       description: PickRunActionsParameter
     PickRunCancelActionEnum:
@@ -68286,13 +68289,47 @@ components:
       properties:
         active:
           default: false
-          description: Enable or disable returns
+          description: Enable or disable pick job takeover
           type: boolean
       required:
         - active
       type: object
       title: TakeOverPickJobConfiguration
       description: TakeOverPickJobConfiguration
+    TakeOverPickRunActionEnum:
+      enum:
+        - TAKE_OVER_PICK_RUN
+      type: string
+      title: TakeOverPickRunActionEnum
+      description: TakeOverPickRunActionEnum
+    TakeOverPickRunActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/TakeOverPickRunActionEnum'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - name
+        - version
+      title: TakeOverPickRunActionParameter
+      type: object
+      description: TakeOverPickRunActionParameter
+    TakeOverPickRunConfiguration:
+      properties:
+        active:
+          default: false
+          description: Enable or disable pick run takeover
+          type: boolean
+      required:
+        - active
+      type: object
+      title: TakeOverPickRunConfiguration
+      description: TakeOverPickRunConfiguration
     TargetAddress:
       allOf:
         - $ref: '#/components/schemas/ConsumerAddress'
