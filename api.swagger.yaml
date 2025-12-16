@@ -63416,6 +63416,8 @@ components:
           items:
             $ref: '#/components/schemas/SourcingOptionSalesPrice'
           type: array
+        totalCosts:
+          $ref: '#/components/schemas/SourcingOptionsMoney'
         totalSalesPrice:
           description: Sum of all sales prices of the items in the solution
           example: 10
@@ -63519,6 +63521,22 @@ components:
       type: object
       title: SourcingOptionsExecutionResults
       description: SourcingOptionsExecutionResults
+    SourcingOptionsMoney:
+      properties:
+        currency:
+          $ref: '#/components/schemas/CurrencyCode'
+        decimalPlaces:
+          type: number
+        value:
+          type: number
+      required:
+        - value
+        - currency
+      type: object
+      xml:
+        name: SourcingOptionsMoney
+      title: SourcingOptionsMoney
+      description: SourcingOptionsMoney
     SourcingOptionsRequest:
       properties:
         additionalInfo:
@@ -63583,19 +63601,14 @@ components:
       title: SourcingOptionsTransferDeliverCostCoefficient
       description: SourcingOptionsTransferDeliverCostCoefficient
     SourcingOptionsTransferDeliveryCost:
+      allOf:
+        - $ref: '#/components/schemas/SourcingOptionsMoney'
       properties:
-        currency:
-          $ref: '#/components/schemas/CurrencyCode'
-        decimalPlaces:
-          type: number
         deliveryCostCoefficient:
           $ref: '#/components/schemas/SourcingOptionsTransferDeliverCostCoefficient'
-        value:
-          type: number
-      required:
-        - value
-        - currency
       type: object
+      xml:
+        name: SourcingOptionsTransferDeliveryCost
       title: SourcingOptionsTransferDeliveryCost
       description: SourcingOptionsTransferDeliveryCost
     SourcingOptionsTransferPackagingInformation:
