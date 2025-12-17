@@ -27066,6 +27066,27 @@ components:
         - availableStock
       title: ArticleAvailability
       description: ArticleAvailability
+    ArticleHistoryLog:
+      properties:
+        titleLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        measurementUnit:
+          properties:
+            abbreviationLocalized:
+              $ref: '#/components/schemas/LocaleString'
+              description: Abbreviation of the measurement unit.
+          type: object
+        newQuantity:
+          type: number
+        previousQuantity:
+          type: number
+        title:
+          type: string
+      required:
+        - title
+      type: object
+      title: ArticleHistoryLog
+      description: ArticleHistoryLog
     ArticleItem:
       additionalProperties: false
       properties:
@@ -30287,17 +30308,6 @@ components:
       type: object
       title: ConsumerAddress
       description: ConsumerAddress
-    ConsumerAddressChangedPayload:
-      allOf:
-        - $ref: '#/components/schemas/OrderModificationPayloadBase'
-      properties:
-        changedFields:
-          description: List of changed address fields
-          items:
-            type: string
-          type: array
-      title: ConsumerAddressChangedPayload
-      description: ConsumerAddressChangedPayload
     ConsumerAddressesForSourcingOptions:
       properties:
         addresses:
@@ -30418,6 +30428,27 @@ components:
       type: object
       title: ConsumerAddressForSourcingOptionsPhoneNumber
       description: ConsumerAddressForSourcingOptionsPhoneNumber
+    ConsumerAddressModifiedLogEntry:
+      properties:
+        addressType:
+          $ref: '#/components/schemas/AddressType'
+        changedFields:
+          items:
+            type: string
+          type: array
+      type: object
+      title: ConsumerAddressModifiedLogEntry
+      description: ConsumerAddressModifiedLogEntry
+    ConsumerAddressModifiedLogPayload:
+      properties:
+        changes:
+          description: List of address changes
+          items:
+            $ref: '#/components/schemas/ConsumerAddressModifiedLogEntry'
+          type: array
+      type: object
+      title: ConsumerAddressModifiedLogPayload
+      description: ConsumerAddressModifiedLogPayload
     ContainerDimensions:
       additionalProperties: false
       properties:
@@ -46456,12 +46487,7 @@ components:
         - $ref: '#/components/schemas/OperativeEntityPayloadBase'
       properties:
         article:
-          properties:
-            titleLocalized:
-              $ref: '#/components/schemas/LocaleString'
-            title:
-              type: string
-          type: object
+          $ref: '#/components/schemas/ArticleHistoryLog'
         picked:
           type: number
         quantity:
@@ -47469,6 +47495,17 @@ components:
           type: number
       title: OrderLineItemForUpdate
       description: OrderLineItemForUpdate
+    OrderLineItemModifiedLogPayload:
+      allOf:
+        - $ref: '#/components/schemas/OrderModificationPayloadBase'
+      properties:
+        articles:
+          description: List of modified articles
+          items:
+            $ref: '#/components/schemas/ArticleHistoryLog'
+          type: array
+      title: OrderLineItemModifiedLogPayload
+      description: OrderLineItemModifiedLogPayload
     OrderModificationConfiguration:
       additionalProperties: false
       description: >-
@@ -47511,6 +47548,21 @@ components:
       type: object
       title: OrderModificationPayloadBase
       description: OrderModificationPayloadBase
+    OrderModificationPreferredHandlingTimePayload:
+      allOf:
+        - $ref: '#/components/schemas/OrderModificationPayloadBase'
+      properties:
+        newPreferredHandlingTime:
+          format: date-time
+          type: string
+        previousPreferredHandlingTime:
+          format: date-time
+          type: string
+      required:
+        - previousPreferredHandlingTime
+        - newPreferredHandlingTime
+      title: OrderModificationPreferredHandlingTimePayload
+      description: OrderModificationPreferredHandlingTimePayload
     OrderModifiedEventPayload:
       allOf:
         - $ref: '#/components/schemas/Order'
@@ -54111,6 +54163,7 @@ components:
       description: The domain type of the process history entry
       enum:
         - ORDER
+        - ORDER_MODIFICATION
         - PICKJOB
         - PACKJOB
         - PARCEL
@@ -54169,7 +54222,10 @@ components:
             - $ref: '#/components/schemas/RerouteLogPayloadBase'
             - $ref: '#/components/schemas/OrderCancellationPayload'
             - $ref: '#/components/schemas/OrderModificationPayloadBase'
-            - $ref: '#/components/schemas/ConsumerAddressChangedPayload'
+            - $ref: '#/components/schemas/ConsumerAddressModifiedLogPayload'
+            - $ref: >-
+                #/components/schemas/OrderModificationPreferredHandlingTimePayload
+            - $ref: '#/components/schemas/OrderLineItemModifiedLogPayload'
             - $ref: '#/components/schemas/OperativeEntityPayloadBase'
             - $ref: '#/components/schemas/ExternalActionHistoryLogPayload'
             - $ref: '#/components/schemas/OperativeEntityPayloadShortPicked'
