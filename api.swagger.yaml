@@ -37388,34 +37388,54 @@ components:
       title: HandoverLineItemStatus
       description: HandoverLineItemStatus
     HandoverSubstituteLineItem:
-      allOf:
-        - $ref: '#/components/schemas/SubstituteLineItem'
-        - properties:
-            handedOverQuantity:
-              description: >-
-                quantity of the specific item to substitute the original line
-                item that has been handed over
-              example: 20
-              format: int64
-              minimum: 0
-              type: integer
-            id:
-              type: string
-            quantity:
-              description: >-
-                quantity of the specific item to substitute the original line
-                item that has been provided for handover
-              example: 21
-              format: int64
-              minimum: 1
-              type: integer
-            refused:
-              items:
-                $ref: '#/components/schemas/RefusedItem'
-              type: array
+      properties:
+        article:
+          $ref: '#/components/schemas/SubstituteLineItemArticle'
+        handedOverQuantity:
+          description: >-
+            quantity of the specific item to substitute the original line item
+            that has been handed over
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+        id:
+          type: string
+        partialStockLocations:
+          items:
+            $ref: '#/components/schemas/SubstituteLineItemPartialStockLocation'
+        pickedAt:
+          description: Date when the line has been picked.
+          example: 2024-02-03T08:45:51.525Z
+          format: date-time
+          type: string
+        priority:
+          description: >-
+            This field allows you to rank substitutes against each other. The
+            lowest number is the most preferrable substitute.
+          minimum: 0
+          type: number
+        quantity:
+          description: >-
+            quantity of the specific item to substitute the original line item
+            that has been provided for handover
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        refused:
+          items:
+            $ref: '#/components/schemas/RefusedItem'
+          type: array
+        scannableCodes:
+          items:
+            description: Codes, that identify the article
+            type: string
+          type: array
       required:
         - quantity
         - article
+        - id
       title: HandoverSubstituteLineItem
       description: HandoverSubstituteLineItem
     HandoverSubstituteLineItemForUpdate:
@@ -67834,6 +67854,12 @@ components:
           type: array
         imageUrl:
           type: string
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        measurementValidation:
+          $ref: '#/components/schemas/MeasurementValidation'
         priority:
           description: >-
             This field allows you to rank substitutes against each other. The
@@ -67845,6 +67871,12 @@ components:
             description: Strings, that identify the substitute article
             type: string
           type: array
+        secondaryMeasurementUnitKey:
+          description: >-
+            Identifier for items unit of measurement. E.g. measurementUnitKey is
+            pieces and secondaryQuantity is gram
+          example: gram
+          type: string
         tenantArticleId:
           type: string
         title:
@@ -67866,11 +67898,28 @@ components:
       properties:
         article:
           $ref: '#/components/schemas/SubstituteLineItemArticle'
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
         id:
           type: string
+        measurementUnitKey:
+          description: Identifier for items unit of measurement.
+          example: liter
+          type: string
+        measurementValidation:
+          $ref: '#/components/schemas/MeasurementValidation'
         partialStockLocations:
           items:
             $ref: '#/components/schemas/SubstituteLineItemPartialStockLocation'
+        picked:
+          description: The amount of articles that were picked for this pickline.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
         pickedAt:
           description: Date when the line has been picked.
           example: 2024-02-03T08:45:51.525Z
@@ -67884,8 +67933,8 @@ components:
           type: number
         quantity:
           description: >-
-            quantity of the specific article that has been picked to substitute
-            the ordered line item
+            quantity of the specific article that needs to be picked to
+            substitute the item
           example: 21
           format: int64
           minimum: 1
@@ -67899,9 +67948,30 @@ components:
             description: Codes, that identify the article
             type: string
           type: array
+        secondaryMeasurementUnitKey:
+          description: >-
+            Identifier for items unit of measurement. E.g. measurementUnitKey is
+            pieces and secondaryQuantity is gram
+          example: gram
+          type: string
+        secondaryPicked:
+          description: The secondary amount of articles that were picked for this pickline.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+        secondaryQuantity:
+          description: >-
+            secondary quantity of this item, E.g. quantity is the count and
+            secondaryQuantity is the weight
+          example: 200
+          format: int64
+          minimum: 1
+          type: integer
       required:
-        - quantity
         - article
+        - id
+        - quantity
       type: object
       title: SubstituteLineItem
       description: SubstituteLineItem
@@ -67921,6 +67991,12 @@ components:
       description: SubstituteLineItemArticle
     SubstituteLineItemForCreation:
       properties:
+        picked:
+          description: The amount of articles that were picked for this pickline.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
         pickedAt:
           description: Date when the line has been picked.
           example: 2024-02-03T08:45:51.525Z
@@ -67928,8 +68004,8 @@ components:
           type: string
         quantity:
           description: >-
-            quantity of the specific article that has been picked to substitute
-            the ordered line item
+            quantity of the specific article that needs to be picked to
+            substitute the item
           example: 21
           format: int64
           minimum: 1
@@ -67938,8 +68014,8 @@ components:
           description: TenantArticleId of the substitute article
           type: string
       required:
-        - quantity
         - tenantArticleId
+        - quantity
       type: object
       title: SubstituteLineItemForCreation
       description: SubstituteLineItemForCreation
@@ -67947,11 +68023,30 @@ components:
       properties:
         location:
           $ref: '#/components/schemas/Location'
+        picked:
+          example: 21
+          format: int64
+          minimum: 0
+          type: number
         quantity:
           example: 21
           format: int64
           minimum: 0
           type: number
+        ratingScore:
+          type: number
+        sequenceScore:
+          type: number
+        stockProperties:
+          anyOf:
+            - $ref: '#/components/schemas/PickingStockPropertyPreset'
+            - $ref: '#/components/schemas/PickingStockProperty'
+        stockRef:
+          type: string
+        tenantPartialStockId:
+          type: string
+        zoneName:
+          type: string
       required:
         - location
         - quantity
