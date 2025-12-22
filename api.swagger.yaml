@@ -14431,6 +14431,276 @@ paths:
       summary: Update load unit type icon
       tags:
         - Picking (Operations)
+  /api/lookuprecorditems/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for LookupRecordItem
+      operationId: searchLookupRecordItem
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookupRecordItemSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookupRecordItemPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: List all record items (search cached for 5 minutes)
+      tags:
+        - Checkout Options (DOMS)
+      x-badges:
+        - color: orange
+          label: BETA
+  /api/lookuprecords:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Retrieves all lookup records.
+      operationId: getAllLookupRecords
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookupRecord'
+          description: Successfully retrieved the lookup records.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get all lookup records
+      tags:
+        - Checkout Options (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Creates a single lookup record.
+      operationId: createLookupRecord
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookupRecordForCreation'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookupRecord'
+          description: Successfully created the lookup record.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Create a lookup record by its ID
+      tags:
+        - Checkout Options (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/lookuprecords/{recordId}:
+    delete:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Deletes a single lookup record using its unique identifier.
+      operationId: deleteLookupRecord
+      parameters:
+        - in: path
+          name: recordId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookupRecord'
+          description: Successfully deleted the lookup record.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Delete a lookup record by its ID
+      tags:
+        - Checkout Options (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Retrieves a single lookup record using its unique identifier.
+      operationId: getLookupRecord
+      parameters:
+        - in: path
+          name: recordId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookupRecord'
+          description: Successfully retrieved the lookup record.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get a lookup record by its ID
+      tags:
+        - Checkout Options (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+    put:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Updates a single lookup record.
+      operationId: putLookupRecord
+      parameters:
+        - in: path
+          name: recordId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookupRecordForUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookupRecord'
+          description: Successfully updated the lookup record.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Updates a whole lookup record by its ID
+      tags:
+        - Checkout Options (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/measurementunits:
     get:
       description: >-
@@ -17748,6 +18018,8 @@ paths:
               - BRAND_READ
               - WORKFLOW_DEFINITION_READ
               - WORKFLOW_DEFINITION_WRITE
+              - LOOKUP_RECORD_READ
+              - LOOKUP_RECORD_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -43373,6 +43645,284 @@ components:
         name: Location
       title: Location
       description: Location
+    LookupAttributeDefinitions:
+      properties: {}
+      title: LookupAttributeDefinitions
+      type: object
+      description: LookupAttributeDefinitions
+    LookupRecord:
+      properties:
+        attributeDefinitions:
+          allOf:
+            - $ref: '#/components/schemas/LookupAttributeDefinitions'
+          description: >-
+            Map of attribute definitions that specify the type for each
+            attribute.
+        created:
+          description: The date when the record was created.
+          format: date-time
+          type: string
+        id:
+          type: string
+        items:
+          description: >-
+            Collection of items in the lookup record, each containing attribute
+            values.
+          items:
+            $ref: '#/components/schemas/LookupRecordItemStripped'
+          type: array
+        lastModified:
+          description: The date when the record was last modified.
+          format: date-time
+          type: string
+        tenantRecordId:
+          description: Tenant-specific identifier for the lookup record.
+          maxLength: 20
+          minLength: 1
+          type: string
+        version:
+          description: The version of the record.
+          type: number
+      required:
+        - id
+        - version
+        - attributeDefinitions
+        - items
+      title: LookupRecord
+      type: object
+      description: LookupRecord
+    LookupRecordForCreation:
+      properties:
+        attributeDefinitions:
+          allOf:
+            - $ref: '#/components/schemas/LookupAttributeDefinitions'
+          description: >-
+            Map of attribute definitions that specify the type for each
+            attribute.
+        items:
+          description: >-
+            Collection of items in the lookup record, each containing attribute
+            values.
+          items:
+            $ref: '#/components/schemas/LookupRecordItemForCreation'
+          type: array
+        tenantRecordId:
+          description: Tenant-specific identifier for the lookup record.
+          maxLength: 20
+          minLength: 1
+          type: string
+      required:
+        - attributeDefinitions
+        - items
+      title: LookupRecordForCreation
+      type: object
+      description: LookupRecordForCreation
+    LookupRecordForUpdate:
+      properties:
+        attributeDefinitions:
+          allOf:
+            - $ref: '#/components/schemas/LookupAttributeDefinitions'
+          description: >-
+            Map of attribute definitions that specify the type for each
+            attribute.
+        items:
+          description: >-
+            Collection of items in the lookup record, each containing attribute
+            values.
+          items:
+            $ref: '#/components/schemas/LookupRecordItemForCreation'
+          type: array
+        tenantRecordId:
+          description: Tenant-specific identifier for the lookup record.
+          maxLength: 20
+          minLength: 1
+          type: string
+        version:
+          description: The version of the record.
+          type: number
+      required:
+        - version
+        - attributeDefinitions
+        - items
+      title: LookupRecordForUpdate
+      type: object
+      description: LookupRecordForUpdate
+    LookupRecordItem:
+      properties:
+        id:
+          type: string
+        recordRef:
+          description: Reference to the parent lookup record.
+          type: string
+        tenantRecordId:
+          description: Tenant-specific identifier for the lookup record.
+          maxLength: 20
+          minLength: 1
+          type: string
+        values:
+          $ref: '#/components/schemas/LookupRecordItemValue'
+          description: Array of attribute-value pairs for the lookup record item.
+          items:
+            type: string
+      required:
+        - recordRef
+        - values
+        - id
+      title: LookupRecordItem
+      type: object
+      description: LookupRecordItem
+    LookupRecordItemForCreation:
+      properties:
+        values:
+          description: Array of attribute-value pairs for the lookup record item.
+          items:
+            $ref: '#/components/schemas/LookupRecordItemValue'
+          type: array
+      required:
+        - values
+      title: LookupRecordItemForCreation
+      type: object
+      description: LookupRecordItemForCreation
+    LookupRecordItemPaginatedResult:
+      properties:
+        lookupRecordItems:
+          items:
+            $ref: '#/components/schemas/LookupRecordItem'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - lookupRecordItems
+      title: LookupRecordItemPaginatedResult
+      type: object
+      description: LookupRecordItemPaginatedResult
+    LookupRecordItemSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after. The value is provided in the
+            `pageInfo.endCursor` field of the response.
+          type: string
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/LookupRecordItemSearchQuery'
+        size:
+          default: 20
+          description: Number of items to return.
+          maximum: 250
+          minimum: 1
+          type: number
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: LookupRecordItemSearchPayload
+      type: object
+      description: LookupRecordItemSearchPayload
+    LookupRecordItemSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/LookupRecordItemSearchQuery'
+          type: array
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        or:
+          items:
+            $ref: '#/components/schemas/LookupRecordItemSearchQuery'
+          type: array
+        recordRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by recordRef
+        tenantRecordId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantRecordId
+        values:
+          allOf:
+            - $ref: '#/components/schemas/LookupRecordItemValuesListFilter'
+          description: Nested list search by values
+      title: LookupRecordItemSearchQuery
+      type: object
+      description: LookupRecordItemSearchQuery
+    LookupRecordItemStripped:
+      properties:
+        id:
+          description: Unique identifier for the lookup record item.
+          type: string
+        values:
+          description: Array of attribute-value pairs for the lookup record item.
+          items:
+            $ref: '#/components/schemas/LookupRecordItemValue'
+          type: array
+      required:
+        - values
+        - id
+      title: LookupRecordItemStripped
+      type: object
+      description: LookupRecordItemStripped
+    LookupRecordItemValue:
+      properties:
+        attributeId:
+          description: Identifier of the attribute.
+          maxLength: 100
+          minLength: 1
+          type: string
+        attributeValue:
+          anyOf:
+            - maxLength: 150
+              minLength: 1
+              type: string
+            - type: number
+            - enum:
+                - null
+          description: Value of the attribute (can be string, number, or null).
+      required:
+        - attributeId
+        - attributeValue
+      title: LookupRecordItemValue
+      type: object
+      description: LookupRecordItemValue
+    LookupRecordItemValuesFilter:
+      properties:
+        attributeId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by attributeId
+        attributeValue:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by attributeValue
+      title: LookupRecordItemValuesFilter
+      type: object
+      description: LookupRecordItemValuesFilter
+    LookupRecordItemValuesListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/LookupRecordItemValuesFilter'
+          description: Contains returns if at least one entry matches
+      title: LookupRecordItemValuesListFilter
+      type: object
+      description: LookupRecordItemValuesListFilter
     ManagedFacility:
       allOf:
         - $ref: '#/components/schemas/Facility'
@@ -51640,6 +52190,8 @@ components:
             - BRAND_READ
             - WORKFLOW_DEFINITION_READ
             - WORKFLOW_DEFINITION_WRITE
+            - LOOKUP_RECORD_READ
+            - LOOKUP_RECORD_WRITE
             - STOCK_AVAILABILITIES_READ
             - LISTING_READ
             - LISTING_WRITE
@@ -51743,6 +52295,7 @@ components:
             - FILTER_ENTITY
             - BRAND
             - WORKFLOW_DEFINITION
+            - LOOKUP_RECORD
             - STOCK_AVAILABILITIES
             - LISTING
             - PURCHASE_PRICE
@@ -58411,6 +58964,8 @@ components:
               - BRAND_READ
               - WORKFLOW_DEFINITION_READ
               - WORKFLOW_DEFINITION_WRITE
+              - LOOKUP_RECORD_READ
+              - LOOKUP_RECORD_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -58608,6 +59163,8 @@ components:
               - BRAND_READ
               - WORKFLOW_DEFINITION_READ
               - WORKFLOW_DEFINITION_WRITE
+              - LOOKUP_RECORD_READ
+              - LOOKUP_RECORD_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -58797,6 +59354,8 @@ components:
               - BRAND_READ
               - WORKFLOW_DEFINITION_READ
               - WORKFLOW_DEFINITION_WRITE
+              - LOOKUP_RECORD_READ
+              - LOOKUP_RECORD_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -58991,6 +59550,8 @@ components:
               - BRAND_READ
               - WORKFLOW_DEFINITION_READ
               - WORKFLOW_DEFINITION_WRITE
+              - LOOKUP_RECORD_READ
+              - LOOKUP_RECORD_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
