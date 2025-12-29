@@ -42153,6 +42153,14 @@ components:
               items:
                 $ref: '#/components/schemas/PartialStock'
               type: array
+            recordableAttributes:
+              description: >-
+                Customizable information about the lineItem that can be set
+                during the process.
+              items:
+                $ref: '#/components/schemas/ListingRecordableAttribute'
+              maxItems: 40
+              type: array
             scannableCodes:
               items:
                 description: Codes, that identify the article
@@ -42663,7 +42671,7 @@ components:
             Customizable information about the lineItem that can be set during
             the process.
           items:
-            $ref: '#/components/schemas/ListingRecordableAttribute'
+            $ref: '#/components/schemas/ListingRecordableAttributeForCreation'
           maxItems: 40
           type: array
         scannableCodes:
@@ -42848,6 +42856,30 @@ components:
       title: ListingRecordableAttribute
       type: object
       description: ListingRecordableAttribute
+    ListingRecordableAttributeForCreation:
+      additionalProperties: false
+      properties:
+        keyLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        recordingRule:
+          description: Indicates whether the value has to be recorded or not
+          enum:
+            - OPTIONAL
+            - MANDATORY
+          example: MANDATORY
+          type: string
+        value:
+          description: The value of the attribute
+          example: Germany
+          minLength: 1
+          nullable: true
+          type: string
+      required:
+        - keyLocalized
+        - recordingRule
+      title: ListingRecordableAttributeForCreation
+      type: object
+      description: ListingRecordableAttributeForCreation
     ListingSearchPayload:
       properties:
         after:
@@ -45111,7 +45143,7 @@ components:
                 Customizable information about the lineItem that can be set
                 during the process.
               items:
-                $ref: '#/components/schemas/ListingRecordableAttribute'
+                $ref: '#/components/schemas/ListingRecordableAttributeForCreation'
               maxItems: 40
               type: array
             scannableCodes:
