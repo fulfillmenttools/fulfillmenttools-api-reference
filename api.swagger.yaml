@@ -54893,6 +54893,7 @@ components:
         - ORDER_MODIFICATION
         - PICKJOB
         - PACKJOB
+        - SERVICEJOB
         - PARCEL
         - HANDOVER
         - ROUTING_PLAN
@@ -54931,6 +54932,10 @@ components:
         - HANDOVER_DONE
         - HANDOVER_DONE_WITH_REFUSED_ITEMS
         - HANDOVER_CANCELED
+        - SERVICEJOB_CREATED
+        - SERVICEJOB_IN_PROGRESS
+        - SERVICEJOB_DONE
+        - SERVICEJOB_CANCELED
         - ACTION_TRIGGERED
         - COMMENT_ADDED
       type: string
@@ -63153,6 +63158,26 @@ components:
         - nextServiceJobLinks
       title: ServiceJobLinkForCreation
       description: ServiceJobLinkForCreation
+    ServiceJobLogCancellationPayload:
+      allOf:
+        - $ref: '#/components/schemas/ServiceJobLogPayload'
+      properties:
+        statusInformationCancelReason:
+          $ref: '#/components/schemas/ServiceJobStatusReason'
+      type: object
+      title: ServiceJobLogCancellationPayload
+      description: ServiceJobLogCancellationPayload
+    ServiceJobLogPayload:
+      allOf:
+        - $ref: '#/components/schemas/OperativeEntityPayloadBase'
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        name:
+          type: string
+      type: object
+      title: ServiceJobLogPayload
+      description: ServiceJobLogPayload
     ServiceJobObsoleteActionEnum:
       enum:
         - ObsoleteServiceJob
@@ -63313,6 +63338,18 @@ components:
           $ref: '#/components/schemas/StatusReason'
       title: ServiceJobStatusInformation
       description: ServiceJobStatusInformation
+    ServiceJobStatusReason:
+      additionalProperties: false
+      properties:
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        reason:
+          type: string
+      required:
+        - reasonLocalized
+      type: object
+      title: ServiceJobStatusReason
+      description: ServiceJobStatusReason
     ServiceJobSubStatus:
       enum:
         - LINE_ITEMS_MISSING
