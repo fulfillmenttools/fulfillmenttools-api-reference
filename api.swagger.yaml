@@ -48984,9 +48984,13 @@ components:
       additionalProperties: false
       properties:
         cost:
-          description: Cost of the package
+          deprecated: true
+          description: replaced with costAmount
           example: 0.99
           type: number
+        costAmount:
+          $ref: '#/components/schemas/SourcingOptionsMoney'
+          description: The total package cost amount
         packageName:
           description: Name of the package
           example: Small Box
@@ -48994,6 +48998,7 @@ components:
       required:
         - packageName
         - cost
+        - costAmount
       type: object
       title: PackageCost
       description: PackageCost
@@ -64050,11 +64055,16 @@ components:
             $ref: '#/components/schemas/PackageCost'
           type: array
         totalTransportCost:
-          description: Combined total costs of all packagingUnits
+          deprecated: true
+          description: replaced with totalTransportCostAmount
           example: 0.99
           type: number
+        totalTransportCostAmount:
+          $ref: '#/components/schemas/SourcingOptionsMoney'
+          description: The total transport cost amount
       required:
         - totalTransportCost
+        - totalTransportCostAmount
       type: object
       title: ShippingCosts
       description: ShippingCosts
@@ -64174,11 +64184,13 @@ components:
       additionalProperties: false
       properties:
         cost:
-          description: Combined total costs of a solution
+          deprecated: true
+          description: deprecated, replaced with totalCosts
           example: 10.99
           type: number
         currency:
-          description: currency as 3 letter iso code
+          deprecated: true
+          description: deprecated, replaced with totalCosts
           example: EUR
           pattern: ^[A-Z]{3}$
           type: string
@@ -64192,9 +64204,12 @@ components:
         totalCosts:
           $ref: '#/components/schemas/SourcingOptionsMoney'
         totalSalesPrice:
-          description: Sum of all sales prices of the items in the solution
+          deprecated: true
+          description: deprecated, replaced with totalSalesPriceAmount
           example: 10
           type: number
+        totalSalesPriceAmount:
+          $ref: '#/components/schemas/SourcingOptionsMoney'
         totalShippingCosts:
           $ref: '#/components/schemas/ShippingCosts'
       required:
@@ -64258,13 +64273,21 @@ components:
               - $ref: '#/components/schemas/FacilityDiscountAbsoluteForCreation'
           type: array
         salesPricePerUnitWithDiscount:
-          description: The sales price of the item after discount has been applied
+          deprecated: true
+          description: replaced with salesPricePerUnitWithDiscountAmount
           example: 9.5
           type: number
+        salesPricePerUnitWithDiscountAmount:
+          $ref: '#/components/schemas/SourcingOptionsMoney'
+          description: The sales price per unit with discount
         salesPricePerUnitWithoutDiscount:
-          description: The sales price of the item
+          deprecated: true
+          description: replaced with salesPricePerUnitWithoutDiscountAmount
           example: 10
           type: number
+        salesPricePerUnitWithoutDiscountAmount:
+          $ref: '#/components/schemas/SourcingOptionsMoney'
+          description: The sales price per unit without discount
         sourceFacilityRef:
           description: The facility reference of the source facility
           example: DE-FAC-4711
@@ -64280,6 +64303,7 @@ components:
       required:
         - tenantArticleId
         - salesPricePerUnitWithoutDiscount
+        - salesPricePerUnitWithoutDiscountAmount
         - amount
         - sourceFacilityRef
       type: object
@@ -64387,6 +64411,8 @@ components:
     SourcingOptionsTransferPackagingInformation:
       properties:
         costs:
+          deprecated: true
+          description: deprecated, replaced with totalCosts
           type: number
         packagingUnit:
           $ref: '#/components/schemas/SourcingOptionsTransferPackagingUnit'
@@ -64394,9 +64420,13 @@ components:
           items:
             $ref: '#/components/schemas/HandledItem'
           type: array
+        totalCosts:
+          $ref: '#/components/schemas/SourcingOptionsMoney'
+          description: Total costs for this packaging information
       required:
         - packagingUnit
         - costs
+        - totalCosts
         - packedItems
       type: object
       title: SourcingOptionsTransferPackagingInformation
