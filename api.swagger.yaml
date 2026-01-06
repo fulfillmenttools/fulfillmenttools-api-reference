@@ -47203,22 +47203,24 @@ components:
     OperativeProcess:
       properties:
         created:
-          description: Creation date of the user
+          description: The timestamp when the operative process was created.
           format: date-time
           type: string
         entityChildren:
-          description: Tree structure of entities belonging to this operative process
+          description: >-
+            Entities involved in this operative process represented as a
+            hierarchical tree structure.
           items:
             $ref: '#/components/schemas/OperativeEntity'
             minLength: 0
           type: array
         facilityRef:
-          description: Reference to the facility this operative process is handled in
+          description: Reference to the facility this operative process is associated with.
           type: string
         flatEntityRefs:
           description: >-
-            References to all operational entities belonging to this operative
-            process
+            Entities involved in this operative process represented as a flat
+            list of entity references.
           items:
             minLength: 0
             type: string
@@ -47226,18 +47228,29 @@ components:
         id:
           description: auto generated unique identifier
           type: string
+        isInProgress:
+          default: false
+          description: >-
+            This field indicates if any of the related pick jobs, service jobs,
+            pack jobs or handover jobs are in progress or have been finished
+            successfully. This field is calculated dynamically on each request.
+          type: boolean
         lastModified:
-          description: Last modification date of the user
+          description: The timestamp when the operative process was last modified.
           format: date-time
           type: string
         processRef:
-          description: Reference to the overall process
+          description: Reference to the process this operative process is associated with.
           type: string
         routingPlanRef:
-          description: Reference to the connected routing plan if available
+          description: >-
+            Reference to the routing plan this operative process is associated
+            with.
           type: string
         version:
-          description: Version of the user
+          description: >-
+            The version number of the operative process. This number is
+            incremented each time the operative process is modified.
           example: 1
           type: number
       required:
