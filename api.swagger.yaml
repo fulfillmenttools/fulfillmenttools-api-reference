@@ -64974,6 +64974,7 @@ components:
             - $ref: '#/components/schemas/StockDeleteByProducts'
             - $ref: '#/components/schemas/StockDeleteByIds'
             - $ref: '#/components/schemas/StockMoveToLocation'
+            - $ref: '#/components/schemas/VersionlessUpdateStock'
         actions:
           deprecated: true
           description: Deprecated. Use 'action' with a single action input instead.
@@ -64995,11 +64996,13 @@ components:
             - DELETE_BY_PRODUCTS
             - DELETE_BY_IDS
             - MOVE_TO_LOCATION
+            - VERSIONLESS_UPDATE_STOCK
           type: string
         result:
           oneOf:
             - $ref: '#/components/schemas/StockDeleteActionResult'
             - $ref: '#/components/schemas/StockMoveToLocationActionResult'
+            - $ref: '#/components/schemas/StockVersionlessUpsertActionResult'
       required:
         - name
         - result
@@ -65319,6 +65322,102 @@ components:
       title: StockForCreation
       type: object
       description: StockForCreation
+    StockForCreationVersionless:
+      properties:
+        availableUntil:
+          description: >-
+            defines until when a stock is included in the stock availability as
+            available and used for routing
+          format: date-time
+          type: string
+        conditions:
+          description: |-
+            Describes conditions of a stock
+                *`DEFECTIVE` - stock is defective, not usable for customer orders
+          items:
+            enum:
+              - DEFECTIVE
+            type: string
+          type: array
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        facility:
+          description: >-
+            Selector for the facility. Either a facility reference or a tenant
+            facility ID must be provided.
+          oneOf:
+            - $ref: '#/components/schemas/FacilityRefSelector'
+            - $ref: '#/components/schemas/TenantFacilityIdSelector'
+        facilityRef:
+          deprecated: true
+          description: >-
+            facility in which the stock is located - fill with either
+            facilityRef or tenantFacilityId - Deprecated: use facility object
+            instead
+          type: string
+        locationRef:
+          description: location on which the stock is placed
+          type: string
+        operationType:
+          enum:
+            - CREATE
+          type: string
+        properties:
+          allOf:
+            - $ref: '#/components/schemas/StockPropertyPreset'
+            - additionalProperties:
+                type: string
+              type: object
+          description: >-
+            allow tracking of specific values such as expiry dates on a set of
+            items. They should describe physical identifiable properties of the
+            stock and are not meant to be used for metadata (see
+            "customAttributes" for that).
+        receiptDate:
+          description: >-
+            date-time when stock has entered the system, defaults to the
+            creation date
+          format: date-time
+          type: string
+        tenantArticleId:
+          description: tenantArticleId of the stock
+          minLength: 1
+          type: string
+        tenantFacilityId:
+          deprecated: true
+          description: >-
+            tenantFacilityId in which the stock is located - fill with either
+            facilityRef or tenantFacilityId - Deprecated: use facility object
+            instead
+          type: string
+        tenantStockId:
+          description: >-
+            tenantStockId is an optional identifier for the stock in the tenant
+            system.
+          type: string
+        traitConfig:
+          description: >-
+            defines the traits of the stock, overrules the storage location
+            traits
+          items:
+            $ref: '#/components/schemas/StorageLocationTraitConfigEntry'
+          type: array
+        value:
+          format: int32
+          minimum: 0
+          type: integer
+      required:
+        - tenantArticleId
+        - value
+        - operationType
+      title: StockForCreationVersionless
+      type: object
+      description: StockForCreationVersionless
     StockForUpdate:
       properties:
         conditions:
@@ -65364,6 +65463,56 @@ components:
       title: StockForUpdate
       type: object
       description: StockForUpdate
+    StockForUpdateVersionless:
+      properties:
+        conditions:
+          description: |-
+            Describes conditions of a stock
+                *`DEFECTIVE` - stock is defective, not usable for customer orders
+          items:
+            enum:
+              - DEFECTIVE
+            type: string
+          type: array
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        id:
+          type: string
+        locationRef:
+          nullable: true
+          type: string
+        operationType:
+          enum:
+            - UPDATE
+          type: string
+        tenantStockId:
+          description: >-
+            tenantStockId is an optional identifier for the stock in the tenant
+            system.
+          type: string
+        traitConfig:
+          description: >-
+            defines the traits of the stock, overrules the storage location
+            traits
+          items:
+            $ref: '#/components/schemas/StorageLocationTraitConfigEntry'
+          type: array
+        value:
+          format: int32
+          minimum: 0
+          type: integer
+      required:
+        - value
+        - id
+        - operationType
+      title: StockForUpdateVersionless
+      type: object
+      description: StockForUpdateVersionless
     StockForUpsertUpdate:
       properties:
         conditions:
@@ -65917,6 +66066,15 @@ components:
       title: StockUpsertOperationResult
       type: object
       description: StockUpsertOperationResult
+    StockVersionlessUpsertActionResult:
+      properties:
+        operationResults:
+          $ref: '#/components/schemas/StockUpsertOperationResult'
+      required:
+        - operationResults
+      title: StockVersionlessUpsertActionResult
+      type: object
+      description: StockVersionlessUpsertActionResult
     StorageLocation:
       allOf:
         - $ref: '#/components/schemas/StorageLocationForReplacement'
@@ -71340,6 +71498,28 @@ components:
       type: object
       title: VersionedResource
       description: VersionedResource
+    VersionlessUpdateStock:
+      properties:
+        name:
+          enum:
+            - VERSIONLESS_UPDATE_STOCK
+          type: string
+        stocks:
+          description: >-
+            Please be sure to include each stock (by ID) only once, when
+            updating. Otherwise the whole batch is rejected with an error.
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/StockForCreationVersionless'
+              - $ref: '#/components/schemas/StockForUpdateVersionless'
+          maxItems: 25
+          type: array
+      required:
+        - name
+        - stocks
+      title: VersionlessUpdateStock
+      type: object
+      description: VersionlessUpdateStock
     WaitForInputItemReturnActionEnum:
       enum:
         - WaitForInputItemReturn
