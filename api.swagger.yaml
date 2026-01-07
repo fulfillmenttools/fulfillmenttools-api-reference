@@ -19057,10 +19057,13 @@ paths:
           label: BETA
   /api/processes:
     get:
+      deprecated: true
       description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+        This part of the API is deprecated. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />No
+        longer supported legacy processes endpoint. Please use
+        /api/processes/search instead.
       operationId: getAllProcesses
       parameters:
         - description: all entities after given Id
@@ -19368,9 +19371,6 @@ paths:
       summary: List processes
       tags:
         - Processes (Core)
-      x-badges:
-        - color: orange
-          label: BETA
   /api/processes/{processId}:
     get:
       description: >-
@@ -54769,6 +54769,11 @@ components:
             - ASC
             - DESC
           type: string
+        postalCode:
+          enum:
+            - ASC
+            - DESC
+          type: string
       title: ProcessConsumerAddressSort
       type: object
       description: ProcessConsumerAddressSort
@@ -55086,6 +55091,11 @@ components:
             - ASC
             - DESC
           type: string
+        orderedAmount:
+          enum:
+            - ASC
+            - DESC
+          type: string
         provisioningTime:
           enum:
             - ASC
@@ -55276,6 +55286,10 @@ components:
             - $ref: >-
                 #/components/schemas/ProcessReferencedParcelTrackingStatusEnumListFilter
           description: Search by parcelTrackingStatus
+        pickJob:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedPickJobFilter'
+          description: Nested search by pickJob
         serviceLevel:
           allOf:
             - $ref: '#/components/schemas/ProcessReferencedServiceLevelEnumListFilter'
@@ -55301,6 +55315,10 @@ components:
       description: ProcessReferencedFilter
     ProcessReferencedOrderFilter:
       properties:
+        consumerId:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by consumerId
         desiredDeliveryTime:
           allOf:
             - $ref: '#/components/schemas/DateFilter'
@@ -55309,6 +55327,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/DateFilter'
           description: Search by orderDate
+        orderedAmount:
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: Search by orderedAmount
         provisioningTime:
           allOf:
             - $ref: '#/components/schemas/DateFilter'
@@ -55436,6 +55458,15 @@ components:
       title: ProcessReferencedParcelTrackingStatusEnumListFilter
       type: object
       description: ProcessReferencedParcelTrackingStatusEnumListFilter
+    ProcessReferencedPickJobFilter:
+      properties:
+        shortId:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by shortId
+      title: ProcessReferencedPickJobFilter
+      type: object
+      description: ProcessReferencedPickJobFilter
     ProcessReferencedServiceLevelEnumFilter:
       properties:
         eq:
