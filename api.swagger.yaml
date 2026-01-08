@@ -52745,10 +52745,14 @@ components:
             status:
               $ref: '#/components/schemas/PickJobStatus'
             statusReason:
+              deprecated: true
               description: >-
-                The reason for the current status. Currently, only reroute
-                reasons are supported.
+                deprecated: Use subStatus instead. Maintained for backward
+                compatibility.
               type: string
+            subStatus:
+              $ref: '#/components/schemas/PickJobSubStatus'
+              description: The reason for the current status.
             usersModificationHistory:
               items:
                 $ref: '#/components/schemas/UserModificationHistory'
@@ -53436,6 +53440,26 @@ components:
       xml:
         name: PickJobStatusUnprotected
       title: PickJobStatusUnprotected
+    PickJobSubStatus:
+      description: >-
+        The reason for the current status, providing type-safe context beyond
+        the status field.
+      enum:
+        - SHORT_PICKED
+        - ZERO_PICKED
+        - WAITING_FOR_RELEASE_TIME
+        - ORDER_MODIFIED
+        - PROCESS_REROUTE
+        - MANUAL_REROUTE
+        - SHORT_PICK_REROUTE
+        - TIME_TRIGGERED
+        - STOCK_ZEROED
+        - PICK_JOB_ABORTED
+        - RECALCULATION
+      type: string
+      xml:
+        name: PickJobSubStatus
+      title: PickJobSubStatus
     PickJobTagConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
