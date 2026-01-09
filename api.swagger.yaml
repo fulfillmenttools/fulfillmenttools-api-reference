@@ -22175,31 +22175,42 @@ paths:
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />
       operationId: getRoutingDecisionLogs
       parameters:
-        - description: >-
-            Filter decision logs by only one of the following references:
-            processRef, orderRef, tenantOrderId, routingPlanRef or
-            sourcingOptionsRef.
-          explode: true
+        - description: All decision logs for given sourcingOptionRef
           in: query
-          name: relatedRefs
+          name: sourcingOptionRef
           required: false
           schema:
-            additionalProperties: false
-            maxProperties: 1
-            minProperties: 1
-            properties:
-              orderRef:
-                type: string
-              processRef:
-                type: string
-              routingPlanRef:
-                type: string
-              sourcingOptionsRef:
-                type: string
-              tenantOrderId:
-                type: string
-            type: object
-          style: form
+            type: string
+        - description: All decision logs for given processRef
+          in: query
+          name: processRef
+          required: false
+          schema:
+            type: string
+        - description: All decision logs for given orderRef
+          in: query
+          name: orderRef
+          required: false
+          schema:
+            type: string
+        - description: All decision logs for given routingPlanRef
+          in: query
+          name: routingPlanRef
+          required: false
+          schema:
+            type: string
+        - description: All decision logs for given sourcingOptionsRef
+          in: query
+          name: sourcingOptionsRef
+          required: false
+          schema:
+            type: string
+        - description: All decision logs for given tenantOrderId
+          in: query
+          name: tenantOrderId
+          required: false
+          schema:
+            type: string
         - description: All decision logs after given Id
           in: query
           name: startAfterId
@@ -26934,6 +26945,16 @@ components:
       title: AddChannelAction
       type: object
       description: AddChannelAction
+    AddCustomsDocumentToParcelContent:
+      additionalProperties: false
+      description: File and Document for this Label
+      properties:
+        labelFile:
+          $ref: '#/components/schemas/AddLabelsToParcelFile'
+      required:
+        - labelFile
+      type: object
+      title: AddCustomsDocumentToParcelContent
     AddFacilitiesToGroupActionEnum:
       enum:
         - ADD_FACILITIES_TO_GROUP
@@ -27034,6 +27055,105 @@ components:
         - $ref: '#/components/schemas/CountryServiceMappingShippingAttribute'
       title: AdditionalShippingAttribute
       description: AdditionalShippingAttribute
+    AddLabelsToParcelActionEnum:
+      enum:
+        - ADD_LABELS_TO_PARCEL
+      type: string
+      title: AddLabelsToParcelActionEnum
+      description: AddLabelsToParcelActionEnum
+    AddLabelsToParcelActionParameter:
+      additionalProperties: false
+      properties:
+        closeParcel:
+          default: false
+          description: >-
+            Close the parcel after adding this labels. Further adding will not
+            be possible.
+          example: true
+          type: boolean
+        customsDocument:
+          $ref: '#/components/schemas/AddCustomsDocumentToParcelContent'
+        name:
+          $ref: '#/components/schemas/AddLabelsToParcelActionEnum'
+        returnLabel:
+          oneOf:
+            - $ref: '#/components/schemas/AddLabelsToParcelContent'
+            - $ref: '#/components/schemas/AddLabelsToParcelError'
+        sendLabel:
+          oneOf:
+            - $ref: '#/components/schemas/AddLabelsToParcelContent'
+            - $ref: '#/components/schemas/AddLabelsToParcelError'
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - name
+        - version
+      title: AddLabelsToParcelActionParameter
+      type: object
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />AddLabelsToParcelActionParameter
+      x-badges:
+        - color: red
+          label: ALPHA
+    AddLabelsToParcelContent:
+      additionalProperties: false
+      description: File and Document for this Label
+      properties:
+        labelFile:
+          $ref: '#/components/schemas/AddLabelsToParcelFile'
+        trackingNumber:
+          description: The reference number by the carrier
+          example: '84168117830018'
+          type: string
+        trackingUrl:
+          description: The URL to track this parcel
+          example: http://track.io/3a186c51d4
+          type: string
+      required:
+        - labelFile
+        - trackingNumber
+        - trackingUrl
+      type: object
+      title: AddLabelsToParcelContent
+    AddLabelsToParcelError:
+      additionalProperties: false
+      description: Error values for a not successfull label request
+      properties:
+        errorCode:
+          description: optional error code from the carrier
+          example: ERROR_12345
+          type: string
+        errorDescription:
+          description: raw text error message
+          example: Postal code not found
+          type: string
+      required:
+        - errorDescription
+      type: object
+      title: AddLabelsToParcelError
+    AddLabelsToParcelFile:
+      additionalProperties: false
+      description: file for a given result
+      properties:
+        content:
+          description: File content base64 encoded
+          example: >-
+            JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDU1ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDAgMCBUZAogICAgKEhlbGxvIFdvcmxkKSBUagogIEVUCmVuZHN0cmVhbQplbmRvYmoKCnhyZWYKMCA1CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAxOCAwMDAwMCBuIAowMDAwMDAwMDc3IDAwMDAwIG4gCjAwMDAwMDAxNzggMDAwMDAgbiAKMDAwMDAwMDQ1NyAwMDAwMCBuIAp0cmFpbGVyCiAgPDwgIC9Sb290IDEgMCBSCiAgICAgIC9TaXplIDUKICA+PgpzdGFydHhyZWYKNTY1CiUlRU9GCg==
+          type: string
+        type:
+          $ref: '#/components/schemas/DocumentType'
+      required:
+        - content
+        - type
+      type: object
+      title: AddLabelsToParcelFile
     AddLineItemToPackingTargetContainer:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -50954,6 +51074,7 @@ components:
         - $ref: '#/components/schemas/ParcelSplitItemsActionParameter'
         - $ref: >-
             #/components/schemas/UpdateParcelItemRecordableAttributesActionParameter
+        - $ref: '#/components/schemas/AddLabelsToParcelActionParameter'
       title: ParcelActionsParameter
       description: ParcelActionsParameter
     ParcelArticleAttributeItemForUpdate:
@@ -51626,6 +51747,17 @@ components:
           description: The original customs document URL
           example: someCepProvider.com/pathToReturnLabel.pdf
           type: string
+        errors:
+          additionalProperties: false
+          description: >-
+            temporary field to show errors during parcel creation, will be
+            removed in the future. used to create summary in error case
+          properties:
+            labelError:
+              type: string
+            returnLabelError:
+              type: string
+          type: object
         labelUrl:
           description: >-
             The URL where you can download the label relative to the path of
