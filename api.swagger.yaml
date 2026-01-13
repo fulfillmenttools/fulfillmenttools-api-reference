@@ -51072,6 +51072,7 @@ components:
     ParcelActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/ParcelSplitItemsActionParameter'
+        - $ref: '#/components/schemas/ParcelUpdateTrackingDataActionParameter'
         - $ref: >-
             #/components/schemas/UpdateParcelItemRecordableAttributesActionParameter
         - $ref: '#/components/schemas/AddLabelsToParcelActionParameter'
@@ -52055,6 +52056,73 @@ components:
         - alternativeReturnAddressConfiguration
       title: ParcelTagConfigurationForUpsert
       description: ParcelTagConfigurationForUpsert
+    ParcelTrackingData:
+      additionalProperties: false
+      properties:
+        carrierStatus:
+          description: Optional additional carrier tracker information
+          example: Waiting for Pickup at Parcel Shop
+          type: string
+        status:
+          $ref: '#/components/schemas/ParcelTrackingDataStatusEnum'
+        trackingNumber:
+          description: '123456789'
+          example: 42
+          type: string
+        type:
+          $ref: '#/components/schemas/ParcelTrackingDataType'
+      required:
+        - type
+        - status
+        - carrierStatus
+        - trackingNumber
+      title: ParcelTrackingData
+      type: object
+      description: ParcelTrackingData
+    ParcelTrackingDataStatusEnum:
+      description: Status of the given enum to be mapped onto the found parcel
+      enum:
+        - DELIVERED
+        - PICKED_UP
+      type: string
+      title: ParcelTrackingDataStatusEnum
+    ParcelTrackingDataType:
+      description: Which kind of tracking data you want to add to the parcel label
+      enum:
+        - SEND_LABEL
+        - RETURN_LABEL
+      type: string
+      title: ParcelTrackingDataType
+    ParcelUpdateTrackingDataActionEnum:
+      enum:
+        - UPDATE_TRACKING_DATA
+      type: string
+      title: ParcelUpdateTrackingDataActionEnum
+      description: ParcelUpdateTrackingDataActionEnum
+    ParcelUpdateTrackingDataActionParameter:
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/ParcelUpdateTrackingDataActionEnum'
+        trackingData:
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/ParcelTrackingData'
+          maxItems: 2
+          minItems: 1
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - name
+        - version
+        - trackingData
+      title: ParcelUpdateTrackingDataActionParameter
+      type: object
+      description: ParcelUpdateTrackingDataActionParameter
     ParcelWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
