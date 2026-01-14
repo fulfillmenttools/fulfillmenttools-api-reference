@@ -27073,16 +27073,15 @@ components:
           type: boolean
         customsDocument:
           $ref: '#/components/schemas/AddCustomsDocumentToParcelContent'
+        labels:
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/AddLabelsToParcelContent'
+              - $ref: '#/components/schemas/AddLabelsToParcelError'
+          maxItems: 2
+          minItems: 0
         name:
           $ref: '#/components/schemas/AddLabelsToParcelActionEnum'
-        returnLabel:
-          oneOf:
-            - $ref: '#/components/schemas/AddLabelsToParcelContent'
-            - $ref: '#/components/schemas/AddLabelsToParcelError'
-        sendLabel:
-          oneOf:
-            - $ref: '#/components/schemas/AddLabelsToParcelContent'
-            - $ref: '#/components/schemas/AddLabelsToParcelError'
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -27092,6 +27091,7 @@ components:
       required:
         - name
         - version
+        - labels
       title: AddLabelsToParcelActionParameter
       type: object
       description: >-
@@ -27108,6 +27108,8 @@ components:
       properties:
         labelFile:
           $ref: '#/components/schemas/AddLabelsToParcelFile'
+        labelType:
+          $ref: '#/components/schemas/ParcelLabelType'
         trackingNumber:
           description: The reference number by the carrier
           example: '84168117830018'
@@ -27117,6 +27119,7 @@ components:
           example: http://track.io/3a186c51d4
           type: string
       required:
+        - labelType
         - labelFile
         - trackingNumber
         - trackingUrl
@@ -27134,7 +27137,10 @@ components:
           description: raw text error message
           example: Postal code not found
           type: string
+        labelType:
+          $ref: '#/components/schemas/ParcelLabelType'
       required:
+        - labelType
         - errorDescription
       type: object
       title: AddLabelsToParcelError
@@ -51585,6 +51591,13 @@ components:
       type: object
       title: ParcelLabelClassificationServices
       description: ParcelLabelClassificationServices
+    ParcelLabelType:
+      description: Which kind of label you want to add to the parcel
+      enum:
+        - SEND_LABEL
+        - RETURN_LABEL
+      type: string
+      title: ParcelLabelType
     ParcelLabelTypeEnum:
       description: The type of possible Parcel Labels
       enum:
