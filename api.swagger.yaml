@@ -65372,6 +65372,8 @@ components:
     StockConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+      description: >-
+        https://docs.fulfillmenttools.com/documentation/products/inventory-management/configurations
       properties:
         expectedStock:
           description: >-
@@ -65402,7 +65404,16 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />This config has no effect yet
           properties:
+            clearAllPredecessors:
+              deprecated: true
+              description: >-
+                @deprecated Clear stocks and reservations in supplying
+                facilities when handover events occur in the receiving facility
+              type: boolean
             clearStocksAndReservationsTrigger:
+              description: >-
+                Clear related stocks and reservations when the specified events
+                occur
               items:
                 properties:
                   completionEntity:
@@ -65416,8 +65427,6 @@ components:
               maxItems: 1
               minItems: 1
               type: array
-          required:
-            - clearStocksAndReservationsTrigger
           type: object
           x-badges:
             - color: red
@@ -65439,7 +65448,6 @@ components:
       xml:
         name: StockConfiguration
       title: StockConfiguration
-      description: StockConfiguration
     StockConfigurationPatchActions:
       properties:
         actions:
