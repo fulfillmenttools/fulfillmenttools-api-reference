@@ -37838,7 +37838,7 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />
           items:
-            $ref: '#/components/schemas/HandoverSubstituteLineItem'
+            $ref: '#/components/schemas/HandoverSubstituteLineItemForCreation'
           type: array
           x-badges:
             - color: orange
@@ -37912,6 +37912,54 @@ components:
         - id
       title: HandoverSubstituteLineItem
       description: HandoverSubstituteLineItem
+    HandoverSubstituteLineItemForCreation:
+      properties:
+        article:
+          $ref: '#/components/schemas/SubstituteLineItemArticle'
+        handedOverQuantity:
+          description: >-
+            quantity of the specific item to substitute the original line item
+            that has been handed over
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+        partialStockLocations:
+          items:
+            $ref: '#/components/schemas/SubstituteLineItemPartialStockLocation'
+        pickedAt:
+          description: Date when the line has been picked.
+          example: 2024-02-03T08:45:51.525Z
+          format: date-time
+          type: string
+        priority:
+          description: >-
+            This field allows you to rank substitutes against each other. The
+            lowest number is the most preferrable substitute.
+          minimum: 0
+          type: number
+        quantity:
+          description: >-
+            quantity of the specific item to substitute the original line item
+            that has been provided for handover
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
+        refused:
+          items:
+            $ref: '#/components/schemas/RefusedItem'
+          type: array
+        scannableCodes:
+          items:
+            description: Codes, that identify the article
+            type: string
+          type: array
+      required:
+        - quantity
+        - article
+      title: HandoverSubstituteLineItemForCreation
+      description: HandoverSubstituteLineItemForCreation
     HandoverSubstituteLineItemForUpdate:
       properties:
         id:
