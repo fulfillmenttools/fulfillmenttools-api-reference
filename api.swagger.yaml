@@ -30676,10 +30676,11 @@ components:
     ConditionWorkflowNode:
       properties:
         condition:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowCondition'
           description: >-
             Condition expression that determines the path. Connections from this
             node must use .TRUE or .FALSE suffixes
-          type: string
         key:
           description: Unique identifier for this node within the workflow
           type: string
@@ -36477,8 +36478,9 @@ components:
     GuardWorkflowNode:
       properties:
         condition:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowConditionForGuard'
           description: Condition expression that guards the workflow path
-          type: string
         key:
           description: Unique identifier for this node within the workflow
           type: string
@@ -72356,6 +72358,41 @@ components:
       xml:
         name: WeekDay
       title: WeekDay
+    WorkflowCondition:
+      properties:
+        entity:
+          description: Entity type that the condition applies to
+          enum:
+            - ORDER
+            - INCOMING_EVENT
+            - FACILITY
+          type: string
+        expression:
+          description: Expression that defines the condition
+          type: string
+      required:
+        - expression
+        - entity
+      title: WorkflowCondition
+      type: object
+      description: WorkflowCondition
+    WorkflowConditionForGuard:
+      properties:
+        entity:
+          description: Entity type that the condition applies to
+          enum:
+            - ORDER
+            - INCOMING_EVENT
+          type: string
+        expression:
+          description: Expression that defines the guard condition
+          type: string
+      required:
+        - expression
+        - entity
+      title: WorkflowConditionForGuard
+      type: object
+      description: WorkflowConditionForGuard
     WorkflowConnection:
       properties:
         from:
