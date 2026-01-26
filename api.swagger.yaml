@@ -47851,9 +47851,10 @@ components:
     OrderConsumerAddressChangeActionParameter:
       allOf:
         - $ref: '#/components/schemas/AbstractOrderActionsParameter'
+      deprecated: true
       description: >-
-        Action to change a consumer address of an order, e.g. the postal
-        address.
+        @deprecated use PATCH /api/orders/:id instead 'Action to change a
+        consumer address of an order, e.g. the postal address.'
       properties:
         addressType:
           $ref: '#/components/schemas/AddressType'
@@ -47958,7 +47959,10 @@ components:
     OrderConsumerAddressesReplaceActionParameter:
       allOf:
         - $ref: '#/components/schemas/AbstractOrderActionsParameter'
-      description: Action to replace all consumer addresses of an order.
+      deprecated: true
+      description: >-
+        @deprecated use PATCH /api/orders/:id instead 'Action to replace all
+        consumer addresses of an order.'
       properties:
         consumerAddresses:
           items:
@@ -48299,6 +48303,8 @@ components:
         comment:
           description: A comment for updating this order.
           type: string
+        consumer:
+          $ref: '#/components/schemas/OrderForCreationConsumer'
         customAttributes:
           description: >-
             Attributes that can be added to the order. These attributes cannot
@@ -48632,6 +48638,9 @@ components:
     OrderModifiedEventPayload:
       allOf:
         - $ref: '#/components/schemas/Order'
+      properties:
+        changes:
+          $ref: '#/components/schemas/OrderUpdateDetailChanges'
       xml:
         name: OrderModifiedEventPayload
       title: OrderModifiedEventPayload
@@ -49122,30 +49131,7 @@ components:
     OrderUpdateDetail:
       properties:
         changes:
-          properties:
-            customAttributes:
-              description: >-
-                Attributes that can be added to the order. These attributes
-                cannot be used within fulfillment processes, but it could be
-                useful to have the informations carried here.
-              nullable: true
-              type: object
-            orderLineItems:
-              description: >-
-                Updates the order line items of the order. All order lines must
-                be included, only the included lines will remain after the
-                update. type: array
-              items:
-                $ref: '#/components/schemas/OrderLineItemForUpdate'
-              nullable: true
-            preferredHandlingTime:
-              description: >-
-                Updates the preferred handling time for ship-from-store orders
-                or the provisioning time for click-and-collect orders.
-              example: 2025-01-15T00:00:00.000Z
-              format: date-time
-              type: string
-          type: object
+          $ref: '#/components/schemas/OrderUpdateDetailChanges'
         comment:
           type: string
         created:
@@ -49161,6 +49147,35 @@ components:
       type: object
       title: OrderUpdateDetail
       description: OrderUpdateDetail
+    OrderUpdateDetailChanges:
+      properties:
+        consumer:
+          $ref: '#/components/schemas/OrderForCreationConsumer'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the order. These attributes cannot
+            be used within fulfillment processes, but it could be useful to have
+            the informations carried here.
+          nullable: true
+          type: object
+        orderLineItems:
+          description: >-
+            Updates the order line items of the order. All order lines must be
+            included, only the included lines will remain after the update.
+            type: array
+          items:
+            $ref: '#/components/schemas/OrderLineItemForUpdate'
+          nullable: true
+        preferredHandlingTime:
+          description: >-
+            Updates the preferred handling time for ship-from-store orders or
+            the provisioning time for click-and-collect orders.
+          example: 2025-01-15T00:00:00.000Z
+          format: date-time
+          type: string
+      type: object
+      title: OrderUpdateDetailChanges
+      description: OrderUpdateDetailChanges
     OutboundClearTrigger:
       properties:
         event:
