@@ -27547,7 +27547,6 @@ components:
           properties:
             abbreviationLocalized:
               $ref: '#/components/schemas/LocaleString'
-              description: Abbreviation of the measurement unit.
           type: object
         newQuantity:
           type: number
@@ -47523,9 +47522,17 @@ components:
       type: object
       title: OperativeEntityPayloadBase
       description: OperativeEntityPayloadBase
-    OperativeEntityPayloadShortPicked:
+    OperativeEntityPickingDoneIncompletePayload:
       allOf:
         - $ref: '#/components/schemas/OperativeEntityPayloadBase'
+      properties:
+        shortPickedItems:
+          items:
+            $ref: '#/components/schemas/OperativeEntityShortPickedItem'
+          type: array
+      title: OperativeEntityPickingDoneIncompletePayload
+      description: OperativeEntityPickingDoneIncompletePayload
+    OperativeEntityShortPickedItem:
       properties:
         article:
           $ref: '#/components/schemas/ArticleHistoryLog'
@@ -47539,8 +47546,9 @@ components:
         - article
         - picked
         - quantity
-      title: OperativeEntityPayloadShortPicked
-      description: OperativeEntityPayloadShortPicked
+      type: object
+      title: OperativeEntityShortPickedItem
+      description: OperativeEntityShortPickedItem
     OperativeProcess:
       properties:
         created:
@@ -48625,9 +48633,12 @@ components:
         - $ref: '#/components/schemas/OrderModificationPayloadBase'
       properties:
         newPreferredHandlingTime:
+          description: Updated preferredHandlingTime value
+          example: 2025-01-01T08:45:50.525Z
           format: date-time
           type: string
         previousPreferredHandlingTime:
+          description: preferredHandlingTime value before an update
           format: date-time
           type: string
       required:
@@ -55509,7 +55520,8 @@ components:
         - PICKING_DONE
         - PICKING_DONE_INCOMPLETE
         - PICKING_ABORTED_NO_ITEMS_PICKED
-        - PICKING_ITEM_SHORTPICKED
+        - PICKING_RESET
+        - PICKING_RESTART
         - PACKING_CREATED
         - PACKING_IN_PROGRESS
         - PACKING_DONE
@@ -55546,7 +55558,7 @@ components:
             - $ref: '#/components/schemas/OrderLineItemModifiedLogPayload'
             - $ref: '#/components/schemas/OperativeEntityPayloadBase'
             - $ref: '#/components/schemas/ExternalActionHistoryLogPayload'
-            - $ref: '#/components/schemas/OperativeEntityPayloadShortPicked'
+            - $ref: '#/components/schemas/OperativeEntityPickingDoneIncompletePayload'
           type: object
       required:
         - eventType
@@ -55569,6 +55581,8 @@ components:
           nullable: true
           type: string
         timestamp:
+          description: Timestamp of the moment at which this log entry was created.
+          example: 2025-01-01T08:45:50.525Z
           format: date-time
           type: string
         type:
@@ -55630,6 +55644,7 @@ components:
         historyLogs:
           items:
             $ref: '#/components/schemas/ProcessHistoryLog'
+          maxItems: 500
           type: array
         total:
           description: Total number of found entities for this query
@@ -58103,10 +58118,6 @@ components:
           $ref: '#/components/schemas/RerouteDescriptionHistoryLog'
         targetFacility:
           $ref: '#/components/schemas/ProcessHistoryLogFacility'
-          required:
-            - facilityRef
-            - version
-            - name
       required:
         - targetFacility
       type: object
