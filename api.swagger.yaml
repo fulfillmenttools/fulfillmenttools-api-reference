@@ -46255,7 +46255,7 @@ components:
                 target="_blank">api-release-life-cycle documentation</a>.<br
                 /><br />
               items:
-                $ref: '#/components/schemas/SubstituteLineItemForCreation'
+                $ref: '#/components/schemas/SubstituteLineItemForUpsert'
               type: array
               x-badges:
                 - color: orange
@@ -54723,7 +54723,7 @@ components:
             target="_blank">api-release-life-cycle documentation</a>.<br /><br
             />
           items:
-            $ref: '#/components/schemas/SubstituteLineItemForCreation'
+            $ref: '#/components/schemas/SubstituteLineItemForUpsert'
           type: array
           x-badges:
             - color: orange
@@ -69908,8 +69908,13 @@ components:
         name: SubstituteLineItemArticle
       title: SubstituteLineItemArticle
       description: SubstituteLineItemArticle
-    SubstituteLineItemForCreation:
+    SubstituteLineItemForUpsert:
       properties:
+        id:
+          description: >-
+            The id of the substitute line item to update. If none is passed, a
+            new substitute line item will be created.
+          type: string
         picked:
           description: The amount of articles that were picked for this pickline.
           example: 20
@@ -69929,6 +69934,20 @@ components:
           format: int64
           minimum: 1
           type: integer
+        secondaryPicked:
+          description: The secondary amount of articles that were picked for this pickline.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+        secondaryQuantity:
+          description: >-
+            secondary quantity of this item, E.g. quantity is the count and
+            secondaryQuantity is the weight
+          example: 21
+          format: int64
+          minimum: 1
+          type: integer
         tenantArticleId:
           description: TenantArticleId of the substitute article
           type: string
@@ -69936,8 +69955,8 @@ components:
         - tenantArticleId
         - quantity
       type: object
-      title: SubstituteLineItemForCreation
-      description: SubstituteLineItemForCreation
+      title: SubstituteLineItemForUpsert
+      description: SubstituteLineItemForUpsert
     SubstituteLineItemPartialStockLocation:
       properties:
         location:
