@@ -54211,6 +54211,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by consumerName
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringEqFilter'
+          description: Search by facilityRef
         id:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
@@ -54220,6 +54224,10 @@ components:
             $ref: '#/components/schemas/PickJobSearchQuery'
           maxItems: 500
           type: array
+        status:
+          allOf:
+            - $ref: '#/components/schemas/PickJobStatusEnumFilter'
+          description: Search by status
         targetTime:
           allOf:
             - $ref: '#/components/schemas/DateFilter'
@@ -54326,6 +54334,65 @@ components:
       xml:
         name: PickJobStatus
       title: PickJobStatus
+    PickJobStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - ABORTED
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - PICKED
+            - REROUTED
+            - REJECTED
+            - RESTOWED
+            - EXPIRED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+            - PAUSED
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - ABORTED
+              - OPEN
+              - IN_PROGRESS
+              - CLOSED
+              - PICKED
+              - REROUTED
+              - REJECTED
+              - RESTOWED
+              - EXPIRED
+              - CANCELED
+              - OBSOLETE
+              - WAITING_FOR_INPUT
+              - PAUSED
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - ABORTED
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - PICKED
+            - REROUTED
+            - REJECTED
+            - RESTOWED
+            - EXPIRED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+            - PAUSED
+          type: string
+      title: PickJobStatusEnumFilter
+      type: object
+      description: PickJobStatusEnumFilter
     PickJobStatusUnprotected:
       description: >-
         The status of a pickjob. These are the status that are still allowed to
