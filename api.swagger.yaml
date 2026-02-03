@@ -18311,6 +18311,8 @@ paths:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
+              - SIMULATION_ORDER_READ
+              - SIMULATION_ORDER_WRITE
               - AUDIT_READ
               - NOTIFICATION_READ
               - NOTIFICATION_WRITE
@@ -24733,6 +24735,365 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/simulations/orders:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
+        all simulation orders
+      operationId: listSimulationOrders
+      parameters:
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: number
+        - in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationOrder'
+          description: Simulation orders were found & you were allowed to access them.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: List simulation orders
+      x-fft-permissions:
+        - SIMULATION_ORDER_READ
+      tags:
+        - Simulation Orders (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Create a simulation order for testing purposes
+      operationId: createSimulationOrder
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulationOrderForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationOrder'
+          description: The simulation order has been successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Create simulation order
+      x-fft-permissions:
+        - SIMULATION_ORDER_WRITE
+      tags:
+        - Simulation Orders (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/simulations/orders/{id}:
+    delete:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Delete a simulation order
+      operationId: deleteSimulationOrder
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: The simulation order was successfully deleted
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Delete simulation order
+      x-fft-permissions:
+        - SIMULATION_ORDER_WRITE
+      tags:
+        - Simulation Orders (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
+        a single simulation order by id
+      operationId: getSimulationOrder
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationOrder'
+          description: The simulation order was found
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get simulation order
+      x-fft-permissions:
+        - SIMULATION_ORDER_READ
+      tags:
+        - Simulation Orders (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+    patch:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Partially update a simulation order
+      operationId: patchSimulationOrder
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulationOrderForPartialUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationOrder'
+          description: The simulation order was successfully patched
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+      summary: Patch simulation order
+      x-fft-permissions:
+        - SIMULATION_ORDER_WRITE
+      tags:
+        - Simulation Orders (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+    put:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Update a simulation order
+      operationId: updateSimulationOrder
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulationOrderForUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationOrder'
+          description: The simulation order was successfully updated
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+      summary: Update simulation order
+      x-fft-permissions:
+        - SIMULATION_ORDER_WRITE
+      tags:
+        - Simulation Orders (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/simulations/orders/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for SimulationOrder
+      operationId: searchSimulationOrder
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulationOrderSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationOrderPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Search simulation orders
+      x-fft-permissions:
+        - ADMIN_MODULES_READ
+      tags:
+        - Simulation Orders
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/stacks:
     get:
       description: >-
@@ -53512,6 +53873,8 @@ components:
             - ORDER_CONSUMER_WRITE
             - ORDER_CUSTOM_ATTRIBUTES_WRITE
             - ORDER_LINEITEM_WRITE
+            - SIMULATION_ORDER_READ
+            - SIMULATION_ORDER_WRITE
             - AUDIT_READ
             - NOTIFICATION_READ
             - NOTIFICATION_WRITE
@@ -53657,6 +54020,7 @@ components:
           description: The subgroup of the permission
           enum:
             - ORDER
+            - SIMULATION_ORDER
             - USER
             - CURRENT_USER
             - ROLE
@@ -60484,6 +60848,8 @@ components:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
+              - SIMULATION_ORDER_READ
+              - SIMULATION_ORDER_WRITE
               - AUDIT_READ
               - NOTIFICATION_READ
               - NOTIFICATION_WRITE
@@ -60687,6 +61053,8 @@ components:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
+              - SIMULATION_ORDER_READ
+              - SIMULATION_ORDER_WRITE
               - AUDIT_READ
               - NOTIFICATION_READ
               - NOTIFICATION_WRITE
@@ -60882,6 +61250,8 @@ components:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
+              - SIMULATION_ORDER_READ
+              - SIMULATION_ORDER_WRITE
               - AUDIT_READ
               - NOTIFICATION_READ
               - NOTIFICATION_WRITE
@@ -61082,6 +61452,8 @@ components:
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
+              - SIMULATION_ORDER_READ
+              - SIMULATION_ORDER_WRITE
               - AUDIT_READ
               - NOTIFICATION_READ
               - NOTIFICATION_WRITE
@@ -65772,6 +66144,753 @@ components:
       type: object
       title: ShortPickReasonForUpsert
       description: ShortPickReasonForUpsert
+    SimulationOrder:
+      properties:
+        consumer:
+          description: Consumer information for the order
+          type: object
+        created:
+          description: Timestamp when the simulation order was created
+          format: date-time
+          type: string
+        customAttributes:
+          description: Attributes that can be added to the order
+          type: object
+        customServices:
+          description: Custom services for the order
+          items:
+            $ref: '#/components/schemas/CustomServiceReferenceForCreation'
+          maxItems: 100
+          type: array
+        deliveryPreferences:
+          description: Delivery preferences for the order
+          type: object
+        id:
+          description: Unique identifier of the simulation order
+          type: string
+        lastModified:
+          description: Timestamp when the simulation order was last modified
+          format: date-time
+          type: string
+        orderDate:
+          description: The date this order was created at the supplying system
+          format: date-time
+          type: string
+        orderLineItems:
+          description: Line items in the order
+          items:
+            $ref: '#/components/schemas/OrderLineItemForCreation'
+          maxItems: 100
+          type: array
+        paymentInfo:
+          description: Payment information for the order
+          type: object
+        promisesOptions:
+          description: Promise options for the order
+          type: object
+        status:
+          description: Status of the order
+          enum:
+            - OPEN
+            - CANCELLED
+            - PROMISED
+            - LOCKED
+            - OBSOLETE
+          type: string
+        statusReasons:
+          description: Status reasons for the order
+          items:
+            $ref: '#/components/schemas/OrderStatusReason'
+          maxItems: 100
+          type: array
+        stickers:
+          description: Stickers associated with the order
+          items:
+            $ref: '#/components/schemas/Sticker'
+          maxItems: 100
+          type: array
+        tenantOrderId:
+          description: Tenant-specific order identifier
+          type: string
+        version:
+          description: Version number for optimistic locking
+          type: number
+        tags:
+          description: Tags associated with the order
+          items:
+            $ref: '#/components/schemas/TagReference'
+          maxItems: 100
+          type: array
+      required:
+        - consumer
+        - orderDate
+        - orderLineItems
+        - id
+        - version
+        - created
+        - lastModified
+      title: SimulationOrder
+      type: object
+      description: SimulationOrder
+    SimulationOrderConsumerAddressesAddressTypeEnumFilter:
+      properties:
+        eq:
+          description: Search by addressType
+          enum:
+            - POSTAL_ADDRESS
+            - PARCEL_LOCKER
+            - INVOICE_ADDRESS
+          type: string
+        in:
+          description: Search by addressType
+          items:
+            enum:
+              - POSTAL_ADDRESS
+              - PARCEL_LOCKER
+              - INVOICE_ADDRESS
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by addressType
+          enum:
+            - POSTAL_ADDRESS
+            - PARCEL_LOCKER
+            - INVOICE_ADDRESS
+          type: string
+      title: SimulationOrderConsumerAddressesAddressTypeEnumFilter
+      type: object
+      description: SimulationOrderConsumerAddressesAddressTypeEnumFilter
+    SimulationOrderConsumerAddressesFilter:
+      properties:
+        addressType:
+          allOf:
+            - $ref: >-
+                #/components/schemas/SimulationOrderConsumerAddressesAddressTypeEnumFilter
+          description: Search by addressType
+        city:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by city
+        companyName:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by companyName
+        country:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by country
+        email:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by email
+        firstName:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by firstName
+        houseNumber:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by houseNumber
+        lastName:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by lastName
+        postalCode:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by postalCode
+        province:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by province
+        street:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by street
+      title: SimulationOrderConsumerAddressesFilter
+      type: object
+      description: SimulationOrderConsumerAddressesFilter
+    SimulationOrderConsumerAddressesListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderConsumerAddressesFilter'
+          description: Contains returns if at least one entry matches
+      title: SimulationOrderConsumerAddressesListFilter
+      type: object
+      description: SimulationOrderConsumerAddressesListFilter
+    SimulationOrderConsumerFilter:
+      properties:
+        addresses:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderConsumerAddressesListFilter'
+          description: Nested list search by addresses
+        consumerId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by consumerId
+      title: SimulationOrderConsumerFilter
+      type: object
+      description: SimulationOrderConsumerFilter
+    SimulationOrderDeliveryPreferencesCollectFilter:
+      properties:
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
+        paid:
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Search by paid
+      title: SimulationOrderDeliveryPreferencesCollectFilter
+      type: object
+      description: SimulationOrderDeliveryPreferencesCollectFilter
+    SimulationOrderDeliveryPreferencesCollectListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/SimulationOrderDeliveryPreferencesCollectFilter
+          description: Contains returns if at least one entry matches
+      title: SimulationOrderDeliveryPreferencesCollectListFilter
+      type: object
+      description: SimulationOrderDeliveryPreferencesCollectListFilter
+    SimulationOrderDeliveryPreferencesFilter:
+      properties:
+        collect:
+          allOf:
+            - $ref: >-
+                #/components/schemas/SimulationOrderDeliveryPreferencesCollectListFilter
+          description: Nested list search by collect
+        shipping:
+          allOf:
+            - $ref: >-
+                #/components/schemas/SimulationOrderDeliveryPreferencesShippingFilter
+          description: Nested search by shipping
+      title: SimulationOrderDeliveryPreferencesFilter
+      type: object
+      description: SimulationOrderDeliveryPreferencesFilter
+    SimulationOrderDeliveryPreferencesShippingFilter:
+      properties:
+        desiredDeliveryTime:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by desiredDeliveryTime
+        serviceLevel:
+          allOf:
+            - $ref: >-
+                #/components/schemas/SimulationOrderDeliveryPreferencesShippingServiceLevelEnumFilter
+          description: Search by serviceLevel
+      title: SimulationOrderDeliveryPreferencesShippingFilter
+      type: object
+      description: SimulationOrderDeliveryPreferencesShippingFilter
+    SimulationOrderDeliveryPreferencesShippingServiceLevelEnumFilter:
+      properties:
+        eq:
+          description: Search by serviceLevel
+          enum:
+            - DELIVERY
+            - SAMEDAY
+          type: string
+        in:
+          description: Search by serviceLevel
+          items:
+            enum:
+              - DELIVERY
+              - SAMEDAY
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by serviceLevel
+          enum:
+            - DELIVERY
+            - SAMEDAY
+          type: string
+      title: SimulationOrderDeliveryPreferencesShippingServiceLevelEnumFilter
+      type: object
+      description: SimulationOrderDeliveryPreferencesShippingServiceLevelEnumFilter
+    SimulationOrderForCreation:
+      properties:
+        consumer:
+          description: Consumer information for the order
+          type: object
+        customAttributes:
+          description: Attributes that can be added to the order
+          type: object
+        customServices:
+          description: Custom services for the order
+          items:
+            $ref: '#/components/schemas/CustomServiceReferenceForCreation'
+          maxItems: 100
+          type: array
+        deliveryPreferences:
+          description: Delivery preferences for the order
+          type: object
+        orderDate:
+          description: The date this order was created at the supplying system
+          format: date-time
+          type: string
+        orderLineItems:
+          description: Line items in the order
+          items:
+            $ref: '#/components/schemas/OrderLineItemForCreation'
+          maxItems: 100
+          type: array
+        paymentInfo:
+          description: Payment information for the order
+          type: object
+        promisesOptions:
+          description: Promise options for the order
+          type: object
+        status:
+          description: Status of the order
+          enum:
+            - OPEN
+            - CANCELLED
+            - PROMISED
+            - LOCKED
+            - OBSOLETE
+          type: string
+        statusReasons:
+          description: Status reasons for the order
+          items:
+            $ref: '#/components/schemas/OrderStatusReason'
+          maxItems: 100
+          type: array
+        stickers:
+          description: Stickers associated with the order
+          items:
+            $ref: '#/components/schemas/Sticker'
+          maxItems: 100
+          type: array
+        tenantOrderId:
+          description: Tenant-specific order identifier
+          type: string
+        tags:
+          description: Tags associated with the order
+          items:
+            $ref: '#/components/schemas/TagReference'
+          maxItems: 100
+          type: array
+      required:
+        - consumer
+        - orderDate
+        - orderLineItems
+      title: SimulationOrderForCreation
+      type: object
+      description: SimulationOrderForCreation
+    SimulationOrderForPartialUpdate:
+      properties:
+        consumer:
+          description: Consumer information for the order
+          type: object
+        customAttributes:
+          description: Attributes that can be added to the order
+          type: object
+        customServices:
+          description: Custom services for the order
+          items:
+            $ref: '#/components/schemas/CustomServiceReferenceForCreation'
+          maxItems: 100
+          type: array
+        deliveryPreferences:
+          description: Delivery preferences for the order
+          type: object
+        orderDate:
+          description: The date this order was created at the supplying system
+          format: date-time
+          type: string
+        orderLineItems:
+          description: Line items in the order
+          items:
+            $ref: '#/components/schemas/OrderLineItemForCreation'
+          maxItems: 100
+          type: array
+        paymentInfo:
+          description: Payment information for the order
+          type: object
+        promisesOptions:
+          description: Promise options for the order
+          type: object
+        status:
+          description: Status of the order
+          enum:
+            - OPEN
+            - CANCELLED
+            - PROMISED
+            - LOCKED
+            - OBSOLETE
+          type: string
+        statusReasons:
+          description: Status reasons for the order
+          items:
+            $ref: '#/components/schemas/OrderStatusReason'
+          maxItems: 100
+          type: array
+        stickers:
+          description: Stickers associated with the order
+          items:
+            $ref: '#/components/schemas/Sticker'
+          maxItems: 100
+          type: array
+        tenantOrderId:
+          description: Tenant-specific order identifier
+          type: string
+        version:
+          description: Version number for optimistic locking
+          type: number
+        tags:
+          description: Tags associated with the order
+          items:
+            $ref: '#/components/schemas/TagReference'
+          maxItems: 100
+          type: array
+      required:
+        - version
+      title: SimulationOrderForPartialUpdate
+      type: object
+      description: SimulationOrderForPartialUpdate
+    SimulationOrderForUpdate:
+      properties:
+        consumer:
+          description: Consumer information for the order
+          type: object
+        customAttributes:
+          description: Attributes that can be added to the order
+          type: object
+        customServices:
+          description: Custom services for the order
+          items:
+            $ref: '#/components/schemas/CustomServiceReferenceForCreation'
+          maxItems: 100
+          type: array
+        deliveryPreferences:
+          description: Delivery preferences for the order
+          type: object
+        orderDate:
+          description: The date this order was created at the supplying system
+          format: date-time
+          type: string
+        orderLineItems:
+          description: Line items in the order
+          items:
+            $ref: '#/components/schemas/OrderLineItemForCreation'
+          maxItems: 100
+          type: array
+        paymentInfo:
+          description: Payment information for the order
+          type: object
+        promisesOptions:
+          description: Promise options for the order
+          type: object
+        status:
+          description: Status of the order
+          enum:
+            - OPEN
+            - CANCELLED
+            - PROMISED
+            - LOCKED
+            - OBSOLETE
+          type: string
+        statusReasons:
+          description: Status reasons for the order
+          items:
+            $ref: '#/components/schemas/OrderStatusReason'
+          maxItems: 100
+          type: array
+        stickers:
+          description: Stickers associated with the order
+          items:
+            $ref: '#/components/schemas/Sticker'
+          maxItems: 100
+          type: array
+        tenantOrderId:
+          description: Tenant-specific order identifier
+          type: string
+        version:
+          description: Version number for optimistic locking
+          type: number
+        tags:
+          description: Tags associated with the order
+          items:
+            $ref: '#/components/schemas/TagReference'
+          maxItems: 100
+          type: array
+      required:
+        - consumer
+        - orderDate
+        - orderLineItems
+        - version
+      title: SimulationOrderForUpdate
+      type: object
+      description: SimulationOrderForUpdate
+    SimulationOrderOrderLineItemsArticleFilter:
+      properties:
+        titleLocalized:
+          allOf:
+            - $ref: >-
+                #/components/schemas/SimulationOrderOrderLineItemsArticleTitleLocalizedFilter
+          description: Nested search by titleLocalized
+        tenantArticleId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
+        title:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by title
+      title: SimulationOrderOrderLineItemsArticleFilter
+      type: object
+      description: SimulationOrderOrderLineItemsArticleFilter
+    SimulationOrderOrderLineItemsArticleTitleLocalizedFilter:
+      properties:
+        de_DE:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by de_DE
+        en_US:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by en_US
+        ru_RU:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by ru_RU
+      title: SimulationOrderOrderLineItemsArticleTitleLocalizedFilter
+      type: object
+      description: SimulationOrderOrderLineItemsArticleTitleLocalizedFilter
+    SimulationOrderOrderLineItemsFilter:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderOrderLineItemsArticleFilter'
+          description: Nested search by article
+      title: SimulationOrderOrderLineItemsFilter
+      type: object
+      description: SimulationOrderOrderLineItemsFilter
+    SimulationOrderOrderLineItemsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderOrderLineItemsFilter'
+          description: Contains returns if at least one entry matches
+      title: SimulationOrderOrderLineItemsListFilter
+      type: object
+      description: SimulationOrderOrderLineItemsListFilter
+    SimulationOrderPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        simulationOrders:
+          items:
+            $ref: '#/components/schemas/SimulationOrder'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - simulationOrders
+      title: SimulationOrderPaginatedResult
+      type: object
+      description: SimulationOrderPaginatedResult
+    SimulationOrderPaymentInfoFilter:
+      properties:
+        methodLocalized:
+          allOf:
+            - $ref: >-
+                #/components/schemas/SimulationOrderPaymentInfoMethodLocalizedFilter
+          description: Nested search by methodLocalized
+        currency:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by currency
+        method:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by method
+      title: SimulationOrderPaymentInfoFilter
+      type: object
+      description: SimulationOrderPaymentInfoFilter
+    SimulationOrderPaymentInfoMethodLocalizedFilter:
+      properties:
+        de_DE:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by de_DE
+        en_US:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by en_US
+        ru_RU:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by ru_RU
+      title: SimulationOrderPaymentInfoMethodLocalizedFilter
+      type: object
+      description: SimulationOrderPaymentInfoMethodLocalizedFilter
+    SimulationOrderSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/SimulationOrderSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/SimulationOrderSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: SimulationOrderSearchPayload
+      type: object
+      description: SimulationOrderSearchPayload
+    SimulationOrderSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/SimulationOrderSearchQuery'
+          maxItems: 500
+          type: array
+        consumer:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderConsumerFilter'
+          description: Nested search by consumer
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: >-
+            Search entries by created. Applying a narrow and well-considered
+            filter value is strongly recommended, as it can greatly improve
+            response times, especially when working with large datasets.
+        customAttributes:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
+          description: Search by custom attributes
+          type: object
+        deliveryPreferences:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderDeliveryPreferencesFilter'
+          description: Nested search by deliveryPreferences
+        lastModified:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
+        or:
+          items:
+            $ref: '#/components/schemas/SimulationOrderSearchQuery'
+          maxItems: 500
+          type: array
+        orderDate:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: >-
+            Search entries by orderDate. Applying a narrow and well-considered
+            filter value is strongly recommended, as it can greatly improve
+            response times, especially when working with large datasets.
+        orderLineItems:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderOrderLineItemsListFilter'
+          description: Nested list search by orderLineItems
+        paymentInfo:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderPaymentInfoFilter'
+          description: Nested search by paymentInfo
+        tenantOrderId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantOrderId
+        tags:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderTagsListFilter'
+          description: Nested list search by tags
+      title: SimulationOrderSearchQuery
+      type: object
+      description: SimulationOrderSearchQuery
+    SimulationOrderSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        orderDate:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: SimulationOrderSort
+      type: object
+      description: SimulationOrderSort
+    SimulationOrderTagsFilter:
+      properties:
+        value:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by value
+      title: SimulationOrderTagsFilter
+      type: object
+      description: SimulationOrderTagsFilter
+    SimulationOrderTagsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/SimulationOrderTagsFilter'
+          description: Contains returns if at least one entry matches
+      title: SimulationOrderTagsListFilter
+      type: object
+      description: SimulationOrderTagsListFilter
     SortDirection:
       enum:
         - ASCENDING
