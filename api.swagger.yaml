@@ -62107,6 +62107,10 @@ components:
           items:
             $ref: '#/components/schemas/Transfer'
           type: array
+        workflowInformation:
+          oneOf:
+            - $ref: '#/components/schemas/WorkflowInformation'
+            - $ref: '#/components/schemas/WorkflowUnavailable'
       required:
         - id
         - orderDate
@@ -62123,6 +62127,7 @@ components:
         - processId
         - predecessorRerouteRoutingPlanRefs
         - successorRerouteRoutingPlanRefs
+        - workflowInformation
       type: object
       title: RoutingPlan
       description: RoutingPlan
@@ -74679,6 +74684,35 @@ components:
       title: WorkflowDefinitionForUpdate
       type: object
       description: WorkflowDefinitionForUpdate
+    WorkflowInformation:
+      properties:
+        instanceRef:
+          description: The id identifying the workflow instance this entity belongs to.
+          example: 64c13ab08edf48a008793cac
+          type: string
+        isAvailable:
+          description: >-
+            The id identifying the node within the workflow instance tha this
+            entity belongs to.
+          type: boolean
+        nodeRef:
+          description: >-
+            The id identifying the node within the workflow instance tha this
+            entity belongs to.
+          type: string
+      title: WorkflowInformation
+      type: object
+      description: WorkflowInformation
+    WorkflowUnavailable:
+      properties:
+        isAvailable:
+          description: >-
+            The id identifying the node within the workflow instance tha this
+            entity belongs to.
+          type: boolean
+      title: WorkflowUnavailable
+      type: object
+      description: WorkflowUnavailable
     Zone:
       allOf:
         - $ref: '#/components/schemas/ZoneForReplacement'
