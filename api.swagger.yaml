@@ -29484,6 +29484,33 @@ components:
       title: BulkUpsertSummary
       type: object
       description: BulkUpsertSummary
+    BulkyGoodsDetails:
+      properties:
+        maxGirth:
+          description: The maximum girth in millimeters of the packagingUnit.
+          type: number
+        maxItemQuantity:
+          description: The maximum number of items that can fit in the packagingUnit.
+          type: number
+        maxLength:
+          description: The maximum length in millimeters of the packagingUnit.
+          type: number
+        maxWeight:
+          description: The maximum weight in grams that the packagingUnit can hold.
+          type: number
+        packagingPricingDetails:
+          $ref: '#/components/schemas/PackagingPricingDetails'
+        volumeBufferInPercent:
+          description: The volume buffer in percent for the packagingUnit.
+          type: number
+      required:
+        - maxLength
+        - maxGirth
+        - maxWeight
+        - packagingPricingDetails
+      title: BulkyGoodsDetails
+      type: object
+      description: BulkyGoodsDetails
     BundleInformation:
       properties:
         customServiceNodeId:
@@ -50303,6 +50330,45 @@ components:
       type: object
       title: PackageCost
       description: PackageCost
+    PackagingPricingDetails:
+      properties:
+        costCoefficient:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitCostCoefficient'
+          description: Cost coefficient for two-man handling
+        pricing:
+          items:
+            $ref: '#/components/schemas/PackagingUnitDetailPricingByZone'
+          maxItems: 500
+          type: array
+        pricingType:
+          description: >-
+            The type of pricing tier used for the packagingUnit (e.g.,
+            WEIGHT_BASED or VOLUME_BASED).
+          enum:
+            - WEIGHT_BASED
+            - VOLUME_BASED
+            - WEIGHT_ZONE_BASED
+          type: string
+        surchargesPerPackagingUnits:
+          description: The surcharge applied per packagingUnit.
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: '#/components/schemas/PackagingUnitDetailAbsoluteSurcharge'
+                RELATIVE_SURCHARGE_TYPE: '#/components/schemas/PackagingUnitDetailRelativeSurcharge'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/PackagingUnitDetailRelativeSurcharge'
+              - $ref: '#/components/schemas/PackagingUnitDetailAbsoluteSurcharge'
+          maxItems: 500
+          type: array
+      required:
+        - pricing
+        - pricingType
+      title: PackagingPricingDetails
+      type: object
+      description: PackagingPricingDetails
     PackagingUnit:
       additionalProperties: false
       properties:
@@ -50375,13 +50441,32 @@ components:
       type: string
       title: PackagingUnitContextTypes
       description: PackagingUnitContextTypes
+    PackagingUnitCostCoefficient:
+      properties:
+        measurementUnit:
+          enum:
+            - GRAM
+            - CUBIC_METER
+          type: string
+        value:
+          $ref: '#/components/schemas/PackagingUnitsMoney'
+      required:
+        - value
+        - measurementUnit
+      title: PackagingUnitCostCoefficient
+      type: object
+      description: PackagingUnitCostCoefficient
     PackagingUnitDetailAbsoluteSurcharge:
       properties:
         amount:
           $ref: '#/components/schemas/PackagingUnitsMoney'
+        tenantSurchargeType:
+          description: The tenant specific identifier for the surcharge type.
+          type: string
         type:
           $ref: '#/components/schemas/PackagingUnitDetailSurchargeType'
       required:
+        - tenantSurchargeType
         - type
         - amount
       title: PackagingUnitDetailAbsoluteSurcharge
@@ -50412,38 +50497,12 @@ components:
         carrierRef:
           description: The reference to the carrier associated with the packagingUnit.
           type: string
-        dimensions:
-          $ref: '#/components/schemas/PackagingUnitDetailDimensions'
-        maxGirth:
-          description: The maximum girth in millimeters of the packagingUnit.
-          type: number
-        maxItemQuantity:
-          description: The maximum number of items that can fit in the packagingUnit.
-          type: number
-        maxVolume:
-          description: The maximum volume in cubicle millimeters of the packagingUnit.
-          type: number
-        maxWeight:
-          description: The maximum weight in grams that the packagingUnit can hold.
-          type: number
-        pricing:
-          items:
-            $ref: '#/components/schemas/PackagingUnitDetailPricingByZone'
-          maxItems: 500
-          type: array
-        pricingType:
-          description: >-
-            The type of pricing tier used for the packagingUnit (e.g.,
-            WEIGHT_BASED or VOLUME_BASED).
-          enum:
-            - WEIGHT_BASED
-            - VOLUME_BASED
-            - WEIGHT_ZONE_BASED
-          type: string
-        surchargePerPackagingUnit:
-          oneOf:
-            - $ref: '#/components/schemas/PackagingUnitDetailRelativeSurcharge'
-            - $ref: '#/components/schemas/PackagingUnitDetailAbsoluteSurcharge'
+        details:
+          anyOf:
+            - $ref: '#/components/schemas/PalletDetails'
+            - $ref: '#/components/schemas/ParcelDetails'
+            - $ref: '#/components/schemas/BulkyGoodsDetails'
+            - $ref: '#/components/schemas/TwoManHandlingDetails'
         tenantPackagingUnitId:
           description: The tenant specific identifier for the packagingUnit.
           type: string
@@ -50455,26 +50514,12 @@ components:
             - PARCEL
             - BULKY_GOODS
           type: string
-        volumeBufferInPercent:
-          description: The volume buffer in percent for the packagingUnit.
-          type: number
-        volumetricWeightFactor:
-          description: The volumetric weight factor for the packagingUnit.
-          type: number
       required:
         - nameLocalized
         - tenantPackagingUnitId
         - carrierRef
-        - dimensions
-        - maxItemQuantity
-        - maxWeight
-        - volumeBufferInPercent
         - type
-        - maxGirth
-        - maxVolume
-        - volumetricWeightFactor
-        - pricingType
-        - pricing
+        - details
       title: PackagingUnitDetailForCreation
       type: object
       description: PackagingUnitDetailForCreation
@@ -50485,39 +50530,12 @@ components:
         carrierRef:
           description: The reference to the carrier associated with the packagingUnit.
           type: string
-        dimensions:
-          description: The dimensions of the packagingUnit.
-          type: object
-        maxGirth:
-          description: The maximum girth in millimeters of the packagingUnit.
-          type: number
-        maxItemQuantity:
-          description: The maximum number of items that can fit in the packagingUnit.
-          type: number
-        maxVolume:
-          description: The maximum volume in cubicle millimeters of the packagingUnit.
-          type: number
-        maxWeight:
-          description: The maximum weight in grams that the packagingUnit can hold.
-          type: number
-        pricing:
-          items:
-            $ref: '#/components/schemas/PackagingUnitDetailPricingByZone'
-          maxItems: 500
-          type: array
-        pricingType:
-          description: >-
-            The type of pricing tier used for the packagingUnit (e.g.,
-            WEIGHT_BASED or VOLUME_BASED).
-          enum:
-            - WEIGHT_BASED
-            - VOLUME_BASED
-            - WEIGHT_ZONE_BASED
-          type: string
-        surchargePerPackagingUnit:
-          oneOf:
-            - $ref: '#/components/schemas/PackagingUnitDetailRelativeSurcharge'
-            - $ref: '#/components/schemas/PackagingUnitDetailAbsoluteSurcharge'
+        details:
+          anyOf:
+            - $ref: '#/components/schemas/PalletDetails'
+            - $ref: '#/components/schemas/ParcelDetails'
+            - $ref: '#/components/schemas/BulkyGoodsDetails'
+            - $ref: '#/components/schemas/TwoManHandlingDetails'
         tenantPackagingUnitId:
           description: The tenant specific identifier for the packagingUnit.
           type: string
@@ -50532,27 +50550,13 @@ components:
         version:
           description: The version of the packagingUnit.
           type: number
-        volumeBufferInPercent:
-          description: The volume buffer in percent for the packagingUnit.
-          type: number
-        volumetricWeightFactor:
-          description: The volumetric weight factor for the packagingUnit.
-          type: number
       required:
         - nameLocalized
         - tenantPackagingUnitId
         - carrierRef
-        - dimensions
-        - maxItemQuantity
-        - maxWeight
-        - volumeBufferInPercent
         - type
-        - maxGirth
-        - maxVolume
-        - volumetricWeightFactor
+        - details
         - version
-        - pricingType
-        - pricing
       title: PackagingUnitDetailForUpdate
       type: object
       description: PackagingUnitDetailForUpdate
@@ -50599,7 +50603,6 @@ components:
           type: string
       required:
         - prices
-        - overflowFactor
       title: PackagingUnitDetailPricingByZone
       type: object
       description: PackagingUnitDetailPricingByZone
@@ -50608,9 +50611,13 @@ components:
         percentage:
           description: The percentage of the surcharge.
           type: number
+        tenantSurchargeType:
+          description: The tenant specific identifier for the surcharge type.
+          type: string
         type:
           $ref: '#/components/schemas/PackagingUnitDetailSurchargeType'
       required:
+        - tenantSurchargeType
         - type
         - percentage
       title: PackagingUnitDetailRelativeSurcharge
@@ -52409,6 +52416,32 @@ components:
       type: object
       title: PaginatedPackingSourceContainers
       description: PaginatedPackingSourceContainers
+    PalletDetails:
+      properties:
+        dimensions:
+          $ref: '#/components/schemas/PackagingUnitDetailDimensions'
+        maxItemQuantity:
+          description: The maximum number of items that can fit in the packagingUnit.
+          type: number
+        maxWeight:
+          description: The maximum weight in grams that the packagingUnit can hold.
+          type: number
+        packagingPricingDetails:
+          $ref: '#/components/schemas/PackagingPricingDetails'
+        volumeBufferInPercent:
+          description: The volume buffer in percent for the packagingUnit.
+          type: number
+        volumetricWeightFactor:
+          description: The volumetric weight factor for the packagingUnit.
+          type: number
+      required:
+        - dimensions
+        - maxWeight
+        - volumetricWeightFactor
+        - packagingPricingDetails
+      title: PalletDetails
+      type: object
+      description: PalletDetails
     Parcel:
       additionalProperties: false
       allOf:
@@ -52566,6 +52599,28 @@ components:
           type: string
       type: object
       title: ParcelCarrierInformation
+    ParcelDetails:
+      properties:
+        dimensions:
+          $ref: '#/components/schemas/PackagingUnitDetailDimensions'
+        maxItemQuantity:
+          description: The maximum number of items that can fit in the packagingUnit.
+          type: number
+        maxWeight:
+          description: The maximum weight in grams that the packagingUnit can hold.
+          type: number
+        packagingPricingDetails:
+          $ref: '#/components/schemas/PackagingPricingDetails'
+        volumeBufferInPercent:
+          description: The volume buffer in percent for the packagingUnit.
+          type: number
+      required:
+        - dimensions
+        - maxWeight
+        - packagingPricingDetails
+      title: ParcelDetails
+      type: object
+      description: ParcelDetails
     ParcelDimensions:
       additionalProperties: false
       nullable: true
@@ -73214,6 +73269,31 @@ components:
       title: TriggerExternalWorkflowNode
       type: object
       description: TriggerExternalWorkflowNode
+    TwoManHandlingDetails:
+      properties:
+        dimensions:
+          $ref: '#/components/schemas/PackagingUnitDetailDimensions'
+        maxItemQuantity:
+          description: The maximum number of items that can fit in the packagingUnit.
+          type: number
+        maxVolume:
+          description: The maximum volume in cubicle millimeters of the packagingUnit.
+          type: number
+        maxWeight:
+          description: The maximum weight in grams that the packagingUnit can hold.
+          type: number
+        packagingPricingDetails:
+          $ref: '#/components/schemas/PackagingPricingDetails'
+        volumeBufferInPercent:
+          description: The volume buffer in percent for the packagingUnit.
+          type: number
+      required:
+        - dimensions
+        - maxWeight
+        - packagingPricingDetails
+      title: TwoManHandlingDetails
+      type: object
+      description: TwoManHandlingDetails
     UBSendCarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/CarrierConfiguration'
