@@ -15110,10 +15110,7 @@ paths:
   /api/operativecontainertypes:
     get:
       description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Returns all operativeContainerTypes that match the given query
+        Returns all operativeContainerTypes that match the given query
         parameters.
       operationId: getOperativeContainerTypes
       parameters:
@@ -15192,15 +15189,8 @@ paths:
       summary: List operative container types
       tags:
         - Operative Container (Operations)
-      x-badges:
-        - color: orange
-          label: BETA
     post:
-      description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Creates a new operativeContainerType.
+      description: Creates a new operativeContainerType.
       operationId: createOperativeContainerType
       requestBody:
         content:
@@ -15241,16 +15231,9 @@ paths:
       summary: Create operative container type
       tags:
         - Operative Container (Operations)
-      x-badges:
-        - color: orange
-          label: BETA
   /api/operativecontainertypes/{operativeContainerTypeId}:
     get:
-      description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Returns the operativeContainerType with the given ID.
+      description: Returns the operativeContainerType with the given ID.
       operationId: getOperativeContainerTypeById
       parameters:
         - description: id of the operativeContainer you want to retrieve
@@ -15307,15 +15290,8 @@ paths:
       summary: Get operative container type
       tags:
         - Operative Container (Operations)
-      x-badges:
-        - color: orange
-          label: BETA
     patch:
-      description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Updates the operativeContainerType with the given ID.
+      description: Updates the operativeContainerType with the given ID.
       operationId: updateOperativeContainerTypeById
       parameters:
         - description: id of the operativeContainer you want to update
@@ -15370,9 +15346,6 @@ paths:
       summary: Update operative container type
       tags:
         - Operative Container (Operations)
-      x-badges:
-        - color: orange
-          label: BETA
   /api/operativecontainertypes/{operativeContainerTypeId}/icon:
     put:
       operationId: uploadOperativeContainerTypeIcon
@@ -22046,222 +22019,6 @@ paths:
       summary: Create return note
       tags:
         - Shipments (Operations)
-  /api/returns:
-    get:
-      deprecated: true
-      description: >-
-        This part of the API is deprecated. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />No
-        longer supported legacy return. Please use /itemreturnjobs instead.
-      operationId: getReturnJobs
-      parameters:
-        - description: all entities after given Id
-          in: query
-          name: startAfterId
-          required: false
-          schema:
-            type: string
-        - description: number of entities to show (max 500 per request)
-          in: query
-          name: size
-          required: false
-          schema:
-            default: 25
-            type: integer
-        - description: Reference to the facility you want to filter for
-          in: query
-          name: facilityRef
-          required: false
-          schema:
-            type: string
-        - description: >-
-            Reference to the status you want to get the corresponding return
-            jobs to
-          in: query
-          name: status
-          required: false
-          schema:
-            items:
-              type: string
-            type: array
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReturnJobs'
-          description: Return Jobs that were found in response body.
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      summary: List return jobs
-      tags:
-        - Returns (Operations)
-    post:
-      deprecated: true
-      description: >-
-        This part of the API is deprecated. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />No
-        longer supported legacy return. Please use /itemreturnjobs instead.
-      operationId: addReturn
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReturnJobForCreation'
-        description: 'ReturnJob object '
-        required: true
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReturnJob'
-          description: The return was successfully created
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-      summary: Create return job
-      tags:
-        - Returns (Operations)
-  /api/returns/{returnId}:
-    get:
-      deprecated: true
-      description: >-
-        This part of the API is deprecated. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />No
-        longer supported legacy return. Please use /itemreturnjobs instead.
-      operationId: getReturnLines
-      parameters:
-        - description: ID of the return you want to get
-          in: path
-          name: returnId
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReturnJob'
-          description: >-
-            Return was found & you were allowed to access it. The result is in
-            the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: User not found
-      summary: Get return job
-      tags:
-        - Returns (Operations)
-    patch:
-      deprecated: true
-      description: >-
-        This part of the API is deprecated. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />No
-        longer supported legacy return. Please use /itemreturnjobs instead.
-      operationId: patchReturn
-      parameters:
-        - description: ID of return you want to patch
-          in: path
-          name: returnId
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReturnPatchActions'
-        description: Patch set
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReturnJob'
-          description: >-
-            Return was found & patch-set has been applied. The patched entity is
-            in the body.
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Entity not found
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Entity version conflict
-      summary: Update return job
-      tags:
-        - Returns (Operations)
   /api/roles:
     get:
       deprecated: false
