@@ -31271,6 +31271,47 @@ components:
       example: PICKING
       type: string
       title: ConnectAppTypeEnum
+    ConnectionRefusedAnalysis:
+      properties:
+        containsInvalidContexts:
+          description: Indicates whether invalid contexts were found.
+          type: boolean
+        containsInvalidTargets:
+          description: Indicates whether invalid targets were found.
+          type: boolean
+        containsValidConnections:
+          description: Indicates whether valid connections exist.
+          type: boolean
+      required:
+        - containsValidConnections
+        - containsInvalidTargets
+        - containsInvalidContexts
+      title: ConnectionRefusedAnalysis
+      type: object
+      description: ConnectionRefusedAnalysis
+    ConnectionsAnalysisResult:
+      properties:
+        canBeIntermediateHop:
+          allOf:
+            - $ref: '#/components/schemas/ConnectionRefusedAnalysis'
+          description: >-
+            Analysis of connections from the graph to the lookup facility (layer
+            1 or 2).
+        canSupplyIntermediateHop:
+          allOf:
+            - $ref: '#/components/schemas/ConnectionRefusedAnalysis'
+          description: Analysis of lookup facility as potential layer 0 (supplier).
+        canSupplyTarget:
+          allOf:
+            - $ref: '#/components/schemas/ConnectionRefusedAnalysis'
+          description: Analysis of connections from the lookup facility to the target.
+      required:
+        - canSupplyIntermediateHop
+        - canBeIntermediateHop
+        - canSupplyTarget
+      title: ConnectionsAnalysisResult
+      type: object
+      description: ConnectionsAnalysisResult
     ConnectionType:
       enum:
         - SUPPLIER
@@ -36382,6 +36423,44 @@ components:
       type: object
       title: Fence
       description: Fence
+    FenceAnalysis:
+      properties:
+        fenceId:
+          description: The ID of the fence.
+          type: string
+        fenceName:
+          description: The name of the fence.
+          type: string
+        fenceType:
+          description: The type of fence.
+          enum:
+            - STANDARD
+            - TOOLKIT
+          type: string
+        layer:
+          description: The layer at which the fence was evaluated.
+          type: number
+        listingId:
+          description: The ID of the listing.
+          type: string
+        nodeId:
+          description: The ID of the node.
+          type: string
+        result:
+          description: The result of the fence evaluation.
+          enum:
+            - PASSED
+            - FAILED
+            - NOT_APPLICABLE
+          type: string
+      required:
+        - fenceType
+        - nodeId
+        - fenceId
+        - result
+      title: FenceAnalysis
+      type: object
+      description: FenceAnalysis
     FenceImplementation:
       description: >-
         <i>This part of the API is currently under development. That means that
@@ -43074,6 +43153,24 @@ components:
           $ref: '#/components/schemas/LocaleString'
       title: ListingAttributeItem
       description: ListingAttributeItem
+    ListingAvailabilityAnalysis:
+      properties:
+        availableForPicking:
+          description: The quantity available for picking.
+          type: number
+        facilityId:
+          description: The ID of the facility.
+          type: string
+        tenantArticleId:
+          description: The tenant article ID.
+          type: string
+      required:
+        - facilityId
+        - tenantArticleId
+        - availableForPicking
+      title: ListingAvailabilityAnalysis
+      type: object
+      description: ListingAvailabilityAnalysis
     ListingAvailabilityTimeframeFilter:
       properties:
         start:
@@ -66480,6 +66577,82 @@ components:
       type: object
       title: SourcingOption
       description: SourcingOption
+    SourcingOptionAnalyzeActionFacilityResult:
+      properties:
+        analyzedConnections:
+          allOf:
+            - $ref: '#/components/schemas/ConnectionsAnalysisResult'
+          description: >-
+            Analysis of connections. Null when the facility is inside the
+            resulting graph.
+        fenceAnalysis:
+          description: List of fence analyses.
+          items:
+            $ref: '#/components/schemas/FenceAnalysis'
+          type: array
+        listingAvailability:
+          description: List of listing availability analyses.
+          items:
+            $ref: '#/components/schemas/ListingAvailabilityAnalysis'
+          type: array
+        lookupFacilityId:
+          description: The ID of the facility being looked up.
+          type: string
+      required:
+        - lookupFacilityId
+        - listingAvailability
+        - fenceAnalysis
+      title: SourcingOptionAnalyzeActionFacilityResult
+      type: object
+      description: SourcingOptionAnalyzeActionFacilityResult
+    SourcingOptionAnalyzeActionResult:
+      properties:
+        evaluationTimestamp:
+          description: The timestamp when the evaluation was performed.
+          format: date-time
+          type: string
+        orderId:
+          description: The ID of the order.
+          type: string
+        reasons:
+          description: List of facility-level analysis results.
+          items:
+            $ref: '#/components/schemas/SourcingOptionAnalyzeActionFacilityResult'
+          type: array
+        runId:
+          description: The runId of the sourcingOption analyses.
+          type: string
+      required:
+        - orderId
+        - evaluationTimestamp
+        - runId
+        - reasons
+      title: SourcingOptionAnalyzeActionResult
+      type: object
+      description: SourcingOptionAnalyzeActionResult
+    SourcingOptionAnalyzeParameter:
+      properties:
+        facilityIds:
+          description: The list of facility IDs that receive a detailed analysis.
+          items:
+            type: string
+          type: array
+        orderId:
+          description: >-
+            The ID of the order for which the sourcing option analysis is
+            performed.
+          type: string
+        runId:
+          description: The run ID of the sourcing option request.
+          type: string
+        sourcingOptionId:
+          description: The ID of the sourcing option to analyze.
+          type: string
+      required:
+        - facilityIds
+      title: SourcingOptionAnalyzeParameter
+      type: object
+      description: SourcingOptionAnalyzeParameter
     SourcingOptionCosts:
       additionalProperties: false
       properties:
