@@ -10639,25 +10639,16 @@ paths:
           label: BETA
   /api/facilitygroups:
     get:
-      description: ''
+      deprecated: false
+      description: Get all facility groups with pagination.
       operationId: getAllFacilityGroups
       parameters:
-        - description: Returns all entries that were created after the entry with this ID.
-          in: query
+        - in: query
           name: startAfterId
           required: false
           schema:
             type: string
-        - description: Specifies the number of facility groups to return.
-          in: query
-          name: size
-          required: false
-          schema:
-            default: 25
-            maximum: 100
-            type: integer
-        - description: Filters facility groups by the given tenant facility group ID.
-          in: query
+        - in: query
           name: tenantFacilityGroupId
           required: false
           schema:
@@ -10674,29 +10665,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            The user is not authenticated or not allowed to operate against this
-            API instance.
+          description: Your user is not allowed to operate against this API instance
         '403':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: The user is not authorized to access this API instance.
+          description: Your user, although recognized, is not authorized to use this
       summary: List facility groups
+      x-fft-permissions:
+        - FACILITY_GROUP_READ
       tags:
         - Facility Groups (Core)
     post:
-      description: ''
+      deprecated: false
+      description: Creates a new facility group.
       operationId: addFacilityGroup
+      parameters: []
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/FacilityGroupForCreation'
-        description: >-
-          Representation of a facility group, including relevant details such as
-          ID, name, description, and associated data.
         required: true
       responses:
         '201':
@@ -10710,31 +10700,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Invalid input. Please refer to the response for more details.
+          description: Invalid input. See response for details.
         '401':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            The user is not authenticated or not allowed to operate against this
-            API instance.
+          description: Your user is not allowed to operate against this API instance
         '403':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: The user is not authorized to access this API instance.
+          description: Your user, although recognized, is not authorized to use this
       summary: Create facility group
+      x-fft-permissions:
+        - FACILITY_GROUP_WRITE
       tags:
         - Facility Groups (Core)
   /api/facilitygroups/{facilityGroupId}:
     delete:
-      description: ''
+      deprecated: false
+      description: Delete facility group by id.
       operationId: deleteFacilityGroup
       parameters:
-        - description: The ID of the facility to be deleted.
-          in: path
+        - in: path
           name: facilityGroupId
           required: true
           schema:
@@ -10747,30 +10737,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            The user is not authenticated or not allowed to operate against this
-            API instance.
+          description: Your user is not allowed to operate against this API instance
         '403':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: The user is not authorized to access this API instance.
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Facility group not found.
+          description: The requested entity was not found
       summary: Delete facility group
+      x-fft-permissions:
+        - FACILITY_GROUP_WRITE
       tags:
         - Facility Groups (Core)
     get:
-      description: ''
+      deprecated: false
+      description: Get facility group by id.
       operationId: getFacilityGroup
       parameters:
-        - description: The ID of the requested facility group.
-          in: path
+        - in: path
           name: facilityGroupId
           required: true
           schema:
@@ -10787,29 +10777,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            The user is not authenticated or not allowed to operate against this
-            API instance.
+          description: Your user is not allowed to operate against this API instance
         '403':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: The user is not authorized to access this API instance.
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Facility group not found.
+          description: The requested entity was not found
       summary: Get facility group
+      x-fft-permissions:
+        - FACILITY_GROUP_READ
       tags:
         - Facility Groups (Core)
     patch:
+      deprecated: false
+      description: >-
+        Replace facility group by id. All updatable fields will be replaced with
+        the values from the request. Fields that are not included in the request
+        will be removed from the entity.
       operationId: replaceFacilityGroup
       parameters:
-        - description: The ID of the facility group to update.
-          in: path
+        - in: path
           name: facilityGroupId
           required: true
           schema:
@@ -10834,45 +10828,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            The user is not authenticated or not allowed to operate against this
-            API instance.
+          description: Your user is not allowed to operate against this API instance
         '403':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: The user is not authorized to access this API instance.
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Facility group not found.
+          description: The requested entity was not found
         '409':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Facility group version conflict.
+          description: A version conflict occurred.
       summary: Update facility group
+      x-fft-permissions:
+        - FACILITY_GROUP_WRITE
       tags:
         - Facility Groups (Core)
   /api/facilitygroups/{facilityGroupId}/actions:
     post:
+      deprecated: false
+      description: >-
+        Perform action on a facility group. Supported actions are defined in the
+        request body.
       operationId: facilityGroupAction
       parameters:
-        - description: Reference to the facility group you want to call the action for.
-          in: path
+        - in: path
           name: facilityGroupId
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FacilityGroupActionsParameter'
       responses:
         '200':
           content:
@@ -10891,10 +10883,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
       summary: Call facility group action
+      x-fft-permissions:
+        - FACILITY_WRITE
       tags:
         - Facility Groups (Core)
   /api/facilitygroups/search:
@@ -27493,20 +27485,19 @@ components:
       type: object
       title: AddCustomsDocumentToParcelContent
     AddFacilitiesToGroupActionEnum:
+      description: The name of the action
       enum:
         - ADD_FACILITIES_TO_GROUP
         - VERSIONLESS_ADD_FACILITIES_TO_GROUP
-      type: string
       title: AddFacilitiesToGroupActionEnum
-      description: AddFacilitiesToGroupActionEnum
+      type: string
     AddFacilitiesToGroupActionParameter:
-      description: >-
-        Add facilitites to facility group. A facility group can have a maximum
-        of 1000 facilties assigned.
       properties:
         facilitiesToAdd:
+          description: Array of facility references to add to the group
           items:
             type: string
+          maxItems: 200
           minItems: 1
           type: array
         name:
@@ -27514,11 +27505,13 @@ components:
         version:
           description: Version of the entity to be changed
           minimum: 0
-          type: integer
+          type: number
       required:
         - name
         - facilitiesToAdd
       title: AddFacilitiesToGroupActionParameter
+      type: object
+      description: AddFacilitiesToGroupActionParameter
     AddItemReturnToItemReturnJob:
       additionalProperties: false
       properties:
@@ -35223,20 +35216,26 @@ components:
         nameLocalized:
           additionalProperties:
             type: string
-          description: Localized name object
+          description: The localized name
           type: object
         created:
           description: Creation timestamp
           format: date-time
           type: string
         customAttributes:
-          description: Custom attributes
+          description: >-
+            Attributes that can be added to the facility group. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          nullable: true
           type: object
         facilityRefs:
-          description: Array of facility references
+          description: Array of facility references belonging to this group
           items:
             type: string
+          maxItems: 500
           type: array
+          uniqueItems: true
         id:
           description: The facility group ID
           type: string
@@ -35248,27 +35247,23 @@ components:
           description: The name of the facility group
           type: string
         tenantFacilityGroupId:
-          description: The tenant facility group ID
+          description: The id of the facility group in the tenants own system
+          example: K12345
           type: string
         version:
           description: Document version for optimistic locking
           type: number
       required:
+        - tenantFacilityGroupId
+        - facilityRefs
+        - nameLocalized
         - id
         - version
         - created
         - lastModified
-        - tenantFacilityGroupId
-        - facilityRefs
-        - nameLocalized
-      type: object
       title: FacilityGroup
+      type: object
       description: FacilityGroup
-    FacilityGroupActionsParameter:
-      anyOf:
-        - $ref: '#/components/schemas/AddFacilitiesToGroupActionParameter'
-      title: FacilityGroupActionsParameter
-      description: FacilityGroupActionsParameter
     FacilityGroupCreatedWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
@@ -35293,7 +35288,6 @@ components:
       title: FacilityGroupDeletedWebHookEvent
       description: FacilityGroupDeletedWebHookEvent
     FacilityGroupForCreation:
-      additionalProperties: false
       properties:
         nameLocalized:
           additionalProperties:
@@ -35305,11 +35299,13 @@ components:
             Attributes that can be added to the facility group. These attributes
             cannot be used within fulfillment processes, but it could be useful
             to have the information carried here.
+          nullable: true
           type: object
         facilityRefs:
+          description: Array of facility references belonging to this group
           items:
             type: string
-          maxItems: 1000
+          maxItems: 500
           type: array
           uniqueItems: true
         tenantFacilityGroupId:
@@ -35320,13 +35316,10 @@ components:
         - tenantFacilityGroupId
         - facilityRefs
         - nameLocalized
-      type: object
-      xml:
-        name: FacilityGroupForCreation
       title: FacilityGroupForCreation
+      type: object
       description: FacilityGroupForCreation
     FacilityGroupForUpdate:
-      additionalProperties: false
       properties:
         nameLocalized:
           additionalProperties:
@@ -35338,11 +35331,13 @@ components:
             Attributes that can be added to the facility group. These attributes
             cannot be used within fulfillment processes, but it could be useful
             to have the information carried here.
+          nullable: true
           type: object
         facilityRefs:
+          description: Array of facility references belonging to this group
           items:
             type: string
-          maxItems: 1000
+          maxItems: 500
           type: array
           uniqueItems: true
         tenantFacilityGroupId:
@@ -35354,14 +35349,11 @@ components:
             The version of the document to be used in optimistic locking
             mechanisms.
           example: 42
-          format: int64
-          type: integer
+          type: number
       required:
         - version
-      type: object
-      xml:
-        name: FacilityGroupForUpdate
       title: FacilityGroupForUpdate
+      type: object
       description: FacilityGroupForUpdate
     FacilityGroupPaginatedResult:
       properties:
@@ -35388,15 +35380,16 @@ components:
     FacilityGroups:
       properties:
         facilityGroups:
+          description: Array of facility groups
           items:
             $ref: '#/components/schemas/FacilityGroup'
           type: array
         total:
           description: Total number of found entities for this query
           example: 42
-          type: integer
-      type: object
+          type: number
       title: FacilityGroups
+      type: object
       description: FacilityGroups
     FacilityGroupSearchPayload:
       properties:
