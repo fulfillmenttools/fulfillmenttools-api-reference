@@ -33012,6 +33012,19 @@ components:
       type: object
       title: DocumentHandling
       description: DocumentHandling
+    DocumentHandlingConfiguration:
+      description: Configuration for handling documents in packing processes.
+      properties:
+        shouldInheritExternalDocumentsToProcess:
+          default: false
+          description: >-
+            When true, external documents added to an entity's DocumentSet will
+            automatically be added to the associated Process's documentRefs.
+          type: boolean
+      required:
+        - shouldInheritExternalDocumentsToProcess
+      title: DocumentHandlingConfiguration
+      type: object
     DocumentOperations:
       enum:
         - PRINT
@@ -50440,6 +50453,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
+        documentHandlingConfiguration:
+          $ref: '#/components/schemas/DocumentHandlingConfiguration'
         packingContainerRequiredConfiguration:
           $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
         packingItemConfirmationNeededConfiguration:
@@ -53370,9 +53385,9 @@ components:
       type: object
       description: ParcelStatusEnumFilter
     ParcelTagConfiguration:
-      additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/TagConfiguration'
       properties:
         alternativeReturnAddressConfiguration:
           $ref: '#/components/schemas/AlternativeReturnAddressConfiguration'
@@ -53381,7 +53396,8 @@ components:
       title: ParcelTagConfiguration
       description: ParcelTagConfiguration
     ParcelTagConfigurationForUpsert:
-      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/TagConfiguration'
       properties:
         alternativeReturnAddressConfiguration:
           $ref: '#/components/schemas/AlternativeReturnAddressConfiguration'
