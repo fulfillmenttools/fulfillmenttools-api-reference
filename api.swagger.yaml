@@ -31015,6 +31015,7 @@ components:
               - ROUTING_PLAN_NOT_ROUTABLE
               - ROUTING_PLAN_WAITING
             type: string
+          maxItems: 50
           type: array
           uniqueItems: true
         id:
@@ -31047,6 +31048,7 @@ components:
               - ROUTING_PLAN_NOT_ROUTABLE
               - ROUTING_PLAN_WAITING
             type: string
+          maxItems: 50
           type: array
           uniqueItems: true
         type:
@@ -33191,6 +33193,7 @@ components:
               - ROUTING_PLAN_NOT_ROUTABLE
               - ROUTING_PLAN_WAITING
             type: string
+          maxItems: 50
           type: array
           uniqueItems: true
         id:
@@ -33198,6 +33201,7 @@ components:
         receiver:
           items:
             $ref: '#/components/schemas/EmailReceiver'
+          maxItems: 200
           type: array
           uniqueItems: true
         type:
@@ -33229,11 +33233,13 @@ components:
               - ROUTING_PLAN_NOT_ROUTABLE
               - ROUTING_PLAN_WAITING
             type: string
+          maxItems: 50
           type: array
           uniqueItems: true
         receiver:
           items:
             $ref: '#/components/schemas/EmailReceiver'
+          maxItems: 200
           type: array
           uniqueItems: true
         type:
@@ -47299,18 +47305,9 @@ components:
             - $ref: '#/components/schemas/NotificationPayload'
           description: The payload of the notification.
         priority:
+          allOf:
+            - $ref: '#/components/schemas/NotificationPriority'
           description: The priority of the notification
-          properties:
-            label:
-              description: Priority label
-              enum:
-                - LOW
-                - MEDIUM
-                - HIGH
-            sequence:
-              description: Priority sequence number
-              type: number
-          type: object
         status:
           description: The status of the notification
           enum:
@@ -47356,6 +47353,32 @@ components:
       title: NotificationAction
       type: object
       description: NotificationAction
+    NotificationApiNotificationStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - FINISHED
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - OPEN
+              - FINISHED
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - FINISHED
+          type: string
+      title: NotificationApiNotificationStatusEnumFilter
+      type: object
+      description: NotificationApiNotificationStatusEnumFilter
     NotificationCategoryEnumFilter:
       properties:
         eq:
@@ -47392,6 +47415,7 @@ components:
             oneOf:
               - $ref: '#/components/schemas/EmailNotificationChannel'
               - $ref: '#/components/schemas/ClientNotificationChannel'
+          maxItems: 100
           type: array
         created:
           format: date-time
@@ -47416,6 +47440,7 @@ components:
             oneOf:
               - $ref: '#/components/schemas/EmailNotificationChannelForCreation'
               - $ref: '#/components/schemas/ClientNotificationChannelForCreation'
+          maxItems: 100
           type: array
       required:
         - channels
@@ -47429,6 +47454,7 @@ components:
             oneOf:
               - $ref: '#/components/schemas/EmailNotificationChannelForCreation'
               - $ref: '#/components/schemas/ClientNotificationChannelForCreation'
+          maxItems: 100
           type: array
         version:
           type: number
@@ -47438,32 +47464,6 @@ components:
       title: NotificationCenterConfigForUpdate
       type: object
       description: NotificationCenterConfigForUpdate
-    NotificationClientNotificationStatusEnumFilter:
-      properties:
-        eq:
-          description: Search by status
-          enum:
-            - OPEN
-            - FINISHED
-          type: string
-        in:
-          description: Search by status
-          items:
-            enum:
-              - OPEN
-              - FINISHED
-            type: string
-          maxItems: 500
-          type: array
-        notEq:
-          description: Search by status
-          enum:
-            - OPEN
-            - FINISHED
-          type: string
-      title: NotificationClientNotificationStatusEnumFilter
-      type: object
-      description: NotificationClientNotificationStatusEnumFilter
     NotificationPaginatedResult:
       properties:
         notifications:
@@ -47527,6 +47527,66 @@ components:
       title: NotificationPayload
       type: object
       description: NotificationPayload
+    NotificationPriority:
+      properties:
+        label:
+          description: Priority label
+          enum:
+            - LOW
+            - MEDIUM
+            - HIGH
+          type: string
+        sequence:
+          description: Priority sequence number
+          type: number
+      required:
+        - sequence
+        - label
+      title: NotificationPriority
+      type: object
+      description: NotificationPriority
+    NotificationPriorityFilter:
+      properties:
+        label:
+          allOf:
+            - $ref: '#/components/schemas/NotificationPriorityPriorityLabelEnumFilter'
+          description: Search by label
+        sequence:
+          allOf:
+            - $ref: '#/components/schemas/NumberFilter'
+          description: Search by sequence
+      title: NotificationPriorityFilter
+      type: object
+      description: NotificationPriorityFilter
+    NotificationPriorityPriorityLabelEnumFilter:
+      properties:
+        eq:
+          description: Search by label
+          enum:
+            - LOW
+            - MEDIUM
+            - HIGH
+          type: string
+        in:
+          description: Search by label
+          items:
+            enum:
+              - LOW
+              - MEDIUM
+              - HIGH
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by label
+          enum:
+            - LOW
+            - MEDIUM
+            - HIGH
+          type: string
+      title: NotificationPriorityPriorityLabelEnumFilter
+      type: object
+      description: NotificationPriorityPriorityLabelEnumFilter
     NotificationSearchPayload:
       properties:
         after:
@@ -47605,10 +47665,13 @@ components:
             $ref: '#/components/schemas/NotificationSearchQuery'
           maxItems: 500
           type: array
+        priority:
+          allOf:
+            - $ref: '#/components/schemas/NotificationPriorityFilter'
+          description: Nested search by priority
         status:
           allOf:
-            - $ref: >-
-                #/components/schemas/NotificationClientNotificationStatusEnumFilter
+            - $ref: '#/components/schemas/NotificationApiNotificationStatusEnumFilter'
           description: Search by status
       title: NotificationSearchQuery
       type: object
