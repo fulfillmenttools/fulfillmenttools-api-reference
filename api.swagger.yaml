@@ -32977,16 +32977,19 @@ components:
       title: DocumentHandling
       description: DocumentHandling
     DocumentHandlingConfiguration:
-      description: Configuration for handling documents in packing processes.
+      description: >-
+        The configuration allows documents that have been added to the document
+        set of a pack job to be added to the process. The configuration sets the
+        section names of the entities to which external documents will be added
+        to. If the configuration set is empty, no external documents will be
+        added to the process.
       properties:
-        shouldInheritExternalDocumentsToProcess:
-          default: false
-          description: >-
-            When true, external documents added to an entity's DocumentSet will
-            automatically be added to the associated Process's documentRefs.
-          type: boolean
+        inheritedDocumentConfigurations:
+          items:
+            $ref: '#/components/schemas/InheritedDocumentConfiguration'
+          type: array
       required:
-        - shouldInheritExternalDocumentsToProcess
+        - inheritedDocumentConfigurations
       title: DocumentHandlingConfiguration
       type: object
     DocumentOperations:
@@ -40319,6 +40322,14 @@ components:
       title: InboundReceiptLineItemForUpdate
       type: object
       description: InboundReceiptLineItemForUpdate
+    InheritedDocumentConfiguration:
+      properties:
+        section:
+          $ref: '#/components/schemas/Section'
+      required:
+        - section
+      title: InheritedDocumentConfiguration
+      description: InheritedDocumentConfiguration
     InheritedServiceJobLineItem:
       additionalProperties: false
       allOf:
