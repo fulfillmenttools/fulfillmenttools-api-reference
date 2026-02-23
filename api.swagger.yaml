@@ -7987,13 +7987,11 @@ paths:
         - Stocks Configuration (Inventory)
   /api/facilities/{facilityId}/configurations/stock:
     get:
+      deprecated: false
+      description: Get the stock configuration for a specific facility.
       operationId: getFacilityStockConfiguration
       parameters:
-        - description: >-
-            ID of facility you want to retrieve the configurations for. Also
-            accepts tenantFacilityId in urn format (e.g.
-            urn:fft:facility:tenantFacilityId:{your-tenant-facility-id}).
-          in: path
+        - in: path
           name: facilityId
           required: true
           schema:
@@ -8005,35 +8003,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/FacilityStockConfiguration'
           description: Configuration for stock routing was found.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: No active configurations found for this facility
+          description: The requested entity was not found
       summary: Get facility stock config
+      x-fft-permissions:
+        - CONFIG_READ
       tags:
         - Stocks Configuration (Inventory)
     patch:
-      description: ''
+      deprecated: false
+      description: Update the stock configuration for a specific facility.
       operationId: patchFacilityConfiguration
       parameters:
-        - description: >-
-            ID of facility you want to update the stock configuration for. Also
-            accepts tenantFacilityId in urn format (e.g.
-            urn:fft:facility:tenantFacilityId:{your-tenant-facility-id}).
-          in: path
+        - in: path
           name: facilityId
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StockConfigurationPatchActions'
-        description: Patch set
-        required: true
       responses:
         '200':
           content:
@@ -8048,7 +8050,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
+          description: Invalid input. See response for details.
         '401':
           content:
             application/json:
@@ -8060,22 +8062,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Facility Configuration not found
+          description: The requested entity was not found
         '409':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Facility version conflict
+          description: A version conflict occurred.
       summary: Update facility stock config
+      x-fft-permissions:
+        - CONFIG_WRITE
       tags:
         - Stocks Configuration (Inventory)
   /api/facilities/{facilityId}/connections:
@@ -35988,66 +35990,93 @@ components:
       type: object
       description: FacilityStockBulkResult
     FacilityStockConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-        - properties:
-            id:
-              type: string
-            listingReactivationAfter:
-              properties:
-                active:
-                  default: true
-                  description: The disabling of listings is enabled or disabled.
-                  type: boolean
-                value:
-                  default: 24
-                  description: >-
-                    Time in hours that has to pass for a deactivated listing
-                    (e.g. due to manual deactivation or as a result of a
-                    shortpick ) to be become active again.
-                  type: number
-              type: object
-            retainedOfflineStock:
-              deprecated: true
-              description: >-
-                This part of the API is deprecated. For details please check the
-                <a
-                href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-                target="_blank">api-release-life-cycle documentation</a>.<br
-                /><br />Concept depreated. Use safety stock instead.
-              properties:
-                active:
-                  description: The retained Offline Stock is enabled or disabled.
-                  type: boolean
-                value:
-                  default: 0.2
-                  description: >-
-                    The overall percentage of stock that should be reserved to
-                    offline clients.
-                  example: 0.15
-                  maximum: 1
-                  minimum: 0.01
-                  type: number
-              type: object
-            shortpick:
-              properties:
-                active:
-                  default: true
-                  description: >-
-                    Inventory adjustment in the case of insufficient order
-                    picking
-                  type: boolean
-              required:
-                - active
-              type: object
-          required:
-            - retainedOfflineStock
-            - listingReactivationAfter
-            - shortpick
-            - id
-          type: object
+      properties:
+        created:
+          description: Creation timestamp
+          format: date-time
+          type: string
+        id:
+          description: The facility stock configuration ID (same as facility ID)
+          type: string
+        lastModified:
+          description: Last modified timestamp
+          format: date-time
+          type: string
+        listingReactivationAfter:
+          allOf:
+            - $ref: >-
+                #/components/schemas/FacilityStockConfigurationListingReactivationAfter
+          description: Configuration for listing reactivation timing
+        retainedOfflineStock:
+          allOf:
+            - $ref: >-
+                #/components/schemas/FacilityStockConfigurationRetainedOfflineStock
+          deprecated: true
+          description: >-
+            Configuration for retained offline stock. Deprecated: Use safety
+            stock instead.
+        shortpick:
+          allOf:
+            - $ref: '#/components/schemas/FacilityStockConfigurationShortpick'
+          description: Configuration for shortpick handling
+        version:
+          description: Document version for optimistic locking
+          type: number
+      required:
+        - id
+        - version
+        - listingReactivationAfter
+        - retainedOfflineStock
+        - shortpick
       title: FacilityStockConfiguration
+      type: object
       description: FacilityStockConfiguration
+    FacilityStockConfigurationListingReactivationAfter:
+      properties:
+        active:
+          default: true
+          description: The disabling of listings is enabled or disabled.
+          type: boolean
+        value:
+          default: 24
+          description: >-
+            Time in hours that has to pass for a deactivated listing (e.g. due
+            to manual deactivation or as a result of a shortpick) to become
+            active again.
+          type: number
+      title: FacilityStockConfigurationListingReactivationAfter
+      type: object
+      description: FacilityStockConfigurationListingReactivationAfter
+    FacilityStockConfigurationRetainedOfflineStock:
+      properties:
+        active:
+          deprecated: true
+          description: The retained Offline Stock is enabled or disabled.
+          type: boolean
+        value:
+          default: 0.2
+          deprecated: true
+          description: >-
+            The overall percentage of stock that should be reserved to offline
+            clients.
+          example: 0.15
+          maximum: 1
+          minimum: 0.01
+          type: number
+      title: FacilityStockConfigurationRetainedOfflineStock
+      type: object
+      description: FacilityStockConfigurationRetainedOfflineStock
+    FacilityStockConfigurationShortpick:
+      properties:
+        active:
+          default: true
+          description: Inventory adjustment in the case of insufficient order picking
+          type: boolean
+      required:
+        - active
+      title: FacilityStockConfigurationShortpick
+      type: object
+      description: FacilityStockConfigurationShortpick
     FacilityStockDistribution:
       properties:
         available:
