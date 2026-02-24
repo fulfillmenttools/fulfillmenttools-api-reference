@@ -50139,11 +50139,6 @@ components:
     PackageCost:
       additionalProperties: false
       properties:
-        cost:
-          deprecated: true
-          description: replaced with costAmount
-          example: 0.99
-          type: number
         costAmount:
           $ref: '#/components/schemas/Money'
           description: The total package cost amount
@@ -50153,7 +50148,6 @@ components:
           type: string
       required:
         - packageName
-        - cost
         - costAmount
       type: object
       title: PackageCost
@@ -65786,16 +65780,10 @@ components:
           items:
             $ref: '#/components/schemas/PackageCost'
           type: array
-        totalTransportCost:
-          deprecated: true
-          description: replaced with totalTransportCostAmount
-          example: 0.99
-          type: number
         totalTransportCostAmount:
           $ref: '#/components/schemas/Money'
           description: The total transport cost amount
       required:
-        - totalTransportCost
         - totalTransportCostAmount
       type: object
       title: ShippingCosts
@@ -66738,17 +66726,6 @@ components:
     SourcingOptionCosts:
       additionalProperties: false
       properties:
-        cost:
-          deprecated: true
-          description: deprecated, replaced with totalCosts
-          example: 10.99
-          type: number
-        currency:
-          deprecated: true
-          description: deprecated, replaced with totalCosts
-          example: EUR
-          pattern: ^[A-Z]{3}$
-          type: string
         salesPrices:
           description: >-
             Sales prices and applied discounts of the individual items in the
@@ -66758,17 +66735,11 @@ components:
           type: array
         totalCosts:
           $ref: '#/components/schemas/Money'
-        totalSalesPrice:
-          deprecated: true
-          description: deprecated, replaced with totalSalesPriceAmount
-          example: 10
-          type: number
         totalSalesPriceAmount:
           $ref: '#/components/schemas/Money'
         totalShippingCosts:
           $ref: '#/components/schemas/ShippingCosts'
       required:
-        - total
         - salesPrices
       type: object
       title: SourcingOptionCosts
@@ -66827,19 +66798,9 @@ components:
               - $ref: '#/components/schemas/FacilityDiscountRelative'
               - $ref: '#/components/schemas/FacilityDiscountAbsoluteForCreation'
           type: array
-        salesPricePerUnitWithDiscount:
-          deprecated: true
-          description: replaced with salesPricePerUnitWithDiscountAmount
-          example: 9.5
-          type: number
         salesPricePerUnitWithDiscountAmount:
           $ref: '#/components/schemas/Money'
           description: The sales price per unit with discount
-        salesPricePerUnitWithoutDiscount:
-          deprecated: true
-          description: replaced with salesPricePerUnitWithoutDiscountAmount
-          example: 10
-          type: number
         salesPricePerUnitWithoutDiscountAmount:
           $ref: '#/components/schemas/Money'
           description: The sales price per unit without discount
@@ -66857,7 +66818,6 @@ components:
           type: string
       required:
         - tenantArticleId
-        - salesPricePerUnitWithoutDiscount
         - salesPricePerUnitWithoutDiscountAmount
         - amount
         - sourceFacilityRef
@@ -66949,10 +66909,6 @@ components:
       description: SourcingOptionsTransferDeliveryCost
     SourcingOptionsTransferPackagingInformation:
       properties:
-        costs:
-          deprecated: true
-          description: deprecated, replaced with totalCosts
-          type: number
         packagingUnit:
           $ref: '#/components/schemas/SourcingOptionsTransferPackagingUnit'
         packedItems:
@@ -66964,7 +66920,6 @@ components:
           description: Total costs for this packaging information
       required:
         - packagingUnit
-        - costs
         - totalCosts
         - packedItems
       type: object
