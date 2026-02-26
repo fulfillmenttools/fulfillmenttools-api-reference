@@ -15939,7 +15939,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
           description: The requested entity was not found
-      summary: Get all PackagingUnits detaoñs
+      summary: Get all PackagingUnits details
       x-fft-permissions:
         - PACKAGING_UNITS_READ
       tags:
@@ -28998,6 +28998,69 @@ components:
       title: BasketItem
       type: object
       description: BasketItem
+    BinPackerInput:
+      properties:
+        currency:
+          description: ISO 4217 currency code
+          example: EUR
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]{3}$
+          type: string
+        lineItems:
+          description: List of articles and quantities to pack
+          items:
+            $ref: '#/components/schemas/BinPackerInputOrderLine'
+          minItems: 1
+          type: array
+        packagingUnitDetailRefs:
+          description: List of packaging unit detail references to consider for packing
+          items:
+            type: string
+          minItems: 1
+          type: array
+        sourceFacilityRef:
+          description: Reference to the source facility
+          example: FACILITY-001
+          type: string
+        targetCountryCode:
+          description: ISO 3166-1 alpha-2 country code of the target location
+          example: DE
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]{2}$
+          type: string
+        targetPostalCode:
+          description: Postal code of the target location
+          example: '10115'
+          nullable: true
+          type: string
+      required:
+        - lineItems
+        - packagingUnitDetailRefs
+        - sourceFacilityRef
+        - targetCountryCode
+        - currency
+      title: BinPackerInput
+      type: object
+      description: BinPackerInput
+    BinPackerInputOrderLine:
+      properties:
+        quantity:
+          description: Number of items of this article to pack
+          example: 5
+          minimum: 1
+          type: number
+        tenantArticleId:
+          description: Unique identifier for the article within the tenant
+          example: ARTICLE-001
+          type: string
+      required:
+        - tenantArticleId
+        - quantity
+      title: BinPackerInputOrderLine
+      type: object
+      description: BinPackerInputOrderLine
     BooleanFilter:
       properties:
         eq:
