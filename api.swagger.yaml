@@ -15512,6 +15512,103 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/orderrecords:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Create a new order record
+      operationId: createOrderRecord
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRecordForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderRecord'
+          description: The order record has been successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Create an order record
+      x-fft-permissions:
+        - ORDER_RECORD_WRITE
+      tags:
+        - Order Records (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/orderrecords/{orderRecordId}:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
+        a single order record by id
+      operationId: getOrderRecord
+      parameters:
+        - in: path
+          name: orderRecordId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderRecord'
+          description: The order record was found.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get an order record
+      x-fft-permissions:
+        - ORDER_RECORD_READ
+      tags:
+        - Order Records (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/orders:
     get:
       description: ''
@@ -18338,6 +18435,8 @@ paths:
               - WORKFLOW_DEFINITION_WRITE
               - LOOKUP_RECORD_READ
               - LOOKUP_RECORD_WRITE
+              - ORDER_RECORD_READ
+              - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
               - STOCK_AVAILABILITIES_READ
@@ -49665,6 +49764,703 @@ components:
       type: object
       title: OrderRatingDecision
       description: OrderRatingDecision
+    OrderRecord:
+      properties:
+        anonymized:
+          description: Whether consumer data has been anonymized
+          type: boolean
+        consumer:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordConsumer'
+          description: Consumer information
+        created:
+          description: Creation timestamp
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        deletionDate:
+          description: Date when the record will be deleted
+          format: date-time
+          type: string
+        facilityRef:
+          description: Reference to the facility
+          type: string
+        gdprCleanupDate:
+          description: Date when GDPR cleanup will occur
+          format: date-time
+          type: string
+        id:
+          description: Unique identifier of the order record
+          type: string
+        lastModified:
+          description: Last modification timestamp
+          format: date-time
+          type: string
+        lineItems:
+          description: Line items of the order record
+          items:
+            $ref: '#/components/schemas/OrderRecordLineItem'
+          maxItems: 500
+          type: array
+        orderRecordDate:
+          description: Date of the order record
+          format: date-time
+          type: string
+        origin:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordPosOrigin'
+          description: Origin of the order record
+          discriminator:
+            mapping:
+              POS: '#/components/schemas/OrderRecordPosOrigin'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/OrderRecordPosOrigin'
+        payments:
+          description: Payment information
+          items:
+            $ref: '#/components/schemas/OrderRecordPayment'
+          maxItems: 100
+          type: array
+        pricing:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordPricingForCreation'
+          description: Pricing information including calculated totals
+        tenantOrderRecordId:
+          description: Tenant-specific order record identifier
+          type: string
+        version:
+          description: Version number for optimistic locking
+          type: integer
+      required:
+        - orderRecordDate
+        - facilityRef
+        - lineItems
+        - id
+        - version
+        - created
+        - lastModified
+        - anonymized
+        - gdprCleanupDate
+        - deletionDate
+      title: OrderRecord
+      type: object
+      description: OrderRecord
+    OrderRecordAddress:
+      properties:
+        additionalAddressInfo:
+          description: Additional address information
+          type: string
+        city:
+          description: City
+          type: string
+        companyName:
+          description: Company name
+          type: string
+        country:
+          description: Country
+          type: string
+        firstName:
+          description: First name
+          type: string
+        lastName:
+          description: Last name
+          type: string
+        postalCode:
+          description: Postal code
+          type: string
+        province:
+          description: Province or state
+          type: string
+        street:
+          description: Street
+          type: string
+      title: OrderRecordAddress
+      type: object
+      description: OrderRecordAddress
+    OrderRecordConsumer:
+      properties:
+        addresses:
+          description: Addresses of the consumer
+          items:
+            $ref: '#/components/schemas/OrderRecordAddress'
+          maxItems: 10
+          type: array
+        consumerId:
+          description: Consumer identifier
+          type: string
+        email:
+          description: Email address of the consumer
+          type: string
+      title: OrderRecordConsumer
+      type: object
+      description: OrderRecordConsumer
+    OrderRecordDiscount:
+      properties:
+        nameLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleStringConstrained'
+          description: Localized name of the discount
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleStringConstrained'
+          description: Localized description of the discount
+        code:
+          description: Discount code
+          type: string
+        description:
+          description: Description of the discount
+          type: string
+        discount:
+          description: The discount value, either relative or absolute
+          discriminator:
+            mapping:
+              ABSOLUTE: '#/components/schemas/OrderRecordDiscountAbsolute'
+              RELATIVE: '#/components/schemas/OrderRecordDiscountRelative'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/OrderRecordDiscountRelative'
+            - $ref: '#/components/schemas/OrderRecordDiscountAbsolute'
+        name:
+          description: Name of the discount
+          type: string
+        priority:
+          description: Priority of the discount
+          type: integer
+        tenantDiscountId:
+          description: Tenant-specific discount identifier
+          type: string
+        type:
+          description: The price type that the discount applies to
+          enum:
+            - SALES_PRICE
+          type: string
+      required:
+        - type
+        - discount
+      title: OrderRecordDiscount
+      type: object
+      description: OrderRecordDiscount
+    OrderRecordDiscountAbsolute:
+      properties:
+        type:
+          description: Discriminator for absolute discount
+          enum:
+            - ABSOLUTE
+          type: string
+        value:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Absolute discount value
+      required:
+        - type
+        - value
+      title: OrderRecordDiscountAbsolute
+      type: object
+      description: OrderRecordDiscountAbsolute
+    OrderRecordDiscountRelative:
+      properties:
+        type:
+          description: Discriminator for relative discount
+          enum:
+            - RELATIVE
+          type: string
+        valuePercent:
+          description: Relative discount value as a float
+          format: float
+          type: number
+      required:
+        - type
+        - valuePercent
+      title: OrderRecordDiscountRelative
+      type: object
+      description: OrderRecordDiscountRelative
+    OrderRecordFee:
+      properties:
+        name:
+          description: Name of the fee
+          type: string
+        value:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Fee value
+      title: OrderRecordFee
+      type: object
+      description: OrderRecordFee
+    OrderRecordForCreation:
+      properties:
+        consumer:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordConsumer'
+          description: Consumer information
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        facilityRef:
+          description: Reference to the facility
+          type: string
+        lineItems:
+          description: Line items of the order record
+          items:
+            $ref: '#/components/schemas/OrderRecordLineItemForCreation'
+          maxItems: 500
+          type: array
+        orderRecordDate:
+          description: Date of the order record
+          format: date-time
+          type: string
+        origin:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordPosOrigin'
+          description: Origin of the order record
+          discriminator:
+            mapping:
+              POS: '#/components/schemas/OrderRecordPosOrigin'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/OrderRecordPosOrigin'
+        payments:
+          description: Payment information
+          items:
+            $ref: '#/components/schemas/OrderRecordPayment'
+          maxItems: 100
+          type: array
+        pricing:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordPricingForCreation'
+          description: Pricing information for the order record
+        tenantOrderRecordId:
+          description: Tenant-specific order record identifier
+          type: string
+      required:
+        - orderRecordDate
+        - facilityRef
+        - lineItems
+      title: OrderRecordForCreation
+      type: object
+      description: OrderRecordForCreation
+    OrderRecordLineItem:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordLineItemArticle'
+          description: Article information
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        id:
+          description: Unique identifier of the line item
+          type: string
+        measurementUnitKey:
+          description: Measurement unit key
+          type: string
+        quantity:
+          description: Quantity of the line item
+          type: number
+        returnPolicy:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordLineItemReturnPolicy'
+          description: Return policy information
+        warranty:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordLineItemWarranty'
+          description: Warranty information
+      required:
+        - article
+        - quantity
+        - id
+      title: OrderRecordLineItem
+      type: object
+      description: OrderRecordLineItem
+    OrderRecordLineItemArticle:
+      properties:
+        attributes:
+          description: Article attributes
+          items:
+            $ref: '#/components/schemas/OrderRecordLineItemArticleAttribute'
+          maxItems: 100
+          type: array
+        tenantArticleId:
+          description: Tenant-specific article identifier
+          type: string
+        title:
+          description: Title of the article
+          type: string
+      required:
+        - tenantArticleId
+        - attributes
+      title: OrderRecordLineItemArticle
+      type: object
+      description: OrderRecordLineItemArticle
+    OrderRecordLineItemArticleAttribute:
+      properties:
+        valueLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleStringConstrained'
+          description: Localized attribute value
+        keyLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleStringConstrained'
+          description: Localized attribute key
+        category:
+          description: Category of the article attribute
+          enum:
+            - SHOP
+            - DISCOUNT
+            - FEES
+            - ROUNDING
+            - DERIVED_PRICING
+          type: string
+        key:
+          description: Attribute key
+          type: string
+        type:
+          description: The type of the attribute value
+          enum:
+            - STRING
+            - NUMBER
+            - BOOLEAN
+            - MONETARY_VALUE
+          type: string
+        value:
+          description: The attribute value as string
+          type: string
+      required:
+        - key
+        - keyLocalized
+        - type
+        - value
+      title: OrderRecordLineItemArticleAttribute
+      type: object
+      description: OrderRecordLineItemArticleAttribute
+    OrderRecordLineItemForCreation:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordLineItemArticle'
+          description: Article information
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        measurementUnitKey:
+          description: Measurement unit key
+          type: string
+        quantity:
+          description: Quantity of the line item
+          type: number
+        returnPolicy:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordLineItemReturnPolicy'
+          description: Return policy information
+        warranty:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordLineItemWarranty'
+          description: Warranty information
+      required:
+        - article
+        - quantity
+      title: OrderRecordLineItemForCreation
+      type: object
+      description: OrderRecordLineItemForCreation
+    OrderRecordLineItemReturnPolicy:
+      properties:
+        isReturnable:
+          description: Whether the item is returnable
+          type: boolean
+        returnWindowEndDate:
+          description: End date of the return window
+          format: date-time
+          type: string
+      title: OrderRecordLineItemReturnPolicy
+      type: object
+      description: OrderRecordLineItemReturnPolicy
+    OrderRecordLineItemWarranty:
+      properties:
+        warrantyPeriod:
+          description: Warranty period (e.g. ISO 8601 duration)
+          pattern: ^-?P(?:(d+W)|(d+Y)?(d+M)?(d+D)?(?:T(d+H)?(d+M)?(d+S)?)?)$
+          type: string
+        warrantyStartDate:
+          description: Start date of the warranty
+          format: date-time
+          type: string
+      title: OrderRecordLineItemWarranty
+      type: object
+      description: OrderRecordLineItemWarranty
+    OrderRecordMonetaryValue:
+      properties:
+        currency:
+          description: The currency code
+          enum:
+            - AED
+            - AFN
+            - ALL
+            - AMD
+            - ANG
+            - AOA
+            - ARS
+            - AUD
+            - AWG
+            - AZN
+            - BAM
+            - BBD
+            - BDT
+            - BGN
+            - BHD
+            - BIF
+            - BMD
+            - BND
+            - BOB
+            - BOV
+            - BRL
+            - BSD
+            - BTN
+            - BWP
+            - BYN
+            - BZD
+            - CAD
+            - CDF
+            - CHE
+            - CHF
+            - CHW
+            - CLF
+            - CLP
+            - CNY
+            - COP
+            - COU
+            - CRC
+            - CUC
+            - CUP
+            - CVE
+            - CZK
+            - DJF
+            - DKK
+            - DOP
+            - DZD
+            - EGP
+            - ERN
+            - ETB
+            - EUR
+            - FJD
+            - FKP
+            - GBP
+            - GEL
+            - GHS
+            - GIP
+            - GMD
+            - GNF
+            - GTQ
+            - GYD
+            - HKD
+            - HNL
+            - HTG
+            - HUF
+            - IDR
+            - ILS
+            - INR
+            - IQD
+            - IRR
+            - ISK
+            - JMD
+            - JOD
+            - JPY
+            - KES
+            - KGS
+            - KHR
+            - KMF
+            - KPW
+            - KRW
+            - KWD
+            - KYD
+            - KZT
+            - LAK
+            - LBP
+            - LKR
+            - LRD
+            - LSL
+            - LYD
+            - MAD
+            - MDL
+            - MGA
+            - MKD
+            - MMK
+            - MNT
+            - MOP
+            - MRU
+            - MUR
+            - MVR
+            - MWK
+            - MXN
+            - MXV
+            - MYR
+            - MZN
+            - NAD
+            - NGN
+            - NIO
+            - NOK
+            - NPR
+            - NZD
+            - OMR
+            - PAB
+            - PEN
+            - PGK
+            - PHP
+            - PKR
+            - PLN
+            - PYG
+            - QAR
+            - RON
+            - RSD
+            - RUB
+            - RWF
+            - SAR
+            - SBD
+            - SCR
+            - SDG
+            - SEK
+            - SGD
+            - SHP
+            - SLE
+            - SOS
+            - SRD
+            - SSP
+            - STN
+            - SVC
+            - SYP
+            - SZL
+            - THB
+            - TJS
+            - TMT
+            - TND
+            - TOP
+            - TRY
+            - TTD
+            - TWD
+            - TZS
+            - UAH
+            - UGX
+            - USD
+            - USN
+            - UYI
+            - UYU
+            - UYW
+            - UZS
+            - VED
+            - VES
+            - VND
+            - VUV
+            - WST
+            - XAF
+            - XAG
+            - XAU
+            - XBA
+            - XBB
+            - XBC
+            - XBD
+            - XCD
+            - XDR
+            - XOF
+            - XPD
+            - XPF
+            - XPT
+            - XSU
+            - XTS
+            - XUA
+            - XXX
+            - YER
+            - ZAR
+            - ZMW
+            - ZWL
+          type: string
+        decimalPlaces:
+          description: Number of decimal places (defaults to currency standard)
+          type: integer
+        value:
+          description: The monetary value as integer
+          type: integer
+      required:
+        - value
+        - currency
+      title: OrderRecordMonetaryValue
+      type: object
+      description: OrderRecordMonetaryValue
+    OrderRecordPayment:
+      properties:
+        paymentMethod:
+          description: Payment method identifier
+          type: string
+        receiptNumber:
+          description: Receipt number
+          type: string
+        taxValue:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Tax portion of the payment value
+        transactionId:
+          description: Transaction identifier
+          type: string
+        value:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Payment value
+      required:
+        - value
+      title: OrderRecordPayment
+      type: object
+      description: OrderRecordPayment
+    OrderRecordPosOrigin:
+      properties:
+        cashierId:
+          description: Cashier identifier
+          type: string
+        terminalId:
+          description: Terminal identifier
+          type: string
+        type:
+          description: Discriminator for POS origin
+          enum:
+            - POS
+          type: string
+      required:
+        - type
+      title: OrderRecordPosOrigin
+      type: object
+      description: OrderRecordPosOrigin
+    OrderRecordPricingForCreation:
+      properties:
+        discounts:
+          description: Discounts applied to the order
+          items:
+            $ref: '#/components/schemas/OrderRecordDiscount'
+          maxItems: 100
+          type: array
+        fees:
+          description: Fees applied to the order
+          items:
+            $ref: '#/components/schemas/OrderRecordFee'
+          maxItems: 100
+          type: array
+      title: OrderRecordPricingForCreation
+      type: object
+      description: OrderRecordPricingForCreation
     OrderRoutingConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -53951,6 +54747,8 @@ components:
             - WORKFLOW_DEFINITION_WRITE
             - LOOKUP_RECORD_READ
             - LOOKUP_RECORD_WRITE
+            - ORDER_RECORD_READ
+            - ORDER_RECORD_WRITE
             - PACKAGING_UNITS_READ
             - PACKAGING_UNITS_WRITE
             - STOCK_AVAILABILITIES_READ
@@ -54060,6 +54858,7 @@ components:
             - BRAND
             - WORKFLOW_DEFINITION
             - LOOKUP_RECORD
+            - ORDER_RECORD
             - PACKAGING_UNITS
             - STOCK_AVAILABILITIES
             - LISTING
@@ -60710,6 +61509,8 @@ components:
               - WORKFLOW_DEFINITION_WRITE
               - LOOKUP_RECORD_READ
               - LOOKUP_RECORD_WRITE
+              - ORDER_RECORD_READ
+              - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
               - STOCK_AVAILABILITIES_READ
@@ -60918,6 +61719,8 @@ components:
               - WORKFLOW_DEFINITION_WRITE
               - LOOKUP_RECORD_READ
               - LOOKUP_RECORD_WRITE
+              - ORDER_RECORD_READ
+              - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
               - STOCK_AVAILABILITIES_READ
@@ -61118,6 +61921,8 @@ components:
               - WORKFLOW_DEFINITION_WRITE
               - LOOKUP_RECORD_READ
               - LOOKUP_RECORD_WRITE
+              - ORDER_RECORD_READ
+              - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
               - STOCK_AVAILABILITIES_READ
@@ -61323,6 +62128,8 @@ components:
               - WORKFLOW_DEFINITION_WRITE
               - LOOKUP_RECORD_READ
               - LOOKUP_RECORD_WRITE
+              - ORDER_RECORD_READ
+              - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
               - STOCK_AVAILABILITIES_READ
