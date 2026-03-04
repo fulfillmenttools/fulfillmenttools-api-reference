@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "137e3028-78e0-45c6-8e4c-0cabf8ba768d",
+    "_postman_id": "4bcc9a49-de0b-46fe-b2c5-f21c8510249e",
     "name": "fulfillmenttoolsAPI",
     "description": "## Documentation\nYou can find the API Documentation under the following links:\n- https://fulfillmenttools.github.io/api-reference-ui\n- https://docs.fulfillmenttools.com\n\n## Support\nOC fulfillment GmbH - \napi@fulfillmenttools.com",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "19028498"
+    "_exporter_id": "11687310"
   },
   "item": [
     {
@@ -3312,7 +3312,7 @@
                     "header": [],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"version\": 1,\n  \"stickerConfiguration\": {\n    \"offeredStickersByTag\": [\n      {\n        \"tagRef\": \"TAG-ID\",\n        \"matchingValues\": [\"ALLOWED-VALUE\", \"OF-TAG\"],\n        \"stickers\": [\n          {\n            \"color\": \"#112233\",\n            \"key\": \"4cac2b1c-c187-11ed-afa1-0242ac120002\",\n            \"nameLocalized\": {\n              \"de_DE\": \"TK\",\n              \"en_US\": \"Freeze\"\n            },\n            \"priority\": 1\n          }\n        ]\n      }\n    ]\n  }\n}",
+                      "raw": "{\n    \"version\": 1,\n    \"stickerConfiguration\": {\n        \"offeredStickersByTag\": [\n            {\n                \"tagRef\": \"TAG-ID\",\n                \"matchingValues\": [\n                    \"ALLOWED-VALUE\",\n                    \"OF-TAG\"\n                ],\n                \"stickers\": [\n                    {\n                        \"color\": \"#112233\",\n                        \"key\": \"4cac2b1c-c187-11ed-afa1-0242ac120002\",\n                        \"nameLocalized\": {\n                            \"de_DE\": \"TK\",\n                            \"en_US\": \"Freeze\"\n                        },\n                        \"priority\": 1\n                    }\n                ]\n            }\n        ]\n    },\n    \"offeredDocumentsPerTag\": [\n        {\n            \"tagRef\": \"DOCUMENT-TAG-ID\",\n            \"matchingValues\": [\n                \"CUSTOM-INFO\"\n            ],\n            \"offeredDocuments\": [\n                {\n                    \"documentCategory\": \"CUSTOMS\"\n                }\n            ]\n        }\n    ],\n    \"offeredDocumentsByDefault\": [\n        {\n            \"documentCategory\": \"EXTERNAL\"\n        }\n    ]\n}",
                       "options": {
                         "raw": {
                           "language": "json"
@@ -3428,7 +3428,7 @@
                     "header": [],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"alternativeReturnAddressConfiguration\": {\n    \"alternativeReturnAddressPerTag\": [\n      {\n        \"tagRef\": \"SOME_VALID_TAG_REF\",\n        \"matchingValues\": [\n          \"EXISTING_VALUE\",\n          \"ANOTHER_EXISTING_VALUE\"\n        ]\n      }\n    ]\n  }\n}",
+                      "raw": "{\n    \"offeredDocumentsByDefault\": [],\n    \"offeredDocumentsPerTag\": [],\n    \"alternativeReturnAddressConfiguration\": {\n        \"alternativeReturnAddressPerTag\": [\n            {\n                \"tagRef\": \"SOME_VALID_TAG_REF\",\n                \"matchingValues\": [\n                    \"EXISTING_VALUE\",\n                    \"ANOTHER_EXISTING_VALUE\"\n                ]\n            }\n        ]\n    }\n}",
                       "options": {
                         "raw": {
                           "language": "json"
@@ -7882,6 +7882,42 @@
                   "body": ""
                 },
                 {
+                  "name": "with order source",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"orderDate\": \"{{$isoTimestamp}}\",\n    \"source\": { \"sourceRef\": \"Add source reference here\"\n    },\n    \"consumer\": {\n        \"addresses\": [\n            {\n                \"street\": \"{{fftRandomStreet}}\",\n                \"houseNumber\": \"{{fftRandomHouseNumber}}\",\n                \"postalCode\": \"{{fftRandomPLZ}}\",\n                \"city\": \"{{fftRandomCity}}\",\n                \"country\": \"DE\",\n                \"phoneNumbers\": [\n                    {\n                        \"value\": \"{{fftRandomMobileNumber}}\",\n                        \"label\": \"private\",\n                        \"type\": \"MOBILE\"\n                    }\n                ],\n                \"additionalAddressInfo\": \"{{fftRandomAdditionalInfo}}\",\n                \"salutation\": \"{{fftRandomSalutation}}\",\n                \"firstName\": \"{{$randomFirstName}}\",\n                \"lastName\": \"{{$randomLastName}}\",\n                \"email\": \"{{fftRandomEmail}}\"\n            }\n        ]\n    },\n    \"tenantOrderId\": \"{{$randomWord}}{{$randomInt}}\",\n    \"status\": \"OPEN\",\n    \"orderLineItems\": [\n        {\n            \"article\": {\n                \"tenantArticleId\": \"2020249\",\n                \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/240eadd8-8f50-479d-b0d8-74412bd4a9f9.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"miscellaneous\",\n                        \"key\": \"BRAND\",\n                        \"value\": \"Adidas\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 100,\n                        \"key\": \"%%subtitle%%\",\n                        \"value\": \"Neu!\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 200,\n                        \"key\": \"Mitgliederpreis\",\n                        \"value\": \"17,96 EUR\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 300,\n                        \"key\": \"Schnitt\",\n                        \"value\": \"Frauen\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 400,\n                        \"key\": \"Material\",\n                        \"value\": \"100% Baumwolle\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 500,\n                        \"key\": \"Artikelnummer\",\n                        \"value\": \"2020249\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 600,\n                        \"key\": \"Größe\",\n                        \"value\": \"S\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 700,\n                        \"key\": \"Beschreibung\",\n                        \"value\": \"Rotes T-Shirt mit weißen Streifen an den Ärmeln, Blockdruck mit Schriftzug auf der Brust\"\n                    }\n                ]\n            },\n            \"quantity\": 1,\n            \"scannableCodes\": [\n                \"2020249\"\n            ]\n        },\n        {\n            \"article\": {\n                \"tenantArticleId\": \"2010681\",\n                \"title\": \"Steppjacke \\\"Mühlenbach\\\"\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/9fcb7e42-7c84-4ab0-999a-869efe077e0a.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 100,\n                        \"key\": \"%%subtitle%%\",\n                        \"value\": \"Neu!\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 200,\n                        \"key\": \"Größe\",\n                        \"value\": \"L\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 300,\n                        \"key\": \"Oberstoff\",\n                        \"value\": \"100% Polyester\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 400,\n                        \"key\": \"Futter\",\n                        \"value\": \"100% Polyester\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 500,\n                        \"key\": \"Füllung\",\n                        \"value\": \"100% Polyester\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 600,\n                        \"key\": \"Beschreibung\",\n                        \"value\": \"Dreifarbige Steppjacke mit verstaubarer Kapuze, Zwei Eingriffstaschen, Gesticktes Logo auf der Brust\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 700,\n                        \"key\": \"Artikelnummer\",\n                        \"value\": \"2010681\"\n                    }\n                ]\n            },\n            \"quantity\": 1,\n            \"scannableCodes\": [\n                \"2010681\"\n            ]\n        },\n        {\n            \"article\": {\n                \"tenantArticleId\": \"5020064\",\n                \"title\": \"Wandtattoo Stadion\",\n                \"imageUrl\": \"https://d358g9injarr4u.cloudfront.net/res/product_1000/343f4569-66bb-4b0c-aa2b-20011a51b620.jpg\",\n                \"attributes\": [\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 100,\n                        \"key\": \"Maße\",\n                        \"value\": \"70 x 50 cm\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 200,\n                        \"key\": \"Beschreibung\",\n                        \"value\": \"Wandtattoo in Ziegelwand-Optik, Mit tollem Blick aufs Stadion\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 300,\n                        \"key\": \"Anwendung\",\n                        \"value\": \"Für die Beklebung sollte die Fläche staub- und fetfrei sein. Bringen Sie den Aufkleber in Position und reiben Sie diese gleichmäßig mit der flachen Hand an den Untergrund, um sie zu fixieren. Jede Stelle nochmals gest andrücken. Fertig! Für auftretende Schäden nach der Verklebung auf dem Untergrund etc. ist eine Haftung ausgeschlossen.\"\n                    },\n                    {\n                        \"category\": \"descriptive\",\n                        \"priority\": 400,\n                        \"key\": \"Artikelnummer\",\n                        \"value\": \"5020064\"\n                    }\n                ]\n            },\n            \"quantity\": 2,\n            \"scannableCodes\": [\n                \"5020064\"\n            ]\n        }\n    ],\n    \"paymentInfo\": {\n        \"currency\": \"EUR\"\n    },\n    \"stickers\": [\n        {\n            \"key\": \"LGMl2DuvLoLPoSHhYFOm\",\n            \"priority\": 10,\n            \"nameLocalized\": {\n                \"de_DE\": \"Marktplatz\",\n                \"en_US\": \"Marketplace\"\n            },\n            \"color\": \"#19b6b5\"\n        },\n        {\n            \"key\": \"ApMl2DqwdqwdoSHhqwdm\",\n            \"priority\": 100,\n            \"nameLocalized\": {\n                \"de_DE\": \"Gebraucht\",\n                \"en_US\": \"Second Hand\"\n            },\n            \"color\": \"#AA0000\"\n        }\n    ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/orders",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "orders"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": ""
+                },
+                {
                   "name": "with custom service",
                   "originalRequest": {
                     "method": "POST",
@@ -8549,6 +8585,58 @@
                       ]
                     },
                     "description": "[https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration](https://fulfillmenttools.github.io/api-reference-ui/#/Configurations/putCapacityPlanningTimeframeConfiguration)"
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Order Source Cofiguration",
+              "item": [
+                {
+                  "name": "Get Order Source Configuration",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{host}}/api/configurations/ordersources",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "configurations",
+                        "ordersources"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Update Order Source Configuration",
+                  "request": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"version\": 1,\n    \"orderSources\": [{\"tenantSourceId\": \"test_01\", \"nameLocalized\":{\"de_DE\":\"Amazon_de\"}}]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/configurations/ordersources",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "configurations",
+                        "ordersources"
+                      ]
+                    }
                   },
                   "response": []
                 }
