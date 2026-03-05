@@ -27771,7 +27771,9 @@ components:
           minItems: 1
           type: array
         name:
-          $ref: '#/components/schemas/AddFacilitiesToGroupActionEnum'
+          allOf:
+            - $ref: '#/components/schemas/AddFacilitiesToGroupActionEnum'
+          description: The name of the action
         version:
           description: Version of the entity to be changed
           minimum: 0
@@ -28380,6 +28382,7 @@ components:
           description: The currency of the price as an ISO 4217 code.
           example: EUR
           nullable: true
+          type: string
         pricePerUnit:
           description: Price value for a given currency per unit
           example: 9.99
@@ -28782,7 +28785,9 @@ components:
           description: The id of the authentication provider
           type: string
         type:
-          $ref: '#/components/schemas/AuthenticationProviderTypeEnum'
+          allOf:
+            - $ref: '#/components/schemas/AuthenticationProviderTypeEnum'
+          description: The type of the authentication provider
       required:
         - type
       title: AuthenticationProvider
@@ -31315,6 +31320,7 @@ components:
             - $ref: '#/components/schemas/CheckoutOptionsConsumerAddress'
           description: Consumer address
         customAttributes:
+          additionalProperties: true
           description: Custom attributes for filtering
           type: object
         customServices:
@@ -31349,6 +31355,7 @@ components:
     CheckoutOptionsListingDetails:
       properties:
         customAttributes:
+          additionalProperties: true
           description: Custom attributes associated with the listing
           type: object
         facilityRef:
@@ -34942,6 +34949,7 @@ components:
           description: Reference to the carrier
           type: string
         configuration:
+          additionalProperties: true
           description: Carrier-specific configuration
           type: object
         created:
@@ -34949,6 +34957,7 @@ components:
           format: date-time
           type: string
         credentials:
+          additionalProperties: true
           description: Carrier-specific credentials
           type: object
         cutoffTime:
@@ -35023,9 +35032,11 @@ components:
     FacilityCarrierConnectionForCreation:
       properties:
         configuration:
+          additionalProperties: true
           description: Carrier-specific configuration
           type: object
         credentials:
+          additionalProperties: true
           description: Carrier-specific credentials
           type: object
         cutoffTime:
@@ -35069,9 +35080,11 @@ components:
     FacilityCarrierConnectionForModification:
       properties:
         configuration:
+          additionalProperties: true
           description: Carrier-specific configuration
           type: object
         credentials:
+          additionalProperties: true
           description: Carrier-specific credentials
           type: object
         cutoffTime:
@@ -35893,6 +35906,7 @@ components:
           description: The currency of the price as an ISO 4217 code.
           example: EUR
           nullable: true
+          type: string
         decimalPlaces:
           description: Number of decimal places for the given currency
           example: 2
@@ -35920,6 +35934,7 @@ components:
           description: The currency of the price as an ISO 4217 code.
           example: EUR
           nullable: true
+          type: string
         decimalPlaces:
           description: >-
             Number of decimal places for the given currency. We be defaulted
@@ -43706,7 +43721,9 @@ components:
             https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/customization-via-attributes)
           example: EUR
           nullable: true
+          type: string
         customAttributes:
+          additionalProperties: true
           description: >-
             Attributes that can be added to the listing. These attributes
             **cannot** be used within fulfillment processes, but enable you to
@@ -43844,7 +43861,9 @@ components:
             https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/customization-via-attributes)
           example: EUR
           nullable: true
+          type: string
         customAttributes:
+          additionalProperties: true
           description: >-
             Attributes that can be added to the listing. These attributes
             **cannot** be used within fulfillment processes, but enable you to
@@ -43984,6 +44003,7 @@ components:
             multiple currencies when using price ratings in order routing.
           example: EUR
           nullable: true
+          type: string
         customAttributes:
           description: >-
             Attributes that can be added to the listing. These attributes
@@ -45520,6 +45540,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/FacilityLocationType'
           nullable: true
+          type: string
         name:
           example: Hamburg NW2
           type: string
@@ -45533,10 +45554,12 @@ components:
           allOf:
             - $ref: '#/components/schemas/PickingTimes'
           nullable: true
+          type: object
         scanningRule:
           allOf:
             - $ref: '#/components/schemas/ScanningRuleConfiguration'
           nullable: true
+          type: object
         services:
           items:
             $ref: '#/components/schemas/FacilityService'
@@ -46523,6 +46546,7 @@ components:
                 routing.
               example: EUR
               nullable: true
+              type: string
             customAttributes:
               description: >-
                 Attributes that can be added to the listing. These attributes
@@ -47502,7 +47526,9 @@ components:
     ModifyUserAction:
       properties:
         action:
-          $ref: '#/components/schemas/UserActionEnum'
+          allOf:
+            - $ref: '#/components/schemas/UserActionEnum'
+          description: The type of action to perform
         assignedFacilities:
           deprecated: true
           description: >-
@@ -48114,10 +48140,6 @@ components:
       title: NotificationSort
       type: object
       description: NotificationSort
-    NullableEntity:
-      nullable: true
-      title: NullableEntity
-      description: NullableEntity
     NumberEqFilter:
       properties:
         eq:
@@ -49466,10 +49488,10 @@ components:
           description: >-
             Updates the order line items of the order. All order lines must be
             included, only the included lines will remain after the update.
-            type: array
           items:
             $ref: '#/components/schemas/OrderLineItemForUpdate'
           nullable: true
+          type: array
         preferredHandlingTime:
           description: >-
             Updates the preferred handling time for ship-from-store orders or
@@ -51122,10 +51144,10 @@ components:
           description: >-
             Updates the order line items of the order. All order lines must be
             included, only the included lines will remain after the update.
-            type: array
           items:
             $ref: '#/components/schemas/OrderLineItemForUpdate'
           nullable: true
+          type: array
         preferredHandlingTime:
           description: >-
             Updates the preferred handling time for ship-from-store orders or
@@ -51476,7 +51498,9 @@ components:
           description: The tenant specific identifier for the surcharge type.
           type: string
         type:
-          $ref: '#/components/schemas/PackagingUnitDetailSurchargeType'
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitDetailSurchargeType'
+          description: The type of surcharge, which is ABSOLUTE in this case.
       required:
         - tenantSurchargeType
         - type
@@ -51609,7 +51633,9 @@ components:
           description: The tenant specific identifier for the surcharge type.
           type: string
         type:
-          $ref: '#/components/schemas/PackagingUnitDetailSurchargeType'
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitDetailSurchargeType'
+          description: The type of surcharge, which is RELATIVE in this case.
       required:
         - tenantSurchargeType
         - type
@@ -51618,7 +51644,7 @@ components:
       type: object
       description: PackagingUnitDetailRelativeSurcharge
     PackagingUnitDetailSurchargeType:
-      description: The type of surcharge, which is ABSOLUTE in this case.
+      description: The type of surcharge, which is RELATIVE in this case.
       enum:
         - ABSOLUTE_SURCHARGE_TYPE
         - RELATIVE_SURCHARGE_TYPE
@@ -54243,6 +54269,7 @@ components:
       required:
         - startTime
         - endTime
+      type: object
       xml:
         name: ParcelItemForCreation
       title: ParcelPickUpInformation
@@ -54270,6 +54297,7 @@ components:
           description: The currency of the price as an ISO 4217 code.
           example: EUR
           nullable: true
+          type: string
         decimalPlaces:
           description: Number of decimal places for the given currency
           example: 2
@@ -54527,6 +54555,7 @@ components:
         signature:
           description: Signature from anyone needed
           type: boolean
+      type: object
       title: ParcelServices
       description: ParcelServices
     ParcelSort:
@@ -57387,6 +57416,7 @@ components:
           description: The currency of the price as an ISO 4217 code.
           example: EUR
           nullable: true
+          type: string
         decimalPlaces:
           description: Number of decimal places for the given currency
           example: 2
@@ -75120,7 +75150,9 @@ components:
     UserPasswordResetAction:
       properties:
         name:
-          $ref: '#/components/schemas/UserPublicActionEnum'
+          allOf:
+            - $ref: '#/components/schemas/UserPublicActionEnum'
+          description: The action to perform
         username:
           description: The username to request password reset for
           example: johndoe
