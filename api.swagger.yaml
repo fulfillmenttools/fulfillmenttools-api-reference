@@ -55901,6 +55901,10 @@ components:
               items:
                 $ref: '#/components/schemas/UserModificationHistory'
               type: array
+            workflowInformation:
+              oneOf:
+                - $ref: '#/components/schemas/WorkflowInformation'
+                - $ref: '#/components/schemas/WorkflowUnavailable'
             tags:
               items:
                 $ref: '#/components/schemas/TagReference'
@@ -55911,6 +55915,7 @@ components:
             - status
             - pickLineItems
             - shortId
+            - workflowInformation
             - deliveryinformation
             - documentsRef
           type: object
@@ -56112,6 +56117,10 @@ components:
             $ref: '#/components/schemas/OperativeTransfer'
           minItems: 0
           type: array
+        workflowInformation:
+          oneOf:
+            - $ref: '#/components/schemas/WorkflowInformation'
+            - $ref: '#/components/schemas/WorkflowUnavailable'
         tags:
           description: >-
             Tags can only be set when there is no process related with this
@@ -76277,15 +76286,16 @@ components:
       type: object
       description: WorkflowDefinitionForUpdate
     WorkflowInformation:
+      additionalProperties: false
       properties:
         instanceRef:
           description: The id identifying the workflow instance this entity belongs to.
           example: 64c13ab08edf48a008793cac
           type: string
         isAvailable:
-          description: >-
-            The id identifying the node within the workflow instance tha this
-            entity belongs to.
+          description: Explicitly states if this entity is part of a workflow.
+          enum:
+            - true
           type: boolean
         nodeRef:
           description: >-
@@ -76296,11 +76306,12 @@ components:
       type: object
       description: WorkflowInformation
     WorkflowUnavailable:
+      additionalProperties: false
       properties:
         isAvailable:
-          description: >-
-            The id identifying the node within the workflow instance tha this
-            entity belongs to.
+          description: Explicitly states if this entity is part of a workflow.
+          enum:
+            - false
           type: boolean
       title: WorkflowUnavailable
       type: object
