@@ -23828,6 +23828,242 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/servicecontainers:
+    get:
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Gets service containers filtered
+      operationId: getServiceContainers
+      parameters:
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - description: number of entities to show
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            maximum: 500
+            type: integer
+        - description: Reference of the facility you want to filter for
+          in: query
+          name: facilityRefs
+          required: false
+          schema:
+            items:
+              type: string
+            maxItems: 50
+            type: array
+        - description: Reference of the service job you want to filter for
+          in: query
+          name: serviceJobRef
+          required: false
+          schema:
+            type: string
+        - description: sorting for the results
+          in: query
+          name: orderBy
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContainers'
+          description: Service Jobs could be found in response body.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: List service containers
+      x-fft-permissions:
+        - SERVICE_JOB_READ
+      tags:
+        - Services (Operations)
+      x-badges:
+        - color: orange
+          label: BETA
+    post:
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Creates a service container
+      operationId: createServiceContainer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceContainerForCreation'
+        description: Desired service container to create
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContainer'
+          description: The service container was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      summary: Create service container
+      x-fft-permissions:
+        - SERVICE_JOB_WRITE
+      tags:
+        - Services (Operations)
+      x-badges:
+        - color: orange
+          label: BETA
+  /api/servicecontainers/{serviceContainerId}:
+    delete:
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Deletes service container by id
+      operationId: deleteServiceContainer
+      parameters:
+        - description: ID of the service container to delete
+          in: path
+          name: serviceContainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The service container was successfully deleted.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      summary: Delete service container
+      x-fft-permissions:
+        - SERVICE_JOB_READ
+        - SERVICE_JOB_WRITE
+      tags:
+        - Services (Operations)
+      x-badges:
+        - color: orange
+          label: BETA
+    get:
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Gets service container by id
+      operationId: getServiceContainerById
+      parameters:
+        - description: ID of the service container to retrieve
+          in: path
+          name: serviceContainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContainer'
+          description: Service container for the given id.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      summary: Get service container by id
+      x-fft-permissions:
+        - SERVICE_JOB_READ
+      tags:
+        - Services (Operations)
+      x-badges:
+        - color: orange
+          label: BETA
   /api/servicejobs:
     get:
       operationId: getServiceJobs
@@ -24084,6 +24320,61 @@ paths:
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+      x-badges:
+        - color: orange
+          label: BETA
+  /api/servicejobs/{serviceJobId}/servicecontainers:
+    get:
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Lists service containers by the id of the related service job
+      operationId: getServiceContainersByServiceJobId
+      parameters:
+        - description: ID of the service job to retrieve containers for
+          in: path
+          name: serviceJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ServiceContainer'
+                type: array
+          description: Service containers for the given service job.
+        '401':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      summary: List service containers for a service job
+      x-fft-permissions:
+        - SERVICE_JOB_READ
+      tags:
+        - Services (Operations)
       x-badges:
         - color: orange
           label: BETA
@@ -48836,6 +49127,7 @@ components:
         - PACKING_SOURCE
         - PACKING_TARGET
         - HANDOVER
+        - SERVICE
       type: string
       title: OperativeType
       description: OperativeType
@@ -65286,6 +65578,285 @@ components:
       type: string
       title: Section
       description: Section
+    ServiceContainer:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        customAttributes:
+          description: >-
+            Attributes that can be added to this container. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          nullable: true
+          type: object
+        description:
+          description: Translated name, filled on request based on descriptionLocalized.
+          type: string
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        facilityRef:
+          description: Id of the facility this container is used in.
+          type: string
+        iconUrl:
+          description: >-
+            URL to an icon representing this container type, derived from
+            referenced operative container type.
+          type: string
+        id:
+          description: >-
+            The id of this entity. It is generated during creation automatically
+            and suits as the primary identifier of the described entity.
+          type: string
+        lineItems:
+          items:
+            $ref: '#/components/schemas/ServiceContainerLineItem'
+          maxItems: 50
+          type: array
+        name:
+          description: >-
+            Translated description, filled on request based on
+            descriptionLocalized.
+          type: string
+        operativeContainerTypeRef:
+          description: >-
+            Reference to the operative container type this container is based
+            on.
+          type: string
+        scannableCodes:
+          items:
+            description: Codes that can be used for scanning this container.
+            type: string
+          maxItems: 50
+          type: array
+        serviceJobRef:
+          description: Id of the ServiceJob this container belongs to.
+          type: string
+        storageLocationRef:
+          description: Id of the storage location this container is located at.
+          type: string
+        type:
+          $ref: '#/components/schemas/ServiceContainerType'
+        weightLimitInG:
+          description: >-
+            Weight limit of the container in grams, derived from referenced
+            operative container type.
+          type: number
+      required:
+        - id
+        - facilityRef
+        - serviceJobRef
+        - type
+        - lineItems
+        - operativeContainerTypeRef
+      type: object
+      title: ServiceContainer
+      description: ServiceContainer
+    ServiceContainerForCreation:
+      additionalProperties: false
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to the service job. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        lineItems:
+          items:
+            $ref: '#/components/schemas/ServiceContainerLineItemForCreation'
+          maxItems: 50
+          type: array
+        operativeContainerTypeRef:
+          description: >-
+            Reference to the operative container type this container is based
+            on.
+          type: string
+        scannableCodes:
+          items:
+            description: Codes that can be used for scanning this container.
+            type: string
+          maxItems: 50
+          type: array
+        serviceJobRef:
+          description: Id of the ServiceJob this container belongs to.
+          type: string
+        storageLocationRef:
+          description: Id of the storage location this container is located at.
+          type: string
+      required:
+        - serviceJobRef
+        - lineItems
+        - operativeContainerTypeRef
+      type: object
+      title: ServiceContainerForCreation
+      description: ServiceContainerForCreation
+    ServiceContainerLineItem:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItem'
+      properties:
+        article:
+          $ref: '#/components/schemas/LineItemArticle'
+        globalLineItemId:
+          description: >-
+            Cross-entity identifier linking this line item back to the
+            originating pick line item.
+          type: string
+        id:
+          description: >-
+            The id of this line item. It is generated during creation
+            automatically and suits as the primary identifier of the described
+            entity.
+          type: string
+        measurementUnitKey:
+          description: Measurement unit key of the item, for example "pcs" or "kg"
+          example: pcs
+          type: string
+        originId:
+          description: >-
+            The id of the line item this line item was originated from, before
+            any split has happened. This can be used to restore the ‘pre-split’
+            status.
+          example: df671041-10dd-4600-a2ff-e9ffe2556bba
+          nullable: true
+          type: string
+        quantity:
+          description: Quantity of the items
+          example: 12
+          minimum: 1
+          type: integer
+        recordableAttributes:
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          maxItems: 50
+          type: array
+        secondaryMeasurementUnitKey:
+          description: >-
+            Identifier for items unit of measurement. E.g. measurementUnitKey is
+            pieces and secondaryMeasurementUnitKey is gram
+          example: g
+          type: string
+        secondaryQuantity:
+          description: >-
+            Secondary quantity of the items, e.g. quantity is the count and
+            secondaryQuantity is the weight
+          example: 100
+          type: number
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          maxItems: 50
+          type: array
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          maxItems: 50
+          type: array
+      required:
+        - id
+        - article
+        - quantity
+        - globalLineItemId
+      type: object
+      title: ServiceContainerLineItem
+      description: ServiceContainerLineItem
+    ServiceContainerLineItemForCreation:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItemForCreation'
+      properties:
+        article:
+          $ref: '#/components/schemas/LineItemArticle'
+        measurementUnitKey:
+          description: Measurement unit key of the item, for example "pcs" or "kg"
+          type: string
+        originId:
+          description: >-
+            The id of the line item this line item was originated from, before
+            any split has happened.
+          type: string
+        quantity:
+          description: The quantity of the lineItem
+          type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          maxItems: 50
+          type: array
+        secondaryMeasurementUnitKey:
+          description: >-
+            Identifier for items unit of measurement. E.g. measurementUnitKey is
+            pieces and secondaryMeasurementUnitKey is gram
+          type: string
+        secondaryQuantity:
+          description: >-
+            secondary quantity of this item, E.g. quantity is the count and
+            secondaryQuantity is the weight
+          type: number
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          maxItems: 50
+          type: array
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          maxItems: 50
+          type: array
+      required:
+        - article
+        - quantity
+      type: object
+      title: ServiceContainerLineItemForCreation
+      description: ServiceContainerLineItemForCreation
+    ServiceContainers:
+      properties:
+        serviceContainers:
+          items:
+            $ref: '#/components/schemas/ServiceContainer'
+          maxItems: 500
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      type: object
+      title: ServiceContainers
+      description: ServiceContainers
+    ServiceContainerSortOptions:
+      enum:
+        - SERVICE_CONTAINER_LAST_MODIFIED_ASC
+        - SERVICE_CONTAINER_LAST_MODIFIED_DESC
+        - SERVICE_CONTAINER_CREATED_ASC
+        - SERVICE_CONTAINER_CREATED_DESC
+      type: string
+      title: ServiceContainerSortOptions
+      description: ServiceContainerSortOptions
+    ServiceContainerType:
+      enum:
+        - VIRTUAL
+        - PHYSICAL
+      type: string
+      title: ServiceContainerType
+      description: ServiceContainerType
+    ServiceContainerWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/ServiceContainer'
+      required:
+        - payload
+      type: object
+      title: ServiceContainerWebHookEvent
+      description: ServiceContainerWebHookEvent
     ServiceData:
       additionalProperties: false
       properties:
