@@ -55947,13 +55947,14 @@ components:
         - $ref: '#/components/schemas/PickJobRestartActionParameter'
         - $ref: '#/components/schemas/PickJobResetActionParameter'
         - $ref: '#/components/schemas/PickJobObsoleteActionParameter'
-        - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
         - $ref: '#/components/schemas/PickJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/PickJobPauseActionParameter'
         - $ref: '#/components/schemas/PickJobSplitLineItemsActionParameter'
         - $ref: '#/components/schemas/PickJobMergeLineItemsActionParameter'
         - $ref: >-
             #/components/schemas/UpdatePickLineItemRecordableAttributesActionParameter
+        - $ref: '#/components/schemas/PickJobPickedActionParameter'
+        - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
       title: PickJobActionsParameter
       description: PickJobActionsParameter
     PickjobDeliveryInformation:
@@ -56321,6 +56322,33 @@ components:
         - name
         - version
       title: PickJobPauseActionParameter
+    PickJobPickedActionEnum:
+      enum:
+        - PICK
+      type: string
+      title: PickJobPickedActionEnum
+      description: PickJobPickedActionEnum
+    PickJobPickedActionParameter:
+      additionalProperties: false
+      description: Action to set the status to Picked of a Pickjob.
+      properties:
+        lineItems:
+          description: 'Pick line items that should be updated '
+          items:
+            $ref: '#/components/schemas/PickPickJobPickLineItemUpdate'
+          maxItems: 100
+          minItems: 1
+        name:
+          $ref: '#/components/schemas/PickJobPickedActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+        - lineItems
+      title: PickJobPickedActionParameter
     PickJobPickingTimes:
       additionalProperties: false
       properties:
@@ -57057,6 +57085,7 @@ components:
             Attributes that can be added to the pick ine item. These attributes
             cannot be used within fulfillment processes, but it could be useful
             to have the informations carried here.
+          nullable: true
           type: object
         id:
           description: >-
@@ -57068,6 +57097,7 @@ components:
         partialStockLocations:
           items:
             $ref: '#/components/schemas/PickJobLineItemPartialStockLocationForUpdate'
+          maxItems: 50
         picked:
           description: The amount of articles that were picked for this pickline.
           example: 20
@@ -57082,6 +57112,7 @@ components:
           description: Scanned Codes of the given picked line item
           items:
             $ref: '#/components/schemas/PickLineItemScannedCode'
+          maxItems: 50
           minItems: 0
         secondaryPicked:
           type: integer
@@ -57089,13 +57120,12 @@ components:
           properties:
             reasonLocalized:
               $ref: '#/components/schemas/LocaleString'
-              description: Localized reason
-              example: '{ en_US: ''SomeName'' }'
         status:
           $ref: '#/components/schemas/PickLineItemStatus'
         stickers:
           items:
             $ref: '#/components/schemas/Sticker'
+          maxItems: 50
           type: array
         stockEmptied:
           example: true
@@ -57109,6 +57139,7 @@ components:
             />
           items:
             $ref: '#/components/schemas/SubstituteLineItemForUpsert'
+          maxItems: 50
           type: array
           x-badges:
             - color: orange
@@ -57132,6 +57163,76 @@ components:
         - reasonLocalized
       title: PickLineShortPickReason
       description: PickLineShortPickReason
+    PickPickJobPickLineItemUpdate:
+      additionalProperties: false
+      properties:
+        customAttributes:
+          description: >-
+            Attributes that can be added to the pick ine item. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          nullable: true
+          type: object
+        id:
+          description: >-
+            The id of this lineItem. It is generated during creation
+            automatically and suits as the primary identifier of the described
+            entity.
+          example: climk4dcQFiPdA5ULuhS
+          type: string
+        partialStockLocations:
+          items:
+            $ref: '#/components/schemas/PickJobLineItemPartialStockLocationForUpdate'
+          maxItems: 50
+        picked:
+          description: The amount of articles that were picked for this pickline.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+        pickedAt:
+          description: >-
+            Date when the line has been picked. example:
+            '2024-02-03T08:45:51.525Z' format: date-time type: string
+        scannedCodes:
+          description: Scanned Codes of the given picked line item
+          items:
+            $ref: '#/components/schemas/PickLineItemScannedCode'
+          maxItems: 50
+          minItems: 0
+        secondaryPicked:
+          type: integer
+        shortPickReason:
+          properties:
+            reasonLocalized:
+              $ref: '#/components/schemas/LocaleString'
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          maxItems: 50
+          type: array
+        stockEmptied:
+          example: true
+          type: boolean
+        substituteLineItems:
+          description: >-
+            This part of the API is in Beta status. For details please check the
+            <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+            target="_blank">api-release-life-cycle documentation</a>.<br /><br
+            />
+          items:
+            $ref: '#/components/schemas/SubstituteLineItemForUpsert'
+          maxItems: 50
+          type: array
+          x-badges:
+            - color: orange
+              label: BETA
+      required:
+        - id
+      type: object
+      title: PickPickJobPickLineItemUpdate
+      description: PickPickJobPickLineItemUpdate
     PickRun:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
