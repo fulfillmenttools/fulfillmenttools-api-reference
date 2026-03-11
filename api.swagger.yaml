@@ -18950,7 +18950,12 @@ paths:
       tags:
         - Picking (Operations)
     patch:
-      description: ''
+      deprecated: true
+      description: >-
+        This part of the API is deprecated. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />@deprecated Use POST /api/pickjobs/{pickJobId}/actions instead.
       operationId: patchPickJob
       parameters:
         - description: ID of the pickjob you want to get
@@ -55908,6 +55913,7 @@ components:
         - $ref: '#/components/schemas/PickJobObsoleteActionParameter'
         - $ref: '#/components/schemas/PickJobReplaceAssignedUsersActionParameter'
         - $ref: '#/components/schemas/PickJobPauseActionParameter'
+        - $ref: '#/components/schemas/PickJobStartActionParameter'
         - $ref: '#/components/schemas/PickJobSplitLineItemsActionParameter'
         - $ref: '#/components/schemas/PickJobMergeLineItemsActionParameter'
         - $ref: >-
@@ -56566,6 +56572,28 @@ components:
       type: object
       title: PickJobSplitLineItemsInfo
       description: PickJobSplitLineItemsInfo
+    PickJobStartActionEnum:
+      enum:
+        - START
+      type: string
+      title: PickJobStartActionEnum
+      description: PickJobStartActionEnum
+    PickJobStartActionParameter:
+      additionalProperties: false
+      description: >-
+        Action to start a PickJob by setting it and its line items to
+        IN_PROGRESS.
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobStartActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+      title: PickJobStartActionParameter
     PickJobStatus:
       description: The status of a pickjob.
       enum:
