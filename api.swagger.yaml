@@ -11636,11 +11636,12 @@ paths:
           label: BETA
   /api/handovercontainers/{handoverContainerId}/stack:
     get:
+      deprecated: false
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
-        handover container stack
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Return the stack of a given handover container if found
       operationId: getStackForHandoverContainer
       parameters:
         - description: id of the handover container
@@ -11669,17 +11670,18 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Get handover container stack
+      x-fft-permissions:
+        - HANDOVER_CONTAINER_READ
+        - STACKS_READ
       tags:
         - Handovers (Operations)
       x-badges:
@@ -14476,6 +14478,12 @@ paths:
           label: BETA
   /api/loadunits/{loadUnitId}/stack:
     get:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Return the stack of a given load unit if found
       operationId: getStackForLoadUnit
       parameters:
         - in: path
@@ -14494,25 +14502,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                items:
+                  $ref: '#/components/schemas/ApiError'
           description: Your user is not allowed to operate against this API instance
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+                items:
+                  $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
       summary: Get load unit stack
+      x-fft-permissions:
+        - LOADUNIT_READ
+        - STACKS_READ
       tags:
         - Picking (Operations)
+      x-badges:
+        - color: orange
+          label: BETA
   /api/loadunittypes:
     get:
       deprecated: true
@@ -25324,6 +25339,7 @@ paths:
           label: ALPHA
   /api/stacks:
     get:
+      deprecated: false
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
@@ -25345,6 +25361,7 @@ paths:
             default: 25
             type: integer
         - description: facilities to filter the results
+          explode: true
           in: query
           name: facilityRefs
           required: false
@@ -25357,9 +25374,10 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/StacksResponse'
-          description: All Stacks matching the given parameters.
+                $ref: '#/components/schemas/StackResponse'
+          description: >-
+            Entities were found & you were allowed to access it. The result is
+            in the body.
         '401':
           content:
             application/json:
@@ -25373,29 +25391,31 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
-      summary: Get stacks
+          description: The requested entity was not found
+      summary: Get all Stacks respecting the given filter
+      x-fft-permissions:
+        - STACKS_READ
       tags:
         - Stacks (Operations)
       x-badges:
         - color: orange
           label: BETA
     post:
+      deprecated: false
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Create new Stack
+        />Create stack
       operationId: createStack
+      parameters: []
       requestBody:
         content:
           application/json:
@@ -25407,9 +25427,8 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/Stack'
-          description: Created Stack.
+                $ref: '#/components/schemas/Stack'
+          description: Stack created.
         '401':
           content:
             application/json:
@@ -25423,17 +25442,17 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Create stack
+      x-fft-permissions:
+        - STACKS_WRITE
       tags:
         - Stacks (Operations)
       x-badges:
@@ -25441,6 +25460,7 @@ paths:
           label: BETA
   /api/stacks/{stackId}:
     get:
+      deprecated: false
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
@@ -25448,8 +25468,7 @@ paths:
         Stack respecting the given id
       operationId: getStackById
       parameters:
-        - description: id of the stack
-          in: path
+        - in: path
           name: stackId
           required: true
           schema:
@@ -25460,7 +25479,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Stack'
-          description: Stack matching the given id.
+          description: >-
+            Entity was found & you were allowed to access it. The result is in
+            the body.
         '401':
           content:
             application/json:
@@ -25474,17 +25495,17 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Get stack
+      x-fft-permissions:
+        - STACKS_READ
       tags:
         - Stacks (Operations)
       x-badges:
@@ -69078,9 +69099,6 @@ components:
       title: SplitResultType
       description: SplitResultType
     Stack:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/StackForCreation'
       properties:
         created:
           description: >-
@@ -69089,7 +69107,14 @@ components:
           example: 2020-02-03T08:45:51.525Z
           format: date-time
           type: string
+        facilityRefs:
+          description: Linked Facilities through reference
+          items:
+            type: string
+          maxItems: 50
+          type: array
         id:
+          description: Unique identifier of the Stack
           type: string
         lastModified:
           description: >-
@@ -69098,6 +69123,12 @@ components:
           example: 2020-02-03T09:45:51.525Z
           format: date-time
           type: string
+        processRefs:
+          description: Linked Processes through reference
+          items:
+            type: string
+          maxItems: 50
+          type: array
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -69106,49 +69137,53 @@ components:
           format: int64
           type: integer
       required:
-        - id
-        - version
         - created
         - lastModified
-        - facilityRef
-        - processRef
-      type: object
+        - version
+        - id
+        - facilityRefs
+        - processRefs
       title: Stack
+      type: object
       description: Stack
     StackForCreation:
-      additionalProperties: false
       properties:
         facilityRefs:
           description: Linked Facilities through reference
           items:
             type: string
+          maxItems: 50
           type: array
         processRefs:
           description: Linked Processes through reference
           items:
             type: string
+          maxItems: 50
           type: array
       required:
         - facilityRefs
         - processRefs
-      type: object
       title: StackForCreation
+      type: object
       description: StackForCreation
-    StacksResponse:
-      additionalProperties: false
+    StackResponse:
       properties:
         stacks:
+          description: Array of Stacks matching the given filter
           items:
             $ref: '#/components/schemas/Stack'
           type: array
         total:
-          description: total number for the given filter
+          description: Total number of stacks for the given filter
+          example: 42
+          format: int64
           type: integer
       required:
         - stacks
         - total
-      title: StacksResponse
-      description: StacksResponse
+      title: StackResponse
+      type: object
+      description: StackResponse
     StartItemReturnActionEnum:
       enum:
         - StartItemReturn
