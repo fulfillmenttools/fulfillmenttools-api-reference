@@ -65813,8 +65813,14 @@ components:
             type: string
           maxItems: 50
           type: array
-        serviceJobRef:
-          description: Id of the ServiceJob this container belongs to.
+        serviceJobRefs:
+          description: Ids of the ServiceJobs this container belongs to.
+          items:
+            type: string
+          maxItems: 50
+          type: array
+        stackRef:
+          description: Reference to related stack
           type: string
         storageLocationRef:
           description: Id of the storage location this container is located at.
@@ -65829,22 +65835,30 @@ components:
       required:
         - id
         - facilityRef
-        - serviceJobRef
+        - serviceJobRefs
         - type
         - lineItems
-        - operativeContainerTypeRef
       type: object
       title: ServiceContainer
       description: ServiceContainer
     ServiceContainerForCreation:
       additionalProperties: false
       properties:
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
         customAttributes:
           description: >-
             Attributes that can be added to the service job. These attributes
             cannot be used within fulfillment processes, but it could be useful
             to have the information carried here.
           type: object
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        iconUrl:
+          description: URL to an icon representing this container type.
+          type: string
         lineItems:
           items:
             $ref: '#/components/schemas/ServiceContainerLineItemForCreation'
@@ -65861,16 +65875,24 @@ components:
             type: string
           maxItems: 50
           type: array
-        serviceJobRef:
-          description: Id of the ServiceJob this container belongs to.
+        serviceJobRefs:
+          description: Ids of the ServiceJobs this container belongs to.
+          items:
+            type: string
+          maxItems: 50
+          type: array
+        stackRef:
+          description: Reference to related stack
           type: string
         storageLocationRef:
           description: Id of the storage location this container is located at.
           type: string
+        weightLimitInG:
+          description: Weight limit of the container in grams.
+          type: number
       required:
-        - serviceJobRef
+        - serviceJobRefs
         - lineItems
-        - operativeContainerTypeRef
       type: object
       title: ServiceContainerForCreation
       description: ServiceContainerForCreation
