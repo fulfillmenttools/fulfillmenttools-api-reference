@@ -30082,6 +30082,26 @@ components:
         name: Carrier
       title: Carrier
       description: Carrier
+    CarrierChangedCarrierInfo:
+      properties:
+        carrierKey:
+          type: string
+        carrierRef:
+          type: string
+      type: object
+      title: CarrierChangedCarrierInfo
+      description: CarrierChangedCarrierInfo
+    CarrierChangedPayload:
+      allOf:
+        - $ref: '#/components/schemas/OperativeEntityPayloadBase'
+      properties:
+        newCarrier:
+          $ref: '#/components/schemas/CarrierChangedCarrierInfo'
+        previousCarrier:
+          $ref: '#/components/schemas/CarrierChangedCarrierInfo'
+      type: object
+      title: CarrierChangedPayload
+      description: CarrierChangedPayload
     CarrierConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -58326,6 +58346,7 @@ components:
         - HANDOVER
         - ROUTING_PLAN
         - EXTERNAL_ACTION
+        - SHIPMENT
       type: string
       title: ProcessHistoryDomainType
     ProcessHistoryEventType:
@@ -58363,6 +58384,8 @@ components:
         - PACKING_IN_PROGRESS
         - PACKING_DONE
         - PARCEL_CREATED
+        - PARCEL_LABEL_REQUESTED
+        - PARCEL_LABEL_CREATION_FAILED
         - HANDOVER_CREATED
         - HANDOVER_DONE
         - HANDOVER_DONE_WITH_REFUSED_ITEMS
@@ -58415,7 +58438,8 @@ components:
         status:
           description: >-
             Status can be OrderStatus, PickJobStatus, PackJobStatus,
-            ParcelStatus, HandoverjobStatus, RoutingPlanStatus, or null
+            ParcelStatus, HandoverjobStatus, RoutingPlanStatus, ShipmentStatus
+            or null
           nullable: true
           type: string
         timestamp:
