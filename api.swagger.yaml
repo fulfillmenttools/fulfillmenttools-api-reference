@@ -21141,29 +21141,27 @@ paths:
         - Inbound (Inventory)
   /api/remoteconfigs:
     get:
-      description: ''
+      deprecated: false
+      description: >-
+        List all available remote configurations with optional filtering by
+        groups, facility, or user.
       operationId: getAllRemoteConfigurations
       parameters:
-        - description: all entities after given Id
-          in: query
-          name: startAfterId
-          required: false
-          schema:
-            type: string
-        - description: number of entities to show
+        - description: Number of results to return (max 500)
           in: query
           name: size
           required: false
           schema:
             default: 25
-            type: integer
-        - description: facility to filter to
+            maximum: 500
+            type: number
+        - description: Cursor for pagination - ID to start after
           in: query
-          name: facilityId
+          name: startAfterId
           required: false
           schema:
             type: string
-        - description: groups to filter to
+        - description: Filter by group(s)
           in: query
           name: groups
           required: false
@@ -21171,7 +21169,13 @@ paths:
             items:
               type: string
             type: array
-        - description: userId to filter to
+        - description: Filter by facility ID
+          in: query
+          name: facilityId
+          required: false
+          schema:
+            type: string
+        - description: Filter by user ID
           in: query
           name: userId
           required: false
@@ -21197,27 +21201,32 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: List remote configs
+      x-fft-permissions:
+        - REMOTE_CONFIG_READ
       tags:
         - Remote Configs (Core)
     post:
-      description: ''
+      deprecated: false
+      description: >-
+        Create a new remote configuration with specified key, value, type,
+        groups, and optional scopes.
       operationId: createRemoteConfiguration
+      parameters: []
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/RemoteConfigurationForCreation'
+        required: true
       responses:
         '200':
           content:
@@ -21238,19 +21247,21 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
       summary: Create remote config
+      x-fft-permissions:
+        - REMOTE_CONFIG_WRITE
       tags:
         - Remote Configs (Core)
   /api/remoteconfigs/{id}:
     delete:
-      description: ''
+      deprecated: false
+      description: >-
+        Delete a remote configuration by its unique identifier. This operation
+        is irreversible.
       operationId: deleteRemoteConfiguration
       parameters:
-        - description: Reference to the remote config you want to delete
-          in: path
+        - in: path
           name: id
           required: true
           schema:
@@ -21271,25 +21282,25 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Delete remote config
+      x-fft-permissions:
+        - REMOTE_CONFIG_WRITE
       tags:
         - Remote Configs (Core)
     get:
-      description: ''
+      deprecated: false
+      description: Get a single remote configuration by its unique identifier.
       operationId: getRemoteConfiguration
       parameters:
-        - description: Reference to the remote config you want to get
-          in: path
+        - in: path
           name: id
           required: true
           schema:
@@ -21314,25 +21325,27 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Get remote config
+      x-fft-permissions:
+        - REMOTE_CONFIG_READ
       tags:
         - Remote Configs (Core)
     patch:
-      description: ''
+      deprecated: false
+      description: >-
+        Update an existing remote configuration by its unique identifier. Only
+        provided fields will be updated, others will remain unchanged.
       operationId: updateRemoteConfiguration
       parameters:
-        - description: Reference to the remote config you want to change
-          in: path
+        - in: path
           name: id
           required: true
           schema:
@@ -21342,8 +21355,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RemoteConfigurationForUpdate'
+        required: true
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteConfiguration'
           description: Successfully Changed
         '401':
           content:
@@ -21358,25 +21376,27 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Update remote config
+      x-fft-permissions:
+        - REMOTE_CONFIG_WRITE
       tags:
         - Remote Configs (Core)
     put:
-      description: ''
+      deprecated: false
+      description: >-
+        Replace an existing remote configuration by its unique identifier. All
+        fields will be replaced with the provided values.
       operationId: putRemoteConfiguration
       parameters:
-        - description: Reference to the remote config you want to change
-          in: path
+        - in: path
           name: id
           required: true
           schema:
@@ -21386,8 +21406,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RemoteConfigurationForPut'
+        required: true
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteConfiguration'
           description: Successfully Changed
         '401':
           content:
@@ -21402,26 +21427,28 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Update remote config
+      x-fft-permissions:
+        - REMOTE_CONFIG_WRITE
       tags:
         - Remote Configs (Core)
   /api/remoteconfigs/{id}/scopes:
     post:
-      description: ''
+      deprecated: false
+      description: >-
+        Add a new scope to an existing remote configuration. The scope will be
+        added to the list of existing scopes.
       operationId: addRemoteConfigurationScope
       parameters:
-        - description: Reference to the remote config you want to change
-          in: path
+        - in: path
           name: id
           required: true
           schema:
@@ -21431,6 +21458,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AddRemoteConfigurationScopeParameter'
+        required: true
       responses:
         '200':
           content:
@@ -21451,29 +21479,36 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
       summary: Create remote config scope
+      x-fft-permissions:
+        - REMOTE_CONFIG_WRITE
       tags:
         - Remote Configs (Core)
   /api/remoteconfigs/{id}/scopes/{scopeId}:
     delete:
-      description: ''
+      deprecated: false
+      description: >-
+        Remove a scope from an existing remote configuration by scope ID. The
+        scope will be removed from the list of existing scopes.
       operationId: deleteScopeFromRemoteConfiguration
       parameters:
-        - description: Reference to the remote config you want to alter
-          in: path
+        - in: path
           name: id
           required: true
           schema:
             type: string
-        - description: Reference to the remote config scope you want to delete
-          in: path
+        - in: path
           name: scopeId
           required: true
           schema:
             type: string
+        - description: Version of the remote config for optimistic locking
+          in: query
+          name: version
+          required: true
+          schema:
+            type: number
       responses:
         '200':
           content:
@@ -21494,17 +21529,17 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Delete remote config scope
+      x-fft-permissions:
+        - REMOTE_CONFIG_WRITE
       tags:
         - Remote Configs (Core)
   /api/reroutedescriptions:
@@ -28271,18 +28306,20 @@ components:
       title: AddRefuseReasonParameter
       description: AddRefuseReasonParameter
     AddRemoteConfigurationScopeParameter:
-      additionalProperties: false
       properties:
         remoteConfigVersion:
+          description: The version of the remote config for optimistic locking
           minimum: 0
           type: number
         scope:
-          $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+          allOf:
+            - $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+          description: The scope to add
       required:
         - scope
         - remoteConfigVersion
-      type: object
       title: AddRemoteConfigurationScopeParameter
+      type: object
       description: AddRemoteConfigurationScopeParameter
     Address:
       properties:
@@ -60383,76 +60420,97 @@ components:
       type: object
       description: RelatedRefs
     RemoteConfiguration:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
       properties:
+        created:
+          description: The date this entity was created at the platform
+          format: date-time
+          type: string
         flattenScopeIds:
           description: >-
-            generated flatten unique ids of all scope sub elements (userRef,
+            Generated flatten unique ids of all scope sub elements (userRef,
             facilityRef)
+          example:
+            - INVENTORY
+            - 67151fc3-3ce1-400e-8b23-23c29e0cde90
           items:
-            example:
-              - INVENTORY
-              - 67151fc3-3ce1-400e-8b23-23c29e0cde90
             type: string
           type: array
         groups:
+          description: Groups this configuration belongs to
+          example:
+            - INVENTORY
           items:
-            example: INVENTORY
             type: string
+          maxItems: 20
           minItems: 1
           type: array
         id:
-          description: auto generated unique identifier
+          description: Auto generated unique identifier
           example: LGMl2DuvPnfPoSHhYFOm
           type: string
         key:
-          description: unique business key of this entity
+          description: Unique business key of this entity
           example: PICKING_SHOW_NEW_SCAN_VIEW
           type: string
+        lastModified:
+          description: The date this entity was modified last
+          format: date-time
+          type: string
         scopes:
+          description: Scopes for this remote configuration
           items:
             $ref: '#/components/schemas/RemoteConfigurationScope'
+          maxItems: 20
           type: array
         value:
+          description: The value of this remote configuration
           oneOf:
             - type: string
+            - type: integer
             - type: number
             - type: boolean
             - type: object
-            - type: integer
         valueType:
-          $ref: '#/components/schemas/RemoteConfigurationValueType'
+          allOf:
+            - $ref: '#/components/schemas/RemoteConfigurationValueType'
+          description: The type of the value
+        version:
+          description: The version of the document for optimistic locking
+          type: number
       required:
-        - id
         - key
-        - version
-        - value
         - valueType
+        - value
         - groups
+        - id
+        - version
         - flattenScopeIds
-      type: object
       title: RemoteConfiguration
+      type: object
       description: RemoteConfiguration
     RemoteConfigurationForCreation:
-      additionalProperties: false
       properties:
         groups:
+          description: Groups this configuration belongs to
+          example:
+            - INVENTORY
           items:
-            example: INVENTORY
             type: string
+          maxItems: 20
           minItems: 1
           type: array
         key:
-          description: unique business key of this entity
+          description: Unique business key of this entity
           example: PICKING_SHOW_NEW_SCAN_VIEW
           type: string
         scopes:
+          description: Scopes for this remote configuration
           items:
             $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+          maxItems: 20
           type: array
         value:
+          description: The value of this remote configuration
           oneOf:
             - type: string
             - type: integer
@@ -60460,29 +60518,36 @@ components:
             - type: boolean
             - type: object
         valueType:
-          $ref: '#/components/schemas/RemoteConfigurationValueType'
+          allOf:
+            - $ref: '#/components/schemas/RemoteConfigurationValueType'
+          description: The type of the value
       required:
         - key
-        - value
         - valueType
+        - value
         - groups
-      type: object
       title: RemoteConfigurationForCreation
+      type: object
       description: RemoteConfigurationForCreation
     RemoteConfigurationForPut:
-      additionalProperties: false
       properties:
         groups:
+          description: Groups this configuration belongs to
+          example:
+            - INVENTORY
           items:
-            example: INVENTORY
             type: string
+          maxItems: 20
           minItems: 1
           type: array
         scopes:
+          description: Scopes for this remote configuration
           items:
             $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+          maxItems: 20
           type: array
         value:
+          description: The value of this remote configuration
           oneOf:
             - type: string
             - type: integer
@@ -60490,31 +60555,39 @@ components:
             - type: boolean
             - type: object
         valueType:
-          $ref: '#/components/schemas/RemoteConfigurationValueType'
+          allOf:
+            - $ref: '#/components/schemas/RemoteConfigurationValueType'
+          description: The type of the value
         version:
-          type: integer
+          description: The version of the document for optimistic locking
+          type: number
       required:
         - version
-        - value
         - valueType
+        - value
         - groups
-      type: object
       title: RemoteConfigurationForPut
+      type: object
       description: RemoteConfigurationForPut
     RemoteConfigurationForUpdate:
-      additionalProperties: false
       properties:
         groups:
+          description: Groups this configuration belongs to
+          example:
+            - INVENTORY
           items:
-            example: INVENTORY
             type: string
+          maxItems: 20
           minItems: 1
           type: array
         scopes:
+          description: Scopes for this remote configuration
           items:
             $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
+          maxItems: 20
           type: array
         value:
+          description: The value of this remote configuration
           oneOf:
             - type: string
             - type: integer
@@ -60522,69 +60595,89 @@ components:
             - type: boolean
             - type: object
         valueType:
-          $ref: '#/components/schemas/RemoteConfigurationValueType'
+          allOf:
+            - $ref: '#/components/schemas/RemoteConfigurationValueType'
+          description: The type of the value
         version:
-          type: integer
+          description: The version of the document for optimistic locking
+          type: number
       required:
         - version
-      type: object
       title: RemoteConfigurationForUpdate
+      type: object
       description: RemoteConfigurationForUpdate
     RemoteConfigurations:
       properties:
         remoteConfigurations:
+          description: Array of remote configurations
           items:
             $ref: '#/components/schemas/RemoteConfiguration'
           type: array
         total:
           description: Total number of found entities for this query
           example: 42
-          type: integer
-      type: object
+          type: number
       title: RemoteConfigurations
+      type: object
       description: RemoteConfigurations
     RemoteConfigurationScope:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/RemoteConfigurationScopeForCreation'
-      properties:
-        id:
-          description: auto generated unique identifier
-          example: LGMl2DuvPnfPoSHhYFOm
-          type: string
-      required:
-        - id
-      type: object
-      title: RemoteConfigurationScope
-      description: RemoteConfigurationScope
-    RemoteConfigurationScopeForCreation:
-      additionalProperties: false
       properties:
         facilityRefs:
+          description: References of facilities this scope applies to
+          example:
+            - 928f3730-bc48-4d85-b83f-3fd86b776178
           items:
-            description: Reference of a Facility
-            example: 928f3730-bc48-4d85-b83f-3fd86b776178
             type: string
+          maxItems: 100
+          type: array
+        id:
+          description: Auto generated unique identifier
+          example: LGMl2DuvPnfPoSHhYFOm
+          type: string
+        userRefs:
+          description: References of users this scope applies to
+          example:
+            - 928f3730-bc48-4d85-b83f-3fd86b776178
+          items:
+            type: string
+          maxItems: 100
+          type: array
+      required:
+        - id
+      title: RemoteConfigurationScope
+      type: object
+      description: RemoteConfigurationScope
+    RemoteConfigurationScopeForCreation:
+      properties:
+        facilityRefs:
+          description: References of facilities this scope applies to
+          example:
+            - 928f3730-bc48-4d85-b83f-3fd86b776178
+          items:
+            type: string
+          maxItems: 100
           type: array
         userRefs:
+          description: References of users this scope applies to
+          example:
+            - 928f3730-bc48-4d85-b83f-3fd86b776178
           items:
-            description: Reference of a user
-            example: 928f3730-bc48-4d85-b83f-3fd86b776178
             type: string
+          maxItems: 100
           type: array
-      type: object
       title: RemoteConfigurationScopeForCreation
+      type: object
       description: RemoteConfigurationScopeForCreation
     RemoteConfigurationValueType:
+      description: The type of the value
       enum:
         - BOOLEAN
         - STRING
         - JSON
         - NUMBER
         - INT
-      type: string
       title: RemoteConfigurationValueType
-      description: RemoteConfigurationValueType
+      type: string
     RemoveFacilityCoordinatesActionParameter:
       allOf:
         - $ref: '#/components/schemas/AbstractFacilityActionsParameter'
