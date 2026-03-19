@@ -56444,6 +56444,47 @@ components:
         - version
         - lineItems
       title: PickJobPickedActionParameter
+    PickJobPickingMethodEnumEnumFilter:
+      properties:
+        eq:
+          description: Search by preferredPickingMethods
+          enum:
+            - SINGLE_ORDER
+            - MULTI_ORDER
+            - BATCH_PICKING
+            - BATCH
+          type: string
+        in:
+          description: Search by preferredPickingMethods
+          items:
+            enum:
+              - SINGLE_ORDER
+              - MULTI_ORDER
+              - BATCH_PICKING
+              - BATCH
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by preferredPickingMethods
+          enum:
+            - SINGLE_ORDER
+            - MULTI_ORDER
+            - BATCH_PICKING
+            - BATCH
+          type: string
+      title: PickJobPickingMethodEnumEnumFilter
+      type: object
+      description: PickJobPickingMethodEnumEnumFilter
+    PickJobPickingMethodEnumEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/PickJobPickingMethodEnumEnumFilter'
+          description: Search by preferredPickingMethods
+      title: PickJobPickingMethodEnumEnumListFilter
+      type: object
+      description: PickJobPickingMethodEnumEnumListFilter
     PickJobPickingTimes:
       additionalProperties: false
       properties:
@@ -56599,6 +56640,13 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by consumerName
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: >-
+            Search entries by created. Applying a narrow and well-considered
+            filter value is strongly recommended, as it can greatly improve
+            response times, especially when working with large datasets.
         facilityRef:
           allOf:
             - $ref: '#/components/schemas/StringEqFilter'
@@ -56607,11 +56655,23 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
           description: Search by id
+        lastModified:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
         or:
           items:
             $ref: '#/components/schemas/PickJobSearchQuery'
           maxItems: 500
           type: array
+        orderRef:
+          allOf:
+            - $ref: '#/components/schemas/StringEqFilter'
+          description: Search by orderRef
+        preferredPickingMethods:
+          allOf:
+            - $ref: '#/components/schemas/PickJobPickingMethodEnumEnumListFilter'
+          description: Search by preferredPickingMethods
         status:
           allOf:
             - $ref: '#/components/schemas/PickJobStatusEnumFilter'
@@ -56637,6 +56697,16 @@ components:
       description: PickJobSearchQuery
     PickJobSort:
       properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
         targetTime:
           enum:
             - ASC
