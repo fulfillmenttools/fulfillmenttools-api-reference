@@ -29618,6 +29618,21 @@ components:
       title: BasketItem
       type: object
       description: BasketItem
+    BatchPickingConfiguration:
+      additionalProperties: false
+      properties:
+        maxAmountOfPickJobsForBatchPick:
+          description: >-
+            The maximum amount of pick jobs that can be combined in a batch
+            pick. Must be a value between 1 and 100.
+          maximum: 100
+          minimum: 1
+          type: integer
+      required:
+        - maxAmountOfPickJobsForBatchPick
+      type: object
+      title: BatchPickingConfiguration
+      description: BatchPickingConfiguration
     BinPackerInput:
       properties:
         currency:
@@ -47999,7 +48014,9 @@ components:
         maxAmountOfPickJobsForMultiOrderPick:
           description: >-
             The maximum amount of pick jobs that can be combined in a multi
-            order pick. Must be a value between 1 and 50.
+            order pick. Must be a value between 1 and 100.
+          maximum: 100
+          minimum: 1
           type: integer
       required:
         - maxAmountOfPickJobsForMultiOrderPick
@@ -55640,6 +55657,8 @@ components:
       properties:
         backofficePickingConfiguration:
           $ref: '#/components/schemas/BackofficePickingConfiguration'
+        batchPickingConfiguration:
+          $ref: '#/components/schemas/BatchPickingConfiguration'
         loadUnitAssignmentConfiguration:
           $ref: '#/components/schemas/LoadUnitAssignmentConfiguration'
         multiOrderPickingConfiguration:
