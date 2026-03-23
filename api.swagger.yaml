@@ -21141,12 +21141,10 @@ paths:
         - Inbound (Inventory)
   /api/remoteconfigs:
     get:
-      deprecated: true
+      deprecated: false
       description: >-
-        This part of the API is deprecated. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Deprecated: Use /api/remoteconfigurations/search instead
+        List all available remote configurations with optional filtering by
+        groups, facility, or user.
       operationId: getAllRemoteConfigurations
       parameters:
         - description: Number of results to return (max 500)
@@ -21544,49 +21542,6 @@ paths:
         - REMOTE_CONFIG_WRITE
       tags:
         - Remote Configs (Core)
-  /api/remoteconfigurations/search:
-    post:
-      deprecated: false
-      description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Search for RemoteConfiguration
-      operationId: searchRemoteConfiguration
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RemoteConfigurationSearchPayload'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RemoteConfigurationPaginatedResult'
-          description: Your search result
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user is not allowed to operate against this API instance
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Your user, although recognized, is not authorized to use this
-      summary: List remote configurations (search)
-      x-fft-permissions:
-        - REMOTE_CONFIG_READ
-      tags:
-        - Configurations (Core)
-      x-badges:
-        - color: orange
-          label: BETA
   /api/reroutedescriptions:
     get:
       description: >-
@@ -29150,6 +29105,7 @@ components:
       enum:
         - EMAIL_PASSWORD
         - OIDC
+        - SUPPORT_ACCESS
       title: AuthenticationProviderTypeEnum
       type: string
     AvailabilityAllocation:
@@ -60745,28 +60701,6 @@ components:
       title: RemoteConfigurationForUpdate
       type: object
       description: RemoteConfigurationForUpdate
-    RemoteConfigurationPaginatedResult:
-      properties:
-        pageInfo:
-          allOf:
-            - $ref: '#/components/schemas/PageInfo'
-          description: Pagination information for the search result.
-        remoteConfigurations:
-          items:
-            $ref: '#/components/schemas/RemoteConfiguration'
-          type: array
-        total:
-          description: >-
-            The total number of items matching the search criteria. Only filled,
-            if withTotal is set to true in the search options.
-          minimum: 0
-          type: number
-      required:
-        - pageInfo
-        - remoteConfigurations
-      title: RemoteConfigurationPaginatedResult
-      type: object
-      description: RemoteConfigurationPaginatedResult
     RemoteConfigurations:
       properties:
         remoteConfigurations:
@@ -60829,99 +60763,6 @@ components:
       title: RemoteConfigurationScopeForCreation
       type: object
       description: RemoteConfigurationScopeForCreation
-    RemoteConfigurationScopesFilter:
-      properties:
-        facilityRefs:
-          allOf:
-            - $ref: '#/components/schemas/StringListFilter'
-          description: Search by facilityRefs
-        userRefs:
-          allOf:
-            - $ref: '#/components/schemas/StringListFilter'
-          description: Search by userRefs
-      title: RemoteConfigurationScopesFilter
-      type: object
-      description: RemoteConfigurationScopesFilter
-    RemoteConfigurationScopesListFilter:
-      properties:
-        contains:
-          allOf:
-            - $ref: '#/components/schemas/RemoteConfigurationScopesFilter'
-          description: Contains returns if at least one entry matches
-      title: RemoteConfigurationScopesListFilter
-      type: object
-      description: RemoteConfigurationScopesListFilter
-    RemoteConfigurationSearchPayload:
-      properties:
-        after:
-          deprecated: false
-          description: >-
-            The cursor to start after for forward pagination. The value is
-            provided in the `pageInfo.endCursor` field of the response. Cannot
-            be used with `before` or `last`.
-          type: string
-        before:
-          description: >-
-            The cursor to start before for backward pagination. The value is
-            provided in the `pageInfo.startCursor` field of the response. Cannot
-            be used with `after` or `size` (first).
-          type: string
-        last:
-          description: >-
-            Number of items to return for backward pagination. Cannot be used
-            with 'size' (first). Default: 20.
-          maximum: 250
-          minimum: 1
-          type: number
-        options:
-          $ref: '#/components/schemas/SearchOptions'
-        query:
-          $ref: '#/components/schemas/RemoteConfigurationSearchQuery'
-        size:
-          description: >-
-            Number of items to return for forward pagination. Cannot be used
-            with 'last'. Default: 20.
-          maximum: 250
-          minimum: 1
-          type: number
-        startAfterId:
-          deprecated: true
-          description: >-
-            The ID to start after. Deprecated, use `after` with the value
-            provided in `pageInfo.endCursor` instead.
-          type: string
-      required:
-        - query
-      title: RemoteConfigurationSearchPayload
-      type: object
-      description: RemoteConfigurationSearchPayload
-    RemoteConfigurationSearchQuery:
-      properties:
-        and:
-          items:
-            $ref: '#/components/schemas/RemoteConfigurationSearchQuery'
-          maxItems: 500
-          type: array
-        groups:
-          allOf:
-            - $ref: '#/components/schemas/StringListFilter'
-          description: Search by groups
-        key:
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
-          description: Search by key
-        or:
-          items:
-            $ref: '#/components/schemas/RemoteConfigurationSearchQuery'
-          maxItems: 500
-          type: array
-        scopes:
-          allOf:
-            - $ref: '#/components/schemas/RemoteConfigurationScopesListFilter'
-          description: Nested list search by scopes
-      title: RemoteConfigurationSearchQuery
-      type: object
-      description: RemoteConfigurationSearchQuery
     RemoteConfigurationValueType:
       description: The type of the value
       enum:
@@ -76194,6 +76035,7 @@ components:
           enum:
             - EMAIL_PASSWORD
             - OIDC
+            - SUPPORT_ACCESS
           type: string
         in:
           description: Search by type
@@ -76201,6 +76043,7 @@ components:
             enum:
               - EMAIL_PASSWORD
               - OIDC
+              - SUPPORT_ACCESS
             type: string
           maxItems: 500
           type: array
@@ -76209,6 +76052,7 @@ components:
           enum:
             - EMAIL_PASSWORD
             - OIDC
+            - SUPPORT_ACCESS
           type: string
       title: UserAuthAuthenticationProviderTypeEnumFilter
       type: object
