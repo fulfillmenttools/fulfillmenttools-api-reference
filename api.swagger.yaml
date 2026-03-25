@@ -76130,6 +76130,7 @@ components:
           description: Array of connections between workflow nodes
           items:
             $ref: '#/components/schemas/WorkflowConnection'
+          maxItems: 10
           type: array
         description:
           description: Description of what the workflow does
@@ -76144,7 +76145,9 @@ components:
           example: true
           type: boolean
         key:
-          description: Unique key for the workflow definition
+          description: >-
+            Unique key for the workflow definition. Must not contain "." or "$"
+            characters.
           example: fraud-check-workflow
           type: string
         name:
@@ -76160,40 +76163,54 @@ components:
               - $ref: '#/components/schemas/ConditionWorkflowNode'
               - $ref: '#/components/schemas/ExternalSystemWorkflowNode'
               - $ref: '#/components/schemas/TriggerExternalWorkflowNode'
+          maxItems: 100
           type: array
         rootId:
           description: Key of the root node where workflow execution begins
           example: order-node
           type: string
         type:
-          description: Type of workflow
+          description: Type of workflow. Currently only ORDER workflows are supported
           enum:
             - ORDER
           type: string
         version:
-          description: Version number for optimistic locking
+          description: Current version of the workflow definition for optimistic locking
           example: 1
           type: number
       required:
-        - id
         - key
         - type
         - name
         - description
         - rootId
-        - version
-        - isActive
         - nodes
         - connections
+        - id
+        - version
+        - isActive
       title: WorkflowDefinition
       type: object
       description: WorkflowDefinition
+    WorkflowDefinitionAction:
+      properties:
+        name:
+          description: Which action to perform on the workflow definition
+          enum:
+            - ACTIVATE
+          type: string
+      required:
+        - name
+      title: WorkflowDefinitionAction
+      type: object
+      description: WorkflowDefinitionAction
     WorkflowDefinitionForCreation:
       properties:
         connections:
           description: Array of connections between workflow nodes
           items:
             $ref: '#/components/schemas/WorkflowConnection'
+          maxItems: 10
           type: array
         description:
           description: Description of what the workflow does
@@ -76218,6 +76235,7 @@ components:
               - $ref: '#/components/schemas/ConditionWorkflowNode'
               - $ref: '#/components/schemas/ExternalSystemWorkflowNode'
               - $ref: '#/components/schemas/TriggerExternalWorkflowNode'
+          maxItems: 100
           type: array
         rootId:
           description: Key of the root node where workflow execution begins
@@ -76245,15 +76263,16 @@ components:
           description: Array of connections between workflow nodes
           items:
             $ref: '#/components/schemas/WorkflowConnection'
+          maxItems: 10
           type: array
         description:
           description: Description of what the workflow does
           example: Conditional fraud verification flow with manual review
           type: string
-        isActive:
-          description: Whether the workflow definition is active
-          example: true
-          type: boolean
+        id:
+          description: Unique identifier for the workflow definition
+          example: 507f1f77bcf86cd799439011
+          type: string
         key:
           description: >-
             Unique key for the workflow definition. Must not contain "." or "$"
@@ -76273,6 +76292,7 @@ components:
               - $ref: '#/components/schemas/ConditionWorkflowNode'
               - $ref: '#/components/schemas/ExternalSystemWorkflowNode'
               - $ref: '#/components/schemas/TriggerExternalWorkflowNode'
+          maxItems: 100
           type: array
         rootId:
           description: Key of the root node where workflow execution begins
@@ -76295,8 +76315,8 @@ components:
         - rootId
         - nodes
         - connections
+        - id
         - version
-        - isActive
       title: WorkflowDefinitionForUpdate
       type: object
       description: WorkflowDefinitionForUpdate
