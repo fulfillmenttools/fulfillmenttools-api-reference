@@ -64527,6 +64527,10 @@ components:
       oneOf:
         - $ref: '#/components/schemas/RoutingStrategyActivateActionParameter'
         - $ref: '#/components/schemas/RoutingStrategyCreateCopyActionParameter'
+        - $ref: >-
+            #/components/schemas/RoutingStrategyReplaceGlobalConfigurationActionParameter
+        - $ref: '#/components/schemas/RoutingStrategyReplaceNodeActionParameter'
+        - $ref: '#/components/schemas/RoutingStrategyReplaceConditionActionParameter'
       title: RoutingStrategyActionsParameter
       description: RoutingStrategyActionsParameter
     RoutingStrategyActivateActionParameter:
@@ -64638,6 +64642,28 @@ components:
         - nameLocalized
       title: RoutingStrategyConditionForModification
       description: RoutingStrategyConditionForModification
+    RoutingStrategyConditionForReplace:
+      additionalProperties: false
+      description: Condition data for replacing a condition in a routing strategy.
+      properties:
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        activationTimeFrames:
+          items:
+            $ref: '#/components/schemas/ActivationTimeFrame'
+          maxItems: 1
+          type: array
+        active:
+          type: boolean
+        rule:
+          $ref: '#/components/schemas/RoutingStrategyConditionRule'
+      required:
+        - active
+        - nameLocalized
+        - rule
+      title: RoutingStrategyConditionForReplace
     RoutingStrategyConditionPredicate:
       description: The predicate for a routing strategy condition rule
       properties:
@@ -64659,6 +64685,7 @@ components:
               - type: string
               - type: number
               - type: boolean
+          maxItems: 100
           type: array
       required:
         - propertyPath
@@ -64675,6 +64702,7 @@ components:
         predicates:
           items:
             $ref: '#/components/schemas/RoutingStrategyConditionPredicate'
+          maxItems: 100
           minItems: 1
           type: array
       required:
@@ -64980,6 +65008,7 @@ components:
               mapping:
                 StandardFence: '#/components/schemas/RoutingStrategyStandardFenceForUpsert'
                 ToolkitFence: '#/components/schemas/RoutingStrategyToolkitFence'
+          maxItems: 100
           type: array
         orderSplit:
           $ref: '#/components/schemas/RoutingStrategyOrderSplitConfig'
@@ -64993,6 +65022,7 @@ components:
               mapping:
                 StandardRating: '#/components/schemas/RoutingStrategyRatingForUpsert'
                 ToolkitRating: '#/components/schemas/RoutingStrategyToolkitRating'
+          maxItems: 100
           type: array
         reroute:
           $ref: '#/components/schemas/RoutingStrategyRerouteConfig'
@@ -65064,6 +65094,30 @@ components:
       type: object
       title: RoutingStrategyNodeForModification
       description: RoutingStrategyNodeForModification
+    RoutingStrategyNodeForReplace:
+      additionalProperties: false
+      description: Node data for replacing a node in a routing strategy.
+      properties:
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        activationTimeFrames:
+          items:
+            $ref: '#/components/schemas/ActivationTimeFrame'
+          maxItems: 1
+          type: array
+        active:
+          type: boolean
+        categoryRef:
+          type: string
+        config:
+          $ref: '#/components/schemas/RoutingStrategyNodeConfigForUpsert'
+      required:
+        - active
+        - nameLocalized
+        - config
+      title: RoutingStrategyNodeForReplace
     RoutingStrategyOrderSplitConfig:
       additionalProperties: false
       properties:
@@ -65133,6 +65187,60 @@ components:
         - type
       title: RoutingStrategyRating
       type: object
+    RoutingStrategyReplaceConditionActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractRoutingStrategyActionsParameter'
+      description: Action to replace a condition of a routing strategy.
+      properties:
+        condition:
+          $ref: '#/components/schemas/RoutingStrategyConditionForReplace'
+        conditionId:
+          type: string
+        name:
+          enum:
+            - REPLACE_CONDITION
+          type: string
+      required:
+        - name
+        - conditionId
+        - condition
+        - version
+      title: RoutingStrategyReplaceConditionActionParameter
+    RoutingStrategyReplaceGlobalConfigurationActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractRoutingStrategyActionsParameter'
+      description: Action to replace the global configuration of a routing strategy.
+      properties:
+        globalConfiguration:
+          $ref: '#/components/schemas/RoutingStrategyGlobalConfiguration'
+        name:
+          enum:
+            - REPLACE_GLOBAL_CONFIGURATION
+          type: string
+      required:
+        - name
+        - globalConfiguration
+        - version
+      title: RoutingStrategyReplaceGlobalConfigurationActionParameter
+    RoutingStrategyReplaceNodeActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractRoutingStrategyActionsParameter'
+      description: Action to replace a node of a routing strategy.
+      properties:
+        name:
+          enum:
+            - REPLACE_NODE
+          type: string
+        node:
+          $ref: '#/components/schemas/RoutingStrategyNodeForReplace'
+        nodeId:
+          type: string
+      required:
+        - name
+        - nodeId
+        - node
+        - version
+      title: RoutingStrategyReplaceNodeActionParameter
     RoutingStrategyRerouteConfig:
       additionalProperties: false
       properties:
@@ -74302,6 +74410,7 @@ components:
               - type: string
               - type: number
               - type: boolean
+          maxItems: 100
           type: array
         rightEntity:
           $ref: '#/components/schemas/ToolkitAllowedEntities'
@@ -74319,6 +74428,7 @@ components:
               - type: string
               - type: number
               - type: boolean
+          maxItems: 100
           type: array
       required:
         - rightPropertyPath
@@ -74342,6 +74452,7 @@ components:
         predicates:
           items:
             $ref: '#/components/schemas/ToolkitComparisonPredicate'
+          maxItems: 100
           minItems: 1
           type: array
       required:
@@ -74550,6 +74661,7 @@ components:
               - type: string
               - type: number
               - type: boolean
+          maxItems: 100
           type: array
       required:
         - propertyPath
@@ -74774,6 +74886,7 @@ components:
         predicates:
           items:
             $ref: '#/components/schemas/ToolkitPredicate'
+          maxItems: 100
           minItems: 1
           type: array
       required:
