@@ -15336,28 +15336,43 @@ paths:
         - color: red
           label: ALPHA
   /api/orderrecords:
-    post:
+    get:
       deprecated: false
       description: >-
         This part of the API is in Alpha status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br
-        />Create a new order record
-      operationId: createOrderRecord
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrderRecordForCreation'
-        required: true
+        />List order records with pagination and optional filters
+      operationId: listOrderRecords
+      parameters:
+        - in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: size
+          required: false
+          schema:
+            maximum: 500
+            type: number
+        - in: query
+          name: facilityRef
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: tenantOrderRecordId
+          required: false
+          schema:
+            type: string
       responses:
-        '201':
+        '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderRecord'
-          description: The order record has been successfully created.
+                $ref: '#/components/schemas/OrderRecords'
+          description: The order records that were found based on the given filters.
         '400':
           content:
             application/json:
@@ -15376,7 +15391,61 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
           description: Your user, although recognized, is not authorized to use this
-      summary: Create an order record
+      summary: List order records
+      x-fft-permissions:
+        - ORDER_RECORD_READ
+      tags:
+        - Order Records (DOMS)
+      x-badges:
+        - color: red
+          label: ALPHA
+    put:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Create multiple order records in a single request (max 25)
+      operationId: bulkCreateOrderRecords
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRecordBulkOperations'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderRecordBulkOperationsResponse'
+          description: The order records have been successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Bulk create order records
       x-fft-permissions:
         - ORDER_RECORD_WRITE
       tags:
@@ -50039,6 +50108,9 @@ components:
         firstName:
           description: First name
           type: string
+        houseNumber:
+          description: House number
+          type: string
         lastName:
           description: Last name
           type: string
@@ -50054,6 +50126,151 @@ components:
       title: OrderRecordAddress
       type: object
       description: OrderRecordAddress
+    OrderRecordArticleAttributeItem:
+      properties:
+        valueLocalized:
+          description: Localized value of the attribute
+          type: object
+        keyLocalized:
+          description: Localized key of the attribute
+          type: object
+        category:
+          description: >-
+            Category of the attribute. Supports both standard article attribute
+            categories and pricing-specific categories.
+          enum:
+            - descriptive
+            - miscellaneous
+            - pickingSequence
+            - customs
+            - insurance
+            - shop
+            - dimensions
+            - carrierService
+            - salesPrice
+            - basePrice
+            - tax
+            - discount
+            - surcharge
+            - subtotalBeforeDiscounts
+            - subtotalAfterDiscounts
+            - finalUnitPrice
+            - finalLineItemPrice
+          type: string
+        key:
+          description: The key of the attribute
+          minLength: 1
+          type: string
+        priority:
+          description: Priority of the attribute
+          type: integer
+        type:
+          description: The type of the attribute
+          enum:
+            - STRING
+            - NUMBER
+            - CURRENCY
+            - BOOLEAN
+          type: string
+        value:
+          description: The value of the attribute
+          minLength: 1
+          type: string
+      required:
+        - key
+        - value
+      title: OrderRecordArticleAttributeItem
+      type: object
+      description: OrderRecordArticleAttributeItem
+    OrderRecordBulkOperationError:
+      properties:
+        message:
+          description: Error message
+          type: string
+        type:
+          description: Error type
+          enum:
+            - VALIDATION
+            - UNKNOWN
+          type: string
+      required:
+        - type
+        - message
+      title: OrderRecordBulkOperationError
+      type: object
+      description: OrderRecordBulkOperationError
+    OrderRecordBulkOperationResult:
+      properties:
+        error:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordBulkOperationError'
+          description: Error details if the operation failed
+        orderRecord:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecord'
+          description: The created order record
+        status:
+          description: Status of the bulk operation
+          enum:
+            - CREATED
+            - FAILED
+            - UNCHANGED
+          type: string
+      required:
+        - status
+      title: OrderRecordBulkOperationResult
+      type: object
+      description: OrderRecordBulkOperationResult
+    OrderRecordBulkOperations:
+      properties:
+        operations:
+          description: Array of order record creation operations
+          items:
+            $ref: '#/components/schemas/OrderRecordForCreation'
+          maxItems: 25
+          minItems: 1
+          type: array
+      required:
+        - operations
+      title: OrderRecordBulkOperations
+      type: object
+      description: OrderRecordBulkOperations
+    OrderRecordBulkOperationsResponse:
+      properties:
+        details:
+          description: Per-item results of the bulk operation
+          items:
+            $ref: '#/components/schemas/OrderRecordBulkOperationResult'
+          maxItems: 25
+          type: array
+        summary:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordBulkOperationsSummary'
+          description: Summary of the bulk operation
+      required:
+        - summary
+        - details
+      title: OrderRecordBulkOperationsResponse
+      type: object
+      description: OrderRecordBulkOperationsResponse
+    OrderRecordBulkOperationsSummary:
+      properties:
+        created:
+          description: Number of order records created
+          type: integer
+        unchanged:
+          description: Number of order records unchanged
+          type: integer
+        updated:
+          description: Number of order records updated
+          type: integer
+      required:
+        - created
+        - updated
+        - unchanged
+      title: OrderRecordBulkOperationsSummary
+      type: object
+      description: OrderRecordBulkOperationsSummary
     OrderRecordConsumer:
       properties:
         addresses:
@@ -50077,80 +50294,30 @@ components:
           allOf:
             - $ref: '#/components/schemas/LocaleStringConstrained'
           description: Localized name of the discount
-        descriptionLocalized:
-          allOf:
-            - $ref: '#/components/schemas/LocaleStringConstrained'
-          description: Localized description of the discount
         code:
           description: Discount code
           type: string
-        description:
-          description: Description of the discount
+        context:
+          description: Context of the discount
           type: string
-        discount:
-          description: The discount value, either relative or absolute
-          discriminator:
-            mapping:
-              ABSOLUTE: '#/components/schemas/OrderRecordDiscountAbsolute'
-              RELATIVE: '#/components/schemas/OrderRecordDiscountRelative'
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/OrderRecordDiscountRelative'
-            - $ref: '#/components/schemas/OrderRecordDiscountAbsolute'
         name:
           description: Name of the discount
           type: string
-        priority:
-          description: Priority of the discount
-          type: integer
         tenantDiscountId:
           description: Tenant-specific discount identifier
           type: string
         type:
-          description: The price type that the discount applies to
-          enum:
-            - SALES_PRICE
-          type: string
-      required:
-        - type
-        - discount
-      title: OrderRecordDiscount
-      type: object
-      description: OrderRecordDiscount
-    OrderRecordDiscountAbsolute:
-      properties:
-        type:
-          description: Discriminator for absolute discount
-          enum:
-            - ABSOLUTE
+          description: Discount type
           type: string
         value:
           allOf:
             - $ref: '#/components/schemas/OrderRecordMonetaryValue'
-          description: Absolute discount value
+          description: Discount value
       required:
-        - type
         - value
-      title: OrderRecordDiscountAbsolute
+      title: OrderRecordDiscount
       type: object
-      description: OrderRecordDiscountAbsolute
-    OrderRecordDiscountRelative:
-      properties:
-        type:
-          description: Discriminator for relative discount
-          enum:
-            - RELATIVE
-          type: string
-        valuePercent:
-          description: Relative discount value as a float
-          format: float
-          type: number
-      required:
-        - type
-        - valuePercent
-      title: OrderRecordDiscountRelative
-      type: object
-      description: OrderRecordDiscountRelative
+      description: OrderRecordDiscount
     OrderRecordFee:
       properties:
         name:
@@ -50261,7 +50428,7 @@ components:
         attributes:
           description: Article attributes
           items:
-            $ref: '#/components/schemas/OrderRecordLineItemArticleAttribute'
+            $ref: '#/components/schemas/OrderRecordArticleAttributeItem'
           maxItems: 100
           type: array
         tenantArticleId:
@@ -50276,47 +50443,6 @@ components:
       title: OrderRecordLineItemArticle
       type: object
       description: OrderRecordLineItemArticle
-    OrderRecordLineItemArticleAttribute:
-      properties:
-        valueLocalized:
-          allOf:
-            - $ref: '#/components/schemas/LocaleStringConstrained'
-          description: Localized attribute value
-        keyLocalized:
-          allOf:
-            - $ref: '#/components/schemas/LocaleStringConstrained'
-          description: Localized attribute key
-        category:
-          description: Category of the article attribute
-          enum:
-            - SHOP
-            - DISCOUNT
-            - FEES
-            - ROUNDING
-            - DERIVED_PRICING
-          type: string
-        key:
-          description: Attribute key
-          type: string
-        type:
-          description: The type of the attribute value
-          enum:
-            - STRING
-            - NUMBER
-            - BOOLEAN
-            - MONETARY_VALUE
-          type: string
-        value:
-          description: The attribute value as string
-          type: string
-      required:
-        - key
-        - keyLocalized
-        - type
-        - value
-      title: OrderRecordLineItemArticleAttribute
-      type: object
-      description: OrderRecordLineItemArticleAttribute
     OrderRecordLineItemForCreation:
       properties:
         article:
@@ -50366,7 +50492,7 @@ components:
       properties:
         warrantyPeriod:
           description: Warranty period (e.g. ISO 8601 duration)
-          pattern: ^-?P(?:(d+W)|(d+Y)?(d+M)?(d+D)?(?:T(d+H)?(d+M)?(d+S)?)?)$
+          pattern: ^-?P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$
           type: string
         warrantyStartDate:
           description: Start date of the warranty
@@ -50580,6 +50706,15 @@ components:
         receiptNumber:
           description: Receipt number
           type: string
+        status:
+          description: Status of the payment
+          enum:
+            - COMPLETED
+            - FAILED
+            - CANCELLED
+            - REFUNDED
+            - PARTIALLY_REFUNDED
+          type: string
         taxValue:
           allOf:
             - $ref: '#/components/schemas/OrderRecordMonetaryValue'
@@ -50628,9 +50763,58 @@ components:
             $ref: '#/components/schemas/OrderRecordFee'
           maxItems: 100
           type: array
+        taxes:
+          description: Tax breakdown
+          items:
+            $ref: '#/components/schemas/OrderRecordTax'
+          maxItems: 100
+          type: array
       title: OrderRecordPricingForCreation
       type: object
       description: OrderRecordPricingForCreation
+    OrderRecords:
+      properties:
+        orderRecords:
+          description: Array of order records
+          items:
+            $ref: '#/components/schemas/OrderRecord'
+          maxItems: 500
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: number
+      required:
+        - orderRecords
+        - total
+      title: OrderRecords
+      type: object
+      description: OrderRecords
+    OrderRecordTax:
+      properties:
+        ratePercent:
+          description: Tax rate as a percentage
+          format: float
+          type: number
+        scope:
+          description: Tax scope
+          type: string
+        taxableValue:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: The taxable base value
+        type:
+          description: Tax type identifier
+          type: string
+        value:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Tax value
+      required:
+        - value
+      title: OrderRecordTax
+      type: object
+      description: OrderRecordTax
     OrderRoutingConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
