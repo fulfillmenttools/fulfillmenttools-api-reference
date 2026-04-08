@@ -52655,6 +52655,10 @@ components:
                 $ref: '#/components/schemas/OperativeTransfer'
               minItems: 0
               type: array
+            workflowInformation:
+              oneOf:
+                - $ref: '#/components/schemas/WorkflowInformation'
+                - $ref: '#/components/schemas/WorkflowUnavailable'
             tags:
               items:
                 $ref: '#/components/schemas/TagReference'
@@ -52667,6 +52671,7 @@ components:
             - status
             - lineItems
             - processId
+            - workflowInformation
           type: object
           xml:
             name: PackJob
@@ -52774,6 +52779,10 @@ components:
             $ref: '#/components/schemas/OperativeTransfer'
           minItems: 0
           type: array
+        workflowInformation:
+          oneOf:
+            - $ref: '#/components/schemas/WorkflowInformation'
+            - $ref: '#/components/schemas/WorkflowUnavailable'
         tags:
           description: >-
             Tags can only be set when there is no process related with this
@@ -52785,6 +52794,7 @@ components:
       required:
         - facilityRef
         - lineItems
+        - workflowInformation
       type: object
       xml:
         name: PackJobForCreation
