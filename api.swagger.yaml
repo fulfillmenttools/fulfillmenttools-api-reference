@@ -26581,6 +26581,49 @@ paths:
       summary: Get needs packing for tags
       tags:
         - Packing Configuration (Operations)
+  /api/tags/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for Tag
+      operationId: searchTag
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: List tags (search)
+      x-fft-permissions:
+        - TAG_READ
+      tags:
+        - Tags
+      x-badges:
+        - color: orange
+          label: BETA
   /api/users:
     get:
       deprecated: false
@@ -74207,6 +74250,28 @@ components:
         - allowedValues
       title: TagForCreation
       description: TagForCreation
+    TagPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+        tags:
+          items:
+            $ref: '#/components/schemas/Tag'
+          type: array
+      required:
+        - pageInfo
+        - tags
+      title: TagPaginatedResult
+      type: object
+      description: TagPaginatedResult
     TagPatchActions:
       properties:
         actions:
@@ -74250,6 +74315,90 @@ components:
           type: array
       title: TagScanningConfiguration
       description: TagScanningConfiguration
+    TagSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/TagSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/TagSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: TagSearchPayload
+      type: object
+      description: TagSearchPayload
+    TagSearchQuery:
+      properties:
+        allowedValues:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by allowedValues
+        and:
+          items:
+            $ref: '#/components/schemas/TagSearchQuery'
+          maxItems: 500
+          type: array
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by id
+        or:
+          items:
+            $ref: '#/components/schemas/TagSearchQuery'
+          maxItems: 500
+          type: array
+      title: TagSearchQuery
+      type: object
+      description: TagSearchQuery
+    TagSort:
+      properties:
+        id:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: TagSort
+      type: object
+      description: TagSort
     TakenStowLineItemTakeFromForCreation:
       properties:
         takenAt:
