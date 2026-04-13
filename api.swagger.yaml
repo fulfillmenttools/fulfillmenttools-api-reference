@@ -58264,6 +58264,7 @@ components:
         - ROUTING_PLAN
         - EXTERNAL_ACTION
         - SHIPMENT
+        - ITEM_RETURN
       type: string
       title: ProcessHistoryDomainType
     ProcessHistoryEventType:
@@ -58313,6 +58314,10 @@ components:
         - SERVICEJOB_CANCELED
         - ACTION_TRIGGERED
         - COMMENT_ADDED
+        - RETURN_ANNOUNCED
+        - RETURN_CANCELED
+        - RETURN_FINISHED
+        - REFUND_TRIGGERED
       type: string
       title: ProcessHistoryEventType
     ProcessHistoryLog:
@@ -58337,6 +58342,7 @@ components:
             - $ref: '#/components/schemas/ExternalActionHistoryLogPayload'
             - $ref: '#/components/schemas/ParcelLabelCreationFailedPayload'
             - $ref: '#/components/schemas/OperativeEntityPickingDoneIncompletePayload'
+            - $ref: '#/components/schemas/ReturnManagementPayloadBase'
           type: object
       required:
         - eventType
@@ -58355,8 +58361,8 @@ components:
         status:
           description: >-
             Status can be OrderStatus, PickJobStatus, PackJobStatus,
-            ParcelStatus, HandoverjobStatus, RoutingPlanStatus, ShipmentStatus
-            or null
+            ParcelStatus, HandoverjobStatus, RoutingPlanStatus, ShipmentStatus,
+            ItemReturnJobStatus or null
           nullable: true
           type: string
         timestamp:
@@ -58440,6 +58446,7 @@ components:
         - FULFILLMENT
         - ORDER_MODIFICATION
         - COMMENT
+        - RETURN_MANAGEMENT
       type: string
       title: ProcessHistoryLogTypeCommon
     ProcessHistoryLogUser:
@@ -62069,6 +62076,35 @@ components:
       type: string
       title: ReturnedLineItemRefundStatus
       description: ReturnedLineItemRefundStatus
+    ReturnManagementPayloadBase:
+      properties:
+        facility:
+          $ref: '#/components/schemas/ProcessHistoryLogFacility'
+        itemReturnJobsRef:
+          type: string
+        shortId:
+          type: string
+      type: object
+      title: ReturnManagementPayloadBase
+      description: ReturnManagementPayloadBase
+    ReturnManagementReturnPayload:
+      allOf:
+        - $ref: '#/components/schemas/ReturnManagementPayloadBase'
+      properties:
+        itemReturn:
+          properties:
+            id:
+              type: string
+            returnedLineItems:
+              items:
+                type: object
+              type: array
+            status:
+              type: string
+          type: object
+      type: object
+      title: ReturnManagementReturnPayload
+      description: ReturnManagementReturnPayload
     ReturnNote:
       properties:
         companyAddress:
