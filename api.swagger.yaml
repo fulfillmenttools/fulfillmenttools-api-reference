@@ -10802,6 +10802,15 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/AddFacilitiesToGroupActionParameter'
+                - $ref: >-
+                    #/components/schemas/AddFacilitiesToGroupVersionlessActionParameter
+        required: true
       responses:
         '200':
           content:
@@ -10823,7 +10832,7 @@ paths:
           description: Your user, although recognized, is not authorized to use this
       summary: Call facility group action
       x-fft-permissions:
-        - FACILITY_WRITE
+        - FACILITY_GROUP_WRITE
       tags:
         - Facility Groups (Core)
   /api/facilitygroups/search:
@@ -26984,6 +26993,14 @@ paths:
         />Executes an action to manipulate my user.
       operationId: executeMeAction
       parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ModifyMeAction'
+                - $ref: '#/components/schemas/ModifyMyCredentialsAction'
+        required: true
       responses:
         '200':
           content:
@@ -27636,13 +27653,6 @@ components:
         - labelFile
       type: object
       title: AddCustomsDocumentToParcelContent
-    AddFacilitiesToGroupActionEnum:
-      description: The name of the action
-      enum:
-        - ADD_FACILITIES_TO_GROUP
-        - VERSIONLESS_ADD_FACILITIES_TO_GROUP
-      title: AddFacilitiesToGroupActionEnum
-      type: string
     AddFacilitiesToGroupActionParameter:
       properties:
         facilitiesToAdd:
@@ -27653,9 +27663,10 @@ components:
           minItems: 1
           type: array
         name:
-          allOf:
-            - $ref: '#/components/schemas/AddFacilitiesToGroupActionEnum'
           description: The name of the action
+          enum:
+            - ADD_FACILITIES_TO_GROUP
+          type: string
         version:
           description: Version of the entity to be changed
           minimum: 0
@@ -27666,6 +27677,26 @@ components:
       title: AddFacilitiesToGroupActionParameter
       type: object
       description: AddFacilitiesToGroupActionParameter
+    AddFacilitiesToGroupVersionlessActionParameter:
+      properties:
+        facilitiesToAdd:
+          description: Array of facility references to add to the group
+          items:
+            type: string
+          maxItems: 200
+          minItems: 1
+          type: array
+        name:
+          description: The name of the action
+          enum:
+            - VERSIONLESS_ADD_FACILITIES_TO_GROUP
+          type: string
+      required:
+        - name
+        - facilitiesToAdd
+      title: AddFacilitiesToGroupVersionlessActionParameter
+      type: object
+      description: AddFacilitiesToGroupVersionlessActionParameter
     AddItemReturnToItemReturnJob:
       additionalProperties: false
       properties:
@@ -46745,6 +46776,51 @@ components:
         name: ModifyLoadUnitType
       title: ModifyLoadUnitType
       description: ModifyLoadUnitType
+    ModifyMeAction:
+      properties:
+        action:
+          description: The type of action to perform
+          enum:
+            - ModifyMe
+          type: string
+        firstname:
+          description: The new firstname of the user
+          type: string
+        lastname:
+          description: The new lastname of the user
+          type: string
+        locale:
+          $ref: '#/components/schemas/SupportedLocale'
+      required:
+        - action
+      title: ModifyMeAction
+      type: object
+      description: ModifyMeAction
+    ModifyMyCredentialsAction:
+      properties:
+        action:
+          description: The type of action to perform
+          enum:
+            - ModifyCredentials
+          type: string
+        currentPassword:
+          description: Current password for verification (required)
+          example: currentPassword123
+          type: string
+        email:
+          description: New email address (optional)
+          example: newemail@example.com
+          type: string
+        password:
+          description: New password (optional)
+          example: newSecurePassword456
+          type: string
+      required:
+        - currentPassword
+        - action
+      title: ModifyMyCredentialsAction
+      type: object
+      description: ModifyMyCredentialsAction
     ModifyOrderSplitAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
