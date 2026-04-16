@@ -7553,6 +7553,360 @@
           "description": "You can find the API Documentation of orders here: https://fulfillmenttools.github.io/api-reference-ui/#/Orders"
         },
         {
+          "name": "Order Records",
+          "item": [
+            {
+              "name": "Bulk Create Order Records",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"operations\": [\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"tenantOrderRecordId\": \"{{$randomWord}}{{$randomInt}}\",\n            \"consumer\": {\n                \"consumerId\": \"{{$randomUUID}}\",\n                \"email\": \"{{fftRandomEmail}}\",\n                \"addresses\": [\n                    {\n                        \"firstName\": \"{{$randomFirstName}}\",\n                        \"lastName\": \"{{$randomLastName}}\",\n                        \"street\": \"{{fftRandomStreet}}\",\n                        \"houseNumber\": \"{{fftRandomHouseNumber}}\",\n                        \"postalCode\": \"{{fftRandomPLZ}}\",\n                        \"city\": \"{{fftRandomCity}}\",\n                        \"country\": \"DE\"\n                    }\n                ]\n            },\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2020249\",\n                        \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Größe\",\n                                \"value\": \"S\"\n                            },\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 200,\n                                \"key\": \"Material\",\n                                \"value\": \"100% Baumwolle\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"value\",\n                                \"value\": \"2999\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"currency\",\n                                \"value\": \"EUR\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"decimalPlaces\",\n                                \"value\": \"2\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 1\n                },\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2010681\",\n                        \"title\": \"Steppjacke \\\"Mühlenbach\\\"\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Größe\",\n                                \"value\": \"L\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"value\",\n                                \"value\": \"4999\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"currency\",\n                                \"value\": \"EUR\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"decimalPlaces\",\n                                \"value\": \"2\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 2\n                }\n            ],\n            \"payments\": [\n                {\n                    \"paymentMethod\": \"CREDIT_CARD\",\n                    \"transactionId\": \"{{$randomUUID}}\",\n                    \"value\": {\n                        \"value\": 4999,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"status\": \"COMPLETED\"\n                }\n            ],\n            \"origin\": {\n                \"type\": \"POS\",\n                \"terminalId\": \"terminal-{{$randomInt}}\",\n                \"cashierId\": \"cashier-{{$randomInt}}\"\n            }\n        }\n    ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}/api/orderrecords",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "api",
+                    "orderrecords"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "minimal",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"operations\": [\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2020249\",\n                        \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n                        \"attributes\": []\n                    },\n                    \"quantity\": 1\n                }\n            ]\n        }\n    ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/orderrecords",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "orderrecords"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                },
+                {
+                  "name": "with multiple operations",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"operations\": [\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"tenantOrderRecordId\": \"{{$randomWord}}{{$randomInt}}\",\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2020249\",\n                        \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Gr\\u00f6\\u00dfe\",\n                                \"value\": \"S\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 1\n                }\n            ],\n            \"payments\": [\n                {\n                    \"paymentMethod\": \"CASH\",\n                    \"value\": {\n                        \"value\": 1999,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"status\": \"COMPLETED\"\n                }\n            ]\n        },\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"tenantOrderRecordId\": \"{{$randomWord}}{{$randomInt}}\",\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"5020064\",\n                        \"title\": \"Wandtattoo Stadion\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Ma\\u00dfe\",\n                                \"value\": \"70 x 50 cm\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 3\n                }\n            ],\n            \"payments\": [\n                {\n                    \"paymentMethod\": \"DEBIT_CARD\",\n                    \"transactionId\": \"{{$randomUUID}}\",\n                    \"value\": {\n                        \"value\": 8997,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"status\": \"COMPLETED\"\n                }\n            ]\n        }\n    ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/orderrecords",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "orderrecords"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                },
+                {
+                  "name": "with consumer info",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"operations\": [\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"tenantOrderRecordId\": \"{{$randomWord}}{{$randomInt}}\",\n            \"consumer\": {\n                \"consumerId\": \"{{$randomUUID}}\",\n                \"email\": \"{{fftRandomEmail}}\",\n                \"addresses\": [\n                    {\n                        \"firstName\": \"{{$randomFirstName}}\",\n                        \"lastName\": \"{{$randomLastName}}\",\n                        \"companyName\": \"{{$randomCompanyName}}\",\n                        \"street\": \"{{fftRandomStreet}}\",\n                        \"houseNumber\": \"{{fftRandomHouseNumber}}\",\n                        \"additionalAddressInfo\": \"{{fftRandomAdditionalInfo}}\",\n                        \"postalCode\": \"{{fftRandomPLZ}}\",\n                        \"city\": \"{{fftRandomCity}}\",\n                        \"country\": \"DE\"\n                    }\n                ]\n            },\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2020249\",\n                        \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Gr\\u00f6\\u00dfe\",\n                                \"value\": \"M\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 1\n                }\n            ]\n        }\n    ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/orderrecords",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "orderrecords"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                },
+                {
+                  "name": "with pricing (discounts, fees & taxes)",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"operations\": [\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"tenantOrderRecordId\": \"{{$randomWord}}{{$randomInt}}\",\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2020249\",\n                        \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Größe\",\n                                \"value\": \"S\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"value\",\n                                \"value\": \"2999\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"currency\",\n                                \"value\": \"EUR\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"decimalPlaces\",\n                                \"value\": \"2\"\n                            },\n                            {\n                                \"category\": \"discount\",\n                                \"key\": \"value\",\n                                \"value\": \"300\"\n                            },\n                            {\n                                \"category\": \"discount\",\n                                \"key\": \"percentage\",\n                                \"value\": \"10\"\n                            },\n                            {\n                                \"category\": \"tax\",\n                                \"key\": \"value\",\n                                \"value\": \"570\"\n                            },\n                            {\n                                \"category\": \"tax\",\n                                \"key\": \"percentage\",\n                                \"value\": \"19\"\n                            },\n                            {\n                                \"category\": \"surcharge\",\n                                \"key\": \"value\",\n                                \"value\": \"199\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 2\n                }\n            ],\n            \"payments\": [\n                {\n                    \"paymentMethod\": \"CREDIT_CARD\",\n                    \"value\": {\n                        \"value\": 5998,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"taxValue\": {\n                        \"value\": 912,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"status\": \"COMPLETED\"\n                }\n            ],\n            \"pricing\": {\n                \"discounts\": [\n                    {\n                        \"name\": \"Sommeraktion\",\n                        \"type\": \"PERCENTAGE\",\n                        \"value\": {\n                            \"value\": 300,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        },\n                        \"context\": \"PROMOTION\"\n                    },\n                    {\n                        \"name\": \"Gutschein\",\n                        \"code\": \"SUMMER2026\",\n                        \"type\": \"COUPON\",\n                        \"value\": {\n                            \"value\": 500,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        },\n                        \"tenantDiscountId\": \"disc-summer-2026\"\n                    }\n                ],\n                \"fees\": [\n                    {\n                        \"name\": \"Verpackungsgebühr\",\n                        \"value\": {\n                            \"value\": 199,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        }\n                    }\n                ],\n                \"taxes\": [\n                    {\n                        \"type\": \"VAT\",\n                        \"ratePercent\": 19,\n                        \"value\": {\n                            \"value\": 912,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        },\n                        \"scope\": \"DOMESTIC\",\n                        \"taxableValue\": {\n                            \"value\": 4799,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        }\n                    }\n                ]\n            }\n        }\n    ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/orderrecords",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "orderrecords"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                },
+                {
+                  "name": "with warranty and return policy",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"operations\": [\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"tenantOrderRecordId\": \"{{$randomWord}}{{$randomInt}}\",\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2010681\",\n                        \"title\": \"Steppjacke \\\"M\\u00fchlenbach\\\"\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Gr\\u00f6\\u00dfe\",\n                                \"value\": \"L\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 1,\n                    \"warranty\": {\n                        \"warrantyStartDate\": \"{{$isoTimestamp}}\",\n                        \"warrantyPeriod\": \"P2Y\"\n                    },\n                    \"returnPolicy\": {\n                        \"isReturnable\": true,\n                        \"returnWindowEndDate\": \"2026-04-12T00:00:00.000Z\"\n                    }\n                }\n            ],\n            \"payments\": [\n                {\n                    \"paymentMethod\": \"CASH\",\n                    \"receiptNumber\": \"REC-{{$randomInt}}{{$randomInt}}\",\n                    \"value\": {\n                        \"value\": 7999,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"status\": \"COMPLETED\"\n                }\n            ]\n        }\n    ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/orderrecords",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "orderrecords"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                },
+                {
+                  "name": "with custom attributes",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"operations\": [\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"tenantOrderRecordId\": \"{{$randomWord}}{{$randomInt}}\",\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"5020064\",\n                        \"title\": \"Wandtattoo Stadion\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Ma\\u00dfe\",\n                                \"value\": \"70 x 50 cm\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 1,\n                    \"customAttributes\": {\n                        \"giftWrapping\": true,\n                        \"giftMessage\": \"Alles Gute zum Geburtstag!\"\n                    }\n                }\n            ],\n            \"customAttributes\": {\n                \"salesChannel\": \"in-store\",\n                \"campaignId\": \"spring-2026\"\n            },\n            \"origin\": {\n                \"type\": \"POS\",\n                \"terminalId\": \"terminal-42\",\n                \"cashierId\": \"cashier-7\"\n            }\n        }\n    ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/orderrecords",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "orderrecords"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                },
+                {
+                  "name": "with POS origin",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"operations\": [\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2020249\",\n                        \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Gr\\u00f6\\u00dfe\",\n                                \"value\": \"S\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 1\n                }\n            ],\n            \"origin\": {\n                \"type\": \"POS\",\n                \"terminalId\": \"terminal-{{$randomInt}}\",\n                \"cashierId\": \"cashier-{{$randomInt}}\"\n            },\n            \"payments\": [\n                {\n                    \"paymentMethod\": \"CASH\",\n                    \"receiptNumber\": \"REC-{{$randomInt}}{{$randomInt}}\",\n                    \"value\": {\n                        \"value\": 2999,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"status\": \"COMPLETED\"\n                }\n            ]\n        }\n    ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/orderrecords",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "orderrecords"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                },
+                {
+                  "name": "full-blown (all fields and constellations)",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"operations\": [\n        {\n            \"orderRecordDate\": \"{{$isoTimestamp}}\",\n            \"facilityRef\": \"PUT-IN-YOUR-FACILITY-REF\",\n            \"tenantOrderRecordId\": \"{{$randomWord}}{{$randomInt}}\",\n            \"consumer\": {\n                \"consumerId\": \"{{$randomUUID}}\",\n                \"email\": \"{{fftRandomEmail}}\",\n                \"addresses\": [\n                    {\n                        \"firstName\": \"{{$randomFirstName}}\",\n                        \"lastName\": \"{{$randomLastName}}\",\n                        \"companyName\": \"{{$randomCompanyName}}\",\n                        \"street\": \"{{fftRandomStreet}}\",\n                        \"additionalAddressInfo\": \"3. OG, Hinterhaus\",\n                        \"postalCode\": \"{{fftRandomPLZ}}\",\n                        \"city\": \"{{fftRandomCity}}\",\n                        \"province\": \"Nordrhein-Westfalen\",\n                        \"country\": \"DE\"\n                    },\n                    {\n                        \"firstName\": \"{{$randomFirstName}}\",\n                        \"lastName\": \"{{$randomLastName}}\",\n                        \"street\": \"{{fftRandomStreet}}\",\n                        \"postalCode\": \"{{fftRandomPLZ}}\",\n                        \"city\": \"{{fftRandomCity}}\",\n                        \"country\": \"DE\"\n                    }\n                ]\n            },\n            \"lineItems\": [\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2020249\",\n                        \"title\": \"T-Shirt \\\"Am Sonnenhut\\\"\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Größe\",\n                                \"value\": \"S\"\n                            },\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 200,\n                                \"key\": \"Material\",\n                                \"value\": \"100% Baumwolle\",\n                                \"keyLocalized\": {\n                                    \"de_DE\": \"Material\",\n                                    \"en_US\": \"Material\"\n                                },\n                                \"valueLocalized\": {\n                                    \"de_DE\": \"100% Baumwolle\",\n                                    \"en_US\": \"100% Cotton\"\n                                }\n                            },\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 300,\n                                \"key\": \"%%subtitle%%\",\n                                \"value\": \"Limitierte Edition\"\n                            },\n                            {\n                                \"category\": \"miscellaneous\",\n                                \"key\": \"BRAND\",\n                                \"value\": \"FC Köln\"\n                            },\n                            {\n                                \"category\": \"customs\",\n                                \"key\": \"hsCode\",\n                                \"value\": \"6109100020\",\n                                \"type\": \"STRING\"\n                            },\n                            {\n                                \"category\": \"insurance\",\n                                \"key\": \"insuredValue\",\n                                \"value\": \"2999\",\n                                \"type\": \"STRING\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"value\",\n                                \"value\": \"2999\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"currency\",\n                                \"value\": \"EUR\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"decimalPlaces\",\n                                \"value\": \"2\"\n                            },\n                            {\n                                \"category\": \"discount\",\n                                \"key\": \"value\",\n                                \"value\": \"600\"\n                            },\n                            {\n                                \"category\": \"discount\",\n                                \"key\": \"percentage\",\n                                \"value\": \"10\"\n                            },\n                            {\n                                \"category\": \"tax\",\n                                \"key\": \"value\",\n                                \"value\": \"570\"\n                            },\n                            {\n                                \"category\": \"tax\",\n                                \"key\": \"percentage\",\n                                \"value\": \"19\"\n                            },\n                            {\n                                \"category\": \"surcharge\",\n                                \"key\": \"value\",\n                                \"value\": \"199\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 2,\n                    \"measurementUnitKey\": \"PIECE\",\n                    \"warranty\": {\n                        \"warrantyStartDate\": \"{{$isoTimestamp}}\",\n                        \"warrantyPeriod\": \"P1Y\"\n                    },\n                    \"returnPolicy\": {\n                        \"isReturnable\": true,\n                        \"returnWindowEndDate\": \"2026-04-15T00:00:00.000Z\"\n                    },\n                    \"customAttributes\": {\n                        \"giftWrapping\": true,\n                        \"giftMessage\": \"Alles Gute!\",\n                        \"personalization\": {\n                            \"nameOnBack\": \"Müller\",\n                            \"number\": 13\n                        }\n                    }\n                },\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"2010681\",\n                        \"title\": \"Steppjacke \\\"Mühlenbach\\\"\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Größe\",\n                                \"value\": \"L\",\n                                \"type\": \"STRING\"\n                            },\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 200,\n                                \"key\": \"Farbe\",\n                                \"value\": \"Rot\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"value\",\n                                \"value\": \"7999\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"currency\",\n                                \"value\": \"EUR\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"decimalPlaces\",\n                                \"value\": \"2\"\n                            },\n                            {\n                                \"category\": \"tax\",\n                                \"key\": \"value\",\n                                \"value\": \"1520\"\n                            },\n                            {\n                                \"category\": \"tax\",\n                                \"key\": \"percentage\",\n                                \"value\": \"19\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 1,\n                    \"warranty\": {\n                        \"warrantyStartDate\": \"{{$isoTimestamp}}\",\n                        \"warrantyPeriod\": \"P2Y\"\n                    },\n                    \"returnPolicy\": {\n                        \"isReturnable\": true,\n                        \"returnWindowEndDate\": \"2026-04-30T00:00:00.000Z\"\n                    }\n                },\n                {\n                    \"article\": {\n                        \"tenantArticleId\": \"5020064\",\n                        \"title\": \"Wandtattoo Stadion\",\n                        \"attributes\": [\n                            {\n                                \"category\": \"descriptive\",\n                                \"priority\": 100,\n                                \"key\": \"Maße\",\n                                \"value\": \"70 x 50 cm\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"value\",\n                                \"value\": \"1499\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"currency\",\n                                \"value\": \"EUR\"\n                            },\n                            {\n                                \"category\": \"basePrice\",\n                                \"key\": \"decimalPlaces\",\n                                \"value\": \"2\"\n                            }\n                        ]\n                    },\n                    \"quantity\": 3,\n                    \"returnPolicy\": {\n                        \"isReturnable\": false\n                    }\n                }\n            ],\n            \"payments\": [\n                {\n                    \"paymentMethod\": \"CREDIT_CARD\",\n                    \"transactionId\": \"{{$randomUUID}}\",\n                    \"value\": {\n                        \"value\": 15890,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"taxValue\": {\n                        \"value\": 2539,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"status\": \"COMPLETED\"\n                },\n                {\n                    \"paymentMethod\": \"GIFT_CARD\",\n                    \"receiptNumber\": \"GC-{{$randomInt}}{{$randomInt}}\",\n                    \"transactionId\": \"{{$randomUUID}}\",\n                    \"value\": {\n                        \"value\": 2000,\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2\n                    },\n                    \"status\": \"COMPLETED\"\n                }\n            ],\n            \"origin\": {\n                \"type\": \"POS\",\n                \"terminalId\": \"terminal-{{$randomInt}}\",\n                \"cashierId\": \"cashier-{{$randomInt}}\"\n            },\n            \"customAttributes\": {\n                \"salesChannel\": \"in-store\",\n                \"campaignId\": \"spring-2026\",\n                \"loyaltyPoints\": 158,\n                \"employeeDiscount\": false\n            },\n            \"pricing\": {\n                \"discounts\": [\n                    {\n                        \"name\": \"Sommeraktion 10%\",\n                        \"nameLocalized\": {\n                            \"de_DE\": \"Sommeraktion 10%\",\n                            \"en_US\": \"Summer Sale 10%\"\n                        },\n                        \"type\": \"PERCENTAGE\",\n                        \"value\": {\n                            \"value\": 600,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        },\n                        \"context\": \"PROMOTION\",\n                        \"tenantDiscountId\": \"disc-summer-percent-2026\"\n                    },\n                    {\n                        \"name\": \"Gutschein\",\n                        \"nameLocalized\": {\n                            \"de_DE\": \"Gutschein\",\n                            \"en_US\": \"Coupon\"\n                        },\n                        \"type\": \"COUPON\",\n                        \"value\": {\n                            \"value\": 500,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        },\n                        \"code\": \"SUMMER2026\",\n                        \"tenantDiscountId\": \"disc-coupon-summer-2026\"\n                    }\n                ],\n                \"fees\": [\n                    {\n                        \"name\": \"Verpackungsgebühr\",\n                        \"value\": {\n                            \"value\": 199,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        }\n                    },\n                    {\n                        \"name\": \"Personalisierung\",\n                        \"value\": {\n                            \"value\": 499,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        }\n                    }\n                ],\n                \"taxes\": [\n                    {\n                        \"type\": \"VAT\",\n                        \"ratePercent\": 19,\n                        \"value\": {\n                            \"value\": 2539,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        },\n                        \"scope\": \"DOMESTIC\",\n                        \"taxableValue\": {\n                            \"value\": 13363,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        }\n                    },\n                    {\n                        \"type\": \"ECO_TAX\",\n                        \"ratePercent\": 0,\n                        \"value\": {\n                            \"value\": 0,\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2\n                        }\n                    }\n                ]\n            }\n        }\n    ]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/orderrecords",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "orderrecords"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "name": "Get Order Records",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}/api/orderrecords?size=25",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "api",
+                    "orderrecords"
+                  ],
+                  "query": [
+                    {
+                      "key": "size",
+                      "value": "25",
+                      "description": "Number of items to return (max 500)"
+                    },
+                    {
+                      "key": "startAfterId",
+                      "value": "",
+                      "description": "Pagination cursor (order record ID)",
+                      "disabled": true
+                    },
+                    {
+                      "key": "facilityRef",
+                      "value": "",
+                      "description": "Filter by facility reference",
+                      "disabled": true
+                    },
+                    {
+                      "key": "tenantOrderRecordId",
+                      "value": "",
+                      "description": "Filter by tenant order record ID",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Order Record By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}/api/orderrecords/:orderRecordId",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "api",
+                    "orderrecords",
+                    ":orderRecordId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderRecordId",
+                      "value": "PUT-IN-YOUR-ORDER-RECORD-ID"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
           "name": "Order Updates & Actions",
           "item": [
             {
@@ -8033,6 +8387,58 @@
                   "response": []
                 }
               ]
+            }
+          ]
+        },
+        {
+          "name": "Order Records Configuration",
+          "item": [
+            {
+              "name": "Get Order Records Configuration",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}/api/configurations/orderrecords",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "api",
+                    "configurations",
+                    "orderrecords"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Order Records Configuration",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"isOrderRecordsEnabled\": false,\n    \"version\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}/api/configurations/orderrecords",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "api",
+                    "configurations",
+                    "orderrecords"
+                  ]
+                }
+              },
+              "response": []
             }
           ]
         },
