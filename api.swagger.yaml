@@ -15602,6 +15602,49 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/orderrecords/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for OrderRecord
+      operationId: searchOrderRecord
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRecordSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderRecordPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: List order records (search)
+      x-fft-permissions:
+        - ORDER_RECORD_READ
+      tags:
+        - OrderRecords
+      x-badges:
+        - color: orange
+          label: BETA
   /api/orders:
     get:
       description: ''
@@ -50360,6 +50403,21 @@ components:
       title: OrderRecordAddress
       type: object
       description: OrderRecordAddress
+    OrderRecordAddressesSort:
+      properties:
+        companyName:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastName:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: OrderRecordAddressesSort
+      type: object
+      description: OrderRecordAddressesSort
     OrderRecordArticleAttributeItem:
       properties:
         valueLocalized:
@@ -50416,6 +50474,16 @@ components:
       title: OrderRecordArticleAttributeItem
       type: object
       description: OrderRecordArticleAttributeItem
+    OrderRecordArticleSort:
+      properties:
+        tenantArticleId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: OrderRecordArticleSort
+      type: object
+      description: OrderRecordArticleSort
     OrderRecordBulkOperationError:
       properties:
         message:
@@ -50522,6 +50590,48 @@ components:
       title: OrderRecordConsumer
       type: object
       description: OrderRecordConsumer
+    OrderRecordConsumerAddressesFilter:
+      properties:
+        companyName:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by companyName
+        lastName:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by lastName
+      title: OrderRecordConsumerAddressesFilter
+      type: object
+      description: OrderRecordConsumerAddressesFilter
+    OrderRecordConsumerAddressesListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordConsumerAddressesFilter'
+          description: Contains returns if at least one entry matches
+      title: OrderRecordConsumerAddressesListFilter
+      type: object
+      description: OrderRecordConsumerAddressesListFilter
+    OrderRecordConsumerFilter:
+      properties:
+        addresses:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordConsumerAddressesListFilter'
+          description: Nested list search by addresses
+        consumerId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by consumerId
+      title: OrderRecordConsumerFilter
+      type: object
+      description: OrderRecordConsumerFilter
+    OrderRecordConsumerSort:
+      properties:
+        addresses:
+          $ref: '#/components/schemas/OrderRecordAddressesSort'
+      title: OrderRecordConsumerSort
+      type: object
+      description: OrderRecordConsumerSort
     OrderRecordDiscount:
       properties:
         nameLocalized:
@@ -50722,6 +50832,40 @@ components:
       title: OrderRecordLineItemReturnPolicy
       type: object
       description: OrderRecordLineItemReturnPolicy
+    OrderRecordLineItemsArticleFilter:
+      properties:
+        tenantArticleId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
+      title: OrderRecordLineItemsArticleFilter
+      type: object
+      description: OrderRecordLineItemsArticleFilter
+    OrderRecordLineItemsFilter:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordLineItemsArticleFilter'
+          description: Nested search by article
+      title: OrderRecordLineItemsFilter
+      type: object
+      description: OrderRecordLineItemsFilter
+    OrderRecordLineItemsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordLineItemsFilter'
+          description: Contains returns if at least one entry matches
+      title: OrderRecordLineItemsListFilter
+      type: object
+      description: OrderRecordLineItemsListFilter
+    OrderRecordLineItemsSort:
+      properties:
+        article:
+          $ref: '#/components/schemas/OrderRecordArticleSort'
+      title: OrderRecordLineItemsSort
+      type: object
+      description: OrderRecordLineItemsSort
     OrderRecordLineItemWarranty:
       properties:
         warrantyPeriod:
@@ -50932,6 +51076,56 @@ components:
       title: OrderRecordMonetaryValue
       type: object
       description: OrderRecordMonetaryValue
+    OrderRecordOriginFilter:
+      properties:
+        cashierId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by cashierId
+        terminalId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by terminalId
+      title: OrderRecordOriginFilter
+      type: object
+      description: OrderRecordOriginFilter
+    OrderRecordOriginSort:
+      properties:
+        cashierId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        terminalId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: OrderRecordOriginSort
+      type: object
+      description: OrderRecordOriginSort
+    OrderRecordPaginatedResult:
+      properties:
+        orderRecords:
+          items:
+            $ref: '#/components/schemas/OrderRecord'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - orderRecords
+      title: OrderRecordPaginatedResult
+      type: object
+      description: OrderRecordPaginatedResult
     OrderRecordPayment:
       properties:
         paymentMethod:
@@ -50965,6 +51159,43 @@ components:
       title: OrderRecordPayment
       type: object
       description: OrderRecordPayment
+    OrderRecordPaymentsFilter:
+      properties:
+        receiptNumber:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by receiptNumber
+        transactionId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by transactionId
+      title: OrderRecordPaymentsFilter
+      type: object
+      description: OrderRecordPaymentsFilter
+    OrderRecordPaymentsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordPaymentsFilter'
+          description: Contains returns if at least one entry matches
+      title: OrderRecordPaymentsListFilter
+      type: object
+      description: OrderRecordPaymentsListFilter
+    OrderRecordPaymentsSort:
+      properties:
+        receiptNumber:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        transactionId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: OrderRecordPaymentsSort
+      type: object
+      description: OrderRecordPaymentsSort
     OrderRecordPosOrigin:
       properties:
         cashierId:
@@ -51079,6 +51310,128 @@ components:
       title: OrderRecordsConfigurationInput
       type: object
       description: OrderRecordsConfigurationInput
+    OrderRecordSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/OrderRecordSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/OrderRecordSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: OrderRecordSearchPayload
+      type: object
+      description: OrderRecordSearchPayload
+    OrderRecordSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/OrderRecordSearchQuery'
+          maxItems: 500
+          type: array
+        consumer:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordConsumerFilter'
+          description: Nested search by consumer
+        facilityName:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityName
+        lineItems:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordLineItemsListFilter'
+          description: Nested list search by lineItems
+        or:
+          items:
+            $ref: '#/components/schemas/OrderRecordSearchQuery'
+          maxItems: 500
+          type: array
+        orderRecordDate:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by orderRecordDate
+        origin:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordOriginFilter'
+          description: Nested search by origin
+        payments:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordPaymentsListFilter'
+          description: Nested list search by payments
+        tenantOrderRecordId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantOrderRecordId
+      title: OrderRecordSearchQuery
+      type: object
+      description: OrderRecordSearchQuery
+    OrderRecordSort:
+      properties:
+        consumer:
+          $ref: '#/components/schemas/OrderRecordConsumerSort'
+        facilityName:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lineItems:
+          $ref: '#/components/schemas/OrderRecordLineItemsSort'
+        orderRecordDate:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        origin:
+          $ref: '#/components/schemas/OrderRecordOriginSort'
+        payments:
+          $ref: '#/components/schemas/OrderRecordPaymentsSort'
+        tenantOrderRecordId:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: OrderRecordSort
+      type: object
+      description: OrderRecordSort
     OrderRecordTax:
       properties:
         ratePercent:
