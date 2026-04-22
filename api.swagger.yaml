@@ -29281,6 +29281,21 @@ components:
         - decisionType
       title: BaseDecisionDetail
       description: BaseDecisionDetail
+    BaseOperationalContainer:
+      properties:
+        sequenceNumber:
+          description: >-
+            Incremental number to distinguish containers of the same type.
+            Virtual container's sequenceNumber is always 0, non virtual
+            containers are always greater than 0.
+          example: 100
+          format: int32
+          maximum: 10000
+          minimum: 0
+          type: integer
+      type: object
+      title: BaseOperationalContainer
+      description: BaseOperationalContainer
     BaseValidation:
       properties:
         validationType:
@@ -37764,6 +37779,7 @@ components:
       additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/HandoverContainerForCreation'
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         created:
           description: >-
@@ -37821,6 +37837,8 @@ components:
       description: HandoverContainer
     HandoverContainerForCreation:
       additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -44703,6 +44721,7 @@ components:
     LoadUnit:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       description: LoadUnit.
       properties:
         nameLocalized:
@@ -44841,6 +44860,8 @@ components:
       title: LoadUnitDimensions
       description: LoadUnitDimensions
     LoadUnitForCreation:
+      allOf:
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         codes:
           items:
@@ -52629,6 +52650,7 @@ components:
       additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -52725,6 +52747,8 @@ components:
       title: PackingSourceContainerConfiguration
       type: object
     PackingSourceContainerForCreation:
+      allOf:
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -52919,6 +52943,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/PackingTargetContainerForCreation'
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -53008,6 +53033,8 @@ components:
       title: PackingTargetContainerAttributeItem
       description: PackingTargetContainerAttributeItem
     PackingTargetContainerForCreation:
+      allOf:
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         codes:
           items:
@@ -54246,6 +54273,7 @@ components:
       additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/BaseOperationalContainer'
         - properties:
             anonymized:
               description: Indicates if gdpr related data was anonymized
@@ -56120,6 +56148,8 @@ components:
       title: PickingLoadUnit
       description: PickingLoadUnit
     PickingLoadUnitForCreation:
+      allOf:
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         codes:
           items:
@@ -66699,6 +66729,7 @@ components:
       additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -66780,6 +66811,8 @@ components:
       description: ServiceContainer
     ServiceContainerForCreation:
       additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
