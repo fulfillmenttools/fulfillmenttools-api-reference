@@ -74796,6 +74796,44 @@ components:
         - deliveryEvents
       title: SupplyingFacilityConfiguration
       description: SupplyingFacilityConfiguration
+    SupportActivationRequest:
+      properties:
+        durationHours:
+          description: Duration in hours (1-3)
+          example: 2
+          type: number
+        name:
+          description: The action to perform
+          enum:
+            - ACTIVATE_SUPPORT_MODE
+          type: string
+        reason:
+          description: Reason for activating support mode
+          example: Debugging customer order fulfillment issue
+          type: string
+        supportTicket:
+          description: Optional support ticket reference
+          example: ZENDESK-12345
+          type: string
+      required:
+        - name
+        - reason
+        - durationHours
+      title: SupportActivationRequest
+      type: object
+      description: SupportActivationRequest
+    SupportDeactivationRequest:
+      properties:
+        name:
+          description: The action to perform
+          enum:
+            - DEACTIVATE_SUPPORT_MODE
+          type: string
+      required:
+        - name
+      title: SupportDeactivationRequest
+      type: object
+      description: SupportDeactivationRequest
     SupportedEvent:
       properties:
         description:
@@ -74859,6 +74897,40 @@ components:
       type: array
       title: SupportedLocales
       description: SupportedLocales
+    SupportExtensionRequest:
+      properties:
+        additionalHours:
+          description: Additional hours to extend (1-3, max total 5 hours)
+          example: 2
+          type: number
+        name:
+          description: The action to perform
+          enum:
+            - EXTEND_SUPPORT_SESSION
+          type: string
+        reason:
+          description: Reason for extension
+          example: Additional time needed to complete investigation
+          type: string
+      required:
+        - name
+        - additionalHours
+        - reason
+      title: SupportExtensionRequest
+      type: object
+      description: SupportExtensionRequest
+    SupportStatusRequest:
+      properties:
+        name:
+          description: The action to perform
+          enum:
+            - CHECK_SUPPORT_STATUS
+          type: string
+      required:
+        - name
+      title: SupportStatusRequest
+      type: object
+      description: SupportStatusRequest
     Tag:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
