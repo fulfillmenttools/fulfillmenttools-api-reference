@@ -30417,6 +30417,9 @@ components:
         - IDENTITY_CHECK_COMPANY
         - IDENTITY_CHECK_PRIVATE
         - ADDITIONAL_TRANSPORTATION_INSURANCE
+        - IDENTITY_AGE_CHECK_18
+        - NO_NEIGHBOR_DELIVERY
+        - HANDOVER_TO_RECIPIENT_ONLY
       example: SIGNATURE
       type: string
       title: CarrierServices
@@ -32082,6 +32085,9 @@ components:
             - services.IdentityCheckPrivate
             - services.IdentityCheckCompany
             - services.AdditionalTransportInsurance
+            - services.NoNeighborDelivery
+            - services.HandoverToRecipientOnly
+            - services.IdentityAgeCheck18
             - carrierInformation.shippingContainerNumber
           type: string
       type: object
@@ -55270,11 +55276,22 @@ components:
         customerSignature:
           description: Signature from the ordering customer needed
           type: boolean
+        handoverToRecipientOnly:
+          description: Handover person on delivery can only be the given customer
+          type: boolean
+        identityAgeCheck18:
+          description: Minimum age the receiving person has to have (18 years)
+          type: boolean
         identityCheckCompany:
           description: Identity check that can be done by a person of receiving company
           type: boolean
         identityCheckPrivate:
           description: Identity check that can be done by the receiving person
+          type: boolean
+        noNeighborDelivery:
+          description: >-
+            Forbid delivery to neighbors, only allow delivery to the given
+            address
           type: boolean
         saturdayDelivery:
           description: Saturday Delivery
