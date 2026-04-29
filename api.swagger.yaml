@@ -35800,6 +35800,15 @@ components:
         - RELATIVE
       type: string
       title: FacilityDiscountType
+    FacilityFacilityCarrierConnectionFilter:
+      properties:
+        carrierKey:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Filter facilities by configured carrier key
+      title: FacilityFacilityCarrierConnectionFilter
+      type: object
+      description: FacilityFacilityCarrierConnectionFilter
     FacilityForCreation:
       properties:
         customAttributes:
@@ -36283,6 +36292,15 @@ components:
         name: FacilityPatchActions
       title: FacilityPatchActions
       deprecated: true
+    FacilityReferenceFilter:
+      properties:
+        facilityCarrierConnection:
+          allOf:
+            - $ref: '#/components/schemas/FacilityFacilityCarrierConnectionFilter'
+          description: The referenced entity
+      title: FacilityReferenceFilter
+      type: object
+      description: FacilityReferenceFilter
     FacilityRefLatestPickingStartPair:
       properties:
         facilityRef:
@@ -36403,6 +36421,10 @@ components:
             $ref: '#/components/schemas/FacilitySearchQuery'
           maxItems: 500
           type: array
+        referenced:
+          allOf:
+            - $ref: '#/components/schemas/FacilityReferenceFilter'
+          description: References to other entities
         services:
           allOf:
             - $ref: '#/components/schemas/FacilityServicesListFilter'
