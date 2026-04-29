@@ -19768,7 +19768,12 @@ paths:
       tags:
         - Processes (Core)
     patch:
-      description: ''
+      deprecated: true
+      description: >-
+        This part of the API is deprecated. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Deprecated, replaced with /api/processes/{processId}/actions
       operationId: patchProcess
       parameters:
         - description: ID of process you want to patch
@@ -19820,6 +19825,62 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Process version conflict
       summary: Update process
+      tags:
+        - Processes (Core)
+  /api/processes/{processId}/actions:
+    post:
+      description: >-
+        Update Process by calling an action. This can be used to trigger state
+        transitions or other operations on the process.
+      operationId: processAction
+      parameters:
+        - description: ID of process you want to call the action for
+          in: path
+          name: processId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessActionsParameter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Process'
+          description: Updated Process in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Process not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Process version conflict
+      summary: Call process action
+      x-fft-permissions:
+        - PROCESS_WRITE
       tags:
         - Processes (Core)
   /api/processes/{processId}/documents:
@@ -27493,6 +27554,21 @@ components:
         - version
       title: AbstractOrderLineItemActionsParameter
       description: AbstractOrderLineItemActionsParameter
+    AbstractProcessActionsParameter:
+      discriminator:
+        propertyName: name
+      properties:
+        name:
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+      title: AbstractProcessActionsParameter
+      description: AbstractProcessActionsParameter
     AbstractRatingConfiguration:
       description: Base Configuration for Ratings. See documentation for Details.
       type: object
@@ -28086,6 +28162,26 @@ components:
       title: AddTagsToProcessAction
       xml:
         name: AddTagsToProcess
+    AddTagsToProcessActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractProcessActionsParameter'
+      description: Action to add tags to a process.
+      properties:
+        name:
+          enum:
+            - ADD_TAGS_TO_PROCESS
+          type: string
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          maxItems: 10
+          minItems: 1
+          type: array
+      required:
+        - name
+        - version
+        - tags
+      title: AddTagsToProcessActionParameter
     AlternativeReturnAddressConfiguration:
       additionalProperties: false
       properties:
@@ -28558,6 +28654,24 @@ components:
       title: AssignFacilityToProcessAction
       xml:
         name: AssignFacilityToProcess
+    AssignFacilityToProcessActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractProcessActionsParameter'
+      description: Action to assign a facility to a process.
+      properties:
+        facilityRef:
+          type: string
+        name:
+          enum:
+            - ASSIGN_FACILITY_TO_PROCESS
+          type: string
+        rerouteDescriptionId:
+          type: string
+      required:
+        - name
+        - version
+        - facilityRef
+      title: AssignFacilityToProcessActionParameter
     AssignmentItem:
       properties:
         articleTitle:
@@ -58666,6 +58780,14 @@ components:
       type: object
       title: Process
       description: Process
+    ProcessActionsParameter:
+      oneOf:
+        - $ref: '#/components/schemas/AddTagsToProcessActionParameter'
+        - $ref: '#/components/schemas/AssignFacilityToProcessActionParameter'
+        - $ref: '#/components/schemas/UpdateGdprCleanupDateActionParameter'
+        - $ref: '#/components/schemas/UpdateProcessDeletionDateActionParameter'
+      title: ProcessActionsParameter
+      description: ProcessActionsParameter
     ProcessAddressSort:
       properties:
         country:
@@ -76331,6 +76453,26 @@ components:
       title: UpdateGdprCleanupDateAction
       xml:
         name: UpdateGdprCleanupDateAction
+    UpdateGdprCleanupDateActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractProcessActionsParameter'
+      description: Action to set the GDPR cleanup date of a process.
+      properties:
+        gdprCleanupDate:
+          description: >-
+            The date when the process and all connected entities should be
+            cleaned up / anonymized.
+          format: date
+          type: string
+        name:
+          enum:
+            - UPDATE_GDPR_CLEANUP_DATE
+          type: string
+      required:
+        - name
+        - version
+        - gdprCleanupDate
+      title: UpdateGdprCleanupDateActionParameter
     UpdateHandoverLineItemRecordableAttributesActionEnum:
       enum:
         - UPDATE_HANDOVER_LINE_ITEM_RECORDABLE_ATTRIBUTES
@@ -76522,6 +76664,24 @@ components:
       title: UpdatePickLineItemRecordableAttributesActionParameter
       type: object
       description: UpdatePickLineItemRecordableAttributesActionParameter
+    UpdateProcessDeletionDateActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractProcessActionsParameter'
+      description: Action to set the deletion date date of a process.
+      properties:
+        deletionDate:
+          description: The date when the process must be deleted.
+          format: date
+          type: string
+        name:
+          enum:
+            - UPDATE_PROCESS_DELETION_DATE
+          type: string
+      required:
+        - name
+        - version
+        - deletionDate
+      title: UpdateProcessDeletionDateActionParameter
     UpdateRefuseReasonParameter:
       additionalProperties: false
       properties:
