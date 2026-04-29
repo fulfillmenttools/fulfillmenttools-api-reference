@@ -3758,7 +3758,7 @@ paths:
           label: BETA
   /api/configurations/ordercancelation:
     get:
-      description: ''
+      description: Get the order cancelation configuration.
       operationId: getOrderCancelationConfiguration
       responses:
         '200':
@@ -3782,10 +3782,12 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Get order cancelation config
+      x-fft-permissions:
+        - CONFIG_READ
       tags:
         - Orders Configuration (DOMS)
     put:
-      description: ''
+      description: Update the order cancelation configuration.
       operationId: putOrderCancelationConfiguration
       requestBody:
         content:
@@ -3828,11 +3830,13 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Update order cancelation config
+      x-fft-permissions:
+        - CONFIG_WRITE
       tags:
         - Orders Configuration (DOMS)
   /api/configurations/ordermodification:
     get:
-      description: ''
+      description: Get the order modification configuration.
       operationId: getOrderModificationConfiguration
       responses:
         '200':
@@ -3856,10 +3860,12 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Get order modification config
+      x-fft-permissions:
+        - CONFIG_READ
       tags:
         - Orders Configuration (DOMS)
     put:
-      description: ''
+      description: Update the order modification configuration.
       operationId: putOrderModificationConfiguration
       requestBody:
         content:
@@ -3902,6 +3908,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Update order modification config
+      x-fft-permissions:
+        - CONFIG_WRITE
       tags:
         - Orders Configuration (DOMS)
   /api/configurations/orderrecords:
@@ -5124,7 +5132,7 @@ paths:
         - Handovers Configuration (Operations)
   /api/configurations/tags/order:
     get:
-      description: ''
+      description: Get the order tag configuration.
       operationId: getOrderTagConfiguration
       responses:
         '200':
@@ -5154,10 +5162,12 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Entity not found
       summary: Get order tag configuration
+      x-fft-permissions:
+        - CONFIG_READ
       tags:
         - Orders Configuration (DOMS)
     put:
-      description: ''
+      description: Update the order tag configuration.
       operationId: putOrderTagConfigurations
       requestBody:
         content:
@@ -5194,6 +5204,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Update order tag configuration
+      x-fft-permissions:
+        - CONFIG_WRITE
       tags:
         - Orders Configuration (DOMS)
   /api/configurations/tags/packjob:
@@ -15559,7 +15571,7 @@ paths:
           label: BETA
   /api/orders:
     get:
-      description: ''
+      description: List orders with optional filtering by tenant order ID or consumer ID.
       operationId: getAllOrders
       parameters:
         - description: all entities after given Id
@@ -15609,10 +15621,12 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: List orders
+      x-fft-permissions:
+        - ORDER_READ
       tags:
         - Orders (DOMS)
     post:
-      description: ''
+      description: Create a new order.
       operationId: addOrder
       requestBody:
         content:
@@ -15651,11 +15665,13 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Create order
+      x-fft-permissions:
+        - ORDER_WRITE
       tags:
         - Orders (DOMS)
   /api/orders/{orderId}:
     get:
-      description: ''
+      description: Get a specific order by ID.
       operationId: getOrder
       parameters:
         - description: ID of order you want to get
@@ -15694,10 +15710,12 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Entity not found
       summary: Get order
+      x-fft-permissions:
+        - ORDER_READ
       tags:
         - Orders (DOMS)
     patch:
-      description: ''
+      description: Update an existing order.
       operationId: updateOrder
       parameters:
         - description: ID of Order you want to patch
@@ -15743,6 +15761,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Entity not found, for more information please look at details.
       summary: Update order
+      x-fft-permissions:
+        - ORDER_WRITE
       tags:
         - Orders (DOMS)
   /api/orders/{orderId}/actions:
@@ -15788,6 +15808,12 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Order not found or expired
       summary: Call order action
+      x-fft-permissions:
+        - ORDER_WRITE
+        - ORDER_CANCEL
+        - ORDER_FORCE_CANCEL
+        - ORDER_UNLOCK
+        - ORDER_CONSUMER_WRITE
       tags:
         - Orders (DOMS)
   /api/orders/{orderId}/cancel:
@@ -15844,6 +15870,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Entity not found
       summary: Cancel order
+      x-fft-permissions:
+        - ORDER_CANCEL
       tags:
         - Orders (DOMS)
   /api/orders/{orderId}/orderlineitems/{orderLineItemId}/actions:
@@ -15889,6 +15917,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Call order line item action
+      x-fft-permissions:
+        - ORDER_WRITE
       tags:
         - Orders (DOMS)
   /api/orders/search:
@@ -19342,8 +19372,8 @@ paths:
         - Picking (Operations)
   /api/process:
     get:
-      description: ''
-      operationId: getProcesses
+      description: Get a process by query parameters such as order or pickJob reference
+      operationId: getProcess
       parameters:
         - in: query
           name: tenantOrderId
@@ -19409,6 +19439,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Entity not found
       summary: Get process
+      x-fft-permissions:
+        - PROCESS_READ
       tags:
         - Processes (Core)
   /api/processes:
@@ -19725,11 +19757,13 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: List processes
+      x-fft-permissions:
+        - PROCESS_READ
       tags:
         - Processes (Core)
   /api/processes/{processId}:
     get:
-      description: ''
+      description: Get a specific process by ID.
       operationId: getProcessByID
       parameters:
         - in: path
@@ -19765,6 +19799,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Entity not found
       summary: Get process
+      x-fft-permissions:
+        - PROCESS_READ
       tags:
         - Processes (Core)
     patch:
@@ -19825,6 +19861,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Process version conflict
       summary: Update process
+      x-fft-permissions:
+        - PROCESS_WRITE
       tags:
         - Processes (Core)
   /api/processes/{processId}/actions:
@@ -19885,7 +19923,7 @@ paths:
         - Processes (Core)
   /api/processes/{processId}/documents:
     post:
-      description: ''
+      description: Add a document to a process.
       operationId: addDocumentToProcess
       parameters:
         - in: path
@@ -19914,6 +19952,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Invalid input. See response for details
       summary: Create process document
+      x-fft-permissions:
+        - DOCUMENT_SET_WRITE
       tags:
         - Processes (Core)
   /api/processes/{processId}/documents/{documentId}:
@@ -19921,7 +19961,8 @@ paths:
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
+        document metadata from a process.
       operationId: readDocumentMetaInProcess
       parameters:
         - in: path
@@ -19944,6 +19985,8 @@ paths:
             The document meta information with given id attached to the selected
             process
       summary: Get process document
+      x-fft-permissions:
+        - DOCUMENT_SET_READ
       tags:
         - Processes (Core)
       x-badges:
@@ -19954,7 +19997,8 @@ paths:
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Download a document file from a process.
       operationId: downloadDocumentInProcess
       parameters:
         - in: path
@@ -19973,6 +20017,8 @@ paths:
             application/pdf: {}
           description: The document with given id attached to the selected process
       summary: Download process file
+      x-fft-permissions:
+        - DOCUMENT_SET_READ
       tags:
         - Processes (Core)
       x-badges:
@@ -19982,7 +20028,8 @@ paths:
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Update a document file in a process.
       operationId: updateDocumentInProcess
       parameters:
         - in: path
@@ -20016,6 +20063,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Invalid input. See response for details
       summary: Update process file
+      x-fft-permissions:
+        - DOCUMENT_SET_WRITE
       tags:
         - Processes (Core)
       x-badges:
@@ -20077,6 +20126,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Get process history logs
+      x-fft-permissions:
+        - PROCESS_LOG_READ
       tags:
         - Processes (Core)
       x-badges:
@@ -20084,8 +20135,8 @@ paths:
           label: BETA
   /api/processes/{processId}/reroute:
     post:
-      description: ''
-      operationId: postProcess
+      description: Reroute a process to a different facility.
+      operationId: rerouteProcess
       parameters:
         - description: ID of process you want to reroute
           in: path
@@ -20141,11 +20192,13 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: Process version conflict
       summary: Create process reroute
+      x-fft-permissions:
+        - PROCESS_REROUTE
       tags:
         - Processes (Core)
   /api/processes/retrynotroutable:
     post:
-      description: ''
+      description: Retry routing for all not-routable processes.
       operationId: triggerRetryNotRoutable
       responses:
         '204':
@@ -20173,6 +20226,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Create retry not routable
+      x-fft-permissions:
+        - PROCESS_REROUTE
       tags:
         - Processes (Core)
   /api/processes/search:
@@ -28078,6 +28133,7 @@ components:
               - value
               - type
             type: object
+          maxItems: 500
           type: array
         postalCode:
           example: '40764'
@@ -28153,6 +28209,7 @@ components:
             tags:
               items:
                 $ref: '#/components/schemas/TagReference'
+              maxItems: 500
               minItems: 1
               type: array
           required:
@@ -31633,6 +31690,7 @@ components:
             description: Reference of a Facility.
             example: 928f3730-bc48-4d85-b83f-3fd86b776178
             type: string
+          maxItems: 500
           type: array
         supplyingFacilitiesConfigurations:
           description: >-
@@ -31640,6 +31698,7 @@ components:
             another facility with specific configuration of its usage
           items:
             $ref: '#/components/schemas/SupplyingFacilityConfiguration'
+          maxItems: 500
           type: array
         tenantFacilityId:
           description: >-
@@ -32518,6 +32577,7 @@ components:
             required:
               - additionalInformationRef
             type: object
+          maxItems: 500
           type: array
         customAttributes:
           description: >-
@@ -32639,12 +32699,14 @@ components:
         articleItems:
           items:
             $ref: '#/components/schemas/ArticleItem'
+          maxItems: 500
           type: array
         customServiceDefinition:
           $ref: '#/components/schemas/CustomServiceDefinition'
         customServiceItems:
           items:
             $ref: '#/components/schemas/CustomServiceItemForCreation'
+          maxItems: 500
           type: array
       required:
         - customServiceItems
@@ -32708,12 +32770,14 @@ components:
         articleItems:
           items:
             $ref: '#/components/schemas/ArticleItem'
+          maxItems: 500
           type: array
         customServiceDefinition:
           $ref: '#/components/schemas/CustomServiceDefinition'
         customServiceItems:
           items:
             $ref: '#/components/schemas/CustomServiceItemForCreation'
+          maxItems: 500
           type: array
       required:
         - customServiceDefinition
@@ -33214,6 +33278,7 @@ components:
             description: Reference of a SourcingOptions
             example: 928f3730-bc48-4d85-b83f-3fd86b776178
             type: string
+          maxItems: 500
           type: array
         supplyingFacilities:
           description: '@deprecated Use supplyingFacilities under collect'
@@ -33221,6 +33286,7 @@ components:
             description: Reference of a Facility
             example: 928f3730-bc48-4d85-b83f-3fd86b776178
             type: string
+          maxItems: 500
           type: array
         targetTime:
           description: At which time the result is expected.
@@ -33241,14 +33307,17 @@ components:
         preferredCarriers:
           items:
             $ref: '#/components/schemas/PreferredCarrier'
+          maxItems: 500
           type: array
         preferredCarriersWithProduct:
           items:
             $ref: '#/components/schemas/PreferredCarrierWithProduct'
+          maxItems: 500
           type: array
         preselectedFacilities:
           items:
             $ref: '#/components/schemas/PreselectedFacility'
+          maxItems: 500
           type: array
         serviceLevel:
           description: >-
@@ -46240,6 +46309,7 @@ components:
                 description: The number itself. We do not enforce any format (yet).
                 type: string
             type: object
+          maxItems: 500
           type: array
         postalCode:
           example: '40764'
@@ -48515,10 +48585,12 @@ components:
           items:
             minItems: 1
             type: string
+          maxItems: 500
           type: array
         offeredDocuments:
           items:
             $ref: '#/components/schemas/OfferedDocument'
+          maxItems: 500
           type: array
         tagRef:
           type: string
@@ -48555,11 +48627,13 @@ components:
         matchingValues:
           items:
             type: string
+          maxItems: 500
           minItems: 1
           type: array
         stickers:
           items:
             $ref: '#/components/schemas/Sticker'
+          maxItems: 500
           minItems: 1
           type: array
         tagRef:
@@ -49455,6 +49529,7 @@ components:
         consumerAddresses:
           items:
             $ref: '#/components/schemas/ConsumerAddress'
+          maxItems: 500
           type: array
         name:
           enum:
@@ -49639,6 +49714,7 @@ components:
         customServices:
           items:
             $ref: '#/components/schemas/CustomServiceReferenceForCreation'
+          maxItems: 500
           minItems: 1
           type: array
         deliveryPreferences:
@@ -49651,6 +49727,7 @@ components:
         orderLineItems:
           items:
             $ref: '#/components/schemas/OrderLineItemForCreation'
+          maxItems: 500
           type: array
         paymentInfo:
           $ref: '#/components/schemas/OrderPaymentInfoForCreation'
@@ -49669,6 +49746,7 @@ components:
         statusReasons:
           items:
             $ref: '#/components/schemas/OrderStatusReason'
+          maxItems: 500
           type: array
         stickers:
           items:
@@ -49686,6 +49764,7 @@ components:
         tags:
           items:
             $ref: '#/components/schemas/TagReference'
+          maxItems: 500
           minItems: 1
           type: array
       required:
@@ -49702,6 +49781,7 @@ components:
         addresses:
           items:
             $ref: '#/components/schemas/ConsumerAddress'
+          maxItems: 500
           type: array
         consumerId:
           description: The id of the consumer.
@@ -49814,6 +49894,7 @@ components:
             included, only the included lines will remain after the update.
           items:
             $ref: '#/components/schemas/OrderLineItemForUpdate'
+          maxItems: 500
           nullable: true
           type: array
         preferredHandlingTime:
@@ -49885,6 +49966,7 @@ components:
                 href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/customization-via-attributes">here</a>
               items:
                 $ref: '#/components/schemas/OrderArticleAttributeItem'
+              maxItems: 500
               type: array
             customAttributes:
               deprecated: true
@@ -49911,6 +49993,7 @@ components:
                 href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/customization-via-attributes">here</a>
               items:
                 $ref: '#/components/schemas/OrderArticleAttributeItem'
+              maxItems: 500
               type: array
             customAttributes:
               deprecated: true
@@ -49993,6 +50076,7 @@ components:
             on listing level will be available
           items:
             $ref: '#/components/schemas/Substitute'
+          maxItems: 500
           type: array
         article:
           $ref: '#/components/schemas/OrderLineItemArticle'
@@ -50018,6 +50102,7 @@ components:
           items:
             description: Codes, that identify the article
             type: string
+          maxItems: 500
           type: array
         secondaryMeasurementUnitKey:
           description: Secondary identifier for items unit of measurement.
@@ -50040,6 +50125,7 @@ components:
         tags:
           items:
             $ref: '#/components/schemas/TagReference'
+          maxItems: 500
           type: array
       required:
         - article
@@ -58444,6 +58530,7 @@ components:
         carrierServices:
           items:
             $ref: '#/components/schemas/CarrierServices'
+          maxItems: 500
           type: array
       required:
         - carrierKey
@@ -59225,6 +59312,7 @@ components:
               - $ref: '#/components/schemas/AddTagsToProcess'
               - $ref: '#/components/schemas/AssignFacilityToProcess'
               - $ref: '#/components/schemas/UpdateGdprCleanupDateAction'
+          maxItems: 500
           minItems: 1
           type: array
         version:
@@ -70457,6 +70545,7 @@ components:
         offeredStickersByTag:
           items:
             $ref: '#/components/schemas/OfferedStickersByTag'
+          maxItems: 500
           type: array
       title: StickerConfiguration
       description: StickerConfiguration
@@ -74428,6 +74517,7 @@ components:
           items:
             description: Strings, that identify the substitute article
             type: string
+          maxItems: 500
           type: array
         secondaryMeasurementUnitKey:
           description: >-
@@ -74925,6 +75015,7 @@ components:
         deliveryEvents:
           items:
             $ref: '#/components/schemas/DeliveryEvent'
+          maxItems: 500
           type: array
         facilityRef:
           description: ID of the facility.
@@ -75092,6 +75183,7 @@ components:
             entries in offeredDocumentsPerTag can be applied
           items:
             $ref: '#/components/schemas/OfferedDocument'
+          maxItems: 500
           type: array
         offeredDocumentsPerTag:
           description: >-
@@ -75099,6 +75191,7 @@ components:
             when determining what documents belong to an entity
           items:
             $ref: '#/components/schemas/OfferedDocumentPerTag'
+          maxItems: 500
           type: array
       required:
         - offeredDocumentsPerTag
