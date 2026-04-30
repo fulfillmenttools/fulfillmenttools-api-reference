@@ -2502,6 +2502,205 @@ paths:
       summary: Update domain
       tags:
         - Artifacts (Infrastructure)
+  /api/configurations/eventscopes/inventoryarticleavailabilitychanged:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Create a new event scope configuration for inventory article
+        availability changed events.
+      operationId: createEventScopeConfig
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/InventoryArticleAvailabilityChangedEventScopeForCreation
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/InventoryArticleAvailabilityChangedEventScope
+          description: The created event scope configuration.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Create event scope config
+      x-fft-permissions:
+        - EVENT_SCOPE_CONFIG_WRITE
+      tags:
+        - Event Scope Configuration (Inventory)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/configurations/eventscopes/inventoryarticleavailabilitychanged/{idOrUrn}:
+    delete:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Delete an event scope configuration by ID or URN.
+      operationId: deleteEventScopeConfig
+      parameters:
+        - in: path
+          name: idOrUrn
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The event scope configuration was deleted.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Delete event scope config
+      x-fft-permissions:
+        - EVENT_SCOPE_CONFIG_WRITE
+      tags:
+        - Event Scope Configuration (Inventory)
+      x-badges:
+        - color: red
+          label: ALPHA
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
+        an event scope configuration by ID or URN.
+      operationId: getEventScopeConfig
+      parameters:
+        - in: path
+          name: idOrUrn
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/InventoryArticleAvailabilityChangedEventScope
+          description: The event scope configuration.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get event scope config
+      x-fft-permissions:
+        - EVENT_SCOPE_CONFIG_READ
+      tags:
+        - Event Scope Configuration (Inventory)
+      x-badges:
+        - color: red
+          label: ALPHA
+    put:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Replace an existing event scope configuration.
+      operationId: replaceEventScopeConfig
+      parameters:
+        - in: path
+          name: idOrUrn
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/InventoryArticleAvailabilityChangedEventScopeForReplace
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/InventoryArticleAvailabilityChangedEventScope
+          description: The updated event scope configuration.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+      summary: Replace event scope config
+      x-fft-permissions:
+        - EVENT_SCOPE_CONFIG_WRITE
+      tags:
+        - Event Scope Configuration (Inventory)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/configurations/expiry:
     get:
       description: >-
@@ -18391,6 +18590,8 @@ paths:
               - ZONE_WRITE
               - SAFETY_STOCK_READ
               - SAFETY_STOCK_WRITE
+              - EVENT_SCOPE_CONFIG_READ
+              - EVENT_SCOPE_CONFIG_WRITE
             type: string
         - description: The group of the permission to filter by
           in: query
@@ -41702,6 +41903,99 @@ components:
       title: InventoryArticle
       type: object
       description: InventoryArticle
+    InventoryArticleAvailabilityChangedEventScope:
+      properties:
+        created:
+          format: date-time
+          type: string
+        facilityGroupRefs:
+          items:
+            type: string
+          type: array
+        facilityRefs:
+          items:
+            type: string
+          type: array
+        id:
+          type: string
+        key:
+          type: string
+        lastModified:
+          format: date-time
+          type: string
+        status:
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        version:
+          type: number
+      required:
+        - id
+        - key
+        - status
+        - version
+        - created
+        - lastModified
+      title: InventoryArticleAvailabilityChangedEventScope
+      type: object
+      description: InventoryArticleAvailabilityChangedEventScope
+    InventoryArticleAvailabilityChangedEventScopeForCreation:
+      properties:
+        facilityGroupRefs:
+          description: Facility group references whose members are included in this scope.
+          items:
+            type: string
+          maxItems: 5
+          type: array
+        facilityRefs:
+          description: Direct facility references to include in this scope.
+          items:
+            type: string
+          maxItems: 50
+          type: array
+        key:
+          description: Unique key identifying this scope. Used to derive the URN.
+          maxLength: 128
+          type: string
+        status:
+          default: ACTIVE
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+      required:
+        - key
+      title: InventoryArticleAvailabilityChangedEventScopeForCreation
+      type: object
+      description: InventoryArticleAvailabilityChangedEventScopeForCreation
+    InventoryArticleAvailabilityChangedEventScopeForReplace:
+      properties:
+        facilityGroupRefs:
+          description: Facility group references whose members are included in this scope.
+          items:
+            type: string
+          maxItems: 5
+          type: array
+        facilityRefs:
+          description: Direct facility references to include in this scope.
+          items:
+            type: string
+          maxItems: 50
+          type: array
+        status:
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        version:
+          description: Version for optimistic locking.
+          type: number
+      required:
+        - version
+      title: InventoryArticleAvailabilityChangedEventScopeForReplace
+      type: object
+      description: InventoryArticleAvailabilityChangedEventScopeForReplace
     InventoryArticlePaginatedResult:
       properties:
         articles:
@@ -56031,6 +56325,8 @@ components:
             - ZONE_WRITE
             - SAFETY_STOCK_READ
             - SAFETY_STOCK_WRITE
+            - EVENT_SCOPE_CONFIG_READ
+            - EVENT_SCOPE_CONFIG_WRITE
           type: string
         operation:
           description: The operation of the permission
@@ -56143,6 +56439,7 @@ components:
             - PURCHASE_PRICE
             - ZONE
             - SAFETY_STOCK
+            - EVENT_SCOPE_CONFIG
           type: string
       required:
         - operation
@@ -63291,6 +63588,8 @@ components:
               - ZONE_WRITE
               - SAFETY_STOCK_READ
               - SAFETY_STOCK_WRITE
+              - EVENT_SCOPE_CONFIG_READ
+              - EVENT_SCOPE_CONFIG_WRITE
             type: string
           maxItems: 500
           type: array
@@ -63517,6 +63816,8 @@ components:
               - ZONE_WRITE
               - SAFETY_STOCK_READ
               - SAFETY_STOCK_WRITE
+              - EVENT_SCOPE_CONFIG_READ
+              - EVENT_SCOPE_CONFIG_WRITE
             type: string
           maxItems: 500
           type: array
@@ -63735,6 +64036,8 @@ components:
               - ZONE_WRITE
               - SAFETY_STOCK_READ
               - SAFETY_STOCK_WRITE
+              - EVENT_SCOPE_CONFIG_READ
+              - EVENT_SCOPE_CONFIG_WRITE
             type: string
           maxItems: 500
           type: array
@@ -63958,6 +64261,8 @@ components:
               - ZONE_WRITE
               - SAFETY_STOCK_READ
               - SAFETY_STOCK_WRITE
+              - EVENT_SCOPE_CONFIG_READ
+              - EVENT_SCOPE_CONFIG_WRITE
             type: string
           maxItems: 500
           type: array
@@ -77611,6 +77916,8 @@ components:
               - ZONE_WRITE
               - SAFETY_STOCK_READ
               - SAFETY_STOCK_WRITE
+              - EVENT_SCOPE_CONFIG_READ
+              - EVENT_SCOPE_CONFIG_WRITE
             type: string
           type: array
       required:
