@@ -1369,28 +1369,18 @@ paths:
         - Orders Configuration (DOMS)
   /api/carriers:
     get:
-      description: ''
+      deprecated: false
+      description: List carriers
       operationId: getCarriers
       parameters:
-        - description: all entities after given Id
-          in: query
-          name: startAfterId
-          required: false
-          schema:
-            type: string
-        - description: number of entities to show
-          in: query
+        - in: query
           name: size
           required: false
           schema:
-            default: 25
-            type: integer
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
+            type: number
+        - in: query
+          name: startAfterId
+          required: false
           schema:
             type: string
       responses:
@@ -1411,36 +1401,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: No more elements available
+          description: Your user, although recognized, is not authorized to use this
       summary: List carriers
+      x-fft-permissions:
+        - CARRIER_READ
       tags:
         - Carriers (Operations)
     post:
-      description: ''
+      deprecated: false
+      description: Create carrier
       operationId: addCarrier
-      parameters:
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
-          schema:
-            type: string
+      parameters: []
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CarrierForCreation'
-        description: Carrier object
         required: true
       responses:
         '201':
@@ -1456,7 +1432,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Invalid input. See response for details
+          description: Invalid input. See response for details.
         '401':
           content:
             application/json:
@@ -1468,29 +1444,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
       summary: Create carrier
+      x-fft-permissions:
+        - CARRIER_WRITE
       tags:
         - Carriers (Operations)
   /api/carriers/{carrierId}:
     get:
-      description: ''
+      deprecated: false
+      description: Get carrier
       operationId: getCarrier
       parameters:
-        - description: ID of the carrier you want to get
-          in: path
+        - in: path
           name: carrierId
           required: true
-          schema:
-            type: string
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
           schema:
             type: string
       responses:
@@ -1513,34 +1481,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: User not found
+          description: The requested entity was not found
       summary: Get carrier
+      x-fft-permissions:
+        - CARRIER_READ
       tags:
         - Carriers (Operations)
     patch:
-      description: ''
+      deprecated: false
+      description: Update carrier
       operationId: patchCarrier
       parameters:
-        - description: ID of carrier you want to patch
-          in: path
+        - in: path
           name: carrierId
           required: true
-          schema:
-            type: string
-        - description: >-
-            Provide the localized names and descriptions for the parcel label
-            classifications. If not provided the default locale is used., for
-            example de_DE.
-          in: query
-          name: locale
           schema:
             type: string
       requestBody:
@@ -1548,7 +1508,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CarrierPatchActions'
-        description: Patch set
         required: true
       responses:
         '200':
@@ -1570,31 +1529,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
         '409':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity version conflict
+          description: A version conflict occurred.
       summary: Update carrier
+      x-fft-permissions:
+        - CARRIER_WRITE
       tags:
         - Carriers (Operations)
   /api/carriers/{carrierId}/configuration:
     get:
-      description: ''
+      deprecated: false
+      description: >-
+        Retrieves the configuration for a specific carrier by its ID. If no
+        configuration exists, a default one is created and returned.
       operationId: getCarrierConfiguration
       parameters:
-        - description: ID of the carrier you want to get the configuration
-          in: path
+        - in: path
           name: carrierId
           required: true
           schema:
@@ -1604,17 +1565,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
-                  - $ref: '#/components/schemas/CarrierConfiguration'
-                  - $ref: '#/components/schemas/GlsCarrierConfiguration'
-                  - $ref: '#/components/schemas/FedexCarrierConfiguration'
-                  - $ref: '#/components/schemas/BringCarrierConfiguration'
-                  - $ref: '#/components/schemas/DpdChCarrierConfiguration'
-                  - $ref: '#/components/schemas/DhlV2CarrierConfiguration'
-                  - $ref: '#/components/schemas/VceCarrierConfiguration'
-                  - $ref: '#/components/schemas/PostNlCarrierConfiguration'
-                  - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
-                  - $ref: '#/components/schemas/UBSendCarrierConfiguration'
+                $ref: '#/components/schemas/CarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The
             result is in the body.
@@ -1629,24 +1580,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Carrier Configuration not found
+          description: The requested entity was not found
       summary: Get carrier config
+      x-fft-permissions:
+        - CARRIER_READ
       tags:
         - Carriers Configuration (Operations)
     put:
-      description: ''
+      deprecated: false
+      description: >-
+        Updates the complete configuration for a specific carrier. This includes
+        settings like return labels, weight adjustments, non-delivery days,
+        country service mappings, and pick-up times.
       operationId: putCarrierConfiguration
       parameters:
-        - description: ID of the carrier you want to update the configuration
-          in: path
+        - in: path
           name: carrierId
           required: true
           schema:
@@ -1666,24 +1620,13 @@ paths:
                 - $ref: '#/components/schemas/PostNlCarrierConfiguration'
                 - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
                 - $ref: '#/components/schemas/UBSendCarrierConfiguration'
-        description: Carrier Configuration
         required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                anyOf:
-                  - $ref: '#/components/schemas/CarrierConfiguration'
-                  - $ref: '#/components/schemas/GlsCarrierConfiguration'
-                  - $ref: '#/components/schemas/FedexCarrierConfiguration'
-                  - $ref: '#/components/schemas/BringCarrierConfiguration'
-                  - $ref: '#/components/schemas/DpdChCarrierConfiguration'
-                  - $ref: '#/components/schemas/DhlV2CarrierConfiguration'
-                  - $ref: '#/components/schemas/VceCarrierConfiguration'
-                  - $ref: '#/components/schemas/PostNlCarrierConfiguration'
-                  - $ref: '#/components/schemas/SevenSendersCarrierConfiguration'
-                  - $ref: '#/components/schemas/UBSendCarrierConfiguration'
+                $ref: '#/components/schemas/CarrierConfiguration'
           description: >-
             Carrier Configuration was found & you were allowed to access it. The
             result is in the body.
@@ -1698,25 +1641,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Carrier Configuration not found
+          description: The requested entity was not found
       summary: Update carrier config
+      x-fft-permissions:
+        - CARRIER_WRITE
       tags:
         - Carriers Configuration (Operations)
   /api/carriers/{carrierId}/configuration/countryservicemappings:
     get:
-      description: ''
+      deprecated: false
+      description: List country service mappings
       operationId: getCarrierCountryServiceMappings
       parameters:
-        - description: ID of the carrier you want to get the countryservicemappings for
-          in: path
+        - in: path
           name: carrierId
           required: true
           schema:
@@ -1743,24 +1686,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Carrier's countryservicemappings Configuration not found
+          description: The requested entity was not found
       summary: List country service mappings
+      x-fft-permissions:
+        - CARRIER_WRITE
       tags:
         - Carriers Configuration (Operations)
     post:
-      description: ''
+      deprecated: false
+      description: Create country service mapping
       operationId: createCarrierCountryServiceMapping
       parameters:
-        - description: ID of the carrier you want to create a countryservicemapping for
-          in: path
+        - in: path
           name: carrierId
           required: true
           schema:
@@ -1770,7 +1713,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CarrierCountryServiceMappingForCreation'
-        description: Carrier Configuration
         required: true
       responses:
         '201':
@@ -1792,31 +1734,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Carrier not found
+          description: The requested entity was not found
       summary: Create country service mapping
+      x-fft-permissions:
+        - CARRIER_WRITE
       tags:
         - Carriers Configuration (Operations)
   /api/carriers/{carrierId}/configuration/countryservicemappings/{countryServiceMappingId}:
     delete:
-      description: ''
+      deprecated: false
+      description: Delete country service mapping
       operationId: deleteCarrierCountryServiceMapping
       parameters:
-        - description: ID of the carrier you want to delete a countryservicemapping from
-          in: path
+        - in: path
           name: carrierId
           required: true
           schema:
             type: string
-        - description: ID of the countryservicemapping
-          in: path
+        - in: path
           name: countryServiceMappingId
           required: true
           schema:
@@ -1835,30 +1776,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Carrier or CarrierCountryServiceMapping not found
+          description: The requested entity was not found
       summary: Delete country service mapping
+      x-fft-permissions:
+        - CARRIER_WRITE
       tags:
         - Carriers Configuration (Operations)
     get:
-      description: ''
+      deprecated: false
+      description: Get country service mapping
       operationId: getCarrierCountryServiceMapping
       parameters:
-        - description: ID of the carrier you want to get a countryservicemapping for
-          in: path
+        - in: path
           name: carrierId
           required: true
           schema:
             type: string
-        - description: ID of the countryservicemapping
-          in: path
+        - in: path
           name: countryServiceMappingId
           required: true
           schema:
@@ -1883,30 +1823,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Carrier's countryservicemappings Configuration not found
+          description: The requested entity was not found
       summary: Get country service mapping
+      x-fft-permissions:
+        - CARRIER_WRITE
       tags:
         - Carriers Configuration (Operations)
     patch:
-      description: ''
+      deprecated: false
+      description: Update country service mapping
       operationId: updateCarrierCountryServiceMapping
       parameters:
-        - description: ID of the carrier you want to update a countryservicemapping of
-          in: path
+        - in: path
           name: carrierId
           required: true
           schema:
             type: string
-        - description: ID of the countryservicemapping
-          in: path
+        - in: path
           name: countryServiceMappingId
           required: true
           schema:
@@ -1916,7 +1855,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CarrierCountryServiceMappingForUpdate'
-        description: Carrier Mapping for update
         required: true
       responses:
         '200':
@@ -1938,16 +1876,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Carrier or CarrierCountryServiceMapping not found
+          description: The requested entity was not found
       summary: Update country service mapping
+      x-fft-permissions:
+        - CARRIER_WRITE
       tags:
         - Carriers Configuration (Operations)
   /api/categories:
@@ -27594,17 +27532,14 @@ components:
       type: object
       description: AbstractArticleForCreation
     AbstractCarrierCredentials:
-      discriminator:
-        propertyName: key
       properties:
         key:
+          description: The key identifying the carrier credentials type
           type: string
       required:
         - key
-      type: object
-      xml:
-        name: AbstractCarrierCredentials
       title: AbstractCarrierCredentials
+      type: object
       description: AbstractCarrierCredentials
     AbstractFacilityActionsParameter:
       discriminator:
@@ -27707,17 +27642,14 @@ components:
       title: AbstractModificationAction
       description: AbstractModificationAction
     AbstractModifyCarrierCredentials:
-      discriminator:
-        propertyName: key
       properties:
         key:
+          description: The key identifying the carrier credentials type
           type: string
       required:
         - key
-      type: object
-      xml:
-        name: AbstractModifyCarrierCredentials
       title: AbstractModifyCarrierCredentials
+      type: object
       description: AbstractModifyCarrierCredentials
     AbstractOrderActionsParameter:
       discriminator:
@@ -28053,14 +27985,90 @@ components:
       title: AdditionalInformationValueType
       description: AdditionalInformationValueType
     AdditionalShippingArticleAttribute:
-      allOf:
-        - $ref: '#/components/schemas/CountryServiceMappingShippingArticleAttribute'
+      properties:
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: Localized description of this shipping article attribute
+        category:
+          description: The category of this shipping article attribute
+          enum:
+            - customs
+            - dimensions
+            - insurance
+          type: string
+        dataType:
+          description: The data type of this shipping article attribute
+          enum:
+            - NUMBER
+            - STRING
+          type: string
+        description:
+          description: Description of this shipping article attribute
+          type: string
+        referencedField:
+          description: The referenced field for this shipping article attribute
+          enum:
+            - attributes.weightPerUnit
+            - attributes.hsCode
+            - attributes.currency
+            - attributes.valuePerUnit
+            - attributes.countryOfManufacture
+          type: string
+      required:
+        - referencedField
+        - dataType
+        - category
+        - descriptionLocalized
       title: AdditionalShippingArticleAttribute
+      type: object
       description: AdditionalShippingArticleAttribute
     AdditionalShippingAttribute:
-      allOf:
-        - $ref: '#/components/schemas/CountryServiceMappingShippingAttribute'
+      properties:
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: Localized description of this shipping attribute
+        dataType:
+          description: The data type of this shipping attribute
+          enum:
+            - Number
+            - String
+            - Date
+            - Boolean
+          type: string
+        description:
+          description: Description of this shipping attribute
+          type: string
+        referencedField:
+          description: >-
+            - dimensions.weight: will be calculated from
+            MandatoryShippingArticleAttribute.attributes.weightPerUnit if items
+            with weightPerUnit is set on all items
+
+            - productValue: will be calculated from
+            MandatoryShippingArticleAttribute.attributes.pricePerUnit if items
+            with pricePerUnit is set on all items
+          enum:
+            - dimensions.weight
+            - productValue
+            - pickUpInformation.startTime
+            - pickUpInformation.endTime
+            - services.BulkyGoods
+            - services.Signature
+            - services.AdultSignature
+            - services.CustomerSignature
+            - services.SaturdayDelivery
+            - services.IdentityCheckPrivate
+            - services.IdentityCheckCompany
+            - services.AdditionalTransportInsurance
+            - carrierInformation.shippingContainerNumber
+            - services.NoNeighborDelivery
+            - services.HandoverToRecipientOnly
+            - services.IdentityAgeCheck18
+          type: string
       title: AdditionalShippingAttribute
+      type: object
       description: AdditionalShippingAttribute
     AddLabelsToParcelActionEnum:
       enum:
@@ -28410,27 +28418,6 @@ components:
         - alternativeReturnAddress
       title: AlternativeReturnAddressPerTag
       description: AlternativeReturnAddressPerTag
-    AngelCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            authToken:
-              description: X-Auth-Token for callbacks from Angel
-              type: string
-            password:
-              description: angel password
-              type: string
-            username:
-              description: Angel username
-              type: string
-          required:
-            - username
-            - password
-          type: object
-      description: Angel Carrier Credentials
-      title: AngelCarrierCredentials
-      xml:
-        name: AngelCarrierCredentials
     AnnounceItemReturnActionEnum:
       enum:
         - AnnounceItemReturn
@@ -29698,59 +29685,119 @@ components:
       title: BrandForCreation
       description: BrandForCreation
     BringCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of Bring Carrier
       properties:
-        customerId:
-          description: Bring Carrier customer number.
-          example: '12345'
+        additionalWeightInPercent:
+          description: >-
+            It is an amount of percentage for packaging weight which will be
+            added to the calculated shipping weight
+          minimum: 0
+          type: number
+        alternativeReturnAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
+        alternativeSendAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
+        carrierRef:
+          description: Reference to the carrier this configuration belongs to
           type: string
+        countryServiceMappings:
+          description: Country service mappings for this carrier configuration
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
+          type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        customerId:
+          description: Customer ID for Bring carrier
+          type: string
+        defaultPickUpTime:
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
+        fallBackTrackAndTraceEmail:
+          description: >-
+            EmailAddress used to receive track and trace information when no
+            other emailaddress was provided
+          example: max@speedyboxales.com
+          format: email
+          minLength: 1
+          type: string
+        id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        mustBeWeighed:
+          default: false
+          description: >-
+            Indicates if the content of a parcel must be weighed before ordering
+            a label
+          example: false
+          type: boolean
+        nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
+          type: array
+        returnLabel:
+          default: false
+          description: >-
+            When enabled, a return label will be created by creating a shipping
+            label
+          example: false
+          type: boolean
         returnProduct:
-          description: Product that will be used for return
-          example: '9300'
+          description: Return product code
+          type: string
+        serviceUrl:
+          description: Service URL for this carrier configuration
           type: string
         shipmentProduct:
-          description: Product that will be used for the shipment booking
-          example: '5600'
+          description: Shipment product code
           type: string
         supportPhoneNumber:
-          description: Bring Carrier support phone number.
-          example: '0031121424242'
+          description: Support phone number
           type: string
+        thresholdPriceValue:
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
         trackAndTraceUrl:
+          description: Track and trace URL
           type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
         webhookFftHost:
+          description: Webhook FFT host
           type: string
       required:
+        - version
+        - carrierRef
+        - returnLabel
         - customerId
         - supportPhoneNumber
       title: BringCarrierConfiguration
-    BringCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            apiKey:
-              description: Internal API Key to communicate with the CEP Api
-              type: string
-            apiUid:
-              description: Internal API Uid to communicate with the CEP Api
-              type: string
-            authToken:
-              description: Identifier for Track&Trace Webhook
-              type: string
-            clientUrl:
-              description: Url of the requesting client, can be a static value
-              type: string
-          required:
-            - apiUid
-            - apiKey
-            - clientUrl
-          type: object
-      description: Bring Credentials.
-      title: BringCarrierCredentials
-      xml:
-        name: BringCarrierCredentials
+      type: object
+      description: BringCarrierConfiguration
     BulkOperationError:
       properties:
         message:
@@ -30050,48 +30097,116 @@ components:
       title: CapacityPlanningTimeframeConfiguration
       description: CapacityPlanningTimeframeConfiguration
     Carrier:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/CarrierForCreation'
-        - $ref: '#/components/schemas/VersionedResource'
-        - properties:
-            defaultParcelHeightInCm:
-              default: 10
-              description: Default height in cm
-              minimum: 1
-              type: number
-            defaultParcelLengthInCm:
-              default: 25
-              description: Default length in cm
-              minimum: 1
-              type: number
-            defaultParcelWidthInCm:
-              default: 35
-              description: Default width in cm
-              minimum: 1
-              type: number
-            deliveryType:
-              $ref: '#/components/schemas/CarrierDeliveryType'
-            id:
-              description: The id of the carrier
-              example: LGMl2DuvPnfPoSHhYFOm
-              type: string
-            lifecycle:
-              $ref: '#/components/schemas/CarrierLifecycle'
-            parcelLabelClassifications:
-              items:
-                $ref: '#/components/schemas/ParcelLabelClassification'
-              type: array
-          required:
-            - id
-            - status
-            - defaultParcelWidthInCm
-            - defaultParcelLengthInCm
-            - defaultParcelHeightInCm
-          type: object
-      xml:
-        name: Carrier
+      properties:
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        credentials:
+          allOf:
+            - $ref: '#/components/schemas/AbstractCarrierCredentials'
+          description: Credentials for the carrier
+        defaultParcelHeightInCm:
+          default: 10
+          description: Default height in cm
+          minimum: 1
+          type: number
+        defaultParcelLengthInCm:
+          default: 25
+          description: Default length in cm
+          minimum: 1
+          type: number
+        defaultParcelWeightInGram:
+          default: 1000
+          description: Default weight for a parcel in gram
+          minimum: 1
+          type: number
+        defaultParcelWidthInCm:
+          default: 35
+          description: Default width in cm
+          minimum: 1
+          type: number
+        deliveryType:
+          description: 'Provided delivery of this CEP. Default: DELIVERY'
+          enum:
+            - SAMEDAY
+            - DELIVERY
+          type: string
+        id:
+          description: The id of the carrier
+          example: LGMl2DuvPnfPoSHhYFOm
+          type: string
+        key:
+          description: >-
+            References the KEP. Currently allowed values are DHL_V2, DPD_CH,
+            DPD_CH_VCE, ANGEL, GLS, FEDEX, POSTNL, BRING, UPS, POST_NORD,
+            DHL_EXPRESS, CUSTOM and to distinct between multiple custom carriers
+            one can use CUSTOM_ combined with a unique name.
+          example: DHL_V2
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        lifecycle:
+          description: >-
+            Used to determine if a carrier is available for configuration. GA
+            carriers are generally available and are covered by our SLA. BETA
+            carriers are available, but subject to change and not covered by
+            SLA. ALPHA carriers are not implemented completely, yet. Default: GA
+          enum:
+            - GA
+            - BETA
+            - ALPHA
+          type: string
+        logoUrl:
+          description: URL of the carrier logo
+          minLength: 1
+          type: string
+        name:
+          description: >-
+            This is the well known name for a supported CEP partner. Can be
+            adapted to the clients needs.
+          example: DHL Köln
+          type: string
+        parcelLabelClassifications:
+          description: Parcel label classifications for this carrier
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassification'
+          type: array
+        productValueNeeded:
+          description: >-
+            Setting to enable the Client to ask for the parcel product value
+            while ordering a label. This information is mandatory for sending
+            parcels between different countries (customs declaration)
+          example: true
+          type: boolean
+        status:
+          description: 'It is taken into consideration for all carriers. Default: INACTIVE'
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - id
+        - version
+        - key
+        - name
+        - defaultParcelWidthInCm
+        - defaultParcelLengthInCm
+        - defaultParcelHeightInCm
       title: Carrier
+      type: object
       description: Carrier
     CarrierChangedCarrierInfo:
       properties:
@@ -30114,9 +30229,6 @@ components:
       title: CarrierChangedPayload
       description: CarrierChangedPayload
     CarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-      description: Configuration of a Carrier
       properties:
         additionalWeightInPercent:
           description: >-
@@ -30125,17 +30237,34 @@ components:
           minimum: 0
           type: number
         alternativeReturnAddress:
-          $ref: '#/components/schemas/FacilityAddress'
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
         alternativeSendAddress:
-          $ref: '#/components/schemas/FacilityAddress'
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
         carrierRef:
+          description: Reference to the carrier this configuration belongs to
           type: string
         countryServiceMappings:
+          description: Country service mappings for this carrier configuration
           items:
             $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
           type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
         defaultPickUpTime:
-          $ref: '#/components/schemas/CarrierPickUpTime'
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
         fallBackTrackAndTraceEmail:
           description: >-
             EmailAddress used to receive track and trace information when no
@@ -30145,6 +30274,13 @@ components:
           minLength: 1
           type: string
         id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
           type: string
         mustBeWeighed:
           default: false
@@ -30154,8 +30290,10 @@ components:
           example: false
           type: boolean
         nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         returnLabel:
           default: false
@@ -30165,121 +30303,142 @@ components:
           example: false
           type: boolean
         serviceUrl:
+          description: Service URL for this carrier configuration
           type: string
         thresholdPriceValue:
-          $ref: '#/components/schemas/ThresholdPriceValue'
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
       required:
-        - returnLabel
+        - version
         - carrierRef
+        - returnLabel
       title: CarrierConfiguration
       type: object
+      description: CarrierConfiguration
     CarrierCountryServiceMapping:
-      additionalProperties: false
       properties:
         additionalShippingArticleAttributes:
           description: >-
             Article Attributes that will be displayed in the client as
             additional. They are not mandatory but could benefit the process.
-            Mandatory fields can not be additional. If duplicates found, the
-            additional values will be removed on read.
           items:
             $ref: '#/components/schemas/AdditionalShippingArticleAttribute'
-          minItems: 0
+          maxItems: 20
           type: array
         additionalShippingAttributes:
           description: >-
             Shipping Attributes that will be displayed in the client as
             additional. They are not mandatory but could benefit the process.
-            Mandatory fields can not be additional If duplicates found, the
-            additional values will be removed on read.
           items:
             $ref: '#/components/schemas/AdditionalShippingAttribute'
-          minItems: 0
+          maxItems: 30
           type: array
         carrierProductCategory:
-          $ref: '#/components/schemas/CarrierProductCategory'
+          description: Desired product class to choose when ordering a label
+          enum:
+            - STANDARD
+            - EXPRESS
+            - VALUE
+            - FORWARDING
+          type: string
         carrierServices:
           description: Services which can be provided by the carrier
           items:
-            $ref: '#/components/schemas/CarrierServices'
+            enum:
+              - SIGNATURE
+              - CUSTOMER_SIGNATURE
+              - ADULT_SIGNATURE
+              - SATURDAY_DELIVERY
+              - IDENTITY_CHECK_COMPANY
+              - IDENTITY_CHECK_PRIVATE
+              - ADDITIONAL_TRANSPORTATION_INSURANCE
+              - IDENTITY_AGE_CHECK_18
+              - NO_NEIGHBOR_DELIVERY
+              - HANDOVER_TO_RECIPIENT_ONLY
+            type: string
+          maxItems: 10
           type: array
         countAsTransitDayBefore:
+          description: Time before which this day counts as a transit day
+          example: '12:00'
           type: string
         deliveryCosts:
+          description: Delivery costs for this mapping
           items:
             $ref: '#/components/schemas/DeliveryCost'
           maxItems: 1
           type: array
         destinationCountries:
-          description: >-
-            This part of the API is deprecated. For details please check the <a
-            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-            target="_blank">api-release-life-cycle documentation</a>.<br /><br
-            />@deprecated - Use destination instead.
-          items:
-            $ref: '#/components/schemas/CountryCode'
-          minItems: 1
-          type: array
           deprecated: true
+          description: deprecated - Use destinations instead.
+          items:
+            type: string
+          maxItems: 250
+          type: array
         destinations:
           description: The destination regions this mapping should be applied to.
           items:
             $ref: '#/components/schemas/RegionInformation'
-          minItems: 1
+          maxItems: 250
           type: array
         id:
-          description: unique identifier for a countryServiceMapping
+          description: Unique identifier for a countryServiceMapping
           example: bc5b581a-8f65-45b0-9f81-6e0d4babbcb2
           type: string
         mandatoryShippingArticleAttributes:
           items:
             $ref: '#/components/schemas/MandatoryShippingArticleAttribute'
-          minItems: 0
+          maxItems: 20
           type: array
         mandatoryShippingAttributes:
           items:
             $ref: '#/components/schemas/MandatoryShippingAttribute'
-          minItems: 0
+          maxItems: 30
           type: array
         mandatoryShippingItemAttributes:
           deprecated: true
           description: Deprecated - use mandatoryShippingArticleAttributes instead
           items:
             $ref: '#/components/schemas/MandatoryShippingItemAttribute'
-          minItems: 0
+          maxItems: 30
           type: array
         products:
           description: Array of products for the given mapping
           items:
-            example: EXPRESS
             type: string
+          maxItems: 50
           type: array
         source:
-          $ref: '#/components/schemas/RegionInformation'
+          allOf:
+            - $ref: '#/components/schemas/RegionInformation'
+          description: Source region for this mapping
         sourceCountry:
-          description: >-
-            This part of the API is deprecated. For details please check the <a
-            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-            target="_blank">api-release-life-cycle documentation</a>.<br /><br
-            />@deprecated - Use source instead.
-          example: DE
-          maxLength: 2
-          minLength: 2
-          type: string
           deprecated: true
+          description: deprecated - Use source instead.
+          example: DE
+          type: string
         staticCCSMRef:
+          description: Reference to a static country service mapping
           type: string
         transitTime:
-          $ref: '#/components/schemas/CarrierTransitTime'
+          allOf:
+            - $ref: '#/components/schemas/CarrierTransitTime'
+          description: Transit time configuration for this mapping
       required:
         - id
         - source
         - destinations
-      type: object
       title: CarrierCountryServiceMapping
+      type: object
       description: CarrierCountryServiceMapping
     CarrierCountryServiceMappingForCreation:
-      additionalProperties: false
       properties:
         additionalShippingArticleAttributes:
           description: >-
@@ -30305,14 +30464,21 @@ components:
           description: >-
             The version of the carrier configuration to be used in optimistic
             locking mechanisms.
-          example: 42
           format: int64
           type: integer
         carrierProductCategory:
-          $ref: '#/components/schemas/CarrierProductCategory'
+          description: Desired product class to choose when ordering a label
+          enum:
+            - STANDARD
+            - EXPRESS
+            - VALUE
+            - FORWARDING
+          type: string
         countAsTransitDayBefore:
+          description: Time before which this day counts as a transit day
           type: string
         deliveryCosts:
+          description: Delivery costs for this mapping
           items:
             $ref: '#/components/schemas/DeliveryCost'
           maxItems: 1
@@ -30320,13 +30486,9 @@ components:
           type: array
         destinationCountries:
           deprecated: true
-          description: >-
-            This part of the API is deprecated. For details please check the <a
-            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-            target="_blank">api-release-life-cycle documentation</a>.<br /><br
-            />@deprecated Use destination instead.
+          description: deprecated - Use destination instead.
           items:
-            $ref: '#/components/schemas/CountryCode'
+            type: string
           minItems: 1
           type: array
         destinations:
@@ -30346,40 +30508,39 @@ components:
           minItems: 0
           type: array
         mandatoryShippingItemAttributes:
+          deprecated: true
           description: Deprecated - use mandatoryShippingArticleAttributes instead
           items:
             $ref: '#/components/schemas/MandatoryShippingItemAttribute'
           minItems: 0
           type: array
         products:
+          description: Products for this mapping
           items:
-            example: EXPRESS
             type: string
           type: array
         source:
-          $ref: '#/components/schemas/RegionInformation'
+          allOf:
+            - $ref: '#/components/schemas/RegionInformation'
+          description: Source region for this mapping
         sourceCountry:
           deprecated: true
-          description: >-
-            This part of the API is deprecated. For details please check the <a
-            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-            target="_blank">api-release-life-cycle documentation</a>.<br /><br
-            />@deprecated Use source instead.
-          example: DE
+          description: deprecated - Use source instead.
           maxLength: 2
           minLength: 2
           type: string
         transitTime:
-          $ref: '#/components/schemas/CarrierTransitTime'
+          allOf:
+            - $ref: '#/components/schemas/CarrierTransitTime'
+          description: Transit time configuration for this mapping
       required:
         - carrierConfigurationVersion
         - source
         - destinations
-      type: object
       title: CarrierCountryServiceMappingForCreation
+      type: object
       description: CarrierCountryServiceMappingForCreation
     CarrierCountryServiceMappingForUpdate:
-      additionalProperties: false
       properties:
         additionalShippingArticleAttributes:
           description: >-
@@ -30405,28 +30566,30 @@ components:
           description: >-
             The version of the document to be used in optimistic locking
             mechanisms.
-          example: 42
           format: int64
           type: integer
         carrierProductCategory:
-          $ref: '#/components/schemas/CarrierProductCategory'
+          description: Desired product class to choose when ordering a label
+          enum:
+            - STANDARD
+            - EXPRESS
+            - VALUE
+            - FORWARDING
+          type: string
         countAsTransitDayBefore:
+          description: Time before which this day counts as a transit day
           type: string
         deliveryCosts:
+          description: Delivery costs for this mapping
           items:
             $ref: '#/components/schemas/DeliveryCost'
           maxItems: 1
-          minItems: 1
           type: array
         destinationCountries:
           deprecated: true
-          description: >-
-            This part of the API is deprecated. For details please check the <a
-            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-            target="_blank">api-release-life-cycle documentation</a>.<br /><br
-            />@deprecated Use destination instead.
+          description: deprecated - Use destination instead.
           items:
-            $ref: '#/components/schemas/CountryCode'
+            type: string
           minItems: 1
           type: array
         destinations:
@@ -30446,6 +30609,7 @@ components:
           minItems: 0
           type: array
         mandatoryShippingItemAttributes:
+          deprecated: true
           description: Deprecated - use mandatoryShippingArticleAttributes instead
           items:
             $ref: '#/components/schemas/MandatoryShippingItemAttribute'
@@ -30454,28 +30618,26 @@ components:
         products:
           description: Array of products for the given mapping
           items:
-            example: EXPRESS
             type: string
           type: array
         source:
-          $ref: '#/components/schemas/RegionInformation'
+          allOf:
+            - $ref: '#/components/schemas/RegionInformation'
+          description: Source region for this mapping
         sourceCountry:
           deprecated: true
-          description: >-
-            This part of the API is deprecated. For details please check the <a
-            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
-            target="_blank">api-release-life-cycle documentation</a>.<br /><br
-            />@deprecated Use source instead.
-          example: DE
+          description: deprecated - Use source instead.
           maxLength: 2
           minLength: 2
           type: string
         transitTime:
-          $ref: '#/components/schemas/CarrierTransitTime'
+          allOf:
+            - $ref: '#/components/schemas/CarrierTransitTime'
+          description: Transit time configuration for this mapping
       required:
         - carrierConfigurationVersion
-      type: object
       title: CarrierCountryServiceMappingForUpdate
+      type: object
       description: CarrierCountryServiceMappingForUpdate
     CarrierCutoffConfiguration:
       properties:
@@ -30547,17 +30709,18 @@ components:
       title: CarrierCutoffTimesWeekDay
       description: CarrierCutoffTimesWeekDay
     CarrierDeliveryType:
-      description: 'Provided delivery of this CEP. Default: DELIVERY'
       enum:
         - SAMEDAY
         - DELIVERY
       type: string
       title: CarrierDeliveryType
+      description: CarrierDeliveryType
     CarrierForCreation:
-      additionalProperties: false
       properties:
         credentials:
-          $ref: '#/components/schemas/AbstractCarrierCredentials'
+          allOf:
+            - $ref: '#/components/schemas/AbstractCarrierCredentials'
+          description: Credentials for the carrier
         defaultParcelHeightInCm:
           default: 10
           description: Default height in cm
@@ -30582,11 +30745,12 @@ components:
           description: >-
             References the KEP. Currently allowed values are DHL_V2, DPD_CH,
             DPD_CH_VCE, ANGEL, GLS, FEDEX, POSTNL, BRING, UPS, POST_NORD,
-            DHL_EXPRESS,
-             CUSTOM and to distinct between multiple custom carriers one can use CUSTOM_ combined with a unique name.
+            DHL_EXPRESS, CUSTOM and to distinct between multiple custom carriers
+            one can use CUSTOM_ combined with a unique name.
           example: DHL_V2
           type: string
         logoUrl:
+          description: URL of the carrier logo
           minLength: 1
           type: string
         name:
@@ -30596,6 +30760,7 @@ components:
           example: DHL Köln
           type: string
         parcelLabelClassifications:
+          description: Parcel label classifications for this carrier
           items:
             $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
           type: array
@@ -30607,30 +30772,21 @@ components:
           example: true
           type: boolean
         status:
-          $ref: '#/components/schemas/CarrierStatus'
+          description: 'It is taken into consideration for all carriers. Default: INACTIVE'
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
       required:
-        - name
         - key
-      type: object
-      xml:
-        name: CarrierForCreation
+        - name
       title: CarrierForCreation
+      type: object
       description: CarrierForCreation
-    CarrierLifecycle:
-      description: >-
-        Used to determine if a carrier is available for configuration. GA
-        carriers are generally available and are covered by our SLA. BETA
-        carriers are available, but subject to change and not covered by SLA.
-        ALPHA carriers are not implemented completely, yet. Default: GA
-      enum:
-        - GA
-        - BETA
-        - ALPHA
-      type: string
-      title: CarrierLifecycle
     CarrierPatchActions:
       properties:
         actions:
+          description: Array of modification actions to apply to the carrier
           items:
             $ref: '#/components/schemas/ModifyCarrier'
           minItems: 1
@@ -30639,31 +30795,30 @@ components:
           description: >-
             The version of the document to be used in optimistic locking
             mechanisms.
-          example: 42
           format: int64
           type: integer
       required:
-        - version
         - actions
-      type: object
-      xml:
-        name: ShipmentPatchActions
+        - version
       title: CarrierPatchActions
+      type: object
       description: CarrierPatchActions
     CarrierPickUpTime:
-      additionalProperties: false
-      description: >-
-        Default pick up time configuration for carriers supporting pick up
-        scheduling, will be used to calculate the next possible pick up date
       properties:
         end:
-          $ref: '#/components/schemas/TimeStamp'
+          allOf:
+            - $ref: '#/components/schemas/TimeStamp'
+          description: End time of the pick up window
         start:
-          $ref: '#/components/schemas/TimeStamp'
+          allOf:
+            - $ref: '#/components/schemas/TimeStamp'
+          description: Start time of the pick up window
       required:
         - start
         - end
       title: CarrierPickUpTime
+      type: object
+      description: CarrierPickUpTime
     CarrierPriorityCalculationRequest:
       properties:
         productValue:
@@ -30691,9 +30846,6 @@ components:
       type: object
       description: CarrierPriorityResult
     CarrierProductCategory:
-      description: >-
-        Desired product class to choose when ordering a label, this is not a
-        carrier specific value
       enum:
         - STANDARD
         - EXPRESS
@@ -30701,6 +30853,7 @@ components:
         - FORWARDING
       type: string
       title: CarrierProductCategory
+      description: CarrierProductCategory
     CarrierRecommendationResult:
       properties:
         carrier:
@@ -30719,7 +30872,6 @@ components:
       type: object
       description: CarrierRecommendationResult
     CarrierServices:
-      description: Services which should be booked from carrier
       enum:
         - SIGNATURE
         - CUSTOMER_SIGNATURE
@@ -30731,9 +30883,9 @@ components:
         - IDENTITY_AGE_CHECK_18
         - NO_NEIGHBOR_DELIVERY
         - HANDOVER_TO_RECIPIENT_ONLY
-      example: SIGNATURE
       type: string
       title: CarrierServices
+      description: CarrierServices
     CarrierStatus:
       description: 'It is taken into consideration for all carriers. Default: INACTIVE'
       enum:
@@ -30767,18 +30919,20 @@ components:
         maxTransitDays:
           description: Maximum days a carrier needs for transit
           example: 3
+          format: int32
           minimum: 0
-          type: integer
+          type: number
         minTransitDays:
           description: Minimum days a carrier needs for transit
           example: 1
+          format: int32
           minimum: 0
-          type: integer
+          type: number
       required:
-        - maxTransitDays
         - minTransitDays
-      type: object
+        - maxTransitDays
       title: CarrierTransitTime
+      type: object
       description: CarrierTransitTime
     Category:
       properties:
@@ -32341,71 +32495,6 @@ components:
       type: object
       title: CountryLanguageMapping
       description: CountryLanguageMapping
-    CountryServiceMappingShippingArticleAttribute:
-      additionalProperties: false
-      properties:
-        descriptionLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        category:
-          $ref: '#/components/schemas/MandatoryShippingArticleAttributeCategory'
-        dataType:
-          $ref: '#/components/schemas/MandatoryShippingArticleAttributeDataType'
-        description:
-          type: string
-        referencedField:
-          $ref: >-
-            #/components/schemas/MandatoryShippingArticleAttributeReferencedField
-      required:
-        - referencedField
-        - dataType
-        - category
-        - descriptionLocalized
-      type: object
-      title: CountryServiceMappingShippingArticleAttribute
-      description: CountryServiceMappingShippingArticleAttribute
-    CountryServiceMappingShippingAttribute:
-      additionalProperties: false
-      properties:
-        descriptionLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        dataType:
-          enum:
-            - Number
-            - String
-            - Date
-            - Boolean
-          type: string
-        description:
-          type: string
-        referencedField:
-          description: >-
-            - dimensions.weight: will be calculated from
-            MandatoryShippingArticleAttribute.attributes.weightPerUnit if items
-            with weightPerUnit is set on all items - productValue: will be
-            calculated from
-            MandatoryShippingArticleAttribute.attributes.pricePerUnit if items
-            with pricePerUnit is set on all items
-          enum:
-            - dimensions.weight
-            - productValue
-            - pickUpInformation.startTime
-            - pickUpInformation.endTime
-            - services.BulkyGoods
-            - services.Signature
-            - services.AdultSignature
-            - services.CustomerSignature
-            - services.SaturdayDelivery
-            - services.IdentityCheckPrivate
-            - services.IdentityCheckCompany
-            - services.AdditionalTransportInsurance
-            - services.NoNeighborDelivery
-            - services.HandoverToRecipientOnly
-            - services.IdentityAgeCheck18
-            - carrierInformation.shippingContainerNumber
-          type: string
-      type: object
-      title: CountryServiceMappingShippingAttribute
-      description: CountryServiceMappingShippingAttribute
     CurrencyCode:
       description: >-
         The currency code is a three-letter code that represents a currency in
@@ -33219,22 +33308,20 @@ components:
       title: DeliveryArea
       description: DeliveryArea
     DeliveryCost:
-      additionalProperties: false
       properties:
         cost:
           description: The cost of sending with a carrier
           example: 10.99
           type: number
         currency:
-          description: currency as 3 letter iso code
+          description: The currency of the price as an ISO 4217 code.
           example: EUR
-          pattern: ^[A-Z]{3}$
           type: string
       required:
         - cost
         - currency
-      type: object
       title: DeliveryCost
+      type: object
       description: DeliveryCost
     DeliveryEvent:
       properties:
@@ -33593,125 +33680,113 @@ components:
         - status
       title: DhlTrackingStatus
       type: object
-    DHLV2BusinessCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            billingNumber:
-              description: >-
-                Abrechnungsnummer DHL Paket, displayed in the DHL
-                Geschäftskundenportal under 'Vertragspositionen'
-              example: 22222222220101
-              minLength: 1
-              type: string
-            dhlBusinessPassword:
-              description: Password you use to login to the DHL Geschäftskundenportal
-              minLength: 1
-              type: string
-            dhlBusinessUsergroup:
-              description: (optional) User group to use to obtain a label
-              minLength: 1
-              type: string
-            dhlBusinessUsername:
-              description: >-
-                Username (Benutzername) you use to login to the DHL
-                Geschäftskundenportal
-              minLength: 1
-              type: string
-            internationalBillingNumber:
-              description: >-
-                Abrechnungsnummer DHL international shipping, displayed in the
-                DHL Geschäftskundenportal under 'Vertragspositionen'
-              example: 22222222220701
-              minLength: 1
-              type: string
-            retoureBillingNumber:
-              description: >-
-                Abrechnungsnummer DHL Retoure, displayed in the DHL
-                Geschäftskundenportal under 'Vertragspositionen'
-              example: 22222222220701
-              minLength: 1
-              type: string
-          required:
-            - dhlBusinessUsername
-            - dhlBusinessPassword
-            - billingNumber
-          type: object
-          xml:
-            name: DHLV2BusinessCredentials
-      description: DHL Business Credentials.
-      title: DHLV2BusinessCredentials
     DhlV2CarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of DHL Carrier
       properties:
+        additionalWeightInPercent:
+          description: >-
+            It is an amount of percentage for packaging weight which will be
+            added to the calculated shipping weight
+          minimum: 0
+          type: number
+        alternativeReturnAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
+        alternativeSendAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
         alwaysDoTrackAndTrace:
+          description: Whether to always perform track and trace
+          type: boolean
+        carrierRef:
+          description: Reference to the carrier this configuration belongs to
+          type: string
+        countryServiceMappings:
+          description: Country service mappings for this carrier configuration
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
+          type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        defaultPickUpTime:
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
+        fallBackTrackAndTraceEmail:
+          description: >-
+            EmailAddress used to receive track and trace information when no
+            other emailaddress was provided
+          example: max@speedyboxales.com
+          format: email
+          minLength: 1
+          type: string
+        id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        mustBeWeighed:
           default: false
           description: >-
-            If true, the track and trace will always be done, even if a parcel
-            is directly created in DONE status
+            Indicates if the content of a parcel must be weighed before ordering
+            a label
+          example: false
           type: boolean
+        nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
+          type: array
+        returnLabel:
+          default: false
+          description: >-
+            When enabled, a return label will be created by creating a shipping
+            label
+          example: false
+          type: boolean
+        serviceUrl:
+          description: Service URL for this carrier configuration
+          type: string
         sftpConfiguration:
-          $ref: '#/components/schemas/DhlV2SftpConfiguration'
+          allOf:
+            - $ref: '#/components/schemas/SftpConfiguration'
+          description: SFTP configuration for track and trace
         shipperRef:
-          description: >-
-            a shipperRef that can optionally be defined in the DHL business
-            customer portal
+          description: Shipper reference
           type: string
+        thresholdPriceValue:
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
         trackAndTraceUrl:
+          description: Track and trace URL
           type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - version
+        - carrierRef
+        - returnLabel
       title: DhlV2CarrierConfiguration
-    DHLV2CarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            apiKey:
-              description: Internal API Key to communicate with the DHL Api
-              type: string
-            fallback:
-              $ref: '#/components/schemas/DHLV2BusinessCredentials'
-            sftpCredentials:
-              $ref: '#/components/schemas/DHLV2SftpCredentials'
-          required:
-            - apiKey
-          type: object
-      description: DHL Credentials.
-      title: DHLV2CarrierCredentials
-      xml:
-        name: DhlV2CarrierCredentials
-    DhlV2SftpConfiguration:
-      additionalProperties: false
-      properties:
-        useSftpForTandT:
-          default: false
-          description: Indicates if the SFTP should be used for tracking and tracing
-          example: true
-          type: boolean
-      required:
-        - useSftpForTandT
-      title: DhlV2SftpConfiguration
-      description: DhlV2SftpConfiguration
-    DHLV2SftpCredentials:
-      additionalProperties: false
-      description: Dhl V2 SFTP Credentials.
-      properties:
-        password:
-          description: Password for the SFTP
-          example: secretPassword
-          maxLength: 80
-          minLength: 1
-          type: string
-        username:
-          description: Username for the SFTP
-          example: username
-          maxLength: 80
-          minLength: 1
-          type: string
-      required:
-        - username
-        - password
-      title: DHLV2SftpCredentials
+      type: object
+      description: DhlV2CarrierConfiguration
     DocumentCategory:
       enum:
         - EXTERNAL
@@ -33878,31 +33953,102 @@ components:
       title: DomainType
       description: DomainType
     DpdChCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of DPD Switzerland Carrier
       properties:
-        trackAndTraceUrl:
+        additionalWeightInPercent:
+          description: >-
+            It is an amount of percentage for packaging weight which will be
+            added to the calculated shipping weight
+          minimum: 0
+          type: number
+        alternativeReturnAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
+        alternativeSendAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
+        carrierRef:
+          description: Reference to the carrier this configuration belongs to
           type: string
+        countryServiceMappings:
+          description: Country service mappings for this carrier configuration
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
+          type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        defaultPickUpTime:
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
+        fallBackTrackAndTraceEmail:
+          description: >-
+            EmailAddress used to receive track and trace information when no
+            other emailaddress was provided
+          example: max@speedyboxales.com
+          format: email
+          minLength: 1
+          type: string
+        id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        mustBeWeighed:
+          default: false
+          description: >-
+            Indicates if the content of a parcel must be weighed before ordering
+            a label
+          example: false
+          type: boolean
+        nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
+          type: array
+        returnLabel:
+          default: false
+          description: >-
+            When enabled, a return label will be created by creating a shipping
+            label
+          example: false
+          type: boolean
+        serviceUrl:
+          description: Service URL for this carrier configuration
+          type: string
+        thresholdPriceValue:
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
+        trackAndTraceUrl:
+          description: Track and trace URL
+          type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - version
+        - carrierRef
+        - returnLabel
       title: DpdChCarrierConfiguration
-    DpdChCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            delisId:
-              description: Delis ID to create a DPD CH auth token
-              type: string
-            password:
-              description: Password to create a DPD CH auth token
-              type: string
-          required:
-            - delisId
-            - password
-          type: object
-      description: DPD CH Carrier Credentials
-      title: DpdChCarrierCredentials
-      xml:
-        name: DpdChCarrierCredentials
+      type: object
+      description: DpdChCarrierConfiguration
     EarliestPickingStart:
       allOf:
         - $ref: '#/components/schemas/PickingStartBase'
@@ -35301,6 +35447,7 @@ components:
                 required:
                   - value
                 type: object
+              maxItems: 10
               type: array
             resolvedCoordinates:
               $ref: '#/components/schemas/Coordinates'
@@ -37162,63 +37309,124 @@ components:
       title: FeatureStatus
       description: FeatureStatus
     FedexCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of Fedex Carrier
       properties:
+        additionalWeightInPercent:
+          description: >-
+            It is an amount of percentage for packaging weight which will be
+            added to the calculated shipping weight
+          minimum: 0
+          type: number
+        alternativeReturnAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
+        alternativeSendAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
+        carrierRef:
+          description: Reference to the carrier this configuration belongs to
+          type: string
+        countryServiceMappings:
+          description: Country service mappings for this carrier configuration
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
+          type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
         defaultCommodityDescription:
-          description: Describes the shipped goods
-          example: Description goes here
+          description: Default commodity description
           type: string
         defaultManufactureCountry:
-          description: A two-digit country code as per ISO 3166-1 alpha-2
+          description: Default manufacture country
           example: DE
-          pattern: ^[A-Z]{2}$
           type: string
+        defaultPickUpTime:
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
         defaultPriceCurrency:
-          description: default currency of shipped goods as 3 letter iso code
+          description: Default price currency for shipments
           example: EUR
-          pattern: ^[A-Z]{3}$
           type: string
         defaultPriceValue:
-          description: Default value of shipped goods
-          example: 10.99
+          description: Default price value for shipments
           type: number
+        fallBackTrackAndTraceEmail:
+          description: >-
+            EmailAddress used to receive track and trace information when no
+            other emailaddress was provided
+          example: max@speedyboxales.com
+          format: email
+          minLength: 1
+          type: string
+        id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        mustBeWeighed:
+          default: false
+          description: >-
+            Indicates if the content of a parcel must be weighed before ordering
+            a label
+          example: false
+          type: boolean
+        nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
+          type: array
+        returnLabel:
+          default: false
+          description: >-
+            When enabled, a return label will be created by creating a shipping
+            label
+          example: false
+          type: boolean
+        serviceUrl:
+          description: Service URL for this carrier configuration
+          type: string
+        thresholdPriceValue:
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
         trackAndTraceUrl:
+          description: Track and trace URL
           type: string
         useEconomyService:
-          description: Indicates if the economy services of fedex should be used.
-          example: true
+          description: Whether to use the economy service
           type: boolean
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
       required:
+        - version
+        - carrierRef
+        - returnLabel
         - useEconomyService
-        - defaultPriceCurrency
         - defaultPriceValue
+        - defaultPriceCurrency
         - defaultManufactureCountry
         - defaultCommodityDescription
       title: FedexCarrierConfiguration
-    FedexCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            accountNumber:
-              description: Your fedex accountnumber
-              type: string
-            apiKey:
-              description: Internal API Key to communicate with the CEP Api
-              type: string
-            secretKey:
-              description: Internal API Key to communicate with the CEP Api
-              type: string
-          required:
-            - apiKey
-            - secretKey
-            - accountNumber
-          type: object
-      description: Fedex Credentials.
-      title: FedexCarrierCredentials
-      xml:
-        name: FedexCarrierCredentials
+      type: object
+      description: FedexCarrierConfiguration
     Fence:
       additionalProperties: false
       properties:
@@ -37914,47 +38122,111 @@ components:
       type: object
       title: GlobalRoutingConfiguration
     GlsCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of GLS Carrier
       properties:
+        additionalWeightInPercent:
+          description: >-
+            It is an amount of percentage for packaging weight which will be
+            added to the calculated shipping weight
+          minimum: 0
+          type: number
+        alternativeReturnAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
         alternativeReturnAddressLocationId:
-          minLength: 1
+          description: Alternative return address location ID
           type: string
+        alternativeSendAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
         alternativeSendAddressLocationId:
+          description: Alternative send address location ID
+          type: string
+        carrierRef:
+          description: Reference to the carrier this configuration belongs to
+          type: string
+        countryServiceMappings:
+          description: Country service mappings for this carrier configuration
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
+          type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        defaultPickUpTime:
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
+        fallBackTrackAndTraceEmail:
+          description: >-
+            EmailAddress used to receive track and trace information when no
+            other emailaddress was provided
+          example: max@speedyboxales.com
+          format: email
           minLength: 1
           type: string
+        id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        mustBeWeighed:
+          default: false
+          description: >-
+            Indicates if the content of a parcel must be weighed before ordering
+            a label
+          example: false
+          type: boolean
+        nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
+          type: array
+        returnLabel:
+          default: false
+          description: >-
+            When enabled, a return label will be created by creating a shipping
+            label
+          example: false
+          type: boolean
+        serviceUrl:
+          description: Service URL for this carrier configuration
+          type: string
+        thresholdPriceValue:
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
         trackAndTraceUrl:
+          description: Track and trace URL
           type: string
         trackAndTraceWsdlUrl:
+          description: WSDL URL for track and trace
           type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - version
+        - carrierRef
+        - returnLabel
       title: GlsCarrierConfiguration
-    GLSCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            password:
-              description: GLS password
-              type: string
-            trackAndTracePassword:
-              description: GLS Track And Trace password
-              type: string
-            trackAndTraceUsername:
-              description: GLS Track And Trace username
-              type: string
-            username:
-              description: GLS username
-              type: string
-          required:
-            - username
-            - password
-            - trackAndTraceUsername
-            - trackAndTracePassword
-          type: object
-      description: GLS Carrier Credentials
-      title: GLSCarrierCredentials
-      xml:
-        name: GLSCarrierCredentials
+      type: object
+      description: GlsCarrierConfiguration
     GuardWorkflowNode:
       properties:
         condition:
@@ -39538,33 +39810,6 @@ components:
       type: string
       title: HealthStatus
       description: HealthStatus
-    HermesCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of Hermes Carrier
-      properties:
-        alwaysDoTrackAndTrace:
-          default: false
-          type: boolean
-      title: HermesCarrierConfiguration
-    HermesCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            password:
-              description: Password to authenticate with the Hermes Api
-              type: string
-            username:
-              description: Internal user to identify with the Hermes Api
-              type: string
-          required:
-            - username
-            - password
-          type: object
-      description: Hermes Credentials.
-      title: HermesCarrierCredentials
-      xml:
-        name: HermesCarrierCredentials
     InboundAttachment:
       properties:
         created:
@@ -46343,46 +46588,52 @@ components:
       type: object
       description: MandatoryLineItemForCreation
     MandatoryShippingArticleAttribute:
-      allOf:
-        - $ref: '#/components/schemas/CountryServiceMappingShippingArticleAttribute'
-      title: MandatoryShippingArticleAttribute
-      description: MandatoryShippingArticleAttribute
-    MandatoryShippingArticleAttributeCategory:
-      enum:
-        - customs
-        - dimensions
-        - insurance
-      type: string
-      title: MandatoryShippingArticleAttributeCategory
-      description: MandatoryShippingArticleAttributeCategory
-    MandatoryShippingArticleAttributeDataType:
-      enum:
-        - NUMBER
-        - STRING
-      type: string
-      title: MandatoryShippingArticleAttributeDataType
-      description: MandatoryShippingArticleAttributeDataType
-    MandatoryShippingArticleAttributeReferencedField:
-      enum:
-        - attributes.weightPerUnit
-        - attributes.hsCode
-        - attributes.currency
-        - attributes.valuePerUnit
-        - attributes.countryOfManufacture
-      type: string
-      title: MandatoryShippingArticleAttributeReferencedField
-      description: MandatoryShippingArticleAttributeReferencedField
-    MandatoryShippingAttribute:
-      allOf:
-        - $ref: '#/components/schemas/CountryServiceMappingShippingAttribute'
-      title: MandatoryShippingAttribute
-      description: MandatoryShippingAttribute
-    MandatoryShippingItemAttribute:
-      additionalProperties: false
       properties:
         descriptionLocalized:
-          $ref: '#/components/schemas/LocaleString'
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: Localized description of this shipping article attribute
+        category:
+          description: The category of this shipping article attribute
+          enum:
+            - customs
+            - dimensions
+            - insurance
+          type: string
         dataType:
+          description: The data type of this shipping article attribute
+          enum:
+            - NUMBER
+            - STRING
+          type: string
+        description:
+          description: Description of this shipping article attribute
+          type: string
+        referencedField:
+          description: The referenced field for this shipping article attribute
+          enum:
+            - attributes.weightPerUnit
+            - attributes.hsCode
+            - attributes.currency
+            - attributes.valuePerUnit
+            - attributes.countryOfManufacture
+          type: string
+      required:
+        - referencedField
+        - dataType
+        - category
+        - descriptionLocalized
+      title: MandatoryShippingArticleAttribute
+      type: object
+      description: MandatoryShippingArticleAttribute
+    MandatoryShippingAttribute:
+      properties:
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: Localized description of this shipping attribute
+        dataType:
+          description: The data type of this shipping attribute
           enum:
             - Number
             - String
@@ -46390,17 +46641,61 @@ components:
             - Boolean
           type: string
         description:
+          description: Description of this shipping attribute
           type: string
         referencedField:
-          description: |-
-            Deprecated:
-              - description: article.title will be used instead
-              - weightInGram: use MandatoryShippingArticleAttribute.attributes.weightPerUnit
-              - quantity, this field is now mandatory in the item
-              - parcelItemValue.value: use MandatoryShippingArticleAttribute.attributes.pricePerUnit
-              - parcelItemValue.currency: use MandatoryShippingArticleAttribute.attributes.currency
-              - countryOfManufacture: use MandatoryShippingArticleAttribute.attributes.countryOfManufacture
-              - tenantArticleId: mandatory on line item article
+          description: >-
+            - dimensions.weight: will be calculated from
+            MandatoryShippingArticleAttribute.attributes.weightPerUnit if items
+            with weightPerUnit is set on all items
+
+            - productValue: will be calculated from
+            MandatoryShippingArticleAttribute.attributes.pricePerUnit if items
+            with pricePerUnit is set on all items
+          enum:
+            - dimensions.weight
+            - productValue
+            - pickUpInformation.startTime
+            - pickUpInformation.endTime
+            - services.BulkyGoods
+            - services.Signature
+            - services.AdultSignature
+            - services.CustomerSignature
+            - services.SaturdayDelivery
+            - services.IdentityCheckPrivate
+            - services.IdentityCheckCompany
+            - services.AdditionalTransportInsurance
+            - carrierInformation.shippingContainerNumber
+            - services.NoNeighborDelivery
+            - services.HandoverToRecipientOnly
+            - services.IdentityAgeCheck18
+          type: string
+      title: MandatoryShippingAttribute
+      type: object
+      description: MandatoryShippingAttribute
+    MandatoryShippingItemAttribute:
+      properties:
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: Localized description of this attribute
+        dataType:
+          description: The data type of this attribute
+          enum:
+            - Number
+            - String
+            - Date
+            - Boolean
+          type: string
+        description:
+          description: Description of this attribute
+          type: string
+        referencedField:
+          deprecated: true
+          description: >-
+            Deprecated: description: article.title will be used instead,
+            weightInGram: use
+            MandatoryShippingArticleAttribute.attributes.weightPerUnit
           enum:
             - description
             - weightInGram
@@ -46410,8 +46705,8 @@ components:
             - countryOfManufacture
             - tenantArticleId
           type: string
-      type: object
       title: MandatoryShippingItemAttribute
+      type: object
       description: MandatoryShippingItemAttribute
     ManualRerouteConfiguration:
       allOf:
@@ -46583,123 +46878,85 @@ components:
       type: object
       title: ModifyAddress
       description: ModifyAddress
-    ModifyAngelCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - properties:
-            authToken:
-              description: X-Auth-Token for callbacks from Angel
-              type: string
-            key:
-              description: Use value 'ANGEL' in order to provide ANGEL credentials
-              type: string
-            password:
-              description: Your password for Angel carrier
-              type: string
-            username:
-              description: Your Angel username
-              type: string
-          required:
-            - key
-          type: object
-      xml:
-        name: ModifyAngelCarrierCredentials
-      title: ModifyAngelCarrierCredentials
-      description: ModifyAngelCarrierCredentials
-    ModifyBringCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - additionalProperties: false
-          properties:
-            apiKey:
-              description: Internal API Key to communicate with the CEP Api
-              type: string
-            apiUid:
-              description: Internal API Uid to communicate with the CEP Api
-              type: string
-            authToken:
-              description: Identifier for Track&Trace Webhook
-              type: string
-            clientUrl:
-              description: Url of the requesting client, can be a static value
-              type: string
-            key:
-              description: Use value 'BRING' in order to provide BRING credentials
-              type: string
-          required:
-            - key
-          type: object
-      xml:
-        name: ModifyBringCarrierCredentials
-      title: ModifyBringCarrierCredentials
-      description: ModifyBringCarrierCredentials
     ModifyCarrier:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use value 'ModifyCarrierAction', because you want to modify a
-                carrier
-              enum:
-                - ModifyCarrier
-              type: string
-            credentials:
-              $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-            defaultParcelHeightInCm:
-              default: 10
-              description: Default height in cm
-              minimum: 1
-              type: number
-            defaultParcelLengthInCm:
-              default: 25
-              description: Default length in cm
-              minimum: 1
-              type: number
-            defaultParcelWeightInGram:
-              default: 1000
-              description: Default weight for a parcel in gram
-              minimum: 1
-              type: number
-            defaultParcelWidthInCm:
-              default: 35
-              description: Default width in cm
-              minimum: 1
-              type: number
-            deliveryType:
-              $ref: '#/components/schemas/CarrierDeliveryType'
-            lifecycle:
-              $ref: '#/components/schemas/CarrierLifecycle'
-            logoUrl:
-              minLength: 1
-              type: string
-            name:
-              description: >-
-                This is the well known name for a supported CEP partner. Can be
-                adapted to the clients needs.
-              example: DHL Köln
-              type: string
-            parcelLabelClassifications:
-              items:
-                $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
-              type: array
-            productValueNeeded:
-              description: >-
-                Setting to enable the Client to ask for the parcel product value
-                while ordering a label. This information is mandatory for
-                sending parcels between different countries (customs
-                declaration)
-              example: true
-              type: boolean
-            status:
-              $ref: '#/components/schemas/CarrierStatus'
-          required:
-            - action
-          type: object
-      xml:
-        name: ModifyCarrier
+      properties:
+        action:
+          description: Use value 'ModifyCarrier', because you want to modify a carrier
+          enum:
+            - ModifyCarrier
+          example: ModifyCarrier
+          type: string
+        credentials:
+          allOf:
+            - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
+          description: Credentials for the carrier
+        defaultParcelHeightInCm:
+          default: 10
+          description: Default height in cm
+          minimum: 1
+          type: number
+        defaultParcelLengthInCm:
+          default: 25
+          description: Default length in cm
+          minimum: 1
+          type: number
+        defaultParcelWeightInGram:
+          default: 1000
+          description: Default weight for a parcel in gram
+          minimum: 1
+          type: number
+        defaultParcelWidthInCm:
+          default: 35
+          description: Default width in cm
+          minimum: 1
+          type: number
+        deliveryType:
+          description: Provided delivery of this CEP
+          enum:
+            - SAMEDAY
+            - DELIVERY
+          type: string
+        lifecycle:
+          description: >-
+            Used to determine if a carrier is available for configuration. GA
+            carriers are generally available and are covered by our SLA. BETA
+            carriers are available, but subject to change and not covered by
+            SLA. ALPHA carriers are not implemented completely, yet.
+          enum:
+            - GA
+            - BETA
+            - ALPHA
+          type: string
+        logoUrl:
+          description: URL of the carrier logo
+          minLength: 1
+          type: string
+        name:
+          description: >-
+            This is the well known name for a supported CEP partner. Can be
+            adapted to the clients needs.
+          type: string
+        parcelLabelClassifications:
+          description: Parcel label classifications for this carrier
+          items:
+            $ref: '#/components/schemas/ParcelLabelClassificationForCreation'
+          type: array
+        productValueNeeded:
+          description: >-
+            Setting to enable the Client to ask for the parcel product value
+            while ordering a label. This information is mandatory for sending
+            parcels between different countries (customs declaration)
+          type: boolean
+        status:
+          description: It is taken into consideration for all carriers
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+      required:
+        - action
       title: ModifyCarrier
+      type: object
       description: ModifyCarrier
     ModifyCustomServiceAction:
       allOf:
@@ -46739,46 +46996,6 @@ components:
       title: ModifyCustomServiceAction
       xml:
         name: ModifyCustomServiceAction
-    ModifyDHLV2CarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - additionalProperties: false
-          properties:
-            apiKey:
-              description: Internal API Key to communicate with the DHL Api
-              minLength: 1
-              type: string
-            fallback:
-              $ref: '#/components/schemas/DHLV2BusinessCredentials'
-          required:
-            - key
-            - apiKey
-          type: object
-      xml:
-        name: ModifyDHLV2CarrierCredentials
-      title: ModifyDHLV2CarrierCredentials
-      description: ModifyDHLV2CarrierCredentials
-    ModifyDpdChCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - additionalProperties: false
-          properties:
-            delisId:
-              description: Delis ID to create a DPD CH auth token.
-              type: string
-            key:
-              description: Use value 'DPD_CH' in order to provide DPD credentials
-              type: string
-            password:
-              description: Password to create a DPD CH auth token.
-              type: string
-          required:
-            - key
-          type: object
-      xml:
-        name: ModifyDpdChCarrierCredentials
-      title: ModifyDpdChCarrierCredentials
-      description: ModifyDpdChCarrierCredentials
     ModifyFacility:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -46935,29 +47152,6 @@ components:
         name: ModifyFeature
       title: ModifyFeature
       description: ModifyFeature
-    ModifyFedexCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - properties:
-            accountNumber:
-              description: Your fedex accountnumber
-              type: string
-            apiKey:
-              description: Internal API Key to communicate with the CEP Api
-              type: string
-            key:
-              description: Use value 'FEDEX' in order to provide FEDEX credentials
-              type: string
-            secretKey:
-              description: Internal API Key to communicate with the CEP Api
-              type: string
-          required:
-            - key
-          type: object
-      xml:
-        name: ModifyFedexCarrierCredentials
-      title: ModifyFedexCarrierCredentials
-      description: ModifyFedexCarrierCredentials
     ModifyFenceAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -47027,32 +47221,6 @@ components:
           type: object
       description: Action to Modify the Global Routing Configuration.
       title: ModifyGlobalRoutingConfigurationAction
-    ModifyGLSCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - properties:
-            key:
-              description: Use value 'GLS' in order to provide GLS credentials
-              type: string
-            password:
-              description: Your password for Angel carrier
-              type: string
-            trackAndTracePassword:
-              description: GLS Track And Trace password
-              type: string
-            trackAndTraceUsername:
-              description: GLS Track And Trace username
-              type: string
-            username:
-              description: Your Angel username
-              type: string
-          required:
-            - key
-          type: object
-      xml:
-        name: ModifyGLSCarrierCredentials
-      title: ModifyGLSCarrierCredentials
-      description: ModifyGLSCarrierCredentials
     ModifyHandoverjob:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -47807,24 +47975,6 @@ components:
       title: ModifyPickRunLineItem
       xml:
         name: ModifyPickRunLineItem
-    ModifyPostNLCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - additionalProperties: false
-          properties:
-            apiKey:
-              description: Key to access the postNl api.
-              type: string
-            key:
-              description: Use value 'POSTNL' in order to provide POSTNL credentials
-              type: string
-          required:
-            - key
-          type: object
-      xml:
-        name: ModifyPostNLCarrierCredentials
-      title: ModifyPostNLCarrierCredentials
-      description: ModifyPostNLCarrierCredentials
     ModifyPrioritizationAction:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -48142,26 +48292,6 @@ components:
       title: ModifyTimingModeAction
       xml:
         name: ModifyTimingModeAction
-    ModifyUBSendCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModifyCarrierCredentials'
-        - properties:
-            clientId:
-              description: ID provided by UbSend
-              type: string
-            password:
-              description: Password to communicate with the UbSend Api
-              type: string
-            username:
-              description: Username to communicate with the UbSend Api
-              type: string
-          required:
-            - key
-          type: object
-      xml:
-        name: ModifyUBSendCarrierCredentials
-      title: ModifyUBSendCarrierCredentials
-      description: ModifyUBSendCarrierCredentials
     ModifyUserAction:
       properties:
         action:
@@ -48300,65 +48430,95 @@ components:
       title: NodeType
       description: NodeType
     NonDeliveryDays:
-      additionalProperties: false
       properties:
         nonDeliveryDay:
+          description: The non-delivery day in YYYY-MM-DD format
           example: 2020-02-03T00:00:00.000Z
           format: date
           pattern: ^\d{4}-\d{2}-\d{2}$
           type: string
         nonDeliveryType:
-          $ref: '#/components/schemas/NonDeliveryType'
           default: SINGLE
+          description: Type of non-delivery day
+          enum:
+            - SINGLE
+            - RECURRING
+          type: string
       required:
         - nonDeliveryDay
-      type: object
       title: NonDeliveryDays
+      type: object
       description: NonDeliveryDays
     NonDeliveryDaysPerCountryAndProvince:
-      additionalProperties: false
       properties:
         country:
+          description: The country code
           type: string
         nonDeliveryDays:
+          description: Non-delivery days for this country
           items:
             $ref: '#/components/schemas/NonDeliveryDays'
+          maxItems: 500
           type: array
         nonDeliveryDaysPerProvince:
+          description: Non-delivery days per province within this country
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerProvince'
+          maxItems: 500
           type: array
         recurringNonDeliveryWeekdays:
+          description: Recurring non-delivery weekdays for this country
           items:
-            $ref: '#/components/schemas/WeekDay'
+            enum:
+              - MONDAY
+              - TUESDAY
+              - WEDNESDAY
+              - THURSDAY
+              - FRIDAY
+              - SATURDAY
+              - SUNDAY
+            type: string
+          maxItems: 7
           type: array
       required:
         - country
         - nonDeliveryDays
         - recurringNonDeliveryWeekdays
         - nonDeliveryDaysPerProvince
-      type: object
       title: NonDeliveryDaysPerCountryAndProvince
+      type: object
       description: NonDeliveryDaysPerCountryAndProvince
     NonDeliveryDaysPerProvince:
-      additionalProperties: false
       properties:
         nonDeliveryDays:
+          description: Non-delivery days for this province
           items:
             $ref: '#/components/schemas/NonDeliveryDays'
+          maxItems: 500
           type: array
         province:
+          description: The province identifier
           type: string
         recurringNonDeliveryWeekdays:
+          description: Recurring non-delivery weekdays for this province
           items:
-            $ref: '#/components/schemas/WeekDay'
+            enum:
+              - MONDAY
+              - TUESDAY
+              - WEDNESDAY
+              - THURSDAY
+              - FRIDAY
+              - SATURDAY
+              - SUNDAY
+            type: string
+          maxItems: 7
           type: array
       required:
         - province
         - nonDeliveryDays
         - recurringNonDeliveryWeekdays
-      type: object
       title: NonDeliveryDaysPerProvince
+      type: object
       description: NonDeliveryDaysPerProvince
     NonDeliveryType:
       enum:
@@ -54889,26 +55049,14 @@ components:
       nullable: true
       properties:
         customWeight:
-          description: >-
-            Set this value if you want to overwrite the calculated weight of the
-            parcel (in g).
-          example: 1700
           type: number
         height:
-          description: The height of the package (in cm)
-          example: 50
           type: number
         length:
-          description: The length of the package (in cm)
-          example: 100
           type: number
         weight:
-          description: The weight of the package (in g)
-          example: 1700
           type: number
         width:
-          description: The width of the package (in cm)
-          example: 25
           type: number
       type: object
       title: ParcelDimensions
@@ -55352,57 +55500,65 @@ components:
       type: object
       title: ParcelItemValue
     ParcelLabelClassification:
-      additionalProperties: false
       properties:
         nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
           description: Localized name for parcel label classification
           example:
             de_DE: S-Paket
             en_US: S-Parcel
             ru_RU: S-пакет
         dimensions:
-          $ref: '#/components/schemas/ParcelDimensions'
+          allOf:
+            - $ref: '#/components/schemas/ParcelDimensions'
+          description: Dimensions for this parcel label classification
         name:
           description: Name of the parcel label classification
           example: S-Parcel
           type: string
         services:
-          $ref: '#/components/schemas/ParcelLabelClassificationServices'
+          allOf:
+            - $ref: '#/components/schemas/ParcelLabelClassificationServices'
+          description: Services available for this parcel label classification
       required:
         - nameLocalized
         - dimensions
-      type: object
       title: ParcelLabelClassification
+      type: object
       description: ParcelLabelClassification
     ParcelLabelClassificationForCreation:
-      additionalProperties: false
       properties:
         nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
           description: Localized name for parcel label classification
           example:
             de_DE: S-Paket
             en_US: S-Parcel
             ru_RU: S-пакет
         dimensions:
-          $ref: '#/components/schemas/ParcelDimensions'
+          allOf:
+            - $ref: '#/components/schemas/ParcelDimensions'
+          description: Dimensions for this parcel label classification
         services:
-          $ref: '#/components/schemas/ParcelLabelClassificationServices'
+          allOf:
+            - $ref: '#/components/schemas/ParcelLabelClassificationServices'
+          description: Services available for this parcel label classification
       required:
         - nameLocalized
         - dimensions
-      type: object
       title: ParcelLabelClassificationForCreation
+      type: object
       description: ParcelLabelClassificationForCreation
     ParcelLabelClassificationServices:
-      additionalProperties: false
       properties:
         bulkyGoods:
           default: false
+          description: Indicates if this label classification is for bulky goods
           type: boolean
-      type: object
       title: ParcelLabelClassificationServices
+      type: object
       description: ParcelLabelClassificationServices
     ParcelLabelCreationFailedPayload:
       allOf:
@@ -58803,27 +58959,102 @@ components:
       title: PostalCodeValidation
       description: PostalCodeValidation
     PostNlCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of PostNL Carrier
       properties:
-        trackAndTraceUrl:
+        additionalWeightInPercent:
+          description: >-
+            It is an amount of percentage for packaging weight which will be
+            added to the calculated shipping weight
+          minimum: 0
+          type: number
+        alternativeReturnAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
+        alternativeSendAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
+        carrierRef:
+          description: Reference to the carrier this configuration belongs to
           type: string
+        countryServiceMappings:
+          description: Country service mappings for this carrier configuration
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
+          type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        defaultPickUpTime:
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
+        fallBackTrackAndTraceEmail:
+          description: >-
+            EmailAddress used to receive track and trace information when no
+            other emailaddress was provided
+          example: max@speedyboxales.com
+          format: email
+          minLength: 1
+          type: string
+        id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        mustBeWeighed:
+          default: false
+          description: >-
+            Indicates if the content of a parcel must be weighed before ordering
+            a label
+          example: false
+          type: boolean
+        nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
+          type: array
+        returnLabel:
+          default: false
+          description: >-
+            When enabled, a return label will be created by creating a shipping
+            label
+          example: false
+          type: boolean
+        serviceUrl:
+          description: Service URL for this carrier configuration
+          type: string
+        thresholdPriceValue:
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
+        trackAndTraceUrl:
+          description: Track and trace URL
+          type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - version
+        - carrierRef
+        - returnLabel
       title: PostNlCarrierConfiguration
-    PostNLCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            apiKey:
-              description: PostNL API Key
-              type: string
-          required:
-            - apiKey
-          type: object
-      description: Post NL Carrier Credentials
-      title: PostNLCarrierCredentials
-      xml:
-        name: PostNLCarrierCredentials
+      type: object
+      description: PostNlCarrierConfiguration
     PreferredCarrier:
       description: Keys of the preferred carriers to handle out the order
       type: string
@@ -58892,41 +59123,38 @@ components:
       title: PreselectedFacility
       description: PreselectedFacility
     PriceRange:
-      additionalProperties: false
       properties:
         currency:
-          allOf:
-            - $ref: '#/components/schemas/CurrencyCode'
           description: The currency of the price as an ISO 4217 code.
           example: EUR
-          nullable: true
           type: string
         decimalPlaces:
           description: Number of decimal places for the given currency
           example: 2
+          format: int32
           minimum: 0
           type: integer
         from:
           description: >-
             Lowest total parcel value that this carrier will be selected for.
-            Value is in configured in the smallest subunit, e.g. cents.
+            Value is configured in the smallest subunit, e.g. cents.
           example: 1299
           minimum: 0
-          type: integer
+          type: number
         to:
           description: >-
             Highest total parcel value that this carrier will be selected for.
             Value is configured in the smallest subunit, e.g. cents.
           example: 25000
           minimum: 1
-          type: integer
+          type: number
       required:
         - from
         - to
         - currency
         - decimalPlaces
-      type: object
       title: PriceRange
+      type: object
       description: PriceRange
     PrintableDocument:
       properties:
@@ -61370,15 +61598,21 @@ components:
     RegionInformation:
       properties:
         countryCode:
-          $ref: '#/components/schemas/CountryCode'
+          description: ISO 3166 ALPHA-2 of country
+          example: DE
+          maxLength: 2
+          minLength: 2
+          type: string
         postalCodes:
+          description: List of postal codes for this region
           items:
             type: string
+          maxItems: 100
           type: array
       required:
         - countryCode
-      type: object
       title: RegionInformation
+      type: object
       description: RegionInformation
     RelatedRefs:
       properties:
@@ -67099,8 +67333,8 @@ components:
         configurations:
           items:
             anyOf:
-              - $ref: '#/components/schemas/SubstitutionConfiguration'
               - $ref: '#/components/schemas/CarrierConfiguration'
+              - $ref: '#/components/schemas/SubstitutionConfiguration'
               - $ref: '#/components/schemas/RerouteShortPickConfiguration'
               - $ref: '#/components/schemas/ReturnNoteConfiguration'
           type: array
@@ -68595,36 +68829,115 @@ components:
         - version
       title: SetHandoverJobToWaitingForInputActionParameter
     SevenSendersCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of Seven Senders Carrier
       properties:
-        trackAndTraceUrl:
-          type: string
-        warehouse:
+        additionalWeightInPercent:
           description: >-
-            The name of the warehouse that should be passed to Seven Senders, as
-            configured in Seven Senders.
+            It is an amount of percentage for packaging weight which will be
+            added to the calculated shipping weight
+          minimum: 0
+          type: number
+        alternativeReturnAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
+        alternativeSendAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
+        carrierRef:
+          description: Reference to the carrier this configuration belongs to
           type: string
+        countryServiceMappings:
+          description: Country service mappings for this carrier configuration
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
+          type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        defaultPickUpTime:
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
+        fallBackTrackAndTraceEmail:
+          description: >-
+            EmailAddress used to receive track and trace information when no
+            other emailaddress was provided
+          example: max@speedyboxales.com
+          format: email
+          minLength: 1
+          type: string
+        id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        mustBeWeighed:
+          default: false
+          description: >-
+            Indicates if the content of a parcel must be weighed before ordering
+            a label
+          example: false
+          type: boolean
+        nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
+          type: array
+        returnLabel:
+          default: false
+          description: >-
+            When enabled, a return label will be created by creating a shipping
+            label
+          example: false
+          type: boolean
+        serviceUrl:
+          description: Service URL for this carrier configuration
+          type: string
+        thresholdPriceValue:
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
+        trackAndTraceUrl:
+          description: Track and trace URL
+          type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+        warehouse:
+          description: Warehouse identifier
+          type: string
+      required:
+        - version
+        - carrierRef
+        - returnLabel
       title: SevenSendersCarrierConfiguration
-    SevenSendersCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            accessKey:
-              description: Access key to communicate with the Seven Senders Api
-              type: string
-            awsAccessKeyId:
-              description: Access key to communicate with the AWS SQS service
-              type: string
-          required:
-            - accessKey
-            - awsAccessKeyId
-          type: object
-      description: Seven Senders Credentials.
-      title: SevenSendersCredentials
-      xml:
-        name: SevenSendersCredentials
+      type: object
+      description: SevenSendersCarrierConfiguration
+    SftpConfiguration:
+      properties:
+        useSftpForTandT:
+          description: Indicates if the carrier uses sftp for getting track and trace data
+          type: boolean
+      required:
+        - useSftpForTandT
+      title: SftpConfiguration
+      type: object
+      description: SftpConfiguration
     ShipFromStoreRerouteConfiguration:
       properties:
         active:
@@ -73967,51 +74280,82 @@ components:
       title: StrippedBrands
       description: StrippedBrands
     StrippedCarrier:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
-        - properties:
-            deliveryType:
-              $ref: '#/components/schemas/CarrierDeliveryType'
-            id:
-              description: >-
-                The id of this carrier. It is generated during creation
-                automatically and suits as the primary identifier of the
-                described carrier.
-              example: climk4dcQFiPdA5ULuhS
-              type: string
-            key:
-              type: string
-            lifecycle:
-              $ref: '#/components/schemas/CarrierLifecycle'
-            name:
-              description: >-
-                This is the well known name for a supported CEP partner. Can be
-                adapted to the clients needs.
-              example: DHL Köln
-              type: string
-            status:
-              $ref: '#/components/schemas/CarrierStatus'
-          required:
-            - id
-            - name
-            - key
-          type: object
-      xml:
-        name: StrippedCarrier
+      properties:
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        deliveryType:
+          description: The delivery type of this carrier
+          enum:
+            - SAMEDAY
+            - DELIVERY
+          type: string
+        id:
+          description: The id of the carrier
+          example: LGMl2DuvPnfPoSHhYFOm
+          type: string
+        key:
+          description: >-
+            References the KEP. Currently allowed values are DHL_V2, DPD_CH,
+            DPD_CH_VCE, ANGEL, GLS, FEDEX, POSTNL, BRING, UPS, POST_NORD,
+            DHL_EXPRESS, CUSTOM and to distinct between multiple custom carriers
+            one can use CUSTOM_ combined with a unique name.
+          example: DHL_V2
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        lifecycle:
+          description: The lifecycle of this carrier
+          enum:
+            - GA
+            - BETA
+            - ALPHA
+          type: string
+        name:
+          description: >-
+            This is the well known name for a supported CEP partner. Can be
+            adapted to the clients needs.
+          example: DHL
+          type: string
+        status:
+          description: The status of this carrier
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - id
+        - key
+        - name
+        - version
       title: StrippedCarrier
+      type: object
       description: StrippedCarrier
     StrippedCarriers:
       properties:
         carriers:
+          description: List of carriers
           items:
             $ref: '#/components/schemas/StrippedCarrier'
           type: array
         total:
           description: Total number of found entities for this query
-          example: 42
           type: integer
-      type: object
       title: StrippedCarriers
+      type: object
       description: StrippedCarriers
     StrippedCustomServices:
       properties:
@@ -75860,22 +76204,23 @@ components:
       title: TenantSourceId
       description: TenantSourceId
     ThresholdPriceValue:
-      additionalProperties: false
       properties:
         priceRange:
-          $ref: '#/components/schemas/PriceRange'
+          allOf:
+            - $ref: '#/components/schemas/PriceRange'
+          description: Price range for which this threshold applies
         priority:
           description: >-
             The lower the value the higher is the priority, e.g. priority 1 is
             higher than priority 10. The priority is used when comparing
             multiple carriers.
           minimum: 1
-          type: integer
+          type: number
       required:
         - priority
         - priceRange
-      type: object
       title: ThresholdPriceValue
+      type: object
       description: ThresholdPriceValue
     TimeRange:
       properties:
@@ -76725,32 +77070,99 @@ components:
       type: object
       description: TwoManHandlingDetails
     UBSendCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of UBSend Carrier
+      properties:
+        additionalWeightInPercent:
+          description: >-
+            It is an amount of percentage for packaging weight which will be
+            added to the calculated shipping weight
+          minimum: 0
+          type: number
+        alternativeReturnAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
+        alternativeSendAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
+        carrierRef:
+          description: Reference to the carrier this configuration belongs to
+          type: string
+        countryServiceMappings:
+          description: Country service mappings for this carrier configuration
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
+          type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        defaultPickUpTime:
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
+        fallBackTrackAndTraceEmail:
+          description: >-
+            EmailAddress used to receive track and trace information when no
+            other emailaddress was provided
+          example: max@speedyboxales.com
+          format: email
+          minLength: 1
+          type: string
+        id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        mustBeWeighed:
+          default: false
+          description: >-
+            Indicates if the content of a parcel must be weighed before ordering
+            a label
+          example: false
+          type: boolean
+        nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
+          type: array
+        returnLabel:
+          default: false
+          description: >-
+            When enabled, a return label will be created by creating a shipping
+            label
+          example: false
+          type: boolean
+        serviceUrl:
+          description: Service URL for this carrier configuration
+          type: string
+        thresholdPriceValue:
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - version
+        - carrierRef
+        - returnLabel
       title: UBSendCarrierConfiguration
-    UBSendCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            clientId:
-              description: Id provided by UBSend
-              type: string
-            password:
-              description: Password to communicate with the UBSend Api
-              type: string
-            username:
-              description: User name to communicate with the UBSend Api
-              type: string
-          required:
-            - username
-            - password
-            - clientId
-          type: object
-      description: UBSend Credentials.
-      title: UBSendCredentials
-      xml:
-        name: UBSendCredentials
+      type: object
+      description: UBSendCarrierConfiguration
     UpcomingTimeTriggeredRerouteWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
@@ -78130,28 +78542,99 @@ components:
       title: UserUpdatedWebHookEvent
       description: UserUpdatedWebHookEvent
     VceCarrierConfiguration:
-      allOf:
-        - $ref: '#/components/schemas/CarrierConfiguration'
-      description: Configuration of VCE Carrier
+      properties:
+        additionalWeightInPercent:
+          description: >-
+            It is an amount of percentage for packaging weight which will be
+            added to the calculated shipping weight
+          minimum: 0
+          type: number
+        alternativeReturnAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative return address for this carrier
+        alternativeSendAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Alternative send address for this carrier
+        carrierRef:
+          description: Reference to the carrier this configuration belongs to
+          type: string
+        countryServiceMappings:
+          description: Country service mappings for this carrier configuration
+          items:
+            $ref: '#/components/schemas/CarrierCountryServiceMapping'
+          maxItems: 100
+          type: array
+        created:
+          description: >-
+            The date this entity was created at the platform. This value is
+            generated by the service.
+          format: date-time
+          type: string
+        defaultPickUpTime:
+          allOf:
+            - $ref: '#/components/schemas/CarrierPickUpTime'
+          description: >-
+            Default pick up time configuration for carriers supporting pick up
+            scheduling, will be used to calculate the next possible pick up date
+        fallBackTrackAndTraceEmail:
+          description: >-
+            EmailAddress used to receive track and trace information when no
+            other emailaddress was provided
+          example: max@speedyboxales.com
+          format: email
+          minLength: 1
+          type: string
+        id:
+          description: The id of the carrier configuration
+          type: string
+        lastModified:
+          description: >-
+            The date this entity was modified last. This value is generated by
+            the service.
+          format: date-time
+          type: string
+        mustBeWeighed:
+          default: false
+          description: >-
+            Indicates if the content of a parcel must be weighed before ordering
+            a label
+          example: false
+          type: boolean
+        nonDeliveryDaysPerCountryAndProvince:
+          description: Non-delivery days per country and province
+          items:
+            $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
+          type: array
+        returnLabel:
+          default: false
+          description: >-
+            When enabled, a return label will be created by creating a shipping
+            label
+          example: false
+          type: boolean
+        serviceUrl:
+          description: Service URL for this carrier configuration
+          type: string
+        thresholdPriceValue:
+          allOf:
+            - $ref: '#/components/schemas/ThresholdPriceValue'
+          description: Threshold price value for carrier selection
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - version
+        - carrierRef
+        - returnLabel
       title: VceCarrierConfiguration
-    VceCarrierCredentials:
-      allOf:
-        - $ref: '#/components/schemas/AbstractCarrierCredentials'
-        - properties:
-            password:
-              description: Password to authenticate with the VCE Api
-              type: string
-            user:
-              description: Internal user to identify with the VCE Api
-              type: string
-          required:
-            - user
-            - password
-          type: object
-      description: VCE Credentials.
-      title: VceCarrierCredentials
-      xml:
-        name: VceCarrierCredentials
+      type: object
+      description: VceCarrierConfiguration
     VersionedResource:
       properties:
         created:
