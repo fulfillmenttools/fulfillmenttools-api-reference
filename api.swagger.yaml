@@ -20485,7 +20485,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CheckoutOptionsDeliveryEarliestResponse'
+                $ref: '#/components/schemas/CheckoutOptionsCollectEarliestResponse'
           description: The request could be evaluated
         '400':
           content:
@@ -31348,6 +31348,50 @@ components:
       title: CheckoutOptionsCollectEarliestRequest
       type: object
       description: CheckoutOptionsCollectEarliestRequest
+    CheckoutOptionsCollectEarliestResponse:
+      properties:
+        calculationHints:
+          description: Calculation hints
+          items:
+            type: string
+          type: array
+        checkoutOptions:
+          description: Checkout options per article for collection
+          items:
+            $ref: '#/components/schemas/CheckoutOptionsCollectEarliestResponseItem'
+          type: array
+      required:
+        - checkoutOptions
+      title: CheckoutOptionsCollectEarliestResponse
+      type: object
+      description: CheckoutOptionsCollectEarliestResponse
+    CheckoutOptionsCollectEarliestResponseItem:
+      properties:
+        available:
+          description: Available quantity
+          type: number
+        earliestPredictedProvisioningDate:
+          description: Earliest predicted provisioning date
+          format: date-time
+          type: string
+        facilityRef:
+          description: Facility reference
+          type: string
+        latestPickingStartDate:
+          description: Latest picking start date
+          format: date-time
+          type: string
+        tenantArticleId:
+          description: Tenant article ID
+          type: string
+        tenantFacilityId:
+          description: Tenant facility ID
+          type: string
+      required:
+        - tenantArticleId
+      title: CheckoutOptionsCollectEarliestResponseItem
+      type: object
+      description: CheckoutOptionsCollectEarliestResponseItem
     CheckoutOptionsCollectFacilitiesFacilityRef:
       properties:
         facilityRef:
