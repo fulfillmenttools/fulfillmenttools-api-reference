@@ -28481,6 +28481,14 @@ components:
             - dimensions
             - carrierService
             - salesPrice
+            - basePrice
+            - tax
+            - discount
+            - surcharge
+            - subtotalBeforeDiscounts
+            - subtotalAfterDiscounts
+            - finalUnitPrice
+            - finalLineItemPrice
           type: string
         context:
           allOf:
@@ -42568,6 +42576,14 @@ components:
             - dimensions
             - carrierService
             - salesPrice
+            - basePrice
+            - tax
+            - discount
+            - surcharge
+            - subtotalBeforeDiscounts
+            - subtotalAfterDiscounts
+            - finalUnitPrice
+            - finalLineItemPrice
           type: string
         key:
           type: string
@@ -48371,6 +48387,210 @@ components:
       title: ModifyUserPersonalData
       type: object
       description: ModifyUserPersonalData
+    MonetaryValue:
+      properties:
+        currency:
+          description: ISO 4217 currency code
+          enum:
+            - AED
+            - AFN
+            - ALL
+            - AMD
+            - ANG
+            - AOA
+            - ARS
+            - AUD
+            - AWG
+            - AZN
+            - BAM
+            - BBD
+            - BDT
+            - BGN
+            - BHD
+            - BIF
+            - BMD
+            - BND
+            - BOB
+            - BOV
+            - BRL
+            - BSD
+            - BTN
+            - BWP
+            - BYN
+            - BZD
+            - CAD
+            - CDF
+            - CHE
+            - CHF
+            - CHW
+            - CLF
+            - CLP
+            - CNY
+            - COP
+            - COU
+            - CRC
+            - CUC
+            - CUP
+            - CVE
+            - CZK
+            - DJF
+            - DKK
+            - DOP
+            - DZD
+            - EGP
+            - ERN
+            - ETB
+            - EUR
+            - FJD
+            - FKP
+            - GBP
+            - GEL
+            - GHS
+            - GIP
+            - GMD
+            - GNF
+            - GTQ
+            - GYD
+            - HKD
+            - HNL
+            - HTG
+            - HUF
+            - IDR
+            - ILS
+            - INR
+            - IQD
+            - IRR
+            - ISK
+            - JMD
+            - JOD
+            - JPY
+            - KES
+            - KGS
+            - KHR
+            - KMF
+            - KPW
+            - KRW
+            - KWD
+            - KYD
+            - KZT
+            - LAK
+            - LBP
+            - LKR
+            - LRD
+            - LSL
+            - LYD
+            - MAD
+            - MDL
+            - MGA
+            - MKD
+            - MMK
+            - MNT
+            - MOP
+            - MRU
+            - MUR
+            - MVR
+            - MWK
+            - MXN
+            - MXV
+            - MYR
+            - MZN
+            - NAD
+            - NGN
+            - NIO
+            - NOK
+            - NPR
+            - NZD
+            - OMR
+            - PAB
+            - PEN
+            - PGK
+            - PHP
+            - PKR
+            - PLN
+            - PYG
+            - QAR
+            - RON
+            - RSD
+            - RUB
+            - RWF
+            - SAR
+            - SBD
+            - SCR
+            - SDG
+            - SEK
+            - SGD
+            - SHP
+            - SLE
+            - SOS
+            - SRD
+            - SSP
+            - STN
+            - SVC
+            - SYP
+            - SZL
+            - THB
+            - TJS
+            - TMT
+            - TND
+            - TOP
+            - TRY
+            - TTD
+            - TWD
+            - TZS
+            - UAH
+            - UGX
+            - USD
+            - USN
+            - UYI
+            - UYU
+            - UYW
+            - UZS
+            - VED
+            - VES
+            - VND
+            - VUV
+            - WST
+            - XAF
+            - XAG
+            - XAU
+            - XBA
+            - XBB
+            - XBC
+            - XBD
+            - XCD
+            - XDR
+            - XOF
+            - XPD
+            - XPF
+            - XPT
+            - XSU
+            - XTS
+            - XUA
+            - XXX
+            - YER
+            - ZAR
+            - ZMW
+            - ZWL
+          example: EUR
+          type: string
+        decimalPlaces:
+          description: >-
+            Number of decimal places. If omitted, the default for the currency
+            applies.
+          example: 2
+          format: int64
+          type: integer
+        value:
+          description: Monetary value as integer (no decimals)
+          example: 1299
+          format: int64
+          type: integer
+      required:
+        - value
+        - currency
+      title: MonetaryValue
+      type: object
+      description: MonetaryValue
     Money:
       properties:
         currency:
@@ -49721,6 +49941,18 @@ components:
               type: array
             paymentInfo:
               $ref: '#/components/schemas/OrderPaymentInfo'
+            pricing:
+              allOf:
+                - $ref: '#/components/schemas/OrderPricing'
+              description: >-
+                This part of the API is in Alpha status. For details please
+                check the <a
+                href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+                target="_blank">api-release-life-cycle documentation</a>.<br
+                /><br />
+              x-badges:
+                - color: red
+                  label: ALPHA
             processId:
               description: >-
                 Id of the global process related to this entity. For example
@@ -50163,6 +50395,18 @@ components:
           type: array
         paymentInfo:
           $ref: '#/components/schemas/OrderPaymentInfoForCreation'
+        pricing:
+          allOf:
+            - $ref: '#/components/schemas/OrderPricingForCreation'
+          description: >-
+            This part of the API is in Alpha status. For details please check
+            the <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+            target="_blank">api-release-life-cycle documentation</a>.<br /><br
+            />
+          x-badges:
+            - color: red
+              label: ALPHA
         promisesOptions:
           $ref: '#/components/schemas/OrderPromisesOptions'
         source:
@@ -50336,6 +50580,18 @@ components:
           example: 2025-01-15T00:00:00.000Z
           format: date-time
           type: string
+        pricing:
+          allOf:
+            - $ref: '#/components/schemas/OrderPricingForCreation'
+          description: >-
+            This part of the API is in Alpha status. For details please check
+            the <a
+            href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+            target="_blank">api-release-life-cycle documentation</a>.<br /><br
+            />
+          x-badges:
+            - color: red
+              label: ALPHA
         version:
           description: >-
             The version of the document to be used in optimistic locking
@@ -50812,6 +51068,182 @@ components:
       title: OrderPaymentInfoMethodLocalizedFilter
       type: object
       description: OrderPaymentInfoMethodLocalizedFilter
+    OrderPricing:
+      allOf:
+        - $ref: '#/components/schemas/OrderPricingForCreation'
+        - properties:
+            total:
+              $ref: '#/components/schemas/OrderPricingTotal'
+          type: object
+      description: >
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Order pricing with customer-provided inputs and OMS-calculated totals.
+      title: OrderPricing
+      x-badges:
+        - color: red
+          label: ALPHA
+    OrderPricingDiscount:
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        code:
+          description: Discount code
+          type: string
+        context:
+          description: Context of the discount
+          type: string
+        name:
+          description: Name of the discount
+          type: string
+        tenantDiscountId:
+          description: Tenant-specific discount identifier
+          type: string
+        type:
+          description: Type of the discount
+          type: string
+        value:
+          $ref: '#/components/schemas/MonetaryValue'
+      required:
+        - value
+      type: object
+      title: OrderPricingDiscount
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />OrderPricingDiscount
+      x-badges:
+        - color: red
+          label: ALPHA
+    OrderPricingFee:
+      properties:
+        name:
+          description: Name of the fee
+          type: string
+        value:
+          $ref: '#/components/schemas/MonetaryValue'
+      type: object
+      title: OrderPricingFee
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />OrderPricingFee
+      x-badges:
+        - color: red
+          label: ALPHA
+    OrderPricingForCreation:
+      description: >
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Customer-provided order-level pricing inputs. All arrays are optional
+        — if a pricing feature block is missing, OMS treats the feature as not
+        relevant. On update, pricing uses partial-merge semantics: only the
+        provided arrays are replaced, omitted arrays retain their previous
+        values.
+      properties:
+        discounts:
+          items:
+            $ref: '#/components/schemas/OrderPricingDiscount'
+          maxItems: 100
+          type: array
+        fees:
+          items:
+            $ref: '#/components/schemas/OrderPricingFee'
+          maxItems: 100
+          type: array
+        taxes:
+          items:
+            $ref: '#/components/schemas/OrderPricingTax'
+          maxItems: 100
+          type: array
+      type: object
+      title: OrderPricingForCreation
+      x-badges:
+        - color: red
+          label: ALPHA
+    OrderPricingTax:
+      properties:
+        ratePercent:
+          description: Tax rate as percentage
+          type: number
+        scope:
+          description: Scope of the tax
+          type: string
+        taxableValue:
+          $ref: '#/components/schemas/MonetaryValue'
+        type:
+          description: Tax type identifier
+          type: string
+        value:
+          $ref: '#/components/schemas/MonetaryValue'
+      required:
+        - value
+      type: object
+      title: OrderPricingTax
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />OrderPricingTax
+      x-badges:
+        - color: red
+          label: ALPHA
+    OrderPricingTotal:
+      properties:
+        priceBreakdown:
+          $ref: '#/components/schemas/OrderPricingTotals'
+      type: object
+      title: OrderPricingTotal
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />OrderPricingTotal
+      x-badges:
+        - color: red
+          label: ALPHA
+    OrderPricingTotals:
+      description: >
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Calculated order price breakdown. All fields are optional — if a
+        derived field cannot be calculated, it is omitted.
+      properties:
+        subTotal:
+          allOf:
+            - $ref: '#/components/schemas/MonetaryValue'
+          nullable: true
+          type: object
+        total:
+          allOf:
+            - $ref: '#/components/schemas/MonetaryValue'
+          nullable: true
+          type: object
+        totalDiscounts:
+          allOf:
+            - $ref: '#/components/schemas/MonetaryValue'
+          nullable: true
+          type: object
+        totalFees:
+          allOf:
+            - $ref: '#/components/schemas/MonetaryValue'
+          nullable: true
+          type: object
+        totalTaxes:
+          allOf:
+            - $ref: '#/components/schemas/MonetaryValue'
+          nullable: true
+          type: object
+      type: object
+      title: OrderPricingTotals
+      x-badges:
+        - color: red
+          label: ALPHA
     OrderPromisesOptions:
       additionalProperties: false
       properties:
@@ -51468,7 +51900,7 @@ components:
     OrderRecordMonetaryValue:
       properties:
         currency:
-          description: The currency code
+          description: ISO 4217 currency code
           enum:
             - AED
             - AFN
