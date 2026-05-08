@@ -10972,6 +10972,10 @@ paths:
                 - $ref: '#/components/schemas/AddFacilitiesToGroupActionParameter'
                 - $ref: >-
                     #/components/schemas/AddFacilitiesToGroupVersionlessActionParameter
+                - $ref: >-
+                    #/components/schemas/RemoveFacilitiesFromGroupActionParameter
+                - $ref: >-
+                    #/components/schemas/RemoveFacilitiesFromGroupVersionlessActionParameter
         required: true
       responses:
         '200':
@@ -62034,6 +62038,51 @@ components:
         - INT
       title: RemoteConfigurationValueType
       type: string
+    RemoveFacilitiesFromGroupActionParameter:
+      properties:
+        facilitiesToRemove:
+          description: Array of facility references to remove from the group
+          items:
+            type: string
+          maxItems: 200
+          minItems: 1
+          type: array
+        name:
+          description: The name of the action
+          enum:
+            - REMOVE_FACILITIES_FROM_GROUP
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: number
+      required:
+        - facilitiesToRemove
+        - name
+        - version
+      title: RemoveFacilitiesFromGroupActionParameter
+      type: object
+      description: RemoveFacilitiesFromGroupActionParameter
+    RemoveFacilitiesFromGroupVersionlessActionParameter:
+      properties:
+        facilitiesToRemove:
+          description: Array of facility references to remove from the group
+          items:
+            type: string
+          maxItems: 200
+          minItems: 1
+          type: array
+        name:
+          description: The name of the action
+          enum:
+            - VERSIONLESS_REMOVE_FACILITIES_FROM_GROUP
+          type: string
+      required:
+        - facilitiesToRemove
+        - name
+      title: RemoveFacilitiesFromGroupVersionlessActionParameter
+      type: object
+      description: RemoveFacilitiesFromGroupVersionlessActionParameter
     RemoveFacilityCoordinatesActionParameter:
       allOf:
         - $ref: '#/components/schemas/AbstractFacilityActionsParameter'
