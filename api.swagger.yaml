@@ -22646,6 +22646,121 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/routing/journals:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Returns a paginated list of routing journal entries filtered by
+        processRef.
+      operationId: listRoutingJournals
+      parameters:
+        - in: query
+          name: processRef
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: orderRef
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            maximum: 100
+            minimum: 1
+            type: number
+        - in: query
+          name: startAfterId
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingJournals'
+          description: Successfully retrieved the routing journal entries.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: List routing journal entries by processRef
+      x-fft-permissions:
+        - ROUTING_READ
+      tags:
+        - RoutingJournal (doms)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/routing/journals/{id}:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Retrieves a single routingJournal using its unique identifier.
+      operationId: getRoutingJournalById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingJournal'
+          description: Successfully retrieved the routingJournal.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get a routingJournal by its ID
+      x-fft-permissions:
+        - ROUTING_READ
+      tags:
+        - RoutingJournal (doms)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/routing/nodeconfigcategories:
     get:
       description: ''
@@ -56700,7 +56815,6 @@ components:
       required:
         - type
         - status
-        - carrierStatus
         - trackingNumber
       title: ParcelTrackingData
       type: object
@@ -65539,6 +65653,63 @@ components:
       type: object
       title: RoutingDecisionLogs
       description: RoutingDecisionLogs
+    RoutingJournal:
+      properties:
+        changeType:
+          description: Type of change recorded in this routing journal entry
+          enum:
+            - INITIAL
+          type: string
+        created:
+          description: Creation date of this routing journal entry
+          format: date-time
+          type: string
+        id:
+          description: Unique identifier of this routing journal entry
+          type: string
+        orderRef:
+          description: Reference to the associated order
+          type: string
+        processRef:
+          description: Reference to the associated process
+          type: string
+        routingPlanRefs:
+          description: References to the routing plans associated with this journal entry
+          items:
+            type: string
+          type: array
+        sourcingOptionRef:
+          description: Reference to the sourcing option used for routing
+          type: string
+      required:
+        - id
+        - created
+        - processRef
+        - orderRef
+        - sourcingOptionRef
+        - changeType
+        - routingPlanRefs
+      title: RoutingJournal
+      type: object
+      description: RoutingJournal
+    RoutingJournals:
+      properties:
+        routingJournals:
+          description: Array of the routing journal entries
+          items:
+            $ref: '#/components/schemas/RoutingJournal'
+          maxItems: 500
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: number
+      required:
+        - routingJournals
+        - total
+      title: RoutingJournals
+      type: object
+      description: RoutingJournals
     RoutingPlan:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
