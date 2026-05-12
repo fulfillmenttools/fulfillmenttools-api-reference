@@ -2639,6 +2639,49 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/configurations/eventscopes/inventoryarticleavailabilitychanged/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Search for ScopedAvailabilityConfig
+      operationId: searchScopedAvailabilityConfig
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScopedAvailabilityConfigSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScopedAvailabilityConfigPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: List event scope configs (search)
+      x-fft-permissions:
+        - EVENT_SCOPE_CONFIG_READ
+      tags:
+        - Event Scope Configuration (Inventory)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/configurations/expiry:
     get:
       description: >-
@@ -68154,6 +68197,156 @@ components:
       type: object
       title: ScheduledPickJobReleaseConfiguration
       description: ScheduledPickJobReleaseConfiguration
+    ScopedAvailabilityConfigEventScopeConfigStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - ACTIVE
+              - INACTIVE
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+      title: ScopedAvailabilityConfigEventScopeConfigStatusEnumFilter
+      type: object
+      description: ScopedAvailabilityConfigEventScopeConfigStatusEnumFilter
+    ScopedAvailabilityConfigPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        scopedAvailabilityConfigs:
+          items:
+            $ref: '#/components/schemas/InventoryArticleAvailabilityChangedEventScope'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - scopedAvailabilityConfigs
+      title: ScopedAvailabilityConfigPaginatedResult
+      type: object
+      description: ScopedAvailabilityConfigPaginatedResult
+    ScopedAvailabilityConfigSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ScopedAvailabilityConfigSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ScopedAvailabilityConfigSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: ScopedAvailabilityConfigSearchPayload
+      type: object
+      description: ScopedAvailabilityConfigSearchPayload
+    ScopedAvailabilityConfigSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ScopedAvailabilityConfigSearchQuery'
+          maxItems: 500
+          type: array
+        facilityGroupRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by facilityGroupRefs
+        facilityRefs:
+          allOf:
+            - $ref: '#/components/schemas/StringListFilter'
+          description: Search by facilityRefs
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        key:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by key
+        or:
+          items:
+            $ref: '#/components/schemas/ScopedAvailabilityConfigSearchQuery'
+          maxItems: 500
+          type: array
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ScopedAvailabilityConfigEventScopeConfigStatusEnumFilter
+          description: Search by status
+      title: ScopedAvailabilityConfigSearchQuery
+      type: object
+      description: ScopedAvailabilityConfigSearchQuery
+    ScopedAvailabilityConfigSort:
+      properties:
+        id:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        key:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ScopedAvailabilityConfigSort
+      type: object
+      description: ScopedAvailabilityConfigSort
     ScopedCapability:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
