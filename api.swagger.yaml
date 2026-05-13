@@ -2486,7 +2486,7 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
-  /api/configurations/eventscopes/inventoryarticleavailabilitychanged/{idOrUrn}:
+  /api/configurations/eventscopes/inventoryarticleavailabilitychanged/{id}:
     delete:
       deprecated: false
       description: >-
@@ -2496,13 +2496,21 @@ paths:
         />Delete an event scope configuration by ID or URN.
       operationId: deleteEventScopeConfig
       parameters:
-        - in: path
-          name: idOrUrn
+        - description: >-
+            ID of scope you want to get. Also accepts key in urn format (e.g.,
+            urn:fft:eventScopeConfig:key:{your-key}).
+          in: path
+          name: id
           required: true
           schema:
             type: string
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/InventoryArticleAvailabilityChangedEventScope
           description: The event scope configuration was deleted.
         '401':
           content:
@@ -2539,8 +2547,11 @@ paths:
         an event scope configuration by ID or URN.
       operationId: getEventScopeConfig
       parameters:
-        - in: path
-          name: idOrUrn
+        - description: >-
+            ID of scope you want to get. Also accepts key in urn format (e.g.,
+            urn:fft:eventScopeConfig:key:{your-key}).
+          in: path
+          name: id
           required: true
           schema:
             type: string
@@ -2587,8 +2598,11 @@ paths:
         />Replace an existing event scope configuration.
       operationId: replaceEventScopeConfig
       parameters:
-        - in: path
-          name: idOrUrn
+        - description: >-
+            ID of scope you want to get. Also accepts key in urn format (e.g.,
+            urn:fft:eventScopeConfig:key:{your-key}).
+          in: path
+          name: id
           required: true
           schema:
             type: string
@@ -28746,24 +28760,6 @@ components:
         - availableStock
       title: ArticleAvailability
       description: ArticleAvailability
-    ArticleAvailabilityStockValues:
-      properties:
-        availableForPicking:
-          type: number
-        availableOnStock:
-          type: number
-        stockOnHand:
-          type: number
-        total:
-          type: number
-      required:
-        - total
-        - stockOnHand
-        - availableOnStock
-        - availableForPicking
-      title: ArticleAvailabilityStockValues
-      type: object
-      description: ArticleAvailabilityStockValues
     ArticleHistoryLog:
       properties:
         titleLocalized:
@@ -42518,34 +42514,6 @@ components:
       title: InventoryArticleAvailabilityChangedEventScopeForReplace
       type: object
       description: InventoryArticleAvailabilityChangedEventScopeForReplace
-    InventoryArticleAvailabilityChangedPayload:
-      properties:
-        articleAvailability:
-          $ref: '#/components/schemas/ArticleAvailabilityStockValues'
-        configurationScopeKey:
-          type: string
-        emittedAt:
-          format: date-time
-          type: string
-        tenantArticleId:
-          type: string
-      required:
-        - tenantArticleId
-        - configurationScopeKey
-        - articleAvailability
-        - emittedAt
-      title: InventoryArticleAvailabilityChangedPayload
-      type: object
-      description: InventoryArticleAvailabilityChangedPayload
-    InventoryArticleAvailabilityChangedPayloadWebHookEvent:
-      properties:
-        payload:
-          $ref: '#/components/schemas/InventoryArticleAvailabilityChangedPayload'
-      required:
-        - payload
-      title: InventoryArticleAvailabilityChangedPayloadWebHookEvent
-      type: object
-      description: InventoryArticleAvailabilityChangedPayloadWebHookEvent
     InventoryArticlePaginatedResult:
       properties:
         articles:
