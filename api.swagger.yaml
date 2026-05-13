@@ -27809,6 +27809,7 @@ components:
             - RemoveLineItemFromPackingTargetContainer
             - UpdateLineItemOnPackingTargetContainer
             - UpdatePackingTargetContainerLineItemRecordableAttributes
+            - UpdatePackingTargetContainerStorageLocation
             - ModifyCustomService
             - UnlockOrder
           example: <Use the corresponding action, see documentation>
@@ -54532,6 +54533,8 @@ components:
               - $ref: '#/components/schemas/UpdateLineItemOnPackingTargetContainer'
               - $ref: >-
                   #/components/schemas/UpdatePackingTargetContainerLineItemRecordableAttributes
+              - $ref: >-
+                  #/components/schemas/UpdatePackingTargetContainerStorageLocation
           minItems: 1
           type: array
         version:
@@ -78901,6 +78904,39 @@ components:
       title: UpdatePackingTargetContainerLineItemRecordableAttributes
       xml:
         name: UpdatePackingTargetContainerLineItemRecordableAttributes
+    UpdatePackingTargetContainerStorageLocation:
+      allOf:
+        - $ref: '#/components/schemas/AbstractModificationAction'
+        - additionalProperties: false
+          properties:
+            action:
+              description: >-
+                Use this action to update the storageLocationRef of a packing
+                target container
+              enum:
+                - UpdatePackingTargetContainerStorageLocation
+              type: string
+            storageLocationRef:
+              description: >-
+                Reference to the location where the packing target container is
+                located.
+              example: 019e16d1-b503-798a-96a0-6868613c9e36
+              type: string
+            version:
+              description: >-
+                The version of the packing target container to be used in
+                optimistic locking mechanisms.
+              example: 42
+              type: integer
+          required:
+            - action
+            - version
+            - storageLocationRef
+          type: object
+      description: Action to update the storageLocationRef of a packing target container.
+      title: UpdatePackingTargetContainerStorageLocation
+      xml:
+        name: UpdatePackingTargetContainerStorageLocation
     UpdatePackLineItemRecordableAttributesActionEnum:
       enum:
         - UPDATE_PACK_LINE_ITEM_RECORDABLE_ATTRIBUTES
