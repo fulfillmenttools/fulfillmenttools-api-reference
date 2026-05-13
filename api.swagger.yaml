@@ -60746,10 +60746,22 @@ components:
           allOf:
             - $ref: '#/components/schemas/ProcessReferencedFacilityFilter'
           description: Nested search by facility
+        handoverJob:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedHandoverJobFilter'
+          description: Nested search by handoverJob
         order:
           allOf:
             - $ref: '#/components/schemas/ProcessReferencedOrderFilter'
           description: Nested search by order
+        packJob:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedPackJobFilter'
+          description: Nested search by packJob
+        parcel:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedParcelFilter'
+          description: Nested search by parcel
         parcelTrackingStatus:
           allOf:
             - $ref: >-
@@ -60759,6 +60771,14 @@ components:
           allOf:
             - $ref: '#/components/schemas/ProcessReferencedPickJobFilter'
           description: Nested search by pickJob
+        returnJob:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedReturnJobFilter'
+          description: Nested search by returnJob
+        serviceJob:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedServiceJobFilter'
+          description: Nested search by serviceJob
         serviceLevel:
           allOf:
             - $ref: '#/components/schemas/ProcessReferencedServiceLevelEnumListFilter'
@@ -60767,6 +60787,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by serviceType
+        shipment:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedShipmentFilter'
+          description: Nested search by shipment
         sticker:
           allOf:
             - $ref: '#/components/schemas/ProcessReferencedStickerFilter'
@@ -60782,6 +60806,61 @@ components:
       title: ProcessReferencedFilter
       type: object
       description: ProcessReferencedFilter
+    ProcessReferencedHandoverJobFilter:
+      properties:
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedHandoverJobHandoverjobStatusEnumListFilter
+          description: Search by status
+      title: ProcessReferencedHandoverJobFilter
+      type: object
+      description: ProcessReferencedHandoverJobFilter
+    ProcessReferencedHandoverJobHandoverjobStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - HANDED_OVER
+            - OBSOLETE
+            - CANCELED
+            - WAITING_FOR_INPUT
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - OPEN
+              - HANDED_OVER
+              - OBSOLETE
+              - CANCELED
+              - WAITING_FOR_INPUT
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - HANDED_OVER
+            - OBSOLETE
+            - CANCELED
+            - WAITING_FOR_INPUT
+          type: string
+      title: ProcessReferencedHandoverJobHandoverjobStatusEnumFilter
+      type: object
+      description: ProcessReferencedHandoverJobHandoverjobStatusEnumFilter
+    ProcessReferencedHandoverJobHandoverjobStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedHandoverJobHandoverjobStatusEnumFilter
+          description: Search by status
+      title: ProcessReferencedHandoverJobHandoverjobStatusEnumListFilter
+      type: object
+      description: ProcessReferencedHandoverJobHandoverjobStatusEnumListFilter
     ProcessReferencedOrderFilter:
       properties:
         consumerId:
@@ -60860,6 +60939,125 @@ components:
       title: ProcessReferencedOrderOrderStatusEnumListFilter
       type: object
       description: ProcessReferencedOrderOrderStatusEnumListFilter
+    ProcessReferencedPackJobFilter:
+      properties:
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPackJobPackJobStatusEnumListFilter
+          description: Search by status
+      title: ProcessReferencedPackJobFilter
+      type: object
+      description: ProcessReferencedPackJobFilter
+    ProcessReferencedPackJobPackJobStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - OBSOLETE
+            - CANCELED
+            - PAUSED
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - OPEN
+              - IN_PROGRESS
+              - CLOSED
+              - OBSOLETE
+              - CANCELED
+              - PAUSED
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - OBSOLETE
+            - CANCELED
+            - PAUSED
+          type: string
+      title: ProcessReferencedPackJobPackJobStatusEnumFilter
+      type: object
+      description: ProcessReferencedPackJobPackJobStatusEnumFilter
+    ProcessReferencedPackJobPackJobStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPackJobPackJobStatusEnumFilter
+          description: Search by status
+      title: ProcessReferencedPackJobPackJobStatusEnumListFilter
+      type: object
+      description: ProcessReferencedPackJobPackJobStatusEnumListFilter
+    ProcessReferencedParcelFilter:
+      properties:
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedParcelParcelStatusEnumListFilter
+          description: Search by status
+      title: ProcessReferencedParcelFilter
+      type: object
+      description: ProcessReferencedParcelFilter
+    ProcessReferencedParcelParcelStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - PROCESSING
+            - DONE
+            - FAILED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - OPEN
+              - PROCESSING
+              - DONE
+              - FAILED
+              - CANCELED
+              - OBSOLETE
+              - WAITING_FOR_INPUT
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - PROCESSING
+            - DONE
+            - FAILED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+          type: string
+      title: ProcessReferencedParcelParcelStatusEnumFilter
+      type: object
+      description: ProcessReferencedParcelParcelStatusEnumFilter
+    ProcessReferencedParcelParcelStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedParcelParcelStatusEnumFilter
+          description: Search by status
+      title: ProcessReferencedParcelParcelStatusEnumListFilter
+      type: object
+      description: ProcessReferencedParcelParcelStatusEnumListFilter
     ProcessReferencedParcelTrackingStatusEnumFilter:
       properties:
         eq:
@@ -60935,9 +61133,196 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringSearchFilter'
           description: Search by shortId
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPickJobPickJobStatusEnumListFilter
+          description: Search by status
       title: ProcessReferencedPickJobFilter
       type: object
       description: ProcessReferencedPickJobFilter
+    ProcessReferencedPickJobPickJobStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - ABORTED
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - PICKED
+            - REROUTED
+            - REJECTED
+            - RESTOWED
+            - EXPIRED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+            - PAUSED
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - ABORTED
+              - OPEN
+              - IN_PROGRESS
+              - CLOSED
+              - PICKED
+              - REROUTED
+              - REJECTED
+              - RESTOWED
+              - EXPIRED
+              - CANCELED
+              - OBSOLETE
+              - WAITING_FOR_INPUT
+              - PAUSED
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - ABORTED
+            - OPEN
+            - IN_PROGRESS
+            - CLOSED
+            - PICKED
+            - REROUTED
+            - REJECTED
+            - RESTOWED
+            - EXPIRED
+            - CANCELED
+            - OBSOLETE
+            - WAITING_FOR_INPUT
+            - PAUSED
+          type: string
+      title: ProcessReferencedPickJobPickJobStatusEnumFilter
+      type: object
+      description: ProcessReferencedPickJobPickJobStatusEnumFilter
+    ProcessReferencedPickJobPickJobStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPickJobPickJobStatusEnumFilter
+          description: Search by status
+      title: ProcessReferencedPickJobPickJobStatusEnumListFilter
+      type: object
+      description: ProcessReferencedPickJobPickJobStatusEnumListFilter
+    ProcessReferencedReturnJobFilter:
+      properties:
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedReturnJobItemReturnJobStatusEnumListFilter
+          description: Search by status
+      title: ProcessReferencedReturnJobFilter
+      type: object
+      description: ProcessReferencedReturnJobFilter
+    ProcessReferencedReturnJobItemReturnJobStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - FINISHED
+            - CANCELED
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - OPEN
+              - IN_PROGRESS
+              - FINISHED
+              - CANCELED
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - FINISHED
+            - CANCELED
+          type: string
+      title: ProcessReferencedReturnJobItemReturnJobStatusEnumFilter
+      type: object
+      description: ProcessReferencedReturnJobItemReturnJobStatusEnumFilter
+    ProcessReferencedReturnJobItemReturnJobStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedReturnJobItemReturnJobStatusEnumFilter
+          description: Search by status
+      title: ProcessReferencedReturnJobItemReturnJobStatusEnumListFilter
+      type: object
+      description: ProcessReferencedReturnJobItemReturnJobStatusEnumListFilter
+    ProcessReferencedServiceJobFilter:
+      properties:
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedServiceJobServiceJobStatusEnumListFilter
+          description: Search by status
+      title: ProcessReferencedServiceJobFilter
+      type: object
+      description: ProcessReferencedServiceJobFilter
+    ProcessReferencedServiceJobServiceJobStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - FINISHED
+            - CANCELLED
+            - WAITING_FOR_INPUT
+            - OBSOLETE
+            - NOT_READY
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - OPEN
+              - IN_PROGRESS
+              - FINISHED
+              - CANCELLED
+              - WAITING_FOR_INPUT
+              - OBSOLETE
+              - NOT_READY
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - FINISHED
+            - CANCELLED
+            - WAITING_FOR_INPUT
+            - OBSOLETE
+            - NOT_READY
+          type: string
+      title: ProcessReferencedServiceJobServiceJobStatusEnumFilter
+      type: object
+      description: ProcessReferencedServiceJobServiceJobStatusEnumFilter
+    ProcessReferencedServiceJobServiceJobStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedServiceJobServiceJobStatusEnumFilter
+          description: Search by status
+      title: ProcessReferencedServiceJobServiceJobStatusEnumListFilter
+      type: object
+      description: ProcessReferencedServiceJobServiceJobStatusEnumListFilter
     ProcessReferencedServiceLevelEnumFilter:
       properties:
         eq:
@@ -60973,6 +61358,67 @@ components:
       title: ProcessReferencedServiceLevelEnumListFilter
       type: object
       description: ProcessReferencedServiceLevelEnumListFilter
+    ProcessReferencedShipmentFilter:
+      properties:
+        status:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedShipmentShipmentStatusEnumListFilter
+          description: Search by status
+      title: ProcessReferencedShipmentFilter
+      type: object
+      description: ProcessReferencedShipmentFilter
+    ProcessReferencedShipmentShipmentStatusEnumFilter:
+      properties:
+        eq:
+          description: Search by status
+          enum:
+            - INITIAL
+            - REQUEST
+            - RETRYABLE
+            - CONFIRMED
+            - COMPLETED
+            - CANCELED
+            - OBSOLETE
+          type: string
+        in:
+          description: Search by status
+          items:
+            enum:
+              - INITIAL
+              - REQUEST
+              - RETRYABLE
+              - CONFIRMED
+              - COMPLETED
+              - CANCELED
+              - OBSOLETE
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by status
+          enum:
+            - INITIAL
+            - REQUEST
+            - RETRYABLE
+            - CONFIRMED
+            - COMPLETED
+            - CANCELED
+            - OBSOLETE
+          type: string
+      title: ProcessReferencedShipmentShipmentStatusEnumFilter
+      type: object
+      description: ProcessReferencedShipmentShipmentStatusEnumFilter
+    ProcessReferencedShipmentShipmentStatusEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedShipmentShipmentStatusEnumFilter
+          description: Search by status
+      title: ProcessReferencedShipmentShipmentStatusEnumListFilter
+      type: object
+      description: ProcessReferencedShipmentShipmentStatusEnumListFilter
     ProcessReferencedSort:
       properties:
         brand:
@@ -61103,6 +61549,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
           description: Search by handoverJobRefs
+        inventoryStatus:
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusEnumFilter'
+          description: Search by inventoryStatus
         itemReturnJobsRef:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
@@ -61206,6 +61656,11 @@ components:
             - DESC
           type: string
         domsStatus:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        inventoryStatus:
           enum:
             - ASC
             - DESC
