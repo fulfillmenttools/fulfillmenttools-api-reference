@@ -11369,16 +11369,17 @@ paths:
         - Checkout Options (DOMS)
   /api/handovercontainers:
     get:
+      deprecated: false
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
         all Handover Container respecting the given filter
-      operationId: getHandoverContainer
+      operationId: getHandoverContainers
       parameters:
         - description: entity to start after
           in: query
-          name: startAfterId
+          name: startAfter
           required: false
           schema:
             type: string
@@ -11396,6 +11397,7 @@ paths:
           schema:
             items:
               type: string
+            maxItems: 50
             type: array
         - description: handover job to filter the containers for by reference
           in: query
@@ -11408,8 +11410,7 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/StrippedHandoverContainer'
+                $ref: '#/components/schemas/StrippedHandoverContainer'
           description: All HandoverContainer matching the given parameters.
         '401':
           content:
@@ -11422,28 +11423,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: Your user, although recognized, is not authorized to use this
       summary: List handover container
+      x-fft-permissions:
+        - HANDOVER_CONTAINER_READ
       tags:
         - Handovers (Operations)
       x-badges:
         - color: orange
           label: BETA
     post:
+      deprecated: false
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
         target="_blank">api-release-life-cycle documentation</a>.<br /><br
         />Create new Handover Container
       operationId: createHandoverContainer
+      parameters: []
       requestBody:
         content:
           application/json:
@@ -11455,8 +11452,7 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/HandoverContainer'
+                $ref: '#/components/schemas/HandoverContainer'
           description: Created Handover Container.
         '401':
           content:
@@ -11469,16 +11465,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Create handover container
+      x-fft-permissions:
+        - HANDOVER_CONTAINER_WRITE
       tags:
         - Handovers (Operations)
       x-badges:
@@ -11486,6 +11482,7 @@ paths:
           label: BETA
   /api/handovercontainers/{handoverContainerId}:
     delete:
+      deprecated: false
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
@@ -11513,22 +11510,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Delete handover container
+      x-fft-permissions:
+        - HANDOVER_CONTAINER_WRITE
       tags:
         - Handovers (Operations)
       x-badges:
         - color: orange
           label: BETA
     get:
+      deprecated: false
       description: >-
         This part of the API is in Beta status. For details please check the <a
         href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
@@ -11560,16 +11558,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Get handover container
+      x-fft-permissions:
+        - HANDOVER_CONTAINER_READ
       tags:
         - Handovers (Operations)
       x-badges:
@@ -38557,11 +38555,15 @@ components:
       title: HandoverConfigurationForCreate
       description: HandoverConfigurationForCreate
     HandoverContainer:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/HandoverContainerForCreation'
-        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        codes:
+          items:
+            type: string
+          type: array
         created:
           description: >-
             The date this entity was created at the platform. This value is
@@ -38569,13 +38571,24 @@ components:
           example: 2020-02-03T08:45:51.525Z
           format: date-time
           type: string
+        customAttributes:
+          type: object
         description:
           description: Translated Description from descriptionLocalized
           type: string
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
         facilityRef:
           description: Linked Facility through reference
           type: string
+        handoverJobRef:
+          description: Linked HandoverJob through reference
+          type: string
+        iconUrl:
+          description: URL to icon
+          type: string
         id:
+          description: Unique identifier of the handover container
           type: string
         lastModified:
           description: >-
@@ -38591,11 +38604,22 @@ components:
         name:
           description: Translated name from nameLocalized
           type: string
+        operativeContainerTypeRef:
+          description: Linked Operative Container Type through reference
+          type: string
         processRef:
           description: Linked Process through reference
           type: string
+        sequenceNumber:
+          format: int32
+          maximum: 10000
+          minimum: 0
+          type: integer
         stackRef:
           description: Linked stack through reference
+          type: string
+        storageLocationRef:
+          description: Linked StorageLocation through reference
           type: string
         version:
           description: >-
@@ -38604,22 +38628,24 @@ components:
           example: 42
           format: int64
           type: integer
+        weightLimitInG:
+          description: Weight limit in gram for this Container
+          type: integer
       required:
-        - id
-        - version
         - created
         - lastModified
-        - lineItems
+        - version
+        - id
         - facilityRef
         - processRef
         - stackRef
-      type: object
+        - lineItems
+        - handoverJobRef
+        - nameLocalized
       title: HandoverContainer
+      type: object
       description: HandoverContainer
     HandoverContainerForCreation:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/BaseOperationalContainer'
       properties:
         nameLocalized:
           $ref: '#/components/schemas/LocaleString'
@@ -38628,11 +38654,10 @@ components:
         codes:
           items:
             type: string
+          maxItems: 50
           type: array
         customAttributes:
-          items:
-            type: object
-          type: array
+          type: object
         dimensions:
           $ref: '#/components/schemas/ContainerDimensions'
         handoverJobRef:
@@ -38644,10 +38669,16 @@ components:
         lineItems:
           items:
             $ref: '#/components/schemas/HandoverContainerLineItemForCreation'
+          maxItems: 50
           type: array
         operativeContainerTypeRef:
           description: Linked Operative Container Type through reference
           type: string
+        sequenceNumber:
+          format: int32
+          maximum: 10000
+          minimum: 0
+          type: integer
         stackRef:
           description: Linked Stack through reference
           type: string
@@ -38658,20 +38689,32 @@ components:
           description: Weight limit in gram for this Container
           type: integer
       required:
-        - lineItems
         - handoverJobRef
+        - lineItems
         - nameLocalized
-      type: object
       title: HandoverContainerForCreation
+      type: object
       description: HandoverContainerForCreation
     HandoverContainerLineItem:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/MandatoryLineItem'
       properties:
         article:
-          $ref: '#/components/schemas/HandoverContainerLineItemArticle'
+          allOf:
+            - $ref: '#/components/schemas/HandoverContainerLineItemArticle'
+          description: information about the lineItem
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities.
+          type: string
         id:
+          description: id of the recordable attribute
+          example: 17ebfdfb-e1b4-4913-9962-3aef2b49f16f
           type: string
         measurementUnitKey:
           description: Identifier for items unit of measurement.
@@ -38679,33 +38722,72 @@ components:
         quantity:
           description: Amount per line item
           type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          type: array
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
       required:
         - id
-        - quantity
         - article
+        - quantity
       title: HandoverContainerLineItem
+      type: object
       description: HandoverContainerLineItem
     HandoverContainerLineItemArticle:
-      allOf:
-        - $ref: '#/components/schemas/AbstractArticle'
-        - properties:
-            attributes:
-              items:
-                $ref: '#/components/schemas/ArticleAttributeItem'
-              type: array
-          required:
-            - title
-            - tenantArticleId
+      properties:
+        titleLocalized:
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
+          description: The translations for the title of the product
+        attributes:
+          items:
+            $ref: '#/components/schemas/ArticleAttributeItem'
+          maxItems: 50
+          type: array
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
           type: object
+        imageUrl:
+          description: >-
+            A web link to a picture of this article. Please make sure that no
+            authentication is required to fetch the image!
+          type: string
+        tenantArticleId:
+          description: This is a reference to an article number
+          example: '4711'
+          type: string
+        title:
+          description: The title of the product
+          example: Cologne Water
+          type: string
+        weight:
+          description: weight value is in gram
+          minimum: 0
+          type: number
+      required:
+        - tenantArticleId
+        - title
       title: HandoverContainerLineItemArticle
+      type: object
       description: HandoverContainerLineItemArticle
     HandoverContainerLineItemForCreation:
-      additionalProperties: false
-      allOf:
-        - $ref: '#/components/schemas/MandatoryLineItemForCreation'
       properties:
         article:
-          $ref: '#/components/schemas/HandoverContainerLineItemArticle'
+          allOf:
+            - $ref: '#/components/schemas/HandoverContainerLineItemArticle'
+          description: information about the lineItem
         customAttributes:
           description: >-
             Attributes that can be added to the lineItem. These attributes
@@ -38729,16 +38811,19 @@ components:
             the process.
           items:
             $ref: '#/components/schemas/RecordableAttributeForCreation'
+          maxItems: 50
           type: array
         scannableCodes:
           description: Codes that can be used for scanning this lineItem
           items:
             type: string
+          maxItems: 50
           type: array
       required:
-        - quantity
         - article
+        - quantity
       title: HandoverContainerLineItemForCreation
+      type: object
       description: HandoverContainerLineItemForCreation
     Handoverjob:
       allOf:
@@ -46862,11 +46947,13 @@ components:
             the process.
           items:
             $ref: '#/components/schemas/RecordableAttributeForCreation'
+          maxItems: 50
           type: array
         scannableCodes:
           description: Codes that can be used for scanning this lineItem
           items:
             type: string
+          maxItems: 50
           type: array
       required:
         - article
@@ -75884,7 +75971,6 @@ components:
       title: StrippedFilterEntities
       description: StrippedFilterEntities
     StrippedHandoverContainer:
-      additionalProperties: false
       properties:
         handoverContainer:
           items:
@@ -75894,9 +75980,10 @@ components:
           description: total number for the given filter
           type: integer
       required:
-        - handoverContainer
         - total
+        - handoverContainer
       title: StrippedHandoverContainer
+      type: object
       description: StrippedHandoverContainer
     StrippedHandoverjob:
       allOf:
