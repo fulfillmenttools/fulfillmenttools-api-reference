@@ -38607,6 +38607,8 @@ components:
         operativeContainerTypeRef:
           description: Linked Operative Container Type through reference
           type: string
+        previousModuleContainerInfo:
+          $ref: '#/components/schemas/PreviousModuleContainerInfo'
         processRef:
           description: Linked Process through reference
           type: string
@@ -38674,6 +38676,8 @@ components:
         operativeContainerTypeRef:
           description: Linked Operative Container Type through reference
           type: string
+        previousModuleContainerInfo:
+          $ref: '#/components/schemas/PreviousModuleContainerInfo'
         sequenceNumber:
           format: int32
           maximum: 10000
@@ -59948,18 +59952,19 @@ components:
           example: 019df7f0-0507-7002-a9ef-6285caa2e785
           type: string
         type:
-          description: >-
-            The type of the previous container, e.g. LOAD_UNIT or
-            SERVICE_CONTAINER
-          enum:
-            - LOAD_UNIT
-            - SERVICE_CONTAINER
-          type: string
+          $ref: '#/components/schemas/PreviousModuleContainerInfoTypeEnum'
       required:
         - containerRef
         - type
       type: object
       title: PreviousModuleContainerInfo
+    PreviousModuleContainerInfoTypeEnum:
+      enum:
+        - LOAD_UNIT
+        - SERVICE_CONTAINER
+        - PACKING_TARGET_CONTAINER
+      title: PreviousModuleContainerInfoTypeEnum
+      description: PreviousModuleContainerInfoTypeEnum
     PriceRange:
       properties:
         currency:
