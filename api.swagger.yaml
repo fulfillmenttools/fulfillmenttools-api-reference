@@ -40664,7 +40664,7 @@ components:
           type: string
         requestedDate:
           allOf:
-            - $ref: '#/components/schemas/InputRequestedDate'
+            - $ref: '#/components/schemas/RequestedDate'
           description: >-
             Time and date at which the order is expected to arrive. Use 'ASAP'
             for deliveries with unknown date, but be aware that some features
@@ -51711,7 +51711,7 @@ components:
           type: array
         pricing:
           allOf:
-            - $ref: '#/components/schemas/OrderRecordPricingForCreation'
+            - $ref: '#/components/schemas/OrderRecordPricing'
           description: Pricing information including calculated totals
         tenantOrderRecordId:
           description: Tenant-specific order record identifier
@@ -52607,6 +52607,33 @@ components:
       title: OrderRecordPosOrigin
       type: object
       description: OrderRecordPosOrigin
+    OrderRecordPricing:
+      properties:
+        discounts:
+          description: Discounts applied to the order
+          items:
+            $ref: '#/components/schemas/OrderRecordDiscount'
+          maxItems: 100
+          type: array
+        fees:
+          description: Fees applied to the order
+          items:
+            $ref: '#/components/schemas/OrderRecordFee'
+          maxItems: 100
+          type: array
+        taxes:
+          description: Tax breakdown
+          items:
+            $ref: '#/components/schemas/OrderRecordTax'
+          maxItems: 100
+          type: array
+        total:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordPricingTotal'
+          description: Calculated totals
+      title: OrderRecordPricing
+      type: object
+      description: OrderRecordPricing
     OrderRecordPricingForCreation:
       properties:
         discounts:
@@ -52637,6 +52664,15 @@ components:
       title: OrderRecordPricingSort
       type: object
       description: OrderRecordPricingSort
+    OrderRecordPricingTotal:
+      properties:
+        priceBreakdown:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordTotals'
+          description: Calculated price breakdown
+      title: OrderRecordPricingTotal
+      type: object
+      description: OrderRecordPricingTotal
     OrderRecords:
       properties:
         orderRecords:
@@ -52864,6 +52900,47 @@ components:
       title: OrderRecordTax
       type: object
       description: OrderRecordTax
+    OrderRecordTotals:
+      properties:
+        subTotal:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Subtotal before discounts, taxes, and fees
+          nullable: true
+          type: object
+        total:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Grand total
+          nullable: true
+          type: object
+        totalDiscounts:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Total discounts applied
+          nullable: true
+          type: object
+        totalFees:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Total fees
+          nullable: true
+          type: object
+        totalTaxes:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Total taxes
+          nullable: true
+          type: object
+      required:
+        - subTotal
+        - totalDiscounts
+        - totalTaxes
+        - totalFees
+        - total
+      title: OrderRecordTotals
+      type: object
+      description: OrderRecordTotals
     OrderRecordTotalSort:
       properties:
         priceBreakdownTotal:
@@ -62152,7 +62229,7 @@ components:
           type: string
         requestedDate:
           allOf:
-            - $ref: '#/components/schemas/InputRequestedDate'
+            - $ref: '#/components/schemas/RequestedDate'
           description: >-
             Time and date at which the order is expected to arrive. Use 'ASAP'
             for deliveries with unknown date, but be aware that some features
@@ -74703,6 +74780,34 @@ components:
       title: StorageLocationTypeEnumFilter
       type: object
       description: StorageLocationTypeEnumFilter
+    StowedStowLineItemStowTo:
+      properties:
+        stowedAt:
+          description: Time and date on which the item was stowed
+          format: date-time
+          type: string
+        stowedQuantity:
+          description: Quantity that was stowed
+          type: number
+        stowedStockRef:
+          description: >-
+            Specifies the stock where the item will be stowed. Set this to null
+            to explicitly create a new stock. 
+             Exception: If stowTo.type is "DISCARD", a new stock will not be created when set to `null`. However, if a stock is specified, its quantity will be increased regardless of the type.
+          nullable: true
+          type: string
+        stowedStorageLocationRef:
+          description: >-
+            If a new stock is created via stowedStockRef = null, this is used to
+            set the storage location of the new stock. 
+             If a stock is specified, this field will be ignored.
+          type: string
+      required:
+        - stowedStockRef
+        - stowedQuantity
+      title: StowedStowLineItemStowTo
+      type: object
+      description: StowedStowLineItemStowTo
     StowedStowLineItemStowToForCreation:
       properties:
         stowedAt:
@@ -75310,7 +75415,7 @@ components:
           type: array
         takeFrom:
           allOf:
-            - $ref: '#/components/schemas/StowLineItemTakeFromForCreation'
+            - $ref: '#/components/schemas/StowLineItemTakeFrom'
           description: Instructions on how and where to take the item from
       required:
         - article
@@ -75451,7 +75556,7 @@ components:
           type: string
         stowed:
           allOf:
-            - $ref: '#/components/schemas/StowedStowLineItemStowToForCreation'
+            - $ref: '#/components/schemas/StowedStowLineItemStowTo'
           description: >-
             Operative data holding information about the stowing progress. **As
             for now stocks will *not* be updated even if the numbers indicate so
@@ -75604,7 +75709,7 @@ components:
           type: string
         stowed:
           allOf:
-            - $ref: '#/components/schemas/StowedStowLineItemStowToForCreation'
+            - $ref: '#/components/schemas/StowedStowLineItemStowTo'
           description: >-
             Operative data holding information about the stowing progress. **As
             for now stocks will *not* be updated even if the numbers indicate so
@@ -75656,7 +75761,7 @@ components:
           type: string
         taken:
           allOf:
-            - $ref: '#/components/schemas/TakenStowLineItemTakeFromForCreation'
+            - $ref: '#/components/schemas/TakenStowLineItemTakeFrom'
           description: >-
             Operative data holding information about the stowing progress. **As
             for now stocks will *not* be updated even if the numbers indicate so
@@ -77597,6 +77702,27 @@ components:
       title: TagSort
       type: object
       description: TagSort
+    TakenStowLineItemTakeFrom:
+      properties:
+        takenAt:
+          description: Time and date on which the item was taken
+          format: date-time
+          type: string
+        takenQuantity:
+          description: Quantity that was taken
+          type: number
+        takenStockRef:
+          description: |-
+            Specifies the stock from which the goods will be taken. 
+             Exception: If stowTo.type is "UNREGISTERED", this field may be null. If a stock is specified, its quantity will be reduced regardless of the type.
+          nullable: true
+          type: string
+      required:
+        - takenQuantity
+        - takenStockRef
+      title: TakenStowLineItemTakeFrom
+      type: object
+      description: TakenStowLineItemTakeFrom
     TakenStowLineItemTakeFromForCreation:
       properties:
         takenAt:
