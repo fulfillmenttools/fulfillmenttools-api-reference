@@ -2480,7 +2480,7 @@ paths:
           description: Your user, although recognized, is not authorized to use this
       summary: Create event scope config
       x-fft-permissions:
-        - EVENT_SCOPE_CONFIG_WRITE
+        - CONFIG_WRITE
       tags:
         - Event Scope Configuration (Core)
       x-badges:
@@ -2532,7 +2532,7 @@ paths:
           description: The requested entity was not found
       summary: Delete event scope config
       x-fft-permissions:
-        - EVENT_SCOPE_CONFIG_WRITE
+        - CONFIG_WRITE
       tags:
         - Event Scope Configuration (Core)
       x-badges:
@@ -2583,7 +2583,7 @@ paths:
           description: The requested entity was not found
       summary: Get event scope config
       x-fft-permissions:
-        - EVENT_SCOPE_CONFIG_READ
+        - CONFIG_READ
       tags:
         - Event Scope Configuration (Core)
       x-badges:
@@ -2647,7 +2647,7 @@ paths:
           description: A version conflict occurred.
       summary: Replace event scope config
       x-fft-permissions:
-        - EVENT_SCOPE_CONFIG_WRITE
+        - CONFIG_WRITE
       tags:
         - Event Scope Configuration (Core)
       x-badges:
@@ -2690,7 +2690,7 @@ paths:
           description: Your user, although recognized, is not authorized to use this
       summary: List event scope configs (search)
       x-fft-permissions:
-        - EVENT_SCOPE_CONFIG_READ
+        - CONFIG_READ
       tags:
         - Event Scope Configuration (Core)
       x-badges:
@@ -28758,6 +28758,24 @@ components:
         - availableStock
       title: ArticleAvailability
       description: ArticleAvailability
+    ArticleAvailabilityStockValues:
+      properties:
+        availableForPicking:
+          type: number
+        availableOnStock:
+          type: number
+        stockOnHand:
+          type: number
+        total:
+          type: number
+      required:
+        - total
+        - stockOnHand
+        - availableOnStock
+        - availableForPicking
+      title: ArticleAvailabilityStockValues
+      type: object
+      description: ArticleAvailabilityStockValues
     ArticleHistoryLog:
       properties:
         titleLocalized:
@@ -42617,6 +42635,34 @@ components:
       title: InventoryArticleAvailabilityChangedEventScopeForReplace
       type: object
       description: InventoryArticleAvailabilityChangedEventScopeForReplace
+    InventoryArticleAvailabilityChangedPayload:
+      properties:
+        articleAvailability:
+          $ref: '#/components/schemas/ArticleAvailabilityStockValues'
+        configurationScopeKey:
+          type: string
+        emittedAt:
+          format: date-time
+          type: string
+        tenantArticleId:
+          type: string
+      required:
+        - tenantArticleId
+        - configurationScopeKey
+        - articleAvailability
+        - emittedAt
+      title: InventoryArticleAvailabilityChangedPayload
+      type: object
+      description: InventoryArticleAvailabilityChangedPayload
+    InventoryArticleAvailabilityChangedPayloadWebHookEvent:
+      properties:
+        payload:
+          $ref: '#/components/schemas/InventoryArticleAvailabilityChangedPayload'
+      required:
+        - payload
+      title: InventoryArticleAvailabilityChangedPayloadWebHookEvent
+      type: object
+      description: InventoryArticleAvailabilityChangedPayloadWebHookEvent
     InventoryArticlePaginatedResult:
       properties:
         articles:
