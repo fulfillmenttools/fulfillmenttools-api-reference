@@ -34545,8 +34545,6 @@ components:
           items:
             type: string
           type: array
-        status:
-          $ref: '#/components/schemas/HandoverLineItemStatus'
         stickers:
           items:
             $ref: '#/components/schemas/Sticker'
@@ -34560,7 +34558,6 @@ components:
       required:
         - quantity
         - article
-        - transferId
       type: object
       title: ExpectedHandoverLineItemForCreation
       description: ExpectedHandoverLineItemForCreation
@@ -38940,6 +38937,10 @@ components:
                 type: string
               type: array
               deprecated: true
+            missingHandoverJobLineItems:
+              items:
+                $ref: '#/components/schemas/MissingHandoverJobLineItem'
+              type: array
             operativeProcessRef:
               type: string
             orderDate:
@@ -39047,6 +39048,7 @@ components:
         - $ref: '#/components/schemas/HandoverJobSplitLineItemsActionParameter'
         - $ref: >-
             #/components/schemas/UpdateHandoverLineItemRecordableAttributesActionParameter
+        - $ref: '#/components/schemas/MoveHandoverJobLineItemsActionParameter'
       title: HandoverJobActionsParameter
       description: HandoverJobActionsParameter
     HandoverJobAssignedUsersFilter:
@@ -39214,6 +39216,10 @@ components:
             type: string
           type: array
           deprecated: true
+        missingHandoverJobLineItems:
+          items:
+            $ref: '#/components/schemas/MissingHandoverJobLineItemForCreation'
+          type: array
         operativeProcessRef:
           type: string
         orderDate:
@@ -47190,6 +47196,54 @@ components:
           type: number
       title: MeasurementValidation
       description: MeasurementValidation
+    MissingHandoverJobLineItem:
+      additionalProperties: false
+      allOf:
+        - $ref: '#/components/schemas/MissingHandoverJobLineItemForCreation'
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      type: object
+      title: MissingHandoverJobLineItem
+      description: MissingHandoverJobLineItem
+    MissingHandoverJobLineItemForCreation:
+      additionalProperties: false
+      properties:
+        article:
+          $ref: '#/components/schemas/HandoverLineItemArticle'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the lineItem. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the information carried here.
+          type: object
+        quantity:
+          description: quantity of the specific item that is missing
+          example: 1
+          format: int64
+          minimum: 1
+          type: integer
+        scannableCodes:
+          description: Codes that can be used for scanning this lineItem
+          items:
+            type: string
+          type: array
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
+      required:
+        - quantity
+        - article
+      type: object
+      title: MissingHandoverJobLineItemForCreation
+      description: MissingHandoverJobLineItemForCreation
     ModifyAddress:
       properties:
         additionalAddressInfo:
@@ -48952,6 +49006,70 @@ components:
         name: Money
       title: Money
       description: Money
+    MoveHandoverJobLineItemsActionEnum:
+      enum:
+        - MOVE_HANDOVER_JOB_LINE_ITEMS
+      type: string
+      title: MoveHandoverJobLineItemsActionEnum
+      description: MoveHandoverJobLineItemsActionEnum
+    MoveHandoverJobLineItemsActionParameter:
+      additionalProperties: false
+      description: >-
+        Action to move line items of a handover job from line items array to
+        another (expected, missing, handover)
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/MoveHandoverJobLineItemsInfo'
+          maxItems: 50
+          minItems: 1
+          type: array
+        name:
+          $ref: '#/components/schemas/MoveHandoverJobLineItemsActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+        - items
+      title: MoveHandoverJobLineItemsActionParameter
+    MoveHandoverJobLineItemsArrayTypeEnum:
+      enum:
+        - EXPECTED
+        - HANDOVER
+        - MISSING
+      type: string
+      title: MoveHandoverJobLineItemsArrayTypeEnum
+      description: MoveHandoverJobLineItemsArrayTypeEnum
+    MoveHandoverJobLineItemsInfo:
+      additionalProperties: false
+      description: >-
+        Information about the line items that should be moved from one array to
+        another
+      properties:
+        from:
+          $ref: '#/components/schemas/MoveHandoverJobLineItemsArrayTypeEnum'
+        lineItemId:
+          description: >-
+            References the id of the line item of a handover job. Can be the id
+            of a expectedHandoverJobLineItem, handoverLineItem or
+            missingHandoverJobLineItem
+          type: string
+        targetQuantity:
+          description: The quantity of the line item that should be moved.
+          example: 21
+          minimum: 1
+          type: integer
+        to:
+          $ref: '#/components/schemas/MoveHandoverJobLineItemsArrayTypeEnum'
+      required:
+        - lineItemId
+        - from
+        - to
+        - targetQuantity
+      title: MoveHandoverJobLineItemsInfo
     MoveStockToLocationOptions:
       properties:
         deleteFromStockIfZero:
