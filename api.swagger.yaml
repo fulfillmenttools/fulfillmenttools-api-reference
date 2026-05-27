@@ -56214,6 +56214,10 @@ components:
                 $ref: '#/components/schemas/OperativeTransfer'
               minItems: 0
               type: array
+            workflowInformation:
+              oneOf:
+                - $ref: '#/components/schemas/WorkflowInformation'
+                - $ref: '#/components/schemas/WorkflowUnavailable'
           required:
             - id
             - status
@@ -56222,6 +56226,7 @@ components:
             - sender
             - recipient
             - loadUnitRefs
+            - workflowInformation
           type: object
       title: Parcel
       description: Parcel
@@ -56341,6 +56346,9 @@ components:
           items:
             type: string
           type: array
+        parentRef:
+          description: Reference to the parent container of this parcel
+          type: string
         paymentInformation:
           $ref: '#/components/schemas/PaymentInformation'
         pickUpInformation:
