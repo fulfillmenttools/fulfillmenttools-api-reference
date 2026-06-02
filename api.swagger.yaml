@@ -6286,7 +6286,8 @@ paths:
         - Shipments (Operations)
   /api/documents/{documentId}/file:
     get:
-      description: ''
+      deprecated: false
+      description: Download a file by its id
       operationId: downloadProcessDocument
       parameters:
         - in: path
@@ -6297,7 +6298,27 @@ paths:
       responses:
         '200':
           description: The document with given id
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
       summary: Get file
+      x-fft-permissions:
+        - PROCESS_READ
       tags:
         - Processes (Core)
   /api/documentSet/{documentSetRef}:
@@ -6334,10 +6355,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
       summary: Get document set
+      x-fft-permissions:
+        - DOCUMENT_SET_READ
       tags:
         - Document Sets (Core)
   /api/documentSet/{documentSetRef}/documents:
@@ -6380,16 +6407,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Create document
+      x-fft-permissions:
+        - DOCUMENT_SET_WRITE
       tags:
         - Document Sets (Core)
   /api/documentSet/{documentSetRef}/documents/{documentRef}:
@@ -6420,7 +6447,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PrintableDocumentForUpdate'
-        description: PartialDocument
         required: true
       responses:
         '200':
@@ -6440,21 +6466,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Update document
+      x-fft-permissions:
+        - DOCUMENT_SET_WRITE
       tags:
         - Document Sets (Core)
   /api/documentSet/{documentSetRef}/documents/{documentRef}/file:
     get:
-      description: ''
+      deprecated: true
+      description: >-
+        This part of the API is deprecated. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />
       operationId: downloadDocumentDeprecated
       parameters:
         - description: Reference to the documentSet you want to download a file from
@@ -6472,7 +6502,27 @@ paths:
       responses:
         '200':
           description: The document as a stream
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
       summary: Get file
+      x-fft-permissions:
+        - DOCUMENT_SET_READ
       tags:
         - Document Sets (Core)
     put:
@@ -6502,7 +6552,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ExternalDocumentContentForUpdate'
-        description: Document Content with id and version
         required: true
       responses:
         '200':
@@ -6522,25 +6571,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Update file
+      x-fft-permissions:
+        - DOCUMENT_SET_WRITE
       tags:
         - Document Sets (Core)
   /api/documentsets/{documentSetRef}:
     get:
-      description: ''
+      deprecated: false
+      description: Get document set for given id
       operationId: getDocumentSet
       parameters:
-        - description: Reference to the entity you want to get
-          in: path
+        - in: path
           name: documentSetRef
           required: true
           schema:
@@ -6563,18 +6612,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
       summary: Get document set
+      x-fft-permissions:
+        - DOCUMENT_SET_READ
       tags:
         - Document Sets (Core)
   /api/documentsets/{documentSetRef}/documents:
     post:
+      deprecated: false
+      description: add new document to document set
       operationId: addDocument
       parameters:
-        - description: Reference to the documentSet you want to add a file to
-          in: path
+        - in: path
           name: documentSetRef
           required: true
           schema:
@@ -6603,30 +6659,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Create document
+      x-fft-permissions:
+        - PROCESS_READ
       tags:
         - Document Sets (Core)
   /api/documentsets/{documentSetRef}/documents/{documentRef}:
     patch:
+      deprecated: false
+      description: Update document of document set
       operationId: updateDocument
       parameters:
-        - description: Reference to the documentSet you want to update
-          in: path
+        - in: path
           name: documentSetRef
           required: true
           schema:
             type: string
-        - description: Reference to the single document you want to update
-          in: path
+        - in: path
           name: documentRef
           required: true
           schema:
@@ -6636,7 +6692,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PrintableDocumentForUpdate'
-        description: PartialDocument
         required: true
       responses:
         '200':
@@ -6656,52 +6711,75 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Update document
+      x-fft-permissions:
+        - DOCUMENT_SET_WRITE
       tags:
         - Document Sets (Core)
   /api/documentsets/{documentSetRef}/documents/{documentRef}/file:
     get:
-      description: ''
+      deprecated: false
+      description: Download file of document set
       operationId: downloadDocument
       parameters:
-        - description: Reference to the documentSet you want to download a file from
-          in: path
+        - in: path
           name: documentSetRef
           required: true
           schema:
             type: string
-        - description: Reference to the single document you want to download
-          in: path
+        - in: path
           name: documentRef
           required: true
           schema:
             type: string
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                type: string
           description: The document as a stream
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
       summary: Get file
+      x-fft-permissions:
+        - DOCUMENT_SET_READ
       tags:
         - Document Sets (Core)
     put:
+      deprecated: false
+      description: Add document content to document set
       operationId: addContentToDocument
       parameters:
-        - description: Reference to the documentSet you want to update
-          in: path
+        - in: path
           name: documentSetRef
           required: true
           schema:
             type: string
-        - description: Reference to the single document you want to update
-          in: path
+        - in: path
           name: documentRef
           required: true
           schema:
@@ -6711,7 +6789,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ExternalDocumentContentForUpdate'
-        description: Document Content with id and version
         required: true
       responses:
         '200':
@@ -6731,16 +6808,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: >-
-            Your user, although recognized, is not authorized to use this
-            endpoint
+          description: Your user, although recognized, is not authorized to use this
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
+          description: The requested entity was not found
       summary: Update file
+      x-fft-permissions:
+        - DOCUMENT_SET_WRITE
       tags:
         - Document Sets (Core)
   /api/expiries:
@@ -34054,20 +34131,39 @@ components:
       title: DocumentOperations
       description: DocumentOperations
     DocumentSet:
-      allOf:
-        - $ref: '#/components/schemas/VersionedResource'
       properties:
+        created:
+          description: Creation timestamp
+          format: date-time
+          type: string
         documents:
+          description: >-
+            Customizable information about the lineItem that can be set during
+            the process.
           items:
             $ref: '#/components/schemas/PrintableDocument'
+          maxItems: 50
           type: array
         facilityRef:
+          description: connected facility
           type: string
         id:
+          description: Unique identifier for the document set
           type: string
+        lastModified:
+          description: Last modification timestamp
+          format: date-time
+          type: string
+        version:
+          description: Version number for optimistic locking
+          type: integer
       required:
         - id
+        - lastModified
+        - created
+        - version
       title: DocumentSet
+      type: object
       description: DocumentSet
     DocumentStatus:
       enum:
@@ -35094,7 +35190,6 @@ components:
       title: ExternalDocument
       description: ExternalDocument
     ExternalDocumentContentForUpdate:
-      additionalProperties: false
       properties:
         documentSetVersion:
           description: Version of documentSet to which this document belongs.
@@ -35103,10 +35198,10 @@ components:
         file:
           $ref: '#/components/schemas/NamedFile'
       required:
-        - file
         - documentSetVersion
-      type: object
+        - file
       title: ExternalDocumentContentForUpdate
+      type: object
       description: ExternalDocumentContentForUpdate
     ExternalDocumentForCreation:
       additionalProperties: false
@@ -35335,33 +35430,49 @@ components:
       xml:
         name: ExternalLinkActionLogPayload
     ExternalPrintableDocumentForCreation:
-      additionalProperties: false
       properties:
         customAttributes:
           description: >-
-            Attributes that can be added to the document. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the informations carried here.
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
           type: object
         file:
           $ref: '#/components/schemas/NamedFile'
         operations:
-          description: Offered operations for this document
           items:
-            $ref: '#/components/schemas/DocumentOperations'
+            enum:
+              - PRINT
+              - VIEW
+            type: string
+          maxItems: 10
           minItems: 1
           type: array
         priority:
-          minimum: 0
           type: number
         status:
-          $ref: '#/components/schemas/DocumentStatus'
+          enum:
+            - AVAILABLE
+            - LOADING
+            - REQUESTABLE
+            - CANCELED
+            - WAITING_FOR_INPUT
+          type: string
         type:
-          $ref: '#/components/schemas/DocumentType'
+          enum:
+            - PDF
+            - PNG
+            - JPG
+            - GIF
+            - JPEG
+            - XML
+            - JSON
+          type: string
       required:
         - type
-      type: object
       title: ExternalPrintableDocumentForCreation
+      type: object
       description: ExternalPrintableDocumentForCreation
     ExternalStockChangeReason:
       properties:
@@ -60254,36 +60365,39 @@ components:
       title: PrintableDocument
       description: PrintableDocument
     PrintableDocumentForUpdate:
-      additionalProperties: false
       properties:
         customAttributes:
           description: >-
-            Attributes that can be added to the document. These attributes
-            cannot be used within fulfillment processes, but it could be useful
-            to have the informations carried here.
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
           type: object
         operations:
-          description: Offered operations for this document
           items:
-            $ref: '#/components/schemas/DocumentOperations'
+            enum:
+              - PRINT
+              - VIEW
+            type: string
+          maxItems: 10
           minItems: 1
           type: array
         priority:
-          description: Sorting display order of document
-          example: 42
-          format: int64
-          type: integer
+          type: number
         status:
-          $ref: '#/components/schemas/DocumentStatus'
+          enum:
+            - AVAILABLE
+            - LOADING
+            - REQUESTABLE
+            - CANCELED
+            - WAITING_FOR_INPUT
+          type: string
         version:
-          description: Version of the documentSet you want to update a document of
-          example: 42
-          format: int64
-          type: integer
+          type: number
       required:
         - version
-      type: object
       title: PrintableDocumentForUpdate
+      type: object
       description: PrintableDocumentForUpdate
     PrioritizationRule:
       description: >-
