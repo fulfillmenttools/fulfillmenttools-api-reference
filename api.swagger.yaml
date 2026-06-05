@@ -13444,6 +13444,220 @@ paths:
       summary: Get item returns
       tags:
         - Returns (Operations)
+  /api/labels:
+    post:
+      deprecated: false
+      description: Create label
+      operationId: addLabel
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+          description: The label was successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+      summary: Create label
+      x-fft-permissions:
+        - LABEL_WRITE
+      tags:
+        - Label (Operations)
+  /api/labels/{id}:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
+        label
+      operationId: getLabel
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+          description: Label was found. The result is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get label
+      x-fft-permissions:
+        - LABEL_READ
+      tags:
+        - Label (Operations)
+      x-badges:
+        - color: red
+          label: ALPHA
+    patch:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Update label
+      operationId: patchLabel
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelForUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+          description: >-
+            Label was found and patch-set has been applied. The patched entity
+            is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+      summary: Update label
+      x-fft-permissions:
+        - LABEL_WRITE
+      tags:
+        - Label (Operations)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/labels/{id}/actions:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Performs provided labelAction
+      operationId: performLabelAction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/RequestLabelAction'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+          description: >-
+            Label was found and provided action has been applied. The patched
+            entity is in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user, although recognized, is not authorized to use this
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+      summary: Performs provided labelAction
+      x-fft-permissions:
+        - LABEL_WRITE
+      tags:
+        - Label (Operations)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/linkedservicejobs:
     get:
       operationId: getLinkedServiceJobs
@@ -18472,6 +18686,8 @@ paths:
               - PARCEL_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
+              - LABEL_READ
+              - LABEL_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -31120,6 +31336,16 @@ components:
       title: CarrierRecommendationResult
       type: object
       description: CarrierRecommendationResult
+    CarrierService:
+      properties:
+        type:
+          description: Service type identifier
+          type: string
+      required:
+        - type
+      title: CarrierService
+      type: object
+      description: CarrierService
     CarrierServices:
       enum:
         - SIGNATURE
@@ -44269,6 +44495,434 @@ components:
       title: KeyExistsFilter
       type: object
       description: KeyExistsFilter
+    Label:
+      properties:
+        additionalDocuments:
+          description: Additional documents attached to the label
+          items:
+            $ref: '#/components/schemas/LabelAdditionalDocument'
+          maxItems: 20
+          type: array
+        anonymized:
+          description: Whether the label data has been anonymized
+          type: boolean
+        carrierData:
+          allOf:
+            - $ref: '#/components/schemas/LabelCarrierData'
+          description: Carrier and product details
+        created:
+          description: Creation timestamp
+          format: date-time
+          type: string
+        customAttributes:
+          additionalProperties: true
+          description: Custom attributes
+          type: object
+        id:
+          description: Unique identifier of the label
+          type: string
+        labelUrl:
+          description: URL to download the label document
+          type: string
+        lastModified:
+          description: Last modification timestamp
+          format: date-time
+          type: string
+        operativeProcessRef:
+          description: Reference to the operative process
+          type: string
+        packageRef:
+          description: Reference to the package
+          type: string
+        processRef:
+          description: Reference to the fulfillment process
+          type: string
+        recipientAddress:
+          description: Recipient addresses
+          items:
+            $ref: '#/components/schemas/LabelConsumerAddress'
+          maxItems: 10
+          type: array
+        senderAddress:
+          allOf:
+            - $ref: '#/components/schemas/LabelFacilityAddress'
+          description: Sender address
+        shippingInformationRef:
+          description: Reference to the shipping information
+          type: string
+        shortId:
+          description: Short human-readable identifier
+          type: string
+        status:
+          description: Current status of the label
+          enum:
+            - WAITING_FOR_INPUT
+            - REQUESTABLE
+            - REQUESTED
+            - SUCCESSFUL
+            - FAILED
+            - CANCELLED
+            - OBSOLETE
+          type: string
+        tenantLabelId:
+          description: Tenant-specific label identifier
+          type: string
+        tenantOrderId:
+          description: Tenant-specific order identifier
+          type: string
+        type:
+          description: Type of label
+          enum:
+            - SEND_LABEL
+            - RETURN_LABEL
+          type: string
+        version:
+          description: Optimistic locking version
+          type: integer
+      required:
+        - id
+        - status
+        - additionalDocuments
+        - carrierData
+        - senderAddress
+        - recipientAddress
+        - type
+        - anonymized
+        - created
+        - lastModified
+        - version
+      title: Label
+      type: object
+      description: Label
+    LabelAdditionalDocument:
+      properties:
+        nameLocalized:
+          additionalProperties: true
+          description: Localized name of the document
+          type: object
+        url:
+          description: URL to the additional document
+          type: string
+      required:
+        - url
+        - nameLocalized
+      title: LabelAdditionalDocument
+      type: object
+      description: LabelAdditionalDocument
+    LabelAddressPhoneNumber:
+      properties:
+        customAttributes:
+          additionalProperties: true
+          description: Custom attributes
+          type: object
+        label:
+          description: Label for the phone number
+          type: string
+        type:
+          description: Phone number type
+          enum:
+            - MOBILE
+            - PHONE
+          type: string
+        value:
+          description: Phone number value
+          type: string
+      required:
+        - type
+        - value
+      title: LabelAddressPhoneNumber
+      type: object
+      description: LabelAddressPhoneNumber
+    LabelCarrierData:
+      properties:
+        carrierRef:
+          description: Reference to the carrier
+          type: string
+        product:
+          description: Carrier product identifier
+          type: string
+        services:
+          description: Additional carrier services
+          items:
+            $ref: '#/components/schemas/CarrierService'
+          maxItems: 20
+          type: array
+      required:
+        - carrierRef
+      title: LabelCarrierData
+      type: object
+      description: LabelCarrierData
+    LabelConsumerAddress:
+      properties:
+        additionalAddressInfo:
+          description: Additional address information
+          type: string
+        addressType:
+          description: Address type
+          enum:
+            - POSTAL_ADDRESS
+            - PARCEL_LOCKER
+            - INVOICE_ADDRESS
+          type: string
+        city:
+          description: City
+          type: string
+        companyName:
+          description: Company name
+          type: string
+        coordinates:
+          description: Geo-coordinates
+          type: object
+        country:
+          description: Country code (ISO 3166-1 alpha-2)
+          example: DE
+          type: string
+        customAttributes:
+          additionalProperties: true
+          description: Custom attributes
+          type: object
+        email:
+          description: Email address of the consumer
+          type: string
+        emailAddresses:
+          description: Email addresses
+          items:
+            $ref: '#/components/schemas/LabelEmailAddress'
+          maxItems: 10
+          type: array
+        firstName:
+          description: First name
+          type: string
+        houseNumber:
+          description: House number
+          type: string
+        lastName:
+          description: Last name
+          type: string
+        personalTitle:
+          description: Personal title
+          type: string
+        phoneNumbers:
+          description: Phone numbers
+          items:
+            $ref: '#/components/schemas/LabelAddressPhoneNumber'
+          maxItems: 10
+          type: array
+        postalCode:
+          description: Postal code
+          type: string
+        province:
+          description: Province or state
+          type: string
+        salutation:
+          description: Salutation
+          type: string
+        street:
+          description: Street name
+          type: string
+      required:
+        - street
+        - postalCode
+        - city
+        - country
+      title: LabelConsumerAddress
+      type: object
+      description: LabelConsumerAddress
+    LabelEmailAddress:
+      properties:
+        recipient:
+          description: Human-readable recipient description
+          type: string
+        value:
+          description: Email address
+          type: string
+      required:
+        - value
+      title: LabelEmailAddress
+      type: object
+      description: LabelEmailAddress
+    LabelFacilityAddress:
+      properties:
+        additionalAddressInfo:
+          description: Additional address information
+          type: string
+        city:
+          description: City
+          type: string
+        companyName:
+          description: Company name
+          type: string
+        country:
+          description: Country code (ISO 3166-1 alpha-2)
+          example: DE
+          type: string
+        customAttributes:
+          additionalProperties: true
+          description: Custom attributes
+          type: object
+        emailAddresses:
+          description: Email addresses
+          items:
+            $ref: '#/components/schemas/LabelEmailAddress'
+          maxItems: 10
+          type: array
+        houseNumber:
+          description: House number
+          type: string
+        phoneNumbers:
+          description: Phone numbers
+          items:
+            $ref: '#/components/schemas/LabelAddressPhoneNumber'
+          maxItems: 10
+          type: array
+        postalCode:
+          description: Postal code
+          type: string
+        province:
+          description: Province or state
+          type: string
+        street:
+          description: Street name
+          type: string
+      required:
+        - companyName
+        - street
+        - postalCode
+        - city
+        - country
+      title: LabelFacilityAddress
+      type: object
+      description: LabelFacilityAddress
+    LabelForCreation:
+      properties:
+        additionalDocuments:
+          description: Additional documents attached to the label
+          items:
+            $ref: '#/components/schemas/LabelAdditionalDocument'
+          maxItems: 20
+          type: array
+        carrierData:
+          allOf:
+            - $ref: '#/components/schemas/LabelCarrierData'
+          description: Carrier and product details
+        customAttributes:
+          additionalProperties: true
+          description: Custom attributes
+          type: object
+        labelUrl:
+          description: URL to download the label document
+          type: string
+        operativeProcessRef:
+          description: Reference to the operative process
+          type: string
+        packageRef:
+          description: Reference to the package
+          type: string
+        processRef:
+          description: Reference to the fulfillment process
+          type: string
+        recipientAddress:
+          description: Recipient addresses
+          items:
+            $ref: '#/components/schemas/LabelConsumerAddress'
+          maxItems: 10
+          type: array
+        senderAddress:
+          allOf:
+            - $ref: '#/components/schemas/LabelFacilityAddress'
+          description: Sender address
+        shippingInformationRef:
+          description: Reference to the shipping information
+          type: string
+        shortId:
+          description: Short human-readable identifier
+          type: string
+        status:
+          description: Current status of the label
+          enum:
+            - WAITING_FOR_INPUT
+            - REQUESTABLE
+            - REQUESTED
+            - SUCCESSFUL
+            - FAILED
+            - CANCELLED
+            - OBSOLETE
+          type: string
+        tenantLabelId:
+          description: Tenant-specific label identifier
+          type: string
+        tenantOrderId:
+          description: Tenant-specific order identifier
+          type: string
+        type:
+          description: Type of label
+          enum:
+            - SEND_LABEL
+            - RETURN_LABEL
+          type: string
+      required:
+        - status
+        - additionalDocuments
+        - carrierData
+        - senderAddress
+        - recipientAddress
+        - type
+      title: LabelForCreation
+      type: object
+      description: LabelForCreation
+    LabelForUpdate:
+      properties:
+        anonymized:
+          description: Whether the label data has been anonymized
+          type: boolean
+        carrierData:
+          allOf:
+            - $ref: '#/components/schemas/LabelCarrierData'
+          description: Carrier and product details
+        labelUrl:
+          description: URL to download the label document
+          type: string
+        recipientAddress:
+          description: Recipient addresses
+          items:
+            $ref: '#/components/schemas/LabelConsumerAddress'
+          maxItems: 10
+          type: array
+        senderAddress:
+          allOf:
+            - $ref: '#/components/schemas/LabelFacilityAddress'
+          description: Sender address
+        shortId:
+          description: Short human-readable identifier
+          type: string
+        status:
+          description: Current status of the label
+          enum:
+            - WAITING_FOR_INPUT
+            - REQUESTABLE
+            - REQUESTED
+            - SUCCESSFUL
+            - FAILED
+            - CANCELLED
+            - OBSOLETE
+          type: string
+        tenantOrderId:
+          description: Tenant-specific order identifier
+          type: string
+        type:
+          description: Type of label
+          enum:
+            - SEND_LABEL
+            - RETURN_LABEL
+          type: string
+        version:
+          description: Optimistic locking version
+          type: integer
+      required:
+        - version
+      title: LabelForUpdate
+      type: object
+      description: LabelForUpdate
     LastDomainEntityStatusItem:
       description: >-
         An object holding the last DomainStatus of a given entity and its
@@ -57619,6 +58273,8 @@ components:
             - PARCEL_WRITE
             - SHIPMENT_READ
             - SHIPMENT_WRITE
+            - LABEL_READ
+            - LABEL_WRITE
             - HANDOVERJOB_READ
             - HANDOVERJOB_WRITE
             - PICKJOB_READ
@@ -57769,6 +58425,7 @@ components:
             - RETURN
             - PARCEL
             - SHIPMENT
+            - LABEL
             - HANDOVERJOB
             - HANDOVER_JOB
             - PICKJOB
@@ -64004,6 +64661,20 @@ components:
       title: RequestedDateTimePoint
       type: object
       description: RequestedDateTimePoint
+    RequestLabelAction:
+      properties:
+        name:
+          description: Identifier of the specified action.
+          type: string
+        version:
+          description: Optimistic locking version
+          type: integer
+      required:
+        - name
+        - version
+      title: RequestLabelAction
+      type: object
+      description: RequestLabelAction
     RequiredLineItem:
       additionalProperties: false
       properties:
@@ -65482,6 +66153,8 @@ components:
               - PARCEL_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
+              - LABEL_READ
+              - LABEL_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -65710,6 +66383,8 @@ components:
               - PARCEL_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
+              - LABEL_READ
+              - LABEL_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -65930,6 +66605,8 @@ components:
               - PARCEL_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
+              - LABEL_READ
+              - LABEL_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -66155,6 +66832,8 @@ components:
               - PARCEL_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
+              - LABEL_READ
+              - LABEL_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -80294,6 +80973,8 @@ components:
               - PARCEL_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
+              - LABEL_READ
+              - LABEL_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
