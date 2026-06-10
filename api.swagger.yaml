@@ -29778,6 +29778,27 @@ components:
       title: AvailabilityTimeframe2
       type: object
       description: AvailabilityTimeframe2
+    AvailableDecisionReasons:
+      additionalProperties: false
+      properties:
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        context:
+          description: Context in which this reason is available
+          items:
+            $ref: '#/components/schemas/DecisionReasonContext'
+          maxItems: 10
+          minItems: 1
+          type: array
+        reason:
+          description: Translated value from  reasonLocalized
+          example: Item damaged
+          type: string
+      required:
+        - reasonLocalized
+      type: object
+      title: AvailableDecisionReasons
+      description: AvailableDecisionReasons
     AvailableForPickingDetails:
       properties:
         total:
@@ -33736,6 +33757,34 @@ components:
         name: DecisionLogRef
       title: DecisionLogRef
       description: DecisionLogRef
+    DecisionReasonContext:
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/DecisionReasonContextTypes'
+        values:
+          items:
+            $ref: '#/components/schemas/DecisionReasonContextValues'
+          maxItems: 10
+          minItems: 1
+          type: array
+      type: object
+      title: DecisionReasonContext
+      description: DecisionReasonContext
+    DecisionReasonContextTypes:
+      enum:
+        - ITEM_RETURN_LINE_ITEM_STATUS
+      type: string
+      title: DecisionReasonContextTypes
+      description: DecisionReasonContextTypes
+    DecisionReasonContextValues:
+      enum:
+        - ACCEPTED
+        - REJECTED
+        - WAITING_FOR_INPUT
+      type: string
+      title: DecisionReasonContextValues
+      description: DecisionReasonContextValues
     DecisionType:
       enum:
         - FENCE
@@ -47041,6 +47090,28 @@ components:
       title: LocaleStringConstrained
       type: object
       description: LocaleStringConstrained
+    LocalizedAvailableDecisionReason:
+      additionalProperties: false
+      properties:
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        context:
+          description: Context in which this reason is available
+          items:
+            $ref: '#/components/schemas/DecisionReasonContext'
+          maxItems: 10
+          minItems: 1
+          type: array
+        reason:
+          description: Translated value from  reasonLocalized
+          example: Item damaged
+          type: string
+      required:
+        - reasonLocalized
+        - reason
+      type: object
+      title: LocalizedAvailableDecisionReason
+      description: LocalizedAvailableDecisionReason
     LocalizedAvailableItemCondition:
       additionalProperties: false
       properties:
@@ -47100,6 +47171,10 @@ components:
             If true, a refund can be triggered. If false, the endpoints to
             trigger a refund are disabled.
           type: boolean
+        availableDecisionReasons:
+          items:
+            $ref: '#/components/schemas/LocalizedAvailableDecisionReason'
+          type: array
         availableItemConditions:
           items:
             $ref: '#/components/schemas/LocalizedAvailableItemCondition'
@@ -65822,6 +65897,11 @@ components:
             If true, a refund can be triggered. If false, the endpoints to
             trigger a refund are disabled.
           type: boolean
+        availableDecisionReasons:
+          items:
+            $ref: '#/components/schemas/AvailableDecisionReasons'
+          maxItems: 100
+          type: array
         availableItemConditions:
           items:
             $ref: '#/components/schemas/AvailableItemCondition'
