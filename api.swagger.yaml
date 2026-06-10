@@ -20471,6 +20471,28 @@ paths:
           required: true
           schema:
             type: string
+        - description: A type parameter for filtering history logs
+          in: query
+          name: type
+          required: false
+          schema:
+            type: string
+        - description: >-
+            Reference to the username you want to get the corresponding history
+            logs
+          in: query
+          name: username
+          required: false
+          schema:
+            type: string
+        - description: >-
+            Reference to the facility name you want to get the corresponding
+            history logs
+          in: query
+          name: facilityName
+          required: false
+          schema:
+            type: string
         - description: all entities after given Id
           in: query
           name: startAfterId
@@ -20484,6 +20506,12 @@ paths:
           schema:
             default: 25
             type: integer
+        - description: query process history log orderBy
+          in: query
+          name: orderBy
+          required: false
+          schema:
+            $ref: '#/components/schemas/ProcessHistoryLogSort'
         - description: control whether you want to filter consecutive duplicate logs
           in: query
           name: filterConsecutiveDuplicates
@@ -61623,6 +61651,23 @@ components:
       type: object
       title: ProcessHistoryLogs
       description: ProcessHistoryLogs
+    ProcessHistoryLogSort:
+      description: Attribute to order a process history log by
+      enum:
+        - TIMESTAMP_DESC
+        - TIMESTAMP_ASC
+        - INFO_DESC
+        - INFO_ASC
+        - TYPE_ASC
+        - TYPE_DESC
+        - USERNAME_DESC
+        - USERNAME_ASC
+        - FACILITY_NAME_DESC
+        - FACILITY_NAME_ASC
+      type: string
+      xml:
+        name: ProcessHistoryLogSort
+      title: ProcessHistoryLogSort
     ProcessHistoryLogTypeCommon:
       description: Common log types for process history
       enum:
