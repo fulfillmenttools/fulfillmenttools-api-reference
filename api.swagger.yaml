@@ -34506,6 +34506,8 @@ components:
       title: DomainConfiguration
       description: DomainConfiguration
     DomainStatus:
+      deprecated: true
+      description: Deprecated. Use ModuleStatus instead.
       enum:
         - PENDING
         - CREATED
@@ -34516,7 +34518,6 @@ components:
         - OBSOLETE
       type: string
       title: DomainStatus
-      description: DomainStatus
     DomainStatusHistoryItem:
       description: >-
         This item represent a process status change triggered by a specific
@@ -34552,6 +34553,8 @@ components:
       type: object
       title: DomainStatusHistoryItem
     DomainType:
+      deprecated: true
+      description: Deprecated. Use ModuleType instead.
       enum:
         - ORDER
         - ROUTING_PLAN
@@ -34566,7 +34569,6 @@ components:
         - RESERVATION
       type: string
       title: DomainType
-      description: DomainType
     DpdChCarrierConfiguration:
       properties:
         additionalWeightInPercent:
@@ -45031,12 +45033,40 @@ components:
         status:
           $ref: '#/components/schemas/DomainStatus'
           description: The status of the entity.
+        subStatuses:
+          description: >-
+            The current sub-statuses of the entity, persisted to avoid reloading
+            all progress logs on each recalculation.
+          items:
+            $ref: '#/components/schemas/ProcessSubStatus'
+          type: array
       required:
         - domain
         - status
         - entityId
       type: object
       title: LastDomainEntityStatusItem
+    LastModuleEntityStatusItem:
+      properties:
+        entityRef:
+          type: string
+        facilityRef:
+          type: string
+        moduleEntity:
+          $ref: '#/components/schemas/ModuleEntity'
+        status:
+          $ref: '#/components/schemas/ModuleEntityStatus'
+        subStatuses:
+          items:
+            $ref: '#/components/schemas/ProcessSubStatus'
+          type: array
+      required:
+        - moduleEntity
+        - status
+        - entityRef
+      type: object
+      title: LastModuleEntityStatusItem
+      description: LastModuleEntityStatusItem
     LatestPickingStart:
       allOf:
         - $ref: '#/components/schemas/PickingStartBase'
@@ -49725,6 +49755,72 @@ components:
       type: string
       title: ModuleEntityStatus
       description: ModuleEntityStatus
+    ModuleEntityStatusHistoryItem:
+      properties:
+        created:
+          format: date-time
+          type: string
+        entityRef:
+          type: string
+        facilityRef:
+          type: string
+        moduleEntity:
+          $ref: '#/components/schemas/ModuleEntity'
+        status:
+          $ref: '#/components/schemas/ModuleEntityStatus'
+        subStatus:
+          $ref: '#/components/schemas/ProcessSubStatus'
+      required:
+        - moduleEntity
+        - status
+        - entityRef
+        - created
+      type: object
+      title: ModuleEntityStatusHistoryItem
+      description: ModuleEntityStatusHistoryItem
+    ModuleStatus:
+      enum:
+        - PENDING
+        - CREATED
+        - IN_PROGRESS
+        - STUCK
+        - FINISHED
+        - INCOMPLETE
+        - CANCELED
+        - OBSOLETE
+      type: string
+      title: ModuleStatus
+      description: ModuleStatus
+    ModuleStatusItem:
+      properties:
+        module:
+          $ref: '#/components/schemas/ModuleType'
+        status:
+          $ref: '#/components/schemas/ModuleStatus'
+        subStatuses:
+          items:
+            $ref: '#/components/schemas/ProcessSubStatus'
+          nullable: true
+          type: array
+      required:
+        - module
+        - status
+      type: object
+      title: ModuleStatusItem
+      description: ModuleStatusItem
+    ModuleType:
+      enum:
+        - PICKING
+        - ROUTING
+        - PACKING
+        - SHIPMENT
+        - HANDOVER
+        - RETURN
+        - SERVICE_JOB
+        - INVENTORY
+      type: string
+      title: ModuleType
+      description: ModuleType
     MonetaryValue:
       properties:
         currency:
@@ -61235,19 +61331,31 @@ components:
         domainStatuses:
           additionalProperties:
             $ref: '#/components/schemas/DomainStatus'
-          description: Overview of the different domain adherent status of the process.
+          deprecated: true
+          description: >-
+            Deprecated. Use moduleStatuses instead. Overview of the different
+            domain adherent status of the process.
           type: object
         domainStatusHistory:
+          deprecated: true
           description: >-
-            History of process status changes caused by changes on the related
-            domains.
+            Deprecated. Use moduleEntityStatusesHistory instead. History of
+            process status changes caused by changes on the related domains.
           items:
             $ref: '#/components/schemas/DomainStatusHistoryItem'
           type: array
         domsStatus:
-          $ref: '#/components/schemas/ProcessStatus'
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatus'
           default: CREATED
-          description: Overall DOMS status of the process.
+          deprecated: true
+          description: >-
+            Deprecated. Use domsStatuses instead. Overall DOMS status of the
+            process.
+        domsStatuses:
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusDetail'
+          description: DOMS domain status with aggregated sub-statuses from modules.
         externalActionRefs:
           description: >-
             References to the external actions connected to this process (if
@@ -61283,9 +61391,17 @@ components:
           description: ID of this process
           type: string
         inventoryStatus:
-          $ref: '#/components/schemas/ProcessStatus'
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatus'
           default: CREATED
-          description: Overall inventory status of the process
+          deprecated: true
+          description: >-
+            Deprecated. Use inventoryStatuses instead. Overall inventory status
+            of the process.
+        inventoryStatuses:
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusDetail'
+          description: Inventory domain status with aggregated sub-statuses from modules.
         isAnonymized:
           description: Indicates if the entities have been anonymized.
           type: boolean
@@ -61297,14 +61413,40 @@ components:
             type: string
           type: array
         lastDomainEntityStatuses:
-          description: The last domain statuses of each domain
+          deprecated: true
+          description: >-
+            Deprecated. Use lastModuleEntityStatuses instead. The last domain
+            statuses of each domain.
           items:
             $ref: '#/components/schemas/LastDomainEntityStatusItem'
           type: array
+        lastModuleEntityStatuses:
+          description: The last status of each module entity.
+          items:
+            $ref: '#/components/schemas/LastModuleEntityStatusItem'
+          type: array
+        moduleEntityStatusesHistory:
+          description: History of module entity status changes.
+          items:
+            $ref: '#/components/schemas/ModuleEntityStatusHistoryItem'
+          type: array
+        moduleStatuses:
+          description: Status of each module involved in this process.
+          items:
+            $ref: '#/components/schemas/ModuleStatusItem'
+          type: array
         operativeStatus:
-          $ref: '#/components/schemas/ProcessStatus'
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatus'
           default: CREATED
-          description: Overall operative status of the process
+          deprecated: true
+          description: >-
+            Deprecated. Use operativeStatuses instead. Overall operative status
+            of the process.
+        operativeStatuses:
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusDetail'
+          description: Operative domain status with aggregated sub-statuses from modules.
         orderRef:
           description: References to the Order connected to this process (if present).
           type: string
@@ -61324,9 +61466,17 @@ components:
             type: string
           type: array
         returnStatus:
-          $ref: '#/components/schemas/ProcessStatus'
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatus'
           default: NOT_AVAILABLE
-          description: Overall return status of the process
+          deprecated: true
+          description: >-
+            Deprecated. Use returnStatuses instead. Overall return status of the
+            process.
+        returnStatuses:
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusDetail'
+          description: Return domain status with aggregated sub-statuses from modules.
         routingPlanRefs:
           description: >-
             References the RoutingPlans that were used during this process (if
@@ -61347,9 +61497,17 @@ components:
             type: string
           type: array
         status:
-          $ref: '#/components/schemas/ProcessStatus'
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatus'
           default: CREATED
-          description: Overall status of the process.
+          deprecated: true
+          description: >-
+            Deprecated. Use statuses.status instead. Overall status of the
+            process.
+        statuses:
+          allOf:
+            - $ref: '#/components/schemas/ProcessStatusDetail'
+          description: Aggregated process status with sub-statuses from all domains.
         tenantOrderId:
           description: The tenantOrderId referencing this process.
           type: string
@@ -61870,6 +62028,9 @@ components:
           example: 1
           format: int64
           type: integer
+        facilityRef:
+          description: The id of the facility an entity possibly belongs to.
+          type: string
         id:
           type: string
         moduleEntity:
@@ -61889,6 +62050,14 @@ components:
           description: >-
             Module entity's original status mapped to the ModuleEntityStatus for
             process
+        moduleEntitySubStatuses:
+          description: >-
+            Sub-statuses reported by the module entity for this progress log
+            entry.
+          items:
+            $ref: '#/components/schemas/ProcessSubStatus'
+          nullable: true
+          type: array
         moduleEntityVersion:
           description: The version of the related module entity
           example: 1
@@ -62942,6 +63111,25 @@ components:
       type: string
       title: ProcessStatus
       description: ProcessStatus
+    ProcessStatusDetail:
+      properties:
+        status:
+          $ref: '#/components/schemas/ProcessStatus'
+        subStatuses:
+          items:
+            $ref: '#/components/schemas/ProcessSubStatus'
+          nullable: true
+          type: array
+        subStatusHistory:
+          items:
+            $ref: '#/components/schemas/ProcessSubStatus'
+          type: array
+      required:
+        - status
+        - subStatusHistory
+      type: object
+      title: ProcessStatusDetail
+      description: ProcessStatusDetail
     ProcessStatusEnumFilter:
       properties:
         eq:
@@ -62990,6 +63178,14 @@ components:
       title: ProcessStickerSort
       type: object
       description: ProcessStickerSort
+    ProcessSubStatus:
+      enum:
+        - MISMATCH
+        - DELAYED
+        - AT_RISK
+      type: string
+      title: ProcessSubStatus
+      description: ProcessSubStatus
     ProcessTagsFilter:
       properties:
         id:
