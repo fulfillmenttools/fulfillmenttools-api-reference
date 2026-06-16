@@ -35807,6 +35807,29 @@ components:
       type: object
       title: ExpiryWebHookEvent
       description: ExpiryWebHookEvent
+    ExpressionGuardCondition:
+      properties:
+        entity:
+          description: Entity the expression applies to
+          enum:
+            - ORDER
+            - INCOMING_EVENT
+          type: string
+        expression:
+          description: JSONPath expression evaluated to decide the guard.
+          type: string
+        kind:
+          description: 'Discriminator: expression-based guard.'
+          enum:
+            - EXPRESSION
+          type: string
+      required:
+        - kind
+        - expression
+        - entity
+      title: ExpressionGuardCondition
+      type: object
+      description: ExpressionGuardCondition
     ExternalAction:
       allOf:
         - $ref: '#/components/schemas/ExternalActionForReplacement'
@@ -39545,9 +39568,15 @@ components:
     GuardWorkflowNode:
       properties:
         condition:
-          allOf:
-            - $ref: '#/components/schemas/WorkflowConditionForGuard'
-          description: Condition expression that guards the workflow path
+          description: 'Guard condition: an expression or a built-in (preconfigured) guard.'
+          discriminator:
+            mapping:
+              EXPRESSION: '#/components/schemas/ExpressionGuardCondition'
+              PRECONFIGURED: '#/components/schemas/PreconfiguredGuardCondition'
+            propertyName: kind
+          oneOf:
+            - $ref: '#/components/schemas/ExpressionGuardCondition'
+            - $ref: '#/components/schemas/PreconfiguredGuardCondition'
         key:
           description: Unique identifier for this node within the workflow
           type: string
@@ -61934,6 +61963,24 @@ components:
       title: PostNlCarrierConfiguration
       type: object
       description: PostNlCarrierConfiguration
+    PreconfiguredGuardCondition:
+      properties:
+        kind:
+          description: 'Discriminator: built-in guard.'
+          enum:
+            - PRECONFIGURED
+          type: string
+        preconfigured:
+          description: Which built-in guard to run
+          enum:
+            - ORDER_GATE
+          type: string
+      required:
+        - kind
+        - preconfigured
+      title: PreconfiguredGuardCondition
+      type: object
+      description: PreconfiguredGuardCondition
     PreferredCarrier:
       description: Keys of the preferred carriers to handle out the order
       type: string
@@ -83163,23 +83210,6 @@ components:
       title: WorkflowCondition
       type: object
       description: WorkflowCondition
-    WorkflowConditionForGuard:
-      properties:
-        entity:
-          description: Entity type that the condition applies to
-          enum:
-            - ORDER
-            - INCOMING_EVENT
-          type: string
-        expression:
-          description: Expression that defines the guard condition
-          type: string
-      required:
-        - expression
-        - entity
-      title: WorkflowConditionForGuard
-      type: object
-      description: WorkflowConditionForGuard
     WorkflowConnection:
       properties:
         from:
