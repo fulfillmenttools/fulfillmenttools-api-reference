@@ -45127,6 +45127,8 @@ components:
             be used within fulfillment processes, but it could be useful to have
             the information carried here.
           type: object
+        decisionReason:
+          $ref: '#/components/schemas/ItemReturnLineItemReason'
         id:
           example: a69006ba-7100-4b4d-a610-1ca28016a4eb
           type: string
@@ -45180,6 +45182,8 @@ components:
             be used within fulfillment processes, but it could be useful to have
             the information carried here.
           type: object
+        decisionReason:
+          $ref: '#/components/schemas/ItemReturnLineItemReasonForUpsert'
         itemConditionComment:
           example: Upper corner damaged
           minLength: 1
@@ -45214,6 +45218,8 @@ components:
     ItemReturnLineItemForUpdate:
       additionalProperties: false
       properties:
+        decisionReason:
+          $ref: '#/components/schemas/ItemReturnLineItemReasonForUpsert'
         itemReturnJobVersion:
           description: version of the overlaying itemReturnJob
           example: 42
@@ -45242,6 +45248,19 @@ components:
         - reasonLocalized
       title: ItemReturnLineItemReason
       description: ItemReturnLineItemReason
+    ItemReturnLineItemReasonForUpsert:
+      additionalProperties: false
+      properties:
+        reasonLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        comment:
+          example: Upper corner damaged
+          minLength: 1
+          type: string
+      required:
+        - reasonLocalized
+      title: ItemReturnLineItemReasonForUpsert
+      description: ItemReturnLineItemReasonForUpsert
     ItemReturnLineItemStatus:
       enum:
         - OPEN
