@@ -28318,7 +28318,6 @@ components:
   schemas:
     AbortPickJob:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
@@ -28458,17 +28457,7 @@ components:
           description: ''
           enum:
             - AddAllowedValueToTag
-            - ModifyPickJob
-            - ModifyPickJobLastEditor
-            - RestartPickJob
-            - ResetPickJob
-            - CancelPickRun
             - CancelHandoverjob
-            - AbortPickJob
-            - FinishPickRun
-            - StartPickRun
-            - ModifyPickLineItem
-            - ModifyPickRunLineItem
             - ModifyPackJob
             - PausePackJob
             - ModifyPackLineItem
@@ -28493,7 +28482,6 @@ components:
             - ModifyParcel
             - ModifyParcelLoadUnit
             - ModifyRestowItem
-            - RemovePickJobFromPickRun
             - ModifyPartialStock
             - AddTagsToProcess
             - AssignFacilityToProcess
@@ -31051,7 +31039,6 @@ components:
         name: CancelHandoverjob
     CancelPickRun:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
@@ -39057,7 +39044,6 @@ components:
       title: FinishItemReturnJobActionParameter
     FinishPickRun:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
@@ -50030,7 +50016,6 @@ components:
       description: ModifyPartialStock
     ModifyPickJob:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
@@ -50062,7 +50047,6 @@ components:
         name: ModifyPickJob
     ModifyPickJobLastEditor:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
@@ -50087,7 +50071,6 @@ components:
       description: ModifyPickJobLineItemsActionEnum
     ModifyPickLineItem:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             shortPickReasonLocalized:
@@ -50184,9 +50167,9 @@ components:
         - version
         - pickJobLineItemUpdates
       title: ModifyPickLineItemsActionParameter
+      type: object
     ModifyPickRunLineItem:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - properties:
             action:
               description: >-
@@ -59770,7 +59753,6 @@ components:
       required:
         - version
         - actions
-      type: object
       xml:
         name: PickingPatchActions
       title: PickingPatchActions
@@ -59912,6 +59894,7 @@ components:
           type: string
       required:
         - zoneRef
+      type: object
       title: PickingZone
     PickJob:
       allOf:
@@ -60023,6 +60006,7 @@ components:
         - name
         - version
       title: PickJobAbortActionParameter
+      type: object
     PickJobActionsParameter:
       anyOf:
         - $ref: '#/components/schemas/PickJobAbortActionParameter'
@@ -60045,15 +60029,20 @@ components:
         - $ref: '#/components/schemas/PickjobDeliveryInformationForCreation'
         - required:
             - channel
+      type: object
       title: PickjobDeliveryInformation
       description: PickjobDeliveryInformation
+    PickJobDeliveryInformationChannel:
+      enum:
+        - COLLECT
+        - SHIPPING
+      type: string
+      title: PickJobDeliveryInformationChannel
+      description: PickJobDeliveryInformationChannel
     PickjobDeliveryInformationForCreation:
       properties:
         channel:
-          enum:
-            - COLLECT
-            - SHIPPING
-          type: string
+          $ref: '#/components/schemas/PickJobDeliveryInformationChannel'
         details:
           properties:
             collect:
@@ -60348,6 +60337,7 @@ components:
         - name
         - version
       title: PickJobObsoleteActionParameter
+      type: object
     PickJobOrderBy:
       description: Attribute to order a pickJobs by
       enum:
@@ -60405,6 +60395,7 @@ components:
         - name
         - version
       title: PickJobPauseActionParameter
+      type: object
     PickJobPickedActionEnum:
       enum:
         - PICK
@@ -60433,6 +60424,7 @@ components:
         - version
         - lineItems
       title: PickJobPickedActionParameter
+      type: object
     PickJobPickingMethodEnumEnumFilter:
       properties:
         eq:
@@ -60547,6 +60539,7 @@ components:
         - name
         - version
       title: PickJobResetActionParameter
+      type: object
     PickJobRestartActionEnum:
       enum:
         - RESTART
@@ -60567,6 +60560,7 @@ components:
         - name
         - version
       title: PickJobRestartActionParameter
+      type: object
     PickJobSearchPayload:
       properties:
         after:
@@ -60783,6 +60777,7 @@ components:
         - name
         - version
       title: PickJobStartActionParameter
+      type: object
     PickJobStatus:
       description: The status of a pickjob.
       enum:
@@ -61478,6 +61473,7 @@ components:
         - name
         - version
       title: PickRunCancelActionParameter
+      type: object
     PickRunFinishActionEnum:
       enum:
         - FINISH
@@ -61498,6 +61494,7 @@ components:
         - name
         - version
       title: PickRunFinishActionParameter
+      type: object
     PickRunForCreation:
       properties:
         facilityRef:
@@ -61671,6 +61668,160 @@ components:
           type: object
       title: PickRunLineItem
       description: PickRunLineItem
+    PickRunLineItems:
+      allOf:
+        - $ref: '#/components/schemas/MandatoryLineItem'
+        - properties:
+            allowedSubstitutes:
+              items:
+                $ref: '#/components/schemas/Substitute'
+              type: array
+            article:
+              $ref: '#/components/schemas/PickLineItemArticle'
+            customAttributes:
+              description: >-
+                Attributes that can be added to the pick line. These attributes
+                cannot be used within fulfillment processes, but it could be
+                useful to have the information carried here.
+              type: object
+            globalLineItemIds:
+              items:
+                description: Global line item ids that refer to this line item
+                type: string
+              type: array
+            id:
+              description: >-
+                The id of this lineItem. It is generated during creation
+                automatically and suits as the primary identifier of the
+                described entity.
+              example: climk4dcQFiPdA5ULuhS
+              type: string
+            measurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            measurementValidation:
+              $ref: '#/components/schemas/MeasurementValidation'
+            originId:
+              description: >-
+                The id of the line item this line item was originated from,
+                before any split has happened. This can be used to restore the
+                ‘pre-split’ status.
+              example: df671041-10dd-4600-a2ff-e9ffe2556bba
+              nullable: true
+              type: string
+            partialStockLocations:
+              description: >-
+                Indicates where the items to pick could be found and from where
+                the picking should be started.
+              items:
+                $ref: '#/components/schemas/PickJobLineItemPartialStockLocation'
+            picked:
+              description: The amount of articles that were picked for this pickline.
+              example: 20
+              format: int64
+              minimum: 0
+              type: integer
+            pickedAt:
+              description: Date when the line has been picked.
+              example: 2024-02-03T08:45:51.525Z
+              format: date-time
+              type: string
+            pickJobLineItemRef:
+              description: used for line items in pick runs to be split up correctly again
+              example: '12345'
+              type: string
+            pickJobRef:
+              type: string
+            quantity:
+              description: quantity of the specific article that has been ordered
+              example: 21
+              format: int64
+              minimum: 1
+              type: integer
+            recordableAttributes:
+              items:
+                $ref: '#/components/schemas/RecordableAttribute'
+              nullable: true
+              type: array
+            scannableCodes:
+              items:
+                description: Codes, that identify the article
+                type: string
+              type: array
+            scannedCodes:
+              items:
+                $ref: '#/components/schemas/PickLineItemScannedCode'
+              minimum: 0
+              type: array
+            scanningRule:
+              $ref: '#/components/schemas/ScanningRuleConfiguration'
+              deprecated: true
+              description: >-
+                This part of the API is deprecated. For details please check the
+                <a
+                href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#deprecated"
+                target="_blank">api-release-life-cycle documentation</a>.<br
+                /><br />Deprecated: Use scanningRules instead. This value
+                indicates which scanning rule should be applied for this pick
+                line. Only generated on demand on separate call, no persistence.
+            scanningRules:
+              $ref: '#/components/schemas/PickLineItemScanningRules'
+            secondaryMeasurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            secondaryPicked:
+              description: >-
+                The secondary amount of articles that were picked for this
+                pickline.
+              example: 20
+              format: int64
+              minimum: 0
+              type: integer
+            secondaryQuantity:
+              description: quantity of the specific article that has been ordered
+              example: 21
+              format: int64
+              minimum: 0
+              type: integer
+            shortPickReason:
+              $ref: '#/components/schemas/PickLineShortPickReason'
+            status:
+              $ref: '#/components/schemas/PickLineItemStatus'
+            stickers:
+              items:
+                $ref: '#/components/schemas/Sticker'
+              type: array
+            stockEmptied:
+              example: true
+              type: boolean
+            substituteLineItems:
+              description: >-
+                This part of the API is in Beta status. For details please check
+                the <a
+                href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
+                target="_blank">api-release-life-cycle documentation</a>.<br
+                /><br />
+              items:
+                $ref: '#/components/schemas/SubstituteLineItem'
+              type: array
+              x-badges:
+                - color: orange
+                  label: BETA
+            tags:
+              items:
+                $ref: '#/components/schemas/TagReference'
+              type: array
+          required:
+            - id
+            - picked
+            - status
+            - quantity
+            - article
+          type: object
+      title: PickRunLineItems
+      description: PickRunLineItems
     PickRunPatchAction:
       properties:
         actions:
@@ -61717,6 +61868,7 @@ components:
         - name
         - version
       title: PickRunPauseActionParameter
+      type: object
     PickRunPickJobsPatchAction:
       properties:
         actions:
@@ -61770,6 +61922,7 @@ components:
         - version
         - payload
       title: PickRunRemovePickJobActionParameter
+      type: object
     PickRunResumeActionEnum:
       enum:
         - RESUME
@@ -61790,6 +61943,7 @@ components:
         - name
         - version
       title: PickRunResumeActionParameter
+      type: object
     PickRunSplitLineItemsActionEnum:
       enum:
         - SPLIT_LINES_PICK_RUN
@@ -61862,6 +62016,7 @@ components:
         - name
         - version
       title: PickRunStartActionParameter
+      type: object
     PickRunStatus:
       description: The state of the PickRun
       enum:
@@ -65690,7 +65845,6 @@ components:
         name: RemoveLineItemFromPackingTargetContainer
     RemovePickJobFromPickRun:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
@@ -66607,7 +66761,6 @@ components:
       description: ReservationStock
     ResetPickJob:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
@@ -66739,7 +66892,6 @@ components:
       title: RestartItemReturnJobActionParameter
     RestartPickJob:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
@@ -71056,6 +71208,7 @@ components:
       required:
         - priority
         - scanningRuleType
+      type: object
       title: ScanningRuleValue
       description: ScanningRuleValue
     ScheduledPickJobReleaseConfiguration:
@@ -75439,7 +75592,6 @@ components:
       title: StartItemReturnJobActionParameter
     StartPickRun:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
