@@ -35161,6 +35161,14 @@ components:
         - domainRef
       type: object
       title: DomainStatusHistoryItem
+    DomainStatusMappingConfiguration:
+      additionalProperties: false
+      description: Configuration for the entity status to domainStatus mapping
+      properties:
+        pickingMappingConfiguration:
+          $ref: '#/components/schemas/PickingDomainStatusConfiguration'
+      type: object
+      title: DomainStatusMappingConfiguration
     DomainType:
       deprecated: true
       description: Deprecated. Use ModuleType instead.
@@ -59664,6 +59672,18 @@ components:
       type: object
       title: PickingConfigurations
       description: PickingConfigurations
+    PickingDomainStatusConfiguration:
+      additionalProperties: false
+      description: Configuration for the picking status to domainStatus mapping
+      properties:
+        mapAbortedToFinished:
+          default: false
+          description: >-
+            If true, the pickJob status ABORTED will be mapped to the
+            domainStatus FINISHED instead of STUCK
+          type: boolean
+      type: object
+      title: PickingDomainStatusConfiguration
     PickingLoadUnitForCreation:
       properties:
         codes:
@@ -80690,6 +80710,8 @@ components:
       properties:
         clearName:
           type: string
+        domainStatusMappingConfiguration:
+          $ref: '#/components/schemas/DomainStatusMappingConfiguration'
       required:
         - clearName
       type: object
@@ -80702,6 +80724,8 @@ components:
       properties:
         clearName:
           type: string
+        domainStatusMappingConfiguration:
+          $ref: '#/components/schemas/DomainStatusMappingConfiguration'
         version:
           type: number
       required:
