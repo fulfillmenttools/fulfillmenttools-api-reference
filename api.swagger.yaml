@@ -6506,6 +6506,54 @@ paths:
         - PROCESS_READ
       tags:
         - Processes (Core)
+  /api/documents/merge:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details please check the <a
+        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#alpha"
+        target="_blank">api-release-life-cycle documentation</a>.<br /><br
+        />Merge and download documents passed by document id and document set
+        into one pdf
+      operationId: downloadMergedDocuments
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MergeDocumentsParameter'
+        required: true
+      responses:
+        '200':
+          description: The merged document
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Merge and download passed documents
+      x-fft-permissions:
+        - PROCESS_READ
+      tags:
+        - Processes (Core)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/documentSet/{documentSetRef}:
     get:
       deprecated: true
@@ -15799,11 +15847,7 @@ paths:
   /api/operativeprocesses:
     get:
       deprecated: false
-      description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
-        all operative processes
+      description: Get all operative processes
       operationId: getOperativeProcesses
       parameters:
         - description: facility to filter the results
@@ -15865,17 +15909,10 @@ paths:
         - OPERATIVE_PROCESS_READ
       tags:
         - Operative Process (Operations)
-      x-badges:
-        - color: orange
-          label: BETA
   /api/operativeprocesses/{operativeProcessId}:
     get:
       deprecated: false
-      description: >-
-        This part of the API is in Beta status. For details please check the <a
-        href="https://docs.fulfillmenttools.com/documentation/developer-docs/api/core-concepts/api-release-life-cycle#beta"
-        target="_blank">api-release-life-cycle documentation</a>.<br /><br />Get
-        the operative processes for a specific id
+      description: Get the operative processes for a specific id
       operationId: getOperativeProcessById
       parameters:
         - in: path
@@ -15921,9 +15958,6 @@ paths:
         - OPERATIVE_PROCESS_READ
       tags:
         - Operative Process (Operations)
-      x-badges:
-        - color: orange
-          label: BETA
   /api/operativeprocesses/{operativeProcessId}/availableactions:
     get:
       deprecated: false
@@ -49001,6 +49035,34 @@ components:
           type: number
       title: MeasurementValidation
       description: MeasurementValidation
+    MergeDocumentsDocument:
+      properties:
+        documentId:
+          description: id of the document from the passed document set
+          type: string
+        documentsSetRef:
+          description: document set of the passed document
+          type: string
+      required:
+        - documentId
+        - documentsSetRef
+      title: MergeDocumentsDocument
+      type: object
+      description: MergeDocumentsDocument
+    MergeDocumentsParameter:
+      properties:
+        documents:
+          description: Documents that should be merged during this operation
+          items:
+            $ref: '#/components/schemas/MergeDocumentsDocument'
+          maxItems: 50
+          minItems: 1
+          type: array
+      required:
+        - documents
+      title: MergeDocumentsParameter
+      type: object
+      description: MergeDocumentsParameter
     MissingHandoverJobLineItem:
       additionalProperties: false
       allOf:
