@@ -15958,6 +15958,77 @@ paths:
         - OPERATIVE_PROCESS_READ
       tags:
         - Operative Process (Operations)
+  /api/operativeprocesses/{operativeProcessId}/actions:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Perform action for the given operative process
+      operationId: applyOperativeProcessAction
+      parameters:
+        - in: path
+          name: operativeProcessId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: >-
+                    #/components/schemas/AddTargetTimeToOperativeProcessEntitiesActionParameter
+        description: Desired action to apply to given operativeProcess
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableOperativeProcessActions'
+          description: OperativeProcess after action has been applied
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid input. See response for details.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+      summary: Perform action for the given operative process
+      x-fft-permissions:
+        - OPERATIVE_PROCESS_WRITE
+      tags:
+        - Operative Process (Operations)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/operativeprocesses/{operativeProcessId}/availableactions:
     get:
       deprecated: false
@@ -24962,6 +25033,7 @@ paths:
                 - $ref: '#/components/schemas/ServiceJobSplitLineItemsActionParameter'
                 - $ref: >-
                     #/components/schemas/UpdateServiceJobLineItemRecordableAttributesActionParameter
+                - $ref: '#/components/schemas/ServiceJobAddTargetTimeActionParameter'
         description: Desired change to a service job
         required: true
       responses:
@@ -29332,6 +29404,36 @@ components:
         - version
         - tags
       title: AddTagsToProcessActionParameter
+    AddTargetTimeToOperativeProcessEntitiesActionParameter:
+      properties:
+        name:
+          description: >-
+            Name of the action to perform, must be
+            'ADD_TARGET_TIME_TO_OPERATIVE_PROCESS_ENTITIES'
+          enum:
+            - ADD_TARGET_TIME_TO_OPERATIVE_PROCESS_ENTITIES
+          example: ADD_TARGET_TIME_TO_OPERATIVE_PROCESS_ENTITIES
+          type: string
+        operativeProcessVersion:
+          description: Version of the service job
+          example: 1
+          minimum: 0
+          type: integer
+        targetTime:
+          description: >-
+            TargetTime you want to set for PickJobs, PackJobs, ServiceJobs and
+            HandoverJobs that do not have a targetTime ServiceJob. Only effects
+            entities of that operativeProcess.
+          example: 2020-02-03T09:45:51.525Z
+          format: date-time
+          type: string
+      required:
+        - name
+        - operativeProcessVersion
+        - targetTime
+      title: AddTargetTimeToOperativeProcessEntitiesActionParameter
+      type: object
+      description: AddTargetTimeToOperativeProcessEntitiesActionParameter
     AlternativeReturnAddressConfiguration:
       additionalProperties: false
       properties:
@@ -30380,6 +30482,7 @@ components:
             - REJECT_OPERATIVE_PROCESS
             - MANIPULATE_LINE_ITEM_QUANTITY
             - CHANGE_POSTAL_ADDRESS
+            - ADD_TARGET_TIME
           type: string
       required:
         - name
@@ -30396,6 +30499,7 @@ components:
             - PICKING_STARTED
             - TRANSFER_HAPPENED
             - HANDOVER_DONE
+            - TARGET_TIME_ALREADY_SET
           type: string
         message:
           description: Human-readable message describing the deny reason
@@ -40233,8 +40337,37 @@ components:
         - $ref: >-
             #/components/schemas/UpdateHandoverLineItemRecordableAttributesActionParameter
         - $ref: '#/components/schemas/MoveHandoverJobLineItemsActionParameter'
+        - $ref: '#/components/schemas/HandoverJobAddTargetTimeActionParameter'
       title: HandoverJobActionsParameter
       description: HandoverJobActionsParameter
+    HandoverJobAddTargetTimeActionEnum:
+      enum:
+        - ADD_TARGET_TIME
+      type: string
+      title: HandoverJobAddTargetTimeActionEnum
+      description: HandoverJobAddTargetTimeActionEnum
+    HandoverJobAddTargetTimeActionParameter:
+      additionalProperties: false
+      description: >-
+        Action to add targetTime to a HandoverJob that has none. Will fail if
+        targetTime is already set
+      properties:
+        name:
+          $ref: '#/components/schemas/HandoverJobAddTargetTimeActionEnum'
+        targetTime:
+          description: The target time you want set for the given handoverJob.
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+        - targetTime
+      title: HandoverJobAddTargetTimeActionParameter
     HandoverJobAssignedUsersFilter:
       properties:
         userId:
@@ -56985,8 +57118,37 @@ components:
             #/components/schemas/PackJobMoveEachesToSourceContainerActionParameter
         - $ref: >-
             #/components/schemas/PackJobMoveEachesToTargetContainerActionParameter
+        - $ref: '#/components/schemas/PackJobAddTargetTimeActionParameter'
       title: PackJobActionsParameter
       description: PackJobActionsParameter
+    PackJobAddTargetTimeActionEnum:
+      enum:
+        - ADD_TARGET_TIME
+      type: string
+      title: PackJobAddTargetTimeActionEnum
+      description: PackJobAddTargetTimeActionEnum
+    PackJobAddTargetTimeActionParameter:
+      additionalProperties: false
+      description: >-
+        Action to add targetTime to a PackJob that has none. Will fail if
+        targetTime is already set
+      properties:
+        name:
+          $ref: '#/components/schemas/PackJobAddTargetTimeActionEnum'
+        targetTime:
+          description: The target time you want set for the given packJob.
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+        - targetTime
+      title: PackJobAddTargetTimeActionParameter
     PackJobCreationPerTag:
       properties:
         matchingValues:
@@ -60127,8 +60289,37 @@ components:
             #/components/schemas/UpdatePickLineItemRecordableAttributesActionParameter
         - $ref: '#/components/schemas/PickJobPickedActionParameter'
         - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
+        - $ref: '#/components/schemas/PickJobAddTargetTimeActionParameter'
       title: PickJobActionsParameter
       description: PickJobActionsParameter
+    PickJobAddTargetTimeActionEnum:
+      enum:
+        - ADD_TARGET_TIME
+      type: string
+      title: PickJobAddTargetTimeActionEnum
+      description: PickJobAddTargetTimeActionEnum
+    PickJobAddTargetTimeActionParameter:
+      additionalProperties: false
+      description: >-
+        Action to add targetTime to a PickJob that has none. Will fail if
+        targetTime is already set
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobAddTargetTimeActionEnum'
+        targetTime:
+          description: The target time you want set for the given pickJob.
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+        - targetTime
+      title: PickJobAddTargetTimeActionParameter
     PickjobDeliveryInformation:
       allOf:
         - $ref: '#/components/schemas/PickjobDeliveryInformationForCreation'
@@ -72671,6 +72862,33 @@ components:
       title: ServiceJobAdditionalInformationForUpdate
       type: object
       description: ServiceJobAdditionalInformationForUpdate
+    ServiceJobAddTargetTimeActionParameter:
+      properties:
+        name:
+          description: Name of the action to perform, must be 'ADD_TARGET_TIME'
+          enum:
+            - ADD_TARGET_TIME
+          example: ADD_TARGET_TIME
+          type: string
+        targetTime:
+          description: >-
+            TargetTime you want to set for given ServiceJob. If the ServiceJob
+            already has a TargetTime, this Action will fail.
+          example: 2020-02-03T09:45:51.525Z
+          format: date-time
+          type: string
+        version:
+          description: Version of the service job
+          example: 1
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+        - targetTime
+      title: ServiceJobAddTargetTimeActionParameter
+      type: object
+      description: ServiceJobAddTargetTimeActionParameter
     ServiceJobCancelledActionParameter:
       properties:
         additionalInformation:
@@ -73676,8 +73894,37 @@ components:
         - $ref: '#/components/schemas/ShipmentSplitLineItemsActionParameter'
         - $ref: >-
             #/components/schemas/UpdateShipmentLineItemRecordableAttributesActionParameter
+        - $ref: '#/components/schemas/ShipmentAddTargetTimeActionParameter'
       title: ShipmentActionsParameter
       description: ShipmentActionsParameter
+    ShipmentAddTargetTimeActionEnum:
+      enum:
+        - ADD_TARGET_TIME
+      type: string
+      title: ShipmentAddTargetTimeActionEnum
+      description: ShipmentAddTargetTimeActionEnum
+    ShipmentAddTargetTimeActionParameter:
+      additionalProperties: false
+      description: >-
+        Action to add targetTime to a Shipment that has none. Will fail if
+        targetTime is already set
+      properties:
+        name:
+          $ref: '#/components/schemas/ShipmentAddTargetTimeActionEnum'
+        targetTime:
+          description: The target time you want set for the given shipment.
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+        - targetTime
+      title: ShipmentAddTargetTimeActionParameter
     ShipmentForCreation:
       additionalProperties: false
       properties:
