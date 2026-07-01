@@ -63249,6 +63249,8 @@ components:
           type: integer
         processRef:
           type: string
+        schemaVersion:
+          type: number
         statusChangeReasonKey:
           description: >-
             This property captures the reason for the entity’s status change.
@@ -68798,6 +68800,13 @@ components:
       description: RoutingDecisionLogs
     RoutingJournal:
       properties:
+        blacklistedFacilityData:
+          description: >-
+            List of blacklisted facilities associated with this routing journal
+            entry
+          items:
+            $ref: '#/components/schemas/RoutingJournalBlacklistedFacilityData'
+          type: array
         changeType:
           description: Type of change recorded in this routing journal entry
           enum:
@@ -68823,10 +68832,16 @@ components:
           items:
             type: string
           type: array
+        runId:
+          description: The technical id for a sourcing option evaluation
+          type: string
         sourcingOptionRef:
           description: Reference to the sourcing option used for routing
-          type: string
+          nullable: true
+          type: object
       required:
+        - runId
+        - blacklistedFacilityData
         - id
         - created
         - processRef
@@ -68837,6 +68852,16 @@ components:
       title: RoutingJournal
       type: object
       description: RoutingJournal
+    RoutingJournalBlacklistedFacilityData:
+      properties:
+        facilityRef:
+          description: Reference to the facility
+          type: string
+      required:
+        - facilityRef
+      title: RoutingJournalBlacklistedFacilityData
+      type: object
+      description: RoutingJournalBlacklistedFacilityData
     RoutingJournals:
       properties:
         routingJournals:
