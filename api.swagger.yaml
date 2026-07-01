@@ -28470,10 +28470,6 @@ components:
           enum:
             - AddAllowedValueToTag
             - CancelHandoverjob
-            - ModifyPackJob
-            - PausePackJob
-            - ModifyPackLineItem
-            - SplitLineItemsPackJob
             - ModifyFacility
             - ModifyListing
             - ModifyRetainedOfflineStock
@@ -28493,21 +28489,11 @@ components:
             - ModifyFeature
             - ModifyParcel
             - ModifyParcelLoadUnit
-            - ModifyRestowItem
             - ModifyPartialStock
             - AddTagsToProcess
             - AssignFacilityToProcess
             - UpdateGdprCleanupDateAction
             - ModifyStorageLocation
-            - ModifyPackingContainerType
-            - ModifyPackingContainerTypeIcon
-            - ReplaceCodesInPackingTargetContainer
-            - AddLineItemToPackingTargetContainer
-            - RemoveLineItemFromPackingTargetContainer
-            - UpdateLineItemOnPackingTargetContainer
-            - UpdatePackingTargetContainerLineItemRecordableAttributes
-            - UpdatePackingTargetContainerStorageLocation
-            - ModifyCustomService
             - UnlockOrder
           example: <Use the corresponding action, see documentation>
           type: string
@@ -29095,26 +29081,24 @@ components:
       type: object
       title: AddLabelsToParcelFile
     AddLineItemToPackingTargetContainer:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                'Deprecated. Use /api/packjobs/{packJobId}/actions with
-                MOVE_EACHES_TO_PACKING_TARGET_CONTAINER or
-                MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER instead'
-              enum:
-                - AddLineItemToPackingTargetContainer
-              type: string
-            lineItem:
-              $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
-          required:
-            - action
-            - lineItem
-          type: object
+      additionalProperties: false
       description: Action to a line item to a packing target container.
+      properties:
+        action:
+          description: >-
+            'Deprecated. Use /api/packjobs/{packJobId}/actions with
+            MOVE_EACHES_TO_PACKING_TARGET_CONTAINER or
+            MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER instead'
+          enum:
+            - AddLineItemToPackingTargetContainer
+          type: string
+        lineItem:
+          $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
+      required:
+        - action
+        - lineItem
       title: AddLineItemToPackingTargetContainer
+      type: object
       xml:
         name: AddLineItemToPackingTargetContainer
     AddRefuseReasonParameter:
@@ -49861,127 +49845,119 @@ components:
       xml:
         name: ModifyOrderSplitAction
     ModifyPackingContainerType:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            nameLocalized:
-              $ref: '#/components/schemas/LocaleString'
-            descriptionLocalized:
-              $ref: '#/components/schemas/LocaleString'
-            action:
-              description: >-
-                Use value 'ModifyPackingContainerType', because you want to
-                modify a PackingContainerType
-              enum:
-                - ModifyPackingContainerType
-              type: string
-            dimensions:
-              $ref: '#/components/schemas/ContainerDimensions'
-            priority:
-              description: >-
-                This value gives the priority in the respective
-                packingContainerType. The lower the value the higher is the
-                priority, e.g. priority 1 is higher than priority 10. The
-                priority can be used to order PackingContainerTypes.
-              example: 100
-              format: int32
-              maximum: 10000
-              minimum: 1
-              type: integer
-            weightLimitInG:
-              description: 'Maximal weight in gramm(gr) the container can be loaded with. '
-              example: 2500
-              minimum: 1
-              type: number
-          required:
-            - action
-          type: object
+      additionalProperties: false
       description: Action to a modify the type of a packing container.
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        action:
+          description: >-
+            Use value 'ModifyPackingContainerType', because you want to modify a
+            PackingContainerType
+          enum:
+            - ModifyPackingContainerType
+          type: string
+        dimensions:
+          $ref: '#/components/schemas/ContainerDimensions'
+        priority:
+          description: >-
+            This value gives the priority in the respective
+            packingContainerType. The lower the value the higher is the
+            priority, e.g. priority 1 is higher than priority 10. The priority
+            can be used to order PackingContainerTypes.
+          example: 100
+          format: int32
+          maximum: 10000
+          minimum: 1
+          type: integer
+        weightLimitInG:
+          description: 'Maximal weight in gramm(gr) the container can be loaded with. '
+          example: 2500
+          minimum: 1
+          type: number
+      required:
+        - action
       title: ModifyPackingContainerType
+      type: object
       xml:
         name: ModifyPackingContainerType
     ModifyPackingContainerTypeIcon:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use value 'ModifyPackingContainerTypeIcon', because you want to
-                modify a PackingContainerTypes icon
-              enum:
-                - ModifyPackingContainerTypeIcon
-              type: string
-            content:
-              description: Content of the icon as base64 string
-              type: string
-            name:
-              description: icons filename
-              type: string
-          required:
-            - action
-            - name
-            - content
-          type: object
+      additionalProperties: false
       description: Action to a modify the type icon of a packing container.
+      properties:
+        action:
+          description: >-
+            Use value 'ModifyPackingContainerTypeIcon', because you want to
+            modify a PackingContainerTypes icon
+          enum:
+            - ModifyPackingContainerTypeIcon
+          type: string
+        content:
+          description: Content of the icon as base64 string
+          type: string
+        name:
+          description: icons filename
+          type: string
+      required:
+        - action
+        - name
+        - content
       title: ModifyPackingContainerTypeIcon
+      type: object
       xml:
         name: ModifyPackingContainerTypeIcon
     ModifyPackJob:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: Use value 'ModifyPackJob', because you want to modify a packjob
-              enum:
-                - ModifyPackJob
-              type: string
-            customAttributes:
-              description: >-
-                Attributes that can be added to the line item. These attributes
-                cannot be used within fulfillment processes, but it could be
-                useful to have the informations carried here.
-              type: object
-            status:
-              $ref: '#/components/schemas/PackJobStatus'
-          required:
-            - action
-          type: object
+      additionalProperties: false
       description: Action to modify a PackJob
+      properties:
+        action:
+          description: Use value 'ModifyPackJob', because you want to modify a packjob
+          enum:
+            - ModifyPackJob
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to the line item. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        status:
+          $ref: '#/components/schemas/PackJobStatus'
+      required:
+        - action
       title: ModifyPackJob
+      type: object
       xml:
         name: ModifyPackJob
     ModifyPackLineItem:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use value 'ModifyPackLineItem', because you want to modify a
-                packjobs lineItem
-              enum:
-                - ModifyPackLineItem
-              type: string
-            id:
-              description: references the id of the packLineItem of a packJob
-              type: string
-            packed:
-              description: >-
-                The amount of articles that were packed for this packline. Can't
-                be more than picked before.
-              example: 20
-              format: int64
-              minimum: 0
-              type: integer
-          required:
-            - action
-            - id
-          type: object
+      additionalProperties: false
       description: Action to modify a PackLineItem of a PackJob
+      properties:
+        action:
+          description: >-
+            Use value 'ModifyPackLineItem', because you want to modify a
+            packjobs lineItem
+          enum:
+            - ModifyPackLineItem
+          type: string
+        id:
+          description: references the id of the packLineItem of a packJob
+          type: string
+        packed:
+          description: >-
+            The amount of articles that were packed for this packline. Can't be
+            more than picked before.
+          example: 20
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+        - action
+        - id
       title: ModifyPackLineItem
+      type: object
       xml:
         name: ModifyPackLineItem
     ModifyParcel:
@@ -56087,17 +56063,17 @@ components:
     PackingConfigurations:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        documentHandlingConfiguration:
-          $ref: '#/components/schemas/DocumentHandlingConfiguration'
-        packingContainerRequiredConfiguration:
-          $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
-        packingItemConfirmationNeededConfiguration:
-          $ref: '#/components/schemas/PackingItemConfirmationNeededConfiguration'
-        packingSourceContainerConfiguration:
-          $ref: '#/components/schemas/PackingSourceContainerConfiguration'
-        scanningConfiguration:
-          $ref: '#/components/schemas/PackingScanningConfiguration'
+        - properties:
+            documentHandlingConfiguration:
+              $ref: '#/components/schemas/DocumentHandlingConfiguration'
+            packingContainerRequiredConfiguration:
+              $ref: '#/components/schemas/PackingContainerRequiredConfiguration'
+            packingItemConfirmationNeededConfiguration:
+              $ref: '#/components/schemas/PackingItemConfirmationNeededConfiguration'
+            packingSourceContainerConfiguration:
+              $ref: '#/components/schemas/PackingSourceContainerConfiguration'
+            scanningConfiguration:
+              $ref: '#/components/schemas/PackingScanningConfiguration'
       type: object
       title: PackingConfigurations
       description: PackingConfigurations
@@ -56116,39 +56092,39 @@ components:
       additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
-      properties:
-        nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        descriptionLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        description:
-          type: string
-        dimensions:
-          $ref: '#/components/schemas/ContainerDimensions'
-        iconUrl:
-          description: ''
-          type: string
-        id:
-          description: ''
-          type: string
-        name:
-          type: string
-        priority:
-          description: >-
-            This value gives the priority of the respective
-            packingContainerType. The lower the value the higher is the
-            priority, e.g. priority 1 is higher than priority 10. The priority
-            can be used to order packingContainerTypes in the UI.
-          example: 100
-          format: int32
-          maximum: 10000
-          minimum: 1
-          type: integer
-        weightLimitInG:
-          description: 'Maximal weight in gramm(gr) the container can be loaded with. '
-          example: 2500
-          minimum: 1
-          type: number
+        - properties:
+            nameLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            descriptionLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            description:
+              type: string
+            dimensions:
+              $ref: '#/components/schemas/ContainerDimensions'
+            iconUrl:
+              description: ''
+              type: string
+            id:
+              description: ''
+              type: string
+            name:
+              type: string
+            priority:
+              description: >-
+                This value gives the priority of the respective
+                packingContainerType. The lower the value the higher is the
+                priority, e.g. priority 1 is higher than priority 10. The
+                priority can be used to order packingContainerTypes in the UI.
+              example: 100
+              format: int32
+              maximum: 10000
+              minimum: 1
+              type: integer
+            weightLimitInG:
+              description: 'Maximal weight in gramm(gr) the container can be loaded with. '
+              example: 2500
+              minimum: 1
+              type: number
       required:
         - id
         - version
@@ -56221,7 +56197,7 @@ components:
           type: boolean
       required:
         - active
-      title: PackingContainerRequiredConfiguration
+      title: PackingItemConfirmationNeededConfiguration
       type: object
     PackingScanningConfiguration:
       description: Packing Scanning Configuration.
@@ -56242,84 +56218,84 @@ components:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/BaseOperationalContainer'
-      properties:
-        nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        descriptionLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        codes:
-          items:
-            description: Codes, that identify the container
-            type: string
-          minItems: 1
-          type: array
-        customAttributes:
-          description: >-
-            Attributes that can be added to the packing source container. These
-            attributes cannot be used within fulfillment processes, but it could
-            be useful to have the information carried here.
-          type: object
-        description:
-          description: >-
-            Description of the packing source container in the locale the client
-            requests.
-          type: string
-        facilityRef:
-          description: >-
-            Reference to the facility the packing source container is related
-            to.
-          example: Esb20gpHBL94X5NdMp3C
-          type: string
-        iconUrl:
-          description: Url to the icon of the packing source container
-          type: string
-        id:
-          description: >-
-            The id of this packing source container. It is generated during
-            creation automatically and suits as the primary identifier of the
-            described entity.
-          example: c7467ba8-c28a-4473-8748-a4e54e675e4c
-          type: string
-        lineItems:
-          items:
-            $ref: '#/components/schemas/PackingSourceContainerLineItem'
-          type: array
-        loadUnitRef:
-          deprecated: true
-          description: >-
-            This part of the API is deprecated. For details, see the <a
-            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
-            target="_blank">API release lifecycle documentation</a>.<br /><br
-            />Deprecated: Use previousModuleContainerInfo instead. For load
-            units ref see: type: LOAD_UNIT.
-          example: 2357914c-d965-421e-b6cf-330501bccaab
-          type: string
-        name:
-          description: >-
-            Name of the packing source container in the locale the client
-            requests.
-          type: string
-        operativeContainerTypeRef:
-          description: Reference to the assigned operativeContainerType
-          type: string
-        packJobRefs:
-          description: >-
-            List of references to packJobs this packing source container is
-            related to.
-          items:
-            example: 0857914c-d965-421e-b6cf-330501bcca58
-            type: string
-          minItems: 1
-          type: array
-        previousModuleContainerInfo:
-          $ref: '#/components/schemas/PreviousModuleContainerInfo'
-        storageLocationRef:
-          description: >-
-            Reference to the location where the packing source container is
-            located.
-          type: string
-        type:
-          $ref: '#/components/schemas/PackingSourceContainerType'
+        - properties:
+            nameLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            descriptionLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            codes:
+              items:
+                description: Codes, that identify the container
+                type: string
+              minItems: 1
+              type: array
+            customAttributes:
+              description: >-
+                Attributes that can be added to the packing source container.
+                These attributes cannot be used within fulfillment processes,
+                but it could be useful to have the information carried here.
+              type: object
+            description:
+              description: >-
+                Description of the packing source container in the locale the
+                client requests.
+              type: string
+            facilityRef:
+              description: >-
+                Reference to the facility the packing source container is
+                related to.
+              example: Esb20gpHBL94X5NdMp3C
+              type: string
+            iconUrl:
+              description: Url to the icon of the packing source container
+              type: string
+            id:
+              description: >-
+                The id of this packing source container. It is generated during
+                creation automatically and suits as the primary identifier of
+                the described entity.
+              example: c7467ba8-c28a-4473-8748-a4e54e675e4c
+              type: string
+            lineItems:
+              items:
+                $ref: '#/components/schemas/PackingSourceContainerLineItem'
+              type: array
+            loadUnitRef:
+              deprecated: true
+              description: >-
+                This part of the API is deprecated. For details, see the <a
+                href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+                target="_blank">API release lifecycle documentation</a>.<br
+                /><br />Deprecated: Use previousModuleContainerInfo instead. For
+                load units ref see: type: LOAD_UNIT.
+              example: 2357914c-d965-421e-b6cf-330501bccaab
+              type: string
+            name:
+              description: >-
+                Name of the packing source container in the locale the client
+                requests.
+              type: string
+            operativeContainerTypeRef:
+              description: Reference to the assigned operativeContainerType
+              type: string
+            packJobRefs:
+              description: >-
+                List of references to packJobs this packing source container is
+                related to.
+              items:
+                example: 0857914c-d965-421e-b6cf-330501bcca58
+                type: string
+              minItems: 1
+              type: array
+            previousModuleContainerInfo:
+              $ref: '#/components/schemas/PreviousModuleContainerInfo'
+            storageLocationRef:
+              description: >-
+                Reference to the location where the packing source container is
+                located.
+              type: string
+            type:
+              $ref: '#/components/schemas/PackingSourceContainerType'
       required:
         - packJobRefs
         - nameLocalized
@@ -56346,54 +56322,54 @@ components:
     PackingSourceContainerForCreation:
       allOf:
         - $ref: '#/components/schemas/BaseOperationalContainer'
-      properties:
-        nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        descriptionLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        codes:
-          items:
-            description: Codes, that identify the article
-            type: string
-          minItems: 1
-          type: array
-        customAttributes:
-          description: >-
-            Attributes that can be added to the packing source container. These
-            attributes cannot be used within fulfillment processes, but it could
-            be useful to have the information carried here.
-          type: object
-        facilityRef:
-          description: >-
-            The id of the facility reference. The given ID has to be present in
-            the system. But it is not updatable.
-          example: Esb20gpHBL94X5NdMp3C
-          type: string
-        icon:
-          $ref: '#/components/schemas/NamedFile'
-        lineItems:
-          items:
-            $ref: '#/components/schemas/PackingSourceContainerLineItemForCreation'
-          type: array
-        operativeContainerTypeRef:
-          description: >-
-            Reference to the operativeContainerType, available values will be
-            taken from the container type while creating the container
-          type: string
-        packJobRefs:
-          description: List of references to packJobs
-          items:
-            example: 0857914c-d965-421e-b6cf-330501bcca58
-            type: string
-          minItems: 1
-          type: array
-        previousModuleContainerInfo:
-          $ref: '#/components/schemas/PreviousModuleContainerInfo'
-        storageLocationRef:
-          description: >-
-            Reference to the location where the packing source container is
-            located.
-          type: string
+        - properties:
+            nameLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            descriptionLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            codes:
+              items:
+                description: Codes, that identify the article
+                type: string
+              minItems: 1
+              type: array
+            customAttributes:
+              description: >-
+                Attributes that can be added to the packing source container.
+                These attributes cannot be used within fulfillment processes,
+                but it could be useful to have the information carried here.
+              type: object
+            facilityRef:
+              description: >-
+                The id of the facility reference. The given ID has to be present
+                in the system. But it is not updatable.
+              example: Esb20gpHBL94X5NdMp3C
+              type: string
+            icon:
+              $ref: '#/components/schemas/NamedFile'
+            lineItems:
+              items:
+                $ref: '#/components/schemas/PackingSourceContainerLineItemForCreation'
+              type: array
+            operativeContainerTypeRef:
+              description: >-
+                Reference to the operativeContainerType, available values will
+                be taken from the container type while creating the container
+              type: string
+            packJobRefs:
+              description: List of references to packJobs
+              items:
+                example: 0857914c-d965-421e-b6cf-330501bcca58
+                type: string
+              minItems: 1
+              type: array
+            previousModuleContainerInfo:
+              $ref: '#/components/schemas/PreviousModuleContainerInfo'
+            storageLocationRef:
+              description: >-
+                Reference to the location where the packing source container is
+                located.
+              type: string
       required:
         - packJobRefs
         - nameLocalized
@@ -56406,57 +56382,57 @@ components:
       additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItem'
+        - properties:
+            article:
+              $ref: '#/components/schemas/LineItemArticle'
+            id:
+              description: >-
+                The id of this lineItem. It is generated during creation
+                automatically and suits as the primary identifier of the
+                described entity.
+              example: da488ad1-4215-4b9a-9642-c39883c6cd2c
+              type: string
+            measurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            originId:
+              description: >-
+                The id of the line item this line item was originated from,
+                before any split has happened. This can be used to restore the
+                ‘pre-split’ status.
+              example: df671041-10dd-4600-a2ff-e9ffe2556bba
+              nullable: true
+              type: string
+            quantity:
+              description: quantity of this item
+              example: 21
+              format: int64
+              minimum: 1
+              type: integer
+            secondaryMeasurementUnitKey:
+              description: >-
+                Identifier for items unit of measurement. E.g.
+                measurementUnitKey is pieces and secondaryQuantity is gram
+              example: gram
+              type: string
+            secondaryQuantity:
+              description: >-
+                secondary quantity of this item, E.g. quantity is the count and
+                secondaryQuantity is the weight
+              example: 200
+              format: int64
+              minimum: 1
+              type: integer
+            stickers:
+              items:
+                $ref: '#/components/schemas/Sticker'
+              type: array
+            tags:
+              items:
+                $ref: '#/components/schemas/TagReference'
+              type: array
       description: item that is inside the packingSourceContainer
-      properties:
-        article:
-          $ref: '#/components/schemas/LineItemArticle'
-        id:
-          description: >-
-            The id of this lineItem. It is generated during creation
-            automatically and suits as the primary identifier of the described
-            entity.
-          example: da488ad1-4215-4b9a-9642-c39883c6cd2c
-          type: string
-        measurementUnitKey:
-          description: Identifier for items unit of measurement.
-          example: liter
-          type: string
-        originId:
-          description: >-
-            The id of the line item this line item was originated from, before
-            any split has happened. This can be used to restore the ‘pre-split’
-            status.
-          example: df671041-10dd-4600-a2ff-e9ffe2556bba
-          nullable: true
-          type: string
-        quantity:
-          description: quantity of this item
-          example: 21
-          format: int64
-          minimum: 1
-          type: integer
-        secondaryMeasurementUnitKey:
-          description: >-
-            Identifier for items unit of measurement. E.g. measurementUnitKey is
-            pieces and secondaryQuantity is gram
-          example: gram
-          type: string
-        secondaryQuantity:
-          description: >-
-            secondary quantity of this item, E.g. quantity is the count and
-            secondaryQuantity is the weight
-          example: 200
-          format: int64
-          minimum: 1
-          type: integer
-        stickers:
-          items:
-            $ref: '#/components/schemas/Sticker'
-          type: array
-        tags:
-          items:
-            $ref: '#/components/schemas/TagReference'
-          type: array
       required:
         - id
         - quantity
@@ -56469,50 +56445,50 @@ components:
       additionalProperties: false
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItemForCreation'
+        - properties:
+            article:
+              $ref: '#/components/schemas/LineItemArticle'
+            measurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            originId:
+              description: >-
+                The id of the line item this line item was originated from,
+                before any split has happened. This can be used to restore the
+                ‘pre-split’ status.
+              example: df671041-10dd-4600-a2ff-e9ffe2556bba
+              nullable: true
+              type: string
+            quantity:
+              description: quantity of this item
+              example: 21
+              format: int64
+              minimum: 1
+              type: integer
+            secondaryMeasurementUnitKey:
+              description: >-
+                Identifier for items unit of measurement. E.g.
+                measurementUnitKey is pieces and secondaryQuantity is gram
+              example: gram
+              type: string
+            secondaryQuantity:
+              description: >-
+                secondary quantity of this item, E.g. quantity is the count and
+                secondaryQuantity is the weight
+              example: 200
+              format: int64
+              minimum: 1
+              type: integer
+            stickers:
+              items:
+                $ref: '#/components/schemas/Sticker'
+              type: array
+            tags:
+              items:
+                $ref: '#/components/schemas/TagReference'
+              type: array
       description: items that are inside the packingSourceContainer
-      properties:
-        article:
-          $ref: '#/components/schemas/LineItemArticle'
-        measurementUnitKey:
-          description: Identifier for items unit of measurement.
-          example: liter
-          type: string
-        originId:
-          description: >-
-            The id of the line item this line item was originated from, before
-            any split has happened. This can be used to restore the ‘pre-split’
-            status.
-          example: df671041-10dd-4600-a2ff-e9ffe2556bba
-          nullable: true
-          type: string
-        quantity:
-          description: quantity of this item
-          example: 21
-          format: int64
-          minimum: 1
-          type: integer
-        secondaryMeasurementUnitKey:
-          description: >-
-            Identifier for items unit of measurement. E.g. measurementUnitKey is
-            pieces and secondaryQuantity is gram
-          example: gram
-          type: string
-        secondaryQuantity:
-          description: >-
-            secondary quantity of this item, E.g. quantity is the count and
-            secondaryQuantity is the weight
-          example: 200
-          format: int64
-          minimum: 1
-          type: integer
-        stickers:
-          items:
-            $ref: '#/components/schemas/Sticker'
-          type: array
-        tags:
-          items:
-            $ref: '#/components/schemas/TagReference'
-          type: array
       required:
         - quantity
         - article
@@ -56543,71 +56519,71 @@ components:
         - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/PackingTargetContainerForCreation'
         - $ref: '#/components/schemas/BaseOperationalContainer'
-      properties:
-        nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        descriptionLocalized:
-          $ref: '#/components/schemas/LocaleString'
-        description:
-          description: >-
-            Description of the packing source container in the locale the client
-            requests. Automatically filled upon request.
-          type: string
-        dimensions:
-          $ref: '#/components/schemas/ContainerDimensions'
-        documentsRef:
-          description: Reference to the documents collection from this entity
-          type: string
-        facilityRef:
-          description: >-
-            The id of the facility reference. The given ID has to be present in
-            the system. But it is not updatable via PUT request
-          example: Esb20gpHBL94X5NdMp3C
-          type: string
-        iconUrl:
-          description: >-
-            Url to the icon of the packing source container  (inherited from
-            operative container type).
-          type: string
-        id:
-          description: >-
-            The id of this packing source container. It is generated during
-            creation automatically and suits as the primary identifier of the
-            described entity.
-          type: string
-        lineItems:
-          items:
-            $ref: '#/components/schemas/PackingTargetContainerLineItem'
-          type: array
-        name:
-          description: >-
-            Name of the packing source container in the locale the client
-            requests. Automatically filled upon request.
-          type: string
-        operativeProcessRef:
-          description: >-
-            Reference to the operative process this packing target container is
-            related to.
-          type: string
-        packJobRef:
-          description: >-
-            Reference to the packJob this packing source container is related
-            to.
-          type: string
-        parcels:
-          items:
-            $ref: '#/components/schemas/Parcel'
-          type: array
-        shortId:
-          description: Short identifier for the container
-          type: string
-        type:
-          $ref: '#/components/schemas/PackingTargetContainerType'
-        weightLimitInG:
-          description: 'Maximal weight in gramm(gr) the container can be loaded with. '
-          example: 2500
-          minimum: 1
-          type: number
+        - properties:
+            nameLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            descriptionLocalized:
+              $ref: '#/components/schemas/LocaleString'
+            description:
+              description: >-
+                Description of the packing source container in the locale the
+                client requests. Automatically filled upon request.
+              type: string
+            dimensions:
+              $ref: '#/components/schemas/ContainerDimensions'
+            documentsRef:
+              description: Reference to the documents collection from this entity
+              type: string
+            facilityRef:
+              description: >-
+                The id of the facility reference. The given ID has to be present
+                in the system. But it is not updatable via PUT request
+              example: Esb20gpHBL94X5NdMp3C
+              type: string
+            iconUrl:
+              description: >-
+                Url to the icon of the packing source container  (inherited from
+                operative container type).
+              type: string
+            id:
+              description: >-
+                The id of this packing source container. It is generated during
+                creation automatically and suits as the primary identifier of
+                the described entity.
+              type: string
+            lineItems:
+              items:
+                $ref: '#/components/schemas/PackingTargetContainerLineItem'
+              type: array
+            name:
+              description: >-
+                Name of the packing source container in the locale the client
+                requests. Automatically filled upon request.
+              type: string
+            operativeProcessRef:
+              description: >-
+                Reference to the operative process this packing target container
+                is related to.
+              type: string
+            packJobRef:
+              description: >-
+                Reference to the packJob this packing source container is
+                related to.
+              type: string
+            parcels:
+              items:
+                $ref: '#/components/schemas/Parcel'
+              type: array
+            shortId:
+              description: Short identifier for the container
+              type: string
+            type:
+              $ref: '#/components/schemas/PackingTargetContainerType'
+            weightLimitInG:
+              description: 'Maximal weight in gramm(gr) the container can be loaded with. '
+              example: 2500
+              minimum: 1
+              type: number
       required:
         - id
         - nameLocalized
@@ -56634,27 +56610,27 @@ components:
     PackingTargetContainerForCreation:
       allOf:
         - $ref: '#/components/schemas/BaseOperationalContainer'
-      properties:
-        codes:
-          items:
-            description: List of codes
-            minItems: 1
-            type: string
-          type: array
-        lineItems:
-          items:
-            $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
-          type: array
-        operativeContainerTypeRef:
-          type: string
-        packingContainerTypeRef:
-          description: deprecated - use operativeContainerTypeRef instead
-          type: string
-        storageLocationRef:
-          description: >-
-            Reference to the location where the packing target container is
-            located.
-          type: string
+        - properties:
+            codes:
+              items:
+                description: List of codes
+                minItems: 1
+                type: string
+              type: array
+            lineItems:
+              items:
+                $ref: '#/components/schemas/PackingTargetContainerLineItemForCreation'
+              type: array
+            operativeContainerTypeRef:
+              type: string
+            packingContainerTypeRef:
+              description: deprecated - use operativeContainerTypeRef instead
+              type: string
+            storageLocationRef:
+              description: >-
+                Reference to the location where the packing target container is
+                located.
+              type: string
       required:
         - codes
       type: object
@@ -56663,60 +56639,61 @@ components:
     PackingTargetContainerLineItem:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItem'
-      properties:
-        article:
-          $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
-        id:
-          description: >-
-            The id of this lineItem. It is generated during creation
-            automatically and suits as the primary identifier of the described
-            entity.
-          example: climk4dcQFiPdA5ULuhS
-          type: string
-        measurementUnitKey:
-          description: Identifier for items unit of measurement.
-          example: liter
-          type: string
-        originId:
-          description: >-
-            The id of the line item this line item was originated from, before
-            any split has happened. This can be used to restore the ‘pre-split’
-            status.
-          example: df671041-10dd-4600-a2ff-e9ffe2556bba
-          nullable: true
-          type: string
-        quantity:
-          description: quantity of the item
-          example: 21
-          format: int64
-          minimum: 1
-          type: integer
-        secondaryMeasurementUnitKey:
-          description: >-
-            Identifier for items unit of measurement. E.g. measurementUnitKey is
-            pieces and secondaryQuantity is gram
-          example: gram
-          type: string
-        secondaryQuantity:
-          description: >-
-            secondary quantity of this item, E.g. quantity is the count and
-            secondaryQuantity is the weight
-          example: 200
-          format: int64
-          minimum: 1
-          type: integer
-        stickers:
-          items:
-            $ref: '#/components/schemas/Sticker'
-          type: array
-        tags:
-          items:
-            $ref: '#/components/schemas/TagReference'
-          type: array
+        - properties:
+            article:
+              $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
+            id:
+              description: >-
+                The id of this lineItem. It is generated during creation
+                automatically and suits as the primary identifier of the
+                described entity.
+              example: climk4dcQFiPdA5ULuhS
+              type: string
+            measurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            originId:
+              description: >-
+                The id of the line item this line item was originated from,
+                before any split has happened. This can be used to restore the
+                ‘pre-split’ status.
+              example: df671041-10dd-4600-a2ff-e9ffe2556bba
+              nullable: true
+              type: string
+            quantity:
+              description: quantity of the item
+              example: 21
+              format: int64
+              minimum: 1
+              type: integer
+            secondaryMeasurementUnitKey:
+              description: >-
+                Identifier for items unit of measurement. E.g.
+                measurementUnitKey is pieces and secondaryQuantity is gram
+              example: gram
+              type: string
+            secondaryQuantity:
+              description: >-
+                secondary quantity of this item, E.g. quantity is the count and
+                secondaryQuantity is the weight
+              example: 200
+              format: int64
+              minimum: 1
+              type: integer
+            stickers:
+              items:
+                $ref: '#/components/schemas/Sticker'
+              type: array
+            tags:
+              items:
+                $ref: '#/components/schemas/TagReference'
+              type: array
       required:
         - id
         - article
         - quantity
+      type: object
       title: PackingTargetContainerLineItem
       description: PackingTargetContainerLineItem
     PackingTargetContainerLineItemArticle:
@@ -56736,52 +56713,53 @@ components:
     PackingTargetContainerLineItemForCreation:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItemForCreation'
-      properties:
-        article:
-          $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
-        measurementUnitKey:
-          description: Identifier for items unit of measurement.
-          example: liter
-          type: string
-        originId:
-          description: >-
-            The id of the line item this line item was originated from, before
-            any split has happened. This can be used to restore the ‘pre-split’
-            status.
-          example: df671041-10dd-4600-a2ff-e9ffe2556bba
-          nullable: true
-          type: string
-        quantity:
-          description: quantity of the item
-          example: 21
-          format: int64
-          minimum: 1
-          type: integer
-        secondaryMeasurementUnitKey:
-          description: >-
-            Identifier for items unit of measurement. E.g. measurementUnitKey is
-            pieces and secondaryQuantity is gram
-          example: gram
-          type: string
-        secondaryQuantity:
-          description: >-
-            secondary quantity of this item, E.g. quantity is the count and
-            secondaryQuantity is the weight
-          example: 200
-          format: int64
-          minimum: 1
-          type: integer
-        stickers:
-          items:
-            $ref: '#/components/schemas/Sticker'
-          type: array
-        tags:
-          items:
-            $ref: '#/components/schemas/TagReference'
-          type: array
+        - properties:
+            article:
+              $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
+            measurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            originId:
+              description: >-
+                The id of the line item this line item was originated from,
+                before any split has happened. This can be used to restore the
+                ‘pre-split’ status.
+              example: df671041-10dd-4600-a2ff-e9ffe2556bba
+              nullable: true
+              type: string
+            quantity:
+              description: quantity of the item
+              example: 21
+              format: int64
+              minimum: 1
+              type: integer
+            secondaryMeasurementUnitKey:
+              description: >-
+                Identifier for items unit of measurement. E.g.
+                measurementUnitKey is pieces and secondaryQuantity is gram
+              example: gram
+              type: string
+            secondaryQuantity:
+              description: >-
+                secondary quantity of this item, E.g. quantity is the count and
+                secondaryQuantity is the weight
+              example: 200
+              format: int64
+              minimum: 1
+              type: integer
+            stickers:
+              items:
+                $ref: '#/components/schemas/Sticker'
+              type: array
+            tags:
+              items:
+                $ref: '#/components/schemas/TagReference'
+              type: array
       required:
         - article
         - quantity
+      type: object
       title: PackingTargetContainerLineItemForCreation
       description: PackingTargetContainerLineItemForCreation
     PackingTargetContainerPatchActions:
@@ -57173,6 +57151,7 @@ components:
         - globalLineItemId
         - quantity
       title: PackJobMoveEachesToContainerFrom
+      type: object
     PackJobMoveEachesToContainerTo:
       additionalProperties: false
       description: Where to move the eaches to.
@@ -57188,6 +57167,7 @@ components:
         - containerId
         - containerVersion
       title: PackJobMoveEachesToContainerTo
+      type: object
     PackJobMoveEachesToNewContainerTo:
       additionalProperties: false
       description: Additional information for the new created container during a move
@@ -57203,6 +57183,7 @@ components:
       required:
         - operativeContainerTypeRef
       title: PackJobMoveEachesToContainerTo
+      type: object
     PackJobMoveEachesToSourceContainerActionEnum:
       enum:
         - MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER
@@ -57221,6 +57202,7 @@ components:
         - name
         - move
       title: PackJobReplaceAssignedUsersActionParameter
+      type: object
     PackJobMoveEachesToTargetContainerActionEnum:
       enum:
         - MOVE_EACHES_TO_PACKING_TARGET_CONTAINER
@@ -57239,6 +57221,7 @@ components:
         - name
         - move
       title: PackJobReplaceAssignedUsersActionParameter
+      type: object
     PackJobOrderBy:
       description: Attribute to order a packJobs by
       enum:
@@ -57366,6 +57349,7 @@ components:
         - version
         - assignedUsers
       title: PackJobReplaceAssignedUsersActionParameter
+      type: object
     PackJobs:
       properties:
         packJobs:
@@ -57623,8 +57607,8 @@ components:
       description: PackJobStatusEnumFilter
     PackJobTagConfiguration:
       allOf:
-        - $ref: '#/components/schemas/VersionedResource'
         - $ref: '#/components/schemas/TagConfiguration'
+        - $ref: '#/components/schemas/VersionedResource'
         - properties:
             lineItemStickerConfiguration:
               $ref: '#/components/schemas/StickerConfiguration'
@@ -57637,9 +57621,10 @@ components:
               type: array
             stickerConfiguration:
               $ref: '#/components/schemas/StickerConfiguration'
-          required:
-            - packJobCreationPerTag
-          type: object
+      required:
+        - packJobCreationPerTag
+        - version
+      type: object
       title: PackJobTagConfiguration
       description: PackJobTagConfiguration
     PackJobWebHookEvent:
@@ -57657,12 +57642,12 @@ components:
       allOf:
         - $ref: '#/components/schemas/PackJob'
         - additionalProperties: false
-      properties:
-        searchPaths:
-          items:
-            type: string
-          minItems: 0
-          type: array
+          properties:
+            searchPaths:
+              items:
+                type: string
+              minItems: 0
+              type: array
       xml:
         name: PackJobWithPath
       title: PackJobWithSearchPath
@@ -57735,7 +57720,7 @@ components:
                 $ref: '#/components/schemas/ArticleAttributeItem'
               maxItems: 40
               type: array
-          type: object
+      type: object
       xml:
         name: PackLineItemArticle
       title: PackLineItemArticle
@@ -57743,35 +57728,35 @@ components:
     PackLineItemForCreation:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItemForCreation'
-      properties:
-        article:
-          $ref: '#/components/schemas/PackLineItemArticle'
-        measurementUnitKey:
-          description: Identifier for items unit of measurement.
-          example: liter
-          type: string
-        quantity:
-          description: quantity of this item
-          example: 21
-          format: int64
-          minimum: 1
-          type: integer
-        serviceJobRefs:
-          description: Reference to the service job that has altered this line item
-          items:
-            type: string
-          type: array
-        stickers:
-          items:
-            $ref: '#/components/schemas/Sticker'
-          type: array
-        tags:
-          items:
-            $ref: '#/components/schemas/TagReference'
-          type: array
-      required:
-        - quantity
-        - article
+        - properties:
+            article:
+              $ref: '#/components/schemas/PackLineItemArticle'
+            measurementUnitKey:
+              description: Identifier for items unit of measurement.
+              example: liter
+              type: string
+            quantity:
+              description: quantity of this item
+              example: 21
+              format: int64
+              minimum: 1
+              type: integer
+            serviceJobRefs:
+              description: Reference to the service job that has altered this line item
+              items:
+                type: string
+              type: array
+            stickers:
+              items:
+                $ref: '#/components/schemas/Sticker'
+              type: array
+            tags:
+              items:
+                $ref: '#/components/schemas/TagReference'
+              type: array
+          required:
+            - quantity
+            - article
       type: object
       xml:
         name: PackLineItemForCreation
@@ -58002,6 +57987,7 @@ components:
             - loadUnitRefs
             - workflowInformation
           type: object
+      type: object
       title: Parcel
       description: Parcel
     ParcelActionsParameter:
@@ -58320,59 +58306,60 @@ components:
     ParcelItem:
       allOf:
         - $ref: '#/components/schemas/LineItem'
-      properties:
-        article:
-          $ref: '#/components/schemas/ParcelItemArticle'
-        countryOfManufacture:
-          deprecated: true
-          description: Deprecated - use article.attribute.countryOfManufacture instead
-          type: string
-        description:
-          deprecated: true
-          description: >-
-            Description - article.title will be used instead - of the given
-            item/items
-          example: Item Description
-          type: string
-        hsCode:
-          deprecated: true
-          description: Deprecated - use article.attribute.hsCode instead
-          maxLength: 50
-          type: string
-        id:
-          description: The id of this parcelItem.
-          example: ae3ba67c-a42c-4816-96ac-16231e49640c
-          type: string
-        originId:
-          description: >-
-            The id of the line item this line item was originated from, before
-            any split has happened. This can be used to restore the ‘pre-split’
-            status.
-          example: df671041-10dd-4600-a2ff-e9ffe2556bba
-          nullable: true
-          type: string
-        parcelItemValue:
-          $ref: '#/components/schemas/ParcelItemValue'
-          deprecated: true
-          description: >-
-            Deprecated - use article.attribute.pricePerUnit and
-            article.attribute.currency instead
-        quantity:
-          description: amount of the given items
-          example: 5
-          minimum: 1
-          type: integer
-        weightInGram:
-          deprecated: true
-          description: >-
-            Deprecated - use article.attribute.weightPerUnit instead - Weight of
-            a single item in gram
-          example: 10000
-          type: integer
-      required:
-        - id
-        - quantity
-      type: object
+        - properties:
+            article:
+              $ref: '#/components/schemas/ParcelItemArticle'
+            countryOfManufacture:
+              deprecated: true
+              description: Deprecated - use article.attribute.countryOfManufacture instead
+              type: string
+            description:
+              deprecated: true
+              description: >-
+                Description - article.title will be used instead - of the given
+                item/items
+              example: Item Description
+              type: string
+            hsCode:
+              deprecated: true
+              description: Deprecated - use article.attribute.hsCode instead
+              maxLength: 50
+              type: string
+            id:
+              description: The id of this parcelItem.
+              example: ae3ba67c-a42c-4816-96ac-16231e49640c
+              type: string
+            originId:
+              description: >-
+                The id of the line item this line item was originated from,
+                before any split has happened. This can be used to restore the
+                ‘pre-split’ status.
+              example: df671041-10dd-4600-a2ff-e9ffe2556bba
+              nullable: true
+              type: string
+            parcelItemValue:
+              allOf:
+                - $ref: '#/components/schemas/ParcelItemValue'
+              deprecated: true
+              description: >-
+                Deprecated - use article.attribute.pricePerUnit and
+                article.attribute.currency instead
+            quantity:
+              description: amount of the given items
+              example: 5
+              minimum: 1
+              type: integer
+            weightInGram:
+              deprecated: true
+              description: >-
+                Deprecated - use article.attribute.weightPerUnit instead -
+                Weight of a single item in gram
+              example: 10000
+              type: integer
+          required:
+            - id
+            - quantity
+          type: object
       xml:
         name: ParcelItem
       title: ParcelItem
@@ -58411,7 +58398,8 @@ components:
           maxLength: 50
           type: string
         parcelItemValue:
-          $ref: '#/components/schemas/ParcelItemValue'
+          allOf:
+            - $ref: '#/components/schemas/ParcelItemValue'
           deprecated: true
           description: >-
             Deprecated - use article.attribute.pricePerUnit and
@@ -59313,24 +59301,22 @@ components:
         - itemReturnJobVersion
       title: PauseItemReturnActionParameter
     PausePackJob:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: Use value 'PausePackJob', because you want to pause a packjob
-              enum:
-                - PausePackJob
-              type: string
-            packLineItemsUpdate:
-              items:
-                $ref: '#/components/schemas/PackLineItemForUpdate'
-              type: array
-          required:
-            - action
-          type: object
+      additionalProperties: false
       description: Action to pause a PackJob
+      properties:
+        action:
+          description: Use value 'PausePackJob', because you want to pause a packjob
+          enum:
+            - PausePackJob
+          type: string
+        packLineItemsUpdate:
+          items:
+            $ref: '#/components/schemas/PackLineItemForUpdate'
+          type: array
+      required:
+        - action
       title: PausePackJob
+      type: object
       xml:
         name: PausePackJob
     PauseStowJobAction:
@@ -65882,27 +65868,25 @@ components:
         - version
       title: RemoveFacilityCoordinatesActionParameter
     RemoveLineItemFromPackingTargetContainer:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                'Deprecated. Use /api/packjobs/{packJobId}/actions with
-                MOVE_EACHES_TO_PACKING_TARGET_CONTAINER or
-                MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER instead'
-              enum:
-                - RemoveLineItemFromPackingTargetContainer
-              type: string
-            lineItemRef:
-              description: Id of the PackLineItem you want to remove.
-              type: string
-          required:
-            - action
-            - lineItemRef
-          type: object
+      additionalProperties: false
       description: Action to a remove a line item from a packing target container.
+      properties:
+        action:
+          description: >-
+            'Deprecated. Use /api/packjobs/{packJobId}/actions with
+            MOVE_EACHES_TO_PACKING_TARGET_CONTAINER or
+            MOVE_EACHES_TO_PACKING_SOURCE_CONTAINER instead'
+          enum:
+            - RemoveLineItemFromPackingTargetContainer
+          type: string
+        lineItemRef:
+          description: Id of the PackLineItem you want to remove.
+          type: string
+      required:
+        - action
+        - lineItemRef
       title: RemoveLineItemFromPackingTargetContainer
+      type: object
       xml:
         name: RemoveLineItemFromPackingTargetContainer
     RemovePickJobFromPickRun:
@@ -65980,28 +65964,26 @@ components:
       title: ReopenStowJobAction
       type: object
     ReplaceCodesInPackingTargetContainer:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use ReplaceCodesInPackingTargetContainer to add a code to an
-                existing packing container
-              enum:
-                - ReplaceCodesInPackingTargetContainer
-              type: string
-            codes:
-              items:
-                description: List of codes
-                minItems: 1
-                type: string
-              type: array
-          required:
-            - action
-          type: object
+      additionalProperties: false
       description: Action to replace codes in packing target container.
+      properties:
+        action:
+          description: >-
+            Use ReplaceCodesInPackingTargetContainer to add a code to an
+            existing packing container
+          enum:
+            - ReplaceCodesInPackingTargetContainer
+          type: string
+        codes:
+          items:
+            description: List of codes
+            minItems: 1
+            type: string
+          type: array
+      required:
+        - action
       title: ReplaceCodesInPackingTargetContainer
+      type: object
       xml:
         name: ReplaceCodesInPackingTargetContainer
     ReplaceLineItemsOnItemReturnJobActionEnum:
@@ -66082,6 +66064,7 @@ components:
         - version
         - name
       title: ReplacePackingTargetContainerLineItemCodesAction
+      type: object
     ReplacePackingTargetContainerLineItemCodesEnum:
       enum:
         - ReplaceLineItemCodes
@@ -75732,7 +75715,8 @@ components:
       additionalProperties: false
       properties:
         nameLocalized:
-          $ref: '#/components/schemas/LocaleString'
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
           description: >-
             Dictionary of possible translations, min 1 entry, max 14 characters
             per description
@@ -81977,25 +81961,23 @@ components:
       type: object
       description: UpdateHandoverLineItemRecordableAttributesActionParameter
     UpdateLineItemOnPackingTargetContainer:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use UpdateLineItemOnPackingTargetContainer to change a line item
-                on an existing packing container
-              enum:
-                - UpdateLineItemOnPackingTargetContainer
-              type: string
-            lineItem:
-              $ref: '#/components/schemas/PackingTargetContainerLineItem'
-          required:
-            - action
-            - lineItem
-          type: object
+      additionalProperties: false
       description: Action to a update a line item of a packing target container.
+      properties:
+        action:
+          description: >-
+            Use UpdateLineItemOnPackingTargetContainer to change a line item on
+            an existing packing container
+          enum:
+            - UpdateLineItemOnPackingTargetContainer
+          type: string
+        lineItem:
+          $ref: '#/components/schemas/PackingTargetContainerLineItem'
+      required:
+        - action
+        - lineItem
       title: UpdateLineItemOnPackingTargetContainer
+      type: object
       xml:
         name: UpdateLineItemOnPackingTargetContainer
     UpdatePackingTargetContainerLineItemAction:
@@ -82020,6 +82002,7 @@ components:
         - payload
         - name
       title: UpdatePackingTargetContainerLineItemAction
+      type: object
     UpdatePackingTargetContainerLineItemEnum:
       enum:
         - UpdateLineItem
@@ -82027,62 +82010,58 @@ components:
       title: UpdatePackingTargetContainerLineItemEnum
       description: UpdatePackingTargetContainerLineItemEnum
     UpdatePackingTargetContainerLineItemRecordableAttributes:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use this action to update the recordable attributes of the line
-                items of a packing target container
-              enum:
-                - UpdatePackingTargetContainerLineItemRecordableAttributes
-              type: string
-            recordableAttributeUpdates:
-              items:
-                $ref: '#/components/schemas/RecordableAttributeForUpdate'
-              type: array
-          required:
-            - action
-            - recordableAttributeUpdates
-          type: object
+      additionalProperties: false
       description: >-
         Action to a update the recordable attributes of the line items of a
         packing target container.
+      properties:
+        action:
+          description: >-
+            Use this action to update the recordable attributes of the line
+            items of a packing target container
+          enum:
+            - UpdatePackingTargetContainerLineItemRecordableAttributes
+          type: string
+        recordableAttributeUpdates:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForUpdate'
+          type: array
+      required:
+        - action
+        - recordableAttributeUpdates
       title: UpdatePackingTargetContainerLineItemRecordableAttributes
+      type: object
       xml:
         name: UpdatePackingTargetContainerLineItemRecordableAttributes
     UpdatePackingTargetContainerStorageLocation:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use this action to update the storageLocationRef of a packing
-                target container
-              enum:
-                - UpdatePackingTargetContainerStorageLocation
-              type: string
-            storageLocationRef:
-              description: >-
-                Reference to the location where the packing target container is
-                located.
-              example: 019e16d1-b503-798a-96a0-6868613c9e36
-              type: string
-            version:
-              description: >-
-                The version of the packing target container to be used in
-                optimistic locking mechanisms.
-              example: 42
-              type: integer
-          required:
-            - action
-            - version
-            - storageLocationRef
-          type: object
+      additionalProperties: false
       description: Action to update the storageLocationRef of a packing target container.
+      properties:
+        action:
+          description: >-
+            Use this action to update the storageLocationRef of a packing target
+            container
+          enum:
+            - UpdatePackingTargetContainerStorageLocation
+          type: string
+        storageLocationRef:
+          description: >-
+            Reference to the location where the packing target container is
+            located.
+          example: 019e16d1-b503-798a-96a0-6868613c9e36
+          type: string
+        version:
+          description: >-
+            The version of the packing target container to be used in optimistic
+            locking mechanisms.
+          example: 42
+          type: integer
+      required:
+        - action
+        - version
+        - storageLocationRef
       title: UpdatePackingTargetContainerStorageLocation
+      type: object
       xml:
         name: UpdatePackingTargetContainerStorageLocation
     UpdatePackLineItemRecordableAttributesActionEnum:
