@@ -28254,6 +28254,51 @@ paths:
       summary: Validate postal code
       tags:
         - Validations (Core)
+  /api/workflows/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Search for Workflow
+      operationId: searchWorkflow
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: List workflows (search)
+      x-fft-permissions:
+        - WORKFLOW_DEFINITION_READ
+      tags:
+        - Workflow Management (Core)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/zones/search:
     post:
       deprecated: false
@@ -83676,6 +83721,116 @@ components:
       title: WorkflowInformation
       type: object
       description: WorkflowInformation
+    WorkflowPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+        workflows:
+          items:
+            $ref: '#/components/schemas/WorkflowDefinition'
+          type: array
+      required:
+        - pageInfo
+        - workflows
+      title: WorkflowPaginatedResult
+      type: object
+      description: WorkflowPaginatedResult
+    WorkflowSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/WorkflowSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/WorkflowSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: WorkflowSearchPayload
+      type: object
+      description: WorkflowSearchPayload
+    WorkflowSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/WorkflowSearchQuery'
+          maxItems: 500
+          type: array
+        isActive:
+          allOf:
+            - $ref: '#/components/schemas/BooleanFilter'
+          description: Search by isActive
+        key:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by key
+        name:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by name
+        or:
+          items:
+            $ref: '#/components/schemas/WorkflowSearchQuery'
+          maxItems: 500
+          type: array
+      title: WorkflowSearchQuery
+      type: object
+      description: WorkflowSearchQuery
+    WorkflowSort:
+      properties:
+        name:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: WorkflowSort
+      type: object
+      description: WorkflowSort
     WorkflowUnavailable:
       additionalProperties: false
       properties:
