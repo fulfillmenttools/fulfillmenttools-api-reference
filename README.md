@@ -5,6 +5,19 @@ Public api assets for the fulfillmenttools platform API
 - [Open API Specification](api.swagger.yaml)
 - [Technical Documentation](https://docs.fulfillmenttools.com)
 
+## API Collections
+
+We provide ready-to-use API collections for popular HTTP clients to help you get started quickly:
+
+| Client | Folder |
+|--------|--------|
+| [Postman](https://www.postman.com/) | [`postman/`](postman/) |
+| [Insomnia](https://insomnia.rest/) | [`insomnia/`](insomnia/) |
+| [Bruno](https://www.usebruno.com/) | [`bruno/`](bruno/) |
+
+Import the collection file from the respective subfolder into your HTTP client of choice.
+See [Access to fulfillmenttools APIs](https://docs.fulfillmenttools.com/documentation/getting-started/access-to-fulfillmenttools-apis) for instructions.
+
 ## Generate API Client with HeyAPI OpenAPI Generator
 
 ### 1. Obtain the OpenAPI specification
