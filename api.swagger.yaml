@@ -19002,6 +19002,8 @@ paths:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
+              - SHIPPING_INFORMATION_READ
+              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
               - LABEL_READ
@@ -25746,6 +25748,235 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/shippinginformation:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Retrieves shippingInformation entities based on provided search
+        criteria.
+      operationId: getShippingInformation
+      parameters:
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+            type: string
+        - description: number of entities to show. Max value is 500
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            example: 25
+            maximum: 500
+            minimum: 1
+            type: integer
+        - description: filter by facilityRefs
+          in: query
+          name: facilityRefs
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - description: filter by tenantOrderId
+          in: query
+          name: tenantOrderId
+          required: false
+          schema:
+            example: ORDER-12345
+            type: string
+        - description: >-
+            the value by which results should be ordered by. If nothing is
+            passed return values are sorted by id
+          in: query
+          name: orderBy
+          required: false
+          schema:
+            example: CREATED_ASC
+            type: string
+        - description: >-
+            if set to true, the total count of entities found by the given
+            search criteria will be returned. Default is false
+          in: query
+          name: withTotal
+          required: false
+          schema:
+            example: true
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingInformationResponse'
+          description: Successfully retrieved shippingInformation.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Get shippingInformation
+      x-fft-permissions:
+        - SHIPPING_INFORMATION_READ
+      tags:
+        - ShippingInformation (carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Creates a new shippingInformation.
+      operationId: createShippingInformation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingInformationForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingInformation'
+          description: Successfully created the shippingInformation.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Create a shippingInformation
+      x-fft-permissions:
+        - SHIPPING_INFORMATION_WRITE
+      tags:
+        - ShippingInformation (carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/shippinginformation/{shippingInformationId}:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Retrieves a single shippingInformation using its unique identifier.
+      operationId: getShippingInformationById
+      parameters:
+        - in: path
+          name: shippingInformationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingInformation'
+          description: Successfully retrieved the shippingInformation.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get a shippingInformation by its ID
+      x-fft-permissions:
+        - SHIPPING_INFORMATION_READ
+      tags:
+        - ShippingInformation (carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/shippinginformation/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Search for ShippingInformation
+      operationId: searchShippingInformation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingInformationSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingInformationPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: List ShippingInformation (search)
+      x-fft-permissions:
+        - SHIPPING_INFORMATION_READ
+      tags:
+        - ShippingInformation (carrier)
+      x-badges:
+        - color: orange
+          label: BETA
   /api/simulations/orders:
     get:
       deprecated: false
@@ -32016,6 +32247,47 @@ components:
       type: string
       title: CarrierProductCategory
       description: CarrierProductCategory
+    CarrierRecipientInformation:
+      properties:
+        address:
+          description: >-
+            Addresses of the recipients for this carrierRecipientInformation.
+            Depending on the use case there can be multiple recipient addresses
+            (e.g. invoice address deviates from shipping address).
+          items:
+            $ref: '#/components/schemas/ShippingInformationConsumerAddress'
+          maxItems: 3
+          minItems: 1
+          type: array
+        id:
+          description: >-
+            Addresses of the recipients for this carrierRecipientInformation.
+            Depending on the use case there can be multiple recipient addresses
+            (e.g. invoice address deviates from shipping address).
+          type: string
+      required:
+        - id
+        - address
+      title: CarrierRecipientInformation
+      type: object
+      description: CarrierRecipientInformation
+    CarrierRecipientInformationForCreation:
+      properties:
+        address:
+          description: >-
+            Addresses of the recipients for this carrierRecipientInformation.
+            Depending on the use case there can be multiple recipient addresses
+            (e.g. invoice address deviates from shipping address).
+          items:
+            $ref: '#/components/schemas/ShippingInformationConsumerAddress'
+          maxItems: 3
+          minItems: 1
+          type: array
+      required:
+        - address
+      title: CarrierRecipientInformationForCreation
+      type: object
+      description: CarrierRecipientInformationForCreation
     CarrierRecommendationResult:
       properties:
         carrier:
@@ -39603,6 +39875,46 @@ components:
         - radius
       type: object
       title: GeoFence
+    GetShippingInformationParams:
+      properties:
+        facilityRefs:
+          description: filter by facilityRefs
+          example:
+            - 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          items:
+            type: string
+          maxItems: 50
+          type: array
+        orderBy:
+          description: >-
+            the value by which results should be ordered by. If nothing is
+            passed return values are sorted by id
+          example: CREATED_ASC
+          type: string
+        size:
+          default: 25
+          description: number of entities to show. Max value is 500
+          example: 25
+          maximum: 500
+          minimum: 1
+          type: integer
+        startAfterId:
+          description: entity to start after
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        tenantOrderId:
+          description: filter by tenantOrderId
+          example: ORDER-12345
+          type: string
+        withTotal:
+          description: >-
+            if set to true, the total count of entities found by the given
+            search criteria will be returned. Default is false
+          example: true
+          type: boolean
+      title: GetShippingInformationParams
+      type: object
+      description: GetShippingInformationParams
     GlobalManualRerouteConfiguration:
       description: Allows reroutes to be triggered manually via api.
       properties:
@@ -46097,6 +46409,7 @@ components:
             attributes article</a>.
           items:
             $ref: '#/components/schemas/ArticleAttributeItem'
+          maxItems: 50
           type: array
         customAttributes:
           deprecated: true
@@ -52311,6 +52624,7 @@ components:
             - PICK_JOB
             - PACK_JOB
             - SHIPMENT
+            - SHIPPING_INFORMATION
             - HANDOVER_JOB
             - PARCEL
             - SERVICE_JOB
@@ -59657,6 +59971,8 @@ components:
             - ROUTING_WRITE
             - PARCEL_READ
             - PARCEL_WRITE
+            - SHIPPING_INFORMATION_READ
+            - SHIPPING_INFORMATION_WRITE
             - SHIPMENT_READ
             - SHIPMENT_WRITE
             - LABEL_READ
@@ -59808,6 +60124,7 @@ components:
             - CARRIER
             - RETURN
             - PARCEL
+            - SHIPPING_INFORMATION
             - SHIPMENT
             - LABEL
             - HANDOVERJOB
@@ -65444,6 +65761,30 @@ components:
       title: ReceiptForCreation
       type: object
       description: ReceiptForCreation
+    RecommendedCarrier:
+      properties:
+        carrierProduct:
+          description: Carrier product that has been selected.
+          example: EXPRESS
+          type: string
+        carrierRef:
+          description: Reference to the recommended carrier
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        carrierServices:
+          description: Carrier services that have been selected
+          example:
+            - IDENTITY_CHECK
+            - AGE_VERIFICATION
+          items:
+            type: string
+          maxItems: 20
+          type: array
+      required:
+        - carrierRef
+      title: RecommendedCarrier
+      type: object
+      description: RecommendedCarrier
     RecordableAttribute:
       additionalProperties: false
       properties:
@@ -67887,6 +68228,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
+              - SHIPPING_INFORMATION_READ
+              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
               - LABEL_READ
@@ -68115,6 +68458,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
+              - SHIPPING_INFORMATION_READ
+              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
               - LABEL_READ
@@ -68335,6 +68680,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
+              - SHIPPING_INFORMATION_READ
+              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
               - LABEL_READ
@@ -68560,6 +68907,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
+              - SHIPPING_INFORMATION_READ
+              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
               - LABEL_READ
@@ -74539,6 +74888,648 @@ components:
       type: object
       title: ShippingCosts
       description: ShippingCosts
+    ShippingInformation:
+      properties:
+        anonymized:
+          description: Indicates if gdpr related data was anonymized
+          example: false
+          type: boolean
+        carrierRecipientInformation:
+          description: >-
+            Combination of address, carrier, carrier product and carrier service
+            which can be referenced by line items. At the moment only address is
+            implemented and only one carrierRecipientInformation is allowed.
+          items:
+            $ref: '#/components/schemas/CarrierRecipientInformation'
+          maxItems: 1
+          minItems: 1
+          type: array
+        created:
+          description: Creation date of this shippingInformation
+          example: 2025-08-04T08:16:07.000Z
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        facilityRef:
+          description: Reference to related facility
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        id:
+          description: Unique identifier of this shippingInformation
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        lastModified:
+          description: Last modification date of this shippingInformation
+          example: 2025-08-04T08:16:07.000Z
+          format: date-time
+          type: string
+        operativeProcessRef:
+          description: >-
+            Reference to related operative process. If not passed, a new
+            operative process will be created and the reference added.
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        processRef:
+          description: >-
+            Reference to related process. If not passed, a new process will be
+            created and the reference added.
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        recommendedCarrier:
+          allOf:
+            - $ref: '#/components/schemas/RecommendedCarrier'
+          description: Recommended carrier for this shippingInformation.
+        senderAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Address of the sender for this shippingInformation
+        shippingInformationLineItems:
+          description: Items that are related to this shippingInformation
+          items:
+            $ref: '#/components/schemas/ShippingInformationLineItem'
+          maxItems: 50
+          minItems: 0
+          type: array
+        shortId:
+          description: >-
+            A short identifier that helps assigning a shippingInformation to a
+            customer
+          example: ABC123
+          type: string
+        tenantOrderId:
+          description: >-
+            Field can be used as a reference number in foreign systems, for
+            example as a reference to the source system's identifier for this
+            order.
+          example: ORDER-12345
+          type: string
+        version:
+          description: Version number of this shippingInformation
+          example: 1
+          type: number
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - processRef
+        - operativeProcessRef
+        - facilityRef
+        - carrierRecipientInformation
+        - senderAddress
+        - shippingInformationLineItems
+      title: ShippingInformation
+      type: object
+      description: ShippingInformation
+    ShippingInformationAddressPhoneNumber:
+      properties:
+        customAttributes:
+          additionalProperties: true
+          description: Custom attributes
+          type: object
+        label:
+          description: Label for the phone number
+          type: string
+        type:
+          description: Phone number type
+          enum:
+            - MOBILE
+            - PHONE
+          type: string
+        value:
+          description: Phone number value
+          type: string
+      required:
+        - type
+        - value
+      title: ShippingInformationAddressPhoneNumber
+      type: object
+      description: ShippingInformationAddressPhoneNumber
+    ShippingInformationCarrierRecipientInformationAddressFilter:
+      properties:
+        companyName:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by companyName
+        email:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by email
+        firstName:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by firstName
+        lastName:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by lastName
+      title: ShippingInformationCarrierRecipientInformationAddressFilter
+      type: object
+      description: ShippingInformationCarrierRecipientInformationAddressFilter
+    ShippingInformationCarrierRecipientInformationAddressListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ShippingInformationCarrierRecipientInformationAddressFilter
+          description: Contains returns if at least one entry matches
+      title: ShippingInformationCarrierRecipientInformationAddressListFilter
+      type: object
+      description: ShippingInformationCarrierRecipientInformationAddressListFilter
+    ShippingInformationCarrierRecipientInformationFilter:
+      properties:
+        address:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ShippingInformationCarrierRecipientInformationAddressListFilter
+          description: Nested list search by address
+      title: ShippingInformationCarrierRecipientInformationFilter
+      type: object
+      description: ShippingInformationCarrierRecipientInformationFilter
+    ShippingInformationCarrierRecipientInformationListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ShippingInformationCarrierRecipientInformationFilter
+          description: Contains returns if at least one entry matches
+      title: ShippingInformationCarrierRecipientInformationListFilter
+      type: object
+      description: ShippingInformationCarrierRecipientInformationListFilter
+    ShippingInformationConsumerAddress:
+      properties:
+        additionalAddressInfo:
+          description: Additional address information
+          type: string
+        addressType:
+          description: Address type
+          enum:
+            - POSTAL_ADDRESS
+            - PARCEL_LOCKER
+            - INVOICE_ADDRESS
+          type: string
+        city:
+          description: City
+          type: string
+        companyName:
+          description: Company name
+          type: string
+        coordinates:
+          description: Geo-coordinates
+          type: object
+        country:
+          description: Country code (ISO 3166-1 alpha-2)
+          example: DE
+          type: string
+        customAttributes:
+          additionalProperties: true
+          description: Custom attributes
+          type: object
+        email:
+          description: Email address of the consumer
+          type: string
+        emailAddresses:
+          description: Email addresses
+          items:
+            $ref: '#/components/schemas/ShippingInformationEmailAddress'
+          maxItems: 10
+          type: array
+        firstName:
+          description: First name
+          type: string
+        houseNumber:
+          description: House number
+          type: string
+        lastName:
+          description: Last name
+          type: string
+        personalTitle:
+          description: Personal title
+          type: string
+        phoneNumbers:
+          description: Phone numbers
+          items:
+            $ref: '#/components/schemas/ShippingInformationAddressPhoneNumber'
+          maxItems: 10
+          type: array
+        postalCode:
+          description: Postal code
+          type: string
+        province:
+          description: Province or state
+          type: string
+        salutation:
+          description: Salutation
+          type: string
+        street:
+          description: Street name
+          type: string
+      required:
+        - street
+        - postalCode
+        - city
+        - country
+      title: ShippingInformationConsumerAddress
+      type: object
+      description: ShippingInformationConsumerAddress
+    ShippingInformationEmailAddress:
+      properties:
+        recipient:
+          description: Human-readable recipient description
+          type: string
+        value:
+          description: Email address
+          type: string
+      required:
+        - value
+      title: ShippingInformationEmailAddress
+      type: object
+      description: ShippingInformationEmailAddress
+    ShippingInformationForCreation:
+      properties:
+        anonymized:
+          description: Indicates if gdpr related data was anonymized
+          example: false
+          type: boolean
+        carrierRecipientInformation:
+          description: >-
+            Combination of address, carrier, carrier product and carrier service
+            which can be referenced by line items. At the moment only address is
+            implemented and only one carrierRecipientInformation is allowed.
+          items:
+            $ref: '#/components/schemas/CarrierRecipientInformationForCreation'
+          maxItems: 1
+          minItems: 1
+          type: array
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        facilityRef:
+          description: Reference to related facility
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        operativeProcessRef:
+          description: >-
+            Reference to related operative process. If not passed, a new
+            operative process will be created and the reference added.
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        processRef:
+          description: >-
+            Reference to related process. If not passed, a new process will be
+            created and the reference added.
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        recommendedCarrier:
+          allOf:
+            - $ref: '#/components/schemas/RecommendedCarrier'
+          description: Recommended carrier for this shippingInformation.
+        senderAddress:
+          allOf:
+            - $ref: '#/components/schemas/FacilityAddress'
+          description: Address of the sender for this shippingInformation
+        shippingInformationLineItems:
+          description: Items that are related to this shippingInformation
+          items:
+            $ref: '#/components/schemas/ShippingInformationLineItemForCreation'
+          maxItems: 50
+          minItems: 0
+          type: array
+        shortId:
+          description: >-
+            A short identifier that helps assigning a shippingInformation to a
+            customer
+          example: ABC123
+          type: string
+        tenantOrderId:
+          description: >-
+            Field can be used as a reference number in foreign systems, for
+            example as a reference to the source system's identifier for this
+            order.
+          example: ORDER-12345
+          type: string
+      required:
+        - facilityRef
+        - senderAddress
+        - shippingInformationLineItems
+        - carrierRecipientInformation
+      title: ShippingInformationForCreation
+      type: object
+      description: ShippingInformationForCreation
+    ShippingInformationLineItem:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/LineItemArticle'
+          description: Article information for this line item.
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities. If not passed, a new one will be
+            generated.
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        id:
+          description: Unique identifier of this shippingInformationLineItem
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        quantity:
+          description: Quantity of this item
+          example: 1
+          minimum: 1
+          type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the item that can be set during the
+            process
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          maxItems: 50
+          minItems: 0
+          type: array
+        scannableCodes:
+          description: Codes, that identify the article
+          example:
+            - ABC-12345
+          items:
+            type: string
+          maxItems: 50
+          minItems: 0
+          type: array
+      required:
+        - id
+        - article
+        - quantity
+      title: ShippingInformationLineItem
+      type: object
+      description: ShippingInformationLineItem
+    ShippingInformationLineItemForCreation:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/LineItemArticle'
+          description: Article information for this line item.
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities. If not passed, a new one will be
+            generated.
+          example: 019edfb7-f4cc-73ba-b117-8899ecbd1fa5
+          type: string
+        quantity:
+          description: Quantity of this item
+          example: 1
+          minimum: 1
+          type: number
+        recordableAttributes:
+          description: >-
+            Customizable information about the item that can be set during the
+            process
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          maxItems: 50
+          minItems: 0
+          type: array
+        scannableCodes:
+          description: Codes, that identify the article
+          example:
+            - ABC-12345
+          items:
+            type: string
+          maxItems: 50
+          minItems: 0
+          type: array
+      required:
+        - article
+        - quantity
+      title: ShippingInformationLineItemForCreation
+      type: object
+      description: ShippingInformationLineItemForCreation
+    ShippingInformationPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        shippingInformationList:
+          items:
+            $ref: '#/components/schemas/ShippingInformation'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - shippingInformationList
+      title: ShippingInformationPaginatedResult
+      type: object
+      description: ShippingInformationPaginatedResult
+    ShippingInformationResponse:
+      properties:
+        shippingInformation:
+          description: the shipping information entities found by the given search criteria
+          items:
+            $ref: '#/components/schemas/ShippingInformation'
+          maxItems: 500
+          type: array
+        total:
+          description: >-
+            the total count of shipping information entities found by the given
+            search criteria
+          example: 42
+          type: integer
+      title: ShippingInformationResponse
+      type: object
+      description: ShippingInformationResponse
+    ShippingInformationSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ShippingInformationSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ShippingInformationSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: ShippingInformationSearchPayload
+      type: object
+      description: ShippingInformationSearchPayload
+    ShippingInformationSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ShippingInformationSearchQuery'
+          maxItems: 500
+          type: array
+        carrierRecipientInformation:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ShippingInformationCarrierRecipientInformationListFilter
+          description: Nested list search by carrierRecipientInformation
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: >-
+            Search entries by created. Applying a narrow and well-considered
+            filter value is strongly recommended, as it can greatly improve
+            response times, especially when working with large datasets.
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        lastModified:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
+        or:
+          items:
+            $ref: '#/components/schemas/ShippingInformationSearchQuery'
+          maxItems: 500
+          type: array
+        shippingInformationLineItems:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ShippingInformationShippingInformationLineItemsListFilter
+          description: Nested list search by shippingInformationLineItems
+        shortId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by shortId
+        tenantOrderId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantOrderId
+      title: ShippingInformationSearchQuery
+      type: object
+      description: ShippingInformationSearchQuery
+    ShippingInformationShippingInformationLineItemsArticleFilter:
+      properties:
+        tenantArticleId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
+        title:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by title
+      title: ShippingInformationShippingInformationLineItemsArticleFilter
+      type: object
+      description: ShippingInformationShippingInformationLineItemsArticleFilter
+    ShippingInformationShippingInformationLineItemsFilter:
+      properties:
+        article:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ShippingInformationShippingInformationLineItemsArticleFilter
+          description: Nested search by article
+      title: ShippingInformationShippingInformationLineItemsFilter
+      type: object
+      description: ShippingInformationShippingInformationLineItemsFilter
+    ShippingInformationShippingInformationLineItemsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ShippingInformationShippingInformationLineItemsFilter
+          description: Contains returns if at least one entry matches
+      title: ShippingInformationShippingInformationLineItemsListFilter
+      type: object
+      description: ShippingInformationShippingInformationLineItemsListFilter
+    ShippingInformationSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ShippingInformationSort
+      type: object
+      description: ShippingInformationSort
+    ShippingInformationWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/ShippingInformation'
+      required:
+        - payload
+      type: object
+      title: ShippingInformationWebHookEvent
+      description: ShippingInformationWebHookEvent
     ShortPickReason:
       additionalProperties: false
       properties:
@@ -83291,6 +84282,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
+              - SHIPPING_INFORMATION_READ
+              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
               - LABEL_READ
