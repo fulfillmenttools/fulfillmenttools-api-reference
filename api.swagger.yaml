@@ -55851,6 +55851,15 @@ components:
         - reason
         - status
       title: OrderStatusReason
+    OrderStatusReasonLog:
+      properties:
+        reason:
+          type: string
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+      type: object
+      title: OrderStatusReasonLog
+      description: OrderStatusReasonLog
     OrderTagConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -63446,6 +63455,7 @@ components:
             - $ref: '#/components/schemas/ConsumerAddressModifiedLogPayload'
             - $ref: >-
                 #/components/schemas/OrderModificationPreferredHandlingTimePayload
+            - $ref: '#/components/schemas/StatusReasonsPayload'
             - $ref: '#/components/schemas/OrderLineItemModifiedLogPayload'
             - $ref: '#/components/schemas/OperativeEntityPayloadBase'
             - $ref: '#/components/schemas/ExternalActionHistoryLogPayload'
@@ -77000,6 +77010,16 @@ components:
       title: StatusReason
       type: object
       description: StatusReason
+    StatusReasonsPayload:
+      properties:
+        statusReason:
+          allOf:
+            - $ref: '#/components/schemas/OrderStatusReasonLog'
+          description: Reason for the status change
+          type: object
+      type: object
+      title: StatusReasonsPayload
+      description: StatusReasonsPayload
     Sticker:
       additionalProperties: false
       properties:
