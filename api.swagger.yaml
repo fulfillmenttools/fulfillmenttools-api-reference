@@ -28769,14 +28769,11 @@ components:
           description: ''
           enum:
             - AddAllowedValueToTag
-            - CancelHandoverjob
             - ModifyFacility
             - ModifyListing
             - ModifyRetainedOfflineStock
             - ModifyListingReactivationAfter
             - ModifyUser
-            - ModifyShipment
-            - ModifyHandoverjob
             - ModifyCarrier
             - ModifyShortpick
             - ModifyRoutingPlan
@@ -29414,6 +29411,7 @@ components:
       required:
         - handoverConfigurationVersion
         - availableRefuseReasonForCreation
+      type: object
       title: AddRefuseReasonParameter
       description: AddRefuseReasonParameter
     AddRemoteConfigurationScopeParameter:
@@ -30722,13 +30720,15 @@ components:
       required:
         - refusedReasonLocalized
         - active
+      type: object
       title: AvailableRefusedReason
       description: AvailableRefusedReason
     AvailableRefuseReasonForCreation:
       additionalProperties: false
       properties:
         refusedReasonLocalized:
-          $ref: '#/components/schemas/LocaleString'
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
           description: Localized reason
           example: '{ en_US: ''SomeName'' }'
         active:
@@ -30737,13 +30737,15 @@ components:
       required:
         - active
         - refusedReasonLocalized
+      type: object
       title: AvailableRefuseReasonForCreation
       description: AvailableRefuseReasonForCreation
     AvailableRefuseReasonForUpdate:
       additionalProperties: false
       properties:
         refusedReasonLocalized:
-          $ref: '#/components/schemas/LocaleString'
+          allOf:
+            - $ref: '#/components/schemas/LocaleString'
           description: Localized reason
           example: '{ en_US: ''SomeName'' }'
         active:
@@ -30760,6 +30762,7 @@ components:
         - active
         - refusedReasonLocalized
         - version
+      type: object
       title: AvailableRefuseReasonForUpdate
       description: AvailableRefuseReasonForUpdate
     AvailableReturnReason:
@@ -31354,32 +31357,31 @@ components:
       title: CancelationReasons
       description: CancelationReasons
     CancelHandoverjob:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use value 'CancelHandoverjob', because you want to cancel a
-                handover job
-              enum:
-                - CancelHandoverjob
-              type: string
-            handoverJobCancelReason:
-              $ref: '#/components/schemas/HandoverJobCancelReason'
-          required:
-            - action
-            - handoverJobCancelReason
-          type: object
+      additionalProperties: false
       deprecated: true
       description: >-
         This part of the API is deprecated. For details, see the <a
         href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
         target="_blank">API release lifecycle documentation</a>.<br /><br
         />@deprecated Use api/handoverjobs/:id/actions instead
+      properties:
+        action:
+          $ref: '#/components/schemas/CancelHandoverjobActionEnum'
+        handoverJobCancelReason:
+          $ref: '#/components/schemas/HandoverJobCancelReason'
+      required:
+        - action
+        - handoverJobCancelReason
       title: CancelHandoverjob
+      type: object
       xml:
         name: CancelHandoverjob
+    CancelHandoverjobActionEnum:
+      enum:
+        - CancelHandoverjob
+      type: string
+      title: CancelHandoverjobActionEnum
+      description: CancelHandoverjobActionEnum
     CancelPickRun:
       allOf:
         - additionalProperties: false
@@ -33293,8 +33295,8 @@ components:
             Supported events for triggering external notifications:
             PICK_JOB_CREATED, UPCOMING_TIME_TRIGGERED_REROUTE,
             ROUTING_PLAN_NOT_ROUTABLE, ROUTING_PLAN_WAITING, ORDER_MODIFIED,
-            ORDER_UNLOCKED, ORDER_FORCE_CANCELLED, ORDER_CANCELLED_BY_EXPIRY,
-            ORDER_CANCELLED.
+            ORDER_UNLOCKED, LOCKED_ORDER_CREATED, ORDER_FORCE_CANCELLED,
+            ORDER_CANCELLED_BY_EXPIRY, ORDER_CANCELLED.
           items:
             enum:
               - PICK_JOB_CREATED
@@ -33303,6 +33305,7 @@ components:
               - ROUTING_PLAN_WAITING
               - ORDER_MODIFIED
               - ORDER_UNLOCKED
+              - LOCKED_ORDER_CREATED
               - ORDER_FORCE_CANCELLED
               - ORDER_CANCELLED_BY_EXPIRY
               - ORDER_CANCELLED
@@ -33333,8 +33336,8 @@ components:
             Supported events for triggering external notifications:
             PICK_JOB_CREATED, UPCOMING_TIME_TRIGGERED_REROUTE,
             ROUTING_PLAN_NOT_ROUTABLE, ROUTING_PLAN_WAITING, ORDER_MODIFIED,
-            ORDER_UNLOCKED, ORDER_FORCE_CANCELLED, ORDER_CANCELLED_BY_EXPIRY,
-            ORDER_CANCELLED.
+            ORDER_UNLOCKED, LOCKED_ORDER_CREATED, ORDER_FORCE_CANCELLED,
+            ORDER_CANCELLED_BY_EXPIRY, ORDER_CANCELLED.
           items:
             enum:
               - PICK_JOB_CREATED
@@ -33343,6 +33346,7 @@ components:
               - ROUTING_PLAN_WAITING
               - ORDER_MODIFIED
               - ORDER_UNLOCKED
+              - LOCKED_ORDER_CREATED
               - ORDER_FORCE_CANCELLED
               - ORDER_CANCELLED_BY_EXPIRY
               - ORDER_CANCELLED
@@ -34822,6 +34826,7 @@ components:
           type: number
       required:
         - handoverConfigurationVersion
+      type: object
       title: DeleteRefuseReasonParameter
       description: DeleteRefuseReasonParameter
     DeliverCostCoefficient:
@@ -35737,8 +35742,8 @@ components:
             Supported events for triggering external notifications:
             PICK_JOB_CREATED, UPCOMING_TIME_TRIGGERED_REROUTE,
             ROUTING_PLAN_NOT_ROUTABLE, ROUTING_PLAN_WAITING, ORDER_MODIFIED,
-            ORDER_UNLOCKED, ORDER_FORCE_CANCELLED, ORDER_CANCELLED_BY_EXPIRY,
-            ORDER_CANCELLED.
+            ORDER_UNLOCKED, LOCKED_ORDER_CREATED, ORDER_FORCE_CANCELLED,
+            ORDER_CANCELLED_BY_EXPIRY, ORDER_CANCELLED.
           items:
             enum:
               - PICK_JOB_CREATED
@@ -35747,6 +35752,7 @@ components:
               - ROUTING_PLAN_WAITING
               - ORDER_MODIFIED
               - ORDER_UNLOCKED
+              - LOCKED_ORDER_CREATED
               - ORDER_FORCE_CANCELLED
               - ORDER_CANCELLED_BY_EXPIRY
               - ORDER_CANCELLED
@@ -35784,8 +35790,8 @@ components:
             Supported events for triggering external notifications:
             PICK_JOB_CREATED, UPCOMING_TIME_TRIGGERED_REROUTE,
             ROUTING_PLAN_NOT_ROUTABLE, ROUTING_PLAN_WAITING, ORDER_MODIFIED,
-            ORDER_UNLOCKED, ORDER_FORCE_CANCELLED, ORDER_CANCELLED_BY_EXPIRY,
-            ORDER_CANCELLED.
+            ORDER_UNLOCKED, LOCKED_ORDER_CREATED, ORDER_FORCE_CANCELLED,
+            ORDER_CANCELLED_BY_EXPIRY, ORDER_CANCELLED.
           items:
             enum:
               - PICK_JOB_CREATED
@@ -35794,6 +35800,7 @@ components:
               - ROUTING_PLAN_WAITING
               - ORDER_MODIFIED
               - ORDER_UNLOCKED
+              - LOCKED_ORDER_CREATED
               - ORDER_FORCE_CANCELLED
               - ORDER_CANCELLED_BY_EXPIRY
               - ORDER_CANCELLED
@@ -40441,10 +40448,7 @@ components:
               type: string
               deprecated: true
             channel:
-              enum:
-                - DELIVERY
-                - COLLECT
-              type: string
+              $ref: '#/components/schemas/HandoverjobChannel'
             customAttributes:
               description: >-
                 Attributes that can be added to the handover job. These
@@ -40636,6 +40640,7 @@ components:
         - version
         - targetTime
       title: HandoverJobAddTargetTimeActionParameter
+      type: object
     HandoverJobAssignedUsersFilter:
       properties:
         userId:
@@ -40694,6 +40699,13 @@ components:
       type: string
       title: HandoverJobCancelReason
       description: HandoverJobCancelReason
+    HandoverjobChannel:
+      enum:
+        - DELIVERY
+        - COLLECT
+      type: string
+      title: HandoverjobChannel
+      description: HandoverjobChannel
     HandoverJobChannelEnumEnumFilter:
       properties:
         eq:
@@ -40760,10 +40772,7 @@ components:
           type: string
           deprecated: true
         channel:
-          enum:
-            - DELIVERY
-            - COLLECT
-          type: string
+          $ref: '#/components/schemas/HandoverjobChannel'
         customAttributes:
           description: >-
             Attributes that can be added to the handover job. These attributes
@@ -49976,32 +49985,31 @@ components:
       description: Action to Modify the Global Routing Configuration.
       title: ModifyGlobalRoutingConfigurationAction
     ModifyHandoverjob:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use value 'ModifyHandoverjob', because you want to modify a
-                handoverjob
-              enum:
-                - ModifyHandoverjob
-              type: string
-            customAttributes:
-              description: >-
-                Attributes that can be added to the handoverJob. These
-                attributes cannot be used within fulfillment processes, but it
-                could be useful to have the informations carried here.
-              type: object
-            status:
-              $ref: '#/components/schemas/HandoverjobStatus'
-          required:
-            - action
-          type: object
+      additionalProperties: false
       description: Action to modify a HandoverJob.
+      properties:
+        action:
+          $ref: '#/components/schemas/ModifyHandoverjobActionEnum'
+        customAttributes:
+          description: >-
+            Attributes that can be added to the handoverJob. These attributes
+            cannot be used within fulfillment processes, but it could be useful
+            to have the informations carried here.
+          type: object
+        status:
+          $ref: '#/components/schemas/HandoverjobStatus'
+      required:
+        - action
       title: ModifyHandoverjobAction
+      type: object
       xml:
         name: ModifyHandoverjob
+    ModifyHandoverjobActionEnum:
+      enum:
+        - ModifyHandoverjob
+      type: string
+      title: ModifyHandoverjobActionEnum
+      description: ModifyHandoverjobActionEnum
     ModifyListing:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -50850,16 +50858,10 @@ components:
       description: ModifyRoutingPlanAction
     ModifyShipment:
       allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
         - additionalProperties: false
           properties:
             action:
-              description: >-
-                Use value 'ModifyShipment', because you want to modify a
-                shipment
-              enum:
-                - ModifyShipment
-              type: string
+              $ref: '#/components/schemas/ModifyShipmentActionEnum'
             carrierProduct:
               description: Desired product of given carrier to choose when ordering a label
               example: EXPRESS
@@ -50889,6 +50891,12 @@ components:
         name: ModifyShipment
       title: ModifyShipment
       description: ModifyShipment
+    ModifyShipmentActionEnum:
+      description: Use value 'ModifyShipment', because you want to modify a shipment
+      enum:
+        - ModifyShipment
+      type: string
+      title: ModifyShipmentActionEnum
     ModifyShortpick:
       allOf:
         - $ref: '#/components/schemas/AbstractModificationAction'
@@ -74283,6 +74291,7 @@ components:
         - version
         - targetTime
       title: ShipmentAddTargetTimeActionParameter
+      type: object
     ShipmentForCreation:
       additionalProperties: false
       properties:
@@ -80387,10 +80396,7 @@ components:
               type: string
               deprecated: true
             channel:
-              enum:
-                - DELIVERY
-                - COLLECT
-              type: string
+              $ref: '#/components/schemas/HandoverjobChannel'
             facilityRef:
               description: The id of the facility reference.
               example: Esb20gpHBL94X5NdMp3C
@@ -83510,6 +83516,7 @@ components:
       required:
         - handoverConfigurationVersion
         - availableRefuseReasonForUpdate
+      type: object
       title: UpdateRefuseReasonParameter
       description: UpdateRefuseReasonParameter
     UpdateServiceDataAvailableLineItemsActionParameter:
