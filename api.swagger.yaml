@@ -18496,6 +18496,234 @@ paths:
         - PACKJOB_READ
       tags:
         - Packing (Operations)
+  /api/parcelinformation:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Returns all parcel information that match the given query parameters.
+      operationId: getParcelInformation
+      parameters:
+        - description: entity to start after
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            example: 019eefb1-4bd1-7ef0-98ba-f91e07243ea7
+            type: string
+        - description: number of entities to show. Max value is 500
+          in: query
+          name: size
+          required: false
+          schema:
+            default: 25
+            example: 25
+            maximum: 500
+            minimum: 1
+            type: integer
+        - description: filter by facilityRefs
+          in: query
+          name: facilityRefs
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+        - description: filter by shippingInformationRef
+          in: query
+          name: shippingInformationRef
+          required: false
+          schema:
+            example: 019eefb2-0001-7000-9000-100000000001
+            type: string
+        - description: >-
+            the value by which results should be ordered by. If nothing is
+            passed return values are sorted by id
+          in: query
+          name: orderBy
+          required: false
+          schema:
+            example: LAST_MODIFIED_DESC
+            type: string
+        - description: >-
+            if set to true, the total count of entities will be returned.
+            Default is false
+          in: query
+          name: withTotal
+          required: false
+          schema:
+            example: true
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelInformationListResponse'
+          description: Found parcel information that match the given query parameters.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: List parcel information
+      x-fft-permissions:
+        - PARCEL_INFORMATION_READ
+      tags:
+        - Parcel Information (Operations)
+      x-badges:
+        - color: red
+          label: ALPHA
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Creates a new parcel information.
+      operationId: createParcelInformation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelInformationForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelInformation'
+          description: Successfully created the parcel information.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Create a parcel information
+      x-fft-permissions:
+        - PARCEL_INFORMATION_WRITE
+      tags:
+        - Parcel Information (Operations)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/parcelinformation/{parcelInformationId}:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Retrieves a single parcel information using its unique identifier.
+      operationId: getParcelInformationById
+      parameters:
+        - in: path
+          name: parcelInformationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelInformation'
+          description: Successfully retrieved the parcel information.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get a parcel information by its ID
+      x-fft-permissions:
+        - PARCEL_INFORMATION_READ
+      tags:
+        - Parcel Information (Operations)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/parcelinformation/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Search for ParcelInformation
+      operationId: searchParcelInformation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelInformationSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelInformationPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: List ParcelInformation (search)
+      x-fft-permissions:
+        - PARCEL_INFORMATION_READ
+      tags:
+        - Parcel Information (Operations)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/parcels:
     get:
       description: ''
@@ -18974,6 +19202,8 @@ paths:
               - SHIPMENT_WRITE
               - LABEL_READ
               - LABEL_WRITE
+              - PARCEL_INFORMATION_READ
+              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -39838,6 +40068,46 @@ components:
         - radius
       type: object
       title: GeoFence
+    GetParcelInformationListParams:
+      properties:
+        facilityRefs:
+          description: filter by facilityRefs
+          example:
+            - 019eefb2-0001-7000-9000-100000000002
+          items:
+            type: string
+          maxItems: 50
+          type: array
+        orderBy:
+          description: >-
+            the value by which results should be ordered by. If nothing is
+            passed return values are sorted by id
+          example: LAST_MODIFIED_DESC
+          type: string
+        shippingInformationRef:
+          description: filter by shippingInformationRef
+          example: 019eefb2-0001-7000-9000-100000000001
+          type: string
+        size:
+          default: 25
+          description: number of entities to show. Max value is 500
+          example: 25
+          maximum: 500
+          minimum: 1
+          type: integer
+        startAfterId:
+          description: entity to start after
+          example: 019eefb1-4bd1-7ef0-98ba-f91e07243ea7
+          type: string
+        withTotal:
+          description: >-
+            if set to true, the total count of entities will be returned.
+            Default is false
+          example: true
+          type: boolean
+      title: GetParcelInformationListParams
+      type: object
+      description: GetParcelInformationListParams
     GetShippingInformationParams:
       properties:
         facilityRefs:
@@ -52591,6 +52861,7 @@ components:
             - SHIPPING_INFORMATION
             - HANDOVER_JOB
             - PARCEL
+            - PARCEL_INFORMATION
             - SERVICE_JOB
             - RESTOW_ITEM
             - ITEM_RETURN_JOB
@@ -58788,6 +59059,524 @@ components:
       type: object
       title: ParcelForDirectCreation
       description: ParcelForDirectCreation
+    ParcelInformation:
+      properties:
+        anonymized:
+          description: Indicates if gdpr related data was anonymized
+          example: false
+          type: boolean
+        created:
+          description: Creation date of this parcelInformation
+          example: 2026-04-15T08:02:01.956Z
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        dimensions:
+          allOf:
+            - $ref: '#/components/schemas/ParcelInformationDimensions'
+          description: Dimension information of this parcel information
+        facilityRef:
+          description: Reference to related facility
+          example: 019eefb2-0001-7000-9000-100000000002
+          type: string
+        id:
+          description: Unique identifier of this parcelInformation
+          example: 019eefb1-4bd1-7ef0-98ba-f91e07243ea7
+          type: string
+        lastModified:
+          description: Last modification date of this parcelInformation
+          example: 2026-04-15T08:02:01.956Z
+          format: date-time
+          type: string
+        operativeProcessRef:
+          description: Reference to related operative process.
+          example: 019eefb2-0001-7000-9000-100000000003
+          type: string
+        parcelInformationLineItems:
+          description: Items that are contained in this parcel information
+          items:
+            $ref: '#/components/schemas/ParcelInformationLineItem'
+          maxItems: 50
+          minItems: 0
+          type: array
+        processRef:
+          description: Reference to related process.
+          example: 019eefb2-0001-7000-9000-100000000004
+          type: string
+        shippingInformationRef:
+          description: Reference to related shipping information.
+          example: 019eefb2-0001-7000-9000-100000000001
+          type: string
+        shortId:
+          description: >-
+            A short identifier that helps assigning a parcelInformation to a
+            customer
+          example: FT-01
+          type: string
+        version:
+          description: Version number of this parcelInformation
+          example: 1
+          type: integer
+        weights:
+          allOf:
+            - $ref: '#/components/schemas/ParcelInformationWeights'
+          description: Weight information of this parcel information
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - processRef
+        - operativeProcessRef
+        - facilityRef
+        - shippingInformationRef
+        - parcelInformationLineItems
+      title: ParcelInformation
+      type: object
+      description: ParcelInformation
+    ParcelInformationDimensions:
+      properties:
+        decimalPlaces:
+          description: The number of decimal places the dimensions have. Max value is 2
+          example: 0
+          maximum: 2
+          minimum: 0
+          type: integer
+        height:
+          description: The height of the parcel without decimal places
+          example: 30
+          minimum: 1
+          type: integer
+        length:
+          description: The length of the parcel without decimal places
+          example: 40
+          minimum: 1
+          type: integer
+        unit:
+          description: The unit of the dimensions. For now only CENTIMETER is supported
+          enum:
+            - CENTIMETER
+          example: CENTIMETER
+          type: string
+        width:
+          description: The width of the parcel without decimal places
+          example: 20
+          minimum: 1
+          type: integer
+      required:
+        - height
+        - width
+        - length
+        - unit
+        - decimalPlaces
+      title: ParcelInformationDimensions
+      type: object
+      description: ParcelInformationDimensions
+    ParcelInformationForCreation:
+      properties:
+        anonymized:
+          description: Indicates if gdpr related data was anonymized
+          example: false
+          type: boolean
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        dimensions:
+          allOf:
+            - $ref: '#/components/schemas/ParcelInformationDimensions'
+          description: Dimension information of this parcel information
+        parcelInformationLineItems:
+          description: Items that are contained in this parcel information
+          items:
+            $ref: '#/components/schemas/ParcelInformationLineItemForCreation'
+          maxItems: 50
+          minItems: 0
+          type: array
+        shippingInformationRef:
+          description: Reference to related shipping information.
+          example: 019eefb2-0001-7000-9000-100000000001
+          type: string
+        shortId:
+          description: >-
+            A short identifier that helps assigning a parcelInformation to a
+            customer
+          example: FT-01
+          type: string
+        weights:
+          allOf:
+            - $ref: '#/components/schemas/ParcelInformationWeightsForCreation'
+          description: Weight information of this parcel information
+      required:
+        - shippingInformationRef
+        - parcelInformationLineItems
+      title: ParcelInformationForCreation
+      type: object
+      description: ParcelInformationForCreation
+    ParcelInformationLineItem:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/LineItemArticle'
+          description: Article information for this line item.
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities. If not passed, a new one will be
+            generated.
+          example: 019eefb2-0001-7000-9000-200000000002
+          type: string
+        id:
+          description: Unique identifier of this parcelInformationLineItem
+          example: 019eefb2-0001-7000-9000-200000000001
+          type: string
+        quantity:
+          description: Quantity of this item
+          example: 2
+          minimum: 1
+          type: integer
+        recordableAttributes:
+          description: >-
+            Customizable information about the item that can be set during the
+            process
+          items:
+            $ref: '#/components/schemas/RecordableAttribute'
+          maxItems: 50
+          minItems: 0
+          type: array
+        scannableCodes:
+          description: Codes, that identify the article
+          example:
+            - '4006381333931'
+          items:
+            type: string
+          maxItems: 50
+          minItems: 0
+          type: array
+      required:
+        - id
+        - article
+        - quantity
+      title: ParcelInformationLineItem
+      type: object
+      description: ParcelInformationLineItem
+    ParcelInformationLineItemForCreation:
+      properties:
+        article:
+          allOf:
+            - $ref: '#/components/schemas/LineItemArticle'
+          description: Article information for this line item.
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        globalLineItemId:
+          description: >-
+            This id is used to identify if this line item is related to the line
+            item of other operational entities. If not passed, a new one will be
+            generated.
+          example: 019eefb2-0001-7000-9000-200000000002
+          type: string
+        quantity:
+          description: Quantity of this item
+          example: 2
+          minimum: 1
+          type: integer
+        recordableAttributes:
+          description: >-
+            Customizable information about the item that can be set during the
+            process
+          items:
+            $ref: '#/components/schemas/RecordableAttributeForCreation'
+          maxItems: 50
+          minItems: 0
+          type: array
+        scannableCodes:
+          description: Codes, that identify the article
+          example:
+            - '4006381333931'
+          items:
+            type: string
+          maxItems: 50
+          minItems: 0
+          type: array
+      required:
+        - article
+        - quantity
+      title: ParcelInformationLineItemForCreation
+      type: object
+      description: ParcelInformationLineItemForCreation
+    ParcelInformationListResponse:
+      properties:
+        parcelInformationList:
+          description: the parcel information found by the given search criteria
+          items:
+            $ref: '#/components/schemas/ParcelInformation'
+          maxItems: 500
+          type: array
+        total:
+          description: >-
+            the total count of parcel information found by the given search
+            criteria
+          example: 42
+          type: integer
+      title: ParcelInformationListResponse
+      type: object
+      description: ParcelInformationListResponse
+    ParcelInformationPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        parcelInformationList:
+          items:
+            $ref: '#/components/schemas/ParcelInformation'
+          type: array
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - parcelInformationList
+      title: ParcelInformationPaginatedResult
+      type: object
+      description: ParcelInformationPaginatedResult
+    ParcelInformationParcelInformationLineItemsArticleFilter:
+      properties:
+        tenantArticleId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantArticleId
+        title:
+          allOf:
+            - $ref: '#/components/schemas/StringSearchFilter'
+          description: Search by title
+      title: ParcelInformationParcelInformationLineItemsArticleFilter
+      type: object
+      description: ParcelInformationParcelInformationLineItemsArticleFilter
+    ParcelInformationParcelInformationLineItemsFilter:
+      properties:
+        article:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ParcelInformationParcelInformationLineItemsArticleFilter
+          description: Nested search by article
+      title: ParcelInformationParcelInformationLineItemsFilter
+      type: object
+      description: ParcelInformationParcelInformationLineItemsFilter
+    ParcelInformationParcelInformationLineItemsListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ParcelInformationParcelInformationLineItemsFilter
+          description: Contains returns if at least one entry matches
+      title: ParcelInformationParcelInformationLineItemsListFilter
+      type: object
+      description: ParcelInformationParcelInformationLineItemsListFilter
+    ParcelInformationSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ParcelInformationSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/ParcelInformationSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: ParcelInformationSearchPayload
+      type: object
+      description: ParcelInformationSearchPayload
+    ParcelInformationSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ParcelInformationSearchQuery'
+          maxItems: 500
+          type: array
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: >-
+            Search entries by created. Applying a narrow and well-considered
+            filter value is strongly recommended, as it can greatly improve
+            response times, especially when working with large datasets.
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+        lastModified:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
+        or:
+          items:
+            $ref: '#/components/schemas/ParcelInformationSearchQuery'
+          maxItems: 500
+          type: array
+        parcelInformationLineItems:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ParcelInformationParcelInformationLineItemsListFilter
+          description: Nested list search by parcelInformationLineItems
+        shippingInformationRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by shippingInformationRef
+        shortId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by shortId
+      title: ParcelInformationSearchQuery
+      type: object
+      description: ParcelInformationSearchQuery
+    ParcelInformationSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: ParcelInformationSort
+      type: object
+      description: ParcelInformationSort
+    ParcelInformationWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/ParcelInformation'
+      required:
+        - payload
+      type: object
+      title: ParcelInformationWebHookEvent
+      description: ParcelInformationWebHookEvent
+    ParcelInformationWeight:
+      properties:
+        decimalPlaces:
+          description: The number of decimal places the weight has. Max value is 3
+          example: 0
+          maximum: 3
+          minimum: 0
+          type: integer
+        unit:
+          description: The unit of the weight. For now only GRAM is supported
+          enum:
+            - GRAM
+          example: GRAM
+          type: string
+        weight:
+          description: The weight of the parcel without decimal places.
+          example: 500
+          minimum: 1
+          type: integer
+      required:
+        - unit
+        - decimalPlaces
+        - weight
+      title: ParcelInformationWeight
+      type: object
+      description: ParcelInformationWeight
+    ParcelInformationWeights:
+      properties:
+        autoCalculated:
+          allOf:
+            - $ref: '#/components/schemas/ParcelInformationWeight'
+          description: >-
+            Weight automatically calculated from the line items of this parcel
+            information. The weights per item are taken from article.attributes
+            (category: dimensions, key: weightPerUnit, type: NUMBER). Only if
+            ALL items have this attribute a weight will be calculated. If at
+            least one item does not have this attribute, autoCalculated will not
+            be set.
+        manuallySet:
+          allOf:
+            - $ref: '#/components/schemas/ParcelInformationWeight'
+          description: Weight manually set for this parcel information
+      title: ParcelInformationWeights
+      type: object
+      description: ParcelInformationWeights
+    ParcelInformationWeightsForCreation:
+      properties:
+        manuallySet:
+          allOf:
+            - $ref: '#/components/schemas/ParcelInformationWeight'
+          description: Weight manually set for this parcel information
+      required:
+        - manuallySet
+      title: ParcelInformationWeightsForCreation
+      type: object
+      description: ParcelInformationWeightsForCreation
     ParcelInvoiceFilter:
       properties:
         companyName:
@@ -59954,6 +60743,8 @@ components:
             - SHIPMENT_WRITE
             - LABEL_READ
             - LABEL_WRITE
+            - PARCEL_INFORMATION_READ
+            - PARCEL_INFORMATION_WRITE
             - HANDOVERJOB_READ
             - HANDOVERJOB_WRITE
             - PICKJOB_READ
@@ -60104,6 +60895,7 @@ components:
             - SHIPPING_INFORMATION
             - SHIPMENT
             - LABEL
+            - PARCEL_INFORMATION
             - HANDOVERJOB
             - HANDOVER_JOB
             - PICKJOB
@@ -68255,6 +69047,8 @@ components:
               - SHIPMENT_WRITE
               - LABEL_READ
               - LABEL_WRITE
+              - PARCEL_INFORMATION_READ
+              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -68485,6 +69279,8 @@ components:
               - SHIPMENT_WRITE
               - LABEL_READ
               - LABEL_WRITE
+              - PARCEL_INFORMATION_READ
+              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -68707,6 +69503,8 @@ components:
               - SHIPMENT_WRITE
               - LABEL_READ
               - LABEL_WRITE
+              - PARCEL_INFORMATION_READ
+              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -68934,6 +69732,8 @@ components:
               - SHIPMENT_WRITE
               - LABEL_READ
               - LABEL_WRITE
+              - PARCEL_INFORMATION_READ
+              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -84328,6 +85128,8 @@ components:
               - SHIPMENT_WRITE
               - LABEL_READ
               - LABEL_WRITE
+              - PARCEL_INFORMATION_READ
+              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
