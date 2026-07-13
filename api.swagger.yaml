@@ -23967,6 +23967,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: No more elements available
       summary: List routing strategies
+      x-fft-permissions:
+        - ROUTING_CONFIG_READ
       tags:
         - Routing Strategy (DOMS)
     post:
@@ -24007,6 +24009,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Create routing strategy
+      x-fft-permissions:
+        - ROUTING_CONFIG_WRITE
       tags:
         - Routing Strategy (DOMS)
   /api/routing/strategies/{strategyId}:
@@ -24048,6 +24052,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Get routing strategy
+      x-fft-permissions:
+        - ROUTING_CONFIG_READ
       tags:
         - Routing Strategy (DOMS)
     put:
@@ -24095,6 +24101,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Update routing strategy
+      x-fft-permissions:
+        - ROUTING_CONFIG_WRITE
       tags:
         - Routing Strategy (DOMS)
   /api/routing/strategies/{strategyId}/actions:
@@ -24141,6 +24149,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Call routing strategy action
+      x-fft-permissions:
+        - ROUTING_CONFIG_WRITE
       tags:
         - Routing Strategy (DOMS)
   /api/routing/strategies/{strategyId}/evaluation:
@@ -24193,6 +24203,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: The routing strategy does not exist
       summary: Evaluate routing strategy
+      x-fft-permissions:
+        - ROUTING_CONFIG_READ
       tags:
         - Routing Strategy (DOMS)
   /api/routing/strategies/{strategyId}/nodes/{nodeId}/evaluation:
@@ -24246,6 +24258,8 @@ paths:
                 $ref: '#/components/schemas/ApiError'
           description: The routing strategy node does not exist
       summary: Evaluate routing strategy node
+      x-fft-permissions:
+        - ROUTING_CONFIG_READ
       tags:
         - Routing Strategy (DOMS)
   /api/routingplans:
@@ -61392,6 +61406,7 @@ components:
         - $ref: '#/components/schemas/PickJobPickedActionParameter'
         - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
         - $ref: '#/components/schemas/PickJobAddTargetTimeActionParameter'
+        - $ref: '#/components/schemas/PickJobCancelActionParameter'
       title: PickJobActionsParameter
       description: PickJobActionsParameter
     PickJobAddTargetTimeActionEnum:
@@ -61422,6 +61437,27 @@ components:
         - version
         - targetTime
       title: PickJobAddTargetTimeActionParameter
+    PickJobCancelActionEnum:
+      enum:
+        - CANCEL
+      type: string
+      title: PickJobCancelActionEnum
+      description: PickJobCancelActionEnum
+    PickJobCancelActionParameter:
+      additionalProperties: false
+      description: 'Action to cancel a Pickjob. '
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobCancelActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+      title: PickJobCancelActionParameter
+      type: object
     PickjobDeliveryInformation:
       allOf:
         - $ref: '#/components/schemas/PickjobDeliveryInformationForCreation'
@@ -71898,6 +71934,11 @@ components:
           type: string
         timeTriggered:
           $ref: '#/components/schemas/RoutingStrategyRerouteTimeTriggeredConfig'
+        timeTriggeredByContext:
+          items:
+            $ref: '#/components/schemas/TimeTriggeredConfigurationContext'
+          maxItems: 500
+          type: array
       required:
         - defaultPrice
       type: object
@@ -83049,6 +83090,40 @@ components:
       type: object
       title: TimeStamp
       description: TimeStamp
+    TimeTriggeredConfigContextType:
+      enum:
+        - FACILITY
+        - FACILITY_GROUP
+      type: string
+      title: TimeTriggeredConfigContextType
+      description: TimeTriggeredConfigContextType
+    TimeTriggeredConfigurationContext:
+      additionalProperties: false
+      properties:
+        priority:
+          minimum: 0
+          type: number
+        timeTriggered:
+          $ref: '#/components/schemas/RoutingStrategyRerouteTimeTriggeredConfig'
+        type:
+          $ref: '#/components/schemas/TimeTriggeredConfigContextType'
+        values:
+          description: >-
+            The id of the context values. For example, if the type is FACILITY,
+            then the values are the ids of the facilities.
+          items:
+            format: uuid
+            type: string
+          maxItems: 500
+          type: array
+      required:
+        - priority
+        - type
+        - values
+        - timeTriggered
+      type: object
+      title: TimeTriggeredConfigurationContext
+      description: TimeTriggeredConfigurationContext
     TimeZone:
       description: Timezone for information retrieved e.g. by the Google Maps API
       properties:
