@@ -19296,6 +19296,8 @@ paths:
               - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
+              - EXPORT_READ
+              - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -36456,6 +36458,407 @@ components:
       type: object
       title: ExpiryWebHookEvent
       description: ExpiryWebHookEvent
+    ExportContainer:
+      properties:
+        created:
+          description: Timestamp when the export container was created.
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Arbitrary key-value pairs for storing additional metadata on the
+            container.
+          type: object
+        description:
+          description: >-
+            Optional description providing additional context about the
+            container's purpose.
+          type: string
+        id:
+          description: Unique identifier of the export container.
+          type: string
+        lastModified:
+          description: Timestamp when the export container was last modified.
+          format: date-time
+          type: string
+        name:
+          description: Human-readable name of the export container.
+          type: string
+        tenantExportContainerId:
+          description: >-
+            Caller-supplied identifier to correlate this container with an
+            external system.
+          type: string
+        version:
+          description: >-
+            Version number incremented on each update. Used for optimistic
+            concurrency control.
+          type: number
+      required:
+        - id
+        - created
+        - lastModified
+        - version
+        - name
+      title: ExportContainer
+      type: object
+      description: ExportContainer
+    ExportContainerForCreation:
+      properties:
+        customAttributes:
+          description: >-
+            Arbitrary key-value pairs for storing additional metadata on the
+            container.
+          type: object
+        description:
+          description: >-
+            Optional description providing additional context about the
+            container's purpose.
+          type: string
+        name:
+          description: Human-readable name of the export container.
+          type: string
+        tenantExportContainerId:
+          description: >-
+            Caller-supplied identifier to correlate this container with an
+            external system.
+          type: string
+      required:
+        - name
+      title: ExportContainerForCreation
+      type: object
+      description: ExportContainerForCreation
+    ExportContainerForUpdate:
+      properties:
+        customAttributes:
+          description: >-
+            Arbitrary key-value pairs for storing additional metadata on the
+            container.
+          nullable: true
+          type: object
+        description:
+          description: >-
+            Optional description providing additional context about the
+            container's purpose.
+          nullable: true
+          type: string
+        name:
+          description: Human-readable name of the export container.
+          type: string
+        tenantExportContainerId:
+          description: >-
+            Caller-supplied identifier to correlate this container with an
+            external system.
+          nullable: true
+          type: string
+        version:
+          description: >-
+            Current version of the export container. Must match the stored
+            version to prevent concurrent update conflicts.
+          type: number
+      required:
+        - version
+      title: ExportContainerForUpdate
+      type: object
+      description: ExportContainerForUpdate
+    ExportOperation:
+      properties:
+        created:
+          description: Timestamp when the export operation was created.
+          format: date-time
+          type: string
+        dataFormat:
+          description: Format of the exported data, e.g. JSONL.
+          enum:
+            - JSONL
+          type: string
+        error:
+          allOf:
+            - $ref: '#/components/schemas/ExportOperationError'
+          description: Error details if the export operation failed.
+          nullable: true
+          type: object
+        exportRequestRef:
+          description: Reference to the export request that this operation belongs to.
+          type: string
+        files:
+          description: >-
+            Files produced by this export operation, each with a download URL
+            and its expiry.
+          items:
+            $ref: '#/components/schemas/ExportOperationFile'
+          type: array
+        filesDeletionDate:
+          description: Timestamp when the exported files are scheduled to be deleted.
+          format: date-time
+          type: string
+        filesExpired:
+          description: >-
+            Whether the exported files have already been deleted and are no
+            longer accessible.
+          type: boolean
+        finishedAt:
+          description: >-
+            Timestamp when the export operation finished, either successfully or
+            with an error.
+          format: date-time
+          type: string
+        id:
+          description: Unique identifier of the export operation.
+          type: string
+        lastModified:
+          description: Timestamp when the export operation was last modified.
+          format: date-time
+          type: string
+        sourceType:
+          description: Type of the data source that is exported, e.g. FACILITY.
+          type: string
+        startedAt:
+          description: Timestamp when the export operation started.
+          format: date-time
+          type: string
+        status:
+          description: Current status of the export operation.
+          enum:
+            - RUNNING
+            - COMPLETED
+            - FAILED
+          type: string
+        trigger:
+          description: How the export operation was triggered.
+          enum:
+            - MANUAL
+          type: string
+        version:
+          description: >-
+            Version number incremented on each update. Used for optimistic
+            concurrency control.
+          type: number
+      required:
+        - id
+        - created
+        - lastModified
+        - version
+        - exportRequestRef
+        - sourceType
+        - trigger
+        - status
+        - startedAt
+        - filesExpired
+        - dataFormat
+        - files
+      title: ExportOperation
+      type: object
+      description: ExportOperation
+    ExportOperationError:
+      properties:
+        message:
+          description: >-
+            Error message describing the reason for the export operation
+            failure.
+          type: string
+      required:
+        - message
+      title: ExportOperationError
+      type: object
+      description: ExportOperationError
+    ExportOperationFile:
+      properties:
+        id:
+          description: >-
+            Unique identifier of the exported file, used to access it via the
+            file download endpoint.
+          type: string
+        name:
+          description: Name of the exported file.
+          type: string
+        sizeBytes:
+          description: Size of the exported file in bytes.
+          type: number
+        uri:
+          description: Download URI of the exported file.
+          type: string
+      required:
+        - id
+        - name
+        - uri
+        - sizeBytes
+      title: ExportOperationFile
+      type: object
+      description: ExportOperationFile
+    ExportRequest:
+      properties:
+        created:
+          description: Timestamp when the export container was created.
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Arbitrary key-value pairs for storing additional metadata on the
+            container.
+          type: object
+        dataFormat:
+          description: Data format of the export request.
+          enum:
+            - JSONL
+          type: string
+        exportContainerRef:
+          description: Reference to the export container.
+          type: string
+        id:
+          description: Unique identifier of the export container.
+          type: string
+        lastModified:
+          description: Timestamp when the export container was last modified.
+          format: date-time
+          type: string
+        source:
+          allOf:
+            - $ref: '#/components/schemas/ExportRequestSource'
+          description: Source of the export request.
+        state:
+          allOf:
+            - $ref: '#/components/schemas/ExportRequestState'
+          description: State of the export request.
+        tenantExportRequestId:
+          description: ID of the tenant export request associated with this container.
+          type: string
+        version:
+          description: >-
+            Version number incremented on each update. Used for optimistic
+            concurrency control.
+          type: number
+      required:
+        - id
+        - created
+        - lastModified
+        - version
+        - exportContainerRef
+        - source
+        - dataFormat
+        - state
+      title: ExportRequest
+      type: object
+      description: ExportRequest
+    ExportRequestAction:
+      properties:
+        name:
+          description: Name of the action to perform on the export request.
+          enum:
+            - TRIGGER_EXPORT
+          type: string
+      required:
+        - name
+      title: ExportRequestAction
+      type: object
+      description: ExportRequestAction
+    ExportRequestActionResult:
+      properties:
+        name:
+          description: Name of the action that was performed.
+          enum:
+            - TRIGGER_EXPORT
+          type: string
+        result:
+          description: Result of the action performed on the export request.
+          oneOf:
+            - $ref: '#/components/schemas/ExportOperation'
+      required:
+        - name
+        - result
+      title: ExportRequestActionResult
+      type: object
+      description: ExportRequestActionResult
+    ExportRequestForCreation:
+      properties:
+        customAttributes:
+          description: >-
+            Arbitrary key-value pairs for storing additional metadata on the
+            container.
+          type: object
+        dataFormat:
+          description: Data format of the export request.
+          enum:
+            - JSONL
+          type: string
+        source:
+          allOf:
+            - $ref: '#/components/schemas/ExportRequestSource'
+          description: Source of the export request.
+        tenantExportRequestId:
+          description: ID of the tenant export request associated with this container.
+          type: string
+      required:
+        - source
+        - dataFormat
+      title: ExportRequestForCreation
+      type: object
+      description: ExportRequestForCreation
+    ExportRequestForUpdate:
+      properties:
+        customAttributes:
+          description: >-
+            Arbitrary key-value pairs for storing additional metadata on the
+            request.
+          nullable: true
+          type: object
+        source:
+          allOf:
+            - $ref: '#/components/schemas/ExportRequestSource'
+          description: Source of the export request.
+        tenantExportRequestId:
+          description: ID of the tenant export request associated with this request.
+          nullable: true
+          type: string
+        version:
+          description: >-
+            Current version of the export request. Must match the stored version
+            to prevent concurrent update conflicts.
+          type: number
+      required:
+        - version
+      title: ExportRequestForUpdate
+      type: object
+      description: ExportRequestForUpdate
+    ExportRequestSource:
+      properties:
+        type:
+          description: Type of the export request source.
+          enum:
+            - ARTICLE_STOCK
+          type: string
+      required:
+        - type
+      title: ExportRequestSource
+      type: object
+      description: ExportRequestSource
+    ExportRequestState:
+      properties:
+        lastOperationFinishedAt:
+          description: Timestamp when the last operation on the export request finished.
+          format: date-time
+          type: string
+        lastOperationId:
+          description: ID of the last operation performed on the export request.
+          type: string
+        lastOperationStatus:
+          description: Status of the last operation performed on the export request.
+          enum:
+            - RUNNING
+            - COMPLETED
+            - FAILED
+          type: string
+        status:
+          description: Status of the export request.
+          enum:
+            - IDLE
+            - RUNNING
+          type: string
+      required:
+        - status
+      title: ExportRequestState
+      type: object
+      description: ExportRequestState
     ExpressionGuardCondition:
       properties:
         entity:
@@ -60853,6 +61256,8 @@ components:
             - ORDER_RECORD_WRITE
             - PACKAGING_UNITS_READ
             - PACKAGING_UNITS_WRITE
+            - EXPORT_READ
+            - EXPORT_WRITE
             - STOCK_AVAILABILITIES_READ
             - LISTING_READ
             - LISTING_WRITE
@@ -60972,6 +61377,7 @@ components:
             - LOOKUP_RECORD
             - ORDER_RECORD
             - PACKAGING_UNITS
+            - EXPORT
             - STOCK_AVAILABILITIES
             - LISTING
             - PURCHASE_PRICE
@@ -69179,6 +69585,8 @@ components:
               - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
+              - EXPORT_READ
+              - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -69411,6 +69819,8 @@ components:
               - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
+              - EXPORT_READ
+              - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -69635,6 +70045,8 @@ components:
               - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
+              - EXPORT_READ
+              - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -69864,6 +70276,8 @@ components:
               - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
+              - EXPORT_READ
+              - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
@@ -85299,6 +85713,8 @@ components:
               - ORDER_RECORD_WRITE
               - PACKAGING_UNITS_READ
               - PACKAGING_UNITS_WRITE
+              - EXPORT_READ
+              - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
               - LISTING_READ
               - LISTING_WRITE
