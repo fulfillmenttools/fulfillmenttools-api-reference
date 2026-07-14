@@ -13648,7 +13648,7 @@ paths:
             endpoint
       summary: Create label
       x-fft-permissions:
-        - LABEL_WRITE
+        - ADMIN_MODULES_WRITE
       tags:
         - Label (Operations)
   /api/labels/{id}:
@@ -13695,7 +13695,7 @@ paths:
           description: The requested entity was not found
       summary: Get label
       x-fft-permissions:
-        - LABEL_READ
+        - ADMIN_MODULES_READ
       tags:
         - Label (Operations)
       x-badges:
@@ -13758,7 +13758,7 @@ paths:
           description: A version conflict occurred.
       summary: Update label
       x-fft-permissions:
-        - LABEL_WRITE
+        - ADMIN_MODULES_WRITE
       tags:
         - Label (Operations)
       x-badges:
@@ -13823,7 +13823,7 @@ paths:
           description: A version conflict occurred.
       summary: Performs provided labelAction
       x-fft-permissions:
-        - LABEL_WRITE
+        - ADMIN_MODULES_WRITE
       tags:
         - Label (Operations)
       x-badges:
@@ -18627,7 +18627,7 @@ paths:
             endpoint
       summary: List parcel information
       x-fft-permissions:
-        - PARCEL_INFORMATION_READ
+        - ADMIN_MODULES_READ
       tags:
         - Parcel Information (Operations)
       x-badges:
@@ -18671,7 +18671,7 @@ paths:
             endpoint
       summary: Create a parcel information
       x-fft-permissions:
-        - PARCEL_INFORMATION_WRITE
+        - ADMIN_MODULES_WRITE
       tags:
         - Parcel Information (Operations)
       x-badges:
@@ -18721,7 +18721,7 @@ paths:
           description: The requested entity was not found
       summary: Get a parcel information by its ID
       x-fft-permissions:
-        - PARCEL_INFORMATION_READ
+        - ADMIN_MODULES_READ
       tags:
         - Parcel Information (Operations)
       x-badges:
@@ -18766,7 +18766,7 @@ paths:
             endpoint
       summary: List ParcelInformation (search)
       x-fft-permissions:
-        - PARCEL_INFORMATION_READ
+        - ADMIN_MODULES_READ
       tags:
         - Parcel Information (Operations)
       x-badges:
@@ -19244,14 +19244,8 @@ paths:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
-              - SHIPPING_INFORMATION_READ
-              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
-              - LABEL_READ
-              - LABEL_WRITE
-              - PARCEL_INFORMATION_READ
-              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -26078,7 +26072,7 @@ paths:
             endpoint
       summary: Get shippingInformation
       x-fft-permissions:
-        - SHIPPING_INFORMATION_READ
+        - ADMIN_MODULES_READ
       tags:
         - ShippingInformation (carrier)
       x-badges:
@@ -26122,7 +26116,7 @@ paths:
             endpoint
       summary: Create a shippingInformation
       x-fft-permissions:
-        - SHIPPING_INFORMATION_WRITE
+        - ADMIN_MODULES_WRITE
       tags:
         - ShippingInformation (carrier)
       x-badges:
@@ -26172,7 +26166,7 @@ paths:
           description: The requested entity was not found
       summary: Get a shippingInformation by its ID
       x-fft-permissions:
-        - SHIPPING_INFORMATION_READ
+        - ADMIN_MODULES_READ
       tags:
         - ShippingInformation (carrier)
       x-badges:
@@ -26217,7 +26211,7 @@ paths:
             endpoint
       summary: List ShippingInformation (search)
       x-fft-permissions:
-        - SHIPPING_INFORMATION_READ
+        - ADMIN_MODULES_READ
       tags:
         - ShippingInformation (carrier)
       x-badges:
@@ -29039,22 +29033,6 @@ components:
         - version
       title: AbstractFacilityActionsParameter
       description: AbstractFacilityActionsParameter
-    AbstractFulfillabilityConstraintType:
-      properties:
-        type:
-          description: >-
-            Type of the constraint (must be supported by the fulfillmenttools
-            platform).
-          enum:
-            - ITEMS
-          example: ITEMS
-          type: string
-        value:
-          description: Additional parameters needed for the referenced type of constraint.
-          type: object
-      type: object
-      title: AbstractFulfillabilityConstraintType
-      description: AbstractFulfillabilityConstraintType
     AbstractModificationAction:
       discriminator:
         propertyName: action
@@ -30088,21 +30066,6 @@ components:
       title: ArticleAttributeItemContext
       type: object
       description: ArticleAttributeItemContext
-    ArticleAvailability:
-      properties:
-        availabilityTimeframe:
-          $ref: '#/components/schemas/AvailabilityTimeframe'
-        availableStock:
-          type: number
-        outOfStockBehaviour:
-          $ref: '#/components/schemas/OutOfStockBehaviour'
-        tenantArticleId:
-          type: string
-      required:
-        - tenantArticleId
-        - availableStock
-      title: ArticleAvailability
-      description: ArticleAvailability
     ArticleAvailabilityStockValues:
       properties:
         availableForPicking:
@@ -40391,257 +40354,6 @@ components:
           type: number
       title: FloatValidation
       type: object
-    Fulfillability:
-      description: The response to a fulfillability request.
-      properties:
-        collect:
-          properties:
-            facilities:
-              items:
-                $ref: '#/components/schemas/FulfillabilityFacility'
-              type: array
-          type: object
-        shipping:
-          description: >-
-            Results for the fulfillment of a shipping order for the parameters
-            provided in the query
-          properties:
-            DELIVERY:
-              description: Depicts wether the servicelevel DELIVERY is available.
-              properties:
-                available:
-                  description: Depicts wether the servicelevel DELIVERY is available
-                  example: false
-                  type: boolean
-              required:
-                - available
-              type: object
-            SAMEDAY:
-              description: >-
-                This service level means, that the consumer expects a package
-                the same day.
-              properties:
-                available:
-                  description: Depicts wether the servicelevel SAMEDAY is available
-                  example: true
-                  type: boolean
-                validUntil:
-                  description: >-
-                    This information is most likely valid until this date (there
-                    are circumstances when this information becomes stale
-                    earlier).
-                  example: 2020-02-03T08:45:50.525Z
-                  format: date-time
-                  type: string
-              required:
-                - available
-              type: object
-          type: object
-      type: object
-      title: Fulfillability
-    FulfillabilityClickAndCollectQuery:
-      description: >-
-        Provides the paramters you are interested in. You must supply at least
-        the articles you are interested in
-      properties:
-        articles:
-          items:
-            properties:
-              quantity:
-                type: number
-              tenantArticleId:
-                type: string
-            required:
-              - tenantArticleId
-            type: object
-          minItems: 1
-          type: array
-        deliveryCountry:
-          description: A two-digit country code as per ISO 3166-1 alpha-2
-          example: DE
-          pattern: ^[A-Z]{2}$
-          type: string
-        deliveryPostalCode:
-          type: string
-        deliveryPreferences:
-          $ref: '#/components/schemas/DeliveryPreferences'
-        facilityRefs:
-          items:
-            type: string
-          type: array
-        geoFence:
-          $ref: '#/components/schemas/GeoFence'
-      required:
-        - articles
-      title: FulfillabilityClickAndCollectQuery
-    FulfillabilityDetail:
-      properties:
-        address:
-          $ref: '#/components/schemas/FacilityAddress'
-        articleAvailabilities:
-          items:
-            $ref: '#/components/schemas/ArticleAvailability'
-          type: array
-        closingDays:
-          items:
-            $ref: '#/components/schemas/ClosingDay'
-          type: array
-        facilityName:
-          type: string
-        facilityRef:
-          type: string
-        pickingTimes:
-          $ref: '#/components/schemas/PickingTimes'
-        targetTime:
-          format: date-time
-          type: string
-        tenantFacilityId:
-          type: string
-      required:
-        - facilityRef
-        - facilityName
-        - address
-        - articleAvailabilities
-      title: FulfillabilityDetail
-      description: FulfillabilityDetail
-    FulfillabilityFacility:
-      allOf:
-        - $ref: '#/components/schemas/StrippedManagedFacility'
-      title: FulfillabilityFacility
-      description: FulfillabilityFacility
-    FulfillabilityItemsConstraintValue:
-      properties:
-        items:
-          description: >-
-            The shortened description of an article, that would be part of the
-            order.
-          items:
-            properties:
-              amount:
-                description: The required amount
-                example: 5
-                type: integer
-              tenantArticleId:
-                description: The article ID, that is used in corresponding listings.
-                example: RO-57665956-6-XL
-                type: string
-            type: object
-          type: array
-        mode:
-          description: >-
-            The mode this constraint is evaluated in. ITEMS_COMPLETE means, that
-            all the items in the desired quantities have to be listed in a
-            resulting facility.
-          enum:
-            - ITEMS_COMPLETE
-          example: ITEMS_COMPLETE
-          type: string
-      required:
-        - mode
-        - items
-      type: object
-      title: FulfillabilityItemsConstraintValue
-      description: FulfillabilityItemsConstraintValue
-    FulfillabilityQuery:
-      description: >-
-        Provides the paramters you are interested in. You must supply at least
-        either the shipping or the collect attribute as the description of the
-        last mile expectation.
-      properties:
-        collect:
-          description: >-
-            The geofence (a gps coordinate and a radius around that coordinate)
-            for considered facilities to collect the goods.
-          properties:
-            geoFence:
-              $ref: '#/components/schemas/GeoFence'
-          required:
-            - geoFence
-          type: object
-        constraints:
-          description: >-
-            Constraints can be used to further cut down the list of resulting
-            facilities. Important: ALL of the given constraints will be matched
-            against the resulting list of facilities!
-          items:
-            $ref: '#/components/schemas/AbstractFulfillabilityConstraintType'
-          type: array
-        estimatedOrderDate:
-          description: >-
-            The point in time when the order estimated to be supplied to
-            fulfillmenttools platform, e.g. calling this endpoint during
-            checkout, you would most likely put the timestamp for 'now' in here.
-          example: 2020-02-03T08:45:50.525Z
-          format: date-time
-          type: string
-        shipping:
-          description: >-
-            You want information about the shipping possibility - more detailed
-            parameters  can be described here.
-          properties:
-            serviceLevels:
-              description: >-
-                The kind of servicelevel you want to query as being part of the
-                consumer expectation of delivery
-              items:
-                $ref: '#/components/schemas/CarrierDeliveryType'
-              minItems: 1
-              type: array
-            targetAddress:
-              $ref: '#/components/schemas/StrippedShippingTargetAddress'
-          required:
-            - serviceLevels
-            - targetAddress
-          type: object
-      required:
-        - estimatedOrderDate
-      type: object
-      title: FulfillabilityQuery
-    FulfillabilityResult:
-      properties:
-        fulfillability:
-          items:
-            $ref: '#/components/schemas/FulfillabilityDetail'
-          type: array
-      required:
-        - details
-      title: FulfillabilityResult
-      description: FulfillabilityResult
-    FulfillabilityShipFromStoreQuery:
-      description: >-
-        Provides the paramters you are interested in. You must supply at least
-        the articles you are interested in
-      properties:
-        articles:
-          items:
-            properties:
-              quantity:
-                type: number
-              tenantArticleId:
-                type: string
-            required:
-              - tenantArticleId
-            type: object
-          minItems: 1
-          type: array
-        deliveryCountry:
-          description: A two-digit country code as per ISO 3166-1 alpha-2
-          example: DE
-          pattern: ^[A-Z]{2}$
-          type: string
-        deliveryPostalCode:
-          type: string
-        deliveryPreferences:
-          $ref: '#/components/schemas/DeliveryPreferences'
-        facilityRefs:
-          items:
-            type: string
-          type: array
-        geoFence:
-          $ref: '#/components/schemas/GeoFence'
-      required:
-        - articles
-      title: FulfillabilityShipFromStoreQuery
     FulfillmentProcessBufferConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -46707,19 +46419,6 @@ components:
         - searchPaths
       title: ItemReturnsWithSearchPaths
       description: ItemReturnsWithSearchPaths
-    ItemsFulfillabilityConstraintType:
-      allOf:
-        - $ref: '#/components/schemas/AbstractFulfillabilityConstraintType'
-      properties:
-        type:
-          enum:
-            - ITEMS
-          type: string
-        value:
-          $ref: '#/components/schemas/FulfillabilityItemsConstraintValue'
-      type: object
-      title: ItemsFulfillabilityConstraintType
-      description: ItemsFulfillabilityConstraintType
     KeyExistsFilter:
       properties:
         exists:
@@ -61390,14 +61089,8 @@ components:
             - ROUTING_WRITE
             - PARCEL_READ
             - PARCEL_WRITE
-            - SHIPPING_INFORMATION_READ
-            - SHIPPING_INFORMATION_WRITE
             - SHIPMENT_READ
             - SHIPMENT_WRITE
-            - LABEL_READ
-            - LABEL_WRITE
-            - PARCEL_INFORMATION_READ
-            - PARCEL_INFORMATION_WRITE
             - HANDOVERJOB_READ
             - HANDOVERJOB_WRITE
             - PICKJOB_READ
@@ -61547,10 +61240,7 @@ components:
             - CARRIER
             - RETURN
             - PARCEL
-            - SHIPPING_INFORMATION
             - SHIPMENT
-            - LABEL
-            - PARCEL_INFORMATION
             - HANDOVERJOB
             - HANDOVER_JOB
             - PICKJOB
@@ -69719,14 +69409,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
-              - SHIPPING_INFORMATION_READ
-              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
-              - LABEL_READ
-              - LABEL_WRITE
-              - PARCEL_INFORMATION_READ
-              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -69953,14 +69637,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
-              - SHIPPING_INFORMATION_READ
-              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
-              - LABEL_READ
-              - LABEL_WRITE
-              - PARCEL_INFORMATION_READ
-              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -70179,14 +69857,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
-              - SHIPPING_INFORMATION_READ
-              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
-              - LABEL_READ
-              - LABEL_WRITE
-              - PARCEL_INFORMATION_READ
-              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -70410,14 +70082,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
-              - SHIPPING_INFORMATION_READ
-              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
-              - LABEL_READ
-              - LABEL_WRITE
-              - PARCEL_INFORMATION_READ
-              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
@@ -85847,14 +85513,8 @@ components:
               - ROUTING_WRITE
               - PARCEL_READ
               - PARCEL_WRITE
-              - SHIPPING_INFORMATION_READ
-              - SHIPPING_INFORMATION_WRITE
               - SHIPMENT_READ
               - SHIPMENT_WRITE
-              - LABEL_READ
-              - LABEL_WRITE
-              - PARCEL_INFORMATION_READ
-              - PARCEL_INFORMATION_WRITE
               - HANDOVERJOB_READ
               - HANDOVERJOB_WRITE
               - PICKJOB_READ
