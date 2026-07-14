@@ -54785,16 +54785,25 @@ components:
         name:
           description: Name of the discount
           type: string
+        percentage:
+          description: >-
+            Discount percentage (-100 to 0). Required when type is PERCENTAGE.
+            Must be negative or zero (e.g. -10 for 10% off).
+          format: float
+          type: number
         tenantDiscountId:
           description: Tenant-specific discount identifier
           type: string
         type:
-          description: Type of the discount
+          description: >-
+            Type of the discount. ABSOLUTE requires value, PERCENTAGE requires
+            percentage.
+          enum:
+            - ABSOLUTE
+            - PERCENTAGE
           type: string
         value:
           $ref: '#/components/schemas/MonetaryValue'
-      required:
-        - value
       type: object
       title: OrderPricingDiscount
       description: >-
@@ -54914,7 +54923,7 @@ components:
           type: object
         totalDiscounts:
           allOf:
-            - $ref: '#/components/schemas/MonetaryValue'
+            - $ref: '#/components/schemas/OrderTotalDiscounts'
           nullable: true
           type: object
         totalFees:
@@ -55355,6 +55364,9 @@ components:
         name:
           description: Name of the discount
           type: string
+        percentage:
+          description: Discount percentage (0-100). Required when type is PERCENTAGE.
+          type: number
         tenantDiscountId:
           description: Tenant-specific discount identifier
           type: string
@@ -55364,12 +55376,30 @@ components:
         value:
           allOf:
             - $ref: '#/components/schemas/OrderRecordMonetaryValue'
-          description: Discount value
-      required:
-        - value
+          description: Discount value. Required when type is ABSOLUTE.
       title: OrderRecordDiscount
       type: object
       description: OrderRecordDiscount
+    OrderRecordDiscountBreakdown:
+      properties:
+        lineItemDiscounts:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Discounts originating from line items
+          nullable: true
+          type: object
+        orderDiscounts:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Discounts applied at order level
+          nullable: true
+          type: object
+      required:
+        - lineItemDiscounts
+        - orderDiscounts
+      title: OrderRecordDiscountBreakdown
+      type: object
+      description: OrderRecordDiscountBreakdown
     OrderRecordFee:
       properties:
         name:
@@ -56233,6 +56263,24 @@ components:
       title: OrderRecordTax
       type: object
       description: OrderRecordTax
+    OrderRecordTotalDiscounts:
+      properties:
+        breakdown:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordDiscountBreakdown'
+          description: Total discounts broken down by source
+        value:
+          allOf:
+            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
+          description: Aggregate total discounts applied
+          nullable: true
+          type: object
+      required:
+        - value
+        - breakdown
+      title: OrderRecordTotalDiscounts
+      type: object
+      description: OrderRecordTotalDiscounts
     OrderRecordTotals:
       properties:
         subTotal:
@@ -56249,8 +56297,8 @@ components:
           type: object
         totalDiscounts:
           allOf:
-            - $ref: '#/components/schemas/OrderRecordMonetaryValue'
-          description: Total discounts applied
+            - $ref: '#/components/schemas/OrderRecordTotalDiscounts'
+          description: Total discounts applied, with breakdown by source
           nullable: true
           type: object
         totalFees:
@@ -56676,6 +56724,37 @@ components:
       title: OrderTagsListFilter
       type: object
       description: OrderTagsListFilter
+    OrderTotalDiscounts:
+      description: >
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Aggregate discount total with a breakdown by source. Values follow the
+        negative-or-zero discount convention.
+      properties:
+        breakdown:
+          properties:
+            lineItemDiscounts:
+              allOf:
+                - $ref: '#/components/schemas/MonetaryValue'
+              nullable: true
+              type: object
+            orderDiscounts:
+              allOf:
+                - $ref: '#/components/schemas/MonetaryValue'
+              nullable: true
+              type: object
+          type: object
+        value:
+          allOf:
+            - $ref: '#/components/schemas/MonetaryValue'
+          nullable: true
+          type: object
+      type: object
+      title: OrderTotalDiscounts
+      x-badges:
+        - color: red
+          label: ALPHA
     OrderUnlockActionParameter:
       allOf:
         - $ref: '#/components/schemas/AbstractOrderActionsParameter'
@@ -72439,6 +72518,7 @@ components:
           items:
             $ref: '#/components/schemas/TimeTriggeredConfigurationContext'
           maxItems: 500
+          minItems: 1
           type: array
       required:
         - defaultPrice
@@ -83659,7 +83739,7 @@ components:
       properties:
         priority:
           minimum: 0
-          type: number
+          type: integer
         timeTriggered:
           $ref: '#/components/schemas/RoutingStrategyRerouteTimeTriggeredConfig'
         type:
