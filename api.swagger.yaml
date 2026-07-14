@@ -243,8 +243,11 @@ paths:
         - Stocks (Inventory)
   /api/audits:
     get:
-      deprecated: false
-      description: ''
+      deprecated: true
+      description: >-
+        This part of the API is deprecated. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br />
       operationId: getAudits
       parameters:
         - in: query
@@ -317,6 +320,51 @@ paths:
         - AUDIT_READ
       tags:
         - Audits (Core)
+  /api/audits/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Search for Audit
+      operationId: searchAudit
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: List audits (search)
+      x-fft-permissions:
+        - AUDIT_READ
+      tags:
+        - Audits (Core)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/availabilitychannels:
     get:
       deprecated: true
@@ -30502,6 +30550,77 @@ components:
       title: AuditClient
       type: object
       description: AuditClient
+    AuditedEntityTypeEnumFilter:
+      properties:
+        eq:
+          description: Search by entityType
+          enum:
+            - PACK_JOB
+            - PICK_JOB
+            - PICK_RUN
+            - HANDOVER_JOB
+            - SHIPMENT
+            - PARCEL
+            - CUSTOM_SERVICE
+            - SERVICE_JOB
+            - LINKED_SERVICE_JOBS
+            - ORDER
+            - ROUTING_PLAN
+            - FACILITY
+            - FACILITY_GROUP
+            - FACILITY_CARRIER_CONNECTION
+            - FACILITY_CUSTOM_SERVICE
+            - ROUTING_STRATEGY
+            - STOW_JOB
+          type: string
+        in:
+          description: Search by entityType
+          items:
+            enum:
+              - PACK_JOB
+              - PICK_JOB
+              - PICK_RUN
+              - HANDOVER_JOB
+              - SHIPMENT
+              - PARCEL
+              - CUSTOM_SERVICE
+              - SERVICE_JOB
+              - LINKED_SERVICE_JOBS
+              - ORDER
+              - ROUTING_PLAN
+              - FACILITY
+              - FACILITY_GROUP
+              - FACILITY_CARRIER_CONNECTION
+              - FACILITY_CUSTOM_SERVICE
+              - ROUTING_STRATEGY
+              - STOW_JOB
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by entityType
+          enum:
+            - PACK_JOB
+            - PICK_JOB
+            - PICK_RUN
+            - HANDOVER_JOB
+            - SHIPMENT
+            - PARCEL
+            - CUSTOM_SERVICE
+            - SERVICE_JOB
+            - LINKED_SERVICE_JOBS
+            - ORDER
+            - ROUTING_PLAN
+            - FACILITY
+            - FACILITY_GROUP
+            - FACILITY_CARRIER_CONNECTION
+            - FACILITY_CUSTOM_SERVICE
+            - ROUTING_STRATEGY
+            - STOW_JOB
+          type: string
+      title: AuditedEntityTypeEnumFilter
+      type: object
+      description: AuditedEntityTypeEnumFilter
     AuditOperation:
       properties:
         name:
@@ -30515,6 +30634,116 @@ components:
       title: AuditOperation
       type: object
       description: AuditOperation
+    AuditPaginatedResult:
+      properties:
+        audits:
+          items:
+            $ref: '#/components/schemas/Audit'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - audits
+      title: AuditPaginatedResult
+      type: object
+      description: AuditPaginatedResult
+    AuditSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/AuditSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/AuditSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: AuditSearchPayload
+      type: object
+      description: AuditSearchPayload
+    AuditSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/AuditSearchQuery'
+          maxItems: 500
+          type: array
+        entityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by entityRef
+        entityType:
+          allOf:
+            - $ref: '#/components/schemas/AuditedEntityTypeEnumFilter'
+          description: Search by entityType
+        or:
+          items:
+            $ref: '#/components/schemas/AuditSearchQuery'
+          maxItems: 500
+          type: array
+        trace:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by trace
+      title: AuditSearchQuery
+      type: object
+      description: AuditSearchQuery
+    AuditSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: AuditSort
+      type: object
+      description: AuditSort
     AuditsResult:
       properties:
         audits:
