@@ -13163,7 +13163,14 @@ paths:
         - Returns (Operations)
   /api/itemreturnjobs/{itemReturnJobId}/itemreturns/{itemReturnId}:
     delete:
-      description: Delete an item return from an item return job
+      deprecated: true
+      description: >-
+        This part of the API is deprecated. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br />Use
+        POST
+        /api/itemreturnjobs/{itemReturnJobId}/itemreturns/{itemReturnId}/actions
+        with the CancelItemReturn action instead.
       operationId: deleteItemReturn
       parameters:
         - description: id of the item return job to delete the item return for
@@ -31806,6 +31813,26 @@ components:
       type: string
       title: CancelHandoverjobActionEnum
       description: CancelHandoverjobActionEnum
+    CancelItemReturnActionEnum:
+      enum:
+        - CancelItemReturn
+      type: string
+      title: CancelItemReturnActionEnum
+      description: CancelItemReturnActionEnum
+    CancelItemReturnActionParameter:
+      additionalProperties: false
+      description: Action to cancel an ItemReturn.
+      properties:
+        itemReturnJobVersion:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+        name:
+          $ref: '#/components/schemas/CancelItemReturnActionEnum'
+      required:
+        - name
+        - itemReturnJobVersion
+      title: CancelItemReturnActionParameter
     CancelPickRun:
       allOf:
         - additionalProperties: false
@@ -36741,6 +36768,21 @@ components:
       title: ExportContainerForUpdate
       type: object
       description: ExportContainerForUpdate
+    ExportContainerPaginatedResult:
+      properties:
+        exportContainers:
+          items:
+            $ref: '#/components/schemas/ExportContainer'
+          type: array
+        total:
+          minimum: 0
+          type: number
+      required:
+        - total
+        - exportContainers
+      title: ExportContainerPaginatedResult
+      type: object
+      description: ExportContainerPaginatedResult
     ExportOperation:
       properties:
         created:
@@ -36866,6 +36908,21 @@ components:
       title: ExportOperationFile
       type: object
       description: ExportOperationFile
+    ExportOperationPaginatedResult:
+      properties:
+        exportOperations:
+          items:
+            $ref: '#/components/schemas/ExportOperation'
+          type: array
+        total:
+          minimum: 0
+          type: number
+      required:
+        - total
+        - exportOperations
+      title: ExportOperationPaginatedResult
+      type: object
+      description: ExportOperationPaginatedResult
     ExportRequest:
       properties:
         created:
@@ -37000,6 +37057,21 @@ components:
       title: ExportRequestForUpdate
       type: object
       description: ExportRequestForUpdate
+    ExportRequestPaginatedResult:
+      properties:
+        exportRequests:
+          items:
+            $ref: '#/components/schemas/ExportRequest'
+          type: array
+        total:
+          minimum: 0
+          type: number
+      required:
+        - total
+        - exportRequests
+      title: ExportRequestPaginatedResult
+      type: object
+      description: ExportRequestPaginatedResult
     ExportRequestSource:
       properties:
         type:
@@ -45932,6 +46004,7 @@ components:
         - $ref: '#/components/schemas/PauseItemReturnActionParameter'
         - $ref: '#/components/schemas/FinishItemReturnActionParameter'
         - $ref: '#/components/schemas/WaitForInputItemReturnActionParameter'
+        - $ref: '#/components/schemas/CancelItemReturnActionParameter'
       title: ItemReturnActionsParameter
       description: ItemReturnActionsParameter
     ItemReturnForCreation:
@@ -46442,6 +46515,8 @@ components:
         - PAUSED
         - FINISHED
         - WAITING_FOR_INPUT
+        - CANCELED
+        - OBSOLETE
       type: string
       title: ItemReturnStatus
       description: ItemReturnStatus
