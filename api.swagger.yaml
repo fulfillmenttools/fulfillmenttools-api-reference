@@ -37280,6 +37280,62 @@ components:
       title: ExportRequestActionResult
       type: object
       description: ExportRequestActionResult
+    ExportRequestExportContainerFilter:
+      properties:
+        exportContainerRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Field of ExportContainer entity
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+      title: ExportRequestExportContainerFilter
+      type: object
+      description: ExportRequestExportContainerFilter
+    ExportRequestExportDataFormatEnumFilter:
+      properties:
+        eq:
+          description: Search by dataFormat
+          enum:
+            - JSONL
+          type: string
+        in:
+          description: Search by dataFormat
+          items:
+            enum:
+              - JSONL
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by dataFormat
+          enum:
+            - JSONL
+          type: string
+      title: ExportRequestExportDataFormatEnumFilter
+      type: object
+      description: ExportRequestExportDataFormatEnumFilter
+    ExportRequestExportSourceTypeEnumFilter:
+      properties:
+        eq:
+          description: Search by sourceType
+          enum:
+            - STOCK_SUMMARY
+          type: string
+        in:
+          description: Search by sourceType
+          items:
+            enum:
+              - STOCK_SUMMARY
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by sourceType
+          enum:
+            - STOCK_SUMMARY
+          type: string
+      title: ExportRequestExportSourceTypeEnumFilter
+      type: object
+      description: ExportRequestExportSourceTypeEnumFilter
     ExportRequestForCreation:
       properties:
         customAttributes:
@@ -37349,6 +37405,102 @@ components:
       title: ExportRequestPaginatedResult
       type: object
       description: ExportRequestPaginatedResult
+    ExportRequestReferenceFilter:
+      properties:
+        exportContainer:
+          allOf:
+            - $ref: '#/components/schemas/ExportRequestExportContainerFilter'
+          description: The referenced entity
+      title: ExportRequestReferenceFilter
+      type: object
+      description: ExportRequestReferenceFilter
+    ExportRequestSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/ExportRequestSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          example: 10
+          maximum: 250
+          minimum: 1
+          type: number
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: ExportRequestSearchPayload
+      type: object
+      description: ExportRequestSearchPayload
+    ExportRequestSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/ExportRequestSearchQuery'
+          maxItems: 500
+          type: array
+        customAttributes:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/BooleanFilter'
+              - $ref: '#/components/schemas/StringEqFilter'
+              - $ref: '#/components/schemas/NumberEqFilter'
+              - $ref: '#/components/schemas/DateFilter'
+          description: Search by custom attributes
+          type: object
+        dataFormat:
+          allOf:
+            - $ref: '#/components/schemas/ExportRequestExportDataFormatEnumFilter'
+          description: Search by dataFormat
+          example: 2026-06-17T12:00:00.000Z
+        or:
+          items:
+            $ref: '#/components/schemas/ExportRequestSearchQuery'
+          maxItems: 500
+          type: array
+        referenced:
+          allOf:
+            - $ref: '#/components/schemas/ExportRequestReferenceFilter'
+          description: References to other entities
+        sourceType:
+          allOf:
+            - $ref: '#/components/schemas/ExportRequestExportSourceTypeEnumFilter'
+          description: Search by sourceType
+        tenantExportRequestId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantExportRequestId
+          example: MY_EXPORTREQUEST_ID
+      title: ExportRequestSearchQuery
+      type: object
+      description: ExportRequestSearchQuery
     ExportRequestSource:
       properties:
         type:
