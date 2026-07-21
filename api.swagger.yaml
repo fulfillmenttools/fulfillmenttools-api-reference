@@ -13879,6 +13879,51 @@ paths:
       x-badges:
         - color: red
           label: ALPHA
+  /api/labels/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Search for Label
+      operationId: searchLabel
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Labels (search)
+      x-fft-permissions:
+        - ADMIN_MODULES_READ
+      tags:
+        - Label (Operations)
+      x-badges:
+        - color: orange
+          label: BETA
   /api/linkedservicejobs:
     get:
       deprecated: false
@@ -47521,6 +47566,10 @@ components:
           additionalProperties: true
           description: Custom attributes
           type: object
+        facilityRef:
+          description: Reference to the connected facility
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          type: string
         id:
           description: Unique identifier of the label
           example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
@@ -47595,6 +47644,10 @@ components:
       required:
         - id
         - status
+        - processRef
+        - operativeProcessRef
+        - facilityRef
+        - shippingInformationRef
         - additionalDocuments
         - carrierData
         - senderAddress
@@ -47893,6 +47946,7 @@ components:
           type: string
       required:
         - status
+        - shippingInformationRef
         - additionalDocuments
         - carrierData
         - senderAddress
@@ -47957,6 +48011,146 @@ components:
       title: LabelForUpdate
       type: object
       description: LabelForUpdate
+    LabelPaginatedResult:
+      properties:
+        labels:
+          items:
+            $ref: '#/components/schemas/Label'
+          type: array
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+      required:
+        - pageInfo
+        - labels
+      title: LabelPaginatedResult
+      type: object
+      description: LabelPaginatedResult
+    LabelSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/LabelSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          example: 10
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/LabelSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: LabelSearchPayload
+      type: object
+      description: LabelSearchPayload
+    LabelSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/LabelSearchQuery'
+          maxItems: 500
+          type: array
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: >-
+            Search entries by created. Applying a narrow and well-considered
+            filter value is strongly recommended, as it can greatly improve
+            response times, especially when working with large datasets.
+        facilityRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by facilityRef
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+        lastModified:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
+        or:
+          items:
+            $ref: '#/components/schemas/LabelSearchQuery'
+          maxItems: 500
+          type: array
+        processRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by processRef
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+        tenantLabelId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantLabelId
+          example: MY_LABEL_ID
+        tenantOrderId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by tenantOrderId
+          example: MY_ORDER_ID
+      title: LabelSearchQuery
+      type: object
+      description: LabelSearchQuery
+    LabelSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: LabelSort
+      type: object
+      description: LabelSort
     LastDomainEntityStatusItem:
       description: >-
         An object holding the last DomainStatus of a given entity and its
