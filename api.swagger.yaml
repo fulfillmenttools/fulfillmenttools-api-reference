@@ -62999,6 +62999,7 @@ components:
         - $ref: '#/components/schemas/ModifyPickLineItemsActionParameter'
         - $ref: '#/components/schemas/PickJobAddTargetTimeActionParameter'
         - $ref: '#/components/schemas/PickJobCancelActionParameter'
+        - $ref: '#/components/schemas/PickJobCloseActionParameter'
       title: PickJobActionsParameter
       description: PickJobActionsParameter
     PickJobAddTargetTimeActionEnum:
@@ -63049,6 +63050,31 @@ components:
         - name
         - version
       title: PickJobCancelActionParameter
+      type: object
+    PickJobCloseActionEnum:
+      enum:
+        - CLOSE
+      type: string
+      title: PickJobCloseActionEnum
+      description: PickJobCloseActionEnum
+    PickJobCloseActionParameter:
+      additionalProperties: false
+      description: >-
+        Action to close a PickJob. Directly setting a pickJob to CLOSED will
+        skip non zero shortPick actions like rerouting, setting subStatus to
+        SHORT_PICKED instead. If none of the pickLineItems have been picked, the
+        pickJob will be set to ABORTED instead of CLOSED.
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobCloseActionEnum'
+        version:
+          description: Version of the entity to be closed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+      title: PickJobCloseActionParameter
       type: object
     PickjobDeliveryInformation:
       allOf:
