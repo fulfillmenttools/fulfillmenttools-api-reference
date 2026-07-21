@@ -19371,7 +19371,7 @@
                     "header": [],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n  \"status\": \"REQUESTABLE\",\n  \"carrierData\": {\n    \"carrierRef\": \"carrier-ref-1\",\n    \"product\": \"MyCarrierProduct\",\n    \"services\": [{ \"type\": \"EXPRESS\" }]\n  },\n  \"senderAddress\": {\n    \"companyName\": \"Sender GmbH\",\n    \"street\": \"Sender Str. 1\",\n    \"postalCode\": \"12345\",\n    \"city\": \"Berlin\",\n    \"country\": \"DE\"\n  },\n  \"recipientAddress\": [\n    {\n      \"street\": \"Recipient Str. 2\",\n      \"postalCode\": \"67890\",\n      \"city\": \"Munich\",\n      \"country\": \"DE\"\n    }\n  ],\n  \"labelUrl\": \"https://example.com/label.pdf\",\n  \"type\": \"SEND_LABEL\",\n  \"additionalDocuments\": []\n}",
+                      "raw": "{\n    \"status\": \"REQUESTABLE\",\n    \"carrierData\": {\n        \"carrierRef\": \"carrier-ref-1\",\n        \"product\": \"MyCarrierProduct\",\n        \"services\": [{ \"type\": \"EXPRESS\" }]\n    },\n    \"shippingInformationRef\": \"VALID_SHIPPING_INFORMATION_REF\",\n    \"senderAddress\": {\n        \"companyName\": \"Sender GmbH\",\n        \"street\": \"Sender Str. 1\",\n        \"postalCode\": \"12345\",\n        \"city\": \"Berlin\",\n        \"country\": \"DE\"\n    },\n    \"recipientAddress\": [\n        {\n            \"street\": \"Recipient Str. 2\",\n            \"postalCode\": \"67890\",\n            \"city\": \"Munich\",\n            \"country\": \"DE\"\n        }\n    ],\n    \"labelUrl\": \"https://example.com/label.pdf\",\n    \"type\": \"SEND_LABEL\",\n    \"additionalDocuments\": []\n}",
                       "options": {
                         "raw": {
                           "language": "json"
@@ -19426,13 +19426,13 @@
                   "response": []
                 },
                 {
-                  "name": "Request Label Action [ALPHA]",
+                  "name": "Update Label [ALPHA]",
                   "request": {
-                    "method": "POST",
+                    "method": "PATCH",
                     "header": [],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n    \"version\":42,\n    \"name\": \"RequestLabel\"\n}",
+                      "raw": "{\n    \"version\": 42,\n    \"carrierData\": {\n        \"carrierRef\": \"carrier-ref-1\",\n        \"product\": \"MyCarrierProduct\",\n        \"services\": [\n            {\n                \"type\": \"EXPRESS\"\n            }\n        ]\n    },\n    \"senderAddress\": {\n        \"companyName\": \"Sender GmbH\",\n        \"street\": \"Sender Str. 1\",\n        \"postalCode\": \"12345\",\n        \"city\": \"Berlin\",\n        \"country\": \"DE\"\n    },\n    \"recipientAddress\": [\n        {\n            \"street\": \"Recipient Str. 2\",\n            \"postalCode\": \"67890\",\n            \"city\": \"Munich\",\n            \"country\": \"DE\"\n        }\n    ]\n}",
                       "options": {
                         "raw": {
                           "language": "json"
@@ -19440,15 +19440,14 @@
                       }
                     },
                     "url": {
-                      "raw": "{{host}}/api/labels/:labelID/actions",
+                      "raw": "{{host}}/api/labels/:labelID",
                       "host": [
                         "{{host}}"
                       ],
                       "path": [
                         "api",
                         "labels",
-                        ":labelID",
-                        "actions"
+                        ":labelID"
                       ],
                       "variable": [
                         {
@@ -19457,6 +19456,35 @@
                         }
                       ]
                     }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Search Labels",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"query\": {\n        \"tenantLabelId\": {\n            \"eq\": \"tenantLabelId\"\n        },\n        \"tenantOrderId\": {\n            \"eq\": \"tenantOrderId\"\n        },\n        \"processRef\": {\n            \"eq\": \"processRef\"\n        },\n        \"facilityRef\": {\n            \"eq\": \"facilityRef\"\n        }\n    }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/pickjobs/search",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "pickjobs",
+                        "search"
+                      ]
+                    },
+                    "description": "https://fulfillmenttools.github.io/api-reference-ui/#/PickJobs/getPickJob"
                   },
                   "response": []
                 }
