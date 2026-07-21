@@ -37451,16 +37451,6 @@ components:
       title: ExportRequestActionResult
       type: object
       description: ExportRequestActionResult
-    ExportRequestExportContainerFilter:
-      properties:
-        exportContainerRef:
-          allOf:
-            - $ref: '#/components/schemas/StringFilter'
-          description: Field of ExportContainer entity
-          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
-      title: ExportRequestExportContainerFilter
-      type: object
-      description: ExportRequestExportContainerFilter
     ExportRequestExportDataFormatEnumFilter:
       properties:
         eq:
@@ -37576,15 +37566,6 @@ components:
       title: ExportRequestPaginatedResult
       type: object
       description: ExportRequestPaginatedResult
-    ExportRequestReferenceFilter:
-      properties:
-        exportContainer:
-          allOf:
-            - $ref: '#/components/schemas/ExportRequestExportContainerFilter'
-          description: The referenced entity
-      title: ExportRequestReferenceFilter
-      type: object
-      description: ExportRequestReferenceFilter
     ExportRequestSearchPayload:
       properties:
         after:
@@ -37651,15 +37632,16 @@ components:
             - $ref: '#/components/schemas/ExportRequestExportDataFormatEnumFilter'
           description: Search by dataFormat
           example: 2026-06-17T12:00:00.000Z
+        exportContainerRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by exportContainerRef
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
         or:
           items:
             $ref: '#/components/schemas/ExportRequestSearchQuery'
           maxItems: 500
           type: array
-        referenced:
-          allOf:
-            - $ref: '#/components/schemas/ExportRequestReferenceFilter'
-          description: References to other entities
         sourceType:
           allOf:
             - $ref: '#/components/schemas/ExportRequestExportSourceTypeEnumFilter'
