@@ -34162,14 +34162,28 @@ components:
       description: CompanyAddress
     ConditionWorkflowNode:
       properties:
+        nameLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowNameLocaleString'
+          description: Localized name of the node
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowDescriptionLocaleString'
+          description: Localized description of the node
         condition:
           allOf:
             - $ref: '#/components/schemas/WorkflowCondition'
           description: >-
             Condition expression that determines the path. Connections from this
             node must use .TRUE or .FALSE suffixes
+        description:
+          description: Description resolved to the requesting user's locale (read-only)
+          type: string
         key:
           description: Unique identifier for this node within the workflow
+          type: string
+        name:
+          description: Name resolved to the requesting user's locale (read-only)
           type: string
         type:
           description: Type of the workflow node
@@ -40865,8 +40879,22 @@ components:
       description: FenceStatistic
     FFTActivityNode:
       properties:
+        nameLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowNameLocaleString'
+          description: Localized name of the node
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowDescriptionLocaleString'
+          description: Localized description of the node
+        description:
+          description: Description resolved to the requesting user's locale (read-only)
+          type: string
         key:
           description: Unique identifier for this node within the workflow
+          type: string
+        name:
+          description: Name resolved to the requesting user's locale (read-only)
           type: string
         type:
           description: >-
@@ -41369,6 +41397,14 @@ components:
       description: GlsCarrierConfiguration
     GuardWorkflowNode:
       properties:
+        nameLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowNameLocaleString'
+          description: Localized name of the node
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowDescriptionLocaleString'
+          description: Localized description of the node
         condition:
           description: 'Guard condition: an expression or a built-in (preconfigured) guard.'
           discriminator:
@@ -41379,8 +41415,14 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ExpressionGuardCondition'
             - $ref: '#/components/schemas/PreconfiguredGuardCondition'
+        description:
+          description: Description resolved to the requesting user's locale (read-only)
+          type: string
         key:
           description: Unique identifier for this node within the workflow
+          type: string
+        name:
+          description: Name resolved to the requesting user's locale (read-only)
           type: string
         type:
           description: Type of the workflow node
@@ -88147,6 +88189,16 @@ components:
       description: WorkflowConnection
     WorkflowDefinition:
       properties:
+        nameLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowNameLocaleStringRequired'
+          description: >-
+            Localized human-readable name of the workflow. At least one locale
+            value is required.
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowDescriptionLocaleString'
+          description: Localized description of what the workflow does
         connections:
           description: Array of connections between workflow nodes
           items:
@@ -88154,8 +88206,7 @@ components:
           maxItems: 10
           type: array
         description:
-          description: Description of what the workflow does
-          example: Conditional fraud verification flow with manual review
+          description: Description resolved to the requesting user's locale (read-only)
           type: string
         id:
           description: Unique identifier for the workflow definition
@@ -88166,8 +88217,7 @@ components:
           example: true
           type: boolean
         name:
-          description: Human-readable name of the workflow
-          example: Fraud Check Workflow
+          description: Name resolved to the requesting user's locale (read-only)
           type: string
         nodes:
           description: Array of workflow nodes
@@ -88200,8 +88250,7 @@ components:
       required:
         - tenantWorkflowId
         - type
-        - name
-        - description
+        - nameLocalized
         - rootId
         - nodes
         - connections
@@ -88225,20 +88274,22 @@ components:
       description: WorkflowDefinitionAction
     WorkflowDefinitionForCreation:
       properties:
+        nameLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowNameLocaleStringRequired'
+          description: >-
+            Localized human-readable name of the workflow. At least one locale
+            value is required.
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowDescriptionLocaleString'
+          description: Localized description of what the workflow does
         connections:
           description: Array of connections between workflow nodes
           items:
             $ref: '#/components/schemas/WorkflowConnection'
           maxItems: 10
           type: array
-        description:
-          description: Description of what the workflow does
-          example: Conditional fraud verification flow with manual review
-          type: string
-        name:
-          description: Human-readable name of the workflow
-          example: Fraud Check Workflow
-          type: string
         nodes:
           description: Array of workflow nodes
           items:
@@ -88266,8 +88317,7 @@ components:
       required:
         - tenantWorkflowId
         - type
-        - name
-        - description
+        - nameLocalized
         - rootId
         - nodes
         - connections
@@ -88276,23 +88326,25 @@ components:
       description: WorkflowDefinitionForCreation
     WorkflowDefinitionForUpdate:
       properties:
+        nameLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowNameLocaleStringRequired'
+          description: >-
+            Localized human-readable name of the workflow. At least one locale
+            value is required.
+        descriptionLocalized:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowDescriptionLocaleString'
+          description: Localized description of what the workflow does
         connections:
           description: Array of connections between workflow nodes
           items:
             $ref: '#/components/schemas/WorkflowConnection'
           maxItems: 10
           type: array
-        description:
-          description: Description of what the workflow does
-          example: Conditional fraud verification flow with manual review
-          type: string
         id:
           description: Unique identifier for the workflow definition
           example: 507f1f77bcf86cd799439011
-          type: string
-        name:
-          description: Human-readable name of the workflow
-          example: Fraud Check Workflow
           type: string
         nodes:
           description: Array of workflow nodes
@@ -88325,8 +88377,7 @@ components:
       required:
         - tenantWorkflowId
         - type
-        - name
-        - description
+        - nameLocalized
         - rootId
         - nodes
         - connections
@@ -88335,6 +88386,20 @@ components:
       title: WorkflowDefinitionForUpdate
       type: object
       description: WorkflowDefinitionForUpdate
+    WorkflowDescriptionLocaleString:
+      additionalProperties:
+        maxLength: 500
+        minLength: 2
+        type: string
+      description: >-
+        Provides localized values. The key is the locale, the value is the
+        translation.
+        https://docs.fulfillmenttools.com/documentation/getting-started/authentication-and-authorization/localization
+      example:
+        de_DE: Betrugsprüfungs-Workflow
+        en_US: Fraud check workflow
+      title: WorkflowDescriptionLocaleString
+      type: object
     WorkflowInformation:
       additionalProperties: false
       properties:
@@ -88355,6 +88420,35 @@ components:
       title: WorkflowInformation
       type: object
       description: WorkflowInformation
+    WorkflowNameLocaleString:
+      additionalProperties:
+        maxLength: 100
+        minLength: 2
+        type: string
+      description: >-
+        Provides localized values. The key is the locale, the value is the
+        translation.
+        https://docs.fulfillmenttools.com/documentation/getting-started/authentication-and-authorization/localization
+      example:
+        de_DE: Betrugsprüfung
+        en_US: Fraud Check
+      title: WorkflowNameLocaleString
+      type: object
+    WorkflowNameLocaleStringRequired:
+      additionalProperties:
+        maxLength: 100
+        minLength: 2
+        type: string
+      description: >-
+        Provides localized values. The key is the locale, the value is the
+        translation.
+        https://docs.fulfillmenttools.com/documentation/getting-started/authentication-and-authorization/localization
+      example:
+        de_DE: Betrugsprüfung
+        en_US: Fraud Check
+      minProperties: 1
+      title: WorkflowNameLocaleStringRequired
+      type: object
     WorkflowPaginatedResult:
       properties:
         pageInfo:
@@ -88447,7 +88541,7 @@ components:
           description: Search by isActive
         name:
           allOf:
-            - $ref: '#/components/schemas/StringSearchFilter'
+            - $ref: '#/components/schemas/LocalizedStringSearchFilter'
           description: Search by name
         or:
           items:
@@ -88465,11 +88559,6 @@ components:
     WorkflowSort:
       properties:
         id:
-          enum:
-            - ASC
-            - DESC
-          type: string
-        name:
           enum:
             - ASC
             - DESC
