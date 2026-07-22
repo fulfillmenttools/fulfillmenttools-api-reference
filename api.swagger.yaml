@@ -14382,7 +14382,7 @@ paths:
   /api/loadunits:
     delete:
       deprecated: false
-      description: Delete load units
+      description: Soft delete load units
       operationId: deleteLoadUnits
       parameters:
         - description: Reference to the pickJob of which you want to delete the loadUnits
@@ -14406,7 +14406,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoadUnits'
-          description: Load units are successfully deleted.
+          description: Load units have successfully been set to OBSOLETE.
         '400':
           content:
             application/json:
@@ -14441,7 +14441,7 @@ paths:
           description: >-
             The syntax of the request content was correct, but it was unable to
             process the contained instructions, possibly due to semantic errors.
-      summary: Delete load units
+      summary: Soft deletes load units by setting them to status OBSOLETE.
       x-fft-permissions:
         - LOADUNIT_WRITE
       tags:
@@ -14481,6 +14481,21 @@ paths:
           schema:
             example: de_DE
             type: string
+        - description: >-
+            The statuses you want to filter the load units by. If not provided,
+            only load units in status AVAILABLE will be returned. An empty array
+            will return all load units regardless of status.
+          in: query
+          name: statuses
+          required: false
+          schema:
+            example: '[AVAILABLE]'
+            items:
+              enum:
+                - AVAILABLE
+                - OBSOLETE
+              type: string
+            type: array
       responses:
         '200':
           content:
@@ -14555,7 +14570,7 @@ paths:
   /api/loadunits/{loadUnitId}:
     delete:
       deprecated: false
-      description: Delete load unit
+      description: Soft delete a load unit
       operationId: deleteLoadUnit
       parameters:
         - in: path
@@ -14569,7 +14584,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoadUnit'
-          description: Successfully deleted load unit.
+          description: Load unit has successfully been set to OBSOLETE.
         '401':
           content:
             application/json:
@@ -14590,7 +14605,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
           description: The requested entity was not found
-      summary: Delete load unit
+      summary: Soft deletes load unit by setting them to status OBSOLETE.
       x-fft-permissions:
         - LOADUNIT_WRITE
       tags:
@@ -24920,6 +24935,22 @@ paths:
             example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
             minLength: 1
             type: string
+        - description: >-
+            The statuses you want to filter the service containers by. If not
+            provided, only service containers in status AVAILABLE will be
+            returned. An empty array will return all service containers
+            regardless of status.
+          in: query
+          name: statuses
+          required: false
+          schema:
+            example: '[AVAILABLE]'
+            items:
+              enum:
+                - AVAILABLE
+                - OBSOLETE
+              type: string
+            type: array
       responses:
         '200':
           content:
@@ -25024,7 +25055,7 @@ paths:
             type: string
       responses:
         '200':
-          description: The service container was successfully deleted.
+          description: The service container has successfully been set to OBSOLETE.
         '401':
           content:
             application/json:
@@ -25045,7 +25076,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
           description: The requested entity was not found
-      summary: Delete service container
+      summary: Soft deletes service container by id by setting them to status OBSOLETE.
       x-fft-permissions:
         - SERVICE_JOB_WRITE
       tags:
@@ -28388,6 +28419,307 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/trackinginformation:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Retrieves all found tracking information using the passed search
+        parameters.
+      operationId: trackingInformationList
+      parameters:
+        - description: Ordering of the found tracking information.
+          in: query
+          name: orderBy
+          required: false
+          schema:
+            enum:
+              - CREATED_ASC
+              - CREATED_DESC
+              - LAST_MODIFIED_ASC
+              - LAST_MODIFIED_DESC
+            example: CREATED_ASC
+            type: string
+        - description: Amount of results of this call.
+          in: query
+          name: size
+          required: false
+          schema:
+            example: 5
+            type: integer
+        - description: Used for pagination, return sorted results after this id.
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            example: 2d19415f-a8e6-4480-aa7d-e72ad85716a2
+            type: string
+        - description: >-
+            Flag to specify if the result should include a sum of all possible
+            found values for this filter.
+          in: query
+          name: withTotal
+          required: false
+          schema:
+            default: false
+            example: true
+            type: boolean
+        - description: Possible facility refs to filter by
+          in: query
+          name: facilityRefs
+          required: false
+          schema:
+            example: c8fe61e3-ba3f-461e-bc14-8fc610ce4cc2
+            items:
+              type: string
+            maxItems: 20
+            minItems: 0
+            type: array
+        - description: Connected shipping information ref to filter by
+          in: query
+          name: shippingInformationRef
+          required: false
+          schema:
+            example: 3d844fea-c9d0-4386-841c-d688cb205df3
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingInformationListResponse'
+          description: >-
+            Successfully retrieved all trackingInformation matching the given
+            parameters.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Get all tracking information by parameters
+      x-fft-permissions:
+        - ADMIN_MODULES_READ
+      tags:
+        - TrackingInformation (Carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Creates a new tracking information.
+      operationId: createTrackingInformation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackingInformationForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingInformation'
+          description: Successfully created the trackingInformation.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Create a tracking information
+      x-fft-permissions:
+        - ADMIN_MODULES_WRITE
+      tags:
+        - TrackingInformation (Carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/trackinginformation/{trackingInformationId}:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Retrieves a single tracking information using its unique identifier.
+      operationId: getTrackingInformationById
+      parameters:
+        - in: path
+          name: trackingInformationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingInformation'
+          description: Successfully retrieved the trackingInformation.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get a tracking information by its ID
+      x-fft-permissions:
+        - ADMIN_MODULES_READ
+      tags:
+        - TrackingInformation (Carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/trackinginformation/{trackingInformationId}/actions:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Handle Action on an existing tracking information.
+      operationId: trackingInformationActions
+      parameters:
+        - in: path
+          name: trackingInformationId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: >-
+                    #/components/schemas/TrackingInformationAddTrackingEventActionParameter
+                - $ref: >-
+                    #/components/schemas/TrackingInformationRemoveTrackingEventsParameter
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingInformation'
+          description: Successfully handled the action on the tracking information.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: handle tracking information action
+      x-fft-permissions:
+        - ADMIN_MODULES_WRITE
+      tags:
+        - TrackingInformation (Carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/trackinginformation/search:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Search for TrackingInformation
+      operationId: searchTrackingInformation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackingInformationSearchPayload'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingInformationPaginatedResult'
+          description: Your search result
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: List tracking information (search)
+      x-fft-permissions:
+        - ADMIN_MODULES_READ
+      tags:
+        - TrackingInformation (Carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/users:
     get:
       deprecated: false
@@ -50027,6 +50359,18 @@ components:
           description: the reference to the stackRef this loadUnit is part of
           example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
           type: string
+        status:
+          default: AVAILABLE
+          description: >-
+            The status of the load unit. It can be AVAILABLE or OBSOLETE. The
+            status cannot be set from outside. When a load unit is created, it
+            is automatically set to AVAILABLE. When a load unit is deleted, it
+            is automatically set to OBSOLETE.
+          enum:
+            - AVAILABLE
+            - OBSOLETE
+          example: AVAILABLE
+          type: string
         storageLocationRef:
           description: >-
             the reference to the storage location this load unit as been placed
@@ -50049,6 +50393,7 @@ components:
         - facilityRef
         - pickJobRefs
         - nameLocalized
+        - status
       title: LoadUnit
       type: object
       description: LoadUnit
@@ -75377,6 +75722,18 @@ components:
           example: 9a14e183-ff86-4b6e-a2dc-eb4c7e312ab1
           minLength: 1
           type: string
+        status:
+          default: AVAILABLE
+          description: >-
+            The status of the service container. It can be AVAILABLE or
+            OBSOLETE. The status cannot be set from outside. When a service
+            container is created, it is automatically set to AVAILABLE. When a
+            service container is deleted, it is automatically set to OBSOLETE.
+          enum:
+            - AVAILABLE
+            - OBSOLETE
+          example: AVAILABLE
+          type: string
         storageLocationRef:
           description: Id of the storage location this container is located at.
           example: 41d43211-g5a1-gg22-a716-ba095e30ds1d
@@ -75411,6 +75768,7 @@ components:
         - id
         - facilityRef
         - type
+        - status
       title: ServiceContainer
       type: object
       description: ServiceContainer
@@ -86264,6 +86622,534 @@ components:
       xml:
         name: ToolkitTransformationType
       title: ToolkitTransformationType
+    TrackingInformation:
+      properties:
+        carrierRef:
+          description: Reference to the connected carrier
+          example: 283554a4-1ba5-459b-9bf2-59bc9c68f60e
+          minLength: 1
+          type: string
+        carrierStatus:
+          additionalProperties: true
+          anyOf:
+            - type: string
+            - type: object
+          description: Status of the latest tracking information event status.
+          example:
+            code: SOME_CODE
+            status: SOME_VALUE
+        carrierStatusSet:
+          description: Creation timestamp of the latest tracking information event status.
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        created:
+          description: Creation date of this tracking information
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        facilityRef:
+          description: >-
+            Reference to the connected facility ref via the connected shipping
+            information
+          example: f7fcd0a1-d269-42d9-8322-ba8f354ca6a0
+          type: string
+        id:
+          description: Unique identifier of this tracking information
+          example: d7058a3c-e57d-45dc-b024-e1725bb09541
+          type: string
+        labelRef:
+          description: Reference to the connected label
+          example: 3b06b80c-55ae-4e0e-af1d-8843d901e9ed
+          minLength: 1
+          type: string
+        labelUrl:
+          description: The URL to the label for this tracking information.
+          example: https://www.example.com/label.pdf
+          minLength: 1
+          type: string
+        lastModified:
+          description: Last modification date of this tracking information
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        shippingInformationRef:
+          description: Reference to the connected shipping information
+          example: 9d88d014-5627-4f01-96fe-80c5621d268d
+          minLength: 1
+          type: string
+        status:
+          description: >-
+            Status of the tracking information entity. Will either be set by the
+            workflow or calculated from the event history.
+          enum:
+            - CREATED
+            - IN_PROGRESS
+            - FINISHED
+            - CANCELLED
+            - OBSOLETE
+          example: IN_PROGRESS
+          type: string
+        trackingHistory:
+          description: >-
+            The tracking history of the tracking information. Most recent one is
+            defined by the statusSet timestamp, then the internal id.
+          example:
+            - carrierStatus: CA_DELIVERY
+              carrierStatusSet: 2020-02-03T08:45:50.525Z
+              id: 066960e1-630c-4b13-b0b5-58d537190107
+              status: DELIVERED
+              statusSet: 2020-02-03T08:45:50.525Z
+          items:
+            $ref: '#/components/schemas/TrackingInformationTrackingEvent'
+          maxItems: 100
+          minItems: 1
+          type: array
+        trackingNumber:
+          description: Tracking number of the connected label
+          example: '000123456'
+          minLength: 1
+          type: string
+        trackingStatus:
+          description: >-
+            Latest tracking information event status. Based on the found
+            tracking event history.
+          enum:
+            - REGISTERED
+            - ERROR
+            - PICKED_UP
+            - IN_DELIVERY
+            - DELIVERED
+            - DELIVERED_TO_RECIPIENT
+            - DELIVERED_TO_NEIGHBOUR
+            - DELIVERED_TO_PICK_UP_STATION
+            - NOT_PICKED_UP
+            - RETURN_TO_SENDER
+            - LOST
+            - DESTROYED
+            - CANCELLED
+            - UNKNOWN
+          example: DELIVERED
+          type: string
+        trackingStatusSet:
+          description: Creation timestamp of the latest tracking information event.
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        trackingUrl:
+          description: Url to the tracking page of the given carrier and tracking number
+          example: https://www.example.com/tracking:000123456
+          minLength: 1
+          type: string
+        type:
+          description: Type of this tracking information
+          enum:
+            - SEND
+            - RETURN
+          example: RETURN
+          type: string
+        version:
+          description: Version number of this tracking information
+          example: 42
+          type: integer
+      required:
+        - type
+        - carrierRef
+        - shippingInformationRef
+        - trackingNumber
+        - trackingUrl
+        - labelUrl
+        - trackingHistory
+        - id
+        - created
+        - lastModified
+        - version
+        - status
+        - trackingStatus
+        - trackingStatusSet
+        - carrierStatus
+        - facilityRef
+      title: TrackingInformation
+      type: object
+      description: TrackingInformation
+    TrackingInformationAddTrackingEventActionParameter:
+      properties:
+        name:
+          description: Name of this action
+          example: ADD_TRACKING_EVENTS
+          type: string
+        trackingEvents:
+          description: Events to add to the tracking information
+          example:
+            - carrierStatus: CA_DELIVERY
+              carrierStatusSet: 2020-02-03T08:45:50.525Z
+              status: DELIVERED
+              statusSet: 2020-02-03T08:45:50.525Z
+          items:
+            $ref: '#/components/schemas/TrackingInformationTrackingEventForCreation'
+          maxItems: 20
+          minItems: 1
+          type: array
+        version:
+          description: Version of the tracking information to call the action upon
+          example: 2
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+        - trackingEvents
+      title: TrackingInformationAddTrackingEventActionParameter
+      type: object
+      description: TrackingInformationAddTrackingEventActionParameter
+    TrackingInformationForCreation:
+      properties:
+        carrierRef:
+          description: Reference to the connected carrier
+          example: 283554a4-1ba5-459b-9bf2-59bc9c68f60e
+          minLength: 1
+          type: string
+        labelRef:
+          description: Reference to the connected label
+          example: 3b06b80c-55ae-4e0e-af1d-8843d901e9ed
+          minLength: 1
+          type: string
+        labelUrl:
+          description: The URL to the label for this tracking information.
+          example: https://www.example.com/label.pdf
+          minLength: 1
+          type: string
+        shippingInformationRef:
+          description: Reference to the connected shipping information
+          example: 9d88d014-5627-4f01-96fe-80c5621d268d
+          minLength: 1
+          type: string
+        trackingHistory:
+          description: >-
+            The tracking history of the tracking information. Most recent one is
+            defined by the statusSet timestamp, then the internal id.
+          example:
+            - carrierStatus: CA_DELIVERY
+              carrierStatusSet: 2020-02-03T08:45:50.525Z
+              status: DELIVERED
+              statusSet: 2020-02-03T08:45:50.525Z
+          items:
+            $ref: '#/components/schemas/TrackingInformationTrackingEventForCreation'
+          maxItems: 100
+          minItems: 1
+          type: array
+        trackingNumber:
+          description: Tracking number of the connected label
+          example: '000123456'
+          minLength: 1
+          type: string
+        trackingUrl:
+          description: Url to the tracking page of the given carrier and tracking number
+          example: https://www.example.com/tracking:000123456
+          minLength: 1
+          type: string
+        type:
+          description: Type of this tracking information
+          enum:
+            - SEND
+            - RETURN
+          example: RETURN
+          type: string
+      required:
+        - type
+        - carrierRef
+        - shippingInformationRef
+        - trackingNumber
+        - trackingUrl
+        - labelUrl
+        - trackingHistory
+      title: TrackingInformationForCreation
+      type: object
+      description: TrackingInformationForCreation
+    TrackingInformationListResponse:
+      properties:
+        totalCount:
+          description: >-
+            Total number of found tracking information for the given search
+            parameters
+          example: 42
+          type: integer
+        trackingInformation:
+          items:
+            $ref: '#/components/schemas/TrackingInformation'
+          type: array
+      required:
+        - trackingInformation
+      title: TrackingInformationListResponse
+      type: object
+      description: TrackingInformationListResponse
+    TrackingInformationPaginatedResult:
+      properties:
+        pageInfo:
+          allOf:
+            - $ref: '#/components/schemas/PageInfo'
+          description: Pagination information for the search result.
+        total:
+          description: >-
+            The total number of items matching the search criteria. Only filled,
+            if withTotal is set to true in the search options.
+          minimum: 0
+          type: number
+        trackingInformations:
+          items:
+            $ref: '#/components/schemas/TrackingInformation'
+          type: array
+      required:
+        - pageInfo
+        - trackingInformations
+      title: TrackingInformationPaginatedResult
+      type: object
+      description: TrackingInformationPaginatedResult
+    TrackingInformationRemoveTrackingEventsParameter:
+      properties:
+        name:
+          description: Name of this action
+          example: REMOVE_TRACKING_EVENTS
+          type: string
+        trackingEventIds:
+          description: >-
+            Ids of the tracking events that should be removed from the tracking
+            information
+          example:
+            - fa21fdf3-9618-4697-ba2c-1f39a3a78b80
+          items:
+            type: string
+          maxItems: 20
+          minItems: 1
+          type: array
+        version:
+          description: Version of the tracking information to call the action upon
+          example: 2
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+        - trackingEventIds
+      title: TrackingInformationRemoveTrackingEventsParameter
+      type: object
+      description: TrackingInformationRemoveTrackingEventsParameter
+    TrackingInformationSearchPayload:
+      properties:
+        after:
+          deprecated: false
+          description: >-
+            The cursor to start after for forward pagination. The value is
+            provided in the `pageInfo.endCursor` field of the response. Cannot
+            be used with `before` or `last`.
+          type: string
+        before:
+          description: >-
+            The cursor to start before for backward pagination. The value is
+            provided in the `pageInfo.startCursor` field of the response. Cannot
+            be used with `after` or `size` (first).
+          type: string
+        last:
+          description: >-
+            Number of items to return for backward pagination. Cannot be used
+            with 'size' (first). Default: 20.
+          maximum: 250
+          minimum: 1
+          type: number
+        options:
+          $ref: '#/components/schemas/SearchOptions'
+        query:
+          $ref: '#/components/schemas/TrackingInformationSearchQuery'
+        size:
+          description: >-
+            Number of items to return for forward pagination. Cannot be used
+            with 'last'. Default: 20.
+          example: 10
+          maximum: 250
+          minimum: 1
+          type: number
+        sort:
+          description: Use for sorting the result.
+          items:
+            $ref: '#/components/schemas/TrackingInformationSort'
+          maxItems: 1
+          minItems: 1
+          type: array
+        startAfterId:
+          deprecated: true
+          description: >-
+            The ID to start after. Deprecated, use `after` with the value
+            provided in `pageInfo.endCursor` instead.
+          type: string
+      required:
+        - query
+      title: TrackingInformationSearchPayload
+      type: object
+      description: TrackingInformationSearchPayload
+    TrackingInformationSearchQuery:
+      properties:
+        and:
+          items:
+            $ref: '#/components/schemas/TrackingInformationSearchQuery'
+          maxItems: 500
+          type: array
+        carrierRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by carrierRef
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+        created:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: >-
+            Search entries by created. Applying a narrow and well-considered
+            filter value is strongly recommended, as it can greatly improve
+            response times, especially when working with large datasets.
+        id:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by id
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+        labelRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by labelRef
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+        lastModified:
+          allOf:
+            - $ref: '#/components/schemas/DateFilter'
+          description: Search by lastModified
+        or:
+          items:
+            $ref: '#/components/schemas/TrackingInformationSearchQuery'
+          maxItems: 500
+          type: array
+        shippingInformationRef:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by shippingInformationRef
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+        trackingNumber:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by trackingNumber
+      title: TrackingInformationSearchQuery
+      type: object
+      description: TrackingInformationSearchQuery
+    TrackingInformationSort:
+      properties:
+        created:
+          enum:
+            - ASC
+            - DESC
+          type: string
+        lastModified:
+          enum:
+            - ASC
+            - DESC
+          type: string
+      title: TrackingInformationSort
+      type: object
+      description: TrackingInformationSort
+    TrackingInformationTrackingEvent:
+      properties:
+        carrierStatus:
+          additionalProperties: true
+          anyOf:
+            - type: string
+            - type: object
+          description: Status from the carrier before mapping to the internal status
+          example:
+            code: SOME_CODE
+            status: SOME_VALUE
+        carrierStatusSet:
+          description: Creation timestamp
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        id:
+          description: Unique identifier of this tracking history
+          example: 890b857f-8d66-4ec0-91ba-1cc19f2944f6
+          type: string
+        status:
+          description: Internal Status of this Tracking Information Event
+          enum:
+            - REGISTERED
+            - ERROR
+            - PICKED_UP
+            - IN_DELIVERY
+            - DELIVERED
+            - DELIVERED_TO_RECIPIENT
+            - DELIVERED_TO_NEIGHBOUR
+            - DELIVERED_TO_PICK_UP_STATION
+            - NOT_PICKED_UP
+            - RETURN_TO_SENDER
+            - LOST
+            - DESTROYED
+            - CANCELLED
+            - UNKNOWN
+          example: DELIVERED
+          type: string
+        statusSet:
+          description: Creation timestamp
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+      required:
+        - status
+        - statusSet
+        - carrierStatus
+        - id
+      title: TrackingInformationTrackingEvent
+      type: object
+      description: TrackingInformationTrackingEvent
+    TrackingInformationTrackingEventForCreation:
+      properties:
+        carrierStatus:
+          additionalProperties: true
+          anyOf:
+            - type: string
+            - type: object
+          description: Status from the carrier before mapping to the internal status
+          example:
+            code: SOME_CODE
+            status: SOME_VALUE
+        carrierStatusSet:
+          description: Creation timestamp
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+        status:
+          description: Internal Status of this Tracking Information Event
+          enum:
+            - REGISTERED
+            - ERROR
+            - PICKED_UP
+            - IN_DELIVERY
+            - DELIVERED
+            - DELIVERED_TO_RECIPIENT
+            - DELIVERED_TO_NEIGHBOUR
+            - DELIVERED_TO_PICK_UP_STATION
+            - NOT_PICKED_UP
+            - RETURN_TO_SENDER
+            - LOST
+            - DESTROYED
+            - CANCELLED
+            - UNKNOWN
+          example: DELIVERED
+          type: string
+        statusSet:
+          description: Creation timestamp
+          example: 2020-02-03T08:45:50.525Z
+          format: date-time
+          type: string
+      required:
+        - status
+        - statusSet
+        - carrierStatus
+      title: TrackingInformationTrackingEventForCreation
+      type: object
+      description: TrackingInformationTrackingEventForCreation
     TrackingStatus:
       description: The state of the KEP
       enum:
