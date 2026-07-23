@@ -33149,7 +33149,7 @@ components:
             Depending on the use case there can be multiple recipient addresses
             (e.g. invoice address deviates from shipping address).
           items:
-            $ref: '#/components/schemas/ShippingInformationConsumerAddress'
+            $ref: '#/components/schemas/ConsumerAddress'
           maxItems: 3
           minItems: 1
           type: array
@@ -33174,7 +33174,7 @@ components:
             Depending on the use case there can be multiple recipient addresses
             (e.g. invoice address deviates from shipping address).
           items:
-            $ref: '#/components/schemas/ShippingInformationConsumerAddress'
+            $ref: '#/components/schemas/ConsumerAddress'
           maxItems: 3
           minItems: 1
           type: array
@@ -38987,7 +38987,8 @@ components:
             resolvedCoordinates:
               $ref: '#/components/schemas/Coordinates'
             resolvedTimeZone:
-              $ref: '#/components/schemas/TimeZoneForCreation'
+              allOf:
+                - $ref: '#/components/schemas/TimeZoneForCreation'
               description: >-
                 User-specified time zone in identifier format (e.g.,
                 "America/Los_Angeles"). Used to determine local time. Relevant
@@ -47972,13 +47973,11 @@ components:
         recipientAddress:
           description: Recipient addresses
           items:
-            $ref: '#/components/schemas/LabelConsumerAddress'
+            $ref: '#/components/schemas/ConsumerAddress'
           maxItems: 10
           type: array
         senderAddress:
-          allOf:
-            - $ref: '#/components/schemas/LabelFacilityAddress'
-          description: Sender address
+          $ref: '#/components/schemas/FacilityAddress'
         shippingInformationRef:
           description: Reference to the shipping information
           example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
@@ -48050,30 +48049,6 @@ components:
       title: LabelAdditionalDocument
       type: object
       description: LabelAdditionalDocument
-    LabelAddressPhoneNumber:
-      properties:
-        customAttributes:
-          additionalProperties: true
-          description: Custom attributes
-          type: object
-        label:
-          description: Label for the phone number
-          type: string
-        type:
-          description: Phone number type
-          enum:
-            - MOBILE
-            - PHONE
-          type: string
-        value:
-          description: Phone number value
-          type: string
-      required:
-        - type
-        - value
-      title: LabelAddressPhoneNumber
-      type: object
-      description: LabelAddressPhoneNumber
     LabelCarrierData:
       properties:
         carrierRef:
@@ -48094,156 +48069,6 @@ components:
       title: LabelCarrierData
       type: object
       description: LabelCarrierData
-    LabelConsumerAddress:
-      properties:
-        additionalAddressInfo:
-          description: Additional address information
-          type: string
-        addressType:
-          description: Address type
-          enum:
-            - POSTAL_ADDRESS
-            - PARCEL_LOCKER
-            - INVOICE_ADDRESS
-          type: string
-        city:
-          description: City
-          example: Yellowstone
-          type: string
-        companyName:
-          description: Company name
-          type: string
-        coordinates:
-          description: Geo-coordinates
-          type: object
-        country:
-          description: Country code (ISO 3166-1 alpha-2)
-          example: DE
-          type: string
-        customAttributes:
-          additionalProperties: true
-          description: Custom attributes
-          type: object
-        email:
-          description: Email address of the consumer
-          example: phil.bison@fulfillmenttools.com
-          type: string
-        emailAddresses:
-          description: Email addresses
-          example: phil.bison@fulfillmenttools.com
-          items:
-            $ref: '#/components/schemas/LabelEmailAddress'
-          maxItems: 10
-          type: array
-        firstName:
-          description: First name
-          type: string
-        houseNumber:
-          description: House number
-          example: 42
-          type: string
-        lastName:
-          description: Last name
-          type: string
-        personalTitle:
-          description: Personal title
-          type: string
-        phoneNumbers:
-          description: Phone numbers
-          items:
-            $ref: '#/components/schemas/LabelAddressPhoneNumber'
-          maxItems: 10
-          type: array
-        postalCode:
-          description: Postal code
-          example: '42420'
-          type: string
-        province:
-          description: Province or state
-          type: string
-        salutation:
-          description: Salutation
-          type: string
-        street:
-          description: Street name
-          type: string
-      required:
-        - street
-        - postalCode
-        - city
-        - country
-      title: LabelConsumerAddress
-      type: object
-      description: LabelConsumerAddress
-    LabelEmailAddress:
-      properties:
-        recipient:
-          description: Human-readable recipient description
-          type: string
-        value:
-          description: Email address
-          type: string
-      required:
-        - value
-      title: LabelEmailAddress
-      type: object
-      description: LabelEmailAddress
-    LabelFacilityAddress:
-      properties:
-        additionalAddressInfo:
-          description: Additional address information
-          type: string
-        city:
-          description: City
-          example: Yellowstone
-          type: string
-        companyName:
-          description: Company name
-          type: string
-        country:
-          description: Country code (ISO 3166-1 alpha-2)
-          example: DE
-          type: string
-        customAttributes:
-          additionalProperties: true
-          description: Custom attributes
-          type: object
-        emailAddresses:
-          description: Email addresses
-          example: phil.bison@fulfillmenttools.com
-          items:
-            $ref: '#/components/schemas/LabelEmailAddress'
-          maxItems: 10
-          type: array
-        houseNumber:
-          description: House number
-          example: 42
-          type: string
-        phoneNumbers:
-          description: Phone numbers
-          items:
-            $ref: '#/components/schemas/LabelAddressPhoneNumber'
-          maxItems: 10
-          type: array
-        postalCode:
-          description: Postal code
-          example: '42420'
-          type: string
-        province:
-          description: Province or state
-          type: string
-        street:
-          description: Street name
-          type: string
-      required:
-        - companyName
-        - street
-        - postalCode
-        - city
-        - country
-      title: LabelFacilityAddress
-      type: object
-      description: LabelFacilityAddress
     LabelForCreation:
       properties:
         additionalDocuments:
@@ -48279,13 +48104,11 @@ components:
         recipientAddress:
           description: Recipient addresses
           items:
-            $ref: '#/components/schemas/LabelConsumerAddress'
+            $ref: '#/components/schemas/ConsumerAddress'
           maxItems: 10
           type: array
         senderAddress:
-          allOf:
-            - $ref: '#/components/schemas/LabelFacilityAddress'
-          description: Sender address
+          $ref: '#/components/schemas/FacilityAddress'
         shippingInformationRef:
           description: Reference to the shipping information
           example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
@@ -48345,13 +48168,11 @@ components:
         recipientAddress:
           description: Recipient addresses
           items:
-            $ref: '#/components/schemas/LabelConsumerAddress'
+            $ref: '#/components/schemas/ConsumerAddress'
           maxItems: 10
           type: array
         senderAddress:
-          allOf:
-            - $ref: '#/components/schemas/LabelFacilityAddress'
-          description: Sender address
+          $ref: '#/components/schemas/FacilityAddress'
         shortId:
           description: Short human-readable identifier
           type: string
@@ -78552,30 +78373,6 @@ components:
       title: ShippingInformation
       type: object
       description: ShippingInformation
-    ShippingInformationAddressPhoneNumber:
-      properties:
-        customAttributes:
-          additionalProperties: true
-          description: Custom attributes
-          type: object
-        label:
-          description: Label for the phone number
-          type: string
-        type:
-          description: Phone number type
-          enum:
-            - MOBILE
-            - PHONE
-          type: string
-        value:
-          description: Phone number value
-          type: string
-      required:
-        - type
-        - value
-      title: ShippingInformationAddressPhoneNumber
-      type: object
-      description: ShippingInformationAddressPhoneNumber
     ShippingInformationCarrierRecipientInformationAddressFilter:
       properties:
         companyName:
@@ -78628,100 +78425,6 @@ components:
       title: ShippingInformationCarrierRecipientInformationListFilter
       type: object
       description: ShippingInformationCarrierRecipientInformationListFilter
-    ShippingInformationConsumerAddress:
-      properties:
-        additionalAddressInfo:
-          description: Additional address information
-          type: string
-        addressType:
-          description: Address type
-          enum:
-            - POSTAL_ADDRESS
-            - PARCEL_LOCKER
-            - INVOICE_ADDRESS
-          type: string
-        city:
-          description: City
-          example: Yellowstone
-          type: string
-        companyName:
-          description: Company name
-          type: string
-        coordinates:
-          description: Geo-coordinates
-          type: object
-        country:
-          description: Country code (ISO 3166-1 alpha-2)
-          example: DE
-          type: string
-        customAttributes:
-          additionalProperties: true
-          description: Custom attributes
-          type: object
-        email:
-          description: Email address of the consumer
-          example: phil.bison@fulfillmenttools.com
-          type: string
-        emailAddresses:
-          description: Email addresses
-          example: phil.bison@fulfillmenttools.com
-          items:
-            $ref: '#/components/schemas/ShippingInformationEmailAddress'
-          maxItems: 10
-          type: array
-        firstName:
-          description: First name
-          type: string
-        houseNumber:
-          description: House number
-          example: 42
-          type: string
-        lastName:
-          description: Last name
-          type: string
-        personalTitle:
-          description: Personal title
-          type: string
-        phoneNumbers:
-          description: Phone numbers
-          items:
-            $ref: '#/components/schemas/ShippingInformationAddressPhoneNumber'
-          maxItems: 10
-          type: array
-        postalCode:
-          description: Postal code
-          example: '42420'
-          type: string
-        province:
-          description: Province or state
-          type: string
-        salutation:
-          description: Salutation
-          type: string
-        street:
-          description: Street name
-          type: string
-      required:
-        - street
-        - postalCode
-        - city
-        - country
-      title: ShippingInformationConsumerAddress
-      type: object
-      description: ShippingInformationConsumerAddress
-    ShippingInformationEmailAddress:
-      properties:
-        recipient:
-          description: Human-readable recipient description
-          type: string
-        value:
-          description: Email address
-          type: string
-      required:
-        - value
-      title: ShippingInformationEmailAddress
-      type: object
-      description: ShippingInformationEmailAddress
     ShippingInformationForCreation:
       properties:
         anonymized:
