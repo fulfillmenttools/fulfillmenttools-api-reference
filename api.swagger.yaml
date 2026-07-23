@@ -29581,10 +29581,10 @@ components:
       properties:
         type:
           $ref: '#/components/schemas/RatingConfigurationType'
+      title: AbstractRatingConfiguration
       type: object
       xml:
         name: AbstractRatingConfiguration
-      title: AbstractRatingConfiguration
     AbstractReason:
       allOf:
         - $ref: '#/components/schemas/AbstractReasonForCreation'
@@ -68723,7 +68723,8 @@ components:
       description: >-
         This part of the API is in Beta status. For details, see the <a
         href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
-        target="_blank">API release lifecycle documentation</a>.<br /><br />
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Discriminator identifying a rating variant.
       enum:
         - STOCK-BALANCING
         - GEO-DISTANCE
@@ -74688,11 +74689,11 @@ components:
         type:
           $ref: '#/components/schemas/RoutingStrategyStandardRatingType'
       required:
+        - type
         - active
         - implementation
         - maxPenalty
-        - type
-      title: RoutingStrategyRating
+      title: RoutingStrategyRatingForUpsert
       type: object
     RoutingStrategyReplaceConditionActionParameter:
       allOf:
@@ -74866,17 +74867,19 @@ components:
           $ref: '#/components/schemas/RoutingStrategyStandardRatingType'
       required:
         - active
-        - implementation
         - maxPenalty
         - type
+        - implementation
       title: RoutingStrategyStandardRating
       type: object
     RoutingStrategyStandardRatingType:
+      description: >-
+        Discriminator identifying a rating as a routing strategy standard
+        rating.
       enum:
         - StandardRating
       type: string
       title: RoutingStrategyStandardRatingType
-      description: RoutingStrategyStandardRatingType
     RoutingStrategyToolkitFence:
       additionalProperties: false
       description: Routing Strategy Toolkit Fence.
@@ -74938,13 +74941,13 @@ components:
       additionalProperties: false
       description: Routing Strategy Toolkit Rating.
       properties:
-        descriptionLocalized:
-          $ref: '#/components/schemas/LocaleString'
         nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        descriptionLocalized:
           $ref: '#/components/schemas/LocaleString'
         active:
           default: false
-          description: Indicates whether this fence is active or not
+          description: Indicates whether this rating is active or not
           type: boolean
         comparisonRule:
           $ref: '#/components/schemas/ToolkitComparisonRule'
@@ -74979,18 +74982,19 @@ components:
         type:
           $ref: '#/components/schemas/RoutingStrategyToolkitRatingType'
       required:
-        - type
-        - nameLocalized
         - active
         - maxPenalty
         - referenceId
+        - nameLocalized
+        - type
       title: RoutingStrategyToolkitRating
+      type: object
     RoutingStrategyToolkitRatingType:
+      description: Discriminator identifying a rating as a routing strategy toolkit rating.
       enum:
         - ToolkitRating
       type: string
       title: RoutingStrategyToolkitRatingType
-      description: RoutingStrategyToolkitRatingType
     RoutingStrategyTransporter:
       properties:
         routingStrategies:
