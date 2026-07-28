@@ -24671,6 +24671,233 @@
                   "response": []
                 }
               ]
+            },
+            {
+              "name": "tracking Information",
+              "item": [
+                {
+                  "name": "Get tracking information [ALPHA]",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{host}}/api/trackinginformation",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "trackinginformation"
+                      ]
+                    },
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{authToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get tracking information by ID [ALPHA]",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{host}}/api/trackinginformation/{{trackinginformationId}}",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "trackinginformation",
+                        "{{trackinginformationId}}"
+                      ],
+                      "variable": [
+                        {
+                          "key": "trackinginformationId",
+                          "value": "123",
+                          "description": "id of the tracking information to retrieve"
+                        }
+                      ]
+                    },
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{authToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Search tracking information",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"query\": {\n        \"trackingNumber\": {\n            \"eq\": \"trackingNumber\"\n        }\n    }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/trackinginformation/search",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "trackinginformation",
+                        "search"
+                      ]
+                    },
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{authToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Create tracking information [ALPHA]",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"carrierRef\": \"53fbe200-0012-4cee-b736-a06adc81d158\",\n    \"labelRef\": \"78b711ab-55b4-43c7-9faa-47b6f74be2ab\",\n    \"labelUrl\": \"https://some-valid-label-url.de/label.pdf\",\n    \"shippingInformationRef\": \"76862a4b-3b79-4905-9b6b-1308768a9ee6\",\n    \"trackingHistory\": [\n        {\n            \"status\": \"REGISTERED\",\n            \"statusSet\": \"2026-06-06T12:00:00.000000Z\",\n            \"carrierStatus\": {\n                \"status\": \"Either an object like this\",\n                \"subStatus\": \"or a plain string as carrierStatus\"\n            },\n            \"carrierStatusSet\": \"2026-06-06T12:00:00.000000Z\"\n        }\n    ],\n    \"trackingNumber\": \"123\",\n    \"trackingUrl\": \"https://some-valid-url.de/trackingNumber?=123\",\n    \"type\": \"SEND\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/trackinginformation",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "trackinginformation"
+                      ]
+                    },
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{authToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Tracking information actions",
+                  "item": [
+                    {
+                      "name": "Add tracking events to tracking information",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n    \"name\": \"ADD_TRACKING_EVENTS\",\n    \"trackingEventIds\":  [\n        {\n            \"status\": \"REGISTERED\",\n            \"statusSet\": \"2026-06-06T12:00:00.000000Z\",\n            \"carrierStatus\": {\n                \"status\": \"Either an object like this\",\n                \"subStatus\": \"or a plain string as carrierStatus\"\n            },\n            \"carrierStatusSet\": \"2026-06-06T12:00:00.000000Z\"\n        }\n    ],\n    \"version\": 2\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{host}}/api/trackinginformation/{{trackingInformationId}}/actions",
+                          "host": [
+                            "{{host}}"
+                          ],
+                          "path": [
+                            "api",
+                            "trackinginformation",
+                            "{{trackingInformationId}}",
+                            "actions"
+                          ]
+                        },
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{authToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "Remove tracking events from tracking information",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n    \"name\": \"REMOVE_TRACKING_EVENTS\",\n    \"trackingEventIds\":  [\"93476cb3-d740-4d8c-a8fa-d3d8bba716fc\"],\n    \"version\": 2\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{host}}/api/trackinginformation/{{trackingInformationId}}/actions",
+                          "host": [
+                            "{{host}}"
+                          ],
+                          "path": [
+                            "api",
+                            "trackinginformation",
+                            "{{trackingInformationId}}",
+                            "actions"
+                          ]
+                        },
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{authToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
