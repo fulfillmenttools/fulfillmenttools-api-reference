@@ -36398,6 +36398,35 @@ components:
       title: DhlV2CarrierConfiguration
       type: object
       description: DhlV2CarrierConfiguration
+    DiagnosticCode:
+      description: >-
+        Indicates the specific reason a picking diagnostic was raised.
+
+
+        STOCK_SHORT_PICK => The quantity picked from a partial stock location
+        was below the requested quantity, while short-pick handling was enabled
+        for this configuration.
+
+
+        LINE_ITEM_SHORT_PICK => The quantity picked for a pick line item was
+        below the requested quantity.
+
+
+        STOCK_NOT_FOUND => The specified stock reference or tenant stock ID
+        could not be found.
+
+
+        INSUFFICIENT_STOCK => The target stock did not have enough available
+        quantity to fulfill the request.
+      enum:
+        - STOCK_SHORT_PICK
+        - LINE_ITEM_SHORT_PICK
+        - STOCK_NOT_FOUND
+        - INSUFFICIENT_STOCK
+      type: string
+      xml:
+        name: DiagnosticCode
+      title: DiagnosticCode
     DocumentCategory:
       enum:
         - EXTERNAL
@@ -40736,7 +40765,6 @@ components:
         facilityServiceTypes:
           items:
             $ref: '#/components/schemas/FacilityServiceType'
-            type: string
           type: array
         facilityStatus:
           $ref: '#/components/schemas/FacilityStatus'
@@ -62887,6 +62915,20 @@ components:
         name: PartialStock
       title: PartialStockForCreation
       description: PartialStockForCreation
+    PartialStockLocation:
+      properties:
+        stockRef:
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          nullable: true
+          type: string
+        tenantPartialStockId:
+          type: string
+      required:
+        - tenantPartialStockId
+        - stockRef
+      title: PartialStockLocation
+      type: object
+      description: PartialStockLocation
     PartialStockPatchActions:
       properties:
         actions:
@@ -63447,6 +63489,136 @@ components:
       type: object
       title: PickingMethodsConfiguration
       description: PickingMethodsConfiguration
+    PickingOutcomeConfigSnapshot:
+      properties:
+        shortPickActiveDefaulted:
+          description: True when shortpick.active config was absent and defaulted to true
+          type: boolean
+        stockToZeroOnEmptyPartialStockLocationActive:
+          description: Whether stock should be set to zero on empty partial stock location
+          type: boolean
+        stockToZeroOnShortPickActive:
+          description: Whether stock should be set to zero on short pick
+          type: boolean
+      required:
+        - stockToZeroOnShortPickActive
+        - stockToZeroOnEmptyPartialStockLocationActive
+        - shortPickActiveDefaulted
+      title: PickingOutcomeConfigSnapshot
+      type: object
+      description: PickingOutcomeConfigSnapshot
+    PickingOutcomeDiagnostic:
+      properties:
+        code:
+          $ref: '#/components/schemas/DiagnosticCode'
+      required:
+        - code
+      title: PickingOutcomeDiagnostic
+      type: object
+      description: PickingOutcomeDiagnostic
+    PickingOutcomeEventPayload:
+      properties:
+        config:
+          allOf:
+            - $ref: '#/components/schemas/PickingOutcomeConfigSnapshot'
+          description: Job-wide config snapshot
+        header:
+          $ref: '#/components/schemas/PickingOutcomeHeader'
+        reasons:
+          description: Unique list of all DiagnosticCodes
+          items:
+            $ref: '#/components/schemas/DiagnosticCode'
+          type: array
+        records:
+          items:
+            $ref: '#/components/schemas/PickingOutcomeRecord'
+          type: array
+      required:
+        - header
+        - config
+        - reasons
+        - records
+      title: PickingOutcomeEventPayload
+      type: object
+      description: PickingOutcomeEventPayload
+    PickingOutcomeHeader:
+      properties:
+        facilityRef:
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          type: string
+        jobRef:
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          type: string
+        jobType:
+          $ref: '#/components/schemas/PickingOutcomeHeaderJobType'
+        orderRef:
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          type: string
+        processRef:
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          type: string
+        routingPlanRef:
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          type: string
+        tenantOrderId:
+          example: MY_ORDER_ID
+          type: string
+      required:
+        - jobRef
+        - facilityRef
+      title: PickingOutcomeHeader
+      type: object
+      description: PickingOutcomeHeader
+    PickingOutcomeHeaderJobType:
+      description: PickingOutcome Source Trigger
+      enum:
+        - PICK_JOB
+        - HANDOVER_JOB
+        - CHAINED_SUPPLIER
+      type: string
+      xml:
+        name: PickingOutcomeHeaderJobType
+      title: PickingOutcomeHeaderJobType
+    PickingOutcomeRecord:
+      properties:
+        diagnostics:
+          items:
+            $ref: '#/components/schemas/PickingOutcomeDiagnostic'
+          type: array
+        lineItemId:
+          description: >-
+            Depending on the trigger this holds the pickLineItem.id from a
+            pickJob or handoverJobLineItem.id from an handoverJob
+          type: string
+        partialStockLocation:
+          $ref: '#/components/schemas/PartialStockLocation'
+        provided:
+          $ref: '#/components/schemas/ProvidedSection'
+        reduction:
+          $ref: '#/components/schemas/ReductionSection'
+        stockSelection:
+          $ref: '#/components/schemas/StockSelectionSection'
+        substituteLocationRef:
+          type: string
+      required:
+        - provided
+        - stockSelection
+        - reduction
+        - diagnostics
+      title: PickingOutcomeRecord
+      type: object
+      description: PickingOutcomeRecord
+    PickingOutcomeWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/PickingOutcomeEventPayload'
+      required:
+        - payload
+      title: PickingOutcomeWebHookEvent
+      type: object
+      description: PickingOutcomeWebHookEvent
     PickingPatchActions:
       properties:
         actions:
@@ -68437,6 +68609,17 @@ components:
         - invalidAfterTime
       title: PromisesConfiguration
       description: PromisesConfiguration
+    ProvidedSection:
+      properties:
+        diagnostics:
+          items:
+            $ref: '#/components/schemas/PickingOutcomeDiagnostic'
+          type: array
+      required:
+        - diagnostics
+      title: ProvidedSection
+      type: object
+      description: ProvidedSection
     PurchaseOrder:
       properties:
         cancelled:
@@ -69194,6 +69377,17 @@ components:
       title: RecordableAttributeForUpdate
       type: object
       description: RecordableAttributeForUpdate
+    ReductionSection:
+      properties:
+        diagnostics:
+          items:
+            $ref: '#/components/schemas/PickingOutcomeDiagnostic'
+          type: array
+      required:
+        - diagnostics
+      title: ReductionSection
+      type: object
+      description: ReductionSection
     RefundTrigger:
       properties:
         created:
@@ -81898,6 +82092,17 @@ components:
       title: StockSearchQuery
       type: object
       description: StockSearchQuery
+    StockSelectionSection:
+      properties:
+        diagnostics:
+          items:
+            $ref: '#/components/schemas/PickingOutcomeDiagnostic'
+          type: array
+      required:
+        - diagnostics
+      title: StockSelectionSection
+      type: object
+      description: StockSelectionSection
     StocksForUpsert:
       properties:
         stocks:
