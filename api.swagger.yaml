@@ -74424,6 +74424,17 @@ components:
           type: array
         orderSplit:
           $ref: '#/components/schemas/RoutingStrategyOrderSplitConfig'
+        priorityRatings:
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/RoutingStrategyStandardPriorityRating'
+              - $ref: '#/components/schemas/RoutingStrategyToolkitPriorityRating'
+            discriminator:
+              propertyName: type
+              mapping:
+                StandardPriorityRating: '#/components/schemas/RoutingStrategyStandardPriorityRating'
+                ToolkitPriorityRating: '#/components/schemas/RoutingStrategyToolkitPriorityRating'
+          type: array
         ratings:
           items:
             anyOf:
@@ -74528,6 +74539,18 @@ components:
           type: array
         orderSplit:
           $ref: '#/components/schemas/RoutingStrategyOrderSplitConfig'
+        priorityRatings:
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/RoutingStrategyPriorityRatingForUpsert'
+              - $ref: '#/components/schemas/RoutingStrategyToolkitPriorityRating'
+            discriminator:
+              propertyName: type
+              mapping:
+                StandardPriorityRating: '#/components/schemas/RoutingStrategyPriorityRatingForUpsert'
+                ToolkitPriorityRating: '#/components/schemas/RoutingStrategyToolkitPriorityRating'
+          maxItems: 100
+          type: array
         ratings:
           items:
             anyOf:
@@ -74678,6 +74701,28 @@ components:
       type: string
       title: RoutingStrategyPathElementType
       description: RoutingStrategyPathElementType
+    RoutingStrategyPriorityRatingForUpsert:
+      additionalProperties: false
+      description: >-
+        A rating is used to rate a set of possible facilities against each other
+        during routing of orders, ordered by priority.
+      properties:
+        configuration:
+          $ref: '#/components/schemas/AbstractRatingConfiguration'
+        implementation:
+          $ref: '#/components/schemas/RatingImplementation'
+        priority:
+          example: 100
+          minimum: 0
+          type: number
+        type:
+          $ref: '#/components/schemas/RoutingStrategyStandardPriorityRatingType'
+      required:
+        - type
+        - implementation
+        - priority
+      title: RoutingStrategyPriorityRatingForUpsert
+      type: object
     RoutingStrategyRatingForUpsert:
       additionalProperties: false
       description: >-
@@ -74851,6 +74896,40 @@ components:
       type: string
       title: RoutingStrategyStandardFenceType
       description: RoutingStrategyStandardFenceType
+    RoutingStrategyStandardPriorityRating:
+      additionalProperties: false
+      description: >-
+        A rating is used to rate a set of possible facilities against each other
+        during routing of orders, ordered by priority.
+      properties:
+        configuration:
+          $ref: '#/components/schemas/AbstractRatingConfiguration'
+        description:
+          type: string
+        implementation:
+          $ref: '#/components/schemas/RatingImplementation'
+        name:
+          type: string
+        priority:
+          example: 100
+          minimum: 0
+          type: number
+        type:
+          $ref: '#/components/schemas/RoutingStrategyStandardPriorityRatingType'
+      required:
+        - priority
+        - type
+        - implementation
+      title: RoutingStrategyStandardPriorityRating
+      type: object
+    RoutingStrategyStandardPriorityRatingType:
+      description: >-
+        Discriminator identifying a rating as a routing strategy standard
+        rating, ordered by priority.
+      enum:
+        - StandardPriorityRating
+      type: string
+      title: RoutingStrategyStandardPriorityRatingType
     RoutingStrategyStandardRating:
       additionalProperties: false
       description: >-
@@ -74945,6 +75024,63 @@ components:
       type: string
       title: RoutingStrategyToolkitFenceType
       description: RoutingStrategyToolkitFenceType
+    RoutingStrategyToolkitPriorityRating:
+      additionalProperties: false
+      description: Routing Strategy Toolkit Rating, ordered by priority.
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        descriptionLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        comparisonRule:
+          $ref: '#/components/schemas/ToolkitComparisonRule'
+        description:
+          description: The description of this rating
+          example: Some text that describes what the rating does.
+          type: string
+        entity1:
+          allOf:
+            - $ref: '#/components/schemas/ToolkitAllowedEntities'
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
+        entity2:
+          allOf:
+            - $ref: '#/components/schemas/ToolkitAllowedEntities'
+          deprecated: true
+          description: >-
+            This field is obsolete, was replaced by the entity fields at
+            predicate level.
+        name:
+          description: The name of the rating
+          example: CustomRating
+          type: string
+        priority:
+          description: The priority of this rating
+          example: 100
+          type: integer
+        referenceId:
+          type: string
+        rule:
+          $ref: '#/components/schemas/ToolkitRule'
+        type:
+          $ref: '#/components/schemas/RoutingStrategyToolkitPriorityRatingType'
+      required:
+        - priority
+        - referenceId
+        - nameLocalized
+        - type
+      title: RoutingStrategyToolkitPriorityRating
+      type: object
+    RoutingStrategyToolkitPriorityRatingType:
+      description: >-
+        Discriminator identifying a rating as a routing strategy toolkit rating,
+        ordered by priority.
+      enum:
+        - ToolkitPriorityRating
+      type: string
+      title: RoutingStrategyToolkitPriorityRatingType
     RoutingStrategyToolkitRating:
       additionalProperties: false
       description: Routing Strategy Toolkit Rating.
@@ -74964,13 +75100,15 @@ components:
           example: Some text that describes what the rating does.
           type: string
         entity1:
-          $ref: '#/components/schemas/ToolkitAllowedEntities'
+          allOf:
+            - $ref: '#/components/schemas/ToolkitAllowedEntities'
           deprecated: true
           description: >-
             This field is obsolete, was replaced by the entity fields at
             predicate level.
         entity2:
-          $ref: '#/components/schemas/ToolkitAllowedEntities'
+          allOf:
+            - $ref: '#/components/schemas/ToolkitAllowedEntities'
           deprecated: true
           description: >-
             This field is obsolete, was replaced by the entity fields at
