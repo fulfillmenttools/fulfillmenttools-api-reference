@@ -16764,6 +16764,51 @@ paths:
         - ORDER_WRITE
       tags:
         - Orders (DOMS)
+  /api/orders/actions:
+    post:
+      description: Bulk action of orders
+      operationId: bulkOrdersAction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkOrderActionsParameter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BulkOrderActionResult'
+                type: array
+          description: Updated Orders in the body.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Orders not found or expired
+      summary: Call bulk orders action
+      x-fft-permissions:
+        - ORDER_WRITE
+        - ORDER_CANCEL
+        - ORDER_FORCE_CANCEL
+      tags:
+        - Orders (DOMS)
   /api/orders/search:
     post:
       deprecated: false
@@ -32058,6 +32103,23 @@ components:
       title: BringCarrierConfiguration
       type: object
       description: BringCarrierConfiguration
+    BulkForceCancelOrderParameter:
+      properties:
+        cancelationReasonId:
+          description: ID of the cancellation reason
+          type: string
+        orderId:
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - orderId
+        - version
+      type: object
+      title: BulkForceCancelOrderParameter
+      description: BulkForceCancelOrderParameter
     BulkOperationError:
       properties:
         message:
@@ -32084,6 +32146,42 @@ components:
       type: string
       title: BulkOperationResultStatus
       description: BulkOperationResultStatus
+    BulkOrderActionResult:
+      properties:
+        orderId:
+          type: string
+        status:
+          $ref: '#/components/schemas/BulkOperationResultStatus'
+        summary:
+          type: string
+      required:
+        - orderId
+        - status
+      type: object
+      title: BulkOrderActionResult
+      description: BulkOrderActionResult
+    BulkOrderActionsParameter:
+      oneOf:
+        - $ref: '#/components/schemas/BulkOrderForceCancelActionParameter'
+      title: BulkOrderActionsParameter
+      description: BulkOrderActionsParameter
+    BulkOrderForceCancelActionParameter:
+      description: Action to force cancel orders.
+      properties:
+        name:
+          enum:
+            - BULK_FORCE_CANCEL
+          type: string
+        orders:
+          items:
+            $ref: '#/components/schemas/BulkForceCancelOrderParameter'
+          maxItems: 15
+          minItems: 1
+          type: array
+      required:
+        - name
+        - orders
+      title: BulkOrderForceCancelActionParameter
     BulkUpsertSummary:
       properties:
         created:
