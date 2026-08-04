@@ -66765,6 +66765,25 @@ components:
         name: PrioritizationRuleImplementation
       title: PrioritizationRuleImplementation
       description: PrioritizationRuleImplementation
+    PriorityRatingResult:
+      properties:
+        id:
+          type: string
+        matchesPriorityMinimum:
+          type: boolean
+        name:
+          type: string
+        routingStrategyNodeId:
+          type: string
+        type:
+          $ref: '#/components/schemas/RatingResultType'
+      required:
+        - id
+        - type
+        - routingStrategyNodeId
+        - matchesPriorityMinimum
+      title: PriorityRatingResult
+      description: PriorityRatingResult
     Process:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -69489,6 +69508,8 @@ components:
         - STANDARD
         - TOOLKIT
       type: string
+      xml:
+        name: RatingResultType
       title: RatingResultType
       description: RatingResultType
     RatingStatistic:
@@ -80679,6 +80700,10 @@ components:
           items:
             $ref: '#/components/schemas/HandledItem'
           type: array
+        priorityRatingResults:
+          items:
+            $ref: '#/components/schemas/PriorityRatingResult'
+          type: array
         ratingResults:
           items:
             $ref: '#/components/schemas/RatingResult'
@@ -80707,6 +80732,7 @@ components:
         - nodes
         - transfers
         - ratingResults
+        - priorityRatingResults
       type: object
       title: SourcingOption
       description: SourcingOption
