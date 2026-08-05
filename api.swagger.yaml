@@ -5289,6 +5289,91 @@ paths:
       summary: Update return note config
       tags:
         - Shipments Configuration (Operations)
+  /api/configurations/shipping:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Retrieves the tenant-wide shipping configuration. A default
+        configuration is created automatically on first access.
+      operationId: getShippingConfiguration
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingConfiguration'
+          description: Successfully retrieved the shipping configuration.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Get the shipping configuration
+      x-fft-permissions:
+        - SHIPMENT_READ
+      tags:
+        - ShippingConfiguration (carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
+    patch:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Creates or updates the tenant-wide shipping configuration. The version
+        must match the currently persisted version.
+      operationId: upsertShippingConfiguration
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingConfigurationForUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingConfiguration'
+          description: Successfully created or updated the shipping configuration.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Create or update the shipping configuration
+      x-fft-permissions:
+        - SHIPMENT_READ
+      tags:
+        - ShippingConfiguration (carrier)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/configurations/stock:
     get:
       description: Read current stock configuration
@@ -69663,6 +69748,25 @@ components:
       title: ReceiptForCreation
       type: object
       description: ReceiptForCreation
+    RecommendationConfiguration:
+      properties:
+        priceType:
+          description: >-
+            Defines the price attribute category of which the price value is
+            taken for carrier recommendation calculation
+          enum:
+            - customs
+            - insurance
+            - shop
+            - salesPrice
+            - basePrice
+            - tax
+          type: string
+      required:
+        - priceType
+      title: RecommendationConfiguration
+      type: object
+      description: RecommendationConfiguration
     RecommendedCarrier:
       properties:
         carrierProduct:
@@ -79246,6 +79350,53 @@ components:
           type: object
       title: ShipmentWithSearchPath
       description: ShipmentWithSearchPath
+    ShippingConfiguration:
+      properties:
+        created:
+          description: Creation date of this shippingConfiguration
+          example: 2020-02-03T09:45:51.525Z
+          format: date-time
+          type: string
+        id:
+          description: Unique identifier of this shippingConfiguration
+          example: 019f943c-687a-78cd-8d00-54323281eb27
+          type: string
+        lastModified:
+          description: Last modification date of this shippingConfiguration
+          example: 2020-02-03T09:45:51.525Z
+          format: date-time
+          type: string
+        recommendationConfiguration:
+          allOf:
+            - $ref: '#/components/schemas/RecommendationConfiguration'
+          description: Configuration for the automatic carrier recommendation for shipments
+        version:
+          description: Version number of this shippingConfiguration
+          example: 1
+          type: number
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+      title: ShippingConfiguration
+      type: object
+      description: ShippingConfiguration
+    ShippingConfigurationForUpdate:
+      properties:
+        recommendationConfiguration:
+          allOf:
+            - $ref: '#/components/schemas/RecommendationConfiguration'
+          description: Configuration for the automatic carrier recommendation for shipments
+        version:
+          description: Version number of this shippingConfiguration
+          example: 1
+          type: number
+      required:
+        - version
+      title: ShippingConfigurationForUpdate
+      type: object
+      description: ShippingConfigurationForUpdate
     ShippingCosts:
       additionalProperties: false
       properties:
@@ -79336,6 +79487,10 @@ components:
             customer
           example: ABC123
           type: string
+        status:
+          description: The status of the shippingInformation
+          example: AVAILABLE
+          type: string
         tenantOrderId:
           description: >-
             Field can be used as a reference number in foreign systems, for
@@ -79355,6 +79510,7 @@ components:
         - processRef
         - operativeProcessRef
         - facilityRef
+        - status
         - carrierRecipientInformation
         - senderAddress
         - shippingInformationLineItems
@@ -79482,6 +79638,10 @@ components:
             A short identifier that helps assigning a shippingInformation to a
             customer
           example: ABC123
+          type: string
+        status:
+          description: The status of the shippingInformation
+          example: AVAILABLE
           type: string
         tenantOrderId:
           description: >-
