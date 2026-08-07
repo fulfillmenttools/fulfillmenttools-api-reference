@@ -2376,44 +2376,13 @@
                   "response": []
                 },
                 {
-                  "name": "Get FacilityConnection by ID",
-                  "request": {
-                    "method": "GET",
-                    "header": [],
-                    "url": {
-                      "raw": "{{host}}/api/facilities/{{facilityId}}/connections/{{facilityConnectionRef}}",
-                      "host": [
-                        "{{host}}"
-                      ],
-                      "path": [
-                        "api",
-                        "facilities",
-                        "{{facilityId}}",
-                        "connections",
-                        "{{facilityConnectionRef}}"
-                      ],
-                      "variable": [
-                        {
-                          "key": "facilityId",
-                          "value": null
-                        },
-                        {
-                          "key": "facilityConnectionRef",
-                          "value": ""
-                        }
-                      ]
-                    }
-                  },
-                  "response": []
-                },
-                {
                   "name": "Create FacilityConnection",
                   "request": {
                     "method": "POST",
                     "header": [],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n    \"type\": \"SUPPLIER\",\n    \"target\": {\n        \"facilityRef\": \"uuid_targetFacility\",\n        \"type\": \"SUPPLIER\"\n    },\n    \"fallbackTransitTime\": {\n        \"maxTransitDays\": 2,\n        \"minTransitDays\": 1\n    },\n    \"fallbackCosts\": [\n        {\n            \"value\": 10,\n            \"currency\": \"EUR\",\n            \"decimalPlaces\": 2,\n            \"deliveryCostCoefficient\": {\n                \"measurementUnit\": \"GRAM\",\n                \"value\": 2\n            }\n        }\n    ],\n    \"carrierKey\": \"DHL_V2\",\n    \"carrierName\": \"MyDhl\",\n    \"customAttributes\": {\n        \"myKey\": \"myValue\"\n    },\n    \"context\": [\n        {\n            \"operator\": \"NOT\",\n            \"type\": \"CATEGORY\",\n            \"values\": [\n                \"category1\",\n                \"category2\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY\",\n            \"values\": [\n                \"uuid_facility\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY_GROUP\",\n            \"values\": [\n                \"uuid_facility_group\"\n            ]\n        }\n    ],\n    \"packagingUnitsByContexts\": [\n        {\n            \"context\": [\n                {\n                    \"type\": \"TARGET_COUNTRY\",\n                    \"values\": [\n                        \"DE\",\n                        \"NL\"\n                    ]\n                },\n                {\n                    \"type\": \"TARGET_POSTALCODE\",\n                    \"values\": [\n                        \"50688\"\n                    ]\n                },\n                {\n                    \"type\": \"CATEGORY\",\n                    \"values\": [\n                        \"CatA\"\n                    ]\n                }\n            ],\n            \"packagingUnits\": [\n                {\n                    \"dimensions\": {\n                        \"height\": 1,\n                        \"length\": 2,\n                        \"width\": 3,\n                        \"weightInGram\": 1000\n                    },\n                    \"maxItemQuantity\": 1337,\n                    \"name\": \"StandardPackage\",\n                    \"price\": {\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2,\n                        \"value\": 12\n                    },\n                    \"priority\": 1,\n                    \"transitTime\": {\n                        \"maxTransitDays\": 1,\n                        \"minTransitDays\": 1\n                    },\n                    \"volumeBufferInPercent\": 1,\n                    \"packagingUnitRef\": \"packagingUnitRef\",\n                    \"tenantPackagingUnitId\": \"tenantPackagingUnitId\"\n                }\n            ]\n        }\n    ]\n}",
+                      "raw": "{\n    \"type\": \"SUPPLIER\",\n    \"target\": {\n        \"type\": \"SUPPLIER\"\n    },\n    \"fallbackTransitTime\": {\n        \"maxTransitDays\": 2,\n        \"minTransitDays\": 1\n    },\n    \"surchargesPerTransfer\": [\n        {\n            \"tenantSurchargeType\": \"drei Geld\",\n            \"type\": \"ABSOLUTE_SURCHARGE_TYPE\",\n            \"amount\": {\n                \"currency\": \"EUR\",\n                \"value\": 300,\n                \"decimalPlaces\": 2\n            }\n        },\n        {\n            \"tenantSurchargeType\": \"Inselzuschlag x5\",\n            \"type\": \"RELATIVE_SURCHARGE_TYPE\",\n            \"percentage\": 400\n        }\n    ],\n    \"carrierKey\": \"DHL_V2\",\n    \"carrierName\": \"MyDhl\",\n    \"customAttributes\": {\n        \"myKey\": \"myValue\"\n    },\n    \"context\": [\n        {\n            \"operator\": \"NOT\",\n            \"type\": \"CATEGORY\",\n            \"values\": [\n                \"category1\",\n                \"category2\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY\",\n            \"values\": [\n                \"uuid_facility\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY_GROUP\",\n            \"values\": [\n                \"uuid_facility_group\"\n            ]\n        }\n    ],\n    \"nonDeliveryDays\": [\n        {\n            \"country\": \"DE\",\n            \"nonDeliveryDays\": [\n                {\n                    \"nonDeliveryDay\": \"2025-12-12\",\n                    \"nonDeliveryType\": \"SINGLE\"\n                }\n            ],\n            \"nonDeliveryDaysPerProvince\": [\n                {\n                    \"nonDeliveryDays\": [\n                        {\n                            \"nonDeliveryDay\": \"2025-12-12\",\n                            \"nonDeliveryType\": \"SINGLE\"\n                        }\n                    ],\n                    \"province\": \"DE-BW\",\n                    \"recurringNonDeliveryWeekdays\": [\n                        \"SUNDAY\"\n                    ]\n                }\n            ],\n            \"recurringNonDeliveryWeekdays\": [\n                \"SUNDAY\"\n            ]\n        }\n    ],\n    \"packagingUnitsByContexts\": [\n        {\n            \"context\": [\n                {\n                    \"type\": \"TARGET_COUNTRY\",\n                    \"values\": [\n                        \"DE\",\n                        \"NL\"\n                    ]\n                },\n                {\n                    \"type\": \"TARGET_POSTALCODE\",\n                    \"values\": [\n                        \"50688\"\n                    ]\n                },\n                {\n                    \"type\": \"CATEGORY\",\n                    \"values\": [\n                        \"CatA\"\n                    ]\n                }\n            ],\n            \"packagingUnits\": [\n                {\n                    \"dimensions\": {\n                        \"height\": 1,\n                        \"length\": 2,\n                        \"width\": 3,\n                        \"maxWeightInGram\": 1000\n                    },\n                    \"maxItemQuantity\": 1337,\n                    \"name\": \"StandardPackage\",\n                    \"prices\": [\n                        {\n                            \"currency\": \"EUR\",\n                            \"decimalPlaces\": 2,\n                            \"value\": 12,\n                            \"deliveryCostCoefficient\": {\n                                \"value\": 5,\n                                \"measurementUnit\": \"GRAM\"\n                            }\n                        }\n                    ],\n                    \"priority\": 1,\n                    \"transitTime\": {\n                        \"maxTransitDays\": 1,\n                        \"minTransitDays\": 1\n                    },\n                    \"volumeBufferInPercent\": 1,\n                    \"packagingUnitRef\": \"packagingUnitRef\",\n                    \"tenantPackagingUnitId\": \"tenantPackagingUnitId\"\n                }\n            ]\n        }\n    ]\n}",
                       "options": {
                         "raw": {
                           "language": "json"
@@ -2434,7 +2403,42 @@
                       "variable": [
                         {
                           "key": "facilityId",
-                          "value": null
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Create FacilityConnection (minimal)",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"type\": \"SUPPLIER\",\n    \"target\": {\n        \"type\": \"SUPPLIER\"\n    }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/facilities/{{facilityId}}/connections",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "facilities",
+                        "{{facilityId}}",
+                        "connections"
+                      ],
+                      "variable": [
+                        {
+                          "key": "facilityId",
+                          "value": ""
                         }
                       ]
                     }
@@ -2448,13 +2452,84 @@
                     "header": [],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n    \"version\": 1,\n    \"type\": \"SUPPLIER\",\n    \"target\": {\n        \"facilityRef\": \"uuid_targetFacility\",\n        \"type\": \"SUPPLIER\"\n    },\n    \"fallbackTransitTime\": {\n        \"maxTransitDays\": 2,\n        \"minTransitDays\": 1\n    },\n    \"fallbackCost\": {\n        \"value\": 10,\n        \"currency\": \"EUR\",\n        \"decimalPlaces\": 2\n    },\n    \"carrierKey\": \"DHL_V2\",\n    \"carrierName\": \"MyDhl\",\n    \"customAttributes\": {\n        \"myKey\": \"myValue\"\n    },\n    \"context\": [\n        {\n            \"type\": \"CATEGORY\",\n            \"values\": [\n                \"category1\",\n                \"category2\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY\",\n            \"values\": [\n                \"uuid_facility\"\n            ]\n        },\n        {\n            \"type\": \"FACILITY_GROUP\",\n            \"values\": [\n                \"uuid_facility_group\"\n            ]\n        }\n    ],\n    \"nonDeliveryDays\": [\n        {\n            \"country\": \"DE\",\n            \"nonDeliveryDays\": [\n                {\n                    \"nonDeliveryDay\": \"2025-01-01\",\n                    \"nonDeliveryType\": \"SINGLE\"\n                }\n            ],\n            \"nonDeliveryDaysPerProvince\": [\n                {\n                    \"nonDeliveryDays\": [\n                        {\n                            \"nonDeliveryDay\": \"2025-01-01\",\n                            \"nonDeliveryType\": \"SINGLE\"\n                        }\n                    ],\n                    \"province\": \"NRW\",\n                    \"recurringNonDeliveryWeekdays\": [\n                        \"SUNDAY\"\n                    ]\n                }\n            ],\n            \"recurringNonDeliveryWeekdays\": [\n                \"FRIDAY\"\n            ]\n        }\n    ],\n    \"packagingUnitsByContexts\": [\n        {\n            \"context\": [\n                {\n                    \"type\": \"TARGET_COUNTRY\",\n                    \"values\": [\n                        \"DE\",\n                        \"NL\"\n                    ]\n                },\n                {\n                    \"type\": \"TARGET_POSTALCODE\",\n                    \"values\": [\n                        \"50688\"\n                    ]\n                },\n                {\n                    \"type\": \"CATEGORY\",\n                    \"values\": [\n                        \"CatA\"\n                    ]\n                }\n            ],\n            \"packagingUnits\": [\n                {\n                    \"dimensions\": {\n                        \"height\": 1,\n                        \"length\": 2,\n                        \"width\": 3,\n                        \"maxWeightInGram\": 1000\n                    },\n                    \"maxItemQuantity\": 1337,\n                    \"name\": \"StandardPackage\",\n                    \"price\": {\n                        \"currency\": \"EUR\",\n                        \"decimalPlaces\": 2,\n                        \"value\": 12\n                    },\n                    \"priority\": 1,\n                    \"transitTime\": {\n                        \"maxTransitDays\": 1,\n                        \"minTransitDays\": 1\n                    },\n                    \"volumeBufferInPercent\": 1,\n                    \"packagingUnitRef\": \"packagingUnitRef\",\n                    \"tenantPackagingUnitId\": \"tenantPackagingUnitId\"\n                }\n            ]\n        }\n    ]\n}",
+                      "raw": "{\n    \"version\": 1,\n    \"type\": \"SUPPLIER\",\n    \"target\": {\n        \"type\": \"SUPPLIER\"\n    },\n    \"fallbackTransitTime\": {\n        \"maxTransitDays\": 2,\n        \"minTransitDays\": 1\n    },\n    \"carrierKey\": \"DHL_V2\",\n    \"carrierName\": \"MyDhl\",\n    \"customAttributes\": {\n        \"myKey\": \"myValue\"\n    },\n    \"surchargesPerTransfer\": [\n        {\n            \"tenantSurchargeType\": \"drei Geld\",\n            \"type\": \"ABSOLUTE_SURCHARGE_TYPE\",\n            \"amount\": {\n                \"currency\": \"EUR\",\n                \"value\": 300,\n                \"decimalPlaces\": 2\n            }\n        },\n        {\n            \"tenantSurchargeType\": \"Inselzuschlag x5\",\n            \"type\": \"RELATIVE_SURCHARGE_TYPE\",\n            \"percentage\": 400\n        }\n    ],\n    \"context\": [\n        {\n            \"type\": \"CATEGORY\",\n            \"values\": [\n\n            ]\n        },\n        {\n            \"type\": \"FACILITY\",\n            \"values\": [\n\n            ]\n        },\n        {\n            \"type\": \"FACILITY_GROUP\",\n            \"values\": [\n\n            ]\n        }\n    ],\n    \"nonDeliveryDays\": [\n        {\n            \"country\": \"DE\",\n            \"nonDeliveryDays\": [\n                {\n                    \"nonDeliveryDay\": \"2025-01-01\",\n                    \"nonDeliveryType\": \"SINGLE\"\n                }\n            ],\n            \"nonDeliveryDaysPerProvince\": [\n                {\n                    \"nonDeliveryDays\": [\n                        {\n                            \"nonDeliveryDay\": \"2025-01-01\",\n                            \"nonDeliveryType\": \"SINGLE\"\n                        }\n                    ],\n                    \"province\": \"NRW\",\n                    \"recurringNonDeliveryWeekdays\": [\n                        \"SUNDAY\"\n                    ]\n                }\n            ],\n            \"recurringNonDeliveryWeekdays\": [\n                \"FRIDAY\"\n            ]\n        }\n    ],\n    \"packagingUnitsByContexts\": [\n        {\n            \"context\": [\n                {\n                    \"type\": \"TARGET_COUNTRY\",\n                    \"values\": [\n                        \"DE\",\n                        \"NL\"\n                    ]\n                },\n                {\n                    \"type\": \"TARGET_POSTALCODE\",\n                    \"values\": [\n                        \"50688\"\n                    ]\n                },\n                {\n                    \"type\": \"CATEGORY\",\n                    \"values\": [\n                        \"CatA\"\n                    ]\n                }\n            ],\n            \"packagingUnits\": [\n                {\n                    \"dimensions\": {\n                        \"height\": 1,\n                        \"length\": 2,\n                        \"width\": 3,\n                        \"maxWeightInGram\": 1000\n                    },\n                    \"maxItemQuantity\": 1337,\n                    \"name\": \"StandardPackage\",\n                    \"priority\": 1,\n                    \"transitTime\": {\n                        \"maxTransitDays\": 1,\n                        \"minTransitDays\": 1\n                    },\n                    \"volumeBufferInPercent\": 1,\n                    \"packagingUnitRef\": \"packagingUnitRef\",\n                    \"tenantPackagingUnitId\": \"tenantPackagingUnitId\"\n                }\n            ]\n        }\n    ]\n}",
                       "options": {
                         "raw": {
                           "language": "json"
                         }
                       }
                     },
+                    "url": {
+                      "raw": "{{host}}/api/facilities/{{facilityId}}/connections/{{facilityConnectionRef}}",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "facilities",
+                        "{{facilityId}}",
+                        "connections",
+                        "{{facilityConnectionRef}}"
+                      ],
+                      "variable": [
+                        {
+                          "key": "facilityId",
+                          "value": ""
+                        },
+                        {
+                          "key": "facilityConnectionRef",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Update FacilityConnection (minimal)",
+                  "request": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"version\": 5,\n    \"type\": \"SUPPLIER\",\n    \"target\": {\n        \"type\": \"SUPPLIER\"\n    }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{host}}/api/facilities/{{facilityId}}/connections/{{facilityConnectionRef}}",
+                      "host": [
+                        "{{host}}"
+                      ],
+                      "path": [
+                        "api",
+                        "facilities",
+                        "{{facilityId}}",
+                        "connections",
+                        "{{facilityConnectionRef}}"
+                      ],
+                      "variable": [
+                        {
+                          "key": "facilityId",
+                          "value": ""
+                        },
+                        {
+                          "key": "facilityConnectionRef",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get FacilityConnection by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
                     "url": {
                       "raw": "{{host}}/api/facilities/{{facilityId}}/connections/{{facilityConnectionRef}}",
                       "host": [
