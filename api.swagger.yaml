@@ -8057,6 +8057,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: List facility connections
+      x-fft-permissions:
+        - FACILITY_READ
       tags:
         - Facilities (Core)
     post:
@@ -8113,6 +8115,8 @@ paths:
             Your user, although recognized, is not authorized to use this
             endpoint
       summary: Create facility connection
+      x-fft-permissions:
+        - FACILITY_WRITE
       tags:
         - Facilities (Core)
   /api/facilities/{facilityId}/connections/{connectionId}:
@@ -44885,7 +44889,7 @@ components:
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         customAttributes:
@@ -44899,6 +44903,7 @@ components:
         fallbackCosts:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          maxItems: 500
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
@@ -44907,15 +44912,39 @@ components:
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         packagingUnitsByContexts:
           items:
             $ref: '#/components/schemas/PackagingUnitsByContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         sourceFacilityRef:
           type: string
+        surchargesPerTransfer:
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+                RELATIVE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+              propertyName: type
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+          maxItems: 500
+          type: array
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br />
+          x-badges:
+            - color: red
+              label: ALPHA
         target:
           oneOf:
             - $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
@@ -44960,7 +44989,7 @@ components:
           $ref: '#/components/schemas/InterFacilityConnectionContextTypes'
         values:
           items:
-            maxItems: 2000
+            maxItems: 500
             minItems: 0
             type: string
           type: array
@@ -44976,6 +45005,8 @@ components:
         - FACILITY_GROUP
         - CATEGORY
         - TAG_REFERENCE
+        - TARGET_POSTALCODE
+        - TARGET_COUNTRY
       type: string
       title: InterFacilityConnectionContextTypes
       description: InterFacilityConnectionContextTypes
@@ -45048,7 +45079,7 @@ components:
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         customAttributes:
@@ -45062,18 +45093,36 @@ components:
         fallbackCosts:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          maxItems: 500
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         packagingUnitsByContexts:
           items:
             $ref: '#/components/schemas/PackagingUnitsByContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
+          type: array
+        surchargesPerTransfer:
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+                RELATIVE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+              propertyName: type
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+          maxItems: 500
           type: array
         type:
           $ref: '#/components/schemas/ConnectionType'
@@ -45100,7 +45149,7 @@ components:
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         customAttributes:
@@ -45114,18 +45163,36 @@ components:
         fallbackCosts:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          maxItems: 500
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         packagingUnitsByContexts:
           items:
             $ref: '#/components/schemas/PackagingUnitsByContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
+          type: array
+        surchargesPerTransfer:
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+                RELATIVE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+              propertyName: type
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+          maxItems: 500
           type: array
         type:
           $ref: '#/components/schemas/ConnectionType'
@@ -45146,10 +45213,12 @@ components:
         excludedFacilityGroupRefs:
           items:
             type: string
+          maxItems: 500
           type: array
         excludedFacilityRefs:
           items:
             type: string
+          maxItems: 500
           type: array
         facilityRef:
           type: string
@@ -45175,6 +45244,25 @@ components:
         name: InterFacilityConnection
       title: InterFacilityConnections
       description: InterFacilityConnections
+    InterFacilityConnectionsMoney:
+      properties:
+        currency:
+          $ref: '#/components/schemas/CurrencyCode'
+        decimalPlaces:
+          description: Number of decimal places for the given currency
+          example: 2
+          minimum: 0
+          type: integer
+        value:
+          description: Value in the smallest subunit of the given currency, e.g. cents.
+          minimum: 0
+          type: integer
+      required:
+        - currency
+        - value
+      title: InterFacilityConnectionsMoney
+      type: object
+      description: InterFacilityConnectionsMoney
     InterFacilityConnectionSupplierTarget:
       allOf:
         - $ref: '#/components/schemas/InterFacilityConnectionBaseTarget'
@@ -45182,10 +45270,12 @@ components:
         excludedFacilityGroupRefs:
           items:
             type: string
+          maxItems: 500
           type: array
         excludedFacilityRefs:
           items:
             type: string
+          maxItems: 500
           type: array
         facilityRef:
           type: string
@@ -45208,7 +45298,7 @@ components:
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         customAttributes:
@@ -45222,18 +45312,36 @@ components:
         fallbackCosts:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          maxItems: 500
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         packagingUnitsByContexts:
           items:
             $ref: '#/components/schemas/PackagingUnitsByContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
+          type: array
+        surchargesPerTransfer:
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+                RELATIVE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+              propertyName: type
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+          maxItems: 500
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
@@ -45263,7 +45371,7 @@ components:
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         customAttributes:
@@ -45277,18 +45385,36 @@ components:
         fallbackCosts:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          maxItems: 500
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         packagingUnitsByContexts:
           items:
             $ref: '#/components/schemas/PackagingUnitsByContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
+          type: array
+        surchargesPerTransfer:
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+                RELATIVE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+              propertyName: type
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+          maxItems: 500
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
@@ -45321,7 +45447,7 @@ components:
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         customAttributes:
@@ -45335,18 +45461,36 @@ components:
         fallbackCosts:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          maxItems: 500
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         packagingUnitsByContexts:
           items:
             $ref: '#/components/schemas/PackagingUnitsByContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
+          type: array
+        surchargesPerTransfer:
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+                RELATIVE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+              propertyName: type
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+          maxItems: 500
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
@@ -45376,7 +45520,7 @@ components:
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         customAttributes:
@@ -45390,18 +45534,36 @@ components:
         fallbackCosts:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          maxItems: 500
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         packagingUnitsByContexts:
           items:
             $ref: '#/components/schemas/PackagingUnitsByContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
+          type: array
+        surchargesPerTransfer:
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+                RELATIVE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+              propertyName: type
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+          maxItems: 500
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
@@ -45434,7 +45596,7 @@ components:
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         customAttributes:
@@ -45448,18 +45610,36 @@ components:
         fallbackCosts:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          maxItems: 500
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         packagingUnitsByContexts:
           items:
             $ref: '#/components/schemas/PackagingUnitsByContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
+          type: array
+        surchargesPerTransfer:
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+                RELATIVE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+              propertyName: type
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+          maxItems: 500
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
@@ -45489,7 +45669,7 @@ components:
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         customAttributes:
@@ -45503,18 +45683,36 @@ components:
         fallbackCosts:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionDeliveryCost'
+          maxItems: 500
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
+          maxItems: 500
           type: array
         packagingUnitsByContexts:
           items:
             $ref: '#/components/schemas/PackagingUnitsByContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
+          type: array
+        surchargesPerTransfer:
+          items:
+            discriminator:
+              mapping:
+                ABSOLUTE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+                RELATIVE_SURCHARGE_TYPE: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+              propertyName: type
+            oneOf:
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferAbsoluteSurcharge
+              - $ref: >-
+                  #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
+          maxItems: 500
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
@@ -45531,6 +45729,49 @@ components:
         name: InterFacilityConnectionToSupplierForUpdate
       title: InterFacilityConnectionToSupplierForUpdate
       description: InterFacilityConnectionToSupplierForUpdate
+    InterFacilityConnectionTransferAbsoluteSurcharge:
+      properties:
+        amount:
+          $ref: '#/components/schemas/InterFacilityConnectionsMoney'
+        tenantSurchargeType:
+          type: string
+        type:
+          allOf:
+            - $ref: >-
+                #/components/schemas/InterFacilityConnectionTransferSurchargeType
+      required:
+        - tenantSurchargeType
+        - type
+        - amount
+      title: InterFacilityConnectionTransferAbsoluteSurcharge
+      type: object
+      description: InterFacilityConnectionTransferAbsoluteSurcharge
+    InterFacilityConnectionTransferRelativeSurcharge:
+      properties:
+        percentage:
+          format: float
+          minimum: 0
+          type: number
+        tenantSurchargeType:
+          type: string
+        type:
+          allOf:
+            - $ref: >-
+                #/components/schemas/InterFacilityConnectionTransferSurchargeType
+      required:
+        - tenantSurchargeType
+        - type
+        - percentage
+      title: InterFacilityConnectionTransferRelativeSurcharge
+      type: object
+      description: InterFacilityConnectionTransferRelativeSurcharge
+    InterFacilityConnectionTransferSurchargeType:
+      enum:
+        - ABSOLUTE_SURCHARGE_TYPE
+        - RELATIVE_SURCHARGE_TYPE
+      title: InterFacilityConnectionTransferSurchargeType
+      type: string
+      description: InterFacilityConnectionTransferSurchargeType
     InventoryArticle:
       properties:
         titleLocalized:
@@ -58532,7 +58773,7 @@ components:
           $ref: '#/components/schemas/PackagingUnitContextTypes'
         values:
           items:
-            maxItems: 2000
+            maxItems: 500
             minItems: 0
             type: string
           type: array
@@ -58767,13 +59008,13 @@ components:
         context:
           items:
             $ref: '#/components/schemas/PackagingUnitContext'
-          maxItems: 2000
+          maxItems: 500
           minItems: 0
           type: array
         packagingUnits:
           items:
             $ref: '#/components/schemas/PackagingUnit'
-          maxItems: 2000
+          maxItems: 500
           minItems: 1
           type: array
       required:
