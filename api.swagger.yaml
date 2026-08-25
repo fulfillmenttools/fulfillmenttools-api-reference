@@ -30238,6 +30238,17 @@ components:
       title: ArticleAttributeItemContext
       type: object
       description: ArticleAttributeItemContext
+    ArticleAttributeItemType:
+      description: The type of the attribute.
+      enum:
+        - STRING
+        - NUMBER
+        - CURRENCY
+        - BOOLEAN
+      type: string
+      xml:
+        name: ArticleAttributeItemType
+      title: ArticleAttributeItemType
     ArticleAvailabilityStockValues:
       properties:
         availableForPicking:
@@ -46642,10 +46653,14 @@ components:
             - finalUnitPrice
             - finalLineItemPrice
           type: string
+        context:
+          $ref: '#/components/schemas/InventoryListingAttributeItemContext'
         key:
           type: string
         priority:
           type: number
+        type:
+          $ref: '#/components/schemas/ArticleAttributeItemType'
         value:
           type: string
       required:
@@ -46654,6 +46669,22 @@ components:
       title: InventoryListingAttributeItem
       type: object
       description: InventoryListingAttributeItem
+    InventoryListingAttributeItemContext:
+      properties:
+        type:
+          enum:
+            - FACILITY_GROUP
+            - FACILITY
+            - TAG_REFERENCE
+          type: string
+        value:
+          type: string
+      required:
+        - type
+        - value
+      title: InventoryListingAttributeItemContext
+      type: object
+      description: InventoryListingAttributeItemContext
     InventoryListingEventPayload:
       properties:
         titleLocalized:
