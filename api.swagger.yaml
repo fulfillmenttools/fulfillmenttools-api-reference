@@ -17871,6 +17871,57 @@ paths:
       summary: Get target container delivery note
       tags:
         - Packing (Operations)
+  /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}/identifierdocument:
+    get:
+      description: Get the identifier document related to this target container
+      operationId: getPackingTargetContainerIdentifierDocument
+      parameters:
+        - description: >-
+            ID of the pack job of the related container for which you want to
+            get the identifier document
+          in: path
+          name: packJobId
+          required: true
+          schema:
+            type: string
+        - description: >-
+            ID of the packingTargetContainer for which you want to get the
+            identifier document
+          in: path
+          name: targetcontainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf: {}
+          description: The identifier document for the given packingTargetContainer
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Entity not found
+      summary: Get target container identifier document
+      x-fft-permissions:
+        - PACKJOB_READ
+      tags:
+        - Packing (Operations)
   /api/packjobs/{packJobId}/targetcontainers/{targetcontainerId}/lineitems/{lineItemId}:
     delete:
       deprecated: true
@@ -36303,6 +36354,7 @@ components:
         - CUSTOMS
         - SIGNATURE_DRAFT
         - SIGNATURE_SIGNED
+        - IDENTIFIERDOCUMENT
       type: string
       title: DocumentCategory
       description: DocumentCategory
