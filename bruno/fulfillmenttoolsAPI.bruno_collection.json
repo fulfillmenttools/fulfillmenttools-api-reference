@@ -14230,76 +14230,6 @@
                       "response": []
                     },
                     {
-                      "name": "Cancel PickJob",
-                      "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                          "mode": "raw",
-                          "raw": "{\n  \"version\": 1,\n  \"name\": \"CANCEL\"\n}",
-                          "options": {
-                            "raw": {
-                              "language": "json"
-                            }
-                          }
-                        },
-                        "url": {
-                          "raw": "{{host}}/api/pickjobs/{{pickJobId}}/actions",
-                          "host": [
-                            "{{host}}"
-                          ],
-                          "path": [
-                            "api",
-                            "pickjobs",
-                            "{{pickJobId}}",
-                            "actions"
-                          ],
-                          "variable": [
-                            {
-                              "key": "pickJobId",
-                              "value": "PUT-IN-YOUR-PICKJOB-ID"
-                            }
-                          ]
-                        }
-                      },
-                      "response": []
-                    },
-                    {
-                      "name": "Close PickJob",
-                      "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                          "mode": "raw",
-                          "raw": "{\n  \"version\": 1,\n  \"name\": \"CLOSE\"\n}",
-                          "options": {
-                            "raw": {
-                              "language": "json"
-                            }
-                          }
-                        },
-                        "url": {
-                          "raw": "{{host}}/api/pickjobs/{{pickJobId}}/actions",
-                          "host": [
-                            "{{host}}"
-                          ],
-                          "path": [
-                            "api",
-                            "pickjobs",
-                            "{{pickJobId}}",
-                            "actions"
-                          ],
-                          "variable": [
-                            {
-                              "key": "pickJobId",
-                              "value": "PUT-IN-YOUR-PICKJOB-ID"
-                            }
-                          ]
-                        }
-                      },
-                      "response": []
-                    },
-                    {
                       "name": "Reset PickJob",
                       "request": {
                         "method": "POST",
@@ -14405,13 +14335,13 @@
                       "response": []
                     },
                     {
-                      "name": "Modify PickLine Item Action",
+                      "name": "Start Pick Job",
                       "request": {
                         "method": "POST",
                         "header": [],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n  \"version\": 1 ,\n   \"name\": \"MODIFY_PICK_JOB_LINE_ITEMS\",\n          \"pickJobLineItemUpdates\": [\n            {\n              \"id\": \"ID_OF_PICKLINEITEM\",\n              \"picked\" : 1,\n              \"pickedAt\": \"DATUM PICKED AT\",\n              \"substituteLineItems\": [\n                {\n                    \"tenantArticleId\": \"TENANT_ARTICLE_ID_OF_SUBSTITUTE\",\n                    \"quantity\": 1,\n                    \"pickedAt\": \"DATUM PICKED AT\"\n                }\n              ]\n            }\n          ]\n}",
+                          "raw": "{\n  \"version\": 1,\n  \"name\": \"START\"\n}",
                           "options": {
                             "raw": {
                               "language": "json"
@@ -14440,13 +14370,13 @@
                       "response": []
                     },
                     {
-                      "name": "Pick Pick Job Action",
+                      "name": "Modify PickLine Item Action",
                       "request": {
                         "method": "POST",
                         "header": [],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n    \"version\": 1, // mandatory\n    \"name\": \"PICK\", // mandatory\n    \"lineItems\": [ // mandatory and must contain at least 1 item\n        {\n            \"id\": \"ID_OF_PICK_LINE_ITEM\", // mandatory\n            \"picked\": 1,\n            \"pickedAt\": \"2021-03-11T08:16:07.000Z\",\n            \"substituteLineItems\": [\n                {\n                    \"tenantArticleId\": \"TENANT_ARTICLE_ID_OF_SUBSTITUTE\",\n                    \"quantity\": 1,\n                    \"pickedAt\": \"2021-03-11T08:16:07.000Z\"\n                }\n            ],\n            \"partialStockLocations\": [\n                {\n                    \"picked\": 1,\n                    \"tenantPartialStockId\": \"TENANT_PARTIAL_STOCK_ID\"\n                }\n            ]\n        }\n    ]\n}",
+                          "raw": "{\n  \"version\": 1 ,\n   \"name\": \"MODIFY_PICK_JOB_LINE_ITEMS\",\n          \"pickJobLineItemUpdates\": [\n            {\n              \"id\": \"ID_OF_PICKLINEITEM\",\n              \"picked\" : 1,\n              \"pickedAt\": \"{{$isoTimestamp}}\",\n              \"customAttributes\": {\n                \"custom\": \"attribute\"\n              },\n              \"stockEmpited\": true,\n              \"stickers\": [\n                {\n                    \"key\": \"stickerKey\",\n                    \"priority\": 100,\n                    \"nameLocalized\": {\n                        \"de_DE\": \"Aufkleber\",\n                        \"en_US\": \"Sticker\"\n                    },\n                    \"color\": \"#FFFF00\"\n                }\n              ],\n              \"partialStockLocations\": [\n                {\n                    \"tenantPartialStockId\": \"TPS-123-ID\",\n                    \"stockRef\": \"01a06b11-91d4-7140-b73f-abfa4f4891b5\",\n                    \"picked\": 100,\n                    \"stockEmptied\": false\n                }\n              ],\n              \"scannedCodes\": [\n                {\n                    \"code\": \"SC-123\",\n                    \"quantity\": 100\n                }\n              ],\n              \"status\": \"CLOSED\",\n              \"secondaryPicked\": 50,\n              \"substituteLineItems\": [\n                {\n                    \"tenantArticleId\": \"TENANT_ARTICLE_ID_OF_SUBSTITUTE\",\n                    \"quantity\": 1,\n                    \"pickedAt\": \"{{$isoTimestamp}}\"\n                }\n              ],\n              \"shortPickReasonLocalized\": {\n                \"de_DE\": \"Nicht verfügbar\",\n                \"en_US\": \"Unavailable\"\n              }\n            }\n          ]\n}",
                           "options": {
                             "raw": {
                               "language": "json"
@@ -14586,7 +14516,147 @@
                         "header": [],
                         "body": {
                           "mode": "raw",
-                          "raw": "{\n    \"version\": 1,\n    \"name\": \"UPDATE_PICK_LINE_ITEM_RECORDABLE_ATTRIBUTES\",\n    \"recordableAttributeUpdates\": [\n        {\n        \"group\": \"group\",\n        \"recordableAttributeId\": \"ID_OF_RECORDABLE_ATTRIBUTE\",\n        \"keyLocalized\": {\n            \"de_DE\": \"key localized\"\n        },\n        \"recordingRule\": \"OPTIONAL\",\n        \"value\": \"value\"\n      }\n    ]\n}\n",
+                          "raw": "{\n    \"version\": 1,\n    \"name\": \"UPDATE_PICK_LINE_ITEM_RECORDABLE_ATTRIBUTES\",\n    \"recordableAttributeUpdates\": [\n        {\n            \"group\": \"group\",\n            \"recordableAttributeId\": \"ID_OF_RECORDABLE_ATTRIBUTE\",\n            \"keyLocalized\": {\n                \"de_DE\": \"key localized\"\n            },\n            \"recordingRule\": \"OPTIONAL\",\n            \"value\": \"value\"\n        }\n    ]\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{host}}/api/pickjobs/{{pickJobId}}/actions",
+                          "host": [
+                            "{{host}}"
+                          ],
+                          "path": [
+                            "api",
+                            "pickjobs",
+                            "{{pickJobId}}",
+                            "actions"
+                          ],
+                          "variable": [
+                            {
+                              "key": "pickJobId",
+                              "value": "PUT-IN-YOUR-PICKJOB-ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "Pick Pick Job Action",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n    \"version\": 1,\n    \"name\": \"PICK\",\n    \"lineItems\": [\n        {\n            \"id\": \"ID_OF_PICK_LINE_ITEM\",\n            \"picked\": 1,\n            \"pickedAt\": \"2021-03-11T08:16:07.000Z\",\n            \"customAttributes\": {\n                \"custom\": \"Attribute\"\n            },\n            \"stockEmptied\": \"false\",\n            \"stickers\": [\n                {\n                    \"key\": \"stickerKey\",\n                    \"priority\": 100,\n                    \"nameLocalized\": {\n                        \"de_DE\": \"Aufkleber\",\n                        \"en_US\": \"Sticker\"\n                    },\n                    \"color\": \"#FFFF00\"\n                }\n            ],\n            \"partialStockLocations\": [\n                {\n                    \"tenantPartialStockId\": \"TPS-123-ID\",\n                    \"stockRef\": \"01a06b11-91d4-7140-b73f-abfa4f4891b5\",\n                    \"picked\": 100,\n                    \"stockEmptied\": false\n                }\n            ],\n            \"scannedCodes\": [\n                {\n                    \"code\": \"SC-123\",\n                    \"quantity\": 100\n                }\n            ],\n            \"secondaryPicked\": 50,\n            \"substituteLineItems\": [\n                {\n                    \"tenantArticleId\": \"TENANT_ARTICLE_ID_OF_SUBSTITUTE\",\n                    \"quantity\": 1,\n                    \"pickedAt\": \"{{$isoTimestamp}}\"\n                }\n            ],\n            \"shortPickReason\": {\n                \"reasonLocalized\": {\n                    \"de_DE\": \"Nicht verfügbar\",\n                    \"en_US\": \"Unavailable\"\n                }\n            }\n        }\n    ]\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{host}}/api/pickjobs/{{pickJobId}}/actions",
+                          "host": [
+                            "{{host}}"
+                          ],
+                          "path": [
+                            "api",
+                            "pickjobs",
+                            "{{pickJobId}}",
+                            "actions"
+                          ],
+                          "variable": [
+                            {
+                              "key": "pickJobId",
+                              "value": "PUT-IN-YOUR-PICKJOB-ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "Add target time",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n    \"version\": 1,\n    \"name\": \"ADD_TARGET_TIME\",\n    \"targetTime\": \"{{$isoTimestamp}}\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{host}}/api/pickjobs/{{pickJobId}}/actions",
+                          "host": [
+                            "{{host}}"
+                          ],
+                          "path": [
+                            "api",
+                            "pickjobs",
+                            "{{pickJobId}}",
+                            "actions"
+                          ],
+                          "variable": [
+                            {
+                              "key": "pickJobId",
+                              "value": "PUT-IN-YOUR-PICKJOB-ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "Cancel PickJob",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"version\": 1,\n  \"name\": \"CANCEL\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{host}}/api/pickjobs/{{pickJobId}}/actions",
+                          "host": [
+                            "{{host}}"
+                          ],
+                          "path": [
+                            "api",
+                            "pickjobs",
+                            "{{pickJobId}}",
+                            "actions"
+                          ],
+                          "variable": [
+                            {
+                              "key": "pickJobId",
+                              "value": "PUT-IN-YOUR-PICKJOB-ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "Close PickJob",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"version\": 1,\n  \"name\": \"CLOSE\"\n}",
                           "options": {
                             "raw": {
                               "language": "json"
