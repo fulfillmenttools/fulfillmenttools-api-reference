@@ -46014,6 +46014,34 @@ components:
       type: object
       title: InterFacilityConnectionSupplierTarget
       description: InterFacilityConnectionSupplierTarget
+    InterFacilityConnectionSurchargeContext:
+      additionalProperties: false
+      properties:
+        operator:
+          $ref: '#/components/schemas/ContextOperator'
+        type:
+          $ref: '#/components/schemas/InterFacilityConnectionSurchargeContextTypes'
+        values:
+          items:
+            maxItems: 500
+            minItems: 0
+            type: string
+          type: array
+      required:
+        - type
+        - values
+      type: object
+      title: InterFacilityConnectionSurchargeContext
+      description: InterFacilityConnectionSurchargeContext
+    InterFacilityConnectionSurchargeContextTypes:
+      enum:
+        - CATEGORY
+        - TAG_REFERENCE
+        - TARGET_POSTALCODE
+        - TARGET_COUNTRY
+      type: string
+      title: InterFacilityConnectionSurchargeContextTypes
+      description: InterFacilityConnectionSurchargeContextTypes
     InterFacilityConnectionToCustomerForCreation:
       additionalProperties: false
       properties:
@@ -46465,6 +46493,12 @@ components:
       properties:
         amount:
           $ref: '#/components/schemas/InterFacilityConnectionsMoney'
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionSurchargeContext'
+          maxItems: 500
+          minItems: 0
+          type: array
         tenantSurchargeType:
           type: string
         type:
@@ -46480,6 +46514,12 @@ components:
       description: InterFacilityConnectionTransferAbsoluteSurcharge
     InterFacilityConnectionTransferRelativeSurcharge:
       properties:
+        context:
+          items:
+            $ref: '#/components/schemas/InterFacilityConnectionSurchargeContext'
+          maxItems: 500
+          minItems: 0
+          type: array
         percentage:
           format: float
           minimum: 0
@@ -59571,6 +59611,14 @@ components:
       properties:
         amount:
           $ref: '#/components/schemas/PackagingUnitsMoney'
+        context:
+          description: >-
+            Restricts the surcharge to the given contexts. If omitted, the
+            surcharge always applies.
+          items:
+            $ref: '#/components/schemas/PackagingUnitSurchargeContext'
+          maxItems: 500
+          type: array
         tenantSurchargeType:
           description: The tenant specific identifier for the surcharge type.
           type: string
@@ -59708,6 +59756,14 @@ components:
       description: PackagingUnitDetailPricingByZone
     PackagingUnitDetailRelativeSurcharge:
       properties:
+        context:
+          description: >-
+            Restricts the surcharge to the given contexts. If omitted, the
+            surcharge always applies.
+          items:
+            $ref: '#/components/schemas/PackagingUnitSurchargeContext'
+          maxItems: 500
+          type: array
         percentage:
           description: The percentage of the surcharge.
           type: number
@@ -59803,6 +59859,41 @@ components:
       title: PackagingUnitsMoney
       type: object
       description: PackagingUnitsMoney
+    PackagingUnitSurchargeContext:
+      properties:
+        operator:
+          description: >-
+            The operator used to define how the context values are evaluated or
+            compared.
+          enum:
+            - NOT
+          type: string
+        type:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitSurchargeContextTypes'
+          description: The kind of context the values refer to.
+        values:
+          description: The values the context is matched against.
+          items:
+            type: string
+          maxItems: 500
+          minItems: 1
+          type: array
+      required:
+        - type
+        - values
+      title: PackagingUnitSurchargeContext
+      type: object
+      description: PackagingUnitSurchargeContext
+    PackagingUnitSurchargeContextTypes:
+      description: The kind of context the values refer to.
+      enum:
+        - CATEGORY
+        - TAG_REFERENCE
+        - TARGET_POSTALCODE
+        - TARGET_COUNTRY
+      title: PackagingUnitSurchargeContextTypes
+      type: string
     PackingConfigurations:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
