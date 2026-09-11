@@ -42449,6 +42449,8 @@ components:
                 $ref: '#/components/schemas/HandoverJobPickupService'
               maxItems: 100
               type: array
+            pricing:
+              $ref: '#/components/schemas/OrderPricing'
             processId:
               description: >-
                 Id of the global process related to this entity. For example
@@ -43647,6 +43649,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItem'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
       properties:
         article:
           $ref: '#/components/schemas/HandoverLineItemArticle'
@@ -43722,6 +43725,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItemForCreation'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
       properties:
         article:
           $ref: '#/components/schemas/HandoverLineItemArticle'
@@ -48210,15 +48214,14 @@ components:
           maxItems: 50
           type: array
         serviceJobRefs:
-          description: >-
-            refs of the service jobs that altered this line item during the
-            workflow
+          description: Reference to the service jobs that have altered this line item
           example:
             - 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
             - 0190d6e8-9a1b-7c2d-8e3f-5a7b9c1d3e5f
           items:
             type: string
           maxItems: 100
+          minItems: 0
           type: array
       required:
         - article
@@ -60304,6 +60307,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItem'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
         - properties:
             article:
               $ref: '#/components/schemas/LineItemArticle'
@@ -60368,6 +60372,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItemForCreation'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
         - properties:
             article:
               $ref: '#/components/schemas/LineItemArticle'
@@ -60564,6 +60569,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItem'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
         - properties:
             article:
               $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
@@ -60640,6 +60646,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItemForCreation'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
         - properties:
             article:
               $ref: '#/components/schemas/PackingTargetContainerLineItemArticle'
@@ -61632,6 +61639,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItem'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
         - properties:
             article:
               $ref: '#/components/schemas/PackLineItemArticle'
@@ -61666,11 +61674,6 @@ components:
               format: int64
               minimum: 1
               type: integer
-            serviceJobRefs:
-              description: Reference to the service job that has altered this line item
-              items:
-                type: string
-              type: array
             stickers:
               items:
                 $ref: '#/components/schemas/Sticker'
@@ -61706,6 +61709,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/MandatoryLineItemForCreation'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
         - properties:
             article:
               $ref: '#/components/schemas/PackLineItemArticle'
@@ -61719,11 +61723,6 @@ components:
               format: int64
               minimum: 1
               type: integer
-            serviceJobRefs:
-              description: Reference to the service job that has altered this line item
-              items:
-                type: string
-              type: array
             stickers:
               items:
                 $ref: '#/components/schemas/Sticker'
@@ -62818,6 +62817,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/LineItem'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
         - properties:
             article:
               $ref: '#/components/schemas/ParcelItemArticle'
@@ -62894,6 +62894,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/LineItemForCreation'
         - $ref: '#/components/schemas/SubstitutedLineItem'
+        - $ref: '#/components/schemas/ServiceJobAlteredLineItem'
       properties:
         article:
           $ref: '#/components/schemas/ParcelItemArticle'
@@ -78562,6 +78563,21 @@ components:
       title: ServiceJobAddTargetTimeActionParameter
       type: object
       description: ServiceJobAddTargetTimeActionParameter
+    ServiceJobAlteredLineItem:
+      properties:
+        serviceJobRefs:
+          description: Reference to the service jobs that have altered this line item
+          example:
+            - 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+            - 0190d6e8-9a1b-7c2d-8e3f-5a7b9c1d3e5f
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+          type: array
+      title: ServiceJobAlteredLineItem
+      type: object
+      description: ServiceJobAlteredLineItem
     ServiceJobCancelledActionParameter:
       properties:
         additionalInformation:
