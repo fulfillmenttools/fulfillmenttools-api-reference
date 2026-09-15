@@ -11065,6 +11065,59 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/handovercontainers/{handoverContainerId}/identifierdocument:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Beta status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br />Get
+        the identifier document (PDF) of a given handover container, if
+        available
+      operationId: getIdentifierDocumentForHandoverContainer
+      parameters:
+        - description: id of the handover container
+          in: path
+          name: handoverContainerId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                format: binary
+                type: string
+          description: Identifier document (PDF) for the given handoverContainer.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get handover container identifier document
+      x-fft-permissions:
+        - HANDOVER_CONTAINER_READ
+      tags:
+        - Handovers (Operations)
+      x-badges:
+        - color: orange
+          label: BETA
   /api/handovercontainers/{handoverContainerId}/stack:
     get:
       deprecated: false
@@ -42078,6 +42131,12 @@ components:
           type: string
         dimensions:
           $ref: '#/components/schemas/ContainerDimensions'
+        documentsRef:
+          description: >-
+            References to the documents that are related to this handover
+            container.
+          example: 01a05806-7346-73f8-89dd-67d52d2de7cb
+          type: string
         facilityRef:
           description: Linked Facility through reference
           example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
@@ -42093,6 +42152,11 @@ components:
         id:
           description: Unique identifier of the handover container
           example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          type: string
+        identifierCode:
+          description: >-
+            The identifier code generated for this container at creation time,
+            used to render its identifier document.
           type: string
         lastModified:
           description: >-
@@ -60595,6 +60659,11 @@ components:
                 creation automatically and suits as the primary identifier of
                 the described entity.
               type: string
+            identifierCode:
+              description: >-
+                The identifier code generated for this container at creation
+                time, used to render its identifier document.
+              type: string
             lineItems:
               items:
                 $ref: '#/components/schemas/PackingTargetContainerLineItem'
@@ -77553,6 +77622,7 @@ components:
         - HANDOVERJOB
         - PARCEL
         - PACKING_TARGET_CONTAINER
+        - HANDOVER_CONTAINER
       type: string
       title: Section
       description: Section
