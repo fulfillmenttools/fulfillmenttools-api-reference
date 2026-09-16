@@ -32283,6 +32283,17 @@ components:
       description: BulkUpsertSummary
     BulkyGoodsDetails:
       properties:
+        ldmToWeightFactor:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The grams equivalent to 1 loading meter, converting between weight
+            and loading meters.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
         maxGirth:
           description: The maximum girth in millimeters of the packagingUnit.
           type: number
@@ -32297,6 +32308,18 @@ components:
           type: number
         packagingPricingDetails:
           $ref: '#/components/schemas/PackagingPricingDetails'
+        pricingBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitPricingBasis'
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The basis used to determine which quantity of the packagingUnit is
+            chargeable.
+          x-badges:
+            - color: red
+              label: ALPHA
         type:
           description: The type of the packagingUnit.
           enum:
@@ -32304,10 +32327,21 @@ components:
             - TWO_MAN_HANDLING
             - PARCEL
             - BULKY_GOODS
+            - LONG_GOODS
           type: string
         volumeBufferInPercent:
           description: The volume buffer in percent for the packagingUnit.
           type: number
+        volumetricWeightFactor:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The volumetric weight factor for the packagingUnit.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
       required:
         - type
         - maxLength
@@ -51847,6 +51881,71 @@ components:
         name: Location
       title: Location
       description: Location
+    LongGoodsDetails:
+      properties:
+        ldmToWeightFactor:
+          description: >-
+            The grams equivalent to 1 loading meter, converting between weight
+            and loading meters.
+          type: number
+        loadCarrierHeight:
+          description: >-
+            The height in millimeters of the empty load carrier (e.g. pallet or
+            skid) itself.
+          type: number
+        loadCarrierWeight:
+          description: >-
+            The tare weight in grams of the empty load carrier (e.g. pallet or
+            skid) itself.
+          type: number
+        maxGirth:
+          description: The maximum girth in millimeters of the packagingUnit.
+          type: number
+        maxItemQuantity:
+          description: The maximum number of items that can fit in the packagingUnit.
+          type: number
+        maxLength:
+          description: The maximum length in millimeters of the packagingUnit.
+          type: number
+        maxWeight:
+          description: The maximum weight in grams that the packagingUnit can hold.
+          type: number
+        packagingPricingDetails:
+          $ref: '#/components/schemas/PackagingPricingDetails'
+        pricingBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitPricingBasis'
+          description: >-
+            The basis used to determine which quantity of the packagingUnit is
+            chargeable.
+        type:
+          description: The type of the packagingUnit.
+          enum:
+            - PALLET
+            - TWO_MAN_HANDLING
+            - PARCEL
+            - BULKY_GOODS
+            - LONG_GOODS
+          type: string
+        volumeBufferInPercent:
+          description: The volume buffer in percent for the packagingUnit.
+          type: number
+        volumetricWeightFactor:
+          description: The volumetric weight factor for the packagingUnit.
+          type: number
+      required:
+        - type
+        - packagingPricingDetails
+      title: LongGoodsDetails
+      type: object
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />LongGoodsDetails
+      x-badges:
+        - color: red
+          label: ALPHA
     LookupAttributeDefinitions:
       properties: {}
       title: LookupAttributeDefinitions
@@ -59946,6 +60045,7 @@ components:
             - $ref: '#/components/schemas/ParcelDetails'
             - $ref: '#/components/schemas/BulkyGoodsDetails'
             - $ref: '#/components/schemas/TwoManHandlingDetails'
+            - $ref: '#/components/schemas/LongGoodsDetails'
         tenantPackagingUnitId:
           description: The tenant specific identifier for the packagingUnit.
           example: MY_PACKAGINGUNIT_ID
@@ -59972,6 +60072,7 @@ components:
             - $ref: '#/components/schemas/ParcelDetails'
             - $ref: '#/components/schemas/BulkyGoodsDetails'
             - $ref: '#/components/schemas/TwoManHandlingDetails'
+            - $ref: '#/components/schemas/LongGoodsDetails'
         tenantPackagingUnitId:
           description: The tenant specific identifier for the packagingUnit.
           example: MY_PACKAGINGUNIT_ID
@@ -60100,6 +60201,51 @@ components:
       type: object
       title: PackagingUnitDimensions
       description: PackagingUnitDimensions
+    PackagingUnitPricingBasis:
+      properties:
+        pricingQuantities:
+          description: >-
+            The quantities compared, each converted to pricingUnit; the highest
+            one determines the chargeable amount.
+          items:
+            $ref: '#/components/schemas/PackagingUnitPricingQuantity'
+          maxItems: 3
+          type: array
+        pricingUnit:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitPricingUnit'
+          description: The unit the pricing quantities are converted to and priced in.
+      required:
+        - pricingUnit
+        - pricingQuantities
+      title: PackagingUnitPricingBasis
+      type: object
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />PackagingUnitPricingBasis
+      x-badges:
+        - color: red
+          label: ALPHA
+    PackagingUnitPricingQuantity:
+      description: >-
+        The quantities compared, each converted to pricingUnit; the highest one
+        determines the chargeable amount.
+      enum:
+        - ACTUAL_WEIGHT
+        - VOLUMETRIC_WEIGHT
+        - LOADING_METER_EQUIVALENT
+      title: PackagingUnitPricingQuantity
+      type: string
+    PackagingUnitPricingUnit:
+      description: The unit the pricing quantities are converted to and priced in.
+      enum:
+        - GRAM
+        - CUBIC_METER
+        - LOADING_METER
+      title: PackagingUnitPricingUnit
+      type: string
     PackagingUnitsByContext:
       additionalProperties: false
       properties:
@@ -61997,14 +62143,70 @@ components:
       properties:
         dimensions:
           $ref: '#/components/schemas/PackagingUnitDetailDimensions'
+        ldmToWeightFactor:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The grams equivalent to 1 loading meter, converting between weight
+            and loading meters.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
+        loadCarrierHeight:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The height in millimeters of the empty load carrier (e.g. pallet
+            or skid) itself.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
+        loadCarrierWeight:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The tare weight in grams of the empty load carrier (e.g. pallet or
+            skid) itself.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
         maxItemQuantity:
           description: The maximum number of items that can fit in the packagingUnit.
           type: number
+        maxVolumetricWeight:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The maximum volumetric weight the packagingUnit can hold, as a
+            feasibility cap.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
         maxWeight:
           description: The maximum weight in grams that the packagingUnit can hold.
           type: number
         packagingPricingDetails:
           $ref: '#/components/schemas/PackagingPricingDetails'
+        pricingBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitPricingBasis'
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The basis used to determine which quantity of the packagingUnit is
+            chargeable.
+          x-badges:
+            - color: red
+              label: ALPHA
         type:
           description: The type of the packagingUnit.
           enum:
@@ -62012,6 +62214,7 @@ components:
             - TWO_MAN_HANDLING
             - PARCEL
             - BULKY_GOODS
+            - LONG_GOODS
           type: string
         volumeBufferInPercent:
           description: The volume buffer in percent for the packagingUnit.
@@ -62196,14 +62399,48 @@ components:
       properties:
         dimensions:
           $ref: '#/components/schemas/PackagingUnitDetailDimensions'
+        ldmToWeightFactor:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The grams equivalent to 1 loading meter, converting between weight
+            and loading meters.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
         maxItemQuantity:
           description: The maximum number of items that can fit in the packagingUnit.
           type: number
+        maxVolumetricWeight:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The maximum volumetric weight the packagingUnit can hold, as a
+            feasibility cap.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
         maxWeight:
           description: The maximum weight in grams that the packagingUnit can hold.
           type: number
         packagingPricingDetails:
           $ref: '#/components/schemas/PackagingPricingDetails'
+        pricingBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitPricingBasis'
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The basis used to determine which quantity of the packagingUnit is
+            chargeable.
+          x-badges:
+            - color: red
+              label: ALPHA
         type:
           description: The type of the packagingUnit.
           enum:
@@ -62211,10 +62448,21 @@ components:
             - TWO_MAN_HANDLING
             - PARCEL
             - BULKY_GOODS
+            - LONG_GOODS
           type: string
         volumeBufferInPercent:
           description: The volume buffer in percent for the packagingUnit.
           type: number
+        volumetricWeightFactor:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The volumetric weight factor for the packagingUnit.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
       required:
         - type
         - dimensions
@@ -89651,6 +89899,17 @@ components:
       properties:
         dimensions:
           $ref: '#/components/schemas/PackagingUnitDetailDimensions'
+        ldmToWeightFactor:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The grams equivalent to 1 loading meter, converting between weight
+            and loading meters.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
         maxItemQuantity:
           description: The maximum number of items that can fit in the packagingUnit.
           type: number
@@ -89662,6 +89921,18 @@ components:
           type: number
         packagingPricingDetails:
           $ref: '#/components/schemas/PackagingPricingDetails'
+        pricingBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitPricingBasis'
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The basis used to determine which quantity of the packagingUnit is
+            chargeable.
+          x-badges:
+            - color: red
+              label: ALPHA
         type:
           description: The type of the packagingUnit.
           enum:
@@ -89669,10 +89940,32 @@ components:
             - TWO_MAN_HANDLING
             - PARCEL
             - BULKY_GOODS
+            - LONG_GOODS
           type: string
         volumeBufferInPercent:
           description: The volume buffer in percent for the packagingUnit.
           type: number
+        volumetricWeightFactor:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The volumetric weight factor for the packagingUnit.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
+        weightToVolumeFactor:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The factor converting the weight of the packagingUnit to an
+            equivalent volume.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
       required:
         - type
         - dimensions
