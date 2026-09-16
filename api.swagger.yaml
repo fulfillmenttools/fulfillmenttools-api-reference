@@ -32321,14 +32321,9 @@ components:
             - color: red
               label: ALPHA
         type:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitType'
           description: The type of the packagingUnit.
-          enum:
-            - PALLET
-            - TWO_MAN_HANDLING
-            - PARCEL
-            - BULKY_GOODS
-            - LONG_GOODS
-          type: string
         volumeBufferInPercent:
           description: The volume buffer in percent for the packagingUnit.
           type: number
@@ -45939,12 +45934,24 @@ components:
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        generalShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionGeneralShipmentRestriction
+          maxItems: 50
+          type: array
         id:
           type: string
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
           maxItems: 500
+          type: array
+        packageTypeSpecificShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+          maxItems: 50
           type: array
         packagingUnitsByContexts:
           items:
@@ -45990,6 +45997,8 @@ components:
               MANAGED_FACILITY: >-
                 #/components/schemas/InterFacilityConnectionManagedFacilityTarget
               SUPPLIER: '#/components/schemas/InterFacilityConnectionSupplierTarget'
+        transportDetails:
+          $ref: '#/components/schemas/TransportDetails'
       required:
         - id
         - sourceFacilityRef
@@ -46129,10 +46138,22 @@ components:
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        generalShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionGeneralShipmentRestriction
+          maxItems: 50
+          type: array
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
           maxItems: 500
+          type: array
+        packageTypeSpecificShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+          maxItems: 50
           type: array
         packagingUnitsByContexts:
           items:
@@ -46156,6 +46177,8 @@ components:
                   #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
           maxItems: 500
           type: array
+        transportDetails:
+          $ref: '#/components/schemas/TransportDetails'
         type:
           $ref: '#/components/schemas/ConnectionType'
       required:
@@ -46199,10 +46222,22 @@ components:
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        generalShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionGeneralShipmentRestriction
+          maxItems: 50
+          type: array
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
           maxItems: 500
+          type: array
+        packageTypeSpecificShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+          maxItems: 50
           type: array
         packagingUnitsByContexts:
           items:
@@ -46226,6 +46261,8 @@ components:
                   #/components/schemas/InterFacilityConnectionTransferRelativeSurcharge
           maxItems: 500
           type: array
+        transportDetails:
+          $ref: '#/components/schemas/TransportDetails'
         type:
           $ref: '#/components/schemas/ConnectionType'
         version:
@@ -46238,6 +46275,29 @@ components:
         name: InterFacilityConnectionForUpdate
       title: InterFacilityConnectionForUpdate
       description: InterFacilityConnectionForUpdate
+    InterFacilityConnectionGeneralShipmentRestriction:
+      properties:
+        restrictionType:
+          $ref: >-
+            #/components/schemas/InterFacilityConnectionGeneralShipmentRestrictionType
+        value:
+          type: number
+      required:
+        - restrictionType
+        - value
+      type: object
+      title: InterFacilityConnectionGeneralShipmentRestriction
+      description: InterFacilityConnectionGeneralShipmentRestriction
+    InterFacilityConnectionGeneralShipmentRestrictionType:
+      enum:
+        - MAX_WEIGHT_PER_SHIPMENT
+        - MAX_LOADING_METERS_PER_SHIPMENT
+        - MAX_PACKAGING_UNITS_PER_SHIPMENT
+        - MIN_PACKAGING_UNITS_PER_SHIPMENT
+        - MAX_WEIGHT_PER_LOADING_METER
+      type: string
+      title: InterFacilityConnectionGeneralShipmentRestrictionType
+      description: InterFacilityConnectionGeneralShipmentRestrictionType
     InterFacilityConnectionManagedFacilityTarget:
       allOf:
         - $ref: '#/components/schemas/InterFacilityConnectionBaseTarget'
@@ -46257,6 +46317,32 @@ components:
       type: object
       title: InterFacilityConnectionManagedFacilityTarget
       description: InterFacilityConnectionManagedFacilityTarget
+    InterFacilityConnectionPackageTypeSpecificShipmentRestriction:
+      properties:
+        packagingUnitRefs:
+          items:
+            type: string
+          type: array
+        packagingUnitType:
+          $ref: '#/components/schemas/PackagingUnitType'
+        restrictionType:
+          $ref: >-
+            #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestrictionType
+        value:
+          type: number
+      required:
+        - restrictionType
+        - value
+        - packagingUnitType
+      type: object
+      title: InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+      description: InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+    InterFacilityConnectionPackageTypeSpecificShipmentRestrictionType:
+      enum:
+        - MAX_PACKAGING_UNITS_PER_TYPE
+      type: string
+      title: InterFacilityConnectionPackageTypeSpecificShipmentRestrictionType
+      description: InterFacilityConnectionPackageTypeSpecificShipmentRestrictionType
     InterFacilityConnections:
       additionalProperties: false
       properties:
@@ -46376,10 +46462,22 @@ components:
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        generalShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionGeneralShipmentRestriction
+          maxItems: 50
+          type: array
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
           maxItems: 500
+          type: array
+        packageTypeSpecificShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+          maxItems: 50
           type: array
         packagingUnitsByContexts:
           items:
@@ -46405,6 +46503,8 @@ components:
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
+        transportDetails:
+          $ref: '#/components/schemas/TransportDetails'
         type:
           $ref: '#/components/schemas/ConnectionType'
       required:
@@ -46449,10 +46549,22 @@ components:
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        generalShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionGeneralShipmentRestriction
+          maxItems: 50
+          type: array
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
           maxItems: 500
+          type: array
+        packageTypeSpecificShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+          maxItems: 50
           type: array
         packagingUnitsByContexts:
           items:
@@ -46478,6 +46590,8 @@ components:
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionCustomerTarget'
+        transportDetails:
+          $ref: '#/components/schemas/TransportDetails'
         type:
           $ref: '#/components/schemas/ConnectionType'
         version:
@@ -46525,10 +46639,22 @@ components:
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        generalShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionGeneralShipmentRestriction
+          maxItems: 50
+          type: array
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
           maxItems: 500
+          type: array
+        packageTypeSpecificShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+          maxItems: 50
           type: array
         packagingUnitsByContexts:
           items:
@@ -46554,6 +46680,8 @@ components:
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
+        transportDetails:
+          $ref: '#/components/schemas/TransportDetails'
         type:
           $ref: '#/components/schemas/ConnectionType'
       required:
@@ -46598,10 +46726,22 @@ components:
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        generalShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionGeneralShipmentRestriction
+          maxItems: 50
+          type: array
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
           maxItems: 500
+          type: array
+        packageTypeSpecificShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+          maxItems: 50
           type: array
         packagingUnitsByContexts:
           items:
@@ -46627,6 +46767,8 @@ components:
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionManagedFacilityTarget'
+        transportDetails:
+          $ref: '#/components/schemas/TransportDetails'
         type:
           $ref: '#/components/schemas/ConnectionType'
         version:
@@ -46674,10 +46816,22 @@ components:
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        generalShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionGeneralShipmentRestriction
+          maxItems: 50
+          type: array
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
           maxItems: 500
+          type: array
+        packageTypeSpecificShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+          maxItems: 50
           type: array
         packagingUnitsByContexts:
           items:
@@ -46703,6 +46857,8 @@ components:
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
+        transportDetails:
+          $ref: '#/components/schemas/TransportDetails'
         type:
           $ref: '#/components/schemas/ConnectionType'
       required:
@@ -46747,10 +46903,22 @@ components:
           type: array
         fallbackTransitTime:
           $ref: '#/components/schemas/CarrierTransitTime'
+        generalShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionGeneralShipmentRestriction
+          maxItems: 50
+          type: array
         nonDeliveryDays:
           items:
             $ref: '#/components/schemas/NonDeliveryDaysPerCountryAndProvince'
           maxItems: 500
+          type: array
+        packageTypeSpecificShipmentRestrictions:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionPackageTypeSpecificShipmentRestriction
+          maxItems: 50
           type: array
         packagingUnitsByContexts:
           items:
@@ -46776,6 +46944,8 @@ components:
           type: array
         target:
           $ref: '#/components/schemas/InterFacilityConnectionSupplierTarget'
+        transportDetails:
+          $ref: '#/components/schemas/TransportDetails'
         type:
           $ref: '#/components/schemas/ConnectionType'
         version:
@@ -60321,6 +60491,16 @@ components:
         - TARGET_COUNTRY
       title: PackagingUnitSurchargeContextTypes
       type: string
+    PackagingUnitType:
+      description: The type of the packagingUnit.
+      enum:
+        - PALLET
+        - TWO_MAN_HANDLING
+        - PARCEL
+        - BULKY_GOODS
+        - LONG_GOODS
+      title: PackagingUnitType
+      type: string
     PackingConfigurations:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -62208,14 +62388,9 @@ components:
             - color: red
               label: ALPHA
         type:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitType'
           description: The type of the packagingUnit.
-          enum:
-            - PALLET
-            - TWO_MAN_HANDLING
-            - PARCEL
-            - BULKY_GOODS
-            - LONG_GOODS
-          type: string
         volumeBufferInPercent:
           description: The volume buffer in percent for the packagingUnit.
           type: number
@@ -62442,14 +62617,9 @@ components:
             - color: red
               label: ALPHA
         type:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitType'
           description: The type of the packagingUnit.
-          enum:
-            - PALLET
-            - TWO_MAN_HANDLING
-            - PARCEL
-            - BULKY_GOODS
-            - LONG_GOODS
-          type: string
         volumeBufferInPercent:
           description: The volume buffer in percent for the packagingUnit.
           type: number
@@ -89895,6 +90065,13 @@ components:
       type: object
       title: TransitTimeConfigurationForUpsert
       description: TransitTimeConfigurationForUpsert
+    TransportDetails:
+      properties:
+        vehicleWidthInMeters:
+          type: number
+      type: object
+      title: TransportDetails
+      description: TransportDetails
     TwoManHandlingDetails:
       properties:
         dimensions:
@@ -89934,14 +90111,9 @@ components:
             - color: red
               label: ALPHA
         type:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitType'
           description: The type of the packagingUnit.
-          enum:
-            - PALLET
-            - TWO_MAN_HANDLING
-            - PARCEL
-            - BULKY_GOODS
-            - LONG_GOODS
-          type: string
         volumeBufferInPercent:
           description: The volume buffer in percent for the packagingUnit.
           type: number
