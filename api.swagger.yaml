@@ -16454,6 +16454,7 @@ paths:
         - ORDER_CANCEL
         - ORDER_FORCE_CANCEL
         - ORDER_UNLOCK
+        - ORDER_DELIVERY_PROMISE_WRITE
       tags:
         - Orders (DOMS)
   /api/orders/search:
@@ -19082,6 +19083,7 @@ paths:
               - ORDER_FORCE_CANCEL
               - ORDER_UNLOCK
               - ORDER_CANCEL
+              - ORDER_DELIVERY_PROMISE_WRITE
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
@@ -32153,6 +32155,23 @@ components:
       type: object
       title: BulkForceCancelOrderParameter
       description: BulkForceCancelOrderParameter
+    BulkInvalidatePromiseOrderActionParameter:
+      description: Action to invalidate promise orders.
+      properties:
+        name:
+          enum:
+            - BULK_INVALIDATE_PROMISE
+          type: string
+        orders:
+          items:
+            $ref: '#/components/schemas/BulkPromiseOrderParameter'
+          maxItems: 15
+          minItems: 1
+          type: array
+      required:
+        - name
+        - orders
+      title: BulkInvalidatePromisedOrderActionParameter
     BulkOperationError:
       properties:
         message:
@@ -32198,6 +32217,7 @@ components:
         - $ref: '#/components/schemas/BulkOrderForceCancelActionParameter'
         - $ref: '#/components/schemas/BulkOrderCancelActionParameter'
         - $ref: '#/components/schemas/BulkOrderUnlockActionParameter'
+        - $ref: '#/components/schemas/BulkInvalidatePromiseOrderActionParameter'
       title: BulkOrderActionsParameter
       description: BulkOrderActionsParameter
     BulkOrderCancelActionParameter:
@@ -32251,6 +32271,20 @@ components:
         - name
         - orders
       title: BulkOrderUnlockActionParameter
+    BulkPromiseOrderParameter:
+      properties:
+        orderId:
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - orderId
+        - version
+      type: object
+      title: BulkPromiseOrderParameter
+      description: BulkPromiseOrderParameter
     BulkUnlockOrderParameter:
       properties:
         orderId:
@@ -56639,6 +56673,7 @@ components:
     OrderActionsParameter:
       oneOf:
         - $ref: '#/components/schemas/OrderUnlockActionParameter'
+        - $ref: '#/components/schemas/OrderInvalidationActionParameter'
         - $ref: '#/components/schemas/OrderCancelActionParameter'
         - $ref: '#/components/schemas/OrderForceCancelActionParameter'
         - $ref: '#/components/schemas/PromiseConfirmActionParameter'
@@ -57294,6 +57329,19 @@ components:
       type: object
       title: OrderInformation
       description: OrderInformation
+    OrderInvalidationActionParameter:
+      allOf:
+        - $ref: '#/components/schemas/AbstractOrderActionsParameter'
+      description: Action to Invalidate an order.
+      properties:
+        name:
+          enum:
+            - INVALIDATE_PROMISE
+          type: string
+      required:
+        - name
+        - version
+      title: OrderInvalidationActionParameter
     OrderLineItem:
       allOf:
         - $ref: '#/components/schemas/OrderLineItemForCreation'
@@ -64678,6 +64726,7 @@ components:
             - ORDER_FORCE_CANCEL
             - ORDER_UNLOCK
             - ORDER_CANCEL
+            - ORDER_DELIVERY_PROMISE_WRITE
             - ORDER_CONSUMER_WRITE
             - ORDER_CUSTOM_ATTRIBUTES_WRITE
             - ORDER_LINEITEM_WRITE
@@ -64838,6 +64887,7 @@ components:
             - CONSUMER_WRITE
             - CUSTOM_ATTRIBUTES_WRITE
             - LINEITEM_WRITE
+            - DELIVERY_PROMISE_WRITE
             - TOTAL_READ
             - PRICING_READ
             - QUANTITY_INCREASE
@@ -73924,6 +73974,7 @@ components:
               - ORDER_FORCE_CANCEL
               - ORDER_UNLOCK
               - ORDER_CANCEL
+              - ORDER_DELIVERY_PROMISE_WRITE
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
@@ -74157,6 +74208,7 @@ components:
               - ORDER_FORCE_CANCEL
               - ORDER_UNLOCK
               - ORDER_CANCEL
+              - ORDER_DELIVERY_PROMISE_WRITE
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
@@ -74381,6 +74433,7 @@ components:
               - ORDER_FORCE_CANCEL
               - ORDER_UNLOCK
               - ORDER_CANCEL
+              - ORDER_DELIVERY_PROMISE_WRITE
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
@@ -74611,6 +74664,7 @@ components:
               - ORDER_FORCE_CANCEL
               - ORDER_UNLOCK
               - ORDER_CANCEL
+              - ORDER_DELIVERY_PROMISE_WRITE
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
@@ -91580,6 +91634,7 @@ components:
               - ORDER_FORCE_CANCEL
               - ORDER_UNLOCK
               - ORDER_CANCEL
+              - ORDER_DELIVERY_PROMISE_WRITE
               - ORDER_CONSUMER_WRITE
               - ORDER_CUSTOM_ATTRIBUTES_WRITE
               - ORDER_LINEITEM_WRITE
