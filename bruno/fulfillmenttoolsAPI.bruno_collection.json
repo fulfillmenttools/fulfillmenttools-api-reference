@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "907048d1-7005-4939-9154-9b1cd8328d13",
+    "_postman_id": "7d082104-28fa-4e59-92dd-dc3a8a0058d5",
     "name": "fulfillmenttoolsAPI",
     "description": "## Documentation\n\nYou can find the API Documentation under the following links:\n\n- [https://fulfillmenttools.github.io/api-reference-ui](https://fulfillmenttools.github.io/api-reference-ui)\n    \n- [https://docs.fulfillmenttools.com](https://docs.fulfillmenttools.com)\n    \n\n## Support\n\nOC fulfillment GmbH -  \n[api@fulfillmenttools.com](https://mailto:api@fulfillmenttools.com)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -5929,6 +5929,69 @@
                       "key": "orderId",
                       "value": "YOUR-ORDER-ID"
                     }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalidate Promise",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"INVALIDATE_PROMISE\",\n    \"version\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}/api/orders/{{orderId}}/actions",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "api",
+                    "orders",
+                    "{{orderId}}",
+                    "actions"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "YOUR-ORDER-ID"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Bulk Invalidate Promises",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"BULK_INVALIDATE_PROMISE\",\n    \"orders\": [{\n        \"orderId\":\"ORDER-ID\",\n        \"version\": 1\n    }]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}/api/orders/actions",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "api",
+                    "orders",
+                    "actions"
                   ]
                 }
               },
@@ -19400,6 +19463,79 @@
               "name": "tracking Information",
               "item": [
                 {
+                  "name": "Tracking information actions",
+                  "item": [
+                    {
+                      "name": "Add tracking events to tracking information [ALPHA]",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n    \"name\": \"ADD_TRACKING_EVENTS\",\n    \"trackingEventIds\":  [\n        {\n            \"status\": \"REGISTERED\",\n            \"statusSet\": \"2026-06-06T12:00:00.000000Z\",\n            \"carrierStatus\": {\n                \"status\": \"Either an object like this\",\n                \"subStatus\": \"or a plain string as carrierStatus\"\n            },\n            \"carrierStatusSet\": \"2026-06-06T12:00:00.000000Z\"\n        }\n    ],\n    \"version\": 2\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{host}}/api/trackinginformation/{{trackingInformationId}}/actions",
+                          "host": [
+                            "{{host}}"
+                          ],
+                          "path": [
+                            "api",
+                            "trackinginformation",
+                            "{{trackingInformationId}}",
+                            "actions"
+                          ],
+                          "variable": [
+                            {
+                              "key": "trackingInformationId"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "Remove tracking events from tracking information [ALPHA]",
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n    \"name\": \"REMOVE_TRACKING_EVENTS\",\n    \"trackingEventIds\":  [\"93476cb3-d740-4d8c-a8fa-d3d8bba716fc\"],\n    \"version\": 2\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{host}}/api/trackinginformation/{{trackingInformationId}}/actions",
+                          "host": [
+                            "{{host}}"
+                          ],
+                          "path": [
+                            "api",
+                            "trackinginformation",
+                            "{{trackingInformationId}}",
+                            "actions"
+                          ],
+                          "variable": [
+                            {
+                              "key": "trackingInformationId"
+                            }
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
                   "name": "Get tracking information [ALPHA]",
                   "request": {
                     "method": "GET",
@@ -19497,69 +19633,6 @@
                     }
                   },
                   "response": []
-                },
-                {
-                  "name": "Tracking information actions",
-                  "item": [
-                    {
-                      "name": "Add tracking events to tracking information [ALPHA]",
-                      "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                          "mode": "raw",
-                          "raw": "{\n    \"name\": \"ADD_TRACKING_EVENTS\",\n    \"trackingEventIds\":  [\n        {\n            \"status\": \"REGISTERED\",\n            \"statusSet\": \"2026-06-06T12:00:00.000000Z\",\n            \"carrierStatus\": {\n                \"status\": \"Either an object like this\",\n                \"subStatus\": \"or a plain string as carrierStatus\"\n            },\n            \"carrierStatusSet\": \"2026-06-06T12:00:00.000000Z\"\n        }\n    ],\n    \"version\": 2\n}",
-                          "options": {
-                            "raw": {
-                              "language": "json"
-                            }
-                          }
-                        },
-                        "url": {
-                          "raw": "{{host}}/api/trackinginformation/{{trackingInformationId}}/actions",
-                          "host": [
-                            "{{host}}"
-                          ],
-                          "path": [
-                            "api",
-                            "trackinginformation",
-                            "{{trackingInformationId}}",
-                            "actions"
-                          ]
-                        }
-                      },
-                      "response": []
-                    },
-                    {
-                      "name": "Remove tracking events from tracking information [ALPHA]",
-                      "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                          "mode": "raw",
-                          "raw": "{\n    \"name\": \"REMOVE_TRACKING_EVENTS\",\n    \"trackingEventIds\":  [\"93476cb3-d740-4d8c-a8fa-d3d8bba716fc\"],\n    \"version\": 2\n}",
-                          "options": {
-                            "raw": {
-                              "language": "json"
-                            }
-                          }
-                        },
-                        "url": {
-                          "raw": "{{host}}/api/trackinginformation/{{trackingInformationId}}/actions",
-                          "host": [
-                            "{{host}}"
-                          ],
-                          "path": [
-                            "api",
-                            "trackinginformation",
-                            "{{trackingInformationId}}",
-                            "actions"
-                          ]
-                        }
-                      },
-                      "response": []
-                    }
-                  ]
                 }
               ]
             }
