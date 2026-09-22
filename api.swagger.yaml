@@ -46589,6 +46589,27 @@ components:
       type: object
       title: InterFacilityConnectionSupplierTarget
       description: InterFacilityConnectionSupplierTarget
+    InterFacilityConnectionSurchargeCalculationScope:
+      additionalProperties: false
+      description: >-
+        The charges a percentage is calculated against: exactly the referenced
+        ones, or the charged price without them. A reference that matches
+        nothing contributes nothing.
+      properties:
+        mode:
+          $ref: '#/components/schemas/InterFacilityConnectionSurchargeScopeMode'
+        references:
+          items:
+            $ref: >-
+              #/components/schemas/InterFacilityConnectionSurchargeScopeReference
+          maxItems: 500
+          minItems: 1
+          type: array
+      required:
+        - mode
+        - references
+      title: InterFacilityConnectionSurchargeCalculationScope
+      type: object
     InterFacilityConnectionSurchargeContext:
       additionalProperties: false
       properties:
@@ -46617,6 +46638,60 @@ components:
       type: string
       title: InterFacilityConnectionSurchargeContextTypes
       description: InterFacilityConnectionSurchargeContextTypes
+    InterFacilityConnectionSurchargeScopeLevel:
+      description: >-
+        The pricing level that made a charge. PACKAGING_UNIT is what the
+        packaging units of the transfer charged, TRANSFER what the transfer
+        itself charged.
+      enum:
+        - PACKAGING_UNIT
+        - TRANSFER
+      title: InterFacilityConnectionSurchargeScopeLevel
+      type: string
+    InterFacilityConnectionSurchargeScopeMode:
+      description: >-
+        Whether a scope names the charges a percentage is calculated on, or the
+        ones it is not calculated on.
+      enum:
+        - INCLUDE
+        - EXCLUDE
+      title: InterFacilityConnectionSurchargeScopeMode
+      type: string
+    InterFacilityConnectionSurchargeScopeReference:
+      additionalProperties: false
+      description: One entry of a calculation scope.
+      properties:
+        kind:
+          $ref: >-
+            #/components/schemas/InterFacilityConnectionSurchargeScopeReferenceKind
+        level:
+          allOf:
+            - $ref: '#/components/schemas/InterFacilityConnectionSurchargeScopeLevel'
+          description: >-
+            Restricts the reference to the charges made on one pricing level. If
+            omitted, charges of both levels are selected, so a
+            tenantSurchargeType configured on both matches both.
+        tenantSurchargeType:
+          description: >-
+            The referenced tenant surcharge type. Only read for TENANT_SURCHARGE
+            references.
+          type: string
+      required:
+        - kind
+      title: InterFacilityConnectionSurchargeScopeReference
+      type: object
+    InterFacilityConnectionSurchargeScopeReferenceKind:
+      description: >-
+        What a scope reference selects. BASE_PRICE is the resolved base price of
+        the transfer, TENANT_SURCHARGE every charge made under the reference's
+        tenantSurchargeType, and PACKAGING_UNITS everything the packaging units
+        of the transfer charged.
+      enum:
+        - BASE_PRICE
+        - TENANT_SURCHARGE
+        - PACKAGING_UNITS
+      title: InterFacilityConnectionSurchargeScopeReferenceKind
+      type: string
     InterFacilityConnectionToCustomerForCreation:
       additionalProperties: false
       properties:
@@ -47194,6 +47269,14 @@ components:
           maxItems: 500
           minItems: 0
           type: array
+        priority:
+          description: >-
+            Places the surcharge in the transfer's application sequence, which
+            all surcharge types share. Ascending; gaps are allowed. If no
+            surcharge of a transfer declares one, every percentage is calculated
+            on the base price and the packaging units together.
+          minimum: 0
+          type: integer
         tenantSurchargeType:
           type: string
         type:
@@ -47273,6 +47356,9 @@ components:
       type: object
     InterFacilityConnectionTransferRelativeSurcharge:
       properties:
+        calculationScope:
+          $ref: >-
+            #/components/schemas/InterFacilityConnectionSurchargeCalculationScope
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionSurchargeContext'
@@ -47283,6 +47369,14 @@ components:
           format: float
           minimum: 0
           type: number
+        priority:
+          description: >-
+            Places the surcharge in the transfer's application sequence, which
+            all surcharge types share. Ascending; gaps are allowed. If no
+            surcharge of a transfer declares one, every percentage is calculated
+            on the base price and the packaging units together.
+          minimum: 0
+          type: integer
         tenantSurchargeType:
           type: string
         type:
@@ -47312,6 +47406,9 @@ components:
         percentage of the amount it is applied to, for example a cash on
         delivery fee of at least 5.80 EUR but 3 % of a larger transfer.
       properties:
+        calculationScope:
+          $ref: >-
+            #/components/schemas/InterFacilityConnectionSurchargeCalculationScope
         context:
           items:
             $ref: '#/components/schemas/InterFacilityConnectionSurchargeContext'
@@ -47324,6 +47421,14 @@ components:
           format: float
           minimum: 0
           type: number
+        priority:
+          description: >-
+            Places the surcharge in the transfer's application sequence, which
+            all surcharge types share. Ascending; gaps are allowed. If no
+            surcharge of a transfer declares one, every percentage is calculated
+            on the base price and the packaging units together.
+          minimum: 0
+          type: integer
         tenantSurchargeType:
           type: string
         type:
@@ -60510,6 +60615,14 @@ components:
             $ref: '#/components/schemas/PackagingUnitSurchargeContext'
           maxItems: 500
           type: array
+        priority:
+          description: >-
+            Places the surcharge in the packagingUnit's application sequence,
+            which all surcharge types share. Ascending; gaps are allowed. If no
+            surcharge of a packagingUnit declares one, every percentage is
+            calculated on the base price only.
+          minimum: 0
+          type: number
         tenantSurchargeType:
           description: The tenant specific identifier for the surcharge type.
           type: string
@@ -60650,6 +60763,12 @@ components:
       description: PackagingUnitDetailPricingByZone
     PackagingUnitDetailRelativeSurcharge:
       properties:
+        calculationScope:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitSurchargeCalculationScope'
+          description: >-
+            The charges the percentage is calculated on. If omitted, it is
+            calculated on everything charged before it.
         context:
           description: >-
             Restricts the surcharge to the given contexts. If omitted, the
@@ -60660,6 +60779,14 @@ components:
           type: array
         percentage:
           description: The percentage of the surcharge.
+          type: number
+        priority:
+          description: >-
+            Places the surcharge in the packagingUnit's application sequence,
+            which all surcharge types share. Ascending; gaps are allowed. If no
+            surcharge of a packagingUnit declares one, every percentage is
+            calculated on the base price only.
+          minimum: 0
           type: number
         tenantSurchargeType:
           description: The tenant specific identifier for the surcharge type.
@@ -60678,6 +60805,12 @@ components:
       description: PackagingUnitDetailRelativeSurcharge
     PackagingUnitDetailThresholdSurcharge:
       properties:
+        calculationScope:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitSurchargeCalculationScope'
+          description: >-
+            The charges the percentage is calculated on. If omitted, it is
+            calculated on everything charged before it.
         context:
           description: >-
             Restricts the surcharge to the given contexts. If omitted, the
@@ -60696,6 +60829,14 @@ components:
           description: >-
             The percentage of the surcharge, charged whenever it exceeds the
             minimum amount.
+          type: number
+        priority:
+          description: >-
+            Places the surcharge in the packagingUnit's application sequence,
+            which all surcharge types share. Ascending; gaps are allowed. If no
+            surcharge of a packagingUnit declares one, every percentage is
+            calculated on the base price only.
+          minimum: 0
           type: number
         tenantSurchargeType:
           description: The tenant specific identifier for the surcharge type.
@@ -60835,6 +60976,29 @@ components:
       title: PackagingUnitsMoney
       type: object
       description: PackagingUnitsMoney
+    PackagingUnitSurchargeCalculationScope:
+      properties:
+        mode:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitSurchargeScopeMode'
+          description: >-
+            Whether the references name the charges the percentage is calculated
+            on, or the ones it is not calculated on.
+        references:
+          description: >-
+            The charges the mode is applied to. A reference that matches nothing
+            contributes nothing.
+          items:
+            $ref: '#/components/schemas/PackagingUnitSurchargeScopeReference'
+          maxItems: 500
+          minItems: 1
+          type: array
+      required:
+        - mode
+        - references
+      title: PackagingUnitSurchargeCalculationScope
+      type: object
+      description: PackagingUnitSurchargeCalculationScope
     PackagingUnitSurchargeContext:
       properties:
         operator:
@@ -60869,6 +61033,56 @@ components:
         - TARGET_POSTALCODE
         - TARGET_COUNTRY
       title: PackagingUnitSurchargeContextTypes
+      type: string
+    PackagingUnitSurchargeScopeLevel:
+      description: >-
+        Restricts the reference to the charges made on one pricing level. If
+        omitted, charges of both levels are selected, so a tenantSurchargeType
+        configured on both matches both.
+      enum:
+        - PACKAGING_UNIT
+        - TRANSFER
+      title: PackagingUnitSurchargeScopeLevel
+      type: string
+    PackagingUnitSurchargeScopeMode:
+      description: >-
+        Whether the references name the charges the percentage is calculated on,
+        or the ones it is not calculated on.
+      enum:
+        - INCLUDE
+        - EXCLUDE
+      title: PackagingUnitSurchargeScopeMode
+      type: string
+    PackagingUnitSurchargeScopeReference:
+      properties:
+        kind:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitSurchargeScopeReferenceKind'
+          description: What the reference selects.
+        level:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitSurchargeScopeLevel'
+          description: >-
+            Restricts the reference to the charges made on one pricing level. If
+            omitted, charges of both levels are selected, so a
+            tenantSurchargeType configured on both matches both.
+        tenantSurchargeType:
+          description: >-
+            The referenced tenant surcharge type. Only read for TENANT_SURCHARGE
+            references.
+          type: string
+      required:
+        - kind
+      title: PackagingUnitSurchargeScopeReference
+      type: object
+      description: PackagingUnitSurchargeScopeReference
+    PackagingUnitSurchargeScopeReferenceKind:
+      description: What the reference selects.
+      enum:
+        - BASE_PRICE
+        - TENANT_SURCHARGE
+        - PACKAGING_UNITS
+      title: PackagingUnitSurchargeScopeReferenceKind
       type: string
     PackagingUnitType:
       description: The type of the packagingUnit.
