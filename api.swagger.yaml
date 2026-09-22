@@ -1448,6 +1448,223 @@ paths:
       x-badges:
         - color: orange
           label: BETA
+  /api/configurations/availability/thresholds:
+    post:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Creates a new stock availability threshold configuration.
+      operationId: postStockAvailabilityThresholdConfig
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockAvailabilityThresholdConfigForCreation'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/StockAvailabilityThresholdConfigValidationOutcome
+          description: The created stock availability threshold configuration
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/StockAvailabilityThresholdConfigValidationOutcome
+          description: The provided threshold configuration failed validation
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Create stock availability threshold configuration
+      x-fft-permissions:
+        - AVAILABILITY_THRESHOLDS_WRITE
+      tags:
+        - Stock Availability Thresholds (Inventory)
+      x-badges:
+        - color: red
+          label: ALPHA
+  /api/configurations/availability/thresholds/{thresholdId}:
+    delete:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Deletes a stock availability threshold configuration.
+      operationId: deleteStockAvailabilityThresholdConfig
+      parameters:
+        - in: path
+          name: thresholdId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The stock availability threshold configuration was found & deleted.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Delete stock availability threshold configuration
+      x-fft-permissions:
+        - AVAILABILITY_THRESHOLDS_WRITE
+      tags:
+        - Stock Availability Thresholds (Inventory)
+      x-badges:
+        - color: red
+          label: ALPHA
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Returns a single stock availability threshold configuration by id.
+      operationId: getStockAvailabilityThresholdConfig
+      parameters:
+        - in: path
+          name: thresholdId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockAvailabilityThresholdConfig'
+          description: The stock availability threshold configuration
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+      summary: Get stock availability threshold configuration
+      x-fft-permissions:
+        - AVAILABILITY_THRESHOLDS_READ
+      tags:
+        - Stock Availability Thresholds (Inventory)
+      x-badges:
+        - color: red
+          label: ALPHA
+    put:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Updates an existing stock availability threshold configuration.
+      operationId: putStockAvailabilityThresholdConfig
+      parameters:
+        - in: path
+          name: thresholdId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockAvailabilityThresholdConfigForUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/StockAvailabilityThresholdConfigValidationOutcome
+          description: The updated stock availability threshold configuration
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/StockAvailabilityThresholdConfigValidationOutcome
+          description: The provided threshold configuration failed validation
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: The requested entity was not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: A version conflict occurred.
+      summary: Update stock availability threshold configuration
+      x-fft-permissions:
+        - AVAILABILITY_THRESHOLDS_WRITE
+      tags:
+        - Stock Availability Thresholds (Inventory)
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/configurations/capacityplanningtimeframe:
     get:
       description: ''
@@ -84317,6 +84534,223 @@ components:
       title: StockAvailabilityThreshold
       type: object
       description: StockAvailabilityThreshold
+    StockAvailabilityThresholdConfig:
+      properties:
+        created:
+          description: Creation date of this stockAvailabilityThresholdConfig
+          format: date-time
+          type: string
+        id:
+          description: Unique identifier of this stockAvailabilityThresholdConfig
+          example: 5aa18b4d-45de-4e9e-92db-936288040272
+          type: string
+        lastModified:
+          description: Last modification date of this stockAvailabilityThresholdConfig
+          format: date-time
+          type: string
+        target:
+          allOf:
+            - $ref: '#/components/schemas/StockAvailabilityThresholdConfigTarget'
+          description: >-
+            Targeting definition (context entries) this threshold configuration
+            applies to
+        tenantThresholdId:
+          description: Tenant-unique identifier of this threshold configuration
+          example: LOW_STOCK_ARTICLE_ABC123
+          type: string
+        thresholds:
+          description: >-
+            List of threshold level groups, each evaluated against a distinct
+            stock field. Currently limited to a single entry.
+          items:
+            $ref: '#/components/schemas/StockAvailabilityThresholdConfigGroup'
+          maxItems: 1
+          type: array
+        version:
+          description: Version number of this stockAvailabilityThresholdConfig
+          example: 1
+          type: number
+      required:
+        - target
+        - thresholds
+        - id
+        - version
+        - created
+        - lastModified
+      title: StockAvailabilityThresholdConfig
+      type: object
+      description: StockAvailabilityThresholdConfig
+    StockAvailabilityThresholdConfigContext:
+      properties:
+        type:
+          description: Type of the targeted context entry
+          enum:
+            - ARTICLE
+            - CATEGORY
+            - FACILITY
+            - FACILITY_GROUP
+          example: FACILITY
+          type: string
+        values:
+          description: Values for the targeted context entry
+          example:
+            - facilityRef1
+          items:
+            type: string
+          maxItems: 5
+          type: array
+      required:
+        - type
+        - values
+      title: StockAvailabilityThresholdConfigContext
+      type: object
+      description: StockAvailabilityThresholdConfigContext
+    StockAvailabilityThresholdConfigForCreation:
+      properties:
+        target:
+          allOf:
+            - $ref: '#/components/schemas/StockAvailabilityThresholdConfigTarget'
+          description: >-
+            Targeting definition (context entries) this threshold configuration
+            applies to
+        tenantThresholdId:
+          description: Tenant-unique identifier of this threshold configuration
+          example: LOW_STOCK_ARTICLE_ABC123
+          type: string
+        thresholds:
+          description: >-
+            List of threshold level groups, each evaluated against a distinct
+            stock field. Currently limited to a single entry.
+          items:
+            $ref: '#/components/schemas/StockAvailabilityThresholdConfigGroup'
+          maxItems: 1
+          type: array
+      required:
+        - target
+        - thresholds
+        - tenantThresholdId
+      title: StockAvailabilityThresholdConfigForCreation
+      type: object
+      description: StockAvailabilityThresholdConfigForCreation
+    StockAvailabilityThresholdConfigForUpdate:
+      properties:
+        target:
+          allOf:
+            - $ref: '#/components/schemas/StockAvailabilityThresholdConfigTarget'
+          description: >-
+            Targeting definition (context entries) this threshold configuration
+            applies to
+        thresholds:
+          description: >-
+            List of threshold level groups, each evaluated against a distinct
+            stock field. Currently limited to a single entry.
+          items:
+            $ref: '#/components/schemas/StockAvailabilityThresholdConfigGroup'
+          maxItems: 1
+          type: array
+        version:
+          description: Version number of this stockAvailabilityThresholdConfig
+          example: 1
+          minimum: 1
+          type: integer
+      required:
+        - version
+      title: StockAvailabilityThresholdConfigForUpdate
+      type: object
+      description: StockAvailabilityThresholdConfigForUpdate
+    StockAvailabilityThresholdConfigGroup:
+      properties:
+        levels:
+          items:
+            $ref: '#/components/schemas/StockAvailabilityThresholdConfigLevel'
+          maxItems: 5
+          type: array
+        thresholdOnValue:
+          description: Stock field this threshold group is evaluated against
+          enum:
+            - AVAILABLE_FOR_PICKING
+            - STOCK_ON_HAND
+          example: AVAILABLE_FOR_PICKING
+          type: string
+      required:
+        - thresholdOnValue
+        - levels
+      title: StockAvailabilityThresholdConfigGroup
+      type: object
+      description: StockAvailabilityThresholdConfigGroup
+    StockAvailabilityThresholdConfigLevel:
+      properties:
+        key:
+          description: Unique key of a threshold level within its group
+          example: LOW_STOCK
+          type: string
+        limit:
+          description: Cutoff stock quantity of a threshold level
+          example: 100
+          minimum: 0
+          type: integer
+        sticker:
+          allOf:
+            - $ref: '#/components/schemas/Sticker'
+          description: UI displays for stock that falls into this threshold level
+      required:
+        - key
+        - limit
+      title: StockAvailabilityThresholdConfigLevel
+      type: object
+      description: StockAvailabilityThresholdConfigLevel
+    StockAvailabilityThresholdConfigTarget:
+      properties:
+        context:
+          description: >-
+            Targeting definition (context entries) this threshold configuration
+            applies to
+          items:
+            $ref: '#/components/schemas/StockAvailabilityThresholdConfigContext'
+          maxItems: 5
+          type: array
+      required:
+        - context
+      title: StockAvailabilityThresholdConfigTarget
+      type: object
+      description: StockAvailabilityThresholdConfigTarget
+    StockAvailabilityThresholdConfigValidationIssue:
+      properties:
+        field:
+          description: >-
+            The field that failed validation, if the issue can be attributed to
+            a single field.
+          type: string
+        message:
+          description: A human-readable description of the validation failure.
+          type: string
+      required:
+        - message
+      title: StockAvailabilityThresholdConfigValidationIssue
+      type: object
+      description: StockAvailabilityThresholdConfigValidationIssue
+    StockAvailabilityThresholdConfigValidationOutcome:
+      properties:
+        result:
+          allOf:
+            - $ref: '#/components/schemas/StockAvailabilityThresholdConfig'
+          description: Created/updated threshold configuration on success.
+        success:
+          description: Whether the threshold configuration passed business validation.
+          type: boolean
+        validations:
+          description: >-
+            The business validation issues that prevented the threshold
+            configuration from being saved.
+          items:
+            $ref: >-
+              #/components/schemas/StockAvailabilityThresholdConfigValidationIssue
+          type: array
+      required:
+        - success
+      title: StockAvailabilityThresholdConfigValidationOutcome
+      type: object
+      description: StockAvailabilityThresholdConfigValidationOutcome
     StockAvailabilityThresholdTransitionConfig:
       properties:
         id:
@@ -93506,6 +93940,8 @@ tags:
     name: Inbound (Inventory)
   - description: These endpoints handle the reservations.
     name: Reservations (Inventory)
+  - description: Endpoints to create, update, and read stock availability thresholds.
+    name: Stock Availability Thresholds (Inventory)
   - description: Endpoints to create, update, and read stocks.
     name: Stocks (Inventory)
   - description: Endpoints to create, update, and read stocks configuration.
