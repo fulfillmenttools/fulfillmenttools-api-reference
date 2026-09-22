@@ -51461,6 +51461,12 @@ components:
             - MANDATORY
           example: MANDATORY
           type: string
+        validations:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeValidation'
+          maxItems: 1
+          minItems: 0
+          type: array
         value:
           description: The value of the attribute
           example: Germany
@@ -51485,6 +51491,12 @@ components:
             - MANDATORY
           example: MANDATORY
           type: string
+        validations:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeValidation'
+          maxItems: 1
+          minItems: 0
+          type: array
         value:
           description: The value of the attribute
           example: Germany
@@ -65995,6 +66007,7 @@ components:
         - $ref: '#/components/schemas/PickJobAddTargetTimeActionParameter'
         - $ref: '#/components/schemas/PickJobCancelActionParameter'
         - $ref: '#/components/schemas/PickJobCloseActionParameter'
+        - $ref: '#/components/schemas/PickJobTriggerAllowedValuesReloadParameter'
       title: PickJobActionsParameter
       description: PickJobActionsParameter
     PickJobAddTargetTimeActionEnum:
@@ -67008,6 +67021,29 @@ components:
       title: PickJobTransfersListFilter
       type: object
       description: PickJobTransfersListFilter
+    PickJobTriggerAllowedValuesReloadEnum:
+      enum:
+        - TRIGGER_ALLOWED_VALUES_RELOAD
+      type: string
+      title: PickJobTriggerAllowedValuesReloadEnum
+      description: PickJobTriggerAllowedValuesReloadEnum
+    PickJobTriggerAllowedValuesReloadParameter:
+      additionalProperties: false
+      description: >-
+        Action resend the business event PICK_JOB_ALLOWED_VALUES_REQUESTED for
+        this pick job.
+      properties:
+        name:
+          $ref: '#/components/schemas/PickJobTriggerAllowedValuesReloadEnum'
+        version:
+          description: Version of the entity to be closed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+      title: PickJobTriggerAllowedValuesReloadParameter
+      type: object
     PickjobWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
@@ -71924,6 +71960,12 @@ components:
             - MANDATORY
           example: MANDATORY
           type: string
+        validations:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeValidation'
+          maxItems: 1
+          minItems: 0
+          type: array
         value:
           description: The value of the attribute
           example: Germany
@@ -71959,6 +72001,12 @@ components:
             - MANDATORY
           example: MANDATORY
           type: string
+        validations:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeValidation'
+          maxItems: 1
+          minItems: 0
+          type: array
         value:
           description: The value of the attribute to set
           example: Germany
@@ -71969,6 +72017,35 @@ components:
       title: RecordableAttributeForUpdate
       type: object
       description: RecordableAttributeForUpdate
+    RecordableAttributeValidation:
+      properties:
+        allowedValues:
+          items:
+            $ref: '#/components/schemas/RecordableAttributeValidationsAllowedValue'
+          maxItems: 60
+          minItems: 0
+          type: array
+        type:
+          enum:
+            - EXACT_MATCH
+          type: string
+      required:
+        - type
+        - allowedValues
+      title: RecordableAttributeValidation
+      type: object
+      description: RecordableAttributeValidation
+    RecordableAttributeValidationsAllowedValue:
+      properties:
+        type:
+          enum:
+            - STRING
+          type: string
+      required:
+        - type
+      title: RecordableAttributeValidationsAllowedValue
+      type: object
+      description: RecordableAttributeValidationsAllowedValue
     ReductionSection:
       properties:
         diagnostics:
