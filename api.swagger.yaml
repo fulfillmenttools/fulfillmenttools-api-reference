@@ -230,6 +230,14 @@ paths:
               type: string
             maxItems: 50
             type: array
+        - description: >-
+            Additionaly calculate the current thresholds for each facilityStock
+            entry
+          in: query
+          name: includeThresholds
+          required: false
+          schema:
+            type: boolean
       responses:
         '200':
           content:
@@ -41114,6 +41122,10 @@ components:
           type: number
         stockOnHand:
           type: number
+        thresholds:
+          items:
+            $ref: '#/components/schemas/StockAvailabilityThreshold'
+          type: array
         totalAmount:
           minimum: 0
           type: number
@@ -41130,6 +41142,7 @@ components:
         - stockOnHand
         - facilityId
         - facilityName
+        - thresholds
       title: FacilityStockDistribution
       type: object
       description: FacilityStockDistribution
@@ -84206,6 +84219,42 @@ components:
       title: StockActionResult
       type: object
       description: StockActionResult
+    StockAvailabilityThreshold:
+      properties:
+        config:
+          $ref: '#/components/schemas/StockAvailabilityThresholdTransitionConfig'
+        thresholdLevel:
+          $ref: '#/components/schemas/TriggeredThresholdLevel'
+        thresholdOnValue:
+          enum:
+            - AVAILABLE_FOR_PICKING
+            - STOCK_ON_HAND
+          type: string
+      required:
+        - config
+        - thresholdOnValue
+        - thresholdLevel
+      title: StockAvailabilityThreshold
+      type: object
+      description: StockAvailabilityThreshold
+    StockAvailabilityThresholdTransitionConfig:
+      properties:
+        id:
+          type: string
+        revision:
+          type: number
+        tenantThresholdId:
+          type: string
+        version:
+          type: number
+      required:
+        - id
+        - version
+        - revision
+        - tenantThresholdId
+      title: StockAvailabilityThresholdTransitionConfig
+      type: object
+      description: StockAvailabilityThresholdTransitionConfig
     StockConditionEnumFilter:
       properties:
         eq:
@@ -90739,6 +90788,21 @@ components:
       type: object
       title: TransportDetails
       description: TransportDetails
+    TriggeredThresholdLevel:
+      properties:
+        actual:
+          type: number
+        key:
+          type: string
+        limit:
+          type: number
+      required:
+        - key
+        - limit
+        - actual
+      title: TriggeredThresholdLevel
+      type: object
+      description: TriggeredThresholdLevel
     TwoManHandlingDetails:
       properties:
         dimensions:
