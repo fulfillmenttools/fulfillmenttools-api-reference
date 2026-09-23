@@ -42430,10 +42430,24 @@ components:
       type: object
       title: HandledItem
       description: HandledItem
+    HandoverAdditionalItemsConfiguration:
+      additionalProperties: false
+      properties:
+        active:
+          default: false
+          description: Activate or Deactivate additional items handling on handover job
+          type: boolean
+      required:
+        - active
+      type: object
+      title: HandoverAdditionalItemsConfiguration
+      description: HandoverAdditionalItemsConfiguration
     HandoverConfiguration:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
       properties:
+        additionalItems:
+          $ref: '#/components/schemas/HandoverAdditionalItemsConfiguration'
         availableRefusedReasons:
           items:
             $ref: '#/components/schemas/AvailableRefusedReason'
@@ -42457,6 +42471,8 @@ components:
     HandoverConfigurationForCreate:
       additionalProperties: false
       properties:
+        additionalItems:
+          $ref: '#/components/schemas/HandoverAdditionalItemsConfiguration'
         availableRefusedReasons:
           items:
             $ref: '#/components/schemas/AvailableRefuseReasonForCreation'
