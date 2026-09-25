@@ -84936,6 +84936,31 @@ components:
       title: StockAvailabilityThresholdConfigValidationOutcome
       type: object
       description: StockAvailabilityThresholdConfigValidationOutcome
+    StockAvailabilityThresholdTransition:
+      properties:
+        config:
+          $ref: '#/components/schemas/StockAvailabilityThresholdTransitionConfig'
+        thresholdLevel:
+          $ref: '#/components/schemas/TriggeredThresholdLevel'
+        thresholdOnValue:
+          enum:
+            - AVAILABLE_FOR_PICKING
+            - STOCK_ON_HAND
+          type: string
+        transition:
+          enum:
+            - TO_ON
+            - TO_OFF
+            - NONE
+          type: string
+      required:
+        - config
+        - transition
+        - thresholdOnValue
+        - thresholdLevel
+      title: StockAvailabilityThresholdTransition
+      type: object
+      description: StockAvailabilityThresholdTransition
     StockAvailabilityThresholdTransitionConfig:
       properties:
         id:
@@ -84954,6 +84979,35 @@ components:
       title: StockAvailabilityThresholdTransitionConfig
       type: object
       description: StockAvailabilityThresholdTransitionConfig
+    StockAvailabilityThresholdTransitionedEventPayload:
+      properties:
+        facilityId:
+          type: string
+        tenantArticleId:
+          type: string
+        thresholds:
+          items:
+            $ref: '#/components/schemas/StockAvailabilityThresholdTransition'
+          type: array
+      required:
+        - tenantArticleId
+        - facilityId
+        - thresholds
+      title: StockAvailabilityThresholdTransitionedEventPayload
+      type: object
+      description: StockAvailabilityThresholdTransitionedEventPayload
+    StockAvailabilityThresholdTransitionedWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: >-
+            #/components/schemas/StockAvailabilityThresholdTransitionedEventPayload
+      required:
+        - payload
+      title: StockAvailabilityThresholdTransitionedWebHookEvent
+      type: object
+      description: StockAvailabilityThresholdTransitionedWebHookEvent
     StockConditionEnumFilter:
       properties:
         eq:
