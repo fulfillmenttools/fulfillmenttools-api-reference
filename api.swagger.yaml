@@ -40796,6 +40796,17 @@ components:
       title: FacilityPaginatedResult
       type: object
       description: FacilityPaginatedResult
+    FacilityPair:
+      properties:
+        facilityRef:
+          type: string
+        tenantFacilityId:
+          type: string
+      required:
+        - facilityRef
+      title: FacilityPair
+      type: object
+      description: FacilityPair
     FacilityPatchActions:
       description: >-
         This part of the API is deprecated. For details, see the <a
@@ -84996,7 +85007,9 @@ components:
       description: StockAvailabilityThresholdTransitionConfig
     StockAvailabilityThresholdTransitionedEventPayload:
       properties:
-        facilityId:
+        facility:
+          $ref: '#/components/schemas/FacilityPair'
+        facilityRef:
           type: string
         tenantArticleId:
           type: string
@@ -85006,7 +85019,8 @@ components:
           type: array
       required:
         - tenantArticleId
-        - facilityId
+        - facilityRef
+        - facility
         - thresholds
       title: StockAvailabilityThresholdTransitionedEventPayload
       type: object
