@@ -48148,6 +48148,10 @@ components:
           type: number
         tenantArticleId:
           type: string
+        thresholds:
+          items:
+            $ref: '#/components/schemas/StockAvailabilityThresholdTransition'
+          type: array
         totalAmount:
           type: number
       required:
@@ -48168,6 +48172,7 @@ components:
         - staleReasons
         - stockOnHand
         - availableOnStock
+        - thresholds
       title: InventoryFacilityStockShape
       type: object
       description: InventoryFacilityStockShape
@@ -75995,6 +76000,8 @@ components:
             - PICKJOB_SHORTPICKED
             - PICKJOB_ABORTED
             - TIME_TRIGGERED_REROUTE
+            - ORDER_MODIFIED
+            - TIME_TRIGGERED_INACTIVITY_REROUTE
           type: string
         created:
           description: Creation date of this routing journal entry
@@ -76012,6 +76019,13 @@ components:
           description: Reference to the associated process
           example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
           type: string
+        rerouteDescriptionRef:
+          description: >-
+            Reference to the reroute description associated with this routing
+            journal entry
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          nullable: true
+          type: object
         routingPlanRefs:
           description: References to the routing plans associated with this journal entry
           example:
@@ -76038,6 +76052,7 @@ components:
         - sourcingOptionRef
         - changeType
         - routingPlanRefs
+        - rerouteDescriptionRef
       title: RoutingJournal
       type: object
       description: RoutingJournal
@@ -84968,8 +84983,6 @@ components:
       properties:
         id:
           type: string
-        revision:
-          type: number
         tenantThresholdId:
           type: string
         version:
@@ -84977,7 +84990,6 @@ components:
       required:
         - id
         - version
-        - revision
         - tenantThresholdId
       title: StockAvailabilityThresholdTransitionConfig
       type: object
