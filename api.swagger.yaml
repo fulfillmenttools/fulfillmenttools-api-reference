@@ -69961,6 +69961,13 @@ components:
           items:
             type: string
           type: array
+        progressLogs:
+          description: >-
+            The progress logs of the process, which are used to track the status
+            changes of the process and its related entities.
+          items:
+            $ref: '#/components/schemas/ProgressLog'
+          type: array
         returnRefs:
           deprecated: true
           description: >-
@@ -72142,6 +72149,82 @@ components:
       type: string
       title: ProductValueType
       description: ProductValueType
+    ProgressLog:
+      allOf:
+        - $ref: '#/components/schemas/VersionedResource'
+      properties:
+        attributes:
+          type: object
+        domain:
+          $ref: '#/components/schemas/DomainType'
+        domainEntityProcessStatus:
+          $ref: '#/components/schemas/DomainStatus'
+        domainLastModified:
+          description: The last modified date of the related domain entity
+          example: 2020-02-03T09:45:51.525Z
+          format: date-time
+          type: string
+        domainRef:
+          type: string
+        domainStatus:
+          type: string
+        domainVersion:
+          description: The version of the related domain entity
+          example: 1
+          format: int64
+          type: integer
+        facilityRef:
+          description: The id of the facility an entity possibly belongs to.
+          type: string
+        id:
+          type: string
+        moduleEntity:
+          $ref: '#/components/schemas/ModuleEntity'
+        moduleEntityLastModified:
+          description: The last modified date of the related module entity
+          example: 2020-02-03T09:45:51.525Z
+          format: date-time
+          type: string
+        moduleEntityRef:
+          type: string
+        moduleEntityStatus:
+          description: Original status of the related module entity
+          type: string
+        moduleEntityStatusForProcess:
+          $ref: '#/components/schemas/ModuleEntityStatus'
+          description: >-
+            Module entity's original status mapped to the ModuleEntityStatus for
+            process
+        moduleEntitySubStatuses:
+          description: >-
+            Sub-statuses reported by the module entity for this progress log
+            entry.
+          items:
+            $ref: '#/components/schemas/ProcessSubStatus'
+          nullable: true
+          type: array
+        moduleEntityVersion:
+          description: The version of the related module entity
+          example: 1
+          format: int64
+          type: integer
+        schemaVersion:
+          type: number
+        statusChangeReasonKey:
+          description: >-
+            This property captures the reason for the entity’s status change.
+            Each module can define its own set of reasons, represented as an
+            ENUM
+          type: string
+      required:
+        - id
+        - domainVersion
+        - domainEntityProcessStatus
+        - domain
+        - domainRef
+        - domainStatus
+      title: ProgressLog
+      description: ProgressLog
     PromiseCarrier:
       additionalProperties: false
       properties:
