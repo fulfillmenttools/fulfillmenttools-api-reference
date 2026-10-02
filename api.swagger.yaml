@@ -94958,6 +94958,47 @@ components:
         en_US: Fraud check workflow
       title: WorkflowDescriptionLocaleString
       type: object
+    WorkflowGuardAppliesWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/WorkflowGuardAppliesWebHookEventPayload'
+      required:
+        - payload
+      type: object
+      title: WorkflowGuardAppliesWebHookEvent
+      description: WorkflowGuardAppliesWebHookEvent
+    WorkflowGuardAppliesWebHookEventPayload:
+      properties:
+        guardInfo:
+          properties:
+            entity:
+              type: string
+            expression:
+              type: string
+            nodeKey:
+              type: string
+            preconfigured:
+              type: string
+          required:
+            - nodeKey
+          type: object
+        instanceRef:
+          type: string
+        nodeRef:
+          type: string
+        relatedRefs:
+          items:
+            type: string
+          type: array
+      required:
+        - instanceRef
+        - nodeRef
+        - relatedRefs
+      type: object
+      title: WorkflowGuardAppliesWebHookEventPayload
+      description: WorkflowGuardAppliesWebHookEventPayload
     WorkflowInformation:
       additionalProperties: false
       properties:
