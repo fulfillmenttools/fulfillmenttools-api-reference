@@ -13176,21 +13176,21 @@ paths:
         - Returns (Operations)
   /api/itemreturnjobs/{itemReturnJobId}/itemreturns/{itemReturnId}/parcels:
     post:
+      deprecated: false
       description: >-
         This part of the API is in Beta status. For details, see the <a
         href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
         target="_blank">API release lifecycle documentation</a>.<br /><br
-        />Returns all parcels for an itemReturn.
+        />Create a parcel matching the item return values to represent the
+        return label
       operationId: createItemReturnParcel
       parameters:
-        - description: itemReturnJobId
-          in: path
+        - in: path
           name: itemReturnJobId
           required: true
           schema:
             type: string
-        - description: id of the itemReturn to create a parcel for
-          in: path
+        - in: path
           name: itemReturnId
           required: true
           schema:
@@ -13200,7 +13200,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ParcelForCreation'
-        description: Payload of the parcel you want to create
         required: true
       responses:
         '201':
@@ -13208,7 +13207,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Parcel'
-          description: Create a parcel for an itemReturn
+          description: Created Parcel
         '401':
           content:
             application/json:
@@ -13228,8 +13227,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Entity not found
-      summary: Create item return parcel
+          description: The requested entity was not found
+      summary: Create a parcel for the item return
+      x-fft-permissions:
+        - RETURN_WRITE
       tags:
         - Returns (Operations)
       x-badges:
@@ -29779,8 +29780,6 @@ components:
             - ModifyOrderSplit
             - ModifyPrioritization
             - ModifyFeature
-            - ModifyParcel
-            - ModifyParcelLoadUnit
             - ModifyPartialStock
             - AddTagsToProcess
             - AssignFacilityToProcess
@@ -30683,6 +30682,7 @@ components:
           type: array
       required:
         - alternativeReturnAddressPerTag
+      type: object
       title: AlternativeReturnAddressConfiguration
       description: AlternativeReturnAddressConfiguration
     AlternativeReturnAddressPerTag:
@@ -30702,6 +30702,7 @@ components:
         - tagRef
         - matchingValues
         - alternativeReturnAddress
+      type: object
       title: AlternativeReturnAddressPerTag
       description: AlternativeReturnAddressPerTag
     AnnounceItemReturnActionParameter:
@@ -37104,6 +37105,7 @@ components:
               example: Germany
               type: string
           type: object
+      type: object
       title: DhlTrackingLocation
     DhlTrackingStatus:
       additionalProperties: false
@@ -55564,78 +55566,74 @@ components:
       xml:
         name: ModifyPackLineItem
     ModifyParcel:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: Use value 'ModifyParcel', because you want to modify a Parcel
-              enum:
-                - ModifyParcel
-              type: string
-            carrierInformation:
-              $ref: '#/components/schemas/ParcelCarrierInformation'
-            carrierProduct:
-              description: Only changable on status OPEN or FAILED of the existing Parcel
-              nullable: true
-              type: string
-            customAttributes:
-              type: object
-            customProductValue:
-              description: >-
-                Set this value if you want to overwrite the calculated product
-                value of the parcel.
-              example: 12.5
-              type: number
-            dimensions:
-              $ref: '#/components/schemas/ParcelDimensions'
-            pickUpInformation:
-              $ref: '#/components/schemas/ParcelPickUpInformation'
-            productValue:
-              description: >-
-                Monetary value of all goods in this parcel. Needed for sending
-                cross border packages (customs) To be interpreted as money in
-                the currency given under paymentInformation.currency
-              example: 12.5
-              nullable: true
-              type: number
-            result:
-              $ref: '#/components/schemas/ParcelResult'
-            services:
-              $ref: '#/components/schemas/ParcelServices'
-            status:
-              $ref: '#/components/schemas/ParcelStatus'
-            tenantParcelId:
-              type: string
-          required:
-            - action
-          type: object
+      additionalProperties: false
       description: Modify Parcel Action.
+      properties:
+        action:
+          description: Use value "ModifyParcel", because you want to modify a Parcel
+          enum:
+            - ModifyParcel
+          type: string
+        carrierInformation:
+          $ref: '#/components/schemas/ParcelCarrierInformation'
+        carrierProduct:
+          description: Only changable on status OPEN or FAILED of the existing Parcel
+          nullable: true
+          type: string
+        customAttributes:
+          type: object
+        customProductValue:
+          description: >-
+            Set this value if you want to overwrite the calculated product value
+            of the parcel.
+          example: 12.5
+          type: number
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        pickUpInformation:
+          $ref: '#/components/schemas/ParcelPickUpInformation'
+        productValue:
+          description: >-
+            Monetary value of all goods in this parcel. Needed for sending cross
+            border packages (customs) To be interpreted as money in the currency
+            given under paymentInformation.currency
+          example: 12.5
+          nullable: true
+          type: number
+        result:
+          $ref: '#/components/schemas/ParcelResult'
+        services:
+          $ref: '#/components/schemas/ParcelServices'
+        status:
+          $ref: '#/components/schemas/ParcelStatus'
+        tenantParcelId:
+          type: string
+      required:
+        - action
       title: ModifyParcelAction
+      type: object
       xml:
         name: ModifyParcel
     ModifyParcelLoadUnit:
-      allOf:
-        - $ref: '#/components/schemas/AbstractModificationAction'
-        - additionalProperties: false
-          properties:
-            action:
-              description: >-
-                Use value 'ModifyParcelLoadUnit', because you want to modify
-                loadunitRefs in Parcel
-              enum:
-                - ModifyParcelLoadUnit
-              type: string
-            loadUnitRefs:
-              items:
-                type: string
-              type: array
-          required:
-            - action
-            - loadUnitRefs
-          type: object
+      additionalProperties: false
       description: Modify Parcels of a LoadUnit.
+      properties:
+        action:
+          description: >-
+            Use value "ModifyParcelLoadUnit", because you want to modify
+            loadunitRefs in Parcel
+          enum:
+            - ModifyParcelLoadUnit
+          type: string
+        loadUnitRefs:
+          items:
+            type: string
+          type: array
+      required:
+        - action
+        - loadUnitRefs
       title: ModifyParcelLoadUnitsAction
+      type: object
       xml:
         name: ModifyParcelLoadUnit
     ModifyPartialStock:
@@ -64287,6 +64285,7 @@ components:
         - $ref: >-
             #/components/schemas/UpdateParcelItemRecordableAttributesActionParameter
         - $ref: '#/components/schemas/AddLabelsToParcelActionParameter'
+      type: object
       title: ParcelActionsParameter
       description: ParcelActionsParameter
     ParcelArticleAttributeItemForUpdate:
@@ -64297,6 +64296,7 @@ components:
         - key
         - value
         - category
+      type: object
       title: ParcelArticleAttributeItemForUpdate
       description: ParcelArticleAttributeItemForUpdate
     ParcelCarrierInformation:
@@ -65228,6 +65228,7 @@ components:
             - id
             - quantity
           type: object
+      type: object
       xml:
         name: ParcelItem
       title: ParcelItem
@@ -65242,6 +65243,7 @@ components:
               maxItems: 40
               type: array
           type: object
+      type: object
       xml:
         name: ParcelItemArticle
       title: ParcelItemArticle
@@ -65309,7 +65311,8 @@ components:
           maxItems: 40
           type: array
         parcelItemValue:
-          $ref: '#/components/schemas/ParcelItemValue'
+          anyOf:
+            - $ref: '#/components/schemas/ParcelItemValue'
           deprecated: true
           description: >-
             Deprecated - use article.attribute.pricePerUnit and
@@ -65557,6 +65560,7 @@ components:
       required:
         - currency
         - value
+      type: object
       title: ParcelPostalCharge
       description: ParcelPostalCharge
     ParcelProductValue:
@@ -65985,6 +65989,7 @@ components:
           $ref: '#/components/schemas/AlternativeReturnAddressConfiguration'
       required:
         - alternativeReturnAddressConfiguration
+      type: object
       title: ParcelTagConfiguration
       description: ParcelTagConfiguration
     ParcelTagConfigurationForUpsert:
@@ -65998,6 +66003,7 @@ components:
           type: number
       required:
         - alternativeReturnAddressConfiguration
+      type: object
       title: ParcelTagConfigurationForUpsert
       description: ParcelTagConfigurationForUpsert
     ParcelTrackingData:
@@ -70712,7 +70718,8 @@ components:
           description: Original status of the related module entity
           type: string
         moduleEntityStatusForProcess:
-          $ref: '#/components/schemas/ModuleEntityStatus'
+          allOf:
+            - $ref: '#/components/schemas/ModuleEntityStatus'
           description: >-
             Module entity's original status mapped to the ModuleEntityStatus for
             process
@@ -72326,7 +72333,8 @@ components:
           description: Original status of the related module entity
           type: string
         moduleEntityStatusForProcess:
-          $ref: '#/components/schemas/ModuleEntityStatus'
+          allOf:
+            - $ref: '#/components/schemas/ModuleEntityStatus'
           description: >-
             Module entity's original status mapped to the ModuleEntityStatus for
             process
@@ -73447,6 +73455,7 @@ components:
           type: string
       required:
         - quantity
+      type: object
       title: RefusedItem
       description: RefusedItem
     RefusedItemForUpdate:
