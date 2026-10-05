@@ -20470,6 +20470,79 @@ paths:
       tags:
         - Picking (Operations)
   /api/pickupservices:
+    get:
+      deprecated: false
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Retrieves all matching pickupServices respecting the filter criteria.
+      operationId: getPickupServices
+      parameters:
+        - description: number of entities to show
+          in: query
+          name: size
+          required: true
+          schema:
+            default: 25
+            example: 25
+            maximum: 500
+            minimum: 1
+            type: integer
+        - description: all entities after given Id
+          in: query
+          name: startAfterId
+          required: false
+          schema:
+            example: 6db6a29b-143d-4ffd-ab8b-45cd299cdb00
+            minLength: 1
+            type: string
+        - description: Whether this pickupService is active
+          in: query
+          name: active
+          required: false
+          schema:
+            nullable: true
+            type: boolean
+        - description: >-
+            Filter by facility reference. Matches pickupServices whose context
+            contains a FACILITY entry with this value.
+          in: query
+          name: facilityRef
+          required: false
+          schema:
+            example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+            nullable: true
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickupServices'
+          description: Successfully retrieved the pickupServices.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+      summary: Get a pickupServices by filter
+      x-fft-permissions:
+        - PICKUP_SERVICE_READ
+      tags:
+        - PickupService (operations)
+      x-badges:
+        - color: red
+          label: ALPHA
     post:
       deprecated: false
       description: >-
@@ -69402,9 +69475,7 @@ components:
           format: date-time
           type: string
         description:
-          description: >-
-            Description of this pickupService, derived from descriptionLocalized
-            for the requested locale
+          description: Description of this pickupService
           type: string
         id:
           description: Unique identifier of this pickupService
@@ -69415,9 +69486,7 @@ components:
           format: date-time
           type: string
         name:
-          description: >-
-            Name of this pickupService, derived from nameLocalized for the
-            requested locale
+          description: Name of this pickupService
           type: string
         type:
           description: Type of this pickupService
@@ -69551,6 +69620,21 @@ components:
       title: PickupServiceForUpdate
       type: object
       description: PickupServiceForUpdate
+    PickupServices:
+      properties:
+        pickupServices:
+          description: List of pickup services matching the query
+          items:
+            $ref: '#/components/schemas/PickupService'
+          maxItems: 500
+          type: array
+        total:
+          description: Total number of found entities for this query
+          example: 42
+          type: integer
+      title: PickupServices
+      type: object
+      description: PickupServices
     PickUpServiceUpdate:
       additionalProperties: false
       properties:
