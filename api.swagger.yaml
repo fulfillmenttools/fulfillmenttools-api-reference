@@ -32832,6 +32832,19 @@ components:
           x-badges:
             - color: red
               label: ALPHA
+        weightBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitWeightBasis'
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The article weight the packagingUnit is priced on: WEIGHT
+            (weightPerUnit) or BILLABLE_WEIGHT (billableWeightPerUnit). Defaults
+            to WEIGHT.
+          x-badges:
+            - color: red
+              label: ALPHA
       required:
         - type
         - maxLength
@@ -48411,6 +48424,8 @@ components:
           format: float
           minimum: 0
           type: number
+        weightBasis:
+          $ref: '#/components/schemas/InterFacilityConnectionWeightBasis'
         weightToVolumeFactor:
           description: >-
             Converts the aggregated weight of all packaging units into a volume.
@@ -48513,6 +48528,16 @@ components:
         - percentage
       title: InterFacilityConnectionTransferThresholdSurcharge
       type: object
+    InterFacilityConnectionWeightBasis:
+      description: >-
+        The article weight the aggregated weight of the transfer is calculated
+        from: WEIGHT (weightPerUnit) or BILLABLE_WEIGHT (billableWeightPerUnit).
+        Defaults to WEIGHT.
+      enum:
+        - WEIGHT
+        - BILLABLE_WEIGHT
+      title: InterFacilityConnectionWeightBasis
+      type: string
     InventoryArticle:
       properties:
         titleLocalized:
@@ -53603,9 +53628,19 @@ components:
             The height in millimeters of the empty load carrier (e.g. pallet or
             skid) itself.
           type: number
+        loadCarrierLength:
+          description: >-
+            The length in millimeters of the empty load carrier (e.g. pallet or
+            skid) itself.
+          type: number
         loadCarrierWeight:
           description: >-
             The tare weight in grams of the empty load carrier (e.g. pallet or
+            skid) itself.
+          type: number
+        loadCarrierWidth:
+          description: >-
+            The width in millimeters of the empty load carrier (e.g. pallet or
             skid) itself.
           type: number
         maxGirth:
@@ -53657,6 +53692,13 @@ components:
         volumetricWeightFactor:
           description: The volumetric weight factor for the packagingUnit.
           type: number
+        weightBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitWeightBasis'
+          description: >-
+            The article weight the packagingUnit is priced on: WEIGHT
+            (weightPerUnit) or BILLABLE_WEIGHT (billableWeightPerUnit). Defaults
+            to WEIGHT.
       required:
         - type
         - packagingPricingDetails
@@ -62240,6 +62282,16 @@ components:
         - LONG_GOODS
       title: PackagingUnitType
       type: string
+    PackagingUnitWeightBasis:
+      description: >-
+        The article weight the packagingUnit is priced on: WEIGHT
+        (weightPerUnit) or BILLABLE_WEIGHT (billableWeightPerUnit). Defaults to
+        WEIGHT.
+      enum:
+        - WEIGHT
+        - BILLABLE_WEIGHT
+      title: PackagingUnitWeightBasis
+      type: string
     PackingConfigurations:
       allOf:
         - $ref: '#/components/schemas/VersionedResource'
@@ -64084,12 +64136,34 @@ components:
           x-badges:
             - color: red
               label: ALPHA
+        loadCarrierLength:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The length in millimeters of the empty load carrier (e.g. pallet
+            or skid) itself.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
         loadCarrierWeight:
           description: >-
             This part of the API is in Alpha status. For details, see the <a
             href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
             target="_blank">API release lifecycle documentation</a>.<br /><br
             />The tare weight in grams of the empty load carrier (e.g. pallet or
+            skid) itself.
+          type: number
+          x-badges:
+            - color: red
+              label: ALPHA
+        loadCarrierWidth:
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The width in millimeters of the empty load carrier (e.g. pallet or
             skid) itself.
           type: number
           x-badges:
@@ -64139,6 +64213,19 @@ components:
         volumetricWeightFactor:
           description: The volumetric weight factor for the packagingUnit.
           type: number
+        weightBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitWeightBasis'
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The article weight the packagingUnit is priced on: WEIGHT
+            (weightPerUnit) or BILLABLE_WEIGHT (billableWeightPerUnit). Defaults
+            to WEIGHT.
+          x-badges:
+            - color: red
+              label: ALPHA
       required:
         - type
         - dimensions
@@ -64377,6 +64464,19 @@ components:
             target="_blank">API release lifecycle documentation</a>.<br /><br
             />The volumetric weight factor for the packagingUnit.
           type: number
+          x-badges:
+            - color: red
+              label: ALPHA
+        weightBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitWeightBasis'
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The article weight the packagingUnit is priced on: WEIGHT
+            (weightPerUnit) or BILLABLE_WEIGHT (billableWeightPerUnit). Defaults
+            to WEIGHT.
           x-badges:
             - color: red
               label: ALPHA
@@ -92778,6 +92878,19 @@ components:
             target="_blank">API release lifecycle documentation</a>.<br /><br
             />The volumetric weight factor for the packagingUnit.
           type: number
+          x-badges:
+            - color: red
+              label: ALPHA
+        weightBasis:
+          allOf:
+            - $ref: '#/components/schemas/PackagingUnitWeightBasis'
+          description: >-
+            This part of the API is in Alpha status. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />The article weight the packagingUnit is priced on: WEIGHT
+            (weightPerUnit) or BILLABLE_WEIGHT (billableWeightPerUnit). Defaults
+            to WEIGHT.
           x-badges:
             - color: red
               label: ALPHA
