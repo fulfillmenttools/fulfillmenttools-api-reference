@@ -79173,7 +79173,7 @@ components:
           pattern: ^P(?:(\d+W)|(\d+Y)?(\d+M)?(\d+D)?(?:T(\d+H)?(\d+M)?(\d+S)?)?)$
           type: string
         timeTriggered:
-          $ref: '#/components/schemas/RoutingStrategyRerouteTimeTriggeredConfig'
+          $ref: '#/components/schemas/RoutingStrategyGlobalRerouteTimeTriggeredConfig'
         timeTriggeredByContext:
           items:
             $ref: '#/components/schemas/TimeTriggeredConfigurationContext'
@@ -79186,6 +79186,35 @@ components:
         name: RoutingStrategyGlobalConfiguration
       title: RoutingStrategyGlobalConfiguration
       description: RoutingStrategyGlobalConfiguration
+    RoutingStrategyGlobalRerouteConfiguration:
+      allOf:
+        - $ref: '#/components/schemas/RerouteConfiguration'
+      properties:
+        timeTriggeredRerouteAttemptThreshold:
+          description: >-
+            The maximum number of attempts made to time-triggered reroute an
+            order or parts of it.
+          maximum: 200
+          minimum: 1
+          type: integer
+      title: RoutingStrategyGlobalRerouteConfiguration
+      description: RoutingStrategyGlobalRerouteConfiguration
+    RoutingStrategyGlobalRerouteTimeTriggeredConfig:
+      additionalProperties: false
+      properties:
+        clickAndCollectReroute:
+          $ref: '#/components/schemas/RoutingStrategyGlobalRerouteConfiguration'
+        shipFromStoreDeliveryReroute:
+          $ref: '#/components/schemas/RoutingStrategyGlobalRerouteConfiguration'
+        shipFromStoreSamedayReroute:
+          $ref: '#/components/schemas/RoutingStrategyGlobalRerouteConfiguration'
+      required:
+        - clickAndCollectReroute
+        - shipFromStoreDeliveryReroute
+        - shipFromStoreSamedayReroute
+      type: object
+      title: RoutingStrategyGlobalRerouteTimeTriggeredConfig
+      description: RoutingStrategyGlobalRerouteTimeTriggeredConfig
     RoutingStrategyNode:
       additionalProperties: false
       properties:
