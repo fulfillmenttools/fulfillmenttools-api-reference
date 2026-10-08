@@ -30181,6 +30181,14 @@ components:
           format: int64
           minimum: 1
           type: integer
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
       required:
         - id
         - article
@@ -30197,6 +30205,14 @@ components:
           format: int64
           minimum: 1
           type: integer
+        stickers:
+          items:
+            $ref: '#/components/schemas/Sticker'
+          type: array
+        tags:
+          items:
+            $ref: '#/components/schemas/TagReference'
+          type: array
       required:
         - article
         - quantity
@@ -79190,7 +79206,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/RerouteConfiguration'
       properties:
-        timeTriggeredRerouteAttemptThreshold:
+        rerouteAttemptThreshold:
           description: >-
             The maximum number of attempts made to time-triggered reroute an
             order or parts of it.
@@ -91764,6 +91780,17 @@ components:
         - rerouteDate
       title: TimeTriggeredRerouteFailedWebHookEventPayload
       description: TimeTriggeredRerouteFailedWebHookEventPayload
+    TimeTriggeredRerouteLimitReachedWebHookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebHookEvent'
+      properties:
+        payload:
+          $ref: '#/components/schemas/RoutingPlan'
+      required:
+        - payload
+      type: object
+      title: TimeTriggeredRerouteLimitReachedWebHookEvent
+      description: TimeTriggeredRerouteLimitReachedWebHookEvent
     TimeZone:
       description: Timezone for information retrieved e.g. by the Google Maps API
       properties:
