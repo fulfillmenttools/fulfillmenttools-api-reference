@@ -11797,6 +11797,49 @@ paths:
       tags:
         - Handovers (Operations)
   /api/handoverjobs/{handoverJobId}/signature:
+    get:
+      description: Create a signature draft document for an existing handover job
+      operationId: getHandoverJobSignatureDraftPdf
+      parameters:
+        - description: ID of handover job you want to retrieve the signature draft for
+          in: path
+          name: handoverJobId
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          content:
+            application/pdf:
+              schema:
+                format: binary
+                type: string
+          description: The signature draft pdf was successfully created.
+        '401':
+          content:
+            application/pdf:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/pdf:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/pdf:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: handover job not found
+      summary: Get handover job signature draft pdf
+      x-fft-permissions:
+        - HANDOVERJOB_READ
+      tags:
+        - Shipments (Operations)
     post:
       description: >-
         Generates a PDF pickup receipt for the handover job, with a blank
@@ -28428,6 +28471,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
           description: Facility listing not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Substitutes version conflict
       summary: Set substitutes
       tags:
         - Picking (Operations)
