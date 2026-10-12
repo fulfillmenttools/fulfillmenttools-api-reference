@@ -33031,6 +33031,9 @@ components:
         maxLength:
           description: The maximum length in millimeters of the packagingUnit.
           type: number
+        maxVolume:
+          description: The maximum volume in cubic millimeters of the packagingUnit.
+          type: number
         maxVolumetricWeight:
           description: >-
             This part of the API is in Alpha status. For details, see the <a
@@ -53899,6 +53902,9 @@ components:
         maxLength:
           description: The maximum length in millimeters of the packagingUnit.
           type: number
+        maxVolume:
+          description: The maximum volume in cubic millimeters of the packagingUnit.
+          type: number
         maxVolumetricWeight:
           description: >-
             This part of the API is in Alpha status. For details, see the <a
@@ -70528,6 +70534,8 @@ components:
           allOf:
             - $ref: '#/components/schemas/ProcessStatusDetail'
           description: Return domain status with aggregated sub-statuses from modules.
+        routingEngine:
+          $ref: '#/components/schemas/RoutingEngineEnum'
         routingPlanRefs:
           description: >-
             References the RoutingPlans that were used during this process (if
@@ -77410,6 +77418,13 @@ components:
       type: object
       title: RoutingDecisionLogs
       description: RoutingDecisionLogs
+    RoutingEngineEnum:
+      enum:
+        - ADVANCED_ORDER_ROUTING
+        - STANDARD_ORDER_ROUTING
+      type: string
+      title: RoutingEngineEnum
+      description: RoutingEngineEnum
     RoutingJournal:
       properties:
         blacklistedFacilityData:
@@ -77638,6 +77653,8 @@ components:
           type: string
         reRouteReason:
           $ref: '#/components/schemas/RerouteReason'
+        routingEngine:
+          $ref: '#/components/schemas/RoutingEngineEnum'
         routingRun:
           description: The iteration through the routing process
           type: number
@@ -93165,7 +93182,7 @@ components:
           description: The maximum number of items that can fit in the packagingUnit.
           type: number
         maxVolume:
-          description: The maximum volume in cubicle millimeters of the packagingUnit.
+          description: The maximum volume in cubic millimeters of the packagingUnit.
           type: number
         maxVolumetricWeight:
           description: >-
