@@ -63594,6 +63594,8 @@ components:
               $ref: '#/components/schemas/PackingSourceContainerConfiguration'
             scanningConfiguration:
               $ref: '#/components/schemas/PackingScanningConfiguration'
+            takeOverPackJobConfiguration:
+              $ref: '#/components/schemas/TakeOverPackJobConfiguration'
       type: object
       title: PackingConfigurations
       description: PackingConfigurations
@@ -64477,6 +64479,7 @@ components:
         - $ref: >-
             #/components/schemas/PackJobMoveEachesToTargetContainerActionParameter
         - $ref: '#/components/schemas/PackJobAddTargetTimeActionParameter'
+        - $ref: '#/components/schemas/PackJobTakeOverActionParameter'
       title: PackJobActionsParameter
       description: PackJobActionsParameter
     PackJobAddTargetTimeActionEnum:
@@ -65211,6 +65214,28 @@ components:
       type: object
       title: PackJobTagConfiguration
       description: PackJobTagConfiguration
+    PackJobTakeOverActionEnum:
+      enum:
+        - TAKE_OVER_PACK_JOB
+      type: string
+      title: PackJobTakeOverActionEnum
+      description: PackJobTakeOverActionEnum
+    PackJobTakeOverActionParameter:
+      additionalProperties: false
+      description: >-
+        Action to take over the pack job by changing the editor to the current
+        user
+      properties:
+        name:
+          $ref: '#/components/schemas/PackJobTakeOverActionEnum'
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - name
+        - version
+      title: PackJobTakeOverActionParameter
     PackJobWebHookEvent:
       allOf:
         - $ref: '#/components/schemas/WebHookEvent'
@@ -92579,6 +92604,17 @@ components:
       title: TakenStowLineItemTakeFromForCreation
       type: object
       description: TakenStowLineItemTakeFromForCreation
+    TakeOverPackJobConfiguration:
+      properties:
+        active:
+          default: false
+          description: Enable or disable pack job takeover
+          type: boolean
+      required:
+        - active
+      type: object
+      title: TakeOverPackJobConfiguration
+      description: TakeOverPackJobConfiguration
     TakeOverPickJobConfiguration:
       properties:
         active:
