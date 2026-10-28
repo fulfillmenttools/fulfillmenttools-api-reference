@@ -58724,8 +58724,13 @@ components:
       description: OperationsValidationSort
     OperationsValidationSourceOperativeEntity:
       properties:
-        id:
+        entityId:
           description: ID of the operative entity.
+          example: 9a14e183-ff86-4b6e-a2dc-eb4c7e312ab1
+          minLength: 1
+          type: string
+        recordableAttributeId:
+          description: ID of recordable attribute of the operative entity.
           example: 9a14e183-ff86-4b6e-a2dc-eb4c7e312ab1
           minLength: 1
           type: string
@@ -58735,7 +58740,8 @@ components:
             - PICK_JOB
           type: string
       required:
-        - id
+        - entityId
+        - recordableAttributeId
         - type
       title: OperationsValidationSourceOperativeEntity
       type: object
@@ -58775,11 +58781,10 @@ components:
       description: OperationsValidationValueEntriesListFilter
     OperationsValidationValueEntriesSourceOperativeEntityFilter:
       properties:
-        id:
+        entityId:
           allOf:
             - $ref: '#/components/schemas/StringFilter'
-          description: Search by id
-          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          description: Search by entityId
       title: OperationsValidationValueEntriesSourceOperativeEntityFilter
       type: object
       description: OperationsValidationValueEntriesSourceOperativeEntityFilter
@@ -68317,6 +68322,17 @@ components:
             Enable or disable validation on recordable attributes in pick line
             items
           type: boolean
+        keys:
+          description: >-
+            Keys that, if used inside the recordable attribute validation
+            values, will be validated for uniqueness.
+          example:
+            - SERIAL_NUMBER
+          items:
+            type: string
+          maxItems: 60
+          minItems: 0
+          type: array
       required:
         - active
       type: object
@@ -74479,6 +74495,8 @@ components:
           type: string
         name:
           type: string
+        optionAggregation:
+          $ref: '#/components/schemas/ToolkitRatingOptionAggregation'
         penalty:
           type: number
         routingStrategyNodeId:
@@ -81082,6 +81100,12 @@ components:
           description: The name of the rating
           example: CustomRating
           type: string
+        optionAggregation:
+          allOf:
+            - $ref: '#/components/schemas/ToolkitRatingOptionAggregation'
+          description: >-
+            Defines how the facility penalties of a sourcing option are
+            aggregated into the option penalty. Defaults to SUM.
         priority:
           description: The priority of this rating
           example: 100
@@ -81148,6 +81172,12 @@ components:
           description: The name of the rating
           example: CustomRating
           type: string
+        optionAggregation:
+          allOf:
+            - $ref: '#/components/schemas/ToolkitRatingOptionAggregation'
+          description: >-
+            Defines how the facility penalties of a sourcing option are
+            aggregated into the option penalty. Defaults to SUM.
         referenceId:
           type: string
         rule:
@@ -93487,6 +93517,22 @@ components:
         name: ToolkitRatingForModification
       title: ToolkitRatingForModification
       description: ToolkitRatingForModification
+    ToolkitRatingOptionAggregation:
+      description: >-
+        Defines how the penalties of the facilities within one sourcing option
+        are aggregated into the option penalty. MIN: at least one facility must
+        satisfy the rating, otherwise maxPenalty is applied once. MAX: all
+        facilities must satisfy the rating, otherwise maxPenalty is applied
+        once. SUM: every facility not satisfying the rating is charged
+        maxPenalty individually.
+      enum:
+        - MIN
+        - MAX
+        - SUM
+      type: string
+      xml:
+        name: ToolkitRatingOptionAggregation
+      title: ToolkitRatingOptionAggregation
     ToolkitRatingTransporter:
       properties:
         ratings:
