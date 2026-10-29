@@ -50662,6 +50662,10 @@ components:
             type: string
           maxItems: 50
           type: array
+        pricing:
+          allOf:
+            - $ref: '#/components/schemas/OrderPricing'
+          description: Contains pricing information regarding the whole item return job
         processRef:
           type: string
         returnableLineItems:
@@ -50737,6 +50741,10 @@ components:
             type: string
           maxItems: 50
           type: array
+        pricing:
+          allOf:
+            - $ref: '#/components/schemas/PricingForCreation'
+          description: Contains pricing information regarding the whole item return job
         processRef:
           type: string
         returnableLineItems:
@@ -50959,6 +50967,42 @@ components:
       title: ItemReturnJobLineItemForCreation
       type: object
       description: ItemReturnJobLineItemForCreation
+    ItemReturnJobPricingFee:
+      properties:
+        name:
+          description: Name of the fee
+          type: string
+        value:
+          allOf:
+            - $ref: '#/components/schemas/PricingMonetaryValue'
+          description: Fee value
+      title: ItemReturnJobPricingFee
+      type: object
+      description: ItemReturnJobPricingFee
+    ItemReturnJobPricingTax:
+      properties:
+        ratePercent:
+          description: Tax rate as percentage
+          type: number
+        scope:
+          description: Scope of the tax
+          type: string
+        taxableValue:
+          allOf:
+            - $ref: '#/components/schemas/PricingMonetaryValue'
+          description: Taxable base value
+        type:
+          description: Tax type identifier
+          type: string
+        value:
+          allOf:
+            - $ref: '#/components/schemas/PricingMonetaryValue'
+          description: Tax value
+      required:
+        - value
+      title: ItemReturnJobPricingTax
+      type: object
+      description: ItemReturnJobPricingTax
     ItemReturnJobs:
       properties:
         itemReturnJobsWithSearchPaths:
@@ -51033,6 +51077,10 @@ components:
             type: string
           maxItems: 50
           type: array
+        pricing:
+          allOf:
+            - $ref: '#/components/schemas/OrderPricing'
+          description: Contains pricing information regarding the whole item return job
         processRef:
           type: string
         returnableLineItems:
@@ -71311,6 +71359,267 @@ components:
       title: PriceRange
       type: object
       description: PriceRange
+    PricingDiscount:
+      properties:
+        nameLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        code:
+          description: Discount code
+          type: string
+        context:
+          description: Context of the discount
+          type: string
+        name:
+          description: Name of the discount
+          type: string
+        percentage:
+          description: >-
+            Discount percentage (0 to 100). Required when type is PERCENTAGE.
+            Must be positive or zero (e.g. 10 for 10% off).
+          type: number
+        tenantDiscountId:
+          description: Tenant-specific discount identifier
+          example: MY_DISCOUNT_ID
+          type: string
+        type:
+          description: >-
+            Type of the discount. ABSOLUTE requires value, PERCENTAGE requires
+            percentage.
+          enum:
+            - ABSOLUTE
+            - PERCENTAGE
+          type: string
+        value:
+          allOf:
+            - $ref: '#/components/schemas/PricingMonetaryValue'
+          description: Discount value
+      title: PricingDiscount
+      type: object
+      description: PricingDiscount
+    PricingForCreation:
+      properties:
+        discounts:
+          description: Discounts applied to the order
+          items:
+            $ref: '#/components/schemas/PricingDiscount'
+          maxItems: 100
+          type: array
+        fees:
+          description: Fees applied to the order
+          items:
+            $ref: '#/components/schemas/ItemReturnJobPricingFee'
+          maxItems: 100
+          type: array
+        taxes:
+          description: Tax breakdown
+          items:
+            $ref: '#/components/schemas/ItemReturnJobPricingTax'
+          maxItems: 100
+          type: array
+      title: PricingForCreation
+      type: object
+      description: PricingForCreation
+    PricingMonetaryValue:
+      properties:
+        currency:
+          description: ISO 4217 currency code
+          enum:
+            - AED
+            - AFN
+            - ALL
+            - AMD
+            - ANG
+            - AOA
+            - ARS
+            - AUD
+            - AWG
+            - AZN
+            - BAM
+            - BBD
+            - BDT
+            - BGN
+            - BHD
+            - BIF
+            - BMD
+            - BND
+            - BOB
+            - BOV
+            - BRL
+            - BSD
+            - BTN
+            - BWP
+            - BYN
+            - BZD
+            - CAD
+            - CDF
+            - CHE
+            - CHF
+            - CHW
+            - CLF
+            - CLP
+            - CNY
+            - COP
+            - COU
+            - CRC
+            - CUC
+            - CUP
+            - CVE
+            - CZK
+            - DJF
+            - DKK
+            - DOP
+            - DZD
+            - EGP
+            - ERN
+            - ETB
+            - EUR
+            - FJD
+            - FKP
+            - GBP
+            - GEL
+            - GHS
+            - GIP
+            - GMD
+            - GNF
+            - GTQ
+            - GYD
+            - HKD
+            - HNL
+            - HTG
+            - HUF
+            - IDR
+            - ILS
+            - INR
+            - IQD
+            - IRR
+            - ISK
+            - JMD
+            - JOD
+            - JPY
+            - KES
+            - KGS
+            - KHR
+            - KMF
+            - KPW
+            - KRW
+            - KWD
+            - KYD
+            - KZT
+            - LAK
+            - LBP
+            - LKR
+            - LRD
+            - LSL
+            - LYD
+            - MAD
+            - MDL
+            - MGA
+            - MKD
+            - MMK
+            - MNT
+            - MOP
+            - MRU
+            - MUR
+            - MVR
+            - MWK
+            - MXN
+            - MXV
+            - MYR
+            - MZN
+            - NAD
+            - NGN
+            - NIO
+            - NOK
+            - NPR
+            - NZD
+            - OMR
+            - PAB
+            - PEN
+            - PGK
+            - PHP
+            - PKR
+            - PLN
+            - PYG
+            - QAR
+            - RON
+            - RSD
+            - RUB
+            - RWF
+            - SAR
+            - SBD
+            - SCR
+            - SDG
+            - SEK
+            - SGD
+            - SHP
+            - SLE
+            - SOS
+            - SRD
+            - SSP
+            - STN
+            - SVC
+            - SYP
+            - SZL
+            - THB
+            - TJS
+            - TMT
+            - TND
+            - TOP
+            - TRY
+            - TTD
+            - TWD
+            - TZS
+            - UAH
+            - UGX
+            - USD
+            - USN
+            - UYI
+            - UYU
+            - UYW
+            - UZS
+            - VED
+            - VES
+            - VND
+            - VUV
+            - WST
+            - XAF
+            - XAG
+            - XAU
+            - XBA
+            - XBB
+            - XBC
+            - XBD
+            - XCD
+            - XDR
+            - XOF
+            - XPD
+            - XPF
+            - XPT
+            - XSU
+            - XTS
+            - XUA
+            - XXX
+            - YER
+            - ZAR
+            - ZMW
+            - ZWL
+          type: string
+        decimalPlaces:
+          description: >-
+            Number of decimal places. If omitted, the default for the currency
+            applies.
+          example: 42
+          type: integer
+        value:
+          description: Monetary value as integer (no decimals)
+          example: 42
+          type: integer
+      required:
+        - value
+        - currency
+      title: PricingMonetaryValue
+      type: object
+      description: PricingMonetaryValue
     PrintableDocument:
       properties:
         customAttributes:
