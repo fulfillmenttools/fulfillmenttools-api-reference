@@ -48364,9 +48364,10 @@ components:
           description: >-
             The shipping zone for which the pricing applies. Please provide the
             ISO 3166-2 country code, followed by a dash and the first digits of
-            the postal code, e.g. DE-50 for Cologne, Germany.
+            the postal code, e.g. DE-50 for Cologne, Germany. For Great Britain,
+            use the outward code or its leading part, e.g. GB-SW1A or GB-M.
           example: IT-20
-          pattern: ^[A-Z]{2}-\d+$
+          pattern: ^(?:[A-Z]{2}-\d+|GB-[A-Z]{1,2}(?:\d[A-Z\d]?)?)$
           type: string
       required:
         - prices
@@ -63283,10 +63284,11 @@ components:
           type: array
         zone:
           description: >-
-            The shipping zone for which the pricing applies. Please proivide the
+            The shipping zone for which the pricing applies. Please provide the
             ISO 3166-2 Country Code, followed by a dash and the first digits of
-            the postal code, e.g. DE-50 for Cologne, Germany.
-          pattern: ^[A-Z]{2}-\d+$
+            the postal code, e.g. DE-50 for Cologne, Germany. For Great Britain,
+            use the outward code or its leading part, e.g. GB-SW1A or GB-M.
+          pattern: ^(?:[A-Z]{2}-\d+|GB-[A-Z]{1,2}(?:\d[A-Z\d]?)?)$
           type: string
       required:
         - prices
@@ -67139,9 +67141,12 @@ components:
           description: >-
             The masterTrackingNumber is the first tracking number which was
             created for a shipment provided by the carrier. Sometimes carriers
-            also have a separated number range for that. If not, it´s the number
-            of the first package.
+            also have a separated number range for that.
           example: '84168117830018'
+          type: string
+        masterTrackingUrl:
+          description: The URL to track this master tracking number
+          example: http://track.io/3a186c51d4
           type: string
         proxyId:
           description: The ID of the corresponding job at the CEP proxy (if used)
@@ -67159,9 +67164,12 @@ components:
           description: >-
             The returnMasterTrackingNumber is the first tracking number for the
             return which was created for a shipment provided by the carrier.
-            Sometimes carriers also have a separated number range for that. If
-            not, it´s the number of the first package.
+            Sometimes carriers also have a separated number range for that.
           example: '84168117830018'
+          type: string
+        returnMasterTrackingUrl:
+          description: The URL to track this return master tracking number
+          example: http://track.io/3a186c51d4
           type: string
         returnTrackingUrl:
           description: The URL to track the return of this parcel
