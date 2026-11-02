@@ -72715,8 +72715,31 @@ components:
       title: ProcessReferencedFilter
       type: object
       description: ProcessReferencedFilter
+    ProcessReferencedHandoverJobAssignedUsersFilter:
+      properties:
+        userId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by userId
+        username:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by username
+      title: ProcessReferencedHandoverJobAssignedUsersFilter
+      type: object
+      description: ProcessReferencedHandoverJobAssignedUsersFilter
     ProcessReferencedHandoverJobFilter:
       properties:
+        assignedUsers:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedHandoverJobAssignedUsersFilter
+          description: Nested search by assignedUsers
+        channel:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedHandoverJobHandoverjobChannelEnumListFilter
+          description: Search by channel
         facilityRefs:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
@@ -72751,6 +72774,42 @@ components:
       title: ProcessReferencedHandoverJobGlobalActorFilter
       type: object
       description: ProcessReferencedHandoverJobGlobalActorFilter
+    ProcessReferencedHandoverJobHandoverjobChannelEnumFilter:
+      properties:
+        eq:
+          description: Search by channel
+          enum:
+            - DELIVERY
+            - COLLECT
+          type: string
+        in:
+          description: Search by channel
+          items:
+            enum:
+              - DELIVERY
+              - COLLECT
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by channel
+          enum:
+            - DELIVERY
+            - COLLECT
+          type: string
+      title: ProcessReferencedHandoverJobHandoverjobChannelEnumFilter
+      type: object
+      description: ProcessReferencedHandoverJobHandoverjobChannelEnumFilter
+    ProcessReferencedHandoverJobHandoverjobChannelEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedHandoverJobHandoverjobChannelEnumFilter
+          description: Search by channel
+      title: ProcessReferencedHandoverJobHandoverjobChannelEnumListFilter
+      type: object
+      description: ProcessReferencedHandoverJobHandoverjobChannelEnumListFilter
     ProcessReferencedHandoverJobHandoverjobStatusEnumFilter:
       properties:
         eq:
@@ -72899,8 +72958,83 @@ components:
       title: ProcessReferencedOrderOrderStatusEnumListFilter
       type: object
       description: ProcessReferencedOrderOrderStatusEnumListFilter
+    ProcessReferencedPackJobAssignedUsersFilter:
+      properties:
+        userId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by userId
+        username:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by username
+      title: ProcessReferencedPackJobAssignedUsersFilter
+      type: object
+      description: ProcessReferencedPackJobAssignedUsersFilter
+    ProcessReferencedPackJobDeliveryChannelEnumFilter:
+      properties:
+        eq:
+          description: Search by deliveryChannel
+          enum:
+            - COLLECT
+            - SHIPPING
+          type: string
+        in:
+          description: Search by deliveryChannel
+          items:
+            enum:
+              - COLLECT
+              - SHIPPING
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by deliveryChannel
+          enum:
+            - COLLECT
+            - SHIPPING
+          type: string
+      title: ProcessReferencedPackJobDeliveryChannelEnumFilter
+      type: object
+      description: ProcessReferencedPackJobDeliveryChannelEnumFilter
+    ProcessReferencedPackJobDeliveryChannelEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPackJobDeliveryChannelEnumFilter
+          description: Search by deliveryChannel
+      title: ProcessReferencedPackJobDeliveryChannelEnumListFilter
+      type: object
+      description: ProcessReferencedPackJobDeliveryChannelEnumListFilter
+    ProcessReferencedPackJobEditorFilter:
+      properties:
+        userId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by userId
+        username:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by username
+      title: ProcessReferencedPackJobEditorFilter
+      type: object
+      description: ProcessReferencedPackJobEditorFilter
     ProcessReferencedPackJobFilter:
       properties:
+        assignedUsers:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedPackJobAssignedUsersFilter'
+          description: Nested search by assignedUsers
+        deliveryChannel:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPackJobDeliveryChannelEnumListFilter
+          description: Search by deliveryChannel
+        editor:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedPackJobEditorFilter'
+          description: Nested search by editor
         facilityRefs:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
@@ -73108,8 +73242,97 @@ components:
       title: ProcessReferencedParcelTrackingStatusEnumListFilter
       type: object
       description: ProcessReferencedParcelTrackingStatusEnumListFilter
+    ProcessReferencedPickJobAssignedUsersFilter:
+      properties:
+        userId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by userId
+        username:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by username
+      title: ProcessReferencedPickJobAssignedUsersFilter
+      type: object
+      description: ProcessReferencedPickJobAssignedUsersFilter
+    ProcessReferencedPickJobDeliveryInformationFilter:
+      properties:
+        channel:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPickJobDeliveryInformationPickJobDeliveryInformationChannelEnumListFilter
+          description: Search by channel
+      title: ProcessReferencedPickJobDeliveryInformationFilter
+      type: object
+      description: ProcessReferencedPickJobDeliveryInformationFilter
+    ProcessReferencedPickJobDeliveryInformationPickJobDeliveryInformationChannelEnumFilter:
+      properties:
+        eq:
+          description: Search by channel
+          enum:
+            - COLLECT
+            - SHIPPING
+          type: string
+        in:
+          description: Search by channel
+          items:
+            enum:
+              - COLLECT
+              - SHIPPING
+            type: string
+          maxItems: 500
+          type: array
+        notEq:
+          description: Search by channel
+          enum:
+            - COLLECT
+            - SHIPPING
+          type: string
+      title: >-
+        ProcessReferencedPickJobDeliveryInformationPickJobDeliveryInformationChannelEnumFilter
+      type: object
+      description: >-
+        ProcessReferencedPickJobDeliveryInformationPickJobDeliveryInformationChannelEnumFilter
+    ProcessReferencedPickJobDeliveryInformationPickJobDeliveryInformationChannelEnumListFilter:
+      properties:
+        contains:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPickJobDeliveryInformationPickJobDeliveryInformationChannelEnumFilter
+          description: Search by channel
+      title: >-
+        ProcessReferencedPickJobDeliveryInformationPickJobDeliveryInformationChannelEnumListFilter
+      type: object
+      description: >-
+        ProcessReferencedPickJobDeliveryInformationPickJobDeliveryInformationChannelEnumListFilter
+    ProcessReferencedPickJobEditorFilter:
+      properties:
+        userId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by userId
+        username:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by username
+      title: ProcessReferencedPickJobEditorFilter
+      type: object
+      description: ProcessReferencedPickJobEditorFilter
     ProcessReferencedPickJobFilter:
       properties:
+        assignedUsers:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedPickJobAssignedUsersFilter'
+          description: Nested search by assignedUsers
+        deliveryInformation:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedPickJobDeliveryInformationFilter
+          description: Nested search by deliveryInformation
+        editor:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedPickJobEditorFilter'
+          description: Nested search by editor
         facilityRefs:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
@@ -73407,8 +73630,43 @@ components:
       title: ProcessReferencedRoutingPlanRoutingPlanStatusEnumListFilter
       type: object
       description: ProcessReferencedRoutingPlanRoutingPlanStatusEnumListFilter
+    ProcessReferencedServiceJobAssignedUsersFilter:
+      properties:
+        userId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by userId
+        username:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by username
+      title: ProcessReferencedServiceJobAssignedUsersFilter
+      type: object
+      description: ProcessReferencedServiceJobAssignedUsersFilter
+    ProcessReferencedServiceJobEditorFilter:
+      properties:
+        userId:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by userId
+        username:
+          allOf:
+            - $ref: '#/components/schemas/StringFilter'
+          description: Search by username
+      title: ProcessReferencedServiceJobEditorFilter
+      type: object
+      description: ProcessReferencedServiceJobEditorFilter
     ProcessReferencedServiceJobFilter:
       properties:
+        assignedUsers:
+          allOf:
+            - $ref: >-
+                #/components/schemas/ProcessReferencedServiceJobAssignedUsersFilter
+          description: Nested search by assignedUsers
+        editor:
+          allOf:
+            - $ref: '#/components/schemas/ProcessReferencedServiceJobEditorFilter'
+          description: Nested search by editor
         facilityRefs:
           allOf:
             - $ref: '#/components/schemas/StringListFilter'
