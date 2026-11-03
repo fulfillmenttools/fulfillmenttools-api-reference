@@ -12050,8 +12050,10 @@ paths:
         - Handovers
   /api/health:
     get:
+      deprecated: false
       description: ''
       operationId: healthCheck
+      parameters: []
       responses:
         '200':
           content:
@@ -12078,7 +12080,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Manual reroute configuration not found
+          description: The requested entity was not found
       summary: Health check
       tags:
         - Health
@@ -46036,12 +46038,13 @@ components:
           example: database
           type: string
         status:
-          $ref: '#/components/schemas/HealthStatus'
+          allOf:
+            - $ref: '#/components/schemas/HealthStatus'
       required:
         - name
         - status
-      type: object
       title: HealthDependencyStatus
+      type: object
       description: HealthDependencyStatus
     HealthResult:
       properties:
@@ -46051,19 +46054,20 @@ components:
           minItems: 1
           type: array
         status:
-          $ref: '#/components/schemas/HealthStatus'
+          allOf:
+            - $ref: '#/components/schemas/HealthStatus'
       required:
         - status
         - dependencies
-      type: object
       title: HealthResult
+      type: object
       description: HealthResult
     HealthStatus:
       enum:
         - UP
         - DOWN
-      type: string
       title: HealthStatus
+      type: string
       description: HealthStatus
     InboundAttachment:
       properties:
