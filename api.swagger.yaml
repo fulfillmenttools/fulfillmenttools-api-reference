@@ -65267,16 +65267,21 @@ components:
             lineItemStickerConfiguration:
               $ref: '#/components/schemas/StickerConfiguration'
             packJobCreationPerTag:
+              deprecated: true
               description: >-
-                All entries with a match in their matchingValues will be
-                combined when determining what documents belong to an entity
+                This part of the API is deprecated. For details, see the <a
+                href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+                target="_blank">API release lifecycle documentation</a>.<br
+                /><br />Deprecated: This field will be removed in a future
+                release. There is currently no replacement. All entries with a
+                match in their matchingValues will be combined when determining
+                what documents belong to an entity
               items:
                 $ref: '#/components/schemas/PackJobCreationPerTag'
               type: array
             stickerConfiguration:
               $ref: '#/components/schemas/StickerConfiguration'
       required:
-        - packJobCreationPerTag
         - version
       type: object
       title: PackJobTagConfiguration
@@ -68117,7 +68122,17 @@ components:
         domainStatusConfiguration:
           $ref: '#/components/schemas/PickingDomainStatusConfiguration'
         loadUnitAssignmentConfiguration:
-          $ref: '#/components/schemas/LoadUnitAssignmentConfiguration'
+          allOf:
+            - $ref: '#/components/schemas/LoadUnitAssignmentConfiguration'
+          deprecated: true
+          description: >-
+            This part of the API is deprecated. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />Deprecated: Not supported by the new picking flow. Load units are
+            always assigned per item during picking (DURING_PICKING), and only
+            if operative container types are configured. AT_START, AT_END and
+            INACTIVE are ignored. There is no replacement remote config.
         multiOrderPickingConfiguration:
           $ref: '#/components/schemas/MultiOrderPickingConfiguration'
         pickingMethodsConfiguration:
@@ -68130,9 +68145,29 @@ components:
         restartPickJobConfiguration:
           $ref: '#/components/schemas/RestartPickJobConfiguration'
         scanCodeValidationConfiguration:
-          $ref: '#/components/schemas/PickingScanCodeValidationConfiguration'
+          allOf:
+            - $ref: '#/components/schemas/PickingScanCodeValidationConfiguration'
+          deprecated: true
+          description: >-
+            This part of the API is deprecated. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />Deprecated: Not supported by the new picking flow. Item and
+            location scans are always validated against the known scannable
+            codes (same as CODE_MUST_BE_KNOWN; NO_VALIDATION is not possible).
+            Load unit scans accept any code and derive the container type from
+            the operative container types. There is no replacement remote
+            config.
         scanningConfiguration:
-          $ref: '#/components/schemas/PickingScanningConfiguration'
+          allOf:
+            - $ref: '#/components/schemas/PickingScanningConfiguration'
+          deprecated: true
+          description: >-
+            This part of the API is deprecated. For details, see the <a
+            href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+            target="_blank">API release lifecycle documentation</a>.<br /><br
+            />Deprecated: Use the remote configs PICKING_SCANNING_TYPE and
+            PICKING_SCANNING_RULE (group OPERATIONS_MOBILE) instead.
         scheduledPickJobReleaseConfiguration:
           $ref: '#/components/schemas/ScheduledPickJobReleaseConfiguration'
         stockUpdateConfiguration:
@@ -89590,6 +89625,7 @@ components:
       additionalProperties: false
       properties:
         storageLocationRequired:
+          description: 'Deprecated: SOME, behaves like NONE. Use NONE instead.'
           enum:
             - ALL
             - SOME
