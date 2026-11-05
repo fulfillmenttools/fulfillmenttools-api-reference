@@ -70276,6 +70276,8 @@ components:
         - $ref: '#/components/schemas/PickRunRemovePickJobActionParameter'
         - $ref: '#/components/schemas/PickRunSplitLineItemsActionParameter'
         - $ref: '#/components/schemas/TakeOverPickRunActionParameter'
+        - $ref: >-
+            #/components/schemas/PickRunUpdateRecordableAttributesActionParameter
       title: PickRunActionsParameter
       description: PickRunActionsParameter
     PickRunCancelActionEnum:
@@ -70714,6 +70716,24 @@ components:
         name: PickRunPickJobsPatchAction
       title: PickRunPickJobsPatchAction
       description: PickRunPickJobsPatchAction
+    PickRunRecordableAttributeForUpdate:
+      additionalProperties: false
+      properties:
+        recordableAttributeId:
+          description: ID of the recordable attribute to update
+          example: 17ebfdfb-e1b4-4913-9962-3aef2b49f16f
+          type: string
+        value:
+          description: The value of the attribute to set
+          example: L-123
+          minLength: 1
+          nullable: true
+          type: string
+      required:
+        - recordableAttributeId
+      title: PickRunRecordableAttributeForUpdate
+      type: object
+      description: PickRunRecordableAttributeForUpdate
     PickRunRemovePickJobActionEnum:
       enum:
         - REMOVE_PICK_JOB
@@ -70861,6 +70881,42 @@ components:
         - batch
       type: string
       title: PickRunType
+    PickRunUpdateRecordableAttributesActionEnum:
+      enum:
+        - UPDATE_PICK_RUN_LINE_ITEM_RECORDABLE_ATTRIBUTES
+      type: string
+      title: PickRunUpdateRecordableAttributesActionEnum
+      description: PickRunUpdateRecordableAttributesActionEnum
+    PickRunUpdateRecordableAttributesActionParameter:
+      additionalProperties: false
+      description: >-
+        Action to record recordable attribute values on an IN_PROGRESS multi
+        order pick run. The values are written to the pick jobs right away.
+        Batch pick runs are rejected. Unique values are checked one pick job at
+        a time, so swapping values between two pick jobs in one call fails as
+        not unique. Clear one of the values in a separate call first. Canceling
+        the run restores the values from before the run the same way, so after
+        such a swap, clear the swapped values before canceling.
+      properties:
+        name:
+          $ref: '#/components/schemas/PickRunUpdateRecordableAttributesActionEnum'
+        recordableAttributeUpdates:
+          items:
+            $ref: '#/components/schemas/PickRunRecordableAttributeForUpdate'
+          maxItems: 50
+          type: array
+        version:
+          description: >-
+            The version of the document to be used in optimistic locking
+            mechanisms.
+          example: 42
+          type: integer
+      required:
+        - name
+        - version
+        - recordableAttributeUpdates
+      title: PickRunUpdateRecordableAttributesActionParameter
+      type: object
     PickupService:
       properties:
         nameLocalized:
