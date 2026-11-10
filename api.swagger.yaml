@@ -22026,6 +22026,66 @@ paths:
         - PROCESS_REROUTE
       tags:
         - Processes
+  /api/processes/actions:
+    post:
+      description: >-
+        This part of the API is in Alpha status. For details, see the <a
+        href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
+        target="_blank">API release lifecycle documentation</a>.<br /><br
+        />Apply a bulk action to multiple processes, such as reroute.
+      operationId: bulkProcessesAction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkProcessActionsParameter'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BulkProcessActionResult'
+                type: array
+          description: >-
+            Result per process. UPDATED means the reroute has been triggered,
+            UNCHANGED that a reroute is already in progress for the process,
+            FAILED that the process could not be rerouted (see summary).
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Invalid request, e.g. no or too many processes
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Your user is not allowed to operate against this API instance
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: >-
+            Your user, although recognized, is not authorized to use this
+            endpoint
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+          description: Reroute description not found
+      summary: Call bulk processes action
+      x-fft-permissions:
+        - PROCESS_REROUTE
+      tags:
+        - Processes
+      x-badges:
+        - color: red
+          label: ALPHA
   /api/processes/retrynotroutable:
     post:
       description: Retry routing for all not-routable processes.
@@ -33387,6 +33447,46 @@ components:
         - name
         - orders
       title: BulkOrderUnlockActionParameter
+    BulkProcessActionResult:
+      properties:
+        processId:
+          type: string
+        status:
+          $ref: '#/components/schemas/BulkOperationResultStatus'
+        summary:
+          type: string
+      required:
+        - processId
+        - status
+      type: object
+      title: BulkProcessActionResult
+      description: BulkProcessActionResult
+    BulkProcessActionsParameter:
+      oneOf:
+        - $ref: '#/components/schemas/BulkProcessRerouteActionParameter'
+      title: BulkProcessActionsParameter
+      description: BulkProcessActionsParameter
+    BulkProcessRerouteActionParameter:
+      description: Action to reroute processes.
+      properties:
+        name:
+          enum:
+            - BULK_REROUTE
+          type: string
+        processes:
+          items:
+            $ref: '#/components/schemas/BulkRerouteProcessParameter'
+          maxItems: 15
+          minItems: 1
+          type: array
+        rerouteDescriptionId:
+          description: The id of the rerouteDescription, applied to all processes
+          type: string
+      required:
+        - name
+        - processes
+      title: BulkProcessRerouteActionParameter
+      type: object
     BulkPromiseOrderParameter:
       properties:
         orderId:
@@ -33401,6 +33501,20 @@ components:
       type: object
       title: BulkPromiseOrderParameter
       description: BulkPromiseOrderParameter
+    BulkRerouteProcessParameter:
+      properties:
+        processId:
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - processId
+        - version
+      type: object
+      title: BulkRerouteProcessParameter
+      description: BulkRerouteProcessParameter
     BulkUnlockOrderParameter:
       properties:
         orderId:
