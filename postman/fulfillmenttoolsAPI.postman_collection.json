@@ -9786,7 +9786,36 @@
                     }
                   ]
                 },
-                "description": "https://fulfillmenttools.github.io/api-reference-ui/#/Process/getProcessByID"
+                "description": "https://fulfillmenttools.github.io/fulfillmenttools-api-reference-ui/#post-/api/processes/-processId-/reroute"
+              },
+              "response": []
+            },
+            {
+              "name": "Bulk Reroute Processes [ALPHA]",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"BULK_REROUTE\",\n    \"processes\": [\n        {\n            \"processId\": \"PROCESS-ID-1\",\n            \"version\": 1\n        },\n        {\n            \"processId\": \"PROCESS-ID-2\",\n            \"version\": 1\n        }\n    ],\n    \"rerouteDescriptionId\": \"REROUTE-DESCRIPTION-ID\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}/api/processes/actions",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "api",
+                    "processes",
+                    "actions"
+                  ]
+                },
+                "description": "https://fulfillmenttools.github.io/fulfillmenttools-api-reference-ui/#post-/api/processes/actions\n\nTriggers a reroute for up to 15 processes. Returns one result per process: `UPDATED` (reroute triggered), `UNCHANGED` (a reroute is already in progress for the process) or `FAILED` (see `summary`). `rerouteDescriptionId` is optional and applies to all processes."
               },
               "response": []
             },
@@ -10052,35 +10081,17 @@
                 "method": "POST",
                 "header": [],
                 "url": {
-                  "raw": "{{host}}/api/processes/:processId/reroute?version=0",
+                  "raw": "{{host}}/api/processes/retrynotroutable",
                   "host": [
                     "{{host}}"
                   ],
                   "path": [
                     "api",
                     "processes",
-                    ":processId",
-                    "reroute"
-                  ],
-                  "query": [
-                    {
-                      "key": "version",
-                      "value": "0"
-                    },
-                    {
-                      "key": "rerouteDescriptionId",
-                      "value": "REROUTE-DESCRIPTION-ID",
-                      "disabled": true
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "key": "processId",
-                      "value": "PROCESS-ID"
-                    }
+                    "retrynotroutable"
                   ]
                 },
-                "description": "https://fulfillmenttools.github.io/api-reference-ui/#/Process/getProcessByID"
+                "description": "https://fulfillmenttools.github.io/fulfillmenttools-api-reference-ui/#post-/api/processes/retrynotroutable"
               },
               "response": []
             },
