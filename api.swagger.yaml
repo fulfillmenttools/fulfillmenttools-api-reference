@@ -313,6 +313,7 @@ paths:
               - FACILITY_CUSTOM_SERVICE
               - ROUTING_STRATEGY
               - STOW_JOB
+              - EXPORT
             type: string
         - in: query
           name: trace
@@ -31980,6 +31981,10 @@ components:
       properties:
         actor:
           $ref: '#/components/schemas/AuditActor'
+        additionalInfo:
+          allOf:
+            - $ref: '#/components/schemas/AuditAdditionalInfo'
+          description: Additional information about the audited operation
         anonymizationDate:
           format: date-time
           type: string
@@ -32016,6 +32021,7 @@ components:
             - FACILITY_CUSTOM_SERVICE
             - ROUTING_STRATEGY
             - STOW_JOB
+            - EXPORT
           type: string
         entityVersion:
           type: number
@@ -32082,6 +32088,15 @@ components:
       title: AuditActorDetails
       type: object
       description: AuditActorDetails
+    AuditAdditionalInfo:
+      properties:
+        export:
+          allOf:
+            - $ref: '#/components/schemas/AuditExportInfo'
+          description: Only present for audits of entity type EXPORT
+      title: AuditAdditionalInfo
+      type: object
+      description: AuditAdditionalInfo
     AuditClient:
       properties:
         api:
@@ -32116,6 +32131,7 @@ components:
             - FACILITY_CUSTOM_SERVICE
             - ROUTING_STRATEGY
             - STOW_JOB
+            - EXPORT
           type: string
         in:
           description: Search by entityType
@@ -32138,6 +32154,7 @@ components:
               - FACILITY_CUSTOM_SERVICE
               - ROUTING_STRATEGY
               - STOW_JOB
+              - EXPORT
             type: string
           maxItems: 500
           type: array
@@ -32161,10 +32178,34 @@ components:
             - FACILITY_CUSTOM_SERVICE
             - ROUTING_STRATEGY
             - STOW_JOB
+            - EXPORT
           type: string
       title: AuditedEntityTypeEnumFilter
       type: object
       description: AuditedEntityTypeEnumFilter
+    AuditExportInfo:
+      properties:
+        rowCount:
+          description: The number of exported rows
+          minimum: 0
+          type: number
+        type:
+          description: The query the export is derived from
+          enum:
+            - PROCESS_AGGREGATE
+          type: string
+        usedConfiguration:
+          additionalProperties: true
+          description: >-
+            The configuration the export was created with. Removed when the
+            audit is anonymized
+          type: object
+      required:
+        - type
+        - rowCount
+      title: AuditExportInfo
+      type: object
+      description: AuditExportInfo
     AuditOperation:
       properties:
         name:
