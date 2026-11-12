@@ -48794,7 +48794,10 @@ components:
       title: InterFacilityConnectionPricingQuantity
       type: string
     InterFacilityConnectionPricingUnit:
-      description: The unit the pricing quantities are converted to and priced in.
+      description: >-
+        The unit the pricing quantities are converted to and priced in.
+        LOADING_METER is not supported yet, use GRAM with the
+        LOADING_METER_EQUIVALENT quantity and ldmToWeightFactor instead.
       enum:
         - GRAM
         - CUBIC_METER
@@ -49580,7 +49583,10 @@ components:
         ldmToWeightFactor:
           description: >-
             The grams equivalent to 1 loading meter, converting between weight
-            and loading meters.
+            and loading meters. Required when pricingQuantities contains
+            LOADING_METER_EQUIVALENT. The loading meters of a transfer are the
+            summed floor area of its packaging units divided by
+            transportDetails.vehicleWidthInMeters, which must be set as well.
           example: 1850
           format: float
           minimum: 0
