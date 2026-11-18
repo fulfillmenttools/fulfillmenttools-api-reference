@@ -21705,7 +21705,8 @@ paths:
         This part of the API is deprecated. For details, see the <a
         href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
         target="_blank">API release lifecycle documentation</a>.<br /><br
-        />Deprecated, replaced with /api/processes/{processId}/actions
+        />Deprecated, replaced with /api/processes/{processId}/actions. The
+        AssignFacilityToProcess action additionally requires PROCESS_REROUTE.
       operationId: patchProcess
       parameters:
         - description: ID of process you want to patch
@@ -21759,13 +21760,15 @@ paths:
       summary: Update process
       x-fft-permissions:
         - PROCESS_WRITE
+        - PROCESS_REROUTE
       tags:
         - Processes
   /api/processes/{processId}/actions:
     post:
       description: >-
         Update Process by calling an action. This can be used to trigger state
-        transitions or other operations on the process.
+        transitions or other operations on the process. The
+        ASSIGN_FACILITY_TO_PROCESS action additionally requires PROCESS_REROUTE.
       operationId: processAction
       parameters:
         - description: ID of process you want to call the action for
@@ -21815,6 +21818,7 @@ paths:
       summary: Call process action
       x-fft-permissions:
         - PROCESS_WRITE
+        - PROCESS_REROUTE
       tags:
         - Processes
   /api/processes/{processId}/documents:
@@ -22126,7 +22130,9 @@ paths:
         This part of the API is in Alpha status. For details, see the <a
         href="https://docs.fulfillmenttools.com/documentation/apis/api-versioning-and-lifecycle#lifecycle-overview"
         target="_blank">API release lifecycle documentation</a>.<br /><br
-        />Apply a bulk action to multiple processes, such as reroute.
+        />Apply a bulk action to multiple processes, such as reroute or
+        assigning a facility. BULK_REROUTE requires PROCESS_REROUTE,
+        BULK_ASSIGN_FACILITY requires PROCESS_REROUTE and PROCESS_WRITE.
       operationId: bulkProcessesAction
       requestBody:
         content:
@@ -22143,9 +22149,10 @@ paths:
                   $ref: '#/components/schemas/BulkProcessActionResult'
                 type: array
           description: >-
-            Result per process. UPDATED means the reroute has been triggered,
-            UNCHANGED that a reroute is already in progress for the process,
-            FAILED that the process could not be rerouted (see summary).
+            Result per process. UPDATED means the action has been triggered for
+            the process, UNCHANGED that nothing had to be done (e.g. a reroute
+            is already in progress), FAILED that the action could not be applied
+            to the process (see summary).
         '400':
           content:
             application/json:
@@ -22171,10 +22178,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-          description: Reroute description not found
+          description: Reroute description or facility not found
       summary: Call bulk processes action
       x-fft-permissions:
         - PROCESS_REROUTE
+        - PROCESS_WRITE
       tags:
         - Processes
       x-badges:
@@ -33496,6 +33504,20 @@ components:
       title: BringCarrierConfigurationForUpdate
       type: object
       description: BringCarrierConfigurationForUpdate
+    BulkAssignFacilityProcessParameter:
+      properties:
+        processId:
+          type: string
+        version:
+          description: Version of the entity to be changed
+          minimum: 0
+          type: integer
+      required:
+        - processId
+        - version
+      type: object
+      title: BulkAssignFacilityProcessParameter
+      description: BulkAssignFacilityProcessParameter
     BulkCancelOrderParameter:
       properties:
         cancelationReasonId:
@@ -33663,8 +33685,34 @@ components:
     BulkProcessActionsParameter:
       oneOf:
         - $ref: '#/components/schemas/BulkProcessRerouteActionParameter'
+        - $ref: '#/components/schemas/BulkProcessAssignFacilityActionParameter'
       title: BulkProcessActionsParameter
       description: BulkProcessActionsParameter
+    BulkProcessAssignFacilityActionParameter:
+      description: Action to assign processes to a facility.
+      properties:
+        facilityRef:
+          description: The id of the facility all processes are assigned to
+          type: string
+        name:
+          enum:
+            - BULK_ASSIGN_FACILITY
+          type: string
+        processes:
+          items:
+            $ref: '#/components/schemas/BulkAssignFacilityProcessParameter'
+          maxItems: 15
+          minItems: 1
+          type: array
+        rerouteDescriptionId:
+          description: The id of the rerouteDescription, applied to all processes
+          type: string
+      required:
+        - name
+        - processes
+        - facilityRef
+      title: BulkProcessAssignFacilityActionParameter
+      type: object
     BulkProcessRerouteActionParameter:
       description: Action to reroute processes.
       properties:
