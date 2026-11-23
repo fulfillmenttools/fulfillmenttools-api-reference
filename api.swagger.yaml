@@ -43672,44 +43672,6 @@ components:
       type: object
       title: Fence
       description: Fence
-    FenceAnalysis:
-      properties:
-        fenceId:
-          description: The ID of the fence.
-          type: string
-        fenceName:
-          description: The name of the fence.
-          type: string
-        fenceType:
-          description: The type of fence.
-          enum:
-            - STANDARD
-            - TOOLKIT
-          type: string
-        layer:
-          description: The layer at which the fence was evaluated.
-          type: number
-        listingId:
-          description: The ID of the listing.
-          type: string
-        nodeId:
-          description: The ID of the node.
-          type: string
-        result:
-          description: The result of the fence evaluation.
-          enum:
-            - PASSED
-            - FAILED
-            - NOT_APPLICABLE
-          type: string
-      required:
-        - fenceType
-        - nodeId
-        - fenceId
-        - result
-      title: FenceAnalysis
-      type: object
-      description: FenceAnalysis
     FenceImplementation:
       description: >-
         <i>This part of the API is currently under development. That means that
@@ -43733,6 +43695,15 @@ components:
       xml:
         name: FenceImplementation
       title: FenceImplementation
+    FenceInputSource:
+      description: Where the data of the entity came from.
+      enum:
+        - BIG_QUERY
+        - SIMULATED
+        - LIVE
+        - UNAVAILABLE
+      title: FenceInputSource
+      type: string
     FenceMode:
       enum:
         - static
@@ -43740,6 +43711,15 @@ components:
       type: string
       title: FenceMode
       description: FenceMode
+    FenceResult:
+      description: The result of the fence evaluation.
+      enum:
+        - PASSED
+        - FAILED
+        - NOT_APPLICABLE
+        - SKIPPED
+      title: FenceResult
+      type: string
     FenceResultStatus:
       enum:
         - FAILED
@@ -43747,6 +43727,12 @@ components:
         - REACTIVE_PASSING_POSSIBLE
       title: FenceResultStatus
       description: FenceResultStatus
+    FenceSkipReason:
+      description: Why the fence was not evaluated. Set only when the result is SKIPPED.
+      enum:
+        - UNSUPPORTED_SCOPE
+      title: FenceSkipReason
+      type: string
     FenceStatistic:
       properties:
         durationMs:
@@ -88374,11 +88360,6 @@ components:
           description: >-
             Analysis of connections. Null when the facility is inside the
             resulting graph.
-        fenceAnalysis:
-          description: List of fence analyses.
-          items:
-            $ref: '#/components/schemas/FenceAnalysis'
-          type: array
         layers:
           description: >-
             The search graph layers the facility is part of. Empty when it is
@@ -88397,11 +88378,22 @@ components:
         lookupFacilityId:
           description: The ID of the facility being looked up.
           type: string
+        standardFenceAnalysis:
+          description: Analyses of the standard fences.
+          items:
+            $ref: '#/components/schemas/StandardFenceAnalysis'
+          type: array
+        toolkitFenceAnalysis:
+          description: >-
+            Analyses of the toolkit fences, one entry per fence, layer and
+            evaluated scope instance.
+          items:
+            $ref: '#/components/schemas/ToolkitFenceAnalysis'
+          type: array
       required:
         - lookupFacilityId
         - layers
         - listingAvailability
-        - fenceAnalysis
       title: SourcingOptionAnalyzeActionFacilityResult
       type: object
       description: SourcingOptionAnalyzeActionFacilityResult
@@ -88979,6 +88971,28 @@ components:
       title: StackResponse
       type: object
       description: StackResponse
+    StandardFenceAnalysis:
+      properties:
+        fenceId:
+          description: The ID of the fence.
+          type: string
+        fenceName:
+          description: The name of the fence.
+          type: string
+        nodeId:
+          description: The ID of the node.
+          type: string
+        result:
+          allOf:
+            - $ref: '#/components/schemas/FenceResult'
+          description: The result of the fence evaluation.
+      required:
+        - nodeId
+        - fenceId
+        - result
+      title: StandardFenceAnalysis
+      type: object
+      description: StandardFenceAnalysis
     StartItemReturnActionParameter:
       properties:
         itemReturnJobVersion:
@@ -95360,6 +95374,54 @@ components:
         name: ToolkitFence
       title: ToolkitFence
       description: ToolkitFence
+    ToolkitFenceAnalysis:
+      properties:
+        evaluationScope:
+          description: The scope the fence rule is evaluated on.
+          enum:
+            - WHOLE_ENTITY
+            - LINE_ITEM
+            - ASSIGNED_TRANSFER
+          type: string
+        fenceId:
+          description: The ID of the fence.
+          type: string
+        fenceName:
+          description: The name of the fence.
+          type: string
+        inputs:
+          description: >-
+            The entities the fence rule read, with the source and IDs of their
+            data.
+          items:
+            $ref: '#/components/schemas/ToolkitFenceInput'
+          type: array
+        layer:
+          description: The layer at which the fence was evaluated.
+          type: number
+        nodeId:
+          description: The ID of the node.
+          type: string
+        result:
+          allOf:
+            - $ref: '#/components/schemas/FenceResult'
+          description: The result of the fence evaluation.
+        skipReason:
+          allOf:
+            - $ref: '#/components/schemas/FenceSkipReason'
+          description: >-
+            Why the fence was not evaluated. Set only when the result is
+            SKIPPED.
+      required:
+        - nodeId
+        - fenceId
+        - evaluationScope
+        - layer
+        - result
+        - inputs
+      title: ToolkitFenceAnalysis
+      type: object
+      description: ToolkitFenceAnalysis
     ToolkitFenceForCreation:
       properties:
         descriptionLocalized:
@@ -95426,6 +95488,42 @@ components:
         name: ToolkitFenceForModification
       title: ToolkitFenceForModification
       description: ToolkitFenceForModification
+    ToolkitFenceInput:
+      properties:
+        entity:
+          allOf:
+            - $ref: '#/components/schemas/ToolkitFenceInputEntity'
+          description: The entity the fence rule reads.
+        ids:
+          description: The IDs of the entity instances the fence was evaluated on.
+          items:
+            type: string
+          type: array
+        source:
+          allOf:
+            - $ref: '#/components/schemas/FenceInputSource'
+          description: Where the data of the entity came from.
+      required:
+        - entity
+        - source
+        - ids
+      title: ToolkitFenceInput
+      type: object
+      description: ToolkitFenceInput
+    ToolkitFenceInputEntity:
+      description: The entity the fence rule reads.
+      enum:
+        - ORDER
+        - ORDER_REDUCED_LINE_ITEMS
+        - ORDER_REDUCED_TRANSFER_ASSIGNMENTS
+        - ORDERING_FACILITY
+        - ORDERING_FACILITY_GROUPS
+        - FACILITY
+        - FACILITY_CONNECTION
+        - LISTING
+        - STRATEGY_CONTEXT
+      title: ToolkitFenceInputEntity
+      type: string
     ToolkitFencesTransporter:
       properties:
         fences:
