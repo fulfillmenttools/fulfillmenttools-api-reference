@@ -47881,6 +47881,66 @@ components:
       title: InboundRebalancingMoveReport
       type: object
       description: InboundRebalancingMoveReport
+    InboundRebalancingPotential:
+      properties:
+        expectedDate:
+          example: 2026-06-17T12:00:00.000Z
+          format: date-time
+          type: string
+        expectedStockRef:
+          type: string
+        moves:
+          description: Number of reservations that would be moved onto the expected stock.
+          type: number
+        quantity:
+          description: Reserved quantity that would be moved onto the expected stock.
+          type: number
+        tenantArticleId:
+          type: string
+      required:
+        - tenantArticleId
+        - expectedStockRef
+        - expectedDate
+        - moves
+        - quantity
+      title: InboundRebalancingPotential
+      type: object
+      description: InboundRebalancingPotential
+    InboundRebalancingPotentialRequest:
+      properties:
+        facilityRef:
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          type: string
+        minMoves:
+          default: 1
+          description: >-
+            Only expected stocks onto which at least this many reservations
+            would be moved are returned.
+          example: 1
+          minimum: 1
+          type: integer
+        tenantArticleIds:
+          items:
+            type: string
+          maxItems: 50
+          type: array
+      required:
+        - facilityRef
+        - tenantArticleIds
+      title: InboundRebalancingPotentialRequest
+      type: object
+      description: InboundRebalancingPotentialRequest
+    InboundRebalancingPotentialResult:
+      properties:
+        potentials:
+          items:
+            $ref: '#/components/schemas/InboundRebalancingPotential'
+          type: array
+      required:
+        - potentials
+      title: InboundRebalancingPotentialResult
+      type: object
+      description: InboundRebalancingPotentialResult
     InboundRebalancingRequest:
       properties:
         expectedStockRef:
