@@ -20160,6 +20160,8 @@ paths:
               - EXPORT_READ
               - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
+              - PRODUCT_RELATION_READ
+              - PRODUCT_RELATION_WRITE
               - LISTING_READ
               - LISTING_WRITE
               - LISTING_DELETE
@@ -69099,6 +69101,8 @@ components:
             - EXPORT_READ
             - EXPORT_WRITE
             - STOCK_AVAILABILITIES_READ
+            - PRODUCT_RELATION_READ
+            - PRODUCT_RELATION_WRITE
             - LISTING_READ
             - LISTING_WRITE
             - LISTING_DELETE
@@ -69228,6 +69232,7 @@ components:
             - PURCHASE_PRICE
             - ZONE
             - SAFETY_STOCK
+            - PRODUCT_RELATION
             - AVAILABILITY_THRESHOLDS
             - PICKUP_SERVICE
             - PRODUCT
@@ -75875,6 +75880,308 @@ components:
       title: ProductInformation
       type: object
       description: ProductInformation
+    ProductRelation:
+      properties:
+        titleLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        created:
+          description: Creation date of this product relation
+          format: date-time
+          type: string
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        id:
+          description: Unique identifier of this product relation
+          example: 0190d6e8-8c3a-7f1b-9d2e-4a6b8c0d1e2f
+          type: string
+        imageUrl:
+          description: >-
+            A web link to a picture of this product relation. Ensure that no
+            authentication is needed to fetch the image.
+          example: https://example.com/resource
+          type: string
+        lastModified:
+          description: Last modification date of this product relation
+          format: date-time
+          type: string
+        tenantArticleId:
+          description: Tenant article ID of the article this product relation belongs to
+          example: MY_ARTICLE_ID
+          type: string
+        title:
+          description: >-
+            The title of the product relation. Derived from titleLocalized
+            (tenant default locale, otherwise the first available locale)
+          type: string
+        type:
+          description: >-
+            Type of the product relation. BILL_OF_MATERIAL: the article is
+            assembled from the products of the matching variant
+          enum:
+            - BILL_OF_MATERIAL
+          type: string
+        variants:
+          description: >-
+            Variants of the product relation. If several variants match the
+            context, the one with the lowest priority value applies; a variant
+            without context is the default
+          items:
+            $ref: '#/components/schemas/ProductRelationVariant'
+          type: array
+        version:
+          description: Version number of this product relation
+          example: 1
+          type: number
+      required:
+        - id
+        - version
+        - created
+        - lastModified
+        - tenantArticleId
+        - type
+        - title
+        - titleLocalized
+        - variants
+      title: ProductRelation
+      type: object
+      description: ProductRelation
+    ProductRelationContext:
+      properties:
+        operator:
+          description: 'NOT inverts the condition: it matches if none of the values apply'
+          enum:
+            - NOT
+          type: string
+        type:
+          description: Type of the context condition
+          enum:
+            - FACILITY
+          type: string
+        values:
+          description: Facility IDs the condition refers to
+          items:
+            type: string
+          type: array
+      required:
+        - type
+        - values
+      title: ProductRelationContext
+      type: object
+      description: ProductRelationContext
+    ProductRelationContextForCreation:
+      properties:
+        operator:
+          description: 'NOT inverts the condition: it matches if none of the values apply'
+          enum:
+            - NOT
+          type: string
+        type:
+          description: Type of the context condition
+          enum:
+            - FACILITY
+          type: string
+        values:
+          description: Facility IDs the condition refers to
+          items:
+            type: string
+          maxItems: 100
+          minItems: 1
+          type: array
+      required:
+        - type
+        - values
+      title: ProductRelationContextForCreation
+      type: object
+      description: ProductRelationContextForCreation
+    ProductRelationForCreation:
+      properties:
+        titleLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        imageUrl:
+          description: >-
+            A web link to a picture of this product relation. Ensure that no
+            authentication is needed to fetch the image.
+          example: https://example.com/resource
+          type: string
+        tenantArticleId:
+          description: Tenant article ID of the article this product relation belongs to
+          example: MY_ARTICLE_ID
+          minLength: 1
+          type: string
+        type:
+          description: >-
+            Type of the product relation. BILL_OF_MATERIAL: the article is
+            assembled from the products of the matching variant
+          enum:
+            - BILL_OF_MATERIAL
+          type: string
+        variants:
+          description: >-
+            Variants of the product relation. If several variants match the
+            context, the one with the lowest priority value applies; a variant
+            without context is the default
+          items:
+            $ref: '#/components/schemas/ProductRelationVariantForCreation'
+          maxItems: 50
+          minItems: 1
+          type: array
+      required:
+        - titleLocalized
+        - variants
+        - tenantArticleId
+        - type
+      title: ProductRelationForCreation
+      type: object
+      description: ProductRelationForCreation
+    ProductRelationForUpdate:
+      properties:
+        titleLocalized:
+          $ref: '#/components/schemas/LocaleString'
+        customAttributes:
+          description: >-
+            Attributes that can be added to this entity. These attributes
+            **cannot** be used within fulfillment processes, but enable you to
+            attach custom data from your systems to fulfillmenttools entities.
+          nullable: true
+          type: object
+        imageUrl:
+          description: >-
+            A web link to a picture of this product relation. Ensure that no
+            authentication is needed to fetch the image.
+          example: https://example.com/resource
+          type: string
+        variants:
+          description: >-
+            Variants of the product relation. If several variants match the
+            context, the one with the lowest priority value applies; a variant
+            without context is the default
+          items:
+            $ref: '#/components/schemas/ProductRelationVariantForCreation'
+          maxItems: 50
+          minItems: 1
+          type: array
+        version:
+          description: Version number of this product relation
+          example: 1
+          type: integer
+      required:
+        - titleLocalized
+        - variants
+        - version
+      title: ProductRelationForUpdate
+      type: object
+      description: ProductRelationForUpdate
+    ProductRelationProduct:
+      properties:
+        quantity:
+          description: Quantity of the product needed for one unit of the article
+          example: 42
+          minimum: 1
+          type: integer
+        tenantArticleId:
+          description: Tenant article ID of the product
+          example: MY_ARTICLE_ID
+          minLength: 1
+          type: string
+      required:
+        - tenantArticleId
+        - quantity
+      title: ProductRelationProduct
+      type: object
+      description: ProductRelationProduct
+    ProductRelationProductForCreation:
+      properties:
+        quantity:
+          description: Quantity of the product needed for one unit of the article
+          example: 42
+          minimum: 1
+          type: integer
+        tenantArticleId:
+          description: Tenant article ID of the product
+          example: MY_ARTICLE_ID
+          minLength: 1
+          type: string
+      required:
+        - tenantArticleId
+        - quantity
+      title: ProductRelationProductForCreation
+      type: object
+      description: ProductRelationProductForCreation
+    ProductRelationVariant:
+      properties:
+        context:
+          description: >-
+            Conditions under which this variant applies. If omitted, it is the
+            default
+          items:
+            $ref: '#/components/schemas/ProductRelationContext'
+          type: array
+        priority:
+          description: >-
+            Priority of the variant. The lower the value, the earlier the
+            variant is applied if several match. Must be unique within the
+            product relation
+          example: 42
+          minimum: 0
+          type: integer
+        products:
+          description: >-
+            Products and quantities required for one unit of the article. Single
+            articles only
+          items:
+            $ref: '#/components/schemas/ProductRelationProduct'
+          type: array
+      required:
+        - priority
+        - products
+      title: ProductRelationVariant
+      type: object
+      description: ProductRelationVariant
+    ProductRelationVariantForCreation:
+      properties:
+        context:
+          description: >-
+            Conditions under which this variant applies. If omitted, it is the
+            default
+          items:
+            $ref: '#/components/schemas/ProductRelationContextForCreation'
+          maxItems: 100
+          type: array
+        priority:
+          description: >-
+            Priority of the variant. The lower the value, the earlier the
+            variant is applied if several match. Must be unique within the
+            product relation
+          example: 42
+          minimum: 0
+          type: integer
+        products:
+          description: >-
+            Products and quantities required for one unit of the article. Single
+            articles only
+          items:
+            $ref: '#/components/schemas/ProductRelationProductForCreation'
+          maxItems: 100
+          minItems: 1
+          type: array
+      required:
+        - priority
+        - products
+      title: ProductRelationVariantForCreation
+      type: object
+      description: ProductRelationVariantForCreation
     Products:
       properties:
         products:
@@ -79692,6 +79999,8 @@ components:
               - EXPORT_READ
               - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
+              - PRODUCT_RELATION_READ
+              - PRODUCT_RELATION_WRITE
               - LISTING_READ
               - LISTING_WRITE
               - LISTING_DELETE
@@ -79932,6 +80241,8 @@ components:
               - EXPORT_READ
               - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
+              - PRODUCT_RELATION_READ
+              - PRODUCT_RELATION_WRITE
               - LISTING_READ
               - LISTING_WRITE
               - LISTING_DELETE
@@ -80163,6 +80474,8 @@ components:
               - EXPORT_READ
               - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
+              - PRODUCT_RELATION_READ
+              - PRODUCT_RELATION_WRITE
               - LISTING_READ
               - LISTING_WRITE
               - LISTING_DELETE
@@ -80400,6 +80713,8 @@ components:
               - EXPORT_READ
               - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
+              - PRODUCT_RELATION_READ
+              - PRODUCT_RELATION_WRITE
               - LISTING_READ
               - LISTING_WRITE
               - LISTING_DELETE
@@ -98495,6 +98810,8 @@ components:
               - EXPORT_READ
               - EXPORT_WRITE
               - STOCK_AVAILABILITIES_READ
+              - PRODUCT_RELATION_READ
+              - PRODUCT_RELATION_WRITE
               - LISTING_READ
               - LISTING_WRITE
               - LISTING_DELETE
@@ -99763,6 +100080,10 @@ tags:
     name: Carriers
   - description: Endpoints to create, update, and read carriers configuration.
     name: Carriers configuration
+  - description: >-
+      Endpoints to create, update, and read product relations between articles,
+      e.g. bills of material.
+    name: Product relations
   - description: Endpoints to create, update, and read products.
     name: Products
   - description: Endpoints to create, update, and read categories.
