@@ -80993,6 +80993,20 @@ components:
       x-badges:
         - color: orange
           label: BETA
+    RoutingContext:
+      description: >-
+        Why the current routing run happens. With optimizer routing, strategy
+        conditions read it with the property path
+        `$.routingContext.routingType`.
+      properties:
+        routingType:
+          $ref: '#/components/schemas/RoutingType'
+      required:
+        - routingType
+      type: object
+      xml:
+        name: RoutingContext
+      title: RoutingContext
     RoutingDecisionContext:
       enum:
         - LISTING
@@ -83821,6 +83835,34 @@ components:
         name: RoutingStrategyTransporter
       title: RoutingStrategyTransporter
       description: RoutingStrategyTransporter
+    RoutingType:
+      description: |-
+        The situation that triggered the routing run:
+          * `INITIAL` - the first routing of an order
+          * `TIMETRIGGERED_REROUTE` - reroute of expired pick jobs
+          * `REROUTE_ON_SHORTPICK` - reroute after a short pick
+          * `ORDERSPLIT_ON_SHORTPICK` - order split after a short pick
+          * `TASK_REROUTE` - manual reroute of routing plans
+          * `REROUTE_ON_STOCKZEROED` - reroute of an open pick job whose stock was zeroed
+          * `REROUTE_ON_PICKJOB_REJECTED` - reroute of a rejected pick job
+          * `REROUTE_ON_PICKJOB_ABORTED` - reroute of an aborted pick job
+          * `PROCESS_REROUTE` - reroute of a whole process
+          * `REROUTE_ON_ORDER_MODIFIED` - reroute after the order was modified
+      enum:
+        - INITIAL
+        - TIMETRIGGERED_REROUTE
+        - REROUTE_ON_SHORTPICK
+        - ORDERSPLIT_ON_SHORTPICK
+        - TASK_REROUTE
+        - REROUTE_ON_STOCKZEROED
+        - REROUTE_ON_PICKJOB_REJECTED
+        - REROUTE_ON_PICKJOB_ABORTED
+        - PROCESS_REROUTE
+        - REROUTE_ON_ORDER_MODIFIED
+      type: string
+      xml:
+        name: RoutingType
+      title: RoutingType
     SafetyStock:
       properties:
         created:
@@ -95823,6 +95865,7 @@ components:
           * `FACILITY_CONNECTION` - right side only, the facility connection used by the sourcing option; only supported when optimization routing is enabled
           * `ORDERING_FACILITY` - left side only
           * `ORDERING_FACILITY_GROUPS` - left side only
+          * `ROUTING_CONTEXT` - routing strategy conditions only, with optimizer routing
       enum:
         - ORDER
         - FACILITY
@@ -95831,6 +95874,7 @@ components:
         - FACILITY_CONNECTION
         - ORDERING_FACILITY
         - ORDERING_FACILITY_GROUPS
+        - ROUTING_CONTEXT
       type: string
       xml:
         name: ToolkitAllowedEntities
