@@ -53020,6 +53020,43 @@ components:
       title: LineItemForCreation
       type: object
       description: LineItemForCreation
+    LineItemProductRelation:
+      properties:
+        quantity:
+          description: >-
+            Quantity of this line item that belongs to the product relation
+            (relationQuantity multiplied by quantityPerUnit)
+          example: 50
+          type: number
+        quantityPerUnit:
+          description: >-
+            Quantity of this line item needed for one unit of the product
+            relation
+          example: 50
+          type: number
+        relationQuantity:
+          description: Number of units of the product relation
+          example: 1
+          type: number
+        tenantArticleId:
+          description: The tenantArticleId of the product relation
+          example: tent-3x3
+          type: string
+        title:
+          description: The title of the product relation
+          example: Tent 3x3 m
+          type: string
+        type:
+          $ref: '#/components/schemas/ProductRelationType'
+      required:
+        - tenantArticleId
+        - type
+        - relationQuantity
+        - quantityPerUnit
+        - quantity
+      title: LineItemProductRelation
+      type: object
+      description: LineItemProductRelation
     LinkedConfiguration:
       properties:
         ref:
@@ -76118,6 +76155,12 @@ components:
       title: ProductRelationProductForCreation
       type: object
       description: ProductRelationProductForCreation
+    ProductRelationType:
+      description: The type of the product relation
+      enum:
+        - BILL_OF_MATERIAL
+      title: ProductRelationType
+      type: string
     ProductRelationVariant:
       properties:
         context:
@@ -81899,6 +81942,15 @@ components:
           description: '@deprecated This property has been deprecated and has no meaning.'
           items:
             $ref: '#/components/schemas/RoutingPlanLineItemPiece'
+          type: array
+        productRelations:
+          description: >-
+            Shares of the quantity that belong to product relations, e.g. bills
+            of material. The rest of the quantity is standalone demand. Read
+            only.
+          items:
+            $ref: '#/components/schemas/LineItemProductRelation'
+          readOnly: true
           type: array
       title: RoutingPlanLineItem
       description: RoutingPlanLineItem
